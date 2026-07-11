@@ -1,0 +1,31 @@
+name: Automatic Code Compiler and Merger
+
+on:
+  push:
+    branches:
+      - main # Triggers the compiler automatically whenever you edit layout.html or engine.html
+  workflow_dispatch: # Allows you to manually click a button to run the merge anytime
+
+permissions:
+  contents: write # Allows the automated bot to save the merged index.html file to your repo
+
+jobs:
+  merge-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+
+      - name: Compile and Merge Files Natively
+        run: |
+          # Create a fresh index.html by stacking Part 1 and Part 2 on top of each other
+          cat layout.html engine.html > index.html
+          echo "Code matrix merged successfully."
+
+      - name: Commit and Push Merged Output
+        run: |
+          git config --global user.name "Matrix Compiler Bot"
+          git config --global user.email "compiler@matrix-engine.local"
+          git add index.html
+          git diff-index --quiet HEAD || git commit -m "Automated System Compiler: Merged layout.html and engine.html"
+          git push
