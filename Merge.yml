@@ -1,0 +1,33 @@
+name: Merge
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Code
+        uses: actions/checkout@v4
+
+      - name: Compile Site
+        run: |
+          if [ ! -f layout.html ] || [ ! -f engine.html ]; then
+            echo "Error: Critical code components missing from directory root."
+            exit 1
+          fi
+          cat layout.html engine.html > index.html
+
+      - name: Deploy Live
+        run: |
+          git config --global user.name "compiler"
+          git config --global user.email "compiler@matrix.local"
+          git add index.html
+          git diff-index --quiet HEAD || git commit -m "Update index.html site file"
+          git push
