@@ -287,14 +287,14 @@
       </div>
     </div>
   </div>
+
   <script>
     let pChart, mChart, cSeries, mLineSeries, mZwaveSeries;
 
-    // Fixed, non-fiction database repository mapping your model parameters precisely
     const modelTrajectoryDatabase = {
       "LAES": {
         current: 2.80, alpha: 5.88, beta: 1.85,
-        history: [4.12, 3.85, 3.35, 3.10, 2.95, 2.90, 2.84, 2.82, 2.81, 2.80]
+                history: [4.12, 3.85, 3.35, 3.10, 2.95, 2.90, 2.84, 2.82, 2.81, 2.80]
       },
       "RR.L": {
         current: 1438.40, alpha: 1595.00, beta: 1385.00,
@@ -356,12 +356,11 @@
     function compileHistoricalCandles(basePrice, logArray) {
       let data = [];
       let currentDate = new Date();
-      currentDate.setDate(currentDate.getDate() - 100); // 100 days of lookback width
-      
+      currentDate.setDate(currentDate.getDate() - 100); 
       let stepSize = Math.floor(100 / logArray.length);
       
       for (let i = 0; i < 100; i++) {
-        let dateStr = currentDate.toISOString().split('T')[0];
+        let dateStr = currentDate.toISOString().split('T');
         let trackingIndex = Math.min(Math.floor(i / stepSize), logArray.length - 1);
         let targetPrice = logArray[trackingIndex];
         
@@ -375,7 +374,6 @@
         currentDate.setDate(currentDate.getDate() + 1);
       }
       
-      // Enforce current closed price coordinate precisely on the final day candle
       let finalIndex = data.length - 1;
       data[finalIndex].close = basePrice;
       if(data[finalIndex].open > basePrice) {
@@ -408,24 +406,22 @@
       let volumeWeightedAverageCost = totalSharesAccumulated > 0 ? (totalCapitalInvested / totalSharesAccumulated) : 0;
       document.getElementById('ledger-avg-cost').innerText = volumeWeightedAverageCost.toFixed(2);
 
-      // Default baseline values fallback parameters
-      let baseAnchorPrice = 2.80; 
+      let basePrice = 2.80; 
       let alphaPrice = 5.88;
       let betaPrice = 1.85;
       let targetHistory = [4.12, 3.35, 2.90, 2.82, 2.80];
 
-      // Native lookback override mapping model data directly from the internal registry
       if (modelTrajectoryDatabase[symbol]) {
-        baseAnchorPrice = modelTrajectoryDatabase[symbol].current;
+        basePrice = modelTrajectoryDatabase[symbol].current;
         alphaPrice = modelTrajectoryDatabase[symbol].alpha;
         betaPrice = modelTrajectoryDatabase[symbol].beta;
         targetHistory = modelTrajectoryDatabase[symbol].history;
       } else {
-        alphaPrice = baseAnchorPrice * 1.50;
-        betaPrice = baseAnchorPrice * 0.70;
+        alphaPrice = basePrice * 1.50;
+        betaPrice = basePrice * 0.70;
       }
 
-      const buffer = compileHistoricalCandles(baseAnchorPrice, targetHistory);
+      const buffer = compileHistoricalCandles(basePrice, targetHistory);
 
       let candleData = [], matrixData = [], zwaveData = [], signals = [];
       for (let i = 0; i < buffer.length; i++) {
@@ -453,9 +449,7 @@
       mZwaveSeries.setData(zwaveData);
       cSeries.setMarkers(signals);
 
-      // Instantly evaluate portfolio positioning data
-      const latestClose = baseAnchorPrice;
-      const currentPositionValue = latestClose * totalSharesAccumulated;
+      const currentPositionValue = basePrice * totalSharesAccumulated;
       const floatingReturn = currentPositionValue - totalCapitalInvested;
       const floatingPct = totalCapitalInvested > 0 ? (floatingReturn / totalCapitalInvested) * 100 : 0;
 
