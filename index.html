@@ -318,7 +318,9 @@
           <label>Shares Bought</label>
           <input type="number" class="tx-shares" value="0" step="1" style="width: 150px;">
         </div>
-        <div style="margin-top: 15px;"><button class="btn-delete" onclick="this.closest('.transaction-row').remove()">Delete</button></div>
+        <div style="margin-top: 15px;">
+          <button class="btn-delete" onclick="this.closest('.transaction-row').remove()">Delete</button>
+        </div>
       `;
       container.appendChild(row);
     }
@@ -376,10 +378,21 @@
       document.getElementById("ledger-avg-cost").innerText = volumeWeightedAverageCost.toFixed(2);
 
       const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=6mo&interval=1d`;
-      const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
 
       try {
-        const response = await fetch(proxyUrl);
+        let response = await fetch(targetUrl, {
+          method: "GET",
+          headers: { Accept: "application/json" }
+        });
+
+        if (!response.ok) {
+          const proxyUrl = `https://cors.isomorphic-git.org/${targetUrl}`;
+          response = await fetch(proxyUrl, {
+            method: "GET",
+            headers: { Accept: "application/json" }
+          });
+        }
+
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
         const json = await response.json();
@@ -388,7 +401,8 @@
         const timeline = result?.timestamp;
 
         if (!result || !quote || !timeline?.length) {
-          throw new Error("No market data returned for symbol.");
+          const apiError = json?.chart?.error?.description || "No market data returned.";
+          throw new Error(apiError);
         }
 
         const buffer = [];
@@ -485,8 +499,9 @@
         document.getElementById("ledger-beta-profit").innerText =
           `${betaProfit >= 0 ? "+" : ""}${betaProfit.toFixed(2)} (${betaProfit >= 0 ? "+" : ""}${betaPct.toFixed(2)}%)`;
       } catch (e) {
+        console.error("Fetch URL:", targetUrl);
         console.error("Telemetry Processing Interrupted:", e);
-        alert(`Data fetch failed for ${symbol}. Open browser console for details.`);
+        alert(`Data fetch failed for ${symbol}: ${e.message}`);
       }
     }
 
