@@ -289,7 +289,7 @@
   </div>
 
   <script>
-    let pChart, mChart, cSeries, mLineSeries, mZwaveSeries;
+    let pChart = null, mChart = null, cSeries = null, mLineSeries = null, mZwaveSeries = null;
 
     const modelTrajectoryDatabase = {
       "LAES": {
@@ -333,24 +333,27 @@
     }
 
     function buildCharts() {
+      if (pChart || mChart) return; 
+
       const layoutConfig = {
-        layout: { backgroundColor: '#161b22', textColor: '#c9d1d9', fontSize: 10 },
+        layout: { background: { color: '#161b22' }, textColor: '#c9d1d9', fontSize: 10 },
         grid: { vertLines: { color: '#21262d' }, horzLines: { color: '#21262d' } },
-        crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+        crosshair: { mode: 0 },
         timeScale: { borderColor: '#30363d', timeVisible: true },
       };
+      
       pChart = LightweightCharts.createChart(document.getElementById('priceViewport'), layoutConfig);
       cSeries = pChart.addCandlestickSeries({ upColor: '#26a69a', downColor: '#ef5350', borderVisible: false });
 
       mChart = LightweightCharts.createChart(document.getElementById('matrixViewport'), {
         ...layoutConfig,
-        priceScale: { autoScale: false, mode: 0, scaleMargins: { top: 0.1, bottom: 0.1 } }
+        priceScale: { autoScale: true, mode: 0, scaleMargins: { top: 0.1, bottom: 0.1 } }
       });
       mLineSeries = mChart.addLineSeries({ color: '#ab47bc', lineWidth: 2 });
       mZwaveSeries = mChart.addLineSeries({ color: '#2979ff', lineWidth: 1.5, lineStyle: 2 });
 
-      pChart.timeScale().subscribeVisibleTimeRangeChange(range => { mChart.timeScale().setVisibleRange(range); });
-      mChart.timeScale().subscribeVisibleTimeRangeChange(range => { pChart.timeScale().setVisibleRange(range); });
+      pChart.timeScale().subscribeVisibleTimeRangeChange(range => { if(range) mChart.timeScale().setVisibleRange(range); });
+      mChart.timeScale().subscribeVisibleTimeRangeChange(range => { if(range) pChart.timeScale().setVisibleRange(range); });
     }
 
     function compileHistoricalCandles(basePrice, logArray) {
@@ -387,6 +390,10 @@
     }
 
     async function computeTrendEngine() {
+      if (!pChart || !mChart || !cSeries || !mLineSeries || !mZwaveSeries) {
+         buildCharts();
+      }
+
       const symbol = document.getElementById('tickerInput').value.toUpperCase().trim();
       const lookback = parseInt(document.getElementById('lookbackInput').value);
       
@@ -466,7 +473,10 @@
       document.getElementById('ledger-beta-profit').innerText = `${betaProfit >= 0 ? '+' : ''}${betaProfit.toFixed(2)} (${betaProfit >= 0 ? '+' : ''}${betaPct.toFixed(2)}%)`;
     }
 
-    window.onload = () => { buildCharts(); computeTrendEngine(); };
+    window.addEventListener('DOMContentLoaded', () => {
+      buildCharts();
+      computeTrendEngine();
+    });
   </script>
 </body>
 </html>
