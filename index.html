@@ -318,9 +318,7 @@
           <label>Shares Bought</label>
           <input type="number" class="tx-shares" value="0" step="1" style="width: 150px;">
         </div>
-        <div style="margin-top: 15px;">
-          <button class="btn-delete" onclick="this.closest('.transaction-row').remove()">Delete</button>
-        </div>
+        <div style="margin-top: 15px;"><button class="btn-delete" onclick="this.closest('.transaction-row').remove()">Delete</button></div>
       `;
       container.appendChild(row);
     }
@@ -356,6 +354,80 @@
       });
     }
 
+    async function fetchYahooBars(ticker) {
+      const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?range=6mo&interval=1d`;
+
+      let response = await fetch(targetUrl, { headers: { Accept: "application/json" } });
+
+      if (!response.ok) {
+        const proxyUrl = `https://cors.isomorphic-git.org/${targetUrl}`;
+        response = await fetch(proxyUrl, { headers: { Accept: "application/json" } });
+      }
+
+      if (!response.ok) throw new Error(`Yahoo HTTP ${response.status}`);
+
+      const json = await response.json();
+      const result = json?.chart?.result?.[0];
+      const quote = result?.indicators?.quote?.[0];
+      const timeline = result?.timestamp;
+
+      if (!result || !quote || !timeline?.length) {
+        const apiError = json?.chart?.error?.description || "Yahoo returned no data.";
+        throw new Error(apiError);
+      }
+
+      const bars = [];
+      for (let i = 0; i < timeline.length; i++) {
+        const open = quote.open?.[i];
+        const high = quote.high?.[i];
+        const low = quote.low?.[i];
+        const close = quote.close?.[i];
+
+        if ([open, high, low, close].every(Number.isFinite)) {
+          bars.push({
+            time: new Date(timeline[i] * 1000).toISOString().slice(0, 10),
+            open,
+            high,
+            low,
+            close
+          });
+        }
+      }
+
+      if (!bars.length) throw new Error("Yahoo valid OHLC bars = 0");
+      return bars;
+    }
+
+    async function fetchStooqBars(ticker) {
+      const s = ticker.toLowerCase().includes(".") ? ticker.toLowerCase() : `${ticker.toLowerCase()}.us`;
+      const url = `https://stooq.com/q/d/l/?s=${encodeURIComponent(s)}&i=d`;
+
+      const res = await fetch(url, { headers: { Accept: "text/csv" } });
+      if (!res.ok) throw new Error(`Stooq HTTP ${res.status}`);
+
+      const csv = await res.text();
+      const lines = csv.trim().split("\n");
+      if (lines.length < 3) throw new Error("Stooq returned insufficient rows");
+
+      const bars = [];
+      for (let i = 1; i < lines.length; i++) {
+        const [date, o, h, l, c] = lines[i].split(",");
+        const open = parseFloat(o);
+        const high = parseFloat(h);
+        const low = parseFloat(l);
+        const close = parseFloat(c);
+
+        if (date && [open, high, low, close].every(Number.isFinite)) {
+          bars.push({ time: date, open, high, low, close });
+        }
+      }
+
+      const sliced = bars.slice(-130); // ~6 months of trading days
+      if (!sliced.length) throw new Error("Stooq valid OHLC bars = 0");
+
+      return sliced;
+    }
+
     async function computeTrendEngine() {
       const symbol = document.getElementById("tickerInput").value.toUpperCase().trim();
       const lookback = parseInt(document.getElementById("lookbackInput").value, 10);
@@ -377,53 +449,16 @@
         totalSharesAccumulated > 0 ? totalCapitalInvested / totalSharesAccumulated : 0;
       document.getElementById("ledger-avg-cost").innerText = volumeWeightedAverageCost.toFixed(2);
 
-      const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=6mo&interval=1d`;
-
       try {
-        let response = await fetch(targetUrl, {
-          method: "GET",
-          headers: { Accept: "application/json" }
-        });
-
-        if (!response.ok) {
-          const proxyUrl = `https://cors.isomorphic-git.org/${targetUrl}`;
-          response = await fetch(proxyUrl, {
-            method: "GET",
-            headers: { Accept: "application/json" }
-          });
+        let buffer = [];
+        try {
+          buffer = await fetchYahooBars(symbol);
+          console.log("Data source: Yahoo");
+        } catch (yErr) {
+          console.warn("Yahoo failed, falling back to Stooq:", yErr.message);
+          buffer = await fetchStooqBars(symbol);
+          console.log("Data source: Stooq");
         }
-
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-        const json = await response.json();
-        const result = json?.chart?.result?.[0];
-        const quote = result?.indicators?.quote?.[0];
-        const timeline = result?.timestamp;
-
-        if (!result || !quote || !timeline?.length) {
-          const apiError = json?.chart?.error?.description || "No market data returned.";
-          throw new Error(apiError);
-        }
-
-        const buffer = [];
-        for (let i = 0; i < timeline.length; i++) {
-          const open = quote.open?.[i];
-          const high = quote.high?.[i];
-          const low = quote.low?.[i];
-          const close = quote.close?.[i];
-
-          if ([open, high, low, close].every(Number.isFinite)) {
-            buffer.push({
-              time: new Date(timeline[i] * 1000).toISOString().slice(0, 10),
-              open,
-              high,
-              low,
-              close
-            });
-          }
-        }
-
-        if (!buffer.length) throw new Error("No valid OHLC bars.");
 
         const candleData = [];
         const matrixData = [];
@@ -489,17 +524,17 @@
           betaPrice = assetRegistryDb[symbol].beta;
         }
 
-        const alphaProfit = alphaPrice * totalSharesAccumulated - totalCapitalInvested;
+        const alphaProfit = (alphaPrice * totalSharesAccumulated) - totalCapitalInvested;
         const alphaPct = totalCapitalInvested > 0 ? (alphaProfit / totalCapitalInvested) * 100 : 0;
         document.getElementById("ledger-alpha-profit").innerText =
           `${alphaProfit >= 0 ? "+" : ""}${alphaProfit.toFixed(2)} (${alphaProfit >= 0 ? "+" : ""}${alphaPct.toFixed(2)}%)`;
 
-        const betaProfit = betaPrice * totalSharesAccumulated - totalCapitalInvested;
+        const betaProfit = (betaPrice * totalSharesAccumulated) - totalCapitalInvested;
         const betaPct = totalCapitalInvested > 0 ? (betaProfit / totalCapitalInvested) * 100 : 0;
         document.getElementById("ledger-beta-profit").innerText =
           `${betaProfit >= 0 ? "+" : ""}${betaProfit.toFixed(2)} (${betaProfit >= 0 ? "+" : ""}${betaPct.toFixed(2)}%)`;
+
       } catch (e) {
-        console.error("Fetch URL:", targetUrl);
         console.error("Telemetry Processing Interrupted:", e);
         alert(`Data fetch failed for ${symbol}: ${e.message}`);
       }
