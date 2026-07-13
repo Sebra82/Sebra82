@@ -41,7 +41,7 @@
 </head>
 <body>
   <div class="app-container">
-    <header><div><h1>🌌 Prediction Engine</h1><p>128-Point Multi-Asset Geometric Horizon Matrix</p></div><div><span class="badge badge-hold" style="color:var(--matrix-purple);border-color:var(--matrix-purple);">Quant Live V11.0</span></div></header>
+    <header><div><h1>🌌 Prediction Engine</h1><p>128-Point Multi-Asset Geometric Horizon Matrix</p></div><div><span class="badge badge-hold" style="color:var(--matrix-purple);border-color:var(--matrix-purple);">Quant Live V12.0</span></div></header>
     <div class="profit-ledger">
       <div class="ledger-title">📋 Position Evaluation Summary Matrix</div>
       <div class="profit-grid">
@@ -53,12 +53,12 @@
     </div>
     <div class="panel-grid-top">
       <div class="data-panel">
-        <div class="ledger-title" id="historyPanelTitle">📋 Calendar Lookback Nodes & % Change vs Actual</div>
-        <div style="max-height:180px;overflow-y:auto;"><table class="compact-table"><thead><tr><th>Timeline Node</th><th>Price</th><th>% vs Actual</th><th>MACD</th><th>Action</th></tr></thead><tbody id="historicalTableBody"></tbody></table></div>
+        <div class="ledger-title" id="historyPanelTitle">📋 Lookback Horizon Matrix</div>
+        <div style="max-height:180px;overflow-y:auto;"><table class="compact-table"><thead><tr><th>Node Window</th><th>Model Price</th><th>vs Live %</th><th>vs Close %</th><th>Action</th></tr></thead><tbody id="historicalTableBody"></tbody></table></div>
       </div>
       <div class="data-panel">
-        <div class="ledger-title">🔮 Predictive Forward Calendar Horizons (30 to 260 Days)</div>
-        <div style="max-height:180px;overflow-y:auto;"><table class="compact-table"><thead><tr><th>Horizon Window</th><th>Predicted Price</th><th>% Target Gain</th><th>Action Blueprint</th></tr></thead><tbody id="predictiveTableBody"></tbody></table></div>
+        <div class="ledger-title">🔮 Predictive Forward Macro Calendar Horizons</div>
+        <div style="max-height:180px;overflow-y:auto;"><table class="compact-table"><thead><tr><th>Horizon Window</th><th>Predicted Price</th><th>Model vs Actual Delta %</th><th>Action Blueprint</th></tr></thead><tbody id="predictiveTableBody"></tbody></table></div>
       </div>
     </div>
     <div class="panel-grid-bottom">
@@ -77,7 +77,8 @@
             </select>
           </div>
           <div class="input-group"><label for="timeframeSelect">Resolution</label><select id="timeframeSelect" onchange="computeTrendEngine()" style="width:120px;"><option value="daily" selected>Last 30 Days</option><option value="weekly">By Trailing Weeks</option></select></div>
-          <div class="input-group"><label style="color:var(--accent-blue);" id="priceLabelStatus">Live Price</label><input type="text" id="currentClosedPriceDisplay" value="Loading..." style="width:100px;font-weight:800;color:var(--accent-blue);text-align:center;" readonly /></div>
+          <div class="input-group"><label style="color:var(--accent-blue);" id="priceLabelStatus">Live Price</label><input type="text" id="currentClosedPriceDisplay" value="Loading..." style="width:90px;font-weight:800;color:var(--accent-blue);text-align:center;" readonly /></div>
+          <div class="input-group"><label style="color:var(--text-muted);">Market Close</label><input type="text" id="marketStaticCloseDisplay" value="Loading..." style="width:90px;font-weight:800;color:var(--text-muted);text-align:center;" readonly /></div>
         </div>
       </div>
     </div>
@@ -85,12 +86,13 @@
   </div>
   <script>
     let activeStockPrice = 100.00;
-    const FallbackRegistry = { "TSLA":258.40, "LAES":2.80, "NVDA":124.50, "AAPL":182.20, "GME":22.10, "RKTO":18.60, "TTWO":154.30, "SOC":12.40, "ABAT":3.15, "BRTX":0.85, "MSFT":420.50, "AMZN":185.20, "META":495.10, "GOOGL":172.40, "NFLX":610.20, "AMD":165.40, "BABA":74.30, "PLTR":24.15, "NIO":4.85, "COIN":225.30, "SOFI":6.90, "MARA":18.20, "HOOD":19.45, "SQ":64.20, "PYPL":58.90, "DIS":112.40, "XOM":118.20, "JPM":198.50, "V":272.10, "COST":815.30 };
+    let staticClosePrice = 100.00;
+    const FallbackRegistry = { "TSLA":258.40,"LAES":2.80,"NVDA":124.50,"AAPL":182.20,"GME":22.10,"RKTO":18.60,"TTWO":154.30,"SOC":12.40,"ABAT":3.15,"BRTX":0.85,"MSFT":420.50,"AMZN":185.20,"META":495.10,"GOOGL":172.40,"NFLX":610.20,"AMD":165.40,"BABA":74.30,"PLTR":24.15,"NIO":4.85,"COIN":225.30,"SOFI":6.90,"MARA":18.20,"HOOD":19.45,"SQ":64.20,"PYPL":58.90,"DIS":112.40,"XOM":118.20,"JPM":198.50,"V":272.10,"COST":815.30 };
 
     function getDynamicMatrixData(basePrice, ticker) {
       let isPenny = basePrice < 10; let isCrypto = ["COIN", "MARA", "SOFI", "GME"].includes(ticker);
       let alpha = isPenny ? 0.65 : isCrypto ? 0.70 : 0.85; let beta = isPenny ? 2.50 : isCrypto ? 1.45 : 1.15;
-      return { c: basePrice, ob: basePrice * alpha, ss: basePrice * beta, dh: [basePrice * 1.08, basePrice * 1.05, basePrice * 0.95, basePrice * 0.98, basePrice], wh: [basePrice * 1.14, basePrice * 1.09, basePrice * 0.92, basePrice * 0.97, basePrice], f: [basePrice * 1.02, basePrice * 1.08, basePrice * beta * 0.90, basePrice * beta * 0.95, basePrice * beta, basePrice * beta * 1.20] };
+      return { c: basePrice, ob: basePrice * alpha, ss: basePrice * beta, dh: [basePrice * 1.08, basePrice * 1.05, basePrice * 0.95, basePrice * 0.98, basePrice], wh: [basePrice * 1.14, basePrice * 1.09, basePrice * 0.92, basePrice * 0.97, basePrice], f: [basePrice * 1.02, basePrice * 1.08, basePrice * beta * 0.90, basePrice * beta * 0.95, basePrice * beta, basePrice * beta * 1.20, basePrice * beta * 1.40, basePrice * beta * 1.75] };
     }
     function handleNodeClick(p) { addNewTransactionRow(p, 10, true); }
     function showTooltip(e, txt) { const tt = document.getElementById('chartTooltipOverlay'); tt.innerHTML = txt; tt.style.display = 'block'; const r = document.getElementById('svgGraphContainer').getBoundingClientRect(); tt.style.left = (e.clientX - r.left + 12) + 'px'; tt.style.top = (e.clientY - r.top - 12) + 'px'; }
@@ -101,7 +103,8 @@
       let markup = `<svg viewBox="0 0 ${w} ${ht}" style="width:100%; height:100%;"><rect x="20" y="5" width="${w-40}" height="${Math.max(5, ySell-5)}" fill="#7f1d1d" opacity="0.12" /><rect x="20" y="${yBuy}" width="${w-40}" height="${Math.max(5, ht-yBuy-5)}" fill="#064e3b" opacity="0.12" /><line x1="${xMid}" y1="5" x2="${xMid}" y2="${ht-5}" stroke="#334155" stroke-dasharray="3,3" /><polyline points="${pStr}" fill="none" stroke="#c084fc" stroke-width="2.2" />`;
       pts.forEach((v, i) => {
         let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 30) - 15; let isF = i >= h.length; let c = isF ? "#38bdf8" : (i === h.length - 1) ? "#ffffff" : "#4ade80";
-        let lbl = isF ? lblF[i - h.length] : lblH[i]; let d = isF ? 0.85 : (i - 2) * 0.385; let a = isF ? bps[i - h.length] : (d < -0.1 ? "BUY" : d > 0.5 ? "SELL" : "HOLD");
+        let lbl = isF ? lblF[i - h.length] : lblH[i]; let d = isF ? 0.85 : (i - 2) * 0.385; let a = isF ? bps[i - h.length] : (d < -0.1 ? "BUY" : d > 0.4 ? "SELL" : "HOLD");
+        if (!isF && i === h.length - 1) a = "HOLD (EXPANSION LOOKAHEAD)";
         let txt = `<strong>${lbl}</strong><br/>Price: $${v.toFixed(2)}<br/>Action: <span style="color:${a.includes('BUY')?'#4ade80':a.includes('SELL')||a.includes('LIQ')?'#f87171':'#94a3b8'}">${a}</span>`;
         markup += `<circle class="interactive-node" cx="${x}" cy="${y}" r="4.2" fill="${c}" onclick="handleNodeClick(${v})" onmousemove="showTooltip(event, '${txt}')" onmouseout="hideTooltip();" onmouseover="this.setAttribute('r', 6);"></circle>`;
       });
@@ -122,14 +125,23 @@
       addNewTransactionRow(activeStockPrice * 0.95, 100, false);
     }
     async function scrapeRealtimeMarketPrice(ticker) {
-      document.getElementById('currentClosedPriceDisplay').value = "Syncing..."; document.getElementById('priceLabelStatus').innerText = "Live Market Price";
+      document.getElementById('currentClosedPriceDisplay').value = "Syncing...";
       try {
         const proxyUrl = "https://allorigins.win"; const targetUrl = encodeURIComponent(`https://yahoo.com{ticker}`);
         const response = await fetch(proxyUrl + targetUrl); if (!response.ok) throw new Error();
         const rawData = await response.json(); const parsed = JSON.parse(rawData.contents);
-        let livePrice = null; if (parsed && parsed.chart && parsed.chart.result && parsed.chart.result[0]) { const meta = parsed.chart.result[0].meta; livePrice = meta.regularMarketPrice || meta.chartPreviousClose; }
-        if(livePrice) { activeStockPrice = livePrice; document.getElementById('priceLabelStatus').innerText = "🟢 Market Price"; } else { throw new Error(); }
-      } catch (err) { activeStockPrice = FallbackRegistry[ticker] || 100.00; document.getElementById('priceLabelStatus').innerText = "⚠️ Proxy Fallback"; }
+        let livePrice = null; let closePrice = null;
+        if (parsed && parsed.chart && parsed.chart.result && parsed.chart.result[0]) {
+          const meta = parsed.chart.result[0].meta;
+          livePrice = meta.regularMarketPrice; closePrice = meta.chartPreviousClose || meta.previousClose;
+        }
+        activeStockPrice = livePrice || FallbackRegistry[ticker] || 100.00;
+        staticClosePrice = closePrice || activeStockPrice;
+        document.getElementById('priceLabelStatus').innerText = "🟢 Market Price";
+      } catch (err) { 
+        activeStockPrice = FallbackRegistry[ticker] || 100.00; staticClosePrice = activeStockPrice;
+        document.getElementById('priceLabelStatus').innerText = "⚠️ Proxy Fallback"; 
+      }
     }
     async function onTickerChange() { const sym = document.getElementById('tickerSelect').value; localStorage.setItem(`quant_active_ticker`, sym); await scrapeRealtimeMarketPrice(sym); loadPortfolioFromCache(sym); computeTrendEngine(); }
     function computeTrendEngine() {
@@ -137,22 +149,30 @@
       const priceInputs = document.getElementsByClassName('tx-price'); const shareInputs = document.getElementsByClassName('tx-shares');
       let totalCapital = 0, totalShares = 0; for (let i = 0; i < priceInputs.length; i++) { let p = parseFloat(priceInputs[i].value) || 0; let s = parseFloat(shareInputs[i].value) || 0; totalCapital += (p * s); totalShares += s; }
       let vwac = totalShares > 0 ? (totalCapital / totalShares) : 0; document.getElementById('ledger-avg-cost').innerText = "$" + vwac.toFixed(2);
-      const act = activeStockPrice; document.getElementById('currentClosedPriceDisplay').value = "$" + act.toFixed(2);
+      
+      const act = activeStockPrice; const cls = staticClosePrice;
+      document.getElementById('currentClosedPriceDisplay').value = "$" + act.toFixed(2);
+      document.getElementById('marketStaticCloseDisplay').value = "$" + cls.toFixed(2);
       const active = getDynamicMatrixData(act, sym);
+
       const val = act * totalShares; const ret = val - totalCapital; const pct = totalCapital > 0 ? (ret / totalCapital) * 100 : 0; const pEl = document.getElementById('ledger-current-profit');
       if (totalShares === 0 || vwac === 0) { pEl.innerText = "$0.00 (0.00%)"; pEl.className = "card-value"; }
       else { pEl.innerText = `${ret >= 0 ? '+$' : '-$'}${Math.abs(ret).toFixed(2)} (${ret >= 0 ? '+' : ''}${pct.toFixed(2)}%)`; pEl.className = ret >= 0 ? "card-value text-green" : "card-value text-red"; }
       document.getElementById('ledger-alpha-profit').innerText = "$" + active.ob.toFixed(2); document.getElementById('ledger-beta-profit').innerText = "$" + active.ss.toFixed(2);
       const hist = tf === 'weekly' ? active.wh : active.dh;
       const dailyLabels = ["Mid June", "Late June", "Early July", "Mid July", "Actual Today"]; const weeklyLabels = ["Early May", "Late May", "Early June", "Late June", "Actual Today"]; const hLabels = tf === 'weekly' ? weeklyLabels : dailyLabels;
-      document.getElementById('historyPanelTitle').innerText = tf === 'weekly' ? "📋 Historical Weekly Steps & % Change vs Actual" : "📋 Historical 30-Day Nodes & % Change vs Actual";
+      
       const hTab = document.getElementById('historicalTableBody'); hTab.innerHTML = "";
       hist.forEach((hp, idx) => {
-        let chg = ((hp - act) / act) * 100; let d = (idx - 2) * 0.385; let a = d < -0.1 ? "BUY" : d > 0.5 ? "SELL" : "HOLD";
-        hTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${hp})"><td class="highlight-blue">${hLabels[idx]}</td><td>$${hp.toFixed(2)}</td><td class="${chg>=0?'text-green':'text-red'}">${chg>=0?'+':''}${chg.toFixed(2)}%</td><td class="${(1.45-(idx*0.45))>=0?'text-green':'text-red'}">${(1.45-(idx*0.45)).toFixed(2)}</td><td><span class="badge ${a==='BUY'?'badge-buy':a==='SELL'?'badge-sell':'badge-hold'}">${a}</span></td></tr>`;
+        let chgLive = ((hp - act) / act) * 100; let chgClose = ((hp - cls) / cls) * 100;
+        let d = (idx - 2) * 0.385; let a = d < -0.1 ? "BUY" : d > 0.5 ? "SELL" : "HOLD";
+        if (idx === hist.length - 1) a = "HOLD (LOOKAHEAD)";
+        hTab.innerHTML += `<tr><td class="highlight-blue">${hLabels[idx]}</td><td>$${hp.toFixed(2)}</td><td class="${chgLive>=0?'text-green':'text-red'}">${chgLive>=0?'+':''}${chgLive.toFixed(2)}%</td><td class="${chgClose>=0?'text-green':'text-red'}">${chgClose>=0?'+':''}${chgClose.toFixed(2)}%</td><td><span class="badge ${a.includes('BUY')?'badge-buy':a.includes('SELL')?'badge-sell':'badge-hold'}">${a}</span></td></tr>`;
       });
+
       const pTab = document.getElementById('predictiveTableBody'); pTab.innerHTML = "";
-      const fLabels = ["August Forecast", "September Target", "October Horizon", "November Trajectory", "January Peak", "April Zenith"]; const blueprints = ["HOLD", "STRONG BUY", "SCALED SELL", "SCALED SELL", "LIQUIDATE POSITION", "LIQUIDATE POSITION"];
+      const fLabels = ["August Forecast", "September Target", "October Horizon", "November Trajectory", "January Peak", "April Zenith (9-Mo View)", "October Macro (18-Mo Peak)", "July Horizon (24-Mo View)"]; 
+      const blueprints = ["HOLD", "STRONG BUY", "SCALED SELL", "SCALED SELL", "LIQUIDATE POSITION", "LIQUIDATE POSITION", "EXIT ZENITH CEILING", "EXIT ZENITH CEILING"];
       fLabels.forEach((hName, idx) => {
         let fPrice = active.f[idx]; let gain = ((fPrice - act) / act) * 100;
         pTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${fPrice})"><td class="highlight-purple">${hName}</td><td style="font-weight:700;">$${fPrice.toFixed(2)}</td><td class="${gain>=0?'text-green':'text-red'}">${gain>=0?'+':''}${gain.toFixed(2)}%</td><td><span class="badge ${blueprints[idx].includes("BUY")||blueprints[idx].includes("ACCUM")?'badge-buy':'badge-sell'}">${blueprints[idx]}</span></td></tr>`;
