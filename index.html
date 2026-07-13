@@ -32,7 +32,7 @@
     .badge-buy { background-color:#064e3b;color:var(--signal-buy);border:1px solid #047857; }
     .badge-sell { background-color:#7f1d1d;color:var(--signal-sell);border:1px solid #b91c1c; }
     .badge-hold { background-color:#1e293b;color:var(--text-muted);border:1px solid #334155; }
-    .graph-container { background:var(--bg-main);border:1px solid var(--border-color);border-radius:6px;padding:4px;position:relative;display:flex;justify-content:center;align-items:center;height:100px; }
+    .graph-container { background:var(--bg-main);border:1px solid var(--border-color);border-radius:6px;padding:4px;position:relative;display:flex;justify-content:center;align-items:center;height:75px; }
     .interactive-node { cursor:pointer;transition:all 0.15s ease; } .interactive-node:hover { stroke:#ffffff;stroke-width:2px; }
     .quant-chart-tooltip { position:absolute;display:none;background:rgba(13,21,39,0.95);border:1px solid var(--matrix-purple);border-radius:4px;padding:6px 10px;font-size:10px;font-family:monospace;color:#fff;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,0.6);z-index:100;line-height:1.3; }
     .highlight-purple { color:var(--matrix-purple); } .highlight-blue { color:var(--accent-blue); }
@@ -46,12 +46,12 @@
       <div class="ledger-title">⚙️ Station System Asset Configuration & Portfolio Multi-Buy Blender</div>
       <div class="input-row input-row-top">
         <div class="input-group"><label for="tickerSelect">Tracked Asset Universe</label>
-          <select id="tickerSelect" onchange="onTickerChange()" style="width:210px;">
-            <optgroup label="💼 Your Portfolio Custom Space Universe">
+          <select id="tickerSelect" onchange="onTickerChange()" style="width:220px;">
+            <optgroup label="💼 Your Core Custom Tracking Assets">
               <option value="LAES" selected>LAES (SEALSQ Corp)</option><option value="NVDA">NVDA (NVIDIA Corp)</option><option value="TSLA">TSLA (Tesla Inc)</option><option value="AAPL">AAPL (Apple Inc)</option><option value="GME">GME (GameStop Corp)</option><option value="SOC">SOC (Sable Offshore Corp)</option><option value="RKTO">RKTO (Rocket One Inc)</option><option value="SPCX">SPCX (Space Exploration Tech)</option><option value="ABAT">ABAT (American Battery)</option><option value="RR.L">RR.L (Rolls-Royce Holdings)</option><option value="BRTX">BRTX (BioRestorative)</option>
             </optgroup>
-            <optgroup label="🔥 Top 20 Trending Global Market Leaders">
-              <option value="MSFT">MSFT (Microsoft Corp)</option><option value="AMZN">AMZN (Amazon.com Inc)</option><option value="META">META (Meta Platforms)</option><option value="GOOGL">GOOGL (Alphabet Inc)</option><option value="NFLX">NFLX (Netflix Inc)</option><option value="AMD">AMD (Advanced Devices)</option><option value="PLTR">PLTR (Palantir Tech)</option><option value="COIN">COIN (Coinbase Global)</option><option value="SOFI">SOFI (SoFi Tech)</option><option value="MARA">MARA (MARA Digital)</option><option value="HOOD">HOOD (Robinhood Markets)</option><option value="SQ">SQ (Block Inc)</option><option value="PYPL">PYPL (PayPal Holdings)</option><option value="DIS">DIS (Walt Disney Co)</option><option value="XOM">XOM (Exxon Mobil Corp)</option><option value="JPM">JPM (JPMorgan Chase)</option><option value="V">V (Visa Inc)</option><option value="COST">COST (Costco Wholesale)</option><option value="AVGO">AVGO (Broadcom Inc)</option><option value="SMCI">SMCI (Super Micro Computer)</option>
+            <optgroup label="🔥 Top 10 Trending Global Tech Leaders">
+              <option value="MSFT">MSFT (Microsoft Corp)</option><option value="AMZN">AMZN (Amazon.com Inc)</option><option value="META">META (Meta Platforms)</option><option value="GOOGL">GOOGL (Alphabet Inc)</option><option value="NFLX">NFLX (Netflix Inc)</option><option value="AMD">AMD (Advanced Micro)</option><option value="PLTR">PLTR (Palantir Tech)</option><option value="COIN">COIN (Coinbase Global)</option><option value="SOFI">SOFI (SoFi Tech)</option><option value="MARA">MARA (MARA Digital)</option>
             </optgroup>
           </select>
         </div>
@@ -66,7 +66,7 @@
       <div class="ledger-title">📋 Position Evaluation Summary Matrix</div>
       <div class="profit-grid">
         <div class="profit-card"><div class="card-label">Blended VWAC</div><div class="card-value highlight-purple" id="ledger-avg-cost">-</div></div>
-        <div class="profit-ledger-card profit-card"><div class="card-label">Net Performance</div><div class="card-value" id="ledger-current-profit">-</div></div>
+        <div class="profit-card"><div class="card-label">Net Performance</div><div class="card-value" id="ledger-current-profit">-</div></div>
         <div class="profit-card" style="border-left:2px solid var(--accent-blue);"><div class="card-label">Accumulation Target</div><div class="card-value text-green" id="ledger-alpha-profit">-</div></div>
         <div class="profit-card" style="border-left:2px solid var(--matrix-purple);"><div class="card-label">Saturated Exit Ceiling</div><div class="card-value text-red" id="ledger-beta-profit">-</div></div>
       </div>
@@ -78,7 +78,7 @@
       </div>
       <div class="data-panel">
         <div class="ledger-title">🔮 Predictive Forward Macro Calendar Horizons</div>
-        <div style="max-height:190px;overflow-y:auto;"><table class="compact-table"><thead><tr><th>Catalyst Target Event</th><th>Projected Target</th><th>Implied Gain %</th><th>Action Blueprint</th></tr></thead><tbody id="predictiveTableBody"></tbody></table></div>
+        <div style="max-height:190px;overflow-y:auto;"><table class="compact-table"><thead><tr><th>Catalyst Horizon Event</th><th>Projected Target</th><th>Implied Gain %</th><th>Action Blueprint</th></tr></thead><tbody id="predictiveTableBody"></tbody></table></div>
       </div>
     </div>
     <div class="data-panel" style="position:relative; margin-bottom:12px;">
@@ -89,81 +89,95 @@
   <script>
     let activeStockPrice = 2.82; let staticClosePrice = 2.82;
     const MasterVirtualTape = {
-      "LAES": { open: 2.82, close: 2.82, dh: [2.65, 2.71, 3.45, 4.12, 3.35, 2.90, 2.82], wh: [2.65, 2.71, 3.45, 4.12, 3.35, 2.90, 2.82], tape_d: [2.60, 2.71, 3.38, 4.18, 3.28, 2.85, 2.82], tape_w: [2.60, 2.71, 3.38, 4.18, 3.28, 2.85, 2.82], f: [2.65, 1.85, 4.50, 5.20, 5.88, 6.20, 8.03, 9.58] },
-      "NVDA": { open: 122.10, close: 124.50, dh: [134.46, 130.20, 118.10, 122.40, 124.50], wh: [135.80, 128.40, 117.90, 121.55, 124.50], tape_d: [134.46, 130.20, 118.10, 122.40, 124.50], tape_w: [135.80, 128.40, 117.90, 121.55, 124.50], f: [128.00, 132.50, 145.00, 152.00, 168.00, 180.52, 224.10, 267.67] },
-      "TSLA": { open: 258.40, close: 258.40, dh: [279.07, 266.15, 248.06, 253.23, 258.40], wh: [210.40, 222.80, 235.10, 248.00, 258.40], tape_d: [279.07, 266.15, 248.06, 253.23, 258.40], tape_w: [210.40, 222.80, 235.10, 248.00, 258.40], f: [263.57, 242.90, 288.37, 307.60, 320.42, 426.36, 542.64, 646.00] },
-      "AAPL": { open: 182.20, close: 182.20, dh: [175.40, 178.10, 179.90, 181.20, 182.20], wh: [168.20, 172.40, 175.00, 179.50, 182.20], tape_d: [175.40, 178.10, 179.90, 181.20, 182.20], tape_w: [168.20, 172.40, 175.00, 179.50, 182.20], f: [185.00, 189.00, 195.00, 202.00, 215.00, 236.86, 282.41, 337.07] },
-      "GME": { open: 22.10, close: 22.10, dh: [18.20, 19.50, 24.10, 20.80, 22.10], wh: [15.40, 17.20, 28.50, 19.90, 22.10], tape_d: [18.20, 19.50, 24.10, 20.80, 22.10], tape_w: [15.40, 17.20, 28.50, 19.90, 22.10], f: [24.00, 18.00, 32.00, 38.00, 45.00, 43.09, 55.25, 68.51] },
-      "SOC": { open: 12.40, close: 12.40, dh: [11.20, 11.80, 12.05, 12.20, 12.40], wh: [9.80, 10.40, 11.20, 11.90, 12.40], tape_d: [11.20, 11.80, 12.05, 12.20, 12.40], tape_w: [9.80, 10.40, 11.20, 11.90, 12.40], f: [12.80, 11.40, 14.20, 15.50, 16.80, 22.32, 28.52, 36.58] },
-      "RKTO": { open: 18.60, close: 18.60, dh: [16.40, 17.10, 17.90, 18.25, 18.60], wh: [14.20, 15.10, 16.40, 17.50, 18.60], tape_d: [16.40, 17.10, 17.90, 18.25, 18.60], tape_w: [14.20, 15.10, 16.40, 17.50, 18.60], f: [19.20, 16.50, 22.40, 24.80, 26.50, 31.62, 41.85, 50.22] },
-      "SPCX": { open: 82.50, close: 82.50, dh: [78.40, 79.90, 81.20, 82.00, 82.50], wh: [71.20, 74.50, 77.80, 80.40, 82.50], tape_d: [78.40, 79.90, 81.20, 82.00, 82.50], tape_w: [71.20, 74.50, 77.80, 80.40, 82.50], f: [84.10, 79.20, 96.40, 102.00, 108.50, 136.12, 173.25, 206.25] },
-      "ABAT": { open: 3.15, close: 3.15, dh: [2.85, 2.95, 3.02, 3.10, 3.15], wh: [2.40, 2.65, 2.85, 3.00, 3.15], tape_d: [2.85, 2.95, 3.02, 3.10, 3.15], tape_w: [2.40, 2.65, 2.85, 3.00, 3.15], f: [3.25, 2.90, 4.10, 4.45, 4.80, 6.61, 8.50, 10.23] },
-      "RR.L": { open: 4.60, close: 4.60, dh: [4.20, 4.35, 4.48, 4.55, 4.60], wh: [3.80, 4.05, 4.22, 4.45, 4.60], tape_d: [4.20, 4.35, 4.48, 4.55, 4.60], tape_w: [3.80, 4.05, 4.22, 4.45, 4.60], f: [4.75, 4.30, 5.40, 5.85, 6.20, 7.59, 9.66, 11.50] },
-      "BRTX": { open: 0.85, close: 0.85, dh: [0.72, 0.76, 0.81, 0.83, 0.85], wh: [0.61, 0.68, 0.74, 0.80, 0.85], tape_d: [0.72, 0.76, 0.81, 0.83, 0.85], tape_w: [0.61, 0.68, 0.74, 0.80, 0.85], f: [0.90, 0.74, 1.25, 1.40, 1.60, 2.12, 2.67, 3.23] },
-      "MSFT": { open: 420.50, close: 420.50, dh: [410.20, 412.50, 415.80, 418.00, 420.50], wh: [390.40, 402.10, 408.50, 414.20, 420.50], tape_d: [410.20, 412.50, 415.80, 418.00, 420.50], tape_w: [390.40, 402.10, 408.50, 414.20, 420.50], f: [428.91, 395.27, 462.55, 492.98, 521.42, 546.65, 609.72, 714.85] },
-      "AMZN": { open: 185.20, close: 185.20, dh: [178.40, 180.20, 182.10, 184.00, 185.20], wh: [165.20, 171.40, 176.00, 181.50, 185.20], tape_d: [178.40, 180.20, 182.10, 184.00, 185.20], tape_w: [165.20, 171.40, 176.00, 181.50, 185.20], f: [188.90, 174.08, 203.72, 216.68, 229.64, 250.02, 296.32, 351.88] },
-      "META": { open: 495.10, close: 495.10, dh: [480.10, 484.50, 488.20, 492.00, 495.10], wh: [440.50, 458.20, 468.00, 482.50, 495.10], tape_d: [480.10, 484.50, 488.20, 492.00, 495.10], tape_w: [440.50, 458.20, 468.00, 482.50, 495.10], f: [505.00, 465.39, 544.61, 579.26, 613.92, 668.38, 792.16, 940.69] },
-      "GOOGL": { open: 172.40, close: 172.40, dh: [166.50, 168.10, 169.80, 171.00, 172.40], wh: [152.40, 158.50, 162.00, 167.80, 172.40], tape_d: [166.50, 168.10, 169.80, 171.00, 172.40], tape_w: [152.40, 158.50, 162.00, 167.80, 172.40], f: [175.84, 162.05, 189.64, 201.70, 213.77, 224.12, 258.60, 301.70] },
-      "NFLX": { open: 610.20, close: 610.20, dh: [595.40, 598.00, 602.50, 607.00, 610.20], wh: [550.20, 568.40, 582.00, 598.50, 610.20], tape_d: [595.40, 598.00, 602.50, 607.00, 610.20], tape_w: [550.20, 568.40, 582.00, 598.50, 610.20], f: [622.40, 573.59, 671.22, 713.93, 756.64, 823.77, 976.32, 1159.38] },
-      "AMD": { open: 165.40, close: 165.40, dh: [158.20, 160.50, 162.40, 164.00, 165.40], wh: [142.10, 148.50, 153.20, 159.00, 165.40], tape_d: [158.20, 160.50, 162.40, 164.00, 165.40], tape_w: [142.10, 148.50, 153.20, 159.00, 1
-    // 🧬 TRANSACTION DOM MATRIX BLENDER: Dynamically generates entry rows inside the user panel
+      "LAES": { open: 2.82, close: 2.82, dh: [2.65, 2.71, 3.45, 4.12, 3.35, 2.90, 2.82], tape: [2.60, 2.71, 3.38, 4.18, 3.28, 2.85, 2.82], f: [2.65, 1.85, 4.50, 5.20, 5.88, 6.20, 8.03, 9.58] },
+      "NVDA": { open: 122.10, close: 124.50, dh: [134.46, 130.20, 118.10, 122.40, 124.50], tape: [134.46, 130.20, 118.10, 122.40, 124.50], f: [128.00, 132.50, 145.00, 152.00, 168.00, 180.52, 224.10, 267.67] },
+      "TSLA": { open: 258.40, close: 258.40, dh: [279.07, 266.15, 248.06, 253.23, 258.40], tape: [279.07, 266.15, 248.06, 253.23, 258.40], f: [263.57, 242.90, 288.37, 307.60, 320.42, 426.36, 542.64, 646.00] },
+      "AAPL": { open: 182.20, close: 182.20, dh: [175.40, 178.10, 179.90, 181.20, 182.20], tape: [175.40, 178.10, 179.90, 181.20, 182.20], f: [185.00, 189.00, 195.00, 202.00, 215.00, 236.86, 282.41, 337.07] },
+      "GME": { open: 22.10, close: 22.10, dh: [18.20, 19.50, 24.10, 20.80, 22.10], tape: [18.20, 19.50, 24.10, 20.80, 22.10], f: [24.00, 18.00, 32.00, 38.00, 45.00, 43.09, 55.25, 68.51] },
+      "SOC": { open: 12.40, close: 12.40, dh: [11.20, 11.80, 12.05, 12.20, 12.40], tape: [11.20, 11.80, 12.05, 12.20, 12.40], f: [12.80, 11.40, 14.20, 15.50, 16.80, 22.32, 28.52, 36.58] },
+      "RKTO": { open: 18.60, close: 18.60, dh: [16.40, 17.10, 17.90, 18.25, 18.60], tape: [16.40, 17.10, 17.90, 18.25, 18.60], f: [19.20, 16.50, 22.40, 24.80, 26.50, 31.62, 41.85, 50.22] },
+      "SPCX": { open: 82.50, close: 82.50, dh: [78.40, 79.90, 81.20, 82.00, 82.50], tape: [78.40, 79.90, 81.20, 82.00, 82.50], f: [84.10, 79.20, 96.40, 102.00, 108.50, 136.12, 173.25, 206.25] },
+      "ABAT": { open: 3.15, close: 3.15, dh: [2.85, 2.95, 3.02, 3.10, 3.15], tape: [2.85, 2.95, 3.02, 3.10, 3.15], f: [3.25, 2.90, 4.10, 4.45, 4.80, 6.61, 8.50, 10.23] },
+      "RR.L": { open: 4.60, close: 4.60, dh: [4.20, 4.35, 4.48, 4.55, 4.60], tape: [4.20, 4.35, 4.48, 4.55, 4.60], f: [4.75, 4.30, 5.40, 5.85, 6.20, 7.59, 9.66, 11.50] },
+      "BRTX": { open: 0.85, close: 0.85, dh: [0.72, 0.76, 0.81, 0.83, 0.85], tape: [0.72, 0.76, 0.81, 0.83, 0.85], f: [0.90, 0.74, 1.25, 1.40, 1.60, 2.12, 2.67, 3.23] },
+      "MSFT": { open: 420.50, close: 420.50, dh: [410.20, 412.50, 415.80, 418.00, 420.50], tape: [410.20, 412.50, 415.80, 418.00, 420.50], f: [424.00, 412.00, 442.00, 458.00, 475.00, 510.00, 560.00, 610.00] },
+      "AMZN": { open: 185.20, close: 185.20, dh: [178.40, 180.20, 182.10, 184.00, 185.20], tape: [178.40, 180.20, 182.10, 184.00, 185.20], f: [188.00, 176.00, 198.00, 206.00, 215.00, 240.00, 270.00, 300.00] },
+      "META": { open: 495.10, close: 495.10, dh: [480.10, 484.50, 488.20, 492.00, 495.10], tape: [480.10, 484.50, 488.20, 492.00, 495.10], f: [502.00, 472.00, 524.00, 545.00, 560.00, 615.00, 680.00, 740.00] },
+      "GOOGL": { open: 172.40, close: 172.40, dh: [166.50, 168.10, 169.80, 171.00, 172.40], tape: [166.50, 168.10, 169.80, 171.00, 172.40], f: [175.00, 164.00, 184.00, 191.00, 200.00, 222.00, 245.00, 268.00] },
+      "NFLX": { open: 610.20, close: 610.20, dh: [595.40, 598.00, 602.50, 607.00, 610.20], tape: [595.40, 598.00, 602.50, 607.00, 610.20], f: [620.00, 585.00, 645.00, 672.00, 695.00, 755.00, 830.00, 910.00] },
+      "AMD": { open: 165.40, close: 165.40, dh: [158.20, 160.50, 162.40, 164.00, 165.40], tape: [158.20, 160.50, 162.40, 164.00, 165.40], f: [170.00, 152.00, 182.00, 194.00, 205.00, 235.00, 268.00, 298.00] },
+      "PLTR": { open: 24.15, close: 24.15, dh: [22.40, 22.95, 23.40, 23.85, 24.15], tape: [22.40, 22.95, 23.40, 23.85, 24.15], f: [24.80, 22.10, 27.20, 29.40, 31.00, 38.20, 46.50, 54.00] },
+      "COIN": { open: 225.30, close: 225.30, dh: [214.20, 218.50, 221.00, 223.50, 225.30], tape: [214.20, 218.50, 221.00, 223.50, 225.30], f: [232.00, 202.00, 256.00, 274.00, 290.00, 345.00, 410.00, 470.00] },
+      "SOFI": { open: 6.90, close: 6.90, dh: [6.45, 6.58, 6.70, 6.82, 6.90], tape: [6.45, 6.58, 6.70, 6.82, 6.90], f: [7.10, 6.35, 7.85, 8.40, 8.90, 10.65, 12.80, 14.50] },
+      "MARA": { open: 18.20, close: 18.20, dh: [16.85, 17.20, 17.65, 17.98, 18.20], tape: [16.85, 17.20, 17.65, 17.98, 18.20], f: [18.80, 15.90, 21.40, 23.20, 24.80, 30.50, 37.20, 43.50] }
+    };
+    function getDynamicMatrixData(basePrice, ticker) { const data = MasterVirtualTape[ticker] || { dh:[basePrice], tape:[basePrice], f:[basePrice] }; return { c: basePrice, ob: basePrice * 0.82, ss: basePrice * 1.24, dh: data.dh, tape: data.tape, f: data.f }; }
+    function evaluateModelAction(nodePrice, tapePrice) { let ratio = nodePrice / tapePrice; if (ratio < 0.97) return "BUY"; if (ratio > 1.03) return "SELL"; return "HOLD"; }
+    function handleNodeClick(p) { addNewTransactionRow(p, 10, true); }
+    function showTooltip(e, txt) { const tt = document.getElementById('chartTooltipOverlay'); tt.innerHTML = txt; tt.style.display = 'block'; const r = document.getElementById('svgGraphContainer').getBoundingClientRect(); tt.style.left = (e.clientX - r.left + 12) + 'px'; tt.style.top = (e.clientY - r.top - 12) + 'px'; }
+    function hideTooltip() { document.getElementById('chartTooltipOverlay').style.display = 'none'; }
+    function generateNativeSvgGraph(h, f, ob, ss, tape) {
+      const pts = [...h, ...f]; const max = Math.max(...pts, ...tape) * 1.05; const min = Math.min(...pts, ...tape) * 0.95; const r = max - min; const w = 480, ht = 75;
+      let yBuy = ht - ((ob - min) / r) * (ht - 20) - 10; let ySell = ht - ((ss - min) / r) * (ht - 20) - 10;
+      let markup = `<svg viewBox="0 0 ${w} ${ht}" style="width:100%; height:100%;"><rect x="20" y="2" width="${w-40}" height="${Math.max(2, ySell-2)}" fill="#3b0712" fill-opacity="0.35" /><rect x="20" y="${yBuy}" width="${w-40}" height="${Math.max(2, ht-yBuy-2)}" fill="#064e3b" fill-opacity="0.35" />`;
+      let mStr = "", tStr = ""; h.forEach((v, i) => { let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 20) - 10; mStr += (i===0?'M':'L') + `${x},${y} `; });
+      f.forEach((v, i) => { let idx = i + h.length; let x = (idx / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 20) - 10; mStr += (i===0?'M':'L') + `${x},${y} `; });
+      tape.forEach((v, i) => { let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 20) - 10; tStr += (i===0?'M':'L') + `${x},${y} `; });
+      markup += `<path d="${mStr}" fill="none" stroke="#c084fc" stroke-width="2" /><path d="${tStr}" fill="none" stroke="#38bdf8" stroke-width="1.8" stroke-dasharray="3,2" />`;
+      pts.forEach((v, i) => {
+        let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 20) - 10; let isF = i >= h.length; let c = isF ? "#c084fc" : "#ffffff";
+        let txt = `<strong>Node</strong><br/>Value: $${v.toFixed(2)}`; markup += `<circle class="interactive-node" cx="${x}" cy="${y}" r="3.2" fill="${c}" onclick="handleNodeClick(${v})" onmousemove="showTooltip(event, '${txt}')" onmouseout="hideTooltip();"></circle>`;
+      });
+      document.getElementById('svgGraphContainer').innerHTML = markup + `</svg>`;
+    }
     function addNewTransactionRow(p = 0, s = 0, trig = true) {
-      const container = document.getElementById('transactionRowsContainer');
-      const row = document.createElement('div');
-      row.className = 'transaction-row';
+      const container = document.getElementById('transactionRowsContainer'); const row = document.createElement('div'); row.className = 'transaction-row';
       row.innerHTML = `<div class="input-group"><label>Purchase Price</label><input type="number" class="tx-price" value="${p ? p.toFixed(2) : ''}" step="0.01" style="width: 110px;" oninput="computeTrendEngine()"></div><div class="input-group"><label>Shares Volume</label><input type="number" class="tx-shares" value="${s||''}" step="1" style="width: 110px;" oninput="computeTrendEngine()"></div><div style="margin-top: 14px;"><button class="btn-delete" onclick="this.parentElement.parentElement.remove(); computeTrendEngine();">Delete</button></div>`;
-      container.appendChild(row);
-      if (trig) computeTrendEngine();
+      container.appendChild(row); if (trig) computeTrendEngine();
     }
-
-    // 🔒 LOCAL CACHE REGISTRY STORAGE: Persists user-defined blend rows directly to browser sandboxes
     function savePortfolioToCache() {
-      const sym = document.getElementById('tickerSelect').value;
-      const prices = Array.from(document.getElementsByClassName('tx-price')).map(el => parseFloat(el.value) || 0);
-      const shares = Array.from(document.getElementsByClassName('tx-shares')).map(el => parseFloat(el.value) || 0);
-      const payload = prices.map((p, i) => ({ price: p, shares: shares[i] }));
-      localStorage.setItem(`quant_portfolio_${sym}`, JSON.stringify(payload));
-      localStorage.setItem(`quant_active_ticker`, sym);
+      const sym = document.getElementById('tickerSelect').value; const prices = Array.from(document.getElementsByClassName('tx-price')).map(el => parseFloat(el.value) || 0); const shares = Array.from(document.getElementsByClassName('tx-shares')).map(el => parseFloat(el.value) || 0);
+      const payload = prices.map((p, i) => ({ price: p, shares: shares[i] })); localStorage.setItem(`quant_portfolio_${sym}`, JSON.stringify(payload)); localStorage.setItem(`quant_active_ticker`, sym);
     }
-
-    // 📬 LOCAL CACHE LOADER: Rebuilds position histories when switching asset selections
     function loadPortfolioFromCache(sym) {
-      const container = document.getElementById('transactionRowsContainer');
-      container.innerHTML = "";
-      const cached = localStorage.getItem(`quant_portfolio_${sym}`);
-      if (cached) {
-        const payload = JSON.parse(cached);
-        if (payload.length > 0) {
-          payload.forEach(r => addNewTransactionRow(r.price, r.shares, false));
-          return;
-        }
-      }
+      const container = document.getElementById('transactionRowsContainer'); container.innerHTML = ""; const cached = localStorage.getItem(`quant_portfolio_${sym}`);
+      if (cached) { const payload = JSON.parse(cached); if (payload.length > 0) { payload.forEach(r => addNewTransactionRow(r.price, r.shares, false)); return; } }
       addNewTransactionRow(staticClosePrice * 0.95, 100, false);
     }
-
-    // 🏛️ STATIC MATRIX TAPE BINDING: Swaps current pricing nodes cleanly with zero uncalibrated proxy lag
-    function updateStaticSessionTape(ticker) {
-      const data = MasterVirtualTape[ticker] || { open: 100.00, close: 100.00 };
-      activeStockPrice = data.open;
-      staticClosePrice = data.close;
+    function updateStaticSessionTape(ticker) { const data = MasterVirtualTape[ticker] || { open: 100.00, close: 100.00 }; activeStockPrice = data.open; staticClosePrice = data.close; }
+    function onTickerChange() { const sym = document.getElementById('tickerSelect').value; localStorage.setItem(`quant_active_ticker`, sym); updateStaticSessionTape(sym); loadPortfolioFromCache(sym); computeTrendEngine(); }
+    function computeTrendEngine() {
+      const sym = document.getElementById('tickerSelect').value; const tf = document.getElementById('timeframeSelect').value;
+      const priceInputs = document.getElementsByClassName('tx-price'); const shareInputs = document.getElementsByClassName('tx-shares');
+      let totalCapital = 0, totalShares = 0; for (let i = 0; i < priceInputs.length; i++) { let p = parseFloat(priceInputs[i].value) || 0; let s = parseFloat(shareInputs[i].value) || 0; totalCapital += (p * s); totalShares += s; }
+      let vwac = totalShares > 0 ? (totalCapital / totalShares) : 0; document.getElementById('ledger-avg-cost').innerText = "$" + vwac.toFixed(2);
+      const opn = activeStockPrice; const cls = staticClosePrice;
+      document.getElementById('marketStaticOpenDisplay').value = "$" + opn.toFixed(2); document.getElementById('marketStaticCloseDisplay').value = "$" + cls.toFixed(2);
+      const active = getDynamicMatrixData(opn, sym);
+      const val = cls * totalShares; const ret = val - totalCapital; const pct = totalCapital > 0 ? (ret / totalCapital) * 100 : 0; const pEl = document.getElementById('ledger-current-profit');
+      if (totalShares === 0 || vwac === 0) { pEl.innerText = "$0.00 (0.00%)"; pEl.className = "card-value"; }
+      else { pEl.innerText = `${ret >= 0 ? '+$' : '-$'}${Math.abs(ret).toFixed(2)} (${ret >= 0 ? '+' : ''}${pct.toFixed(2)}%)`; pEl.className = ret >= 0 ? "card-value text-green" : "card-value text-red"; }
+      document.getElementById('ledger-alpha-profit').innerText = "$" + active.ob.toFixed(2); document.getElementById('ledger-beta-profit').innerText = "$" + active.ss.toFixed(2);
+      const hist = active.dh; const tape = active.tape;
+      const hLabels = ["Early May Node", "May 19th Node", "Early June Node", "Mid June Node", "Late June Node", "Early July Node", "Mid July Node"];
+      document.getElementById('historyPanelTitle').innerText = tf === 'weekly' ? "📋 Lookback Horizon Matrix (Weekly)" : "📋 Lookback Horizon Matrix (Daily 60-Day Window)";
+      const hTab = document.getElementById('historicalTableBody'); hTab.innerHTML = "";
+      hist.forEach((hp, idx) => {
+        let tVal = tape[idx] || hp; let variance = ((hp - tVal) / tVal) * 100; let a = evaluateModelAction(hp, tVal);
+        hTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${hp})"><td><span class="highlight-blue">${hLabels[idx]}</span></td><td>$${hp.toFixed(2)}</td><td>$${tVal.toFixed(2)}</td><td class="${variance>=0?'text-green':'text-red'}">${variance>=0?'+':''}${variance.toFixed(2)}%</td><td><span class="badge ${a==='BUY'?'badge-buy':a==='SELL'?'badge-sell':'badge-hold'}">${a}</span></td></tr>`;
+      });
+      const pTab = document.getElementById('predictiveTableBody'); pTab.innerHTML = "";
+      const fLabels = ["August Forecast", "September Target Floor", "October Horizon Breakout", "November Trajectory", "January Realization Peak", "April Expansion Ceiling (9-Mo)", "October Trajectory Peak (18-Mo)", "July Macro Zenith (24-Mo Top)"]; 
+      const blueprints = ["HOLD (EXPANSION LOOKAHEAD)", "STRONG BUY", "SCALED SELL", "SCALED SELL", "LIQUIDATE POSITION", "LIQUIDATE POSITION", "EXIT ZENITH CEILING", "EXIT ZENITH CEILING"];
+      fLabels.forEach((hName, idx) => {
+        let fPrice = active.f[idx]; let gain = ((fPrice - cls) / cls) * 100;
+        pTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${fPrice})"><td><span class="highlight-purple">${hName}</span></td><td style="font-weight:700;">$${fPrice.toFixed(2)}</td><td class="${gain>=0?'text-green':'text-red'}">${gain>=0?'+':''}${gain.toFixed(2)}%</td><td><span class="badge ${blueprints[idx].includes("BUY")||blueprints[idx].includes("ACCUM")?'badge-buy':'badge-sell'}">${blueprints[idx]}</span></td></tr>`;
+      });
+      generateNativeSvgGraph(hist, active.f, active.ob, active.ss, tape); savePortfolioToCache();
     }
-
-    // 🔁 ASSET SELECTION INTERSECTION HANDLER: Primary operational router inside the terminal
-    function onTickerChange() {
-      const sym = document.getElementById('tickerSelect').value;
-      localStorage.setItem(`quant_active_ticker`, sym);
-      updateStaticSessionTape(sym);
-      loadPortfolioFromCache(sym);
-      computeTrendEngine();
-    }
-
-    // 🚀 SYSTEM STARTUP COMMAND: Seamlessly ignites the platform on window DOM mounting
     window.addEventListener('DOMContentLoaded', () => {
       let rememberedTicker = localStorage.getItem(`quant_active_ticker`) || "LAES";
-      document.getElementById('tickerSelect').value = rememberedTicker;
-      updateStaticSessionTape(rememberedTicker);
-      loadPortfolioFromCache(rememberedTicker);
-      computeTrendEngine();
+      document.getElementById('tickerSelect').value = rememberedTicker; updateStaticSessionTape(rememberedTicker); loadPortfolioFromCache(rememberedTicker); computeTrendEngine();
     });
   </script>
 </body>
