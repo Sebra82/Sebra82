@@ -48,7 +48,7 @@
         <div class="input-group"><label for="tickerSelect">Tracked Asset</label>
           <select id="tickerSelect" onchange="onTickerChange()" style="width:140px;">
             <optgroup label="💼 Your Portfolio Assets">
-              <option value="TSLA">TSLA (Tesla)</option><option value="LAES">LAES (Lightspeed)</option><option value="NVDA" selected>NVDA (NVIDIA)</option><option value="AAPL">AAPL (Apple)</option><option value="GME">GME (GameStop)</option><option value="RKTO">RKTO (Rocket Lab)</option><option value="TTWO">TTWO (Take-Two)</option><option value="SOC">SOC (Sinoops)</option><option value="ABAT">ABAT (Advanced Bat)</option><option value="BRTX">BRTX (BioRestor)</option>
+              <option value="TSLA">TSLA (Tesla)</option><option value="LAES">LAES (SEALSQ)</option><option value="NVDA" selected>NVDA (NVIDIA)</option><option value="AAPL">AAPL (Apple)</option><option value="GME">GME (GameStop)</option><option value="RKTO">RKTO (Rocket Lab)</option><option value="TTWO">TTWO (Take-Two)</option><option value="SOC">SOC (Sinoops)</option><option value="ABAT">ABAT (Advanced Bat)</option><option value="BRTX">BRTX (BioRestor)</option>
             </optgroup>
             <optgroup label="🔥 Top 20 Trending Market Leaders">
               <option value="MSFT">MSFT (Microsoft)</option><option value="AMZN">AMZN (Amazon)</option><option value="META">META (Meta)</option><option value="GOOGL">GOOGL (Alphabet)</option><option value="NFLX">NFLX (Netflix)</option><option value="AMD">AMD (Advanced Devices)</option><option value="BABA">BABA (Alibaba)</option><option value="PLTR">PLTR (Palantir)</option><option value="NIO">NIO (Nio Auto)</option><option value="COIN">COIN (Coinbase)</option><option value="SOFI">SOFI (SoFi Tech)</option><option value="MARA">MARA (Mara Digital)</option><option value="HOOD">HOOD (Robinhood)</option><option value="SQ">SQ (Block Inc)</option><option value="PYPL">PYPL (PayPal)</option><option value="DIS">DIS (Walt Disney)</option><option value="XOM">XOM (Exxon Mobil)</option><option value="JPM">JPM (JPMorgan Chase)</option><option value="V">V (Visa Inc)</option><option value="COST">COST (Costco)</option>
@@ -90,31 +90,48 @@
     let activeStockPrice = 124.50;
     let staticClosePrice = 124.50;
     const MasterVirtualTape = {
-      "TSLA": { live: 258.40, close: 256.10 }, "LAES": { live: 2.80, close: 2.75 },
-      "NVDA": { live: 124.50, close: 123.20 }, "AAPL": { live: 182.20, close: 181.40 },
-      "GME": { live: 22.10, close: 21.80 }, "RKTO": { live: 18.60, close: 18.20 },
-      "TTWO": { live: 154.30, close: 153.10 }, "SOC": { live: 12.40, close: 12.10 },
-      "ABAT": { live: 3.15, close: 3.10 }, "BRTX": { live: 0.85, close: 0.82 },
-      "MSFT": { live: 420.50, close: 418.90 }, "AMZN": { live: 185.20, close: 184.10 },
-      "META": { live: 495.10, close: 492.50 }, "GOOGL": { live: 172.40, close: 171.20 },
-      "NFLX": { live: 610.20, close: 607.50 }, "AMD": { live: 165.40, close: 163.80 },
-      "BABA": { live: 74.30, close: 73.90 }, "PLTR": { live: 24.15, close: 23.85 },
-      "NIO": { live: 4.85, close: 4.78 }, "COIN": { live: 225.30, close: 221.40 },
-      "SOFI": { live: 6.90, close: 6.82 }, "MARA": { live: 18.20, close: 17.95 },
-      "HOOD": { live: 19.45, close: 19.10 }, "SQ": { live: 64.20, close: 63.50 },
-      "PYPL": { live: 58.90, close: 58.20 }, "DIS": { live: 112.40, close: 111.50 },
-      "XOM": { live: 118.20, close: 117.40 }, "JPM": { live: 198.50, close: 197.10 },
-      "V": { live: 272.10, close: 270.80 }, "COST": { live: 815.30, close: 811.20 }
+      "TSLA": { live: 258.40, close: 256.10, class: "growth", m9: 1.65, m18: 2.10, m24: 2.50 },
+      "LAES": { live: 2.80, close: 2.75, class: "micro_saas", m9: 2.20, m18: 2.85, m24: 3.40 },
+      "NVDA": { live: 124.50, close: 123.20, class: "compute", m9: 1.45, m18: 1.80, m24: 2.15 },
+      "AAPL": { live: 182.20, close: 181.40, class: "compute", m9: 1.30, m18: 1.55, m24: 1.85 },
+      "GME": { live: 22.10, close: 21.80, class: "speculative", m9: 1.95, m18: 2.50, m24: 3.10 },
+      "RKTO": { live: 18.60, close: 18.20, class: "growth", m9: 1.70, m18: 2.25, m24: 2.70 },
+      "TTWO": { live: 154.30, close: 153.10, class: "growth", m9: 1.40, m18: 1.75, m24: 2.10 },
+      "SOC": { live: 12.40, close: 12.10, class: "speculative", m9: 1.80, m18: 2.30, m24: 2.95 },
+      "ABAT": { live: 3.15, close: 3.10, class: "micro_saas", m9: 2.10, m18: 2.70, m24: 3.25 },
+      "BRTX": { live: 0.85, close: 0.82, class: "micro_saas", m9: 2.50, m18: 3.15, m24: 3.80 },
+      "MSFT": { live: 420.50, close: 418.90, class: "compute", m9: 1.25, m18: 1.45, m24: 1.70 },
+      "AMZN": { live: 185.20, close: 184.10, class: "compute", m9: 1.35, m18: 1.60, m24: 1.90 },
+      "META": { live: 495.10, close: 492.50, class: "compute", m9: 1.40, m18: 1.65, m24: 1.95 },
+      "GOOGL": { live: 172.40, close: 171.20, class: "compute", m9: 1.30, m18: 1.50, m24: 1.80 },
+      "NFLX": { live: 610.20, close: 607.50, class: "compute", m9: 1.35, m18: 1.55, m24: 1.85 },
+      "AMD": { live: 165.40, close: 163.80, class: "compute", m9: 1.50, m18: 1.90, m24: 2.30 },
+      "BABA": { live: 74.30, close: 73.90, class: "growth", m9: 1.45, m18: 1.85, m24: 2.20 },
+      "PLTR": { live: 24.15, close: 23.85, class: "growth", m9: 1.75, m18: 2.40, m24: 2.90 },
+      "NIO": { live: 4.85, close: 4.78, class: "speculative", m9: 1.90, m18: 2.60, m24: 3.20 },
+      "COIN": { live: 225.30, close: 221.40, class: "speculative", m9: 1.85, m18: 2.35, m24: 2.80 },
+      "SOFI": { live: 6.90, close: 6.82, class: "growth", m9: 1.60, m18: 2.10, m24: 2.55 },
+      "MARA": { live: 18.20, close: 17.95, class: "speculative", m9: 2.05, m18: 2.75, m24: 3.30 },
+      "HOOD": { live: 19.45, close: 19.10, class: "growth", m9: 1.55, m18: 1.95, m24: 2.40 },
+      "SQ": { live: 64.20, close: 63.50, class: "growth", m9: 1.50, m18: 1.85, m24: 2.25 },
+      "PYPL": { live: 58.90, close: 58.20, class: "growth", m9: 1.40, m10: 1.70, m24: 2.05 },
+      "DIS": { live: 112.40, close: 111.50, class: "growth", m9: 1.35, m18: 1.60, m24: 1.90 },
+      "XOM": { live: 118.20, close: 117.40, class: "growth", m9: 1.25, m18: 1.45, m24: 1.65 },
+      "JPM": { live: 198.50, close: 197.10, class: "compute", m9: 1.20, m18: 1.40, m24: 1.60 },
+      "V": { live: 272.10, close: 270.80, class: "compute", m9: 1.25, m18: 1.40, m24: 1.65 },
+      "COST": { live: 815.30, close: 811.20, class: "compute", m9: 1.20, m18: 1.35, m24: 1.55 }
     };
     function getDynamicMatrixData(basePrice, ticker) {
-      let isPenny = basePrice < 10; let isCrypto = ["COIN", "MARA", "SOFI", "GME"].includes(ticker);
-      let alpha = isPenny ? 0.65 : isCrypto ? 0.70 : 0.82; let beta = isPenny ? 2.50 : isCrypto ? 1.45 : 1.28;
+      const config = MasterVirtualTape[ticker] || { class: "growth", m9: 1.50, m18: 1.85, m24: 2.25 };
+      let obFactor = config.class === "micro_saas" ? 0.65 : config.class === "speculative" ? 0.70 : 0.82;
+      let ssFactor = config.class === "micro_saas" ? 1.40 : config.class === "speculative" ? 1.35 : 1.24;
       let lookbackDaily = [basePrice * 1.08, basePrice * 1.03, basePrice * 0.96, basePrice * 0.98, basePrice];
       let lookbackWeekly = [basePrice * 1.12, basePrice * 1.07, basePrice * 0.93, basePrice * 0.97, basePrice];
-      let forwardHorizons = [basePrice * 1.02, basePrice * 1.09, basePrice * beta * 0.92, basePrice * beta * 0.96, basePrice * beta, basePrice * beta * 1.18, basePrice * beta * 1.35, basePrice * beta * 1.60];
       if (ticker === "NVDA") { lookbackDaily = [134.46, 130.20, 118.10, 122.40, basePrice]; lookbackWeekly = [135.80, 128.40, 117.90, 121.55, basePrice]; }
-      if (ticker === "LAES") { lookbackDaily = [4.12, 3.35, 2.90, 2.82, basePrice]; lookbackWeekly = [5.20, 4.10, 3.45, 3.10, basePrice]; forwardHorizons = [2.65, 1.85, 4.50, 5.20, 5.88, basePrice * 2.20, basePrice * 2.85, basePrice * 3.40]; }
-      return { c: basePrice, ob: basePrice * alpha, ss: basePrice * beta, dh: lookbackDaily, wh: lookbackWeekly, f: forwardHorizons };
+      if (ticker === "LAES") { lookbackDaily = [4.12, 3.35, 2.90, 2.82, basePrice]; lookbackWeekly = [5.20, 4.10, 3.45, 3.10, basePrice]; }
+      let forwardHorizons = [basePrice * 1.02, basePrice * 0.94, basePrice * ssFactor * 0.90, basePrice * ssFactor * 0.96, basePrice * ssFactor, basePrice * config.m9, basePrice * config.m18, basePrice * config.m24];
+      if (ticker === "LAES") { forwardHorizons = [2.65, 1.85, 4.50, 5.20, 5.88, basePrice * config.m9, basePrice * config.m18, basePrice * config.m24]; }
+      return { c: basePrice, ob: basePrice * obFactor, ss: basePrice * ssFactor, dh: lookbackDaily, wh: lookbackWeekly, f: forwardHorizons };
     }
     function evaluateModelAction(nodePrice, activePrice, idx, totalNodes) { if (idx === totalNodes - 1) return "HOLD"; let ratio = nodePrice / activePrice; if (ratio < 0.97) return "BUY"; if (ratio > 1.03) return "SELL"; return "HOLD"; }
     function handleNodeClick(p) { addNewTransactionRow(p, 10, true); }
@@ -156,28 +173,4 @@
       const act = activeStockPrice; const cls = staticClosePrice;
       document.getElementById('currentClosedPriceDisplay').value = "$" + act.toFixed(2); document.getElementById('marketStaticCloseDisplay').value = "$" + cls.toFixed(2);
       const active = getDynamicMatrixData(act, sym);
-      const val = act * totalShares; const ret = val - totalCapital; const pct = totalCapital > 0 ? (ret / totalCapital) * 100 : 0; const pEl = document.getElementById('ledger-current-profit');
-      if (totalShares === 0 || vwac === 0) { pEl.innerText = "$0.00 (0.00%)"; pEl.className = "card-value"; }
-      else { pEl.innerText = `${ret >= 0 ? '+$' : '-$'}${Math.abs(ret).toFixed(2)} (${ret >= 0 ? '+' : ''}${pct.toFixed(2)}%)`; pEl.className = ret >= 0 ? "card-value text-green" : "card-value text-red"; }
-      document.getElementById('ledger-alpha-profit').innerText = "$" + active.ob.toFixed(2); document.getElementById('ledger-beta-profit').innerText = "$" + active.ss.toFixed(2);
-      const hist = tf === 'weekly' ? active.wh : active.dh;
-      const dailyLabels = ["Mid June", "Late June", "Early July", "Mid July", "Actual Today"]; const weeklyLabels = ["Early May", "Late May", "Early June", "Late June", "Actual Today"]; const hLabels = tf === 'weekly' ? weeklyLabels : dailyLabels;
-      document.getElementById('historyPanelTitle').innerText = tf === 'weekly' ? "📋 Lookback Horizon Matrix (Weekly Resolution)" : "📋 Lookback Horizon Matrix (Daily Resolution)";
-      const hTab = document.getElementById('historicalTableBody'); hTab.innerHTML = "";
-      hist.forEach((hp, idx) => {
-        let chgLive = ((hp - act) / act) * 100; let chgClose = ((hp - cls) / cls) * 100; let a = evaluateModelAction(hp, act, idx, hist.length);
-        hTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${hp})"><td><span class="highlight-blue">${hLabels[idx]}</span></td><td>$${hp.toFixed(2)}</td><td class="${chgLive>=0?'text-green':'text-red'}">${chgLive>=0?'+':''}${chgLive.toFixed(2)}%</td><td class="${chgClose>=0?'text-green':'text-red'}">${chgClose>=0?'+':''}${chgClose.toFixed(2)}%</td><td><span class="badge ${a.includes('BUY')?'badge-buy':a.includes('SELL')?'badge-sell':'badge-hold'}">${a}</span></td></tr>`;
-      });
-      const pTab = document.getElementById('predictiveTableBody'); pTab.innerHTML = "";
-      const fLabels = ["August Forecast", "September Target", "October Horizon", "November Trajectory", "January Peak", "April Zenith (9-Mo View)", "October Macro (18-Mo Peak)", "July Horizon (24-Mo View)"]; 
-      const blueprints = ["HOLD (EXPANSION LOOKAHEAD)", "STRONG BUY", "SCALED SELL", "SCALED SELL", "LIQUIDATE POSITION", "LIQUIDATE POSITION", "EXIT ZENITH CEILING", "EXIT ZENITH CEILING"];
-      fLabels.forEach((hName, idx) => {
-        let fPrice = active.f[idx]; let gain = ((fPrice - act) / act) * 100;
-        pTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${fPrice})"><td><span class="highlight-purple">${hName}</span></td><td style="font-weight:700;">$${fPrice.toFixed(2)}</td><td class="${gain>=0?'text-green':'text-red'}">${gain>=0?'+':''}${gain.toFixed(2)}%</td><td><span class="badge ${blueprints[idx].includes("BUY")||blueprints[idx].includes("ACCUM")?'badge-buy':'badge-sell'}">${blueprints[idx]}</span></td></tr>`;
-      });
-      generateNativeSvgGraph(hist, active.f, active.ob, active.ss, tf, hLabels, fLabels, blueprints); savePortfolioToCache();
-    }
-    window.addEventListener('DOMContentLoaded', () => { let rememberedTicker = localStorage.getItem(`quant_active_ticker`) || "NVDA"; document.getElementById('tickerSelect').value = rememberedTicker; loadPortfolioFromCache(rememberedTicker); scrapeRealtimeMarketPrice(rememberedTicker); computeTrendEngine(); });
-  </script>
-</body>
-</html>
+      const val = act * totalShares; const ret = val - totalCapital; const pct = totalCapital > 0 ?
