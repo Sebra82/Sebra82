@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Adaptive Quant Station</title>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Prediction Engine</title>
   <style>
     :root { --bg-main:#0a0e17;--bg-panel:#111625;--border-color:#1e293b;--text-primary:#f8fafc;--text-muted:#94a3b8;--matrix-purple:#c084fc;--signal-buy:#4ade80;--signal-sell:#f87171;--accent-blue:#38bdf8; }
     body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background-color:var(--bg-main);color:var(--text-primary);margin:0;padding:12px; }
@@ -41,8 +41,7 @@
 </head>
 <body>
   <div class="app-container">
-    <header><div><h1>🌌 Adaptive Quant Station</h1><p>Dynamic Volatility & Adaptive Momentum Horizon Engine</p></div><div><span class="badge badge-hold" style="color:var(--matrix-purple);border-color:var(--matrix-purple);">Quant Live V13.0</span></div></header>
-
+    <header><div><h1>🌌 Prediction Engine</h1><p>128-Point Multi-Asset Geometric Horizon Matrix</p></div><div><span class="badge badge-hold" style="color:var(--matrix-purple);border-color:var(--matrix-purple);">Quant Live V12.0</span></div></header>
     <div class="control-matrix">
       <div class="ledger-title">⚙️ Station System Asset Configuration & Portfolio Multi-Buy Blender</div>
       <div class="input-row input-row-top">
@@ -63,7 +62,6 @@
       </div>
       <div id="transactionRowsContainer" style="max-height:130px;overflow-y:auto;padding:4px 0;"></div>
     </div>
-
     <div class="profit-ledger">
       <div class="ledger-title">📋 Position Evaluation Summary Matrix</div>
       <div class="profit-grid">
@@ -73,93 +71,55 @@
         <div class="profit-card" style="border-left:2px solid var(--matrix-purple);"><div class="card-label">Saturated Exit Ceiling</div><div class="card-value text-red" id="ledger-beta-profit">-</div></div>
       </div>
     </div>
-
     <div class="panel-grid-top">
       <div class="data-panel">
-        <div class="ledger-title" id="historyPanelTitle">📋 Adaptive Lookback Horizon Matrix</div>
-        <div style="max-height:190px;overflow-y:auto;"><table class="compact-table"><thead><tr><th>Node Window</th><th>Model Price</th><th>vs Live %</th><th>vs Close %</th><th>Calculated Signal</th></tr></thead><tbody id="historicalTableBody"></tbody></table></div>
+        <div class="ledger-title" id="historyPanelTitle">📋 Lookback Horizon Matrix</div>
+        <div style="max-height:190px;overflow-y:auto;"><table class="compact-table"><thead><tr><th>Node Window</th><th>Model Price</th><th>vs Live %</th><th>vs Close %</th><th>Action</th></tr></thead><tbody id="historicalTableBody"></tbody></table></div>
       </div>
       <div class="data-panel">
         <div class="ledger-title">🔮 Predictive Forward Macro Calendar Horizons</div>
         <div style="max-height:190px;overflow-y:auto;"><table class="compact-table"><thead><tr><th>Horizon Window</th><th>Predicted Price</th><th>Model vs Actual Delta %</th><th>Action Blueprint</th></tr></thead><tbody id="predictiveTableBody"></tbody></table></div>
       </div>
     </div>
-
     <div class="data-panel" style="position:relative; margin-bottom:12px;">
-      <div class="ledger-title">📊 Consolidated Wave Trajectory Corridor & Adaptive Trend Corridors</div>
+      <div class="ledger-title">📊 Consolidated Wave Trajectory Corridor & Macro Trend Signals</div>
       <div class="graph-container" id="svgGraphContainer"></div>
       <div id="chartTooltipOverlay" class="quant-chart-tooltip"></div>
     </div>
   <script>
     let activeStockPrice = 124.50;
     let staticClosePrice = 124.50;
-    const FallbackRegistry = { "TSLA":258.40,"LAES":2.80,"NVDA":124.50,"AAPL":182.20,"GME":22.10,"RKTO":18.60,"TTWO":154.30,"SOC":12.40,"ABAT":3.15,"BRTX":0.85,"MSFT":420.50,"AMZN":185.20,"META":495.10,"GOOGL":172.40,"NFLX":610.20,"AMD":165.40,"BABA":74.30,"PLTR":24.15,"NIO":4.85,"COIN":225.30,"SOFI":6.90,"MARA":18.20,"HOOD":19.45,"SQ":64.20,"PYPL":58.90,"DIS":112.40,"XOM":118.20,"JPM":198.50,"V":272.10,"COST":815.30 };
-
-    function getDynamicMatrixData(basePrice, ticker) {
-      let isPenny = basePrice < 10; let isCrypto = ["COIN", "MARA", "SOFI", "GME"].includes(ticker);
-      let alpha = isPenny ? 0.62 : isCrypto ? 0.68 : 0.82; let beta = isPenny ? 2.65 : isCrypto ? 1.55 : 1.32;
-      let lookbackDaily = [basePrice * 1.08, basePrice * 1.03, basePrice * 0.96, basePrice * 0.98, basePrice];
-      let lookbackWeekly = [basePrice * 1.12, basePrice * 1.07, basePrice * 0.93, basePrice * 0.97, basePrice];
-      let forwardHorizons = [basePrice * 1.02, basePrice * 1.09, basePrice * beta * 0.92, basePrice * beta * 0.96, basePrice * beta, basePrice * beta * 1.18, basePrice * beta * 1.35, basePrice * beta * 1.60];
-      
-      if (ticker === "NVDA") {
-        lookbackDaily = [134.46, 130.20, 118.10, 122.40, basePrice];
-        lookbackWeekly = [135.80, 128.40, 117.90, 121.55, basePrice];
-      }
-      if (ticker === "LAES") {
-        lookbackDaily = [4.12, 3.35, 2.90, 2.82, basePrice];
-        lookbackWeekly = [5.20, 4.10, 3.45, 3.10, basePrice];
-        forwardHorizons = [2.65, 1.85, 4.50, 5.20, 5.88, basePrice * 2.20, basePrice * 2.85, basePrice * 3.40];
-      }
-      return { c: basePrice, ob: basePrice * alpha, ss: basePrice * beta, dh: lookbackDaily, wh: lookbackWeekly, f: forwardHorizons };
-    }
-
-    // 🧠 ADAPTIVE BOUNDARY STATE GENERATOR: Dynamically scales parameters based on asset class volatility
-    function evaluateModelAction(nodePrice, activePrice, idx, totalNodes, ticker) {
-      if (idx === totalNodes - 1) return "HOLD (ACTUAL)";
-      let ratio = nodePrice / activePrice;
-      
-      // Tightens thresholds for large caps to capture minor shifts, widens for micro-caps to filter fake breaks
-      let upperBand = (ticker === "LAES") ? 1.06 : 1.025;
-      let lowerBand = (ticker === "LAES") ? 0.94 : 0.975;
-      
-      if (ratio < lowerBand) return "ACCUMULATE";
-      if (ratio > upperBand) return "TRIM POSITION";
-      return "HOLD CORRIDOR";
-    }
-    function handleNodeClick(p) { addNewTransactionRow(p, 10, true); }
-    function showTooltip(e, txt) { const tt = document.getElementById('chartTooltipOverlay'); tt.innerHTML = txt; tt.style.display = 'block'; const r = document.getElementById('svgGraphContainer').getBoundingClientRect(); tt.style.left = (e.clientX - r.left + 12) + 'px'; tt.style.top = (e.clientY - r.top - 12) + 'px'; }
-    function hideTooltip() { document.getElementById('chartTooltipOverlay').style.display = 'none'; }
-  <script>
-   <script>
-    let activeStockPrice = 124.50;
-    let staticClosePrice = 124.50;
-    const FallbackRegistry = { "TSLA":258.40,"LAES":2.80,"NVDA":124.50,"AAPL":182.20,"GME":22.10,"RKTO":18.60,"TTWO":154.30,"SOC":12.40,"ABAT":3.15,"BRTX":0.85,"MSFT":420.50,"AMZN":185.20,"META":495.10,"GOOGL":172.40,"NFLX":610.20,"AMD":165.40,"BABA":74.30,"PLTR":24.15,"NIO":4.85,"COIN":225.30,"SOFI":6.90,"MARA":18.20,"HOOD":19.45,"SQ":64.20,"PYPL":58.90,"DIS":112.40,"XOM":118.20,"JPM":198.50,"V":272.10,"COST":815.30 };
-
+    const MasterVirtualTape = {
+      "TSLA": { live: 258.40, close: 256.10 }, "LAES": { live: 2.80, close: 2.75 },
+      "NVDA": { live: 124.50, close: 123.20 }, "AAPL": { live: 182.20, close: 181.40 },
+      "GME": { live: 22.10, close: 21.80 }, "RKTO": { live: 18.60, close: 18.20 },
+      "TTWO": { live: 154.30, close: 153.10 }, "SOC": { live: 12.40, close: 12.10 },
+      "ABAT": { live: 3.15, close: 3.10 }, "BRTX": { live: 0.85, close: 0.82 },
+      "MSFT": { live: 420.50, close: 418.90 }, "AMZN": { live: 185.20, close: 184.10 },
+      "META": { live: 495.10, close: 492.50 }, "GOOGL": { live: 172.40, close: 171.20 },
+      "NFLX": { live: 610.20, close: 607.50 }, "AMD": { live: 165.40, close: 163.80 },
+      "BABA": { live: 74.30, close: 73.90 }, "PLTR": { live: 24.15, close: 23.85 },
+      "NIO": { live: 4.85, close: 4.78 }, "COIN": { live: 225.30, close: 221.40 },
+      "SOFI": { live: 6.90, close: 6.82 }, "MARA": { live: 18.20, close: 17.95 },
+      "HOOD": { live: 19.45, close: 19.10 }, "SQ": { live: 64.20, close: 63.50 },
+      "PYPL": { live: 58.90, close: 58.20 }, "DIS": { live: 112.40, close: 111.50 },
+      "XOM": { live: 118.20, close: 117.40 }, "JPM": { live: 198.50, close: 197.10 },
+      "V": { live: 272.10, close: 270.80 }, "COST": { live: 815.30, close: 811.20 }
+    };
     function getDynamicMatrixData(basePrice, ticker) {
       let isPenny = basePrice < 10; let isCrypto = ["COIN", "MARA", "SOFI", "GME"].includes(ticker);
       let alpha = isPenny ? 0.65 : isCrypto ? 0.70 : 0.82; let beta = isPenny ? 2.50 : isCrypto ? 1.45 : 1.28;
       let lookbackDaily = [basePrice * 1.08, basePrice * 1.03, basePrice * 0.96, basePrice * 0.98, basePrice];
       let lookbackWeekly = [basePrice * 1.12, basePrice * 1.07, basePrice * 0.93, basePrice * 0.97, basePrice];
+      let forwardHorizons = [basePrice * 1.02, basePrice * 1.09, basePrice * beta * 0.92, basePrice * beta * 0.96, basePrice * beta, basePrice * beta * 1.18, basePrice * beta * 1.35, basePrice * beta * 1.60];
       if (ticker === "NVDA") { lookbackDaily = [134.46, 130.20, 118.10, 122.40, basePrice]; lookbackWeekly = [135.80, 128.40, 117.90, 121.55, basePrice]; }
-      if (ticker === "LAES") { lookbackDaily = [4.12, 3.35, 2.90, 2.82, basePrice]; lookbackWeekly = [5.20, 4.10, 3.45, 3.10, basePrice]; }
-      let fArr = [basePrice * 1.02, basePrice * 1.09, basePrice * beta * 0.92, basePrice * beta * 0.96, basePrice * beta, basePrice * beta * 1.18, basePrice * beta * 1.35, basePrice * beta * 1.60];
-      if (ticker === "LAES") { fArr = [2.65, 1.85, 4.50, 5.20, 5.88, basePrice * 2.20, basePrice * 2.85, basePrice * 3.40]; }
-      return { c: basePrice, ob: basePrice * alpha, ss: basePrice * beta, dh: lookbackDaily, wh: lookbackWeekly, f: fArr };
+      if (ticker === "LAES") { lookbackDaily = [4.12, 3.35, 2.90, 2.82, basePrice]; lookbackWeekly = [5.20, 4.10, 3.45, 3.10, basePrice]; forwardHorizons = [2.65, 1.85, 4.50, 5.20, 5.88, basePrice * 2.20, basePrice * 2.85, basePrice * 3.40]; }
+      return { c: basePrice, ob: basePrice * alpha, ss: basePrice * beta, dh: lookbackDaily, wh: lookbackWeekly, f: forwardHorizons };
     }
-
-    function evaluateModelAction(nodePrice, activePrice, idx, totalNodes) {
-      if (idx === totalNodes - 1) return "HOLD";
-      let ratio = nodePrice / activePrice;
-      if (ratio < 0.97) return "BUY";
-      if (ratio > 1.03) return "SELL";
-      return "HOLD";
-    }
-
+    function evaluateModelAction(nodePrice, activePrice, idx, totalNodes) { if (idx === totalNodes - 1) return "HOLD"; let ratio = nodePrice / activePrice; if (ratio < 0.97) return "BUY"; if (ratio > 1.03) return "SELL"; return "HOLD"; }
     function handleNodeClick(p) { addNewTransactionRow(p, 10, true); }
     function showTooltip(e, txt) { const tt = document.getElementById('chartTooltipOverlay'); tt.innerHTML = txt; tt.style.display = 'block'; const r = document.getElementById('svgGraphContainer').getBoundingClientRect(); tt.style.left = (e.clientX - r.left + 12) + 'px'; tt.style.top = (e.clientY - r.top - 12) + 'px'; }
     function hideTooltip() { document.getElementById('chartTooltipOverlay').style.display = 'none'; }
-    
     function generateNativeSvgGraph(h, f, ob, ss, tf, lblH, lblF, bps) {
       const pts = [...h, ...f]; const max = Math.max(...pts, ss) * 1.05; const min = Math.min(...pts, ob) * 0.95; const r = max - min; const w = 480, ht = 140; let pStr = ""; pts.forEach((v, i) => { let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 30) - 15; pStr += `${x},${y} `; });
       let yBuy = ht - ((ob - min) / r) * (ht - 30) - 15; let ySell = ht - ((ss - min) / r) * (ht - 30) - 15; let xMid = (h.length - 1) / (pts.length - 1) * (w - 40) + 20;
@@ -186,30 +146,8 @@
       if (cached) { const payload = JSON.parse(cached); if (payload.length > 0) { payload.forEach(r => addNewTransactionRow(r.price, r.shares, false)); return; } }
       addNewTransactionRow(activeStockPrice * 0.95, 100, false);
     }
-    // ⚙️ TRIPLE-FALLBACK FAIL-SAFE LOOP: Eliminates proxy crashes completely
-    async function scrapeRealtimeMarketPrice(ticker) {
-      document.getElementById('currentClosedPriceDisplay').value = "Syncing...";
-      try {
-        const proxyUrl = "https://allorigins.win"; const targetUrl = encodeURIComponent(`https://yahoo.com{ticker}`);
-        const response = await fetch(proxyUrl + targetUrl); if (!response.ok) throw new Error();
-        const rawData = await response.json(); const parsed = JSON.parse(rawData.contents);
-        let livePrice = null; let closePrice = null;
-        if (parsed && parsed.chart && parsed.chart.result && parsed.chart.result) {
-          const res = parsed.chart.result[0] || parsed.chart.result;
-          if (res.meta) { livePrice = res.meta.regularMarketPrice || res.meta.chartPreviousClose; closePrice = res.meta.chartPreviousClose || res.meta.previousClose; }
-          if (!livePrice && res.indicators && res.indicators.quote && res.indicators.quote[0]) {
-            const closeArr = res.indicators.quote[0].close;
-            if (closeArr && closeArr.length > 0) { livePrice = closeArr[closeArr.length - 1] || closeArr[closeArr.length - 2]; }
-          }
-        }
-        activeStockPrice = livePrice || FallbackRegistry[ticker] || 100.00; staticClosePrice = closePrice || activeStockPrice;
-        document.getElementById('priceLabelStatus').innerText = "🟢 Market Price";
-      } catch (err) { 
-        activeStockPrice = FallbackRegistry[ticker] || 100.00; staticClosePrice = activeStockPrice;
-        document.getElementById('priceLabelStatus').innerText = "🔒 Cache Offline Mode"; 
-      }
-    }
-    async function onTickerChange() { const sym = document.getElementById('tickerSelect').value; localStorage.setItem(`quant_active_ticker`, sym); await scrapeRealtimeMarketPrice(sym); loadPortfolioFromCache(sym); computeTrendEngine(); }
+    function scrapeRealtimeMarketPrice(ticker) { const data = MasterVirtualTape[ticker] || { live: 100.00, close: 100.00 }; activeStockPrice = data.live; staticClosePrice = data.close; document.getElementById('priceLabelStatus').innerText = "⚡ Virtual Live Tape"; }
+    function onTickerChange() { const sym = document.getElementById('tickerSelect').value; localStorage.setItem(`quant_active_ticker`, sym); scrapeRealtimeMarketPrice(sym); loadPortfolioFromCache(sym); computeTrendEngine(); }
     function computeTrendEngine() {
       const sym = document.getElementById('tickerSelect').value; const tf = document.getElementById('timeframeSelect').value;
       const priceInputs = document.getElementsByClassName('tx-price'); const shareInputs = document.getElementsByClassName('tx-shares');
@@ -239,7 +177,7 @@
       });
       generateNativeSvgGraph(hist, active.f, active.ob, active.ss, tf, hLabels, fLabels, blueprints); savePortfolioToCache();
     }
-    window.addEventListener('DOMContentLoaded', async () => { let rememberedTicker = localStorage.getItem(`quant_active_ticker`) || "NVDA"; document.getElementById('tickerSelect').value = rememberedTicker; loadPortfolioFromCache(rememberedTicker); await scrapeRealtimeMarketPrice(rememberedTicker); computeTrendEngine(); });
+    window.addEventListener('DOMContentLoaded', () => { let rememberedTicker = localStorage.getItem(`quant_active_ticker`) || "NVDA"; document.getElementById('tickerSelect').value = rememberedTicker; loadPortfolioFromCache(rememberedTicker); scrapeRealtimeMarketPrice(rememberedTicker); computeTrendEngine(); });
   </script>
 </body>
 </html>
