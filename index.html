@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Prediction Engine</title>
   <style>
-    :root { --bg-main:#0a0e17;--bg-panel:#111625;--border-color:#1e293b;--text-primary:#f8fafc;--text-muted:#94a3b8;--matrix-purple:#c084fc;--signal-buy:#4ade80;--signal-sell:#f87171;--accent-blue:#38bdf8; }
-    body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background-color:var(--bg-main);color:var(--text-primary);margin:0;padding:12px; }
+    :root { --bg-main:#060a12;--bg-panel:#0d1527;--border-color:#1e293b;--text-primary:#f8fafc;--text-muted:#64748b;--matrix-purple:#c084fc;--signal-buy:#22c55e;--signal-sell:#ef4444;--accent-blue:#38bdf8; }
+    body { font-family:-apple-system,BlinkMacSystemFont,sans-serif;background-color:var(--bg-main);color:var(--text-primary);margin:0;padding:12px; }
     .app-container { max-width:1250px;margin:0 auto; }
     header { margin-bottom:12px;border-bottom:1px solid var(--border-color);padding-bottom:8px;display:flex;justify-content:space-between;align-items:center; }
-    h1 { margin:0;font-size:20px;color:#ffffff;font-weight:700;letter-spacing:-0.5px; }
+    h1 { margin:0;font-size:18px;color:#ffffff;font-weight:700;letter-spacing:-0.5px; }
     .panel-grid-top,.panel-grid-bottom { display:grid;grid-template-columns:1fr 1.1fr;gap:12px;margin-bottom:12px; }
     @media (max-width:868px) { .panel-grid-top,.panel-grid-bottom { grid-template-columns:1fr; } }
-    .control-matrix,.profit-ledger,.data-panel,.ledger-container { background-color:var(--bg-panel);border:1px solid var(--border-color);border-radius:8px;padding:12px;margin-bottom:12px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.2); }
+    .control-matrix,.profit-ledger,.data-panel,.ledger-container { background-color:var(--bg-panel);border:1px solid var(--border-color);border-radius:8px;padding:12px;box-shadow:0 4px 20px rgba(0,0,0,0.4); }
     .input-row { display:flex;gap:10px;align-items:center;flex-wrap:wrap; }
     .input-row-top { border-bottom:1px solid var(--border-color);padding-bottom:10px;margin-bottom:10px; }
     .input-group { display:flex;flex-direction:column;gap:3px; }
     label { font-size:9px;font-weight:700;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.5px; }
     input,select { background-color:var(--bg-main);border:1px solid var(--border-color);color:#ffffff;padding:6px 10px;border-radius:4px;font-size:12px;font-weight:600; }
     button { background-color:var(--matrix-purple);color:#ffffff;border:none;padding:8px 14px;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:0.5px; }
-    .btn-delete { background-color:#5a181e;padding:4px 8px;font-size:10px;color:#fff;border:1px solid #7f1d1d;border-radius:4px;cursor:pointer; }
+    .btn-delete { background-color:#3b0712;padding:4px 8px;font-size:10px;color:#ef4444;border:1px solid #7f1d1d;border-radius:4px;cursor:pointer; }
     .transaction-row { display:flex;gap:10px;align-items:center;margin-bottom:6px;background:var(--bg-main);padding:6px;border-radius:4px;border:1px solid var(--border-color); }
     .compact-table { width:100%;border-collapse:collapse;font-size:11px;text-align:left; }
-    .compact-table th { padding:5px 6px;color:var(--text-muted);font-weight:700;text-transform:uppercase;font-size:9px;border-bottom:1px solid var(--border-color);letter-spacing:0.5px; }
+    .compact-table th { padding:5px 6px;color:var(--text-muted);font-weight:700;text-transform:uppercase;font-size:9px;border-bottom:1px solid var(--border-color); }
     .compact-table td { padding:6px;border-bottom:1px solid #1e293b;font-weight:500; }
     .profit-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:8px; }
     @media (max-width:580px) { .profit-grid { grid-template-columns:repeat(2, 1fr); } }
@@ -34,7 +34,7 @@
     .badge-hold { background-color:#1e293b;color:var(--text-muted);border:1px solid #334155; }
     .graph-container { background:var(--bg-main);border:1px solid var(--border-color);border-radius:6px;padding:8px;position:relative;display:flex;justify-content:center;align-items:center; }
     .interactive-node { cursor:pointer;transition:r 0.15s ease; } .interactive-node:hover { r:7.5;stroke:#ffffff;stroke-width:1.5; }
-    .quant-chart-tooltip { position:absolute;display:none;background:rgba(17, 22, 37, 0.95);border:1px solid var(--matrix-purple);border-radius:4px;padding:6px 10px;font-size:10px;font-family:monospace;color:#fff;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,0.6);z-index:100;line-height:1.3; }
+    .quant-chart-tooltip { position:absolute;display:none;background:rgba(13,21,39,0.95);border:1px solid var(--matrix-purple);border-radius:4px;padding:6px 10px;font-size:10px;font-family:monospace;color:#fff;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,0.6);z-index:100;line-height:1.3; }
     .highlight-purple { color:var(--matrix-purple); } .highlight-blue { color:var(--accent-blue); }
     .text-green { color:var(--signal-buy) !important; } .text-red { color:var(--signal-sell) !important; }
   </style>
@@ -42,16 +42,13 @@
 <body>
   <div class="app-container">
     <header><div><h1>🌌 Prediction Engine</h1><p>128-Point Multi-Asset Geometric Horizon Matrix</p></div><div><span class="badge badge-hold" style="color:var(--matrix-purple);border-color:var(--matrix-purple);">Quant Live V12.0</span></div></header>
-    <div class="control-matrix">
+    <div class="control-matrix" style="margin-bottom:12px;">
       <div class="ledger-title">⚙️ Station System Asset Configuration & Portfolio Multi-Buy Blender</div>
       <div class="input-row input-row-top">
         <div class="input-group"><label for="tickerSelect">Tracked Asset</label>
           <select id="tickerSelect" onchange="onTickerChange()" style="width:140px;">
             <optgroup label="💼 Your Portfolio Assets">
-              <option value="TSLA">TSLA (Tesla)</option><option value="LAES">LAES (Lightspeed)</option><option value="NVDA" selected>NVDA (NVIDIA)</option><option value="AAPL">AAPL (Apple)</option><option value="GME">GME (GameStop)</option><option value="RKTO">RKTO (Rocket Lab)</option><option value="TTWO">TTWO (Take-Two)</option><option value="SOC">SOC (Sinoops)</option><option value="ABAT">ABAT (Advanced Bat)</option><option value="BRTX">BRTX (BioRestor)</option>
-            </optgroup>
-            <optgroup label="🔥 Top 20 Trending Market Leaders">
-              <option value="MSFT">MSFT (Microsoft)</option><option value="AMZN">AMZN (Amazon)</option><option value="META">META (Meta)</option><option value="GOOGL">GOOGL (Alphabet)</option><option value="NFLX">NFLX (Netflix)</option><option value="AMD">AMD (Advanced Devices)</option><option value="BABA">BABA (Alibaba)</option><option value="PLTR">PLTR (Palantir)</option><option value="NIO">NIO (Nio Auto)</option><option value="COIN">COIN (Coinbase)</option><option value="SOFI">SOFI (SoFi Tech)</option><option value="MARA">MARA (Mara Digital)</option><option value="HOOD">HOOD (Robinhood)</option><option value="SQ">SQ (Block Inc)</option><option value="PYPL">PYPL (PayPal)</option><option value="DIS">DIS (Walt Disney)</option><option value="XOM">XOM (Exxon Mobil)</option><option value="JPM">JPM (JPMorgan Chase)</option><option value="V">V (Visa Inc)</option><option value="COST">COST (Costco)</option>
+              <option value="TSLA">TSLA (Tesla)</option><option value="LAES">LAES (SEALSQ)</option><option value="NVDA" selected>NVDA (NVIDIA)</option><option value="AAPL">AAPL (Apple)</option><option value="GME">GME (GameStop)</option><option value="RKTO">RKTO (Rocket Lab)</option><option value="TTWO">TTWO (Take-Two)</option><option value="SOC">SOC (Sinoops)</option><option value="ABAT">ABAT (Advanced Bat)</option><option value="BRTX">BRTX (BioRestor)</option>
             </optgroup>
           </select>
         </div>
@@ -62,7 +59,7 @@
       </div>
       <div id="transactionRowsContainer" style="max-height:130px;overflow-y:auto;padding:4px 0;"></div>
     </div>
-    <div class="profit-ledger">
+    <div class="profit-ledger" style="margin-bottom:12px;">
       <div class="ledger-title">📋 Position Evaluation Summary Matrix</div>
       <div class="profit-grid">
         <div class="profit-card"><div class="card-label">Blended VWAC</div><div class="card-value highlight-purple" id="ledger-avg-cost">-</div></div>
@@ -71,7 +68,7 @@
         <div class="profit-card" style="border-left:2px solid var(--matrix-purple);"><div class="card-label">Saturated Exit Ceiling</div><div class="card-value text-red" id="ledger-beta-profit">-</div></div>
       </div>
     </div>
-    <div class="panel-grid-top">
+    <div class="panel-grid-top" style="margin-bottom:12px;">
       <div class="data-panel">
         <div class="ledger-title" id="historyPanelTitle">📋 Lookback Horizon Matrix</div>
         <div style="max-height:190px;overflow-y:auto;"><table class="compact-table"><thead><tr><th>Node Window</th><th>Model Price</th><th>vs Live %</th><th>vs Close %</th><th>Action</th></tr></thead><tbody id="historicalTableBody"></tbody></table></div>
@@ -88,11 +85,10 @@
     </div>
   <script>
     let activeStockPrice = 124.50; let staticClosePrice = 124.50;
-    const FallbackRegistry = { "TSLA":258.40,"LAES":2.80,"NVDA":124.50,"AAPL":182.20,"GME":22.10,"RKTO":18.60,"TTWO":154.30,"SOC":12.40,"ABAT":3.15,"BRTX":0.85,"MSFT":420.50,"AMZN":185.20,"META":495.10,"GOOGL":172.40,"NFLX":610.20,"AMD":165.40,"BABA":74.30,"PLTR":24.15,"NIO":4.85,"COIN":225.30,"SOFI":6.90,"MARA":18.20,"HOOD":19.45,"SQ":64.20,"PYPL":58.90,"DIS":112.40,"XOM":118.20,"JPM":198.50,"V":272.10,"COST":815.30 };
+    const FallbackRegistry = { "TSLA":258.40,"LAES":2.80,"NVDA":124.50,"AAPL":182.20,"GME":22.10,"RKTO":18.60,"TTWO":154.30,"SOC":12.40,"ABAT":3.15,"BRTX":0.85 };
 
     function getDynamicMatrixData(basePrice, ticker) {
-      let isPenny = basePrice < 10; let isCrypto = ["COIN", "MARA", "SOFI", "GME"].includes(ticker);
-      let alpha = isPenny ? 0.65 : isCrypto ? 0.70 : 0.82; let beta = isPenny ? 2.50 : isCrypto ? 1.45 : 1.28;
+      let isPenny = basePrice < 10; let alpha = isPenny ? 0.65 : 0.82; let beta = isPenny ? 2.50 : 1.28;
       let lookbackDaily = [basePrice * 1.08, basePrice * 1.03, basePrice * 0.96, basePrice * 0.98, basePrice];
       let lookbackWeekly = [basePrice * 1.12, basePrice * 1.07, basePrice * 0.93, basePrice * 0.97, basePrice];
       if (ticker === "NVDA") { lookbackDaily = [134.46, 130.20, 118.10, 122.40, basePrice]; lookbackWeekly = [135.80, 128.40, 117.90, 121.55, basePrice]; }
@@ -112,11 +108,11 @@
     function generateNativeSvgGraph(h, f, ob, ss, tf, lblH, lblF, bps) {
       const pts = [...h, ...f]; const max = Math.max(...pts, ss) * 1.05; const min = Math.min(...pts, ob) * 0.95; const r = max - min; const w = 480, ht = 140; let pStr = ""; pts.forEach((v, i) => { let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 30) - 15; pStr += `${x},${y} `; });
       let yBuy = ht - ((ob - min) / r) * (ht - 30) - 15; let ySell = ht - ((ss - min) / r) * (ht - 30) - 15; let xMid = (h.length - 1) / (pts.length - 1) * (w - 40) + 20;
-      let markup = `<svg viewBox="0 0 ${w} ${ht}" style="width:100%; height:100%;"><rect x="20" y="5" width="${w-40}" height="${Math.max(5, ySell-5)}" fill="#7f1d1d" opacity="0.12" /><rect x="20" y="${yBuy}" width="${w-40}" height="${Math.max(5, ht-yBuy-5)}" fill="#064e3b" opacity="0.12" /><line x1="${xMid}" y1="5" x2="${xMid}" y2="${ht-5}" stroke="#334155" stroke-dasharray="3,3" /><polyline points="${pStr}" fill="none" stroke="#c084fc" stroke-width="2.2" />`;
+      let markup = `<svg viewBox="0 0 ${w} ${ht}" style="width:100%; height:100%;"><rect x="20" y="5" width="${w-40}" height="${Math.max(5, ySell-5)}" fill="#3b0712" fill-opacity="0.4" /><rect x="20" y="${yBuy}" width="${w-40}" height="${Math.max(5, ht-yBuy-5)}" fill="#064e3b" fill-opacity="0.4" /><line x1="${xMid}" y1="5" x2="${xMid}" y2="${ht-5}" stroke="#1e293b" stroke-dasharray="3,3" /><polyline points="${pStr}" fill="none" stroke="#c084fc" stroke-width="2.5" />`;
       pts.forEach((v, i) => {
-        let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 30) - 15; let isF = i >= h.length; let c = isF ? "#38bdf8" : (i === h.length - 1) ? "#ffffff" : "#4ade80";
+        let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 30) - 15; let isF = i >= h.length; let c = isF ? "#38bdf8" : (i === h.length - 1) ? "#ffffff" : "#22c55e";
         let lbl = isF ? lblF[i - h.length] : lblH[i]; let a = isF ? bps[i - h.length] : evaluateModelAction(v, activeStockPrice, i, h.length);
-        let txt = `<strong>${lbl}</strong><br/>Price: $${v.toFixed(2)}<br/>Action: <span style="color:${a.includes('BUY')?'#4ade80':a.includes('SELL')||a.includes('ZENITH')?'#f87171':'#94a3b8'}">${a}</span>`;
+        let txt = `<strong>${lbl}</strong><br/>Price: $${v.toFixed(2)}<br/>Action: <span style="color:${a.includes('BUY')?'#22c55e':a.includes('SELL')||a.includes('ZENITH')?'#ef4444':'#64748b'}">${a}</span>`;
         markup += `<circle class="interactive-node" cx="${x}" cy="${y}" r="4.2" fill="${c}" onclick="handleNodeClick(${v})" onmousemove="showTooltip(event, '${txt}')" onmouseout="hideTooltip();" onmouseover="this.setAttribute('r', 6);"></circle>`;
       });
       document.getElementById('svgGraphContainer').innerHTML = markup + `</svg>`;
@@ -138,7 +134,7 @@
     window.handleDirectJSONPResponse = function(res) {
       try {
         if (res && res.chart && res.chart.result && res.chart.result[0]) {
-          const meta = res.chart.result[0].meta; activeStockPrice = meta.regularMarketPrice || FallbackRegistry[res.chart.result[0].meta.symbol] || 100.00;
+          const meta = res.chart.result[0].meta; activeStockPrice = meta.regularMarketPrice || FallbackRegistry[meta.symbol] || 100.00;
           staticClosePrice = meta.chartPreviousClose || meta.previousClose || activeStockPrice;
           document.getElementById('priceLabelStatus').innerText = "🟢 Real-Time Net Feed";
         } else { throw new Error(); }
@@ -152,7 +148,7 @@
       document.getElementById('currentClosedPriceDisplay').value = "Syncing...";
       const old = document.getElementById('jsonp_core_script'); if(old) old.remove();
       const s = document.createElement('script'); s.id = 'jsonp_core_script'; document.head.appendChild(s);
-      s.src = `https://allorigins.win{encodeURIComponent('https://yahoo.com)}&callback=handleDirectJSONPResponse`;
+      s.src = `https://yahoo.com{ticker}?callback=handleDirectJSONPResponse`;
     }
     async function onTickerChange() { const sym = document.getElementById('tickerSelect').value; localStorage.setItem(`quant_active_ticker`, sym); await scrapeRealtimeMarketPrice(sym); loadPortfolioFromCache(sym); }
     function computeTrendEngine() {
