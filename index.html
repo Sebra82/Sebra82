@@ -8,9 +8,9 @@
     .app-container { max-width:1250px;margin:0 auto; }
     header { margin-bottom:12px;border-bottom:1px solid var(--border-color);padding-bottom:8px;display:flex;justify-content:space-between;align-items:center; }
     h1 { margin:0;font-size:18px;color:#ffffff;font-weight:700;letter-spacing:-0.5px; }
-    .panel-grid-top,.panel-grid-bottom { display:grid;grid-template-columns:1fr 1.1fr;gap:12px;margin-bottom:12px; }
-    @media (max-width:868px) { .panel-grid-top,.panel-grid-bottom { grid-template-columns:1fr; } }
-    .control-matrix,.profit-ledger,.data-panel,.ledger-container { background-color:var(--bg-panel);border:1px solid var(--border-color);border-radius:8px;padding:12px;box-shadow:0 4px 20px rgba(0,0,0,0.4); }
+    .panel-grid-top { display:grid;grid-template-columns:1fr 1.1fr;gap:12px;margin-bottom:12px; }
+    @media (max-width:868px) { .panel-grid-top { grid-template-columns:1fr; } }
+    .control-matrix,.profit-ledger,.data-panel { background-color:var(--bg-panel);border:1px solid var(--border-color);border-radius:8px;padding:12px;box-shadow:0 4px 20px rgba(0,0,0,0.4); }
     .input-row { display:flex;gap:10px;align-items:center;flex-wrap:wrap; }
     .input-row-top { border-bottom:1px solid var(--border-color);padding-bottom:10px;margin-bottom:10px; }
     .input-group { display:flex;flex-direction:column;gap:3px; }
@@ -36,41 +36,32 @@
     .interactive-node { cursor:pointer;transition:all 0.15s ease; } .interactive-node:hover { stroke:#ffffff;stroke-width:2px; }
     .quant-chart-tooltip { position:absolute;display:none;background:rgba(13,21,39,0.95);border:1px solid var(--matrix-purple);border-radius:4px;padding:6px 10px;font-size:10px;font-family:monospace;color:#fff;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,0.6);z-index:100;line-height:1.3; }
     .highlight-purple { color:var(--matrix-purple); } .highlight-blue { color:var(--accent-blue); }
-    .text-green { color:var(--signal-buy) !important; font-weight: 600; } .text-red { color:var(--signal-sell) !important; font-weight: 600; }
+    .text-green { color:var(--signal-buy) !important; } .text-red { color:var(--signal-sell) !important; }
   </style>
 </head>
 <body>
   <div class="app-container">
-    <header><div><h1>🌌 Prediction Engine</h1><p>128-Point Multi-Asset Geometric Horizon Matrix</p></div><div><span class="badge badge-hold" style="color:var(--matrix-purple);border-color:var(--matrix-purple);">Universe Active V13.5</span></div></header>
-
+    <header><div><h1>🌌 Prediction Engine</h1><p>128-Point Multi-Asset Geometric Horizon Matrix</p></div><div><span class="badge badge-hold" style="color:var(--matrix-purple);border-color:var(--matrix-purple);">Universe Active V13.6</span></div></header>
     <div class="control-matrix" style="margin-bottom:12px;">
       <div class="ledger-title">⚙️ Station System Asset Configuration & Portfolio Multi-Buy Blender</div>
       <div class="input-row input-row-top">
-        <div class="input-group"><label>Tracked Asset Universe</label>
-          <select id="tickerSelect" onchange="onTickerChange()" style="width:170px;">
-            <optgroup label="💼 Extended Portfolio Trackers">
-              <option value="LAES" selected>LAES (SEALSQ)</option>
-              <option value="NVDA">NVDA (NVIDIA)</option>
-              <option value="TSLA">TSLA (Tesla)</option>
-              <option value="AAPL">AAPL (Apple)</option>
-              <option value="GME">GME (GameStop)</option>
-              <option value="SOC">SOC (Sable Offshore)</option>
-              <option value="RKTO">RKTO (Rocket One Inc)</option>
-              <option value="SPCX">SPCX (Space Exploration)</option>
-              <option value="ABAT">ABAT (American Battery)</option>
-              <option value="RR.L">RR.L (Rolls-Royce)</option>
-              <option value="BRTX">BRTX (BioRestorative)</option>
+        <div class="input-group"><label for="tickerSelect">Tracked Asset Universe</label>
+          <select id="tickerSelect" onchange="onTickerChange()" style="width:200px;">
+            <optgroup label="💼 Your Portfolio Custom Space Universe">
+              <option value="LAES">LAES (SEALSQ Corp)</option><option value="NVDA">NVDA (NVIDIA)</option><option value="TSLA">TSLA (Tesla)</option><option value="AAPL">AAPL (Apple)</option><option value="GME">GME (GameStop)</option><option value="SOC">SOC (Sable Offshore Corp)</option><option value="RKTO" selected>RKTO (Rocket One Inc)</option><option value="SPCX">SPCX (Space Exploration Tech)</option><option value="ABAT">ABAT (American Battery)</option><option value="RR.L">RR.L (Rolls-Royce Holdings)</option><option value="BRTX">BRTX (BioRestorative)</option>
+            </optgroup>
+            <optgroup label="🔥 Top 10 Trending Global Tech Leaders">
+              <option value="MSFT">MSFT (Microsoft Corp)</option><option value="AMZN">AMZN (Amazon.com Inc)</option><option value="META">META (Meta Platforms)</option><option value="GOOGL">GOOGL (Alphabet Inc)</option><option value="NFLX">NFLX (Netflix Inc)</option><option value="AMD">AMD (Advanced Micro Devices)</option><option value="PLTR">PLTR (Palantir Tech)</option><option value="COIN">COIN (Coinbase Global)</option><option value="SOFI">SOFI (SoFi Technologies)</option><option value="MARA">MARA (MARA Digital)</option>
             </optgroup>
           </select>
         </div>
-        <div class="input-group"><label for="timeframeSelect">Resolution</label><select id="timeframeSelect" onchange="computeTrendEngine()" style="width:120px;"><option value="daily" selected>Last 30 Days</option><option value="weekly">By Trailing Weeks</option></select></div>
+        <div class="input-group"><label for="timeframeSelect">Resolution</label><select id="timeframeSelect" onchange="computeTrendEngine()" style="width:120px;"><option value="daily" selected>By Trailing Days</option><option value="weekly">By Trailing Weeks</option></select></div>
         <div class="input-group"><label style="color:var(--accent-blue);">Model Baseline</label><input type="text" id="marketStaticOpenDisplay" value="Loading..." style="width:90px;font-weight:800;color:var(--accent-blue);text-align:center;" readonly /></div>
         <div class="input-group"><label style="color:var(--matrix-purple);">Actual Close</label><input type="text" id="marketStaticCloseDisplay" value="Loading..." style="width:90px;font-weight:800;color:var(--matrix-purple);text-align:center;" readonly /></div>
         <div style="margin-left:auto;padding-top:12px;"><button onclick="addNewTransactionRow(0, 0, true)">+ Add Entry Tier Row</button></div>
       </div>
       <div id="transactionRowsContainer" style="max-height:130px;overflow-y:auto;padding:4px 0;"></div>
     </div>
-
     <div class="profit-ledger" style="margin-bottom:12px;">
       <div class="ledger-title">📋 Position Evaluation Summary Matrix</div>
       <div class="profit-grid">
@@ -80,7 +71,6 @@
         <div class="profit-card" style="border-left:2px solid var(--matrix-purple);"><div class="card-label">Saturated Exit Ceiling</div><div class="card-value text-red" id="ledger-beta-profit">-</div></div>
       </div>
     </div>
-
     <div class="panel-grid-top" style="margin-bottom:12px;">
       <div class="data-panel">
         <div class="ledger-title" id="historyPanelTitle">📋 Lookback Horizon Matrix</div>
@@ -91,60 +81,58 @@
         <div style="max-height:190px;overflow-y:auto;"><table class="compact-table"><thead><tr><th>Horizon Window</th><th>Calibrated Target</th><th>Model Proximity Gain %</th><th>Action Blueprint</th></tr></thead><tbody id="predictiveTableBody"></tbody></table></div>
       </div>
     </div>
-
     <div class="data-panel" style="position:relative; margin-bottom:12px;">
       <div class="ledger-title">📊 Consolidated Wave Trajectory Corridor (True Model Trajectory vs Actual Closes)</div>
       <div class="graph-container" id="svgGraphContainer"></div>
       <div id="chartTooltipOverlay" class="quant-chart-tooltip"></div>
     </div>
   <script>
-    let activeStockPrice = 2.82;
-    let staticClosePrice = 2.82;
-    
-    // 🏛️ REBUILT CENTRAL UNIVERSE REGISTRY: Clears parsing errors and mounts new assets flawlessly
+    let activeStockPrice = 18.60; let staticClosePrice = 18.60;
     const MasterVirtualTape = {
       "LAES": { open: 2.82, close: 2.82, dh: [4.12, 3.35, 2.90, 2.82, 2.82], wh: [5.20, 4.10, 3.45, 3.10, 2.82], tape_d: [4.18, 3.28, 2.85, 2.82, 2.82], tape_w: [5.12, 4.02, 3.38, 3.28, 2.82], f: [2.65, 1.85, 4.50, 5.20, 5.88, 6.16, 7.98, 9.52] },
       "NVDA": { open: 124.50, close: 124.50, dh: [134.46, 130.20, 118.10, 122.40, 124.50], wh: [135.80, 128.40, 117.90, 121.55, 124.50], tape_d: [134.46, 130.20, 118.10, 122.40, 124.50], tape_w: [135.80, 128.40, 117.90, 121.55, 124.50], f: [128.00, 132.50, 145.00, 152.00, 168.00, 185.00, 210.00, 240.00] },
-      "TSLA": { open: 258.40, close: 258.40, dh: [241.20, 248.50, 252.10, 255.40, 258.40], wh: [210.40, 222.80, 235.10, 248.00, 258.40], tape_d: [241.20, 248.50, 252.10, 255.40, 258.40], tape_w: [210.40, 222.80, 235.10, 248.00, 258.40], f: [265.00, 278.00, 295.00, 310.00, 335.00, 380.00, 420.00, 450.00] },
+      "TSLA": { open: 258.40, close: 258.40, dh: [279.07, 266.15, 248.06, 253.23, 258.40], wh: [210.40, 222.80, 235.10, 248.00, 258.40], tape_d: [279.07, 266.15, 248.06, 253.23, 258.40], tape_w: [210.40, 222.80, 235.10, 248.00, 258.40], f: [263.57, 242.90, 288.37, 307.60, 320.42, 426.36, 542.64, 646.00] },
       "AAPL": { open: 182.20, close: 182.20, dh: [175.40, 178.10, 179.90, 181.20, 182.20], wh: [168.20, 172.40, 175.00, 179.50, 182.20], tape_d: [175.40, 178.10, 179.90, 181.20, 182.20], tape_w: [168.20, 172.40, 175.00, 179.50, 182.20], f: [185.00, 189.00, 195.00, 202.00, 215.00, 230.00, 250.00, 275.00] },
       "GME": { open: 22.10, close: 22.10, dh: [18.20, 19.50, 24.10, 20.80, 22.10], wh: [15.40, 17.20, 28.50, 19.90, 22.10], tape_d: [18.20, 19.50, 24.10, 20.80, 22.10], tape_w: [15.40, 17.20, 28.50, 19.90, 22.10], f: [24.00, 18.00, 32.00, 38.00, 45.00, 52.00, 65.00, 75.00] },
-      "SOC": { open: 14.50, close: 14.50, dh: [13.20, 13.90, 14.10, 14.40, 14.50], wh: [11.20, 12.50, 13.40, 14.00, 14.50], tape_d: [13.20, 13.90, 14.10, 14.40, 14.50], tape_w: [11.20, 12.50, 13.40, 14.00, 14.50], f: [15.10, 15.80, 16.90, 17.50, 18.80, 21.00, 24.50, 28.00] },
-      "RKTO": { open: 18.60, close: 18.60, dh: [17.10, 17.50, 17.90, 18.20, 18.60], wh: [14.20, 15.60, 16.50, 17.80, 18.60], tape_d: [17.10, 17.50, 17.90, 18.20, 18.60], tape_w: [14.20, 15.60, 16.50, 17.80, 18.60], f: [19.20, 20.10, 21.50, 22.80, 24.00, 27.50, 31.00, 35.00] },
-      "SPCX": { open: 85.00, close: 85.00, dh: [78.20, 81.40, 83.00, 84.50, 85.00], wh: [65.00, 71.50, 77.20, 82.00, 85.00], tape_d: [78.20, 81.40, 83.00, 84.50, 85.00], tape_w: [65.00, 71.50, 77.20, 82.00, 85.00], f: [88.50, 92.00, 98.40, 104.00, 112.50, 130.00, 155.00, 180.00] },
-      "ABAT": { open: 3.15, close: 3.15, dh: [2.80, 2.95, 3.02, 3.10, 3.15], wh: [2.20, 2.45, 2.70, 2.95, 3.15], tape_d: [2.80, 2.95, 3.02, 3.10, 3.15], tape_w: [2.20, 2.45, 2.70, 2.95, 3.15], f: [3.30, 3.48, 3.75, 4.10, 4.50, 5.25, 6.40, 7.50] },
-      "RR.L": { open: 4.60, close: 4.60, dh: [4.20, 4.35, 4.48, 4.55, 4.60], wh: [3.80, 4.05, 4.22, 4.45, 4.60], tape_d: [4.20, 4.35, 4.48, 4.55, 4.60], tape_w: [3.80, 4.05, 4.22, 4.45, 4.60], f: [4.75, 4.92, 5.25, 5.60, 6.00, 6.80, 7.75, 8.50] },
-      "BRTX": { open: 0.85, close: 0.85, dh: [0.72, 0.78, 0.81, 0.83, 0.85], wh: [0.55, 0.62, 0.70, 0.79, 0.85], tape_d: [0.72, 0.78, 0.81, 0.83, 0.85], tape_w: [0.55, 0.62, 0.70, 0.79, 0.85], f: [0.92, 1.05, 1.22, 1.40, 1.65, 2.10, 2.75, 3.25] }
+      "SOC": { open: 12.40, close: 12.40, dh: [11.20, 11.80, 12.05, 12.20, 12.40], wh: [9.80, 10.40, 11.20, 11.90, 12.40], tape_d: [11.20, 11.80, 12.05, 12.20, 12.40], tape_w: [9.80, 10.40, 11.20, 11.90, 12.40], f: [12.80, 11.40, 14.20, 15.50, 16.80, 20.46, 26.04, 31.00] },
+      "RKTO": { open: 18.60, close: 18.60, dh: [16.40, 17.10, 17.90, 18.25, 18.60], wh: [14.20, 15.10, 16.40, 17.50, 18.60], tape_d: [16.40, 17.10, 17.90, 18.25, 18.60], tape_w: [14.20, 15.10, 16.40, 17.50, 18.60], f: [19.20, 16.50, 22.40, 24.80, 26.50, 31.62, 40.92, 48.36] },
+      "SPCX": { open: 82.50, close: 82.50, dh: [78.40, 79.90, 81.20, 82.00, 82.50], wh: [71.20, 74.50, 77.80, 80.40, 82.50], tape_d: [78.40, 79.90, 81.20, 82.00, 82.50], tape_w: [71.20, 74.50, 77.80, 80.40, 82.50], f: [84.10, 79.20, 96.40, 102.00, 108.50, 136.12, 173.25, 206.25] },
+      "ABAT": { open: 3.15, close: 3.15, dh: [2.85, 2.95, 3.02, 3.10, 3.15], wh: [2.40, 2.65, 2.85, 3.00, 3.15], tape_d: [2.85, 2.95, 3.02, 3.10, 3.15], tape_w: [2.40, 2.65, 2.85, 3.00, 3.15], f: [3.25, 2.90, 4.10, 4.45, 4.80, 6.93, 8.97, 10.71] },
+      "RR.L": { open: 4.60, close: 4.60, dh: [4.20, 4.35, 4.48, 4.55, 4.60], wh: [3.80, 4.05, 4.22, 4.45, 4.60], tape_d: [4.20, 4.35, 4.48, 4.55, 4.60], tape_w: [3.80, 4.05, 4.22, 4.45, 4.60], f: [4.75, 4.30, 5.40, 5.85, 6.20, 7.59, 9.66, 11.50] },
+      "BRTX": { open: 0.85, close: 0.85, dh: [0.72, 0.76, 0.81, 0.83, 0.85], wh: [0.61, 0.68, 0.74, 0.80, 0.85], tape_d: [0.72, 0.76, 0.81, 0.83, 0.85], tape_w: [0.61, 0.68, 0.74, 0.80, 0.85], f: [0.90, 0.74, 1.25, 1.40, 1.60, 2.12, 2.67, 3.23] },
+      "MSFT": { open: 420.50, close: 420.50, dh: [410.20, 412.50, 415.80, 418.00, 420.50], wh: [390.40, 402.10, 408.50, 414.20, 420.50], tape_d: [410.20, 412.50, 415.80, 418.00, 420.50], tape_w: [390.40, 402.10, 408.50, 414.20, 420.50], f: [424.00, 412.00, 442.00, 458.00, 475.00, 510.00, 560.00, 610.00] },
+      "AMZN": { open: 185.20, close: 185.20, dh: [178.40, 180.20, 182.10, 184.00, 185.20], wh: [165.20, 171.40, 176.00, 181.50, 185.20], tape_d: [178.40, 180.20, 182.10, 184.00, 185.20], tape_w: [165.20, 171.40, 176.00, 181.50, 185.20], f: [188.00, 176.00, 198.00, 206.00, 215.00, 240.00, 270.00, 300.00] },
+      "META": { open: 495.10, close: 495.10, dh: [480.10, 484.50, 488.20, 492.00, 495.10], wh: [440.50, 458.20, 468.00, 482.50, 495.10], tape_d: [480.10, 484.50, 488.20, 492.00, 495.10], tape_w: [440.50, 458.20, 468.00, 482.50, 495.10], f: [502.00, 472.00, 524.00, 545.00, 560.00, 615.00, 680.00, 740.00] },
+      "GOOGL": { open: 172.40, close: 172.40, dh: [166.50, 168.10, 169.80, 171.00, 172.40], wh: [152.40, 158.50, 162.00, 167.80, 172.40], tape_d: [166.50, 168.10, 169.80, 171.00, 172.40], tape_w: [152.40, 158.50, 162.00, 167.80, 172.40], f: [175.00, 164.00, 184.00, 191.00, 200.00, 222.00, 245.00, 268.00] },
+      "NFLX": { open: 610.20, close: 610.20, dh: [595.40, 598.00, 602.50, 607.00, 610.20], wh: [550.20, 568.40, 582.00, 598.50, 610.20], tape_d: [595.40, 598.00, 602.50, 607.00, 610.20], tape_w: [550.20, 568.40, 582.00, 598.50, 610.20], f: [620.00, 585.00, 645.00, 672.00, 695.00, 755.00, 830.00, 910.00] },
+      "AMD": { open: 165.40, close: 165.40, dh: [158.20, 160.50, 162.40, 164.00, 165.40], wh: [142.10, 148.50, 153.20, 159.00, 165.40], tape_d: [158.20, 160.50, 162.40, 164.00, 165.40], tape_w: [142.10, 148.50, 153.20, 159.00, 165.40], f: [170.00, 152.00, 182.00, 194.00, 205.00, 235.00, 268.00, 298.00] },
+      "PLTR": { open: 24.15, close: 24.15, dh: [22.40, 22.95, 23.40, 23.85, 24.15], wh: [19.20, 20.50, 21.60, 22.90, 24.15], tape_d: [22.40, 22.95, 23.40, 23.85, 24.15], tape_w: [19.20, 20.50, 21.60, 22.90, 24.15], f: [24.80, 22.10, 27.20, 29.40, 31.00, 38.20, 46.50, 54.00] },
+      "COIN": { open: 225.30, close: 225.30, dh: [214.20, 218.50, 221.00, 223.50, 225.30], wh: [185.40, 196.20, 204.50, 215.00, 225.30], tape_d: [214.20, 218.50, 221.00, 223.50, 225.30], tape_w: [185.40, 196.20, 204.50, 215.00, 225.30], f: [232.00, 202.00, 256.00, 274.00, 290.00, 345.00, 410.00, 470.00] },
+      "SOFI": { open: 6.90, close: 6.90, dh: [6.45, 6.58, 6.70, 6.82, 6.90], wh: [5.80, 6.12, 6.34, 6.62, 6.90], tape_d: [6.45, 6.58, 6.70, 6.82, 6.90], tape_w: [5.80, 6.12, 6.34, 6.62, 6.90], f: [7.10, 6.35, 7.85, 8.40, 8.90, 10.65, 12.80, 14.50] },
+      "MARA": { open: 18.20, close: 18.20, dh: [16.85, 17.20, 17.65, 17.98, 18.20], wh: [14.10, 15.25, 16.20, 17.30, 18.20], tape_d: [16.85, 17.20, 17.65, 17.98, 18.20], tape_w: [14.10, 15.25, 16.20, 17.30, 18.20], f: [18.80, 15.90, 21.40, 23.20, 24.80, 30.50, 37.20, 43.50] }
     };
-
     function getDynamicMatrixData(basePrice, ticker) {
       const data = MasterVirtualTape[ticker] || { dh:[basePrice], wh:[basePrice], tape_d:[basePrice], tape_w:[basePrice], f:[basePrice] };
       return { c: basePrice, ob: basePrice * 0.82, ss: basePrice * 1.24, dh: data.dh, wh: data.wh, tape_d: data.tape_d, tape_w: data.tape_w, f: data.f };
     }
-
-    function evaluateModelAction(nodePrice, tapePrice) {
-      let ratio = nodePrice / tapePrice; if (ratio < 0.97) return "BUY"; if (ratio > 1.03) return "SELL"; return "HOLD";
-    }
+    function evaluateModelAction(nodePrice, tapePrice) { let ratio = nodePrice / tapePrice; if (ratio < 0.97) return "BUY"; if (ratio > 1.03) return "SELL"; return "HOLD"; }
     function handleNodeClick(p) { addNewTransactionRow(p, 10, true); }
     function showTooltip(e, txt) { const tt = document.getElementById('chartTooltipOverlay'); tt.innerHTML = txt; tt.style.display = 'block'; const r = document.getElementById('svgGraphContainer').getBoundingClientRect(); tt.style.left = (e.clientX - r.left + 12) + 'px'; tt.style.top = (e.clientY - r.top - 12) + 'px'; }
     function hideTooltip() { document.getElementById('chartTooltipOverlay').style.display = 'none'; }
-
     function generateNativeSvgGraph(h, f, ob, ss, tape) {
       const pts = [...h, ...f]; const max = Math.max(...pts, ...tape) * 1.05; const min = Math.min(...pts, ...tape) * 0.95; const r = max - min; const w = 480, ht = 140;
       let yBuy = ht - ((ob - min) / r) * (ht - 30) - 15; let ySell = ht - ((ss - min) / r) * (ht - 30) - 15;
       let markup = `<svg viewBox="0 0 ${w} ${ht}" style="width:100%; height:100%;"><rect x="20" y="5" width="${w-40}" height="${Math.max(5, ySell-5)}" fill="#3b0712" fill-opacity="0.35" /><rect x="20" y="${yBuy}" width="${w-40}" height="${Math.max(5, ht-yBuy-5)}" fill="#064e3b" fill-opacity="0.35" />`;
-      let mStr = "", tStr = "";
-      h.forEach((v, i) => { let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 30) - 15; mStr += (i===0?'M':'L') + `${x},${y} `; });
+      let mStr = "", tStr = ""; h.forEach((v, i) => { let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 30) - 15; mStr += (i===0?'M':'L') + `${x},${y} `; });
       f.forEach((v, i) => { let idx = i + h.length; let x = (idx / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 30) - 15; mStr += (i===0?'M':'L') + `${x},${y} `; });
       tape.forEach((v, i) => { let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 30) - 15; tStr += (i===0?'M':'L') + `${x},${y} `; });
       markup += `<path d="${mStr}" fill="none" stroke="#c084fc" stroke-width="2.5" /><path d="${tStr}" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="3,3" />`;
       pts.forEach((v, i) => {
         let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 30) - 15; let isF = i >= h.length; let c = isF ? "#c084fc" : "#ffffff";
-        let txt = `<strong>Node</strong><br/>Value: $${v.toFixed(2)}`;
-        markup += `<circle class="interactive-node" cx="${x}" cy="${y}" r="4" fill="${c}" onclick="handleNodeClick(${v})" onmousemove="showTooltip(event, '${txt}')" onmouseout="hideTooltip();"></circle>`;
+        let txt = `<strong>Node</strong><br/>Value: $${v.toFixed(2)}`; markup += `<circle class="interactive-node" cx="${x}" cy="${y}" r="4" fill="${c}" onclick="handleNodeClick(${v})" onmousemove="showTooltip(event, '${txt}')" onmouseout="hideTooltip();"></circle>`;
       });
       document.getElementById('svgGraphContainer').innerHTML = markup + `</svg>`;
     }
-
     function addNewTransactionRow(p = 0, s = 0, trig = true) {
       const container = document.getElementById('transactionRowsContainer'); const row = document.createElement('div'); row.className = 'transaction-row';
       row.innerHTML = `<div class="input-group"><label>Purchase Price</label><input type="number" class="tx-price" value="${p ? p.toFixed(2) : ''}" step="0.01" style="width: 110px;" oninput="computeTrendEngine()"></div><div class="input-group"><label>Shares Volume</label><input type="number" class="tx-shares" value="${s||''}" step="1" style="width: 110px;" oninput="computeTrendEngine()"></div><div style="margin-top: 14px;"><button class="btn-delete" onclick="this.parentElement.parentElement.remove(); computeTrendEngine();">Delete</button></div>`;
@@ -171,4 +159,26 @@
       const active = getDynamicMatrixData(opn, sym);
       const val = cls * totalShares; const ret = val - totalCapital; const pct = totalCapital > 0 ? (ret / totalCapital) * 100 : 0; const pEl = document.getElementById('ledger-current-profit');
       if (totalShares === 0 || vwac === 0) { pEl.innerText = "$0.00 (0.00%)"; pEl.className = "card-value"; }
-      else
+      else { pEl.innerText = `${ret >= 0 ? '+$' : '-$'}${Math.abs(ret).toFixed(2)} (${ret >= 0 ? '+' : ''}${pct.toFixed(2)}%)`; pEl.className = ret >= 0 ? "card-value text-green" : "card-value text-red"; }
+      document.getElementById('ledger-alpha-profit').innerText = "$" + active.ob.toFixed(2); document.getElementById('ledger-beta-profit').innerText = "$" + active.ss.toFixed(2);
+      const hist = tf === 'weekly' ? active.wh : active.dh; const tape = tf === 'weekly' ? active.tape_w : active.tape_d;
+      const dailyLabels = ["Mid June", "Late June", "Early July", "Mid July", "Actual Today"]; const weeklyLabels = ["Early May", "Late May", "Early June", "Late June", "Actual Today"]; const hLabels = tf === 'weekly' ? weeklyLabels : dailyLabels;
+      document.getElementById('historyPanelTitle').innerText = tf === 'weekly' ? "📋 Lookback Horizon Matrix (Weekly Resolution)" : "📋 Lookback Horizon Matrix (Daily Resolution)";
+      const hTab = document.getElementById('historicalTableBody'); hTab.innerHTML = "";
+      hist.forEach((hp, idx) => {
+        let tVal = tape[idx] || hp; let variance = ((hp - tVal) / tVal) * 100; let a = evaluateModelAction(hp, tVal);
+        hTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${hp})"><td><span class="highlight-blue">${hLabels[idx]}</span></td><td>$${hp.toFixed(2)}</td><td>$${tVal.toFixed(2)}</td><td class="${variance>=0?'text-green':'text-red'}">${variance>=0?'+':''}${variance.toFixed(2)}%</td><td><span class="badge ${a==='BUY'?'badge-buy':a==='SELL'?'badge-sell':'badge-hold'}">${a}</span></td></tr>`;
+      });
+      const pTab = document.getElementById('predictiveTableBody'); pTab.innerHTML = "";
+      const fLabels = ["August Forecast", "September Target", "October Horizon", "November Trajectory", "January Peak", "April Zenith (9-Mo View)", "October Macro (18-Mo Peak)", "July Horizon (24-Mo View)"]; 
+      const blueprints = ["HOLD (EXPANSION LOOKAHEAD)", "STRONG BUY", "SCALED SELL", "SCALED SELL", "LIQUIDATE POSITION", "LIQUIDATE POSITION", "EXIT ZENITH CEILING", "EXIT ZENITH CEILING"];
+      fLabels.forEach((hName, idx) => {
+        let fPrice = active.f[idx]; let gain = ((fPrice - cls) / cls) * 100;
+        pTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${fPrice})"><td><span class="highlight-purple">${hName}</span></td><td style="font-weight:700;">$${fPrice.toFixed(2)}</td><td class="${gain>=0?'text-green':'text-red'}">${gain>=0?'+':''}${gain.toFixed(2)}%</td><td><span class="badge ${blueprints[idx].includes("BUY")||blueprints[idx].includes("ACCUM")?'badge-buy':'badge-sell'}">${blueprints[idx]}</span></td></tr>`;
+      });
+      generateNativeSvgGraph(hist, active.f, active.ob, active.ss, tape); savePortfolioToCache();
+    }
+    window.addEventListener('DOMContentLoaded', () => { let rememberedTicker = localStorage.getItem(`quant_active_ticker`) || "RKTO"; document.getElementById('tickerSelect').value = rememberedTicker; updateStaticSessionTape(rememberedTicker); loadPortfolioFromCache(rememberedTicker); computeTrendEngine(); });
+  </script>
+</body>
+</html>
