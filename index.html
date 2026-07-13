@@ -111,86 +111,101 @@
       "SOFI": { close: 6.90, fx: "$", dh: [6.90, 6.82, 6.70, 6.58, 6.45, 6.12, 5.80], tape: [6.90, 6.82, 6.70, 6.58, 6.45, 6.12, 5.80], f: [7.10, 6.35, 7.85, 8.40, 8.90, 10.65, 12.80, 14.50] },
       "MARA": { close: 18.20, fx: "$", dh: [18.20, 17.98, 17.65, 17.20, 16.85, 15.25, 14.10], tape: [18.20, 17.98, 17.65, 17.20, 16.85, 15.25, 14.10], f: [18.80, 15.90, 21.40, 23.20, 24.80, 30.50, 37.20, 43.50] }
     };
-    // ⚡ CALENDAR-INTEGRATION PIPELINE: Dynamically pulls trailing close days backward from the web catalog securely
-    async function triggerAutonomousTapeSync(ticker) {
-      activeCurrency = ticker.includes("RR.L") ? "" : "$";
-      try {
-        const cleanedSym = ticker.replace('.L', '.LON');
-        // Requests a full 60-day range to pull multi-day true closing data structures into browser viewports
-        const targetUrl = encodeURIComponent(`https://yahoo.com{cleanedSym}?interval=1d&range=60d`);
-        const response = await fetch(`https://allorigins.win{targetUrl}`);
-        
-        if (response.ok) {
-          const wrapper = await response.json();
-          const payload = JSON.parse(wrapper.contents);
-          const dataNodes = payload.chart.result[0].indicators.quote.close;
-          const validCloses = dataNodes.filter(val => val !== null);
-          
-          if (validCloses.length > 0) {
-            staticClosePrice = validCloses[validCloses.length - 1]; // Set most recent daily close node
-            let rev = [...validCloses].reverse();
-            
-            // Re-configures the object registry dynamically with true multi-day past closes sorted Latest-to-Lowest
-            MasterVirtualTape[ticker] = {
-              close: staticClosePrice, fx: activeCurrency,
-              dh: rev.slice(0, 7), // True daily trailing prices from couple days before
-              
-    // 🧬 TRANSACTION DOM MATRIX BLENDER: Generates portfolio input rows inside your blender workspace
+     // 🧮 UNIFIED MATRIX CALCULUS: Standardizes multi-asset evaluations cleanly across the universe
+    function getDynamicMatrixData(basePrice, ticker) {
+      const data = MasterVirtualTape[ticker] || { d60: [basePrice], w60: [basePrice], m6: [basePrice], f: [basePrice] };
+      return { c: basePrice, ob: basePrice * 0.82, ss: basePrice * 1.24, d60: data.dh || data.d60, w60: data.wh || data.w60, m6: data.m6, f: data.f };
+    }
+
+    // 🎯 STRICT PARAMETER PARAMETER CORRIDOR: Applies the uniform 3% criteria globally across all asset timelines
+    function evaluateModelAction(nodePrice, tapePrice) {
+      let ratio = nodePrice / tapePrice;
+      if (ratio < 0.97) return "BUY";
+      if (ratio > 1.03) return "SELL";
+      return "HOLD";
+    }
+
+    function handleNodeClick(p) { addNewTransactionRow(p, 10, true); }
+    function showTooltip(e, txt) { const tt = document.getElementById('chartTooltipOverlay'); tt.innerHTML = txt; tt.style.display = 'block'; const r = document.getElementById('svgGraphContainer').getBoundingClientRect(); tt.style.left = (e.clientX - r.left + 12) + 'px'; tt.style.top = (e.clientY - r.top - 12) + 'px'; }
+    function hideTooltip() { document.getElementById('chartTooltipOverlay').style.display = 'none'; }
+
+    // 📊 COMPACT VECTOR GRAPH ENGINE: Renders multi-trend corridors cleanly inside a micro 75px layout container
+    function generateNativeSvgGraph(h, f, ob, ss, tape) {
+      const pts = [...h, ...f]; const max = Math.max(...pts, ...tape) * 1.05; const min = Math.min(...pts, ...tape) * 0.95; const r = max - min; const w = 480, ht = 75;
+      let yBuy = ht - ((ob - min) / r) * (ht - 20) - 10; let ySell = ht - ((ss - min) / r) * (ht - 20) - 10;
+      let markup = `<svg viewBox="0 0 ${w} ${ht}" style="width:100%; height:100%;"><rect x="20" y="2" width="${w-40}" height="${Math.max(2, ySell-2)}" fill="#3b0712" fill-opacity="0.35" /><rect x="20" y="${yBuy}" width="${w-40}" height="${Math.max(2, ht-yBuy-2)}" fill="#064e3b" fill-opacity="0.35" />`;
+      let mStr = "", tStr = ""; h.forEach((v, i) => { let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 20) - 10; mStr += (i===0?'M':'L') + `${x},${y} `; });
+      f.forEach((v, i) => { let idx = i + h.length; let x = (idx / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 20) - 10; mStr += (i===0?'M':'L') + `${x},${y} `; });
+      tape.forEach((v, i) => { let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 20) - 10; tStr += (i===0?'M':'L') + `${x},${y} `; });
+      markup += `<path d="${mStr}" fill="none" stroke="#c084fc" stroke-width="2" /><path d="${tStr}" fill="none" stroke="#38bdf8" stroke-width="1.8" stroke-dasharray="3,2" />`;
+      pts.forEach((v, i) => {
+        let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 20) - 10; let isF = i >= h.length; let c = isF ? "#c084fc" : "#ffffff";
+        let txt = `<strong>Node</strong><br/>Value: ${activeCurrency}${v.toFixed(2)}${activeCurrency===''?' GBX':''}`; markup += `<circle class="interactive-node" cx="${x}" cy="${y}" r="3.2" fill="${c}" onclick="handleNodeClick(${v})" onmousemove="showTooltip(event, '${txt}')" onmouseout="hideTooltip();"></circle>`;
+      });
+      document.getElementById('svgGraphContainer').innerHTML = markup + `</svg>`;
+    }
     function addNewTransactionRow(p = 0, s = 0, trig = true) {
-      const container = document.getElementById('transactionRowsContainer');
-      const row = document.createElement('div');
-      row.className = 'transaction-row';
+      const container = document.getElementById('transactionRowsContainer'); const row = document.createElement('div'); row.className = 'transaction-row';
       row.innerHTML = `<div class="input-group"><label>Purchase Price</label><input type="number" class="tx-price" value="${p ? p.toFixed(2) : ''}" step="0.01" style="width: 110px;" oninput="computeTrendEngine()"></div><div class="input-group"><label>Shares Volume</label><input type="number" class="tx-shares" value="${s||''}" step="1" style="width: 110px;" oninput="computeTrendEngine()"></div><div style="margin-top: 14px;"><button class="btn-delete" onclick="this.parentElement.parentElement.remove(); computeTrendEngine();">Delete</button></div>`;
-      container.appendChild(row);
-      if (trig) computeTrendEngine();
+      container.appendChild(row); if (trig) computeTrendEngine();
     }
-
-    // 💾 LOCAL SANDBOX CACHE REGISTRY: Persists your multi-buy tier arrays to browser memory blocks
     function savePortfolioToCache() {
-      const sym = document.getElementById('tickerSelect').value;
-      const prices = Array.from(document.getElementsByClassName('tx-price')).map(el => parseFloat(el.value) || 0);
-      const shares = Array.from(document.getElementsByClassName('tx-shares')).map(el => parseFloat(el.value) || 0);
-      const payload = prices.map((p, i) => ({ price: p, shares: shares[i] }));
-      localStorage.setItem(`quant_portfolio_${sym}`, JSON.stringify(payload));
-      localStorage.setItem(`quant_active_ticker`, sym);
+      const sym = document.getElementById('tickerSelect').value; const prices = Array.from(document.getElementsByClassName('tx-price')).map(el => parseFloat(el.value) || 0); const shares = Array.from(document.getElementsByClassName('tx-shares')).map(el => parseFloat(el.value) || 0);
+      const payload = prices.map((p, i) => ({ price: p, shares: shares[i] })); localStorage.setItem(`quant_portfolio_${sym}`, JSON.stringify(payload)); localStorage.setItem(`quant_active_ticker`, sym);
     }
-
-    // 📬 LOCAL STORAGE RECOVERY ROUTINE: Instantly rebuilds custom tier layouts upon asset selection changes
     function loadPortfolioFromCache(sym) {
-      const container = document.getElementById('transactionRowsContainer');
-      container.innerHTML = "";
-      const cached = localStorage.getItem(`quant_portfolio_${sym}`);
-      if (cached) {
-        const payload = JSON.parse(cached);
-        if (payload.length > 0) {
-          payload.forEach(r => addNewTransactionRow(r.price, r.shares, false));
-          return;
-        }
-      }
+      const container = document.getElementById('transactionRowsContainer'); container.innerHTML = ""; const cached = localStorage.getItem(`quant_portfolio_${sym}`);
+      if (cached) { const payload = JSON.parse(cached); if (payload.length > 0) { payload.forEach(r => addNewTransactionRow(r.price, r.shares, false)); return; } }
       addNewTransactionRow(staticClosePrice * 0.95, 100, false);
     }
-
-    // 🏛️ STATIC MATRIX DATA BINDING: Swaps reference currency prefixes cleanly across international asset sheets
-    function updateStaticSessionTape(ticker) {
-      const data = MasterVirtualTape[ticker] || { close: 100.00, fx: "$" };
-      staticClosePrice = data.close;
-      activeCurrency = data.fx;
+    function updateStaticSessionTape(ticker) { const data = MasterVirtualTape[ticker] || { close: 100.00, fx:"$" }; staticClosePrice = data.close; activeCurrency = data.fx; }
+    function onTickerChange() { const sym = document.getElementById('tickerSelect').value; localStorage.setItem(`quant_active_ticker`, sym); triggerAutonomousTapeSync(sym); loadPortfolioFromCache(sym); }
+    
+    // ⚙️ AUTOMATED RADIAL COMPILER ROUTINE: Dynamically parses time series calculations on user drop interactions
+    function computeTrendEngine() {
+      const sym = document.getElementById('tickerSelect').value; const tf = document.getElementById('timeframeSelect').value;
+      const priceInputs = document.getElementsByClassName('tx-price'); const shareInputs = document.getElementsByClassName('tx-shares');
+      let totalCapital = 0, totalShares = 0; for (let i = 0; i < priceInputs.length; i++) { let p = parseFloat(priceInputs[i].value) || 0; let s = parseFloat(shareInputs[i].value) || 0; totalCapital += (p * s); totalShares += s; }
+      let vwac = totalShares > 0 ? (totalCapital / totalShares) : 0; document.getElementById('ledger-avg-cost').innerText = activeCurrency + vwac.toFixed(2) + (activeCurrency===''?' GBX':'');
+      const cls = staticClosePrice; document.getElementById('marketStaticCloseDisplay').value = activeCurrency + cls.toFixed(2) + (activeCurrency===''?' GBX':'');
+      
+      const active = generateSmartHistoricalWave(cls, sym, tf);
+      const val = cls * totalShares; const ret = val - totalCapital; const pct = totalCapital > 0 ? (ret / totalCapital) * 100 : 0; const pEl = document.getElementById('ledger-current-profit');
+      if (totalShares === 0 || vwac === 0) { pEl.innerText = "0.00 (0.00%)"; pEl.className = "card-value"; }
+      else { pEl.innerText = `${ret >= 0 ? '+' : '-'}${activeCurrency}${Math.abs(ret).toFixed(2)}${activeCurrency===''?' GBX':''} (${ret >= 0 ? '+' : ''}${pct.toFixed(2)}%)`; pEl.className = ret >= 0 ? "card-value text-green" : "card-value text-red"; }
+      document.getElementById('ledger-alpha-profit').innerText = activeCurrency + active.ob.toFixed(2) + (activeCurrency===''?' GBX':''); document.getElementById('ledger-beta-profit').innerText = activeCurrency + active.ss.toFixed(2) + (activeCurrency===''?' GBX':'');
+      
+      let hLabels = ["Mid July Node (Today)", "Early July Node", "Late June Node", "Mid June Node", "Early June Node", "May 19th Node", "Early May Node"];
+      if (tf === 'weekly') { hLabels = ["W7 Node (Today Anchor)", "W6 Trailing Node", "W5 Trailing Node", "W4 Trailing Node", "W3 Trailing Node", "W2 Trailing Node", "W1 Trailing Node"]; }
+      else if (tf === 'monthly') { hLabels = ["M6 Node (Today Anchor)", "M5 Trailing Node", "M4 Trailing Node", "M3 Trailing Node", "M2 Trailing Node", "M1 Trailing Node", "Initial Launch Base"]; }
+      
+      document.getElementById('historyPanelTitle').innerText = `📋 Lookback Horizon Matrix (${tf.toUpperCase()} View - Latest to Lowest Date Node Progression)`;
+      const hTab = document.getElementById('historicalTableBody'); hTab.innerHTML = "";
+      
+      // Lookback Signal Assignment Layer: Compares each node's model value directly against the master live close
+      active.h.forEach((hp, idx) => {
+        let tVal = active.t[idx] || hp;
+        let variance = ((hp - cls) / cls) * 100; // Evaluates lookback row variance relative to active close anchor
+        let liveSignal = evaluateLiveAnchorSignal(hp, cls);
+        hTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${hp})"><td><span class="highlight-blue">${hLabels[idx]}</span></td><td>${activeCurrency}${hp.toFixed(2)}${activeCurrency===''?' GBX':''}</td><td>${activeCurrency}${tVal.toFixed(2)}${activeCurrency===''?' GBX':''}</td><td class="${variance>=0?'text-green':'text-red'}">${variance>=0?'+':''}${variance.toFixed(2)}%</td><td><span class="badge ${liveSignal==='BUY'?'badge-buy':liveSignal==='SELL'?'badge-sell':'badge-hold'}">${liveSignal}</span></td></tr>`;
+      });
+      
+      const pTab = document.getElementById('predictiveTableBody'); pTab.innerHTML = "";
+      const fLabels = ["August Forecast", "September Target Floor", "October Horizon Breakout", "November Trajectory", "January Realization Peak", "April Expansion Ceiling (9-Mo)", "October Trajectory Peak (18-Mo)", "July Macro Zenith (24-Mo Top)"]; 
+      
+      fLabels.forEach((hName, idx) => {
+        let fPrice = active.f[idx]; let gain = ((fPrice - cls) / cls) * 100;
+        let blueprintStr = "HOLD"; let badgeClass = "badge-hold";
+        if (gain < -3.0) { blueprintStr = "STRONG BUY"; badgeClass = "badge-buy"; }
+        else if (gain > 50.0) { blueprintStr = "LIQUIDATE CEILING"; badgeClass = "badge-sell"; }
+        else if (gain > 3.0) { blueprintStr = "SCALED SELL"; badgeClass = "badge-sell"; }
+        pTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${fPrice})"><td><span class="highlight-purple">${hName}</span></td><td style="font-weight:700;">${activeCurrency}${fPrice.toFixed(2)}${activeCurrency===''?' GBX':''}</td><td class="${gain>=0?'text-green':'text-red'}">${gain>=0?'+':''}${gain.toFixed(2)}%</td><td><span class="badge ${badgeClass}">${blueprintStr}</span></td></tr>`;
+      });
+      generateNativeSvgGraph(active.h, active.f, active.ob, active.ss, active.t); savePortfolioToCache();
     }
-
-    // 🔁 ASSET SELECTION INTERSECTION HANDLER: Primary operational router inside the terminal
-    function onTickerChange() {
-      const sym = document.getElementById('tickerSelect').value;
-      localStorage.setItem(`quant_active_ticker`, sym);
-      triggerAutonomousTapeSync(sym);
-      loadPortfolioFromCache(sym);
-    }
-
-    // 🚀 MASTER WINDOW EVENT MOUNTING: Ignites the multi-asset workstation upon browser canvas load
     window.addEventListener('DOMContentLoaded', () => {
       let rememberedTicker = localStorage.getItem(`quant_active_ticker`) || "LAES";
-      document.getElementById('tickerSelect').value = rememberedTicker;
-      triggerAutonomousTapeSync(rememberedTicker);
-      loadPortfolioFromCache(rememberedTicker);
+      document.getElementById('tickerSelect').value = rememberedTicker; triggerAutonomousTapeSync(rememberedTicker); loadPortfolioFromCache(rememberedTicker);
     });
   </script>
 </body>
