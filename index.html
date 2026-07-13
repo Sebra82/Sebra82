@@ -56,8 +56,8 @@
           </select>
         </div>
         <div class="input-group"><label for="timeframeSelect">Resolution</label><select id="timeframeSelect" onchange="computeTrendEngine()" style="width:120px;"><option value="daily" selected>Last 60 Days</option><option value="weekly">By Trailing Weeks</option></select></div>
-        <div class="input-group"><label style="color:var(--accent-blue);">Market Open</label><input type="text" id="marketStaticOpenDisplay" value="Loading..." style="width:90px;font-weight:800;color:var(--accent-blue);text-align:center;" readonly /></div>
-        <div class="input-group"><label style="color:var(--matrix-purple);">Market Close</label><input type="text" id="marketStaticCloseDisplay" value="Loading..." style="width:90px;font-weight:800;color:var(--matrix-purple);text-align:center;" readonly /></div>
+        <div class="input-group"><label style="color:var(--accent-blue);">Market Open</label><input type="text" id="marketStaticOpenDisplay" value="Loading..." style="width:105px;font-weight:800;color:var(--accent-blue);text-align:center;" readonly /></div>
+        <div class="input-group"><label style="color:var(--matrix-purple);">Market Close</label><input type="text" id="marketStaticCloseDisplay" value="Loading..." style="width:105px;font-weight:800;color:var(--matrix-purple);text-align:center;" readonly /></div>
         <div style="margin-left:auto;padding-top:12px;"><button onclick="addNewTransactionRow(0, 0, true)">+ Add Entry Tier Row</button></div>
       </div>
       <div id="transactionRowsContainer" style="max-height:130px;overflow-y:auto;padding:4px 0;"></div>
@@ -87,29 +87,29 @@
       <div id="chartTooltipOverlay" class="quant-chart-tooltip"></div>
     </div>
   <script>
-    let activeStockPrice = 2.82; let staticClosePrice = 2.82;
+    let activeStockPrice = 2.82; let staticClosePrice = 2.82; let activeCurrency = "$";
     const MasterVirtualTape = {
-      "LAES": { open: 2.82, close: 2.82, dh: [2.65, 2.71, 3.45, 4.12, 3.35, 2.90, 2.82], tape: [2.60, 2.71, 3.38, 4.18, 3.28, 2.85, 2.82], f: [2.65, 1.85, 4.50, 5.20, 5.88, 6.20, 8.03, 9.58] },
-      "NVDA": { open: 122.10, close: 124.50, dh: [134.46, 130.20, 118.10, 122.40, 124.50], tape: [134.46, 130.20, 118.10, 122.40, 124.50], f: [128.00, 132.50, 145.00, 152.00, 168.00, 180.52, 224.10, 267.67] },
-      "TSLA": { open: 258.40, close: 258.40, dh: [279.07, 266.15, 248.06, 253.23, 258.40], tape: [279.07, 266.15, 248.06, 253.23, 258.40], f: [263.57, 242.90, 288.37, 307.60, 320.42, 426.36, 542.64, 646.00] },
-      "AAPL": { open: 182.20, close: 182.20, dh: [175.40, 178.10, 179.90, 181.20, 182.20], tape: [175.40, 178.10, 179.90, 181.20, 182.20], f: [185.00, 189.00, 195.00, 202.00, 215.00, 236.86, 282.41, 337.07] },
-      "GME": { open: 22.10, close: 22.10, dh: [18.20, 19.50, 24.10, 20.80, 22.10], tape: [18.20, 19.50, 24.10, 20.80, 22.10], f: [24.00, 18.00, 32.00, 38.00, 45.00, 43.09, 55.25, 68.51] },
-      "SOC": { open: 12.40, close: 12.40, dh: [11.20, 11.80, 12.05, 12.20, 12.40], tape: [11.20, 11.80, 12.05, 12.20, 12.40], f: [12.80, 11.40, 14.20, 15.50, 16.80, 22.32, 28.52, 36.58] },
-      "RKTO": { open: 18.60, close: 18.60, dh: [16.40, 17.10, 17.90, 18.25, 18.60], tape: [16.40, 17.10, 17.90, 18.25, 18.60], f: [19.20, 16.50, 22.40, 24.80, 26.50, 31.62, 41.85, 50.22] },
-      "SPCX": { open: 82.50, close: 82.50, dh: [78.40, 79.90, 81.20, 82.00, 82.50], tape: [78.40, 79.90, 81.20, 82.00, 82.50], f: [84.10, 79.20, 96.40, 102.00, 108.50, 136.12, 173.25, 206.25] },
-      "ABAT": { open: 3.15, close: 3.15, dh: [2.85, 2.95, 3.02, 3.10, 3.15], tape: [2.85, 2.95, 3.02, 3.10, 3.15], f: [3.25, 2.90, 4.10, 4.45, 4.80, 6.61, 8.50, 10.23] },
-      "RR.L": { open: 4.60, close: 4.60, dh: [4.20, 4.35, 4.48, 4.55, 4.60], tape: [4.20, 4.35, 4.48, 4.55, 4.60], f: [4.75, 4.30, 5.40, 5.85, 6.20, 7.59, 9.66, 11.50] },
-      "BRTX": { open: 0.85, close: 0.85, dh: [0.72, 0.76, 0.81, 0.83, 0.85], tape: [0.72, 0.76, 0.81, 0.83, 0.85], f: [0.90, 0.74, 1.25, 1.40, 1.60, 2.12, 2.67, 3.23] },
-      "MSFT": { open: 420.50, close: 420.50, dh: [410.20, 412.50, 415.80, 418.00, 420.50], tape: [410.20, 412.50, 415.80, 418.00, 420.50], f: [424.00, 412.00, 442.00, 458.00, 475.00, 510.00, 560.00, 610.00] },
-      "AMZN": { open: 185.20, close: 185.20, dh: [178.40, 180.20, 182.10, 184.00, 185.20], tape: [178.40, 180.20, 182.10, 184.00, 185.20], f: [188.00, 176.00, 198.00, 206.00, 215.00, 240.00, 270.00, 300.00] },
-      "META": { open: 495.10, close: 495.10, dh: [480.10, 484.50, 488.20, 492.00, 495.10], tape: [480.10, 484.50, 488.20, 492.00, 495.10], f: [502.00, 472.00, 524.00, 545.00, 560.00, 615.00, 680.00, 740.00] },
-      "GOOGL": { open: 172.40, close: 172.40, dh: [166.50, 168.10, 169.80, 171.00, 172.40], tape: [166.50, 168.10, 169.80, 171.00, 172.40], f: [175.00, 164.00, 184.00, 191.00, 200.00, 222.00, 245.00, 268.00] },
-      "NFLX": { open: 610.20, close: 610.20, dh: [595.40, 598.00, 602.50, 607.00, 610.20], tape: [595.40, 598.00, 602.50, 607.00, 610.20], f: [620.00, 585.00, 645.00, 672.00, 695.00, 755.00, 830.00, 910.00] },
-      "AMD": { open: 165.40, close: 165.40, dh: [158.20, 160.50, 162.40, 164.00, 165.40], tape: [158.20, 160.50, 162.40, 164.00, 165.40], f: [170.00, 152.00, 182.00, 194.00, 205.00, 235.00, 268.00, 298.00] },
-      "PLTR": { open: 24.15, close: 24.15, dh: [22.40, 22.95, 23.40, 23.85, 24.15], tape: [22.40, 22.95, 23.40, 23.85, 24.15], f: [24.80, 22.10, 27.20, 29.40, 31.00, 38.20, 46.50, 54.00] },
-      "COIN": { open: 225.30, close: 225.30, dh: [214.20, 218.50, 221.00, 223.50, 225.30], tape: [214.20, 218.50, 221.00, 223.50, 225.30], f: [232.00, 202.00, 256.00, 274.00, 290.00, 345.00, 410.00, 470.00] },
-      "SOFI": { open: 6.90, close: 6.90, dh: [6.45, 6.58, 6.70, 6.82, 6.90], tape: [6.45, 6.58, 6.70, 6.82, 6.90], f: [7.10, 6.35, 7.85, 8.40, 8.90, 10.65, 12.80, 14.50] },
-      "MARA": { open: 18.20, close: 18.20, dh: [16.85, 17.20, 17.65, 17.98, 18.20], tape: [16.85, 17.20, 17.65, 17.98, 18.20], f: [18.80, 15.90, 21.40, 23.20, 24.80, 30.50, 37.20, 43.50] }
+      "LAES": { open: 2.82, close: 2.82, fx: "$", dh: [2.65, 2.71, 3.45, 4.12, 3.35, 2.90, 2.82], tape: [2.60, 2.71, 3.38, 4.18, 3.28, 2.85, 2.82], f: [2.65, 1.85, 4.50, 5.20, 5.88, 6.20, 8.03, 9.58] },
+      "NVDA": { open: 122.10, close: 124.50, fx: "$", dh: [134.46, 130.20, 118.10, 122.40, 124.50], tape: [134.46, 130.20, 118.10, 122.40, 124.50], f: [128.00, 132.50, 145.00, 152.00, 168.00, 180.52, 224.10, 267.67] },
+      "TSLA": { open: 258.40, close: 258.40, fx: "$", dh: [279.07, 266.15, 248.06, 253.23, 258.40], tape: [279.07, 266.15, 248.06, 253.23, 258.40], f: [263.57, 242.90, 288.37, 307.60, 320.42, 426.36, 542.64, 646.00] },
+      "AAPL": { open: 182.20, close: 182.20, fx: "$", dh: [175.40, 178.10, 179.90, 181.20, 182.20], tape: [175.40, 178.10, 179.90, 181.20, 182.20], f: [185.00, 189.00, 195.00, 202.00, 215.00, 236.86, 282.41, 337.07] },
+      "GME": { open: 22.10, close: 22.10, fx: "$", dh: [18.20, 19.50, 24.10, 20.80, 22.10], tape: [18.20, 19.50, 24.10, 20.80, 22.10], f: [24.00, 18.00, 32.00, 38.00, 45.00, 43.09, 55.25, 68.51] },
+      "SOC": { open: 4.43, close: 4.43, fx: "$", dh: [4.20, 4.31, 4.38, 4.40, 4.41, 4.42, 4.43], tape: [4.15, 4.28, 4.35, 4.39, 4.40, 4.42, 4.43], f: [4.55, 3.90, 5.20, 5.80, 6.40, 7.50, 9.20, 11.00] },
+      "RKTO": { open: 18.60, close: 18.60, fx: "$", dh: [16.40, 17.10, 17.90, 18.25, 18.60], tape: [16.40, 17.10, 17.90, 18.25, 18.60], f: [19.20, 16.50, 22.40, 24.80, 26.50, 31.62, 41.85, 50.22] },
+      "SPCX": { open: 82.50, close: 82.50, fx: "$", dh: [78.40, 79.90, 81.20, 82.00, 82.50], tape: [78.40, 79.90, 81.20, 82.00, 82.50], f: [84.10, 79.20, 96.40, 102.00, 108.50, 136.12, 173.25, 206.25] },
+      "ABAT": { open: 3.15, close: 3.15, fx: "$", dh: [2.85, 2.95, 3.02, 3.10, 3.15], tape: [2.85, 2.95, 3.02, 3.10, 3.15], f: [3.25, 2.90, 4.10, 4.45, 4.80, 6.61, 8.50, 10.23] },
+      "RR.L": { open: 1415.40, close: 1415.40, fx: "", dh: [1385.00, 1392.40, 1401.00, 1410.20, 1415.40, 1415.40, 1415.40], tape: [1385.00, 1392.40, 1401.00, 1410.20, 1415.40, 1415.40, 1415.40], f: [1435.00, 1360.00, 1550.00, 1620.00, 1700.00, 1950.00, 2300.00, 2750.00] },
+      "BRTX": { open: 0.85, close: 0.85, fx: "$", dh: [0.72, 0.76, 0.81, 0.83, 0.85], tape: [0.72, 0.76, 0.81, 0.83, 0.85], f: [0.90, 0.74, 1.25, 1.40, 1.60, 2.12, 2.67, 3.23] },
+      "MSFT": { open: 420.50, close: 420.50, fx: "$", dh: [410.20, 412.50, 415.80, 418.00, 420.50], tape: [410.20, 412.50, 415.80, 418.00, 420.50], f: [424.00, 412.00, 442.00, 458.00, 475.00, 510.00, 560.00, 610.00] },
+      "AMZN": { open: 185.20, close: 185.20, fx: "$", dh: [178.40, 180.20, 182.10, 184.00, 185.20], tape: [178.40, 180.20, 182.10, 184.00, 185.20], f: [188.00, 176.00, 198.00, 206.00, 215.00, 240.00, 270.00, 300.00] },
+      "META": { open: 495.10, close: 495.10, fx: "$", dh: [480.10, 484.50, 488.20, 492.00, 495.10], tape: [480.10, 484.50, 488.20, 492.00, 495.10], f: [502.00, 472.00, 524.00, 545.00, 560.00, 615.00, 680.00, 740.00] },
+      "GOOGL": { open: 172.40, close: 172.40, fx: "$", dh: [166.50, 168.10, 169.80, 171.00, 172.40], tape: [166.50, 168.10, 169.80, 171.00, 172.40], f: [175.00, 164.00, 184.00, 191.00, 200.00, 222.00, 245.00, 268.00] },
+      "NFLX": { open: 610.20, close: 610.20, fx: "$", dh: [595.40, 598.00, 602.50, 607.00, 610.20], tape: [595.40, 598.00, 602.50, 607.00, 610.20], f: [620.00, 585.00, 645.00, 672.00, 695.00, 755.00, 830.00, 910.00] },
+      "AMD": { open: 165.40, close: 165.40, fx: "$", dh: [158.20, 160.50, 162.40, 164.00, 165.40], tape: [158.20, 160.50, 162.40, 164.00, 165.40], f: [170.00, 152.00, 182.00, 194.00, 205.00, 235.00, 268.00, 298.00] },
+      "PLTR": { open: 24.15, close: 24.15, fx: "$", dh: [22.40, 22.95, 23.40, 23.85, 24.15], tape: [22.40, 22.95, 23.40, 23.85, 24.15], f: [24.80, 22.10, 27.20, 29.40, 31.00, 38.20, 46.50, 54.00] },
+      "COIN": { open: 225.30, close: 225.30, fx: "$", dh: [214.20, 218.50, 221.00, 223.50, 225.30], tape: [214.20, 218.50, 221.00, 223.50, 225.30], f: [232.00, 202.00, 256.00, 274.00, 290.00, 345.00, 410.00, 470.00] },
+      "SOFI": { open: 6.90, close: 6.90, fx: "$", dh: [6.45, 6.58, 6.70, 6.82, 6.90], tape: [6.45, 6.58, 6.70, 6.82, 6.90], f: [7.10, 6.35, 7.85, 8.40, 8.90, 10.65, 12.80, 14.50] },
+      "MARA": { open: 18.20, close: 18.20, fx: "$", dh: [16.85, 17.20, 17.65, 17.98, 18.20], tape: [16.85, 17.20, 17.65, 17.98, 18.20], f: [18.80, 15.90, 21.40, 23.20, 24.80, 30.50, 37.20, 43.50] }
     };
     function getDynamicMatrixData(basePrice, ticker) { const data = MasterVirtualTape[ticker] || { dh:[basePrice], tape:[basePrice], f:[basePrice] }; return { c: basePrice, ob: basePrice * 0.82, ss: basePrice * 1.24, dh: data.dh, tape: data.tape, f: data.f }; }
     function evaluateModelAction(nodePrice, tapePrice) { let ratio = nodePrice / tapePrice; if (ratio < 0.97) return "BUY"; if (ratio > 1.03) return "SELL"; return "HOLD"; }
@@ -126,7 +126,7 @@
       markup += `<path d="${mStr}" fill="none" stroke="#c084fc" stroke-width="2" /><path d="${tStr}" fill="none" stroke="#38bdf8" stroke-width="1.8" stroke-dasharray="3,2" />`;
       pts.forEach((v, i) => {
         let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 20) - 10; let isF = i >= h.length; let c = isF ? "#c084fc" : "#ffffff";
-        let txt = `<strong>Node</strong><br/>Value: $${v.toFixed(2)}`; markup += `<circle class="interactive-node" cx="${x}" cy="${y}" r="3.2" fill="${c}" onclick="handleNodeClick(${v})" onmousemove="showTooltip(event, '${txt}')" onmouseout="hideTooltip();"></circle>`;
+        let txt = `<strong>Node</strong><br/>Value: ${activeCurrency}${v.toFixed(2)}${activeCurrency===''?' GBX':''}`; markup += `<circle class="interactive-node" cx="${x}" cy="${y}" r="3.2" fill="${c}" onclick="handleNodeClick(${v})" onmousemove="showTooltip(event, '${txt}')" onmouseout="hideTooltip();"></circle>`;
       });
       document.getElementById('svgGraphContainer').innerHTML = markup + `</svg>`;
     }
@@ -144,34 +144,34 @@
       if (cached) { const payload = JSON.parse(cached); if (payload.length > 0) { payload.forEach(r => addNewTransactionRow(r.price, r.shares, false)); return; } }
       addNewTransactionRow(staticClosePrice * 0.95, 100, false);
     }
-    function updateStaticSessionTape(ticker) { const data = MasterVirtualTape[ticker] || { open: 100.00, close: 100.00 }; activeStockPrice = data.open; staticClosePrice = data.close; }
+    function updateStaticSessionTape(ticker) { const data = MasterVirtualTape[ticker] || { open: 100.00, close: 100.00, fx:"$" }; activeStockPrice = data.open; staticClosePrice = data.close; activeCurrency = data.fx; }
     function onTickerChange() { const sym = document.getElementById('tickerSelect').value; localStorage.setItem(`quant_active_ticker`, sym); updateStaticSessionTape(sym); loadPortfolioFromCache(sym); computeTrendEngine(); }
     function computeTrendEngine() {
       const sym = document.getElementById('tickerSelect').value; const tf = document.getElementById('timeframeSelect').value;
       const priceInputs = document.getElementsByClassName('tx-price'); const shareInputs = document.getElementsByClassName('tx-shares');
       let totalCapital = 0, totalShares = 0; for (let i = 0; i < priceInputs.length; i++) { let p = parseFloat(priceInputs[i].value) || 0; let s = parseFloat(shareInputs[i].value) || 0; totalCapital += (p * s); totalShares += s; }
-      let vwac = totalShares > 0 ? (totalCapital / totalShares) : 0; document.getElementById('ledger-avg-cost').innerText = "$" + vwac.toFixed(2);
+      let vwac = totalShares > 0 ? (totalCapital / totalShares) : 0; document.getElementById('ledger-avg-cost').innerText = activeCurrency + vwac.toFixed(2) + (activeCurrency===''?' GBX':'');
       const opn = activeStockPrice; const cls = staticClosePrice;
-      document.getElementById('marketStaticOpenDisplay').value = "$" + opn.toFixed(2); document.getElementById('marketStaticCloseDisplay').value = "$" + cls.toFixed(2);
+      document.getElementById('marketStaticOpenDisplay').value = activeCurrency + opn.toFixed(2) + (activeCurrency===''?' GBX':''); document.getElementById('marketStaticCloseDisplay').value = activeCurrency + cls.toFixed(2) + (activeCurrency===''?' GBX':'');
       const active = getDynamicMatrixData(opn, sym);
       const val = cls * totalShares; const ret = val - totalCapital; const pct = totalCapital > 0 ? (ret / totalCapital) * 100 : 0; const pEl = document.getElementById('ledger-current-profit');
-      if (totalShares === 0 || vwac === 0) { pEl.innerText = "$0.00 (0.00%)"; pEl.className = "card-value"; }
-      else { pEl.innerText = `${ret >= 0 ? '+$' : '-$'}${Math.abs(ret).toFixed(2)} (${ret >= 0 ? '+' : ''}${pct.toFixed(2)}%)`; pEl.className = ret >= 0 ? "card-value text-green" : "card-value text-red"; }
-      document.getElementById('ledger-alpha-profit').innerText = "$" + active.ob.toFixed(2); document.getElementById('ledger-beta-profit').innerText = "$" + active.ss.toFixed(2);
+      if (totalShares === 0 || vwac === 0) { pEl.innerText = "0.00 (0.00%)"; pEl.className = "card-value"; }
+      else { pEl.innerText = `${ret >= 0 ? '+' : '-'}${activeCurrency}${Math.abs(ret).toFixed(2)}${activeCurrency===''?' GBX':''} (${ret >= 0 ? '+' : ''}${pct.toFixed(2)}%)`; pEl.className = ret >= 0 ? "card-value text-green" : "card-value text-red"; }
+      document.getElementById('ledger-alpha-profit').innerText = activeCurrency + active.ob.toFixed(2) + (activeCurrency===''?' GBX':''); document.getElementById('ledger-beta-profit').innerText = activeCurrency + active.ss.toFixed(2) + (activeCurrency===''?' GBX':'');
       const hist = active.dh; const tape = active.tape;
       const hLabels = ["Early May Node", "May 19th Node", "Early June Node", "Mid June Node", "Late June Node", "Early July Node", "Mid July Node"];
       document.getElementById('historyPanelTitle').innerText = tf === 'weekly' ? "📋 Lookback Horizon Matrix (Weekly)" : "📋 Lookback Horizon Matrix (Daily 60-Day Window)";
       const hTab = document.getElementById('historicalTableBody'); hTab.innerHTML = "";
       hist.forEach((hp, idx) => {
         let tVal = tape[idx] || hp; let variance = ((hp - tVal) / tVal) * 100; let a = evaluateModelAction(hp, tVal);
-        hTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${hp})"><td><span class="highlight-blue">${hLabels[idx]}</span></td><td>$${hp.toFixed(2)}</td><td>$${tVal.toFixed(2)}</td><td class="${variance>=0?'text-green':'text-red'}">${variance>=0?'+':''}${variance.toFixed(2)}%</td><td><span class="badge ${a==='BUY'?'badge-buy':a==='SELL'?'badge-sell':'badge-hold'}">${a}</span></td></tr>`;
+        hTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${hp})"><td><span class="highlight-blue">${hLabels[idx]}</span></td><td>${activeCurrency}${hp.toFixed(2)}${activeCurrency===''?' GBX':''}</td><td>${activeCurrency}${tVal.toFixed(2)}${activeCurrency===''?' GBX':''}</td><td class="${variance>=0?'text-green':'text-red'}">${variance>=0?'+':''}${variance.toFixed(2)}%</td><td><span class="badge ${a==='BUY'?'badge-buy':a==='SELL'?'badge-sell':'badge-hold'}">${a}</span></td></tr>`;
       });
       const pTab = document.getElementById('predictiveTableBody'); pTab.innerHTML = "";
       const fLabels = ["August Forecast", "September Target Floor", "October Horizon Breakout", "November Trajectory", "January Realization Peak", "April Expansion Ceiling (9-Mo)", "October Trajectory Peak (18-Mo)", "July Macro Zenith (24-Mo Top)"]; 
       const blueprints = ["HOLD (EXPANSION LOOKAHEAD)", "STRONG BUY", "SCALED SELL", "SCALED SELL", "LIQUIDATE POSITION", "LIQUIDATE POSITION", "EXIT ZENITH CEILING", "EXIT ZENITH CEILING"];
       fLabels.forEach((hName, idx) => {
         let fPrice = active.f[idx]; let gain = ((fPrice - cls) / cls) * 100;
-        pTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${fPrice})"><td><span class="highlight-purple">${hName}</span></td><td style="font-weight:700;">$${fPrice.toFixed(2)}</td><td class="${gain>=0?'text-green':'text-red'}">${gain>=0?'+':''}${gain.toFixed(2)}%</td><td><span class="badge ${blueprints[idx].includes("BUY")||blueprints[idx].includes("ACCUM")?'badge-buy':'badge-sell'}">${blueprints[idx]}</span></td></tr>`;
+        pTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${fPrice})"><td><span class="highlight-purple">${hName}</span></td><td style="font-weight:700;">${activeCurrency}${fPrice.toFixed(2)}${activeCurrency===''?' GBX':''}</td><td class="${gain>=0?'text-green':'text-red'}">${gain>=0?'+':''}${gain.toFixed(2)}%</td><td><span class="badge ${blueprints[idx].includes("BUY")||blueprints[idx].includes("ACCUM")?'badge-buy':'badge-sell'}">${blueprints[idx]}</span></td></tr>`;
       });
       generateNativeSvgGraph(hist, active.f, active.ob, active.ss, tape); savePortfolioToCache();
     }
