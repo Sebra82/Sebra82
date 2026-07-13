@@ -99,17 +99,15 @@
         <div class="ledger-title">🔮 Predictive Forward Vectors (30 to 260 Days)</div>
         <div style="max-height: 380px; overflow-y: auto;"><table class="compact-table"><thead><tr><th>Horizon Vector</th><th>Predicted Price</th><th>% Change Target</th><th>Action Blueprint</th></tr></thead><tbody id="predictiveTableBody"></tbody></table></div>
       </div>
-    </div>
-  </div>
-  <script>
+        <script>
     const DB = {
-      "TSLA": { c: 258.4, ob: 220, ss: 295, dh: [232.1, 228.4, 220.1, 238.9, 258.4], wh: [215.3, 224.8, 235.1, 248.9, 258.4], f: [252, 235, 285, 310, 345, 420] },
+      "TSLA": { c: 258.4, ob: 220, ss: 295, dh: [232.1, 228.4, 220.1, 238.9, 258.4], wh: [215.3, 224.8, 235.1, 248.9, 258.4], f: [252.0, 235.0, 285.0, 310.0, 345.0, 420.0] },
       "LAES": { c: 2.8, ob: 1.85, ss: 5.88, dh: [4.12, 3.35, 2.9, 2.82, 2.8], wh: [5.2, 4.1, 3.45, 3.1, 2.8], f: [2.65, 1.85, 4.5, 5.2, 5.88, 7.5] },
-      "NVDA": { c: 124.5, ob: 110, ss: 145, dh: [115.2, 118.4, 126.1, 122.3, 124.5], wh: [108.4, 112.9, 122.1, 119.5, 124.5], f: [121, 135, 155, 168, 185, 225] },
-      "AAPL": { c: 182.2, ob: 172, ss: 198, dh: [175.4, 179.1, 184.2, 180.9, 182.2], wh: [169.5, 174.2, 178.1, 183.0, 182.2], f: [185, 174, 205, 215, 230, 265] },
+      "NVDA": { c: 124.5, ob: 110, ss: 145, dh: [115.2, 118.4, 126.1, 122.3, 124.5], wh: [108.4, 112.9, 122.1, 119.5, 124.5], f: [121.0, 135.0, 155.0, 168.0, 185.0, 225.0] },
+      "AAPL": { c: 182.2, ob: 172, ss: 198, dh: [175.4, 179.1, 184.2, 180.9, 182.2], wh: [169.5, 174.2, 178.1, 183.0, 182.2], f: [185.0, 174.0, 205.0, 215.0, 230.0, 265.0] },
       "GME":  { c: 22.1, ob: 14.5, ss: 38, dh: [18.4, 16.2, 25.5, 20.1, 22.1], wh: [15.2, 19.4, 22.8, 18.9, 22.1], f: [19.5, 15, 32.5, 42, 55, 78] },
       "RKTO": { c: 18.6, ob: 15.2, ss: 24, dh: [16.1, 17.3, 19.4, 18.15, 18.6], wh: [14.5, 15.9, 17.2, 18.4, 18.6], f: [17.9, 21.5, 26, 28.5, 34, 45] },
-      "TTWO": { c: 154.3, ob: 142, ss: 178, dh: [148.9, 151.2, 156.4, 152.0, 154.3], wh: [142.1, 145.8, 151.0, 149.2, 154.3], f: [158, 146, 188, 195, 220, 270] },
+      "TTWO": { c: 154.3, ob: 142, ss: 178, dh: [148.9, 151.2, 156.4, 152.0, 154.3], wh: [142.1, 145.8, 151.0, 149.2, 154.3], f: [158.0, 146.0, 188.0, 195.0, 220.0, 270.0] },
       "SOC":  { c: 12.4, ob: 9.5, ss: 16.5, dh: [11.1, 10.8, 13.2, 12.1, 12.4], wh: [9.8, 10.5, 11.9, 12.3, 12.4], f: [11.9, 14.2, 17.8, 19.5, 22, 29] },
       "ABAT": { c: 3.15, ob: 2.1, ss: 5.5, dh: [2.8, 2.95, 3.4, 3.05, 3.15], wh: [2.4, 2.65, 3.1, 2.9, 3.15], f: [2.9, 2.45, 4.8, 5.5, 6.2, 8.8] },
       "BRTX": { c: 0.85, ob: 0.52, ss: 1.65, dh: [0.72, 0.68, 0.94, 0.81, 0.85], wh: [0.55, 0.62, 0.74, 0.79, 0.85], f: [0.78, 0.6, 1.25, 1.5, 1.85, 2.4] }
@@ -164,7 +162,7 @@
       const blueprints = [active.f[0]>act?"ACCUMULATE":"HOLD", "STRONG BUY", "SCALED SELL", "SCALED SELL", "LIQUIDATE POSITION", "LIQUIDATE POSITION"];
       horizons.forEach((hName, idx) => {
         let fPrice = active.f[idx]; let gain = ((fPrice - act) / act) * 100;
-        pTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${fPrice})"><td class="highlight-purple">${hName}</td><td style="font-weight:700;">$${fPrice.toFixed(2)}</td><td class="${gain>=0?'text-green':'text-red'}">${gain>=0?'+':''}${gain.toFixed(2)}%</td><td><span class="badge ${blueprints[idx].includes("BUY")||blueprints[idx].includes("ACCUM")?'badge-buy':'badge-sell'}">${blueprints[idx]}</span></td></tr>`;
+        pTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(fPrice)"><td class="highlight-purple">${hName}</td><td style="font-weight:700;">$${fPrice.toFixed(2)}</td><td class="${gain>=0?'text-green':'text-red'}">${gain>=0?'+':''}${gain.toFixed(2)}%</td><td><span class="badge ${blueprints[idx].includes("BUY")||blueprints[idx].includes("ACCUM")?'badge-buy':'badge-sell'}">${blueprints[idx]}</span></td></tr>`;
       });
 
       generateNativeSvgGraph(hist, active.f);
@@ -173,3 +171,6 @@
   </script>
 </body>
 </html>
+
+    </div>
+  </div>
