@@ -87,6 +87,7 @@
       <div id="chartTooltipOverlay" class="quant-chart-tooltip"></div>
     </div>
   <script>
+  <script>
     let activeStockPrice = 124.50;
     let staticClosePrice = 124.50;
     const FallbackRegistry = { "TSLA":258.40,"LAES":2.80,"NVDA":124.50,"AAPL":182.20,"GME":22.10,"RKTO":18.60,"TTWO":154.30,"SOC":12.40,"ABAT":3.15,"BRTX":0.85,"MSFT":420.50,"AMZN":185.20,"META":495.10,"GOOGL":172.40,"NFLX":610.20,"AMD":165.40,"BABA":74.30,"PLTR":24.15,"NIO":4.85,"COIN":225.30,"SOFI":6.90,"MARA":18.20,"HOOD":19.45,"SQ":64.20,"PYPL":58.90,"DIS":112.40,"XOM":118.20,"JPM":198.50,"V":272.10,"COST":815.30 };
@@ -106,11 +107,12 @@
       };
     }
 
+    // 🎛️ TIGHTENED ALPHA PARAMETERS: 3% threshold corridors for lightning-fast execution signals
     function evaluateModelAction(nodePrice, activePrice, idx, totalNodes) {
       if (idx === totalNodes - 1) return "HOLD";
       let ratio = nodePrice / activePrice;
-      if (ratio < 0.95) return "BUY";
-      if (ratio > 1.06) return "SELL";
+      if (ratio < 0.97) return "BUY";
+      if (ratio > 1.03) return "SELL";
       return "HOLD";
     }
 
@@ -170,6 +172,7 @@
       const act = activeStockPrice; const cls = staticClosePrice;
       document.getElementById('currentClosedPriceDisplay').value = "$" + act.toFixed(2); document.getElementById('marketStaticCloseDisplay').value = "$" + cls.toFixed(2);
       const active = getDynamicMatrixData(act, sym);
+
       const val = act * totalShares; const ret = val - totalCapital; const pct = totalCapital > 0 ? (ret / totalCapital) * 100 : 0; const pEl = document.getElementById('ledger-current-profit');
       if (totalShares === 0 || vwac === 0) { pEl.innerText = "$0.00 (0.00%)"; pEl.className = "card-value"; }
       else { pEl.innerText = `${ret >= 0 ? '+$' : '-$'}${Math.abs(ret).toFixed(2)} (${ret >= 0 ? '+' : ''}${pct.toFixed(2)}%)`; pEl.className = ret >= 0 ? "card-value text-green" : "card-value text-red"; }
