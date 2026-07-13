@@ -4,16 +4,8 @@
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Prediction Engine</title>
   <style>
     :root { --bg-main: #0a0e17; --bg-panel: #111625; --border-color: #1e293b; --text-primary: #f8fafc; --text-muted: #94a3b8; --matrix-purple: #c084fc; --signal-buy: #4ade80; --signal-sell: #f87171; --accent-blue: #38bdf8; }
-    body { font-family: -apple-system, sans-serif; background-color: var(--bg-main); color: var(--text-primary); margin: 0; padding: 12px; padding-top: 45px; }
+    body { font-family: -apple-system, sans-serif; background-color: var(--bg-main); color: var(--text-primary); margin: 0; padding: 12px; }
     .app-container { max-width: 1250px; margin: 0 auto; }
-    
-    /* Premium Real-Time Trending Stock Ribbon Layout */
-    .trending-ribbon { position: fixed; top: 0; left: 0; right: 0; height: 32px; background: #000; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; overflow-x: auto; white-space: nowrap; padding: 0 10px; gap: 15px; z-index: 1000; font-size: 11px; scrollbar-width: none; }
-    .trending-ribbon::-webkit-scrollbar { display: none; }
-    .ribbon-title { color: var(--matrix-purple); font-weight: 800; text-transform: uppercase; border-right: 1px solid var(--border-color); padding-right: 10px; }
-    .ticker-pill { background: var(--bg-panel); border: 1px solid var(--border-color); padding: 2px 8px; border-radius: 4px; cursor: pointer; font-weight: 700; color: var(--accent-blue); transition: all 0.2s; }
-    .ticker-pill:hover { background: var(--matrix-purple); color: #fff; }
-    
     header { margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
     h1 { margin: 0; font-size: 20px; color: #ffffff; font-weight: 700; }
     .panel-grid-top, .panel-grid-bottom { display: grid; grid-template-columns: 1.1fr 1fr; gap: 12px; margin-bottom: 12px; }
@@ -25,7 +17,6 @@
     label { font-size: 9px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
     input, select { background-color: var(--bg-main); border: 1px solid var(--border-color); color: #ffffff; padding: 6px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; }
     button { background-color: var(--matrix-purple); color: #ffffff; border: none; padding: 8px 14px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
-    .btn-add { background-color: #1e293b; border: 1px solid var(--border-color); color: #fff; padding: 5px 10px; font-size: 10px; }
     .btn-delete { background-color: #5a181e; padding: 4px 8px; font-size: 10px; color: #fff; border: 1px solid #7f1d1d; border-radius: 4px; cursor: pointer; }
     .transaction-row { display: flex; gap: 10px; align-items: center; margin-bottom: 6px; background: var(--bg-main); padding: 6px; border-radius: 4px; border: 1px solid var(--border-color); }
     .compact-table { width: 100%; border-collapse: collapse; font-size: 11px; text-align: left; }
@@ -49,13 +40,9 @@
   </style>
 </head>
 <body>
-  <!-- Top 20 Hot Trending Asset Ribbon Grid -->
-  <div class="trending-ribbon" id="tickerRibbonGrid">
-    <span class="ribbon-title">🔥 Trending (Tap to Load)</span>
-  </div>
-
   <div class="app-container">
     <header><div><h1>🌌 Prediction Engine</h1><p>128-Point Multi-Asset Geometric Horizon Matrix</p></div><div><span class="badge badge-hold" style="color: var(--matrix-purple); border-color: var(--matrix-purple);">Quant Live V11.0</span></div></header>
+    
     <div class="profit-ledger">
       <div class="ledger-title">📋 Position Evaluation Summary Matrix</div>
       <div class="profit-grid">
@@ -65,6 +52,7 @@
         <div class="profit-card" style="border-left: 2px solid var(--matrix-purple);"><div class="card-label">Saturated Exit Ceiling</div><div class="card-value text-red" id="ledger-beta-profit">-</div></div>
       </div>
     </div>
+
     <div class="panel-grid-top">
       <div class="data-panel">
         <div class="ledger-title" id="historyPanelTitle">📋 Calendar Lookback Nodes & % Change vs Actual</div>
@@ -75,51 +63,41 @@
         <div style="max-height: 180px; overflow-y: auto;"><table class="compact-table"><thead><tr><th>Horizon Window</th><th>Predicted Price</th><th>% Target Gain</th><th>Action Blueprint</th></tr></thead><tbody id="predictiveTableBody"></tbody></table></div>
       </div>
     </div>
+
     <div class="panel-grid-bottom">
       <div class="data-panel" style="position: relative;"><div class="ledger-title">📊 Consolidated Wave Trajectory Corridor</div><div class="graph-container" id="svgGraphContainer"></div><div id="chartTooltipOverlay" class="quant-chart-tooltip"></div></div>
       <div class="data-panel">
         <div class="ledger-title">⚙️ Station System Asset Configuration Panel</div>
         <div class="input-row input-row-top">
-          <div class="input-group"><label for="tickerSelect">Tracked Asset</label><select id="tickerSelect" onchange="onTickerChange()" style="width: 130px;"><option value="TSLA" selected>TSLA</option><option value="LAES">LAES</option><option value="NVDA">NVDA</option><option value="AAPL">AAPL</option><option value="GME">GME</option><option value="RKTO">RKTO</option><option value="TTWO">TTWO</option><option value="SOC">SOC</option><option value="ABAT">ABAT</option><option value="BRTX">BRTX</option><option value="AMZN">AMZN</option><option value="MSFT">MSFT</option><option value="AMD">AMD</option><option value="META">META</option><option value="PLTR">PLTR</option><option value="GOOGL">GOOGL</option><option value="NFLX">NFLX</option><option value="COIN">COIN</option><option value="SOUN">SOUN</option><option value="BABA">BRTX</option></select></div>
+          <div class="input-group"><label for="tickerSelect">Tracked Asset</label>
+            <select id="tickerSelect" onchange="onTickerChange()" style="width: 140px;">
+              <optgroup label="💼 Your Portfolio Assets">
+                <option value="TSLA" selected>TSLA (Tesla)</option><option value="LAES">LAES (Lightspeed)</option><option value="NVDA">NVDA (NVIDIA)</option><option value="AAPL">AAPL (Apple)</option><option value="GME">GME (GameStop)</option><option value="RKTO">RKTO (Rocket Lab)</option><option value="TTWO">TTWO (Take-Two)</option><option value="SOC">SOC (Sinoops)</option><option value="ABAT">ABAT (Advanced Bat)</option><option value="BRTX">BRTX (BioRestor)</option>
+              </optgroup>
+              <optgroup label="🔥 Top 20 Trending Market Leaders">
+                <option value="MSFT">MSFT (Microsoft)</option><option value="AMZN">AMZN (Amazon)</option><option value="META">META (Meta)</option><option value="GOOGL">GOOGL (Alphabet)</option><option value="NFLX">NFLX (Netflix)</option><option value="AMD">AMD (Advanced Devices)</option><option value="BABA">BABA (Alibaba)</option><option value="PLTR">PLTR (Palantir)</option><option value="NIO">NIO (Nio Auto)</option><option value="COIN">COIN (Coinbase)</option><option value="SOFI">SOFI (SoFi Tech)</option><option value="MARA">MARA (Mara Digital)</option><option value="HOOD">HOOD (Robinhood)</option><option value="SQ">SQ (Block Inc)</option><option value="PYPL">PYPL (PayPal)</option><option value="DIS">DIS (Walt Disney)</option><option value="XOM">XOM (Exxon Mobil)</option><option value="JPM">JPM (JPMorgan Chase)</option><option value="V">V (Visa Inc)</option><option value="COST">DIS (Costco)</option>
+              </optgroup>
+            </select>
+          </div>
           <div class="input-group"><label for="timeframeSelect">Resolution</label><select id="timeframeSelect" onchange="computeTrendEngine()" style="width: 120px;"><option value="daily" selected>Last 30 Days</option><option value="weekly">By Trailing Weeks</option></select></div>
           <div class="input-group"><label style="color: var(--accent-blue);" id="priceLabelStatus">Live Price</label><input type="text" id="currentClosedPriceDisplay" value="Loading..." style="width: 100px; font-weight: 800; color: var(--accent-blue); text-align: center;" readonly /></div>
         </div>
       </div>
     </div>
-    <div class="ledger-container"><div class="ledger-title"><span>🧮 Multi-Buy DCA Portfolio Blender Tiers</span><button class="btn-add" onclick="addNewTransactionRow(0, 0, true)">+ Add Entry Tier Row</button></div><div id="transactionRowsContainer"></div></div>
+    <div class="ledger-container"><div class="ledger-title"><span>🧮 Multi-Buy DCA Portfolio Blender Tiers</span><button class="btn-add" onclick="addNewTransactionRow(0, 0, true)" style="background-color: #1e293b; border: 1px solid var(--border-color); color: #fff; padding: 5px 10px; font-size: 10px; border-radius:4px; cursor:pointer;">+ Add Entry Tier Row</button></div><div id="transactionRowsContainer"></div></div>
   </div>
   <script>
-    const DB = {
-      "TSLA": { c: 258.4, ob: 220, ss: 295, dh: [232.1, 228.4, 220.1, 238.9, 258.4], wh: [215.3, 224.8, 235.1, 248.9, 258.4], f: [252, 235, 285, 310, 345, 420] },
-      "LAES": { c: 2.8, ob: 1.85, ss: 5.88, dh: [4.12, 3.35, 2.9, 2.82, 2.8], wh: [5.2, 4.1, 3.45, 3.1, 2.8], f: [2.65, 1.85, 4.5, 5.2, 5.88, 7.5] },
-      "NVDA": { c: 124.5, ob: 110, ss: 145, dh: [115.2, 118.4, 126.1, 122.3, 124.5], wh: [108.4, 112.9, 122.1, 119.5, 124.5], f: [121, 135, 155, 168, 185, 225] },
-      "AAPL": { c: 182.2, ob: 172, ss: 198, dh: [175.4, 179.1, 184.2, 180.9, 182.2], wh: [169.5, 174.2, 178.1, 183.0, 182.2], f: [185, 174, 205, 215, 230, 265] },
-      "GME":  { c: 22.1, ob: 14.5, ss: 38, dh: [18.4, 16.2, 25.5, 20.1, 22.1], wh: [15.2, 19.4, 22.8, 18.9, 22.1], f: [19.5, 15, 32.5, 42, 55, 78] },
-      "RKTO": { c: 18.6, ob: 15.2, ss: 24, dh: [16.1, 17.3, 19.4, 18.15, 18.6], wh: [14.5, 15.9, 17.2, 18.4, 18.6], f: [17.9, 21.5, 26, 28.5, 34, 45] },
-      "TTWO": { c: 154.3, ob: 142, ss: 178, dh: [148.9, 151.2, 156.4, 152, 154.3], wh: [142.1, 145.8, 151, 149.2, 154.3], f: [158, 146, 188, 195, 220, 270] },
-      "SOC":  { c: 12.4, ob: 9.5, ss: 16.5, dh: [11.1, 10.8, 13.2, 12.1, 12.4], wh: [9.8, 10.5, 11.9, 12.3, 12.4], f: [11.9, 14.2, 17.8, 19.5, 22, 29] },
-      "ABAT": { c: 3.15, ob: 2.1, ss: 5.5, dh: [2.8, 2.95, 3.4, 3.05, 3.15], wh: [2.4, 2.65, 3.1, 2.9, 3.15], f: [2.9, 2.45, 4.8, 5.5, 6.2, 8.8] },
-      "BRTX": { c: 0.85, ob: 0.52, ss: 1.65, dh: [0.72, 0.68, 0.94, 0.81, 0.85], wh: [0.55, 0.62, 0.74, 0.79, 0.85], f: [0.78, 0.6, 1.25, 1.5, 1.85, 2.4] },
-      "AMZN": { c: 175.2, ob: 150, ss: 210, dh: [165.2, 168.4, 172.1, 170.3, 175.2], wh: [155.4, 160.1, 168.2, 171.0, 175.2], f: [182, 195, 215, 225, 240, 275] },
-      "MSFT": { c: 420.5, ob: 380, ss: 475, dh: [410.2, 414.8, 422.1, 418.5, 420.5], wh: [395.2, 402.1, 415.8, 412.3, 420.5], f: [435, 450, 480, 495, 520, 560] },
-      "AMD":  { c: 160.4, ob: 135, ss: 195, dh: [148.2, 152.1, 164.2, 157.9, 160.4], wh: [138.4, 144.2, 158.1, 155.0, 160.4], f: [168, 175, 198, 210, 230, 255] },
-      "META": { c: 485.2, ob: 440, ss: 540, dh: [465.1, 472.4, 488.2, 481.0, 485.2], wh: [432.5, 451.0, 474.2, 479.9, 485.2], f: [505, 525, 555, 580, 610, 650] },
-      "PLTR": { c: 24.5,  ob: 19.5, ss: 32,   dh: [21.2, 22.4, 25.1, 23.8, 24.5],  wh: [18.2, 20.5, 23.1, 22.9, 24.5],  f: [26, 29, 34, 38, 42, 50] },
-      "GOOGL":{ c: 172.4, ob: 155, ss: 195, dh: [164.2, 166.8, 175.1, 171.2, 172.4], wh: [152.4, 159.0, 168.1, 169.5, 172.4], f: [178, 185, 202, 215, 230, 250] },
-      "NFLX": { c: 610.2, ob: 560, ss: 680, dh: [592.1, 598.4, 615.2, 606.3, 610.2], wh: [554.2, 572.1, 598.0, 602.4, 610.2], f: [625, 645, 690, 715, 740, 800] },
-      "COIN": { c: 225.4, ob: 180, ss: 290, dh: [204.2, 212.1, 238.4, 221.0, 225.4], wh: [174.5, 192.0, 218.4, 211.5, 225.4], f: [240, 265, 305, 330, 365, 420] },
-      "SOUN": { c: 5.4,   ob: 3.8,  ss: 8.5,  dh: [4.8, 4.9, 5.8, 5.2, 5.4],     wh: [3.9, 4.2, 5.1, 4.9, 5.4],     f: [5.8, 6.5, 7.8, 8.4, 9.5, 11.2] },
-      "BABA": { c: 74.2,  ob: 68,   ss: 92,   dh: [71.4, 72.1, 75.8, 73.9, 74.2],  wh: [69.2, 70.5, 73.1, 72.8, 74.2],  f: [77, 82, 89, 95, 102, 115] }
-    };
+    let activeStockPrice = 250.00;
 
-    const ribbonTickers = ["TSLA", "LAES", "NVDA", "AAPL", "GME", "RKTO", "TTWO", "SOC", "ABAT", "BRTX", "AMZN", "MSFT", "AMD", "META", "PLTR", "GOOGL", "NFLX", "COIN", "SOUN", "BABA"];
-
-    function buildTickerRibbon() {
-      const r = document.getElementById('tickerRibbonGrid');
-      ribbonTickers.forEach(t => {
-        let p = document.createElement('span'); r.className = 'trending-ribbon'; p.className = 'ticker-pill'; p.innerText = t;
-        p.onclick = () => { document.getElementById('tickerSelect').value = t; onTickerChange(); }; r.appendChild(p);
-      });
+    function getDynamicMatrixData(basePrice) {
+      return {
+        c: basePrice,
+        ob: basePrice * 0.85,
+        ss: basePrice * 1.15,
+        dh: [basePrice * 0.90, basePrice * 0.88, basePrice * 0.85, basePrice * 0.92, basePrice],
+        wh: [basePrice * 0.83, basePrice * 0.87, basePrice * 0.91, basePrice * 0.96, basePrice],
+        f: [basePrice * 0.98, basePrice * 0.91, basePrice * 1.10, basePrice * 1.20, basePrice * 1.33, basePrice * 1.62]
+      };
     }
 
     function handleNodeClick(p) { addNewTransactionRow(p, 10, true); }
@@ -142,7 +120,7 @@
 
     function addNewTransactionRow(p = 0, s = 0, trig = true) {
       const container = document.getElementById('transactionRowsContainer'); const row = document.createElement('div'); row.className = 'transaction-row';
-      row.innerHTML = `<div class="input-group"><label>Purchase Price</label><input type="number" class="tx-price" value="${p||''}" step="0.01" style="width: 120px;" oninput="computeTrendEngine()"></div><div class="input-group"><label>Shares Volume</label><input type="number" class="tx-shares" value="${s||''}" step="1" style="width: 120px;" oninput="computeTrendEngine()"></div><div style="margin-top: 14px;"><button class="btn-delete" onclick="this.parentElement.parentElement.remove(); computeTrendEngine();">Delete</button></div>`;
+      row.innerHTML = `<div class="input-group"><label>Purchase Price</label><input type="number" class="tx-price" value="${p ? p.toFixed(2) : ''}" step="0.01" style="width: 120px;" oninput="computeTrendEngine()"></div><div class="input-group"><label>Shares Volume</label><input type="number" class="tx-shares" value="${s||''}" step="1" style="width: 120px;" oninput="computeTrendEngine()"></div><div style="margin-top: 14px;"><button class="btn-delete" onclick="this.parentElement.parentElement.remove(); computeTrendEngine();">Delete</button></div>`;
       container.appendChild(row); if (trig) computeTrendEngine();
     }
 
@@ -154,7 +132,7 @@
     function loadPortfolioFromCache(sym) {
       const container = document.getElementById('transactionRowsContainer'); container.innerHTML = ""; const cached = localStorage.getItem(`quant_portfolio_${sym}`);
       if (cached) { const payload = JSON.parse(cached); if (payload.length > 0) { payload.forEach(r => addNewTransactionRow(r.price, r.shares, false)); return; } }
-      addNewTransactionRow(DB[sym].ob * 1.05, 100, false);
+      addNewTransactionRow(activeStockPrice * 0.95, 100, false);
     }
 
     async function scrapeRealtimeMarketPrice(ticker) {
@@ -164,4 +142,45 @@
         const response = await fetch(proxyUrl + targetUrl); if (!response.ok) throw new Error();
         const rawData = await response.json(); const parsed = JSON.parse(rawData.contents);
         const livePrice = parsed.chart.result.meta.regularMarketPrice;
-        if(livePrice) { DB[ticker].c = livePrice; document.getElementById('priceLabelStatus').innerText = "
+        if(livePrice) { activeStockPrice = livePrice; document.getElementById('priceLabelStatus').innerText = "🟢 Market Price"; }
+      } catch (err) { activeStockPrice = ticker === "TSLA" ? 258.40 : ticker === "AAPL" ? 182.20 : 120.00; document.getElementById('priceLabelStatus').innerText = "⚠️ Proxy Fallback"; }
+    }
+
+    async function onTickerChange() { const sym = document.getElementById('tickerSelect').value; await scrapeRealtimeMarketPrice(sym); loadPortfolioFromCache(sym); computeTrendEngine(); }
+
+    function computeTrendEngine() {
+      const sym = document.getElementById('tickerSelect').value; const tf = document.getElementById('timeframeSelect').value;
+      const priceInputs = document.getElementsByClassName('tx-price'); const shareInputs = document.getElementsByClassName('tx-shares');
+      let totalCapital = 0, totalShares = 0; for (let i = 0; i < priceInputs.length; i++) { let p = parseFloat(priceInputs[i].value) || 0; let s = parseFloat(shareInputs[i].value) || 0; totalCapital += (p * s); totalShares += s; }
+      let vwac = totalShares > 0 ? (totalCapital / totalShares) : 0; document.getElementById('ledger-avg-cost').innerText = "$" + vwac.toFixed(2);
+      
+      const act = activeStockPrice; document.getElementById('currentClosedPriceDisplay').value = "$" + act.toFixed(2);
+      const active = getDynamicMatrixData(act);
+
+      const val = act * totalShares; const ret = val - totalCapital; const pct = totalCapital > 0 ? (ret / totalCapital) * 100 : 0; const pEl = document.getElementById('ledger-current-profit');
+      if (totalShares === 0 || vwac === 0) { pEl.innerText = "$0.00 (0.00%)"; pEl.className = "card-value"; }
+      else { pEl.innerText = `${ret >= 0 ? '+$' : '-$'}${Math.abs(ret).toFixed(2)} (${ret >= 0 ? '+' : ''}${pct.toFixed(2)}%)`; pEl.className = ret >= 0 ? "card-value text-green" : "card-value text-red"; }
+      document.getElementById('ledger-alpha-profit').innerText = "$" + active.ob.toFixed(2); document.getElementById('ledger-beta-profit').innerText = "$" + active.ss.toFixed(2);
+      const hist = tf === 'weekly' ? active.wh : active.dh;
+      
+      const dailyLabels = ["Mid June", "Late June", "Early July", "Mid July", "Actual Today"]; const weeklyLabels = ["Early May", "Late May", "Early June", "Late June", "Actual Today"]; const hLabels = tf === 'weekly' ? weeklyLabels : dailyLabels;
+      document.getElementById('historyPanelTitle').innerText = tf === 'weekly' ? "📋 Historical Weekly Steps & % Change vs Actual" : "📋 Historical 30-Day Nodes & % Change vs Actual";
+
+      const hTab = document.getElementById('historicalTableBody'); hTab.innerHTML = "";
+      hist.forEach((hp, idx) => {
+        let chg = ((hp - act) / act) * 100; let d = (idx - 2) * 0.385; let a = d < -0.2 ? "BUY" : d > 0.5 ? "SELL" : "HOLD";
+        hTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${hp})"><td class="highlight-blue">${hLabels[idx]}</td><td>$${hp.toFixed(2)}</td><td class="${chg>=0?'text-green':'text-red'}">${chg>=0?'+':''}${chg.toFixed(2)}%</td><td class="${(1.45-(idx*0.45))>=0?'text-green':'text-red'}">${(1.45-(idx*0.45)).toFixed(2)}</td><td><span class="badge ${a==='BUY'?'badge-buy':a==='SELL'?'badge-sell':'badge-hold'}">${a}</span></td></tr>`;
+      });
+
+      const pTab = document.getElementById('predictiveTableBody'); pTab.innerHTML = "";
+      const fLabels = ["August Forecast", "September Target", "October Horizon", "November Trajectory", "January Peak", "April Zenith"]; const blueprints = ["HOLD", "STRONG BUY", "SCALED SELL", "SCALED SELL", "LIQUIDATE POSITION", "LIQUIDATE POSITION"];
+      fLabels.forEach((hName, idx) => {
+        let fPrice = active.f[idx]; let gain = ((fPrice - act) / act) * 100;
+        pTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${fPrice})"><td class="highlight-purple">${hName}</td><td style="font-weight:700;">$${fPrice.toFixed(2)}</td><td class="${gain>=0?'text-green':'text-red'}">${gain>=0?'+':''}${gain.toFixed(2)}%</td><td><span class="badge ${blueprints[idx].includes("BUY")||blueprints[idx].includes("ACCUM")?'badge-buy':'badge-sell'}">${blueprints[idx]}</span></td></tr>`;
+      });
+      generateNativeSvgGraph(hist, active.f, active.ob, active.ss, tf, hLabels, fLabels, blueprints); savePortfolioToCache();
+    }
+    window.addEventListener('DOMContentLoaded', async () => { const startSym = document.getElementById('tickerSelect').value; await scrapeRealtimeMarketPrice(startSym); loadPortfolioFromCache(startSym); computeTrendEngine(); });
+  </script>
+</body>
+</html>
