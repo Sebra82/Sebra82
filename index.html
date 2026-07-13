@@ -6,343 +6,170 @@
   <title>Prediction Engine</title>
   <style>
     :root {
-      --bg-main: #0a0e17;
-      --bg-panel: #111625;
-      --border-color: #1e293b;
-      --text-primary: #f8fafc;
-      --text-muted: #94a3b8;
-      --matrix-purple: #c084fc;
-      --signal-buy: #4ade80;
-      --signal-sell: #f87171;
-      --accent-blue: #38bdf8;
+      --bg-main: #0a0e17; --bg-panel: #111625; --border-color: #1e293b;
+      --text-primary: #f8fafc; --text-muted: #94a3b8; --matrix-purple: #c084fc;
+      --signal-buy: #4ade80; --signal-sell: #f87171; --accent-blue: #38bdf8;
     }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--bg-main);
-      color: var(--text-primary);
-      margin: 0;
-      padding: 16px;
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-main); color: var(--text-primary); margin: 0; padding: 16px; }
     .app-container { max-width: 1300px; margin: 0 auto; }
-    header { margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-    h1 { margin: 0; font-size: 22px; color: #ffffff; letter-spacing: -0.5px; font-weight: 700; }
+    header { margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+    h1 { margin: 0; font-size: 22px; color: #ffffff; font-weight: 700; }
     header p { margin: 0; font-size: 12px; color: var(--text-muted); }
-    
-    .panel-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .panel-grid { display: grid; grid-template-columns: 1.1fr 1.1fr; gap: 16px; margin-bottom: 16px; }
     @media (max-width: 968px) { .panel-grid { grid-template-columns: 1fr; } }
-    
-    .control-matrix, .profit-ledger, .data-panel {
-      background-color: var(--bg-panel);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 14px;
-    }
+    .control-matrix, .profit-ledger, .data-panel { background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; margin-bottom: 16px; }
     .input-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .input-row-top { border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 12px; }
     .input-group { display: flex; flex-direction: column; gap: 4px; }
-    label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; }
-    input, select {
-      background-color: var(--bg-main);
-      border: 1px solid var(--border-color);
-      color: #ffffff;
-      padding: 8px 12px;
-      border-radius: 4px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-    button {
-      background-color: var(--matrix-purple);
-      color: #ffffff;
-      border: none;
-      padding: 9px 18px;
-      border-radius: 4px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
+    label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
+    input, select { background-color: var(--bg-main); border: 1px solid var(--border-color); color: #ffffff; padding: 8px 12px; border-radius: 4px; font-size: 13px; font-weight: 600; }
     .compact-table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
     .compact-table th { padding: 6px 8px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 10px; border-bottom: 1px solid var(--border-color); }
     .compact-table td { padding: 8px; border-bottom: 1px solid #1e293b; font-weight: 500; }
-    
     .profit-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 10px; }
     @media (max-width: 640px) { .profit-grid { grid-template-columns: repeat(2, 1fr); } }
     .profit-card { background-color: var(--bg-main); border: 1px solid var(--border-color); border-radius: 4px; padding: 10px; text-align: center; }
     .ledger-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: #fff; margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
     .card-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: 4px; }
     .card-value { font-size: 15px; font-weight: 700; }
-    
     .badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; display: inline-block; }
     .badge-buy { background-color: #064e3b; color: var(--signal-buy); border: 1px solid #047857; }
     .badge-sell { background-color: #7f1d1d; color: var(--signal-sell); border: 1px solid #b91c1c; }
     .badge-hold { background-color: #1e293b; color: var(--text-muted); border: 1px solid #334155; }
-    
-    .graph-container { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; margin-top: 8px; text-align: center; }
-    .highlight-purple { color: var(--matrix-purple); }
-    .highlight-blue { color: var(--accent-blue); }
-    .text-green { color: var(--signal-buy) !important; }
-    .text-red { color: var(--signal-sell) !important; }
+    .graph-container { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 6px; padding: 14px; margin-top: 4px; text-align: center; }
+    .interactive-node { cursor: pointer; transition: r 0.15s ease, fill 0.15s ease; }
+    .interactive-node:hover { r: 7; fill: #ffffff !important; stroke: var(--matrix-purple); stroke-width: 2; }
+    .graph-instructions { font-size: 11px; color: var(--accent-blue); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 8px; display: block; }
+    .highlight-purple { color: var(--matrix-purple); } .highlight-blue { color: var(--accent-blue); }
+    .text-green { color: var(--signal-buy) !important; } .text-red { color: var(--signal-sell) !important; }
   </style>
 </head>
 <body>
   <div class="app-container">
     <header>
-      <div>
-        <h1>🌌 Prediction Engine</h1>
-        <p>128-Point Multi-Asset Geometric Horizon Matrix</p>
-      </div>
-      <div>
-        <span class="badge badge-hold" style="color: var(--matrix-purple); border-color: var(--matrix-purple);">Quant Mode V5.0</span>
-      </div>
+      <div><h1>🌌 Prediction Engine</h1><p>128-Point Multi-Asset Geometric Horizon Matrix</p></div>
+      <div><span class="badge badge-hold" style="color: var(--matrix-purple); border-color: var(--matrix-purple);">Quant Mode V8.0</span></div>
     </header>
 
-    <!-- Unified Master Control & Input Area at the Top -->
+    <div class="profit-ledger">
+      <div class="ledger-title">📋 Position Evaluation Summary Matrix</div>
+      <div class="profit-grid">
+        <div class="profit-card"><div class="card-label">Your Cost Basis</div><div class="card-value highlight-purple" id="ledger-avg-cost">-</div></div>
+        <div class="profit-card"><div class="card-label">Position Performance</div><div class="card-value" id="ledger-current-profit">-</div></div>
+        <div class="profit-card" style="border-left: 2px solid var(--accent-blue);"><div class="card-label">Optimum Purchase Target</div><div class="card-value text-green" id="ledger-alpha-profit">-</div></div>
+        <div class="profit-card" style="border-left: 2px solid var(--matrix-purple);"><div class="card-label">Saturated Exit Ceiling</div><div class="card-value text-red" id="ledger-beta-profit">-</div></div>
+      </div>
+    </div>
+
+    <div class="data-panel" style="margin-bottom: 16px;">
+      <div class="ledger-title">📊 Interactive Macro Wave Trajectory Curve (Lookback + 30-260 Day Targets)</div>
+      <div class="graph-container" id="svgGraphContainer"></div>
+      <span class="graph-instructions">💡 Interactive Tap Matrix: Click or hover over any node point on the chart curve to hot-swap configuration figures below</span>
+    </div>
+
     <div class="control-matrix" style="margin-bottom: 16px;">
-      <div class="input-row">
+      <div class="input-row input-row-top">
         <div class="input-group">
           <label for="tickerSelect">Tracked Asset</label>
           <select id="tickerSelect" onchange="computeTrendEngine()" style="width: 140px;">
-            <option value="TSLA" selected>TSLA (Tesla)</option>
-            <option value="LAES">LAES (Lightspeed)</option>
-            <option value="NVDA">NVDA (NVIDIA)</option>
-            <option value="AAPL">AAPL (Apple)</option>
-            <option value="GME">GME (GameStop)</option>
-            <option value="RKTO">RKTO (Rocket Lab)</option>
-            <option value="TTWO">TTWO (Take-Two)</option>
-            <option value="SOC">SOC (Sinoops)</option>
-            <option value="ABAT">ABAT (Advanced Bat)</option>
-            <option value="BRTX">BRTX (BioRestor)</option>
+            <option value="TSLA" selected>TSLA (Tesla)</option><option value="LAES">LAES (Lightspeed)</option><option value="NVDA">NVDA (NVIDIA)</option><option value="AAPL">AAPL (Apple)</option><option value="GME">GME (GameStop)</option><option value="RKTO">RKTO (Rocket Lab)</option><option value="TTWO">TTWO (Take-Two)</option><option value="SOC">SOC (Sinoops)</option><option value="ABAT">ABAT (Advanced Bat)</option><option value="BRTX">BRTX (BioRestor)</option>
           </select>
         </div>
         <div class="input-group">
           <label for="timeframeSelect">Resolution</label>
-          <select id="timeframeSelect" onchange="computeTrendEngine()" style="width: 130px;">
-            <option value="daily" selected>Last 30 Days</option>
-            <option value="weekly">By Trailing Weeks</option>
-          </select>
+          <select id="timeframeSelect" onchange="computeTrendEngine()" style="width: 130px;"><option value="daily" selected>Last 30 Days</option><option value="weekly">By Trailing Weeks</option></select>
         </div>
         <div class="input-group">
-          <label for="globalPurchasePrice">Your Purchase Price ($)</label>
-          <input type="number" id="globalPurchasePrice" value="230.50" step="0.01" style="width: 140px;" oninput="computeTrendEngine()" />
+          <label style="color: var(--accent-blue);">Current Asset Price</label>
+          <input type="text" id="currentClosedPriceDisplay" value="-" style="width: 140px; font-weight: 800; color: var(--accent-blue); text-align: center; border-color: var(--accent-blue);" readonly />
         </div>
-        <div class="input-group">
-          <label for="globalShareCount">Your Share Count</label>
-          <input type="number" id="globalShareCount" value="100" step="1" style="width: 120px;" oninput="computeTrendEngine()" />
-        </div>
-        <div style="margin-top: 15px;">
-          <button id="mainComputeBtn" onclick="computeTrendEngine()">Recompute Wave Vectors</button>
-        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group"><label for="globalPurchasePrice">Your Purchase Price ($)</label><input type="number" id="globalPurchasePrice" value="230.50" step="0.01" style="width: 140px;" oninput="computeTrendEngine()" /></div>
+        <div class="input-group"><label for="globalShareCount">Your Share Count</label><input type="number" id="globalShareCount" value="100" step="1" style="width: 120px;" oninput="computeTrendEngine()" /></div>
       </div>
     </div>
 
-    <!-- Layout Grid for Consolidated Windows -->
     <div class="panel-grid">
-      
-      <!-- Left Panel: Historical Nodes and Graphics Engine -->
       <div class="data-panel">
         <div class="ledger-title" id="historyPanelTitle">📋 Historical Regime Nodes & % Change vs Actual</div>
-        <div style="max-height: 250px; overflow-y: auto; margin-bottom: 12px;">
-          <table class="compact-table">
-            <thead>
-              <tr>
-                <th id="tableNodeHeader">Time Node</th>
-                <th>Historical Price</th>
-                <th>% vs Actual</th>
-                <th>Geometric Density</th>
-                <th>Signal</th>
-              </tr>
-            </thead>
-            <tbody id="historicalTableBody">
-              <!-- JS Injected -->
-            </tbody>
-          </table>
-        </div>
-        
-        <div class="ledger-title">📊 Macro Wave Trajectory Curve</div>
-        <div class="graph-container" id="svgGraphContainer">
-          <!-- SVG Graph Injected Natively -->
-        </div>
+        <div style="max-height: 380px; overflow-y: auto;"><table class="compact-table"><thead><tr><th id="tableNodeHeader">Time Node</th><th>Historical Price</th><th>% vs Actual</th><th>Geometric Density</th><th>Signal</th></tr></thead><tbody id="historicalTableBody"></tbody></table></div>
       </div>
-
-      <!-- Right Panel: Future Predictions Roadmap -->
       <div class="data-panel">
-        <div class="ledger-title">🔮 Predictive Forward Vectors (30 / 60 / 90 Days)</div>
-        <div style="max-height: 380px; overflow-y: auto;">
-          <table class="compact-table">
-            <thead>
-              <tr>
-                <th>Horizon Vector</th>
-                <th>Predicted Price</th>
-                <th>% Change Target</th>
-                <th>Action Blueprint</th>
-              </tr>
-            </thead>
-            <tbody id="predictiveTableBody">
-              <!-- JS Injected -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Output Performance Panel -->
-    <div class="profit-ledger">
-      <div class="ledger-title">📋 Position Evaluation Summary Matrix</div>
-      <div class="profit-grid">
-        <div class="profit-card">
-          <div class="card-label">Your Cost Basis</div>
-          <div class="card-value highlight-purple" id="ledger-avg-cost">-</div>
-        </div>
-        <div class="profit-card">
-          <div class="card-label">Position Performance</div>
-          <div class="card-value" id="ledger-current-profit">-</div>
-        </div>
-        <div class="profit-card" style="border-left: 2px solid var(--accent-blue);">
-          <div class="card-label">Optimum Purchase Target</div>
-          <div class="card-value text-green" id="ledger-alpha-profit">-</div>
-        </div>
-        <div class="profit-card" style="border-left: 2px solid var(--matrix-purple);">
-          <div class="card-label">Saturated Exit Ceiling</div>
-          <div class="card-value text-red" id="ledger-beta-profit">-</div>
-        </div>
+        <div class="ledger-title">🔮 Predictive Forward Vectors (30 to 260 Days)</div>
+        <div style="max-height: 380px; overflow-y: auto;"><table class="compact-table"><thead><tr><th>Horizon Vector</th><th>Predicted Price</th><th>% Change Target</th><th>Action Blueprint</th></tr></thead><tbody id="predictiveTableBody"></tbody></table></div>
       </div>
     </div>
-      <script>
-    // Asset lookback and rolling predictive database repository mapping metrics precisely
-    const quantModelDatabase = {
-      "TSLA": { current: 258.40, optimalBuy: 220.00, saturatedSell: 295.00, dailyHistory: [232.10, 228.45, 220.15, 238.90, 258.40], weeklyHistory: [215.30, 224.80, 235.10, 248.90, 258.40], p30: 252.00, p60: 235.00, p90: 285.00 },
-      "LAES": { current: 2.80, optimalBuy: 1.85, saturatedSell: 5.88, dailyHistory: [4.12, 3.35, 2.90, 2.82, 2.80], weeklyHistory: [5.20, 4.10, 3.45, 3.10, 2.80], p30: 2.65, p60: 1.85, p90: 4.50 },
-      "NVDA": { current: 124.50, optimalBuy: 110.00, saturatedSell: 145.00, dailyHistory: [115.20, 118.40, 126.10, 122.30, 124.50], weeklyHistory: [108.40, 112.90, 122.10, 119.50, 124.50], p30: 121.00, p60: 135.00, p90: 155.00 },
-      "AAPL": { current: 182.20, optimalBuy: 172.00, saturatedSell: 198.00, dailyHistory: [175.40, 179.10, 184.20, 180.90, 182.20], weeklyHistory: [169.50, 174.20, 178.10, 183.00, 182.20], p30: 185.00, p60: 174.00, p90: 205.00 },
-      "GME":  { current: 22.10, optimalBuy: 14.50, saturatedSell: 38.00, dailyHistory: [18.40, 16.20, 25.50, 20.10, 22.10], weeklyHistory: [15.20, 19.40, 22.80, 18.90, 22.10], p30: 19.50, p60: 15.00, p90: 32.50 },
-      "RKTO": { current: 18.60, optimalBuy: 15.20, saturatedSell: 24.00, dailyHistory: [16.10, 17.30, 19.40, 18.15, 18.60], weeklyHistory: [14.50, 15.90, 17.20, 18.40, 18.60], p30: 17.90, p60: 21.50, p90: 26.00 },
-      "TTWO": { current: 154.30, optimalBuy: 142.00, saturatedSell: 178.00, dailyHistory: [148.90, 151.20, 156.40, 152.00, 154.30], weeklyHistory: [142.10, 145.80, 151.00, 149.20, 154.30], p30: 158.00, p60: 146.00, p90: 188.00 },
-      "SOC":  { current: 12.40, optimalBuy: 9.50, saturatedSell: 16.50, dailyHistory: [11.10, 10.80, 13.20, 12.10, 12.40], weeklyHistory: [9.80, 10.50, 11.90, 12.30, 12.40], p30: 11.90, p60: 14.20, p90: 17.80 },
-      "ABAT": { current: 3.15, optimalBuy: 2.10, saturatedSell: 5.50, dailyHistory: [2.80, 2.95, 3.40, 3.05, 3.15], weeklyHistory: [2.40, 2.65, 3.10, 2.90, 3.15], p30: 2.90, p60: 2.45, p90: 4.80 },
-      "BRTX": { current: 0.85, optimalBuy: 0.52, saturatedSell: 1.65, dailyHistory: [0.72, 0.68, 0.94, 0.81, 0.85], weeklyHistory: [0.55, 0.62, 0.74, 0.79, 0.85], p30: 0.78, p60: 0.60, p90: 1.25 }
+  </div>
+  <script>
+    const DB = {
+      "TSLA": { c: 258.4, ob: 220, ss: 295, dh: [232.1, 228.4, 220.1, 238.9, 258.4], wh: [215.3, 224.8, 235.1, 248.9, 258.4], f: [252, 235, 285, 310, 345, 420] },
+      "LAES": { c: 2.8, ob: 1.85, ss: 5.88, dh: [4.12, 3.35, 2.9, 2.82, 2.8], wh: [5.2, 4.1, 3.45, 3.1, 2.8], f: [2.65, 1.85, 4.5, 5.2, 5.88, 7.5] },
+      "NVDA": { c: 124.5, ob: 110, ss: 145, dh: [115.2, 118.4, 126.1, 122.3, 124.5], wh: [108.4, 112.9, 122.1, 119.5, 124.5], f: [121, 135, 155, 168, 185, 225] },
+      "AAPL": { c: 182.2, ob: 172, ss: 198, dh: [175.4, 179.1, 184.2, 180.9, 182.2], wh: [169.5, 174.2, 178.1, 183.0, 182.2], f: [185, 174, 205, 215, 230, 265] },
+      "GME":  { c: 22.1, ob: 14.5, ss: 38, dh: [18.4, 16.2, 25.5, 20.1, 22.1], wh: [15.2, 19.4, 22.8, 18.9, 22.1], f: [19.5, 15, 32.5, 42, 55, 78] },
+      "RKTO": { c: 18.6, ob: 15.2, ss: 24, dh: [16.1, 17.3, 19.4, 18.15, 18.6], wh: [14.5, 15.9, 17.2, 18.4, 18.6], f: [17.9, 21.5, 26, 28.5, 34, 45] },
+      "TTWO": { c: 154.3, ob: 142, ss: 178, dh: [148.9, 151.2, 156.4, 152.0, 154.3], wh: [142.1, 145.8, 151.0, 149.2, 154.3], f: [158, 146, 188, 195, 220, 270] },
+      "SOC":  { c: 12.4, ob: 9.5, ss: 16.5, dh: [11.1, 10.8, 13.2, 12.1, 12.4], wh: [9.8, 10.5, 11.9, 12.3, 12.4], f: [11.9, 14.2, 17.8, 19.5, 22, 29] },
+      "ABAT": { c: 3.15, ob: 2.1, ss: 5.5, dh: [2.8, 2.95, 3.4, 3.05, 3.15], wh: [2.4, 2.65, 3.1, 2.9, 3.15], f: [2.9, 2.45, 4.8, 5.5, 6.2, 8.8] },
+      "BRTX": { c: 0.85, ob: 0.52, ss: 1.65, dh: [0.72, 0.68, 0.94, 0.81, 0.85], wh: [0.55, 0.62, 0.74, 0.79, 0.85], f: [0.78, 0.6, 1.25, 1.5, 1.85, 2.4] }
     };
 
-    function generateNativeSvgGraph(historyData, forwardData) {
-      const allPoints = [...historyData, ...forwardData];
-      const maxVal = Math.max(...allPoints) * 1.05;
-      const minVal = Math.min(...allPoints) * 0.95;
-      const range = maxVal - minVal;
+    function handleNodeClick(p) { document.getElementById('globalPurchasePrice').value = p.toFixed(2); computeTrendEngine(); }
 
-      const width = 500, height = 140;
-      let pointsStr = "";
-      
-      allPoints.forEach((val, i) => {
-        let x = (i / (allPoints.length - 1)) * (width - 40) + 20;
-        let y = height - ((val - minVal) / range) * (height - 30) - 15;
-        pointsStr += `${x},${y} `;
+    function generateNativeSvgGraph(h, f) {
+      const pts = [...h, ...f]; const max = Math.max(...pts) * 1.05; const min = Math.min(...pts) * 0.95; const r = max - min;
+      const w = 650, height = 140; let pStr = "";
+      pts.forEach((v, i) => {
+        let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = height - ((v - min) / r) * (height - 30) - 15; pStr += `${x},${y} `;
       });
-
-      let svgMarkup = `<svg viewBox="0 0 ${width} ${height}" style="width:100%; height:100%;">
-        <line x1="20" y1="10" x2="20" y2="${height-10}" stroke="#1e293b" stroke-dasharray="3,3" />
-        <polyline points="${pointsStr}" fill="none" stroke="#c084fc" stroke-width="2.5" />`;
-      
-      allPoints.forEach((val, i) => {
-        let x = (i / (allPoints.length - 1)) * (width - 40) + 20;
-        let y = height - ((val - minVal) / range) * (height - 30) - 15;
-        let isFuture = i >= historyData.length;
-        let nodeColor = isFuture ? "#38bdf8" : (i === historyData.length - 1) ? "#ffffff" : "#4ade80";
-        svgMarkup += `<circle cx="${x}" cy="${y}" r="4" fill="${nodeColor}" />`;
+      let markup = `<svg viewBox="0 0 ${w} ${height}" style="width:100%; height:100%;">
+        <line x1="${(h.length - 1) / (pts.length - 1) * (w - 40) + 20}" y1="5" x2="${(h.length - 1) / (pts.length - 1) * (w - 40) + 20}" y2="${height-5}" stroke="#334155" stroke-dasharray="4,4" />
+        <polyline points="${pStr}" fill="none" stroke="#c084fc" stroke-width="2.5" />`;
+      pts.forEach((v, i) => {
+        let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = height - ((v - min) / r) * (height - 30) - 15;
+        let c = i >= h.length ? "#38bdf8" : (i === h.length - 1) ? "#ffffff" : "#4ade80";
+        markup += `<circle class="interactive-node" cx="${x}" cy="${y}" r="4.5" fill="${c}" onclick="handleNodeClick(${v})" onmouseover="this.setAttribute('r', 7)" onmouseout="this.setAttribute('r', 4.5)"></circle>`;
       });
-
-      svgMarkup += `</svg>`;
-      document.getElementById('svgGraphContainer').innerHTML = svgMarkup;
+      document.getElementById('svgGraphContainer').innerHTML = markup + `</svg>`;
     }
 
     function computeTrendEngine() {
-      const symbol = document.getElementById('tickerSelect').value;
-      const timeframe = document.getElementById('timeframeSelect').value;
-      const purchasePrice = parseFloat(document.getElementById('globalPurchasePrice').value) || 0;
-      const shareCount = parseFloat(document.getElementById('globalShareCount').value) || 0;
+      const sym = document.getElementById('tickerSelect').value; const tf = document.getElementById('timeframeSelect').value;
+      const p = parseFloat(document.getElementById('globalPurchasePrice').value) || 0; const s = parseFloat(document.getElementById('globalShareCount').value) || 0;
+      let active = DB[sym]; const act = active.c;
+
+      document.getElementById('currentClosedPriceDisplay').value = "$" + act.toFixed(2);
+      document.getElementById('ledger-avg-cost').innerText = "$" + p.toFixed(2);
       
-      let activeDb = quantModelDatabase[symbol];
-      const actualPrice = activeDb.current;
+      const cap = p * s; const val = act * s; const ret = val - cap; const pct = cap > 0 ? (ret / cap) * 100 : 0;
+      const pEl = document.getElementById('ledger-current-profit');
+      if (s === 0 || p === 0) { pEl.innerText = "$0.00 (0.00%)"; pEl.className = "card-value"; }
+      else { pEl.innerText = `${ret >= 0 ? '+$' : '-$'}${Math.abs(ret).toFixed(2)} (${ret >= 0 ? '+' : ''}${pct.toFixed(2)}%)`; pEl.className = ret >= 0 ? "card-value text-green" : "card-value text-red"; }
 
-      // Render Cost Basis Layout Outputs
-      document.getElementById('ledger-avg-cost').innerText = "$" + purchasePrice.toFixed(2);
-      
-      const totalCapital = purchasePrice * shareCount;
-      const currentPositionValue = actualPrice * shareCount;
-      const floatingReturn = currentPositionValue - totalCapital;
-      const floatingPct = totalCapital > 0 ? (floatingReturn / totalCapital) * 100 : 0;
+      document.getElementById('ledger-alpha-profit').innerText = "$" + active.ob.toFixed(2); document.getElementById('ledger-beta-profit').innerText = "$" + active.ss.toFixed(2);
 
-      const profitEl = document.getElementById('ledger-current-profit');
-      if (shareCount === 0 || purchasePrice === 0) {
-        profitEl.innerText = "$0.00 (0.00%)";
-        profitEl.className = "card-value";
-      } else {
-        profitEl.innerText = `${floatingReturn >= 0 ? '+$' : '-$'}${Math.abs(floatingReturn).toFixed(2)} (${floatingReturn >= 0 ? '+' : ''}${floatingPct.toFixed(2)}%)`;
-        profitEl.className = floatingReturn >= 0 ? "card-value text-green" : "card-value text-red";
-      }
+      const hist = tf === 'weekly' ? active.wh : active.dh;
+      document.getElementById('historyPanelTitle').innerText = tf === 'weekly' ? "📋 Historical Weekly Steps & % Change vs Actual" : "📋 Historical 30-Day Nodes & % Change vs Actual";
+      document.getElementById('tableNodeHeader').innerText = tf === 'weekly' ? "Weekly Step" : "Day Node";
 
-      document.getElementById('ledger-alpha-profit').innerText = "$" + activeDb.optimalBuy.toFixed(2);
-      document.getElementById('ledger-beta-profit').innerText = "$" + activeDb.saturatedSell.toFixed(2);
-
-      // Select matching resolution lookup data array
-      const targetHistory = timeframe === 'weekly' ? activeDb.weeklyHistory : activeDb.dailyHistory;
-      
-      document.getElementById('historyPanelTitle').innerText = timeframe === 'weekly' ? "📋 Historical Weekly Steps & % Change vs Actual" : "📋 Historical 30-Day Nodes & % Change vs Actual";
-      document.getElementById('tableNodeHeader').innerText = timeframe === 'weekly' ? "Weekly Step" : "Day Node";
-
-      // 1. Render Historical Data Panel Rows
-      const histTable = document.getElementById('historicalTableBody');
-      histTable.innerHTML = "";
-      
-      targetHistory.forEach((histPrice, idx) => {
-        let pctVsActual = ((histPrice - actualPrice) / actualPrice) * 100;
-        let density = (idx - 2) * 0.385; 
-        let action = density < -0.2 ? "BUY" : density > 0.5 ? "SELL" : "HOLD";
-        let badgClass = action === "BUY" ? "badge-buy" : action === "SELL" ? "badge-sell" : "badge-hold";
-        let labelName = timeframe === 'weekly' ? `WK-${5 - idx} Out` : `Node-D${idx + 1}`;
-        
-        histTable.innerHTML += `
-          <tr>
-            <td class="highlight-blue">${labelName}</td>
-            <td>$${histPrice.toFixed(2)}</td>
-            <td class="${pctVsActual >= 0 ? 'text-green' : 'text-red'}">${pctVsActual >= 0 ? '+' : ''}${pctVsActual.toFixed(2)}%</td>
-            <td style="font-family:monospace; color:var(--matrix-purple);">${density.toFixed(4)}</td>
-            <td><span class="badge ${badgClass}">${action}</span></td>
-          </tr>`;
+      const hTab = document.getElementById('historicalTableBody'); hTab.innerHTML = "";
+      hist.forEach((hp, idx) => {
+        let chg = ((hp - act) / act) * 100; let d = (idx - 2) * 0.385; let a = d < -0.2 ? "BUY" : d > 0.5 ? "SELL" : "HOLD";
+        hTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${hp})"><td class="highlight-blue">${tf==='weekly'?'WK-'+(5-idx):'Node-D'+(idx+1)}</td><td>$${hp.toFixed(2)}</td><td class="${chg>=0?'text-green':'text-red'}">${chg>=0?'+':''}${chg.toFixed(2)}%</td><td style="color:var(--matrix-purple);">${d.toFixed(4)}</td><td><span class="badge ${a==='BUY'?'badge-buy':a==='SELL'?'badge-sell':'badge-hold'}">${a}</span></td></tr>`;
       });
 
-      // 2. Render Future Horizons Forecast Matrix
-      const predTable = document.getElementById('predictiveTableBody');
-      const predictionsList = [
-        { horizon: "+30 Day Target Velocity", price: activeDb.p30, blueprint: activeDb.p30 > actualPrice ? "ACCUMULATE" : "HOLD" },
-        { horizon: "+60 Day Realised Cycle Support", price: activeDb.p60, blueprint: "STRONG BUY" },
-        { horizon: "+90 Day Geometric Target Cap", price: activeDb.p90, blueprint: "LIQUIDATE POSITION" }
-      ];
-
-      predTable.innerHTML = "";
-      predictionsList.forEach(item => {
-        let pctGain = ((item.price - actualPrice) / actualPrice) * 100;
-        let badgClass = item.blueprint.includes("BUY") || item.blueprint.includes("ACCUM") ? "badge-buy" : "badge-sell";
-        
-        predTable.innerHTML += `
-          <tr>
-            <td class="highlight-purple">${item.horizon}</td>
-            <td style="font-weight:700;">$${item.price.toFixed(2)}</td>
-            <td class="${pctGain >= 0 ? 'text-green' : 'text-red'}">${pctGain >= 0 ? '+' : ''}${pctGain.toFixed(2)}%</td>
-            <td><span class="badge ${badgClass}">${item.blueprint}</span></td>
-          </tr>`;
+      const pTab = document.getElementById('predictiveTableBody'); pTab.innerHTML = "";
+      const horizons = ["+30 Day Velocity", "+60 Day Support", "+90 Day Target Cap", "+120 Day Expansion", "+180 Day Macro Peak", "+260 Day Zenith"];
+      const blueprints = [active.f[0]>act?"ACCUMULATE":"HOLD", "STRONG BUY", "SCALED SELL", "SCALED SELL", "LIQUIDATE POSITION", "LIQUIDATE POSITION"];
+      horizons.forEach((hName, idx) => {
+        let fPrice = active.f[idx]; let gain = ((fPrice - act) / act) * 100;
+        pTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${fPrice})"><td class="highlight-purple">${hName}</td><td style="font-weight:700;">$${fPrice.toFixed(2)}</td><td class="${gain>=0?'text-green':'text-red'}">${gain>=0?'+':''}${gain.toFixed(2)}%</td><td><span class="badge ${blueprints[idx].includes("BUY")||blueprints[idx].includes("ACCUM")?'badge-buy':'badge-sell'}">${blueprints[idx]}</span></td></tr>`;
       });
 
-      // 3. Render Native Svg Graphs
-      generateNativeSvgGraph(targetHistory, [activeDb.p30, activeDb.p60, activeDb.p90]);
+      generateNativeSvgGraph(hist, active.f);
     }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      computeTrendEngine();
-    });
+    window.addEventListener('DOMContentLoaded', () => { computeTrendEngine(); });
   </script>
 </body>
 </html>
-
-
-  </div>
