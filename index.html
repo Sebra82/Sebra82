@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEBRA V36.0 Quantum Swirl Workspace</title>
+    <title>SEBRA V38.0 Automated Chrono Engine</title>
     <style>
         :root {
             --bg-main: #060913;
@@ -17,11 +17,7 @@
             --accent-green: #10B981;
             --accent-warn: #F59E0B;
         }
-        * { 
-            box-sizing: border-box; margin: 0; padding: 0; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
-            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace; }
         body { background-color: var(--bg-main); color: var(--text-main); padding: 24px; font-size: 14px; overflow-x: hidden; }
         .system-container { max-width: 1600px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
         .sys-header {
@@ -83,8 +79,7 @@
         .slider-node:before { position: absolute; content: ""; height: 14px; width: 16px; left: 3px; bottom: 3px; background-color: #FFF; border-radius: 50%; transition: 0.2s; }
         input:checked + .slider-node { background-color: var(--accent-blue); }
         input:checked + .slider-node:before { transform: translateX(16px); }
-        .payload-area { height: 160px; font-family: monospace; font-size: 0.7rem; background: #04070D; color: var(--border-active); border-color: var(--border-active); resize: vertical; }
-        
+        .payload-area { height: 100px; font-family: monospace; font-size: 0.72rem; background: #04070D; color: var(--accent-green); border-color: var(--border-glow); resize: none; text-align: center; font-weight: bold; }
         .chart-card-wrapper { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 10px; padding: 16px; display: none; flex-direction: column; gap: 10px; box-shadow: 0 4px 24px rgba(0,0,0,0.2); }
         .chart-svg-viewport { width: 100%; height: 160px; background: #050914; border: 1px solid var(--border-glow); border-radius: 6px; }
         .main-content { display: flex; flex-direction: column; gap: 16px; }
@@ -93,7 +88,7 @@
         .metric-tile label { font-size: 0.72rem; color: var(--text-muted); }
         .metric-value { font-size: 1.4rem; font-weight: 700; font-family: monospace; color: #FFF; position: relative; z-index: 2; }
         .ledger-container { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 10px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.2); }
-        .ledger-title-bar { padding: 12px 20px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; background: #0A101F; border-bottom: 1px solid var(--border-glow); }
+        .ledger-title-bar { padding: 12px 20px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; background: #0A101F; border-bottom: 1px solid var(--border-glow); }
         .table-scroll { width: 100%; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th { background: #070B14; color: var(--text-muted); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 12px 16px; border-bottom: 1px solid var(--border-glow); }
@@ -104,24 +99,18 @@
         .pos-delta { color: var(--accent-green); font-weight: 600; font-family: monospace; }
         .neg-delta { color: var(--accent-warn); font-weight: 600; font-family: monospace; }
         .font-mono { font-family: monospace; font-size: 0.82rem; }
-        
-        /* CANVASES TARGET DESIGNATORS */
-        .quantum-wave-canvas {
-            position: absolute; bottom: 0; right: 0; width: 100px; height: 40px; opacity: 0.40; z-index: 1; pointer-events: none;
-        }
-        .quantum-swirl-canvas {
-            position: absolute; top: -5px; right: -5px; width: 50px; height: 50px; opacity: 0.35; z-index: 1; pointer-events: none;
-        }
+        .quantum-wave-canvas { position: absolute; bottom: 0; right: 0; width: 100px; height: 40px; opacity: 0.40; z-index: 1; pointer-events: none; }
+        .quantum-swirl-canvas { position: absolute; top: -5px; right: -5px; width: 50px; height: 50px; opacity: 0.35; z-index: 1; pointer-events: none; }
     </style>
 </head>
 <body>
 <div class="system-container">
     <header class="sys-header">
         <div class="sys-title-block">
-            <div class="sys-title">🌌 SEBRA V36.0 SECURE PORTFOLIO ENGINE</div>
-            <div class="sys-subtitle">SCALE-INVARIANT TOPOLOGICAL ENVIRONMENT LAB</div>
+            <div class="sys-title">🌌 SEBRA V38.0 DECOUPLED MATRIX WORKSPACE</div>
+            <div class="sys-subtitle">AUTOMATED BACKWARD CHRONO INGESTION CORE [JULY 15, 2026]</div>
         </div>
-        <div class="sys-badge">FX BASIS ANCHOR: GBP/USD @ 0.78 LOCK</div>
+        <div class="sys-badge">DATA RUN POOL: FEED CHRONO SYNCHRONIZED</div>
     </header>
 
     <div class="filter-deck-card">
@@ -136,11 +125,10 @@
 
     <div class="workspace-grid">
         <div class="control-sidebar">
-            <div class="sidebar-section-title">📋 Data Ingestion Portal</div>
+            <div class="sidebar-section-title">📋 Automated Input Terminal</div>
             <div class="input-group">
-                <label>Paste Raw CSV Rows Matrix Block</label>
-<!-- REPLACE YOUR PART 8 TEXTAREA WITH THIS FIXED FORMAT -->
-<textarea class="payload-area" id="bulkInputPortal">Symbol,Date,Spot_Close,Macro_Center
+                <label>Paste Over Dataset Here (Hides Automatically)</label>
+<textarea class="payload-area" id="bulkInputPortal" placeholder="[ READY FOR PORTFOLIO CSV PASTE-OVER ]">Symbol,Date,Spot_Close,Macro_Center
 LAES,2026-07-15,2.75,3.12
 LAES,2026-07-14,2.72,3.15
 LAES,2026-07-13,2.71,3.18
@@ -151,9 +139,10 @@ SPCX,2026-07-14,145.30,169.10
 TSLA,2026-07-15,396.77,412.50
 TSLA,2026-07-13,394.76,414.10
 NVDA,2026-07-15,134.93,148.20
-NVDA,2026-07-13,130.04,149.50</textarea>
+NVDA,2026-07-13,130.04,149.50
+BTC,2026-07-15,64250.00,61200.00</textarea>
             </div>
-            <button class="submit-btn" onclick="executeManualPayloadSubmit()">Submit Overwrite Data</button>
+            <button class="submit-btn" onclick="executeManualPayloadSubmit()">Ingest Data Stream</button>
 
             <div class="sidebar-section-title" style="margin-top: 5px;">🔍 Select Active Node</div>
             <div class="input-group">
@@ -196,25 +185,21 @@ NVDA,2026-07-13,130.04,149.50</textarea>
                 <div class="metric-tile">
                     <label>Velocity Vector (W)</label>
                     <div class="metric-value font-mono" id="wDisplay">0.0000</div>
-                    <!-- SWIRL CANVAS TARGET A -->
                     <canvas class="quantum-swirl-canvas" id="swirlCanvas_W"></canvas>
                 </div>
                 <div class="metric-tile">
                     <label>Trajectory Index (TM)</label>
                     <div class="metric-value font-mono" id="tmDisplay" style="color: var(--accent-blue);">0.0000</div>
-                    <!-- SWIRL CANVAS TARGET B -->
                     <canvas class="quantum-swirl-canvas" id="swirlCanvas_TM"></canvas>
                 </div>
                 <div class="metric-tile">
                     <label>Simplex Hyper-Volume (V4)</label>
                     <div class="metric-value font-mono" id="v4Display">0.0000</div>
-                    <!-- OSCILLATING WAVE CANVAS -->
                     <canvas class="quantum-wave-canvas" id="quantumDisplayCanvas"></canvas>
                 </div>
                 <div class="metric-tile">
                     <label>Center Matrix Mass (CM)</label>
                     <div class="metric-value font-mono" id="cmDisplay">0.0000</div>
-                    <!-- SWIRL CANVAS TARGET C -->
                     <canvas class="quantum-swirl-canvas" id="swirlCanvas_CM"></canvas>
                 </div>
             </div>
@@ -244,16 +229,6 @@ NVDA,2026-07-13,130.04,149.50</textarea>
 </div>
 
 <script>
-    (function EngageSecurityShield() {
-        document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; });
-        document.addEventListener('keydown', function(e) {
-            if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || (e.ctrlKey && e.keyCode === 85)) {
-                e.preventDefault(); return false;
-            }
-        });
-        setInterval(function() { (function() { return false; constructor("debugger")(); })(); }, 200);
-    })();
-
     let PAYLOAD_SNAPSHOT_MATRIX_POOL = {};
     let STRATEGIC_ACTIVE_HORIZON = 'current'; 
     const FX_USDBGB_CONVERSION_RATE = 0.78;   
@@ -262,7 +237,8 @@ NVDA,2026-07-13,130.04,149.50</textarea>
         "LAES": { volumeShares: 1000, entryCostGBP: 2.50, news: "SEALSQ H1 revenue up +115% with an active $495M cash fortress.", weight: 1.45 },
         "SPCX": { volumeShares: 500,  entryCostGBP: 120.00, news: "SpaceX consolidates post-IPO structural float floor guidelines.", weight: 1.22 },
         "TSLA": { volumeShares: 100,  entryCostGBP: 350.00, news: "Tesla pushes updated full FSD Beta telemetry across enterprise frames.", weight: 1.05 },
-        "NVDA": { volumeShares: 200,  entryCostGBP: 110.00, news: "NVIDIA accelerators scale ahead of crucial upcoming Q2 earnings print.", weight: 1.35 }
+        "NVDA": { volumeShares: 200,  entryCostGBP: 110.00, news: "NVIDIA accelerators scale ahead of crucial upcoming Q2 earnings print.", weight: 1.35 },
+        "BTC":  { volumeShares: 0.8,   entryCostGBP: 52000.00, news: "Bitcoin digital liquidity tranches expand ahead of structural breakout nodes.", weight: 1.40 }
     };
 
     function processSebraGeometryLayers(h1, h2, h3, biasFactor = 1.0) {
@@ -276,7 +252,8 @@ NVDA,2026-07-13,130.04,149.50</textarea>
 
     function executeQuarticInversion(target_tm, h2, h3, biasFactor = 1.0) {
         let convergence_price = 0.01; let minimum_residual = Infinity;
-        let exploration_limit = h3 * 8; let total_steps = 25000; 
+        let exploration_limit = Math.max(h3 * 6, 160000.0); // Safe scale extension mapping for high-bound assets like BTC
+        let total_steps = 25000; 
         let allocation_step = exploration_limit / total_steps;
 
         for (let idx = 0; idx <= total_steps; idx++) {
@@ -301,7 +278,8 @@ NVDA,2026-07-13,130.04,149.50</textarea>
     }
 
     function executeManualPayloadSubmit() {
-        const textPayload = document.getElementById("bulkInputPortal").value;
+        const inputPortal = document.getElementById("bulkInputPortal");
+        const textPayload = inputPortal.value;
         const selectMenu = document.getElementById("symbolSelect");
         const lines = textPayload.trim().split('\n');
         if (lines.length <= 1) return;
@@ -315,18 +293,25 @@ NVDA,2026-07-13,130.04,149.50</textarea>
             if (row.length < 4) continue;
             
             let symbol = row.toUpperCase().trim();
-            let chronoDate = row.trim();
+            let chronoDateStr = row.trim();
             let spotClose = parseFloat(row);
             let macroBase = parseFloat(row);
             
             if (isNaN(spotClose) || isNaN(macroBase)) continue;
 
+            let targetNodeDate = new Date(chronoDateStr);
+            let activeHorizonAnchor = new Date("2026-07-15"); // Static calibration context baseline threshold anchor
+            let chronologicalDistanceDays = (activeHorizonAnchor - targetNodeDate) / (1000 * 60 * 60 * 24);
+            
+            // AUTOMATION RULE: Filter out anything outside the 180-day micro-window slice automatically
+            if (chronologicalDistanceDays > 180 || chronologicalDistanceDays < 0) continue;
+
             if (!PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol]) { PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol] = []; }
-            let metaLedger = PORTFOLIO_LEDGER_LEDGER[symbol] || { str: "Custom matrix snapshot timeline row node entry.", weight: 1.10 };
+            let metaLedger = PORTFOLIO_LEDGER_LEDGER[symbol] || { str: "Custom configuration matrix asset row tracking node.", weight: 1.10 };
 
             PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol].push({
-                timestamp: chronoDate, actualPrice: spotClose, targetH3: macroBase,
-                newsString: metaLedger.news || "Matrix data re-routed successfully.",
+                timestamp: chronoDateStr, actualPrice: spotClose, targetH3: macroBase,
+                newsString: metaLedger.news || "Matrix data re-routed cleanly.",
                 weightAlpha: metaLedger.weight || 1.10, computedH2: spotClose
             });
         }
@@ -335,6 +320,9 @@ NVDA,2026-07-13,130.04,149.50</textarea>
         Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).forEach(symbol => {
             let newOption = document.createElement("option"); newOption.value = symbol; newOption.text = symbol; selectMenu.add(newOption);
         });
+
+        inputPortal.value = "";
+        inputPortal.placeholder = "[ INGESTION POOL LOCKED — DECOUPLED LOOP RUNNING ]";
 
         if (selectMenu.options.length > 0) {
             selectMenu.value = Array.from(selectMenu.options).some(o => o.value === previousSelection) ? previousSelection : selectMenu.options.value;
@@ -383,62 +371,41 @@ NVDA,2026-07-13,130.04,149.50</textarea>
         });
     }
     let quantumGlobalTimePhase = 0;
-    
-    // NEW LOGIC CORE NODE: Animates the moving math velocity vortex swirls natively on calculation triggers
     function paintQuantumSwirlVortex(canvasId, calculationMagnitude) {
         const canvas = document.getElementById(canvasId);
         if (!canvas) return;
         const ctx = canvas.getContext("2d");
-        
         const w = canvas.width = 50; const h = canvas.height = 50;
         ctx.clearRect(0, 0, w, h);
-        
-        // Dynamically tie rotation velocity and vortex sweep radius to your model metrics
         let spinSpeed = Math.min(Math.max(calculationMagnitude * 0.05, 0.02), 0.35);
         let spiralRadius = Math.min(Math.max(Math.log10(calculationMagnitude + 1) * 4, 3.0), 22.0);
-        
-        ctx.save();
-        ctx.translate(w / 2, h / 2);
-        ctx.rotate(quantumGlobalTimePhase * spinSpeed * 2);
-        
-        ctx.beginPath();
-        ctx.strokeStyle = "rgba(56, 189, 248, 0.4)";
-        ctx.lineWidth = 1.2;
-        
-        // Compute log spiral arc segments
+        ctx.save(); ctx.translate(w / 2, h / 2); ctx.rotate(quantumGlobalTimePhase * spinSpeed * 2);
+        ctx.beginPath(); ctx.strokeStyle = "rgba(56, 189, 248, 0.4)"; ctx.lineWidth = 1.2;
         for (let theta = 0; theta < 30; theta += 0.1) {
             let r = (spiralRadius / 30) * theta;
             let x = r * Math.cos(theta); let y = r * Math.sin(theta);
             if (theta === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
         }
-        ctx.stroke();
-        ctx.restore();
+        ctx.stroke(); ctx.restore();
     }
 
     function animateQuantumDisplayWave(hypervolumeMetric) {
         const canvas = document.getElementById("quantumDisplayCanvas");
         if (!canvas) return;
         const ctx = canvas.getContext("2d");
-        
         const w = canvas.width = 100; const h = canvas.height = 40;
         ctx.clearRect(0, 0, w, h);
         let energyAmplitude = Math.min(Math.max(Math.log10(hypervolumeMetric + 1) * 6, 2.0), 18.0);
-        
         ctx.beginPath(); ctx.strokeStyle = "#38BDF8"; ctx.lineWidth = 1.5;
         for (let x = 0; x < w; x++) {
             let y = (h / 2) + Math.sin((x * 0.1) + quantumGlobalTimePhase) * energyAmplitude;
             if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
         }
         ctx.stroke();
-        
-        // Advance clock step variables to spin the vortices and move the wave segment
         quantumGlobalTimePhase += 0.12;
-        
-        // Re-read active parameters inside memory storage containers
         paintQuantumSwirlVortex("swirlCanvas_W", window.activeMetricTracker_W || 1.0);
         paintQuantumSwirlVortex("swirlCanvas_TM", window.activeMetricTracker_TM || 1.0);
         paintQuantumSwirlVortex("swirlCanvas_CM", window.activeMetricTracker_CM || 1.0);
-        
         requestAnimationFrame(() => animateQuantumDisplayWave(window.currentHypervolumeTracker || 1.0));
     }
 
@@ -449,6 +416,7 @@ NVDA,2026-07-13,130.04,149.50</textarea>
         const manualSandboxValue = parseFloat(document.getElementById("warpPriceInput").value) || 1.0;
         const gridBodyElement = document.getElementById("ledgerInjectTarget");
         
+        if (!dropdownFocusSymbol) return;
         gridBodyElement.innerHTML = ""; 
         document.getElementById("ledgerTitleAnchor").innerText = `Unified Relational Tensor Hub :: Active Horizon Filter -> [${STRATEGIC_ACTIVE_HORIZON.toUpperCase()}]`;
 
@@ -475,7 +443,6 @@ NVDA,2026-07-13,130.04,149.50</textarea>
                     document.getElementById("v4Display").innerText = baseMetrics.v4.toFixed(4);
                     document.getElementById("cmDisplay").innerText = baseMetrics.cm.toFixed(4);
                     
-                    // Route live numbers to the background vortex animators
                     window.activeMetricTracker_W = baseMetrics.w;
                     window.activeMetricTracker_TM = baseMetrics.tm;
                     window.activeMetricTracker_CM = baseMetrics.cm;
@@ -510,7 +477,7 @@ NVDA,2026-07-13,130.04,149.50</textarea>
                         <td class="font-mono">${rowIndex > 0 ? '—' : '£' + rowEntryPriceGBP.toFixed(2)}</td>
                         <td class="font-mono" style="font-weight:700; color:#FFF;">${rowIndex > 0 ? '—' : '£' + netPositionValueGBP.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
                     </tr>
-                
+                `;
 
                 if (activeNewsState && rowItem.newsString && symbol === dropdownFocusSymbol && STRATEGIC_ACTIVE_HORIZON === 'current' && rowIndex === 0) {
                     rowHTML += `
