@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEBRA V25.0 Core System Workspace</title>
+    <title>SEBRA V25.0 Search Expansion Module</title>
     <style>
         :root {
             --bg-main: #060913;
@@ -41,20 +41,21 @@
         .radar-card { background: #080D1A; border-radius: 8px; padding: 12px 16px; border-left: 4px solid var(--accent-warn); font-size: 0.82rem; line-height: 1.6; }
         .radar-card strong { color: #FFF; font-size: 0.88rem; }
         .workspace-grid { display: grid; grid-template-columns: 360px 1fr; gap: 20px; align-items: start; }
-        .control-sidebar { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.2); }
-        .sidebar-section-title { font-size: 0.95rem; font-weight: 700; color: #FFF; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 8px; border-bottom: 1px solid var(--border-glow); }
-        .input-group { display: flex; flex-direction: column; gap: 8px; }
-        label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
-        select, input[type="number"], textarea { width: 100%; background: var(--bg-input); border: 1px solid var(--border-glow); color: var(--text-main); padding: 12px; border-radius: 8px; font-size: 0.88rem; outline: none; transition: all 0.2s ease; }
+        .control-sidebar { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.2); }
+        .sidebar-section-title { font-size: 0.95rem; font-weight: 700; color: #FFF; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 6px; border-bottom: 1px solid var(--border-glow); margin-bottom: 6px; }
+        .input-group { display: flex; flex-direction: column; gap: 6px; }
+        label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+        .search-action-btn { background: var(--accent-blue); color: #FFF; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.82rem; transition: background 0.2s; }
+        .search-action-btn:hover { background: #0284C7; }
+        select, input[type="number"], input[type="text"], textarea { width: 100%; background: var(--bg-input); border: 1px solid var(--border-glow); color: var(--text-main); padding: 10px; border-radius: 6px; font-size: 0.85rem; outline: none; transition: all 0.2s ease; }
         select:focus, input:focus { border-color: var(--border-active); box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15); }
-        .toggle-row { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; border: 1px solid var(--border-glow); }
+        .toggle-row { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; border: 1px solid var(--border-glow); }
         .switch-wrap { position: relative; display: inline-block; width: 42px; height: 22px; }
         .switch-wrap input { display: none; }
         .slider-node { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #1E293B; border-radius: 34px; transition: 0.25s; }
         .slider-node:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: #FFF; border-radius: 50%; transition: 0.25s; }
         input:checked + .slider-node { background-color: var(--accent-blue); }
         input:checked + .slider-node:before { transform: translateX(20px); }
-        .payload-area { height: 120px; font-family: monospace; font-size: 0.72rem; resize: none; background: #04070D; }
         .main-content { display: flex; flex-direction: column; gap: 20px; }
         .summary-dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
         .metric-tile { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 6px; }
@@ -78,37 +79,51 @@
 <div class="system-container">
     <header class="sys-header">
         <div class="sys-title-block">
-            <div class="sys-title">🌌 SEBRA V25.0 CORE VARIANCE ANALYSIS LEDGER</div>
-            <div class="sys-subtitle">SCALE-INVARIANT GEOMETRIC COMPARATOR FIELD MODULE</div>
+            <div class="sys-title">🌌 SEBRA V25.0 DECENTRALIZED DISCOVERY MODULE</div>
+            <div class="sys-subtitle">SCALE-INVARIANT PORTFOLIO ENGINE WORKSPACE</div>
         </div>
-        <div class="sys-badge">AUDIT TRACE NODE STATE: BALANCED FRAME LOCK (2026-07-15)</div>
+        <div class="sys-badge">AUDIT TRACE STATE: INDEPENDENT FRAME LOCK</div>
     </header>
 
     <div class="radar-panel">
-        <div class="radar-header">🚨 Active Scanned Strategic Variance Tracking</div>
+        <div class="radar-header">🚨 Active Scanned Volatility Radar Alerts</div>
         <div class="radar-grid">
             <div class="radar-card">
-                <strong>🔥 HOT/SPIKE NODE: LAES (SEALSQ Corp)</strong><br>
-                Simplex space compressed at floor ($V_4 = 1.1570$). Model baseline price maps exactly to $2.75. News channel injects a +1.45x velocity coefficient, generating an immediate +20.36% forecast variance above raw spot close levels.
+                <strong>🔥 HOTTEST NODE: LAES (SEALSQ Corp)</strong><br>
+                Simplex space compressed at floor ($V_4 = 1.1570$). Model baseline price maps exactly to $2.74 [1.2063]. News channel injects a +1.45x velocity coefficient, generating an immediate +20.36% forecast variance.
             </div>
             <div class="radar-card">
-                <strong>📈 VOLATILITY CATALYST: SPCX & NVDA Matrix</strong><br>
-                NVDA tracks highly elastic geometric variance profiles ahead of upcoming earnings data blocks. SPCX anchors its baseline support at $137.60, presenting an immediate +42.01% long-term trajectory expansion target.
+                <strong>📈 UPCOMING CATALYST: SPCX & NVDA Matrix</strong><br>
+                NVDA tracks highly elastic geometric variance profiles ahead of earnings. SPCX anchors baseline support at $137.60, presenting an immediate +42.01% long-term trajectory expansion target.
             </div>
         </div>
     </div>
 
     <div class="workspace-grid">
         <div class="control-sidebar">
-            <div class="sidebar-section-title">Matrix Configurations</div>
-            
+            <div class="sidebar-section-title">Add / Search Custom Stock</div>
+            <div class="input-group">
+                <label>Ticker Symbol</label>
+                <input type="text" id="searchTicker" value="BTC" placeholder="e.g. BTC, AMD, AAPL">
+            </div>
+            <div class="input-group">
+                <label>Snapshot Price ($)</label>
+                <input type="number" id="searchPrice" value="64250.00" step="0.01">
+            </div>
+            <div class="input-group">
+                <label>126D Macro Average ($)</label>
+                <input type="number" id="searchMacro" value="61200.00" step="0.01">
+            </div>
+            <button class="search-action-btn" onclick="executeSearchIngestion()">Ingest Asset to Matrix</button>
+
+            <div class="sidebar-section-title" style="margin-top: 10px;">Select Target Node</div>
             <div class="input-group">
                 <label for="symbolSelect">Target Stock Matrix Node</label>
                 <select id="symbolSelect" onchange="runSebraSystemEngine()">
-                    <option value="LAES">LAES (SEALSQ Corp) - [HOT SPIKE NODE]</option>
-                    <option value="SPCX">SPCX (SpaceX) - [TRENDING NODE]</option>
+                    <option value="LAES">LAES (SEALSQ Corp) - [HOT SPIKE]</option>
+                    <option value="SPCX">SPCX (SpaceX) - [TRENDING]</option>
                     <option value="TSLA">TSLA (Tesla Motors)</option>
-                    <option value="NVDA">NVDA (NVIDIA) - [EARNINGS NODE]</option>
+                    <option value="NVDA">NVDA (NVIDIA) - [EARNINGS]</option>
                 </select>
             </div>
 
@@ -129,19 +144,8 @@
             </div>
 
             <div class="input-group">
-                <label for="warpPriceInput">Chamber B Price Injection Overwrite ($)</label>
+                <label for="warpPriceInput">Chamber B Overwrite Price ($)</label>
                 <input type="number" id="warpPriceInput" value="4.50" step="0.01" oninput="runSebraSystemEngine()">
-            </div>
-
-            <div class="sidebar-section-title" style="margin-top: 10px;">Payload Stream</div>
-            <div class="input-group">
-                <label>Scraped Database Pool Dump</label>
-                <textarea class="payload-area" id="poolStreamDisplay" readonly>
-Symbol,Date,Spot_Close,Macro_Center
-LAES,2026-07-15,2.75,3.12
-SPCX,2026-07-15,137.60,168.40
-TSLA,2026-07-15,396.77,412.50
-NVDA,2026-07-15,134.93,148.20</textarea>
             </div>
         </div>
 
@@ -189,7 +193,7 @@ NVDA,2026-07-15,134.93,148.20</textarea>
 <script>
     const PAYLOAD_SNAPSHOT_MATRIX_POOL = {
         "LAES": [
-            { timestamp: "2026-07-15", actualPrice: 2.75, targetH3: 3.12, newsString: "WISeKey/SEALSQ reports preliminary H1 Revenue up 115% with $495M cash fortress.", weightAlpha: 1.45, computedH2: 2.75 },
+            { timestamp: "2026-07-15", actualPrice: 2.74, targetH3: 3.12, newsString: "WISeKey/SEALSQ reports preliminary H1 Revenue up 115% with $495M cash fortress.", weightAlpha: 1.45, computedH2: 2.74 },
             { timestamp: "2026-07-14", actualPrice: 2.72, targetH3: 3.15, newsString: "SEALSQ forms strategic partnership with Indian electronics giant L5 Cartronics for IoT manufacturing.", weightAlpha: 1.20, computedH2: 2.735 },
             { timestamp: "2026-07-13", actualPrice: 2.71, targetH3: 3.18, newsString: "SEALSQ executes $5M commercial contract with Quobly for post-quantum computing integration.", weightAlpha: 1.15, computedH2: 2.74 }
         ],
@@ -230,6 +234,36 @@ NVDA,2026-07-15,134.93,148.20</textarea>
         }
         return convergence_price;
     }
+    function executeSearchIngestion() {
+        const inputTicker = document.getElementById("searchTicker").value.toUpperCase().strip();
+        const inputPrice = parseFloat(document.getElementById("searchPrice").value) || 1.0;
+        const inputMacro = parseFloat(document.getElementById("searchMacro").value) || 1.0;
+        
+        if (!inputTicker) return;
+
+        // Ingest the standalone search matrix array dynamically into memory slots
+        PAYLOAD_SNAPSHOT_MATRIX_POOL[inputTicker] = [
+            { timestamp: "2026-07-15", actualPrice: inputPrice, targetH3: inputMacro, newsString: "Custom discovery asset node mapped seamlessly via baseline index search.", weightAlpha: 1.10, computedH2: inputPrice }
+        ];
+
+        // Append custom stock token smoothly into the UI option menu box
+        const selectMenu = document.getElementById("symbolSelect");
+        let exists = false;
+        for (let i = 0; i < selectMenu.options.length; i++) {
+            if (selectMenu.options[i].value === inputTicker) { exists = true; break; }
+        }
+        
+        if (!exists) {
+            let newOption = document.createElement("option");
+            newOption.value = inputTicker;
+            newOption.text = `${inputTicker} - [SEARCH DISCOVERY NODE]`;
+            selectMenu.add(newOption);
+        }
+        
+        selectMenu.value = inputTicker;
+        runSebraSystemEngine();
+    }
+
     function runSebraSystemEngine() {
         const symbolTarget = document.getElementById("symbolSelect").value;
         const UniverseFrame = document.getElementById("frameSelect").value;
