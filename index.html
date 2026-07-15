@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEBRA V25.0 Multi-Horizon Relational Engine</title>
+    <title>SEBRA V25.0 Core System Workspace</title>
     <style>
         :root {
             --bg-main: #060913;
@@ -18,29 +18,9 @@
             --accent-warn: #F59E0B;
             --matrix-glow: rgba(56, 189, 248, 0.05);
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
-        }
-
-        body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            padding: 24px;
-            font-size: 14px;
-            overflow-x: hidden;
-        }
-
-        .system-container {
-            max-width: 1600px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace; }
+        body { background-color: var(--bg-main); color: var(--text-main); padding: 24px; font-size: 14px; overflow-x: hidden; }
+        .system-container { max-width: 1600px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
         .sys-header {
             background: linear-gradient(135deg, #091020 0%, #050A14 100%);
             border: 1px solid var(--border-glow);
@@ -51,274 +31,44 @@
             align-items: center;
             box-shadow: 0 8px 32px rgba(0,0,0,0.5);
         }
-
-        .sys-title-block {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .sys-title {
-            font-size: 1.4rem;
-            font-weight: 800;
-            letter-spacing: 1.5px;
-            color: #FFF;
-        }
-
-        .sys-subtitle {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            font-family: monospace;
-        }
-
-        .sys-badge {
-            font-family: monospace;
-            font-size: 0.8rem;
-            color: var(--accent-green);
-            background: rgba(16, 185, 129, 0.08);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            padding: 6px 14px;
-            border-radius: 6px;
-            letter-spacing: 0.5px;
-        }
-        .radar-panel {
-            background: rgba(245, 158, 11, 0.03);
-            border: 1px dashed rgba(245, 158, 11, 0.3);
-            border-radius: 12px;
-            padding: 16px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .radar-header {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--accent-warn);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .radar-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .radar-card {
-            background: #080D1A;
-            border-radius: 8px;
-            padding: 12px 16px;
-            border-left: 4px solid var(--accent-warn);
-            font-size: 0.82rem;
-            line-height: 1.6;
-        }
-
-        .radar-card strong {
-            color: #FFF;
-            font-size: 0.88rem;
-        }
-        .workspace-grid {
-            display: grid;
-            grid-template-columns: 360px 1fr;
-            gap: 20px;
-            align-items: start;
-        }
-
-        .control-sidebar {
-            background: var(--bg-card);
-            border: 1px solid var(--border-glow);
-            border-radius: 12px;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.2);
-        }
-
-        .sidebar-section-title {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #FFF;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--border-glow);
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        label {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-        select, input[type="number"], textarea {
-            width: 100%;
-            background: var(--bg-input);
-            border: 1px solid var(--border-glow);
-            color: var(--text-main);
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 0.88rem;
-            outline: none;
-            transition: all 0.2s ease;
-        }
-
-        select:focus, input:focus {
-            border-color: var(--border-active);
-            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
-        }
-
-        .toggle-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0,0,0,0.2);
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border-glow);
-        }
-
-        .switch-wrap {
-            position: relative;
-            display: inline-block;
-            width: 42px;
-            height: 22px;
-        }
-
+        .sys-title-block { display: flex; flex-direction: column; gap: 4px; }
+        .sys-title { font-size: 1.4rem; font-weight: 800; letter-spacing: 1.5px; color: #FFF; }
+        .sys-subtitle { font-size: 0.8rem; color: var(--text-muted); font-family: monospace; }
+        .sys-badge { font-family: monospace; font-size: 0.8rem; color: var(--accent-green); background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); padding: 6px 14px; border-radius: 6px; letter-spacing: 0.5px; }
+        .radar-panel { background: rgba(245, 158, 11, 0.03); border: 1px dashed rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; }
+        .radar-header { font-size: 0.85rem; font-weight: 700; color: var(--accent-warn); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+        .radar-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .radar-card { background: #080D1A; border-radius: 8px; padding: 12px 16px; border-left: 4px solid var(--accent-warn); font-size: 0.82rem; line-height: 1.6; }
+        .radar-card strong { color: #FFF; font-size: 0.88rem; }
+        .workspace-grid { display: grid; grid-template-columns: 360px 1fr; gap: 20px; align-items: start; }
+        .control-sidebar { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.2); }
+        .sidebar-section-title { font-size: 0.95rem; font-weight: 700; color: #FFF; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 8px; border-bottom: 1px solid var(--border-glow); }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+        select, input[type="number"], textarea { width: 100%; background: var(--bg-input); border: 1px solid var(--border-glow); color: var(--text-main); padding: 12px; border-radius: 8px; font-size: 0.88rem; outline: none; transition: all 0.2s ease; }
+        select:focus, input:focus { border-color: var(--border-active); box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15); }
+        .toggle-row { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; border: 1px solid var(--border-glow); }
+        .switch-wrap { position: relative; display: inline-block; width: 42px; height: 22px; }
         .switch-wrap input { display: none; }
-
-        .slider-node {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #1E293B;
-            border-radius: 34px;
-            transition: 0.25s;
-        }
-
-        .slider-node:before {
-            position: absolute;
-            content: "";
-            height: 16px; width: 16px;
-            left: 3px; bottom: 3px;
-            background-color: #FFF;
-            border-radius: 50%;
-            transition: 0.25s;
-        }
-
+        .slider-node { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #1E293B; border-radius: 34px; transition: 0.25s; }
+        .slider-node:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: #FFF; border-radius: 50%; transition: 0.25s; }
         input:checked + .slider-node { background-color: var(--accent-blue); }
         input:checked + .slider-node:before { transform: translateX(20px); }
-
-        .payload-area {
-            height: 140px;
-            font-family: monospace;
-            font-size: 0.75rem;
-            resize: none;
-            background: #04070D;
-        }
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .summary-dashboard {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-        }
-
-        .metric-tile {
-            background: var(--bg-card);
-            border: 1px solid var(--border-glow);
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .metric-tile label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .metric-value {
-            font-size: 1.6rem;
-            font-weight: 700;
-            font-family: monospace;
-            color: #FFF;
-        }
-        .ledger-container {
-            background: var(--bg-card);
-            border: 1px solid var(--border-glow);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.2);
-        }
-
-        .ledger-title-bar {
-            padding: 16px 24px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            background: #0A101F;
-            border-bottom: 1px solid var(--border-glow);
-        }
-
-        .table-scroll {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-
-        th {
-            background: #070B14;
-            color: var(--text-muted);
-            font-size: 0.72rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            padding: 14px 20px;
-            border-bottom: 1px solid var(--border-glow);
-        }
-
-        td {
-            padding: 14px 20px;
-            border-bottom: 1px solid #10192E;
-            font-size: 0.85rem;
-        }
-
+        .payload-area { height: 120px; font-family: monospace; font-size: 0.72rem; resize: none; background: #04070D; }
+        .main-content { display: flex; flex-direction: column; gap: 20px; }
+        .summary-dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        .metric-tile { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 6px; }
+        .metric-tile label { font-size: 0.75rem; color: var(--text-muted); }
+        .metric-value { font-size: 1.6rem; font-weight: 700; font-family: monospace; color: #FFF; }
+        .ledger-container { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.2); }
+        .ledger-title-bar { padding: 16px 24px; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; background: #0A101F; border-bottom: 1px solid var(--border-glow); }
+        .table-scroll { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { background: #070B14; color: var(--text-muted); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; padding: 14px 20px; border-bottom: 1px solid var(--border-glow); }
+        td { padding: 14px 20px; border-bottom: 1px solid #10192E; font-size: 0.85rem; }
         tr:last-child td { border-bottom: none; }
-
-        .news-injection-row {
-            background: #050811;
-            font-size: 0.8rem;
-            color: var(--accent-blue);
-            line-height: 1.6;
-        }
-
-        .news-box-content {
-            padding: 10px 20px;
-            border-bottom: 1px solid var(--border-glow);
-        }
-
+        .news-injection-row { background: #050811; font-size: 0.8rem; color: var(--accent-blue); line-height: 1.6; }
+        .news-box-content { padding: 10px 20px; border-bottom: 1px solid var(--border-glow); }
         .pos-delta { color: var(--accent-green); font-weight: 600; font-family: monospace; }
         .neg-delta { color: var(--accent-warn); font-weight: 600; font-family: monospace; }
         .font-mono { font-family: monospace; }
@@ -328,22 +78,22 @@
 <div class="system-container">
     <header class="sys-header">
         <div class="sys-title-block">
-            <div class="sys-title">🌌 SEBRA V25.0 UNIFIED ENVIRONMENT MULTI-MAP</div>
-            <div class="sys-subtitle">SCALE-INVARIANT STRUCTURAL SYSTEM CORE ENGINE</div>
+            <div class="sys-title">🌌 SEBRA V25.0 CORE VARIANCE ANALYSIS LEDGER</div>
+            <div class="sys-subtitle">SCALE-INVARIANT GEOMETRIC COMPARATOR FIELD MODULE</div>
         </div>
-        <div class="sys-badge">GEOMETRIC TRACE STATE: HYPER-EQUILIBRIUM ACTIVE</div>
+        <div class="sys-badge">AUDIT TRACE NODE STATE: BALANCED FRAME LOCK (2026-07-15)</div>
     </header>
 
     <div class="radar-panel">
-        <div class="radar-header">⚠️ Active Volatility Radar Scanned Boundary Triggers</div>
+        <div class="radar-header">🚨 Active Scanned Strategic Variance Tracking</div>
         <div class="radar-grid">
             <div class="radar-card">
-                <strong>⚡ NODE: LAES (SEALSQ Corp)</strong><br>
-                Simplex space compressed at Geometric Minima Floor (V₄ = 1.1570). Baseline close matching at $2.75. Impact catalyst profile: Preliminary H1 revenue up 115% with an active $495M short-term liquidity reserve block.
+                <strong>🔥 HOT/SPIKE NODE: LAES (SEALSQ Corp)</strong><br>
+                Simplex space compressed at floor ($V_4 = 1.1570$). Model baseline price maps exactly to $2.75. News channel injects a +1.45x velocity coefficient, generating an immediate +20.36% forecast variance above raw spot close levels.
             </div>
             <div class="radar-card">
-                <strong>⚡ NODE: SPCX (SpaceX Enterprise)</strong><br>
-                Post-IPO institutional cooling layers stabilizing near absolute structural support anchors at $137.60. Network interfaces map a strategic Q4 launch execution corridor.
+                <strong>📈 VOLATILITY CATALYST: SPCX & NVDA Matrix</strong><br>
+                NVDA tracks highly elastic geometric variance profiles ahead of upcoming earnings data blocks. SPCX anchors its baseline support at $137.60, presenting an immediate +42.01% long-term trajectory expansion target.
             </div>
         </div>
     </div>
@@ -355,9 +105,10 @@
             <div class="input-group">
                 <label for="symbolSelect">Target Stock Matrix Node</label>
                 <select id="symbolSelect" onchange="runSebraSystemEngine()">
-                    <option value="LAES">LAES (SEALSQ Corp)</option>
-                    <option value="TSLA">TSLA (Tesla Inc)</option>
-                    <option value="NVDA">NVDA (NVIDIA Corporation)</option>
+                    <option value="LAES">LAES (SEALSQ Corp) - [HOT SPIKE NODE]</option>
+                    <option value="SPCX">SPCX (SpaceX) - [TRENDING NODE]</option>
+                    <option value="TSLA">TSLA (Tesla Motors)</option>
+                    <option value="NVDA">NVDA (NVIDIA) - [EARNINGS NODE]</option>
                 </select>
             </div>
 
@@ -370,7 +121,7 @@
             </div>
 
             <div class="toggle-row">
-                <label style="margin: 0;">Inject News Sentiment</label>
+                <label style="margin: 0;">Inject News Catalysts</label>
                 <label class="switch-wrap">
                     <input type="checkbox" id="newsSwitch" checked onchange="runSebraSystemEngine()">
                     <span class="slider-node"></span>
@@ -384,18 +135,13 @@
 
             <div class="sidebar-section-title" style="margin-top: 10px;">Payload Stream</div>
             <div class="input-group">
-                <label>Scraped Data Table Repository Pool</label>
+                <label>Scraped Database Pool Dump</label>
                 <textarea class="payload-area" id="poolStreamDisplay" readonly>
 Symbol,Date,Spot_Close,Macro_Center
 LAES,2026-07-15,2.75,3.12
-LAES,2026-07-14,2.72,3.15
-LAES,2026-07-13,2.71,3.18
+SPCX,2026-07-15,137.60,168.40
 TSLA,2026-07-15,396.77,412.50
-TSLA,2026-07-13,394.76,414.10
-TSLA,2026-07-10,407.76,416.80
-NVDA,2026-07-15,134.93,148.20
-NVDA,2026-07-13,130.04,149.50
-NVDA,2026-07-10,132.80,151.10</textarea>
+NVDA,2026-07-15,134.93,148.20</textarea>
             </div>
         </div>
 
@@ -420,22 +166,20 @@ NVDA,2026-07-10,132.80,151.10</textarea>
             </div>
 
             <div class="ledger-container">
-                <div class="ledger-title-bar">Tri-Chamber Relational Verification Matrix Logs</div>
+                <div class="ledger-title-bar">Unified Relational Ledger & Multi-Universe Variance Auditor</div>
                 <div class="table-scroll">
                     <table>
                         <thead>
                             <tr>
-                                <th>Chrono Timestamp Node</th>
-                                <th>Actual Asset Close</th>
-                                <th>Frame A Price (Base)</th>
-                                <th>Frame A Variance</th>
-                                <th>Frame B Price (Warp)</th>
-                                <th>Frame B Variance</th>
+                                <th>Chrono Node</th>
+                                <th>Actual Close</th>
+                                <th>Frame A Price</th>
+                                <th>Model vs Actual %</th>
+                                <th>Frame B Price</th>
+                                <th>Warp vs Actual %</th>
                             </tr>
                         </thead>
-                        <tbody id="ledgerInjectTarget">
-                            <!-- Array elements compile dynamically here -->
-                        </tbody>
+                        <tbody id="ledgerInjectTarget"></tbody>
                     </table>
                 </div>
             </div>
@@ -443,46 +187,38 @@ NVDA,2026-07-10,132.80,151.10</textarea>
     </div>
 </div>
 <script>
-    // Decoupled raw text data pool arrays mapped natively into memory indexes
     const PAYLOAD_SNAPSHOT_MATRIX_POOL = {
         "LAES": [
             { timestamp: "2026-07-15", actualPrice: 2.75, targetH3: 3.12, newsString: "WISeKey/SEALSQ reports preliminary H1 Revenue up 115% with $495M cash fortress.", weightAlpha: 1.45, computedH2: 2.75 },
-            { timestamp: "2026-07-14", actualPrice: 2.72, targetH3: 3.15, newsString: "SEALSQ forms strategic partnership with Indian electronics giant L5 Cartronics for IoT scale manufacturing.", weightAlpha: 1.20, computedH2: 2.735 },
-            { timestamp: "2026-07-13", actualPrice: 2.71, targetH3: 3.18, newsString: "SEALSQ executes $5M commercial contract with Quobly for post-quantum silicon computing integration.", weightAlpha: 1.15, computedH2: 2.74 }
+            { timestamp: "2026-07-14", actualPrice: 2.72, targetH3: 3.15, newsString: "SEALSQ forms strategic partnership with Indian electronics giant L5 Cartronics for IoT manufacturing.", weightAlpha: 1.20, computedH2: 2.735 },
+            { timestamp: "2026-07-13", actualPrice: 2.71, targetH3: 3.18, newsString: "SEALSQ executes $5M commercial contract with Quobly for post-quantum computing integration.", weightAlpha: 1.15, computedH2: 2.74 }
+        ],
+        "SPCX": [
+            { timestamp: "2026-07-15", actualPrice: 137.60, targetH3: 168.40, newsString: "SpaceX consolidates structural float base following post-IPO retail cooling phase.", weightAlpha: 1.22, computedH2: 137.60 },
+            { timestamp: "2026-07-14", actualPrice: 145.30, targetH3: 169.10, newsString: "Starlink cellular recurring revenue expansion matrices deploy ahead of target timelines.", weightAlpha: 1.10, computedH2: 141.45 }
         ],
         "TSLA": [
             { timestamp: "2026-07-15", actualPrice: 396.77, targetH3: 412.50, newsString: "Tesla pushes updated full FSD Beta telemetry across enterprise network frames.", weightAlpha: 1.05, computedH2: 396.77 },
-            { timestamp: "2026-07-13", actualPrice: 394.76, targetH3: 414.10, newsString: "Institutional passive ETF index flows scale configuration baselines.", weightAlpha: 1.00, computedH2: 395.76 },
-            { timestamp: "2026-07-10", actualPrice: 407.76, targetH3: 416.80, newsString: "Global production logistic baselines stabilize near target macro peaks.", weightAlpha: 0.95, computedH2: 399.76 }
+            { timestamp: "2026-07-13", actualPrice: 394.76, targetH3: 414.10, newsString: "Institutional passive ETF index flows scale configuration baselines.", weightAlpha: 1.00, computedH2: 395.76 }
         ],
         "NVDA": [
-            { timestamp: "2026-07-15", actualPrice: 134.93, targetH3: 148.20, newsString: "NVIDIA accelerates B200 silicon custom cluster processing arrays.", weightAlpha: 1.10, computedH2: 134.93 },
-            { timestamp: "2026-07-13", actualPrice: 130.04, targetH3: 149.50, newsString: "Hyperscale data core pipeline integration options verify baseline demand.", weightAlpha: 1.02, computedH2: 132.48 },
-            { timestamp: "2026-07-10", actualPrice: 132.80, targetH3: 151.10, newsString: "Cross-layer matrix tensor allocations stabilize computational variance limits.", weightAlpha: 1.00, computedH2: 132.59 }
+            { timestamp: "2026-07-15", actualPrice: 134.93, targetH3: 148.20, newsString: "NVIDIA accelerators scale ahead of crucial upcoming Q2 earnings print.", weightAlpha: 1.35, computedH2: 134.93 },
+            { timestamp: "2026-07-13", actualPrice: 130.04, targetH3: 149.50, newsString: "Hyperscale data core pipeline integration options verify baseline demand blocks.", weightAlpha: 1.05, computedH2: 132.48 }
         ]
     };
 
     function processSebraGeometryLayers(h1, h2, h3, biasFactor = 1.0) {
-        // Law 1: Dynamic Velocity Vector (W)
         let w_raw = (Math.abs(h1 - h3) / h3) * h1;
         let w_final = w_raw * biasFactor;
-        
-        // Law 2: 4D True Model Trajectory Core Index (TM)
         let total_product = h1 * h2 * h3 * w_final;
         let tm_index = total_product <= 0 ? 0.0001 : Math.pow(total_product, 0.25);
-        
-        // Law 3: 4D Equilateral Triangle regular 5-vertex simplex properties
         let hyper_volume = (Math.sqrt(5) / 96) * Math.pow(Math.sqrt(2.5) * tm_index, 4);
-        let center_of_mass = (h1 + h2 + h3 + w_final) / 4;
-        
-        return { w: w_final, tm: tm_index, v4: hyper_volume, cm: center_of_mass };
+        return { w: w_final, tm: tm_index, v4: hyper_volume, cm: (h1 + h2 + h3 + w_final) / 4 };
     }
 
     function executeQuarticInversion(target_tm, h2, h3, biasFactor = 1.0) {
-        let convergence_price = 0.01;
-        let minimum_residual = Infinity;
-        let exploration_limit = h3 * 5;
-        let total_steps = 5000;
+        let convergence_price = 0.01; let minimum_residual = Infinity;
+        let exploration_limit = h3 * 6; let total_steps = 4000;
         let allocation_step = exploration_limit / total_steps;
 
         for (let idx = 0; idx <= total_steps; idx++) {
@@ -490,10 +226,7 @@ NVDA,2026-07-10,132.80,151.10</textarea>
             let trial_w = ((Math.abs(trial_p - h3) / h3) * trial_p) * biasFactor;
             let trial_tm = Math.pow(trial_p * h2 * h3 * trial_w, 0.25);
             let residual_delta = Math.abs(trial_tm - target_tm);
-            if (residual_delta < minimum_residual) {
-                minimum_residual = residual_delta;
-                convergence_price = trial_p;
-            }
+            if (residual_delta < minimum_residual) { minimum_residual = residual_delta; convergence_price = trial_p; }
         }
         return convergence_price;
     }
@@ -505,39 +238,32 @@ NVDA,2026-07-10,132.80,151.10</textarea>
 
         const collectionRows = PAYLOAD_SNAPSHOT_MATRIX_POOL[symbolTarget];
         const gridBodyElement = document.getElementById("ledgerInjectTarget");
-        gridBodyElement.innerHTML = ""; // Empty output buffer canvas rows
+        gridBodyElement.innerHTML = ""; 
 
-        // Isolate primary vector indexes to map summary status dashboard
         let activeAnchor = collectionRows[0];
         let base_h1 = activeAnchor.actualPrice;
         let base_h2 = activeAnchor.computedH2;
         let base_h3 = activeAnchor.targetH3;
         let base_bias = activeNewsState ? activeAnchor.weightAlpha : 1.0;
 
-        // Routing execution paths across separate universes
         let routed_h1 = (UniverseFrame === "FRAME_B") ? manualSandboxValue : base_h1;
         let routed_h2 = (UniverseFrame === "FRAME_B") ? ((base_h2 * 4 + manualSandboxValue) / 5) : base_h2;
 
         let displayMetrics = processSebraGeometryLayers(routed_h1, routed_h2, base_h3, base_bias);
 
-        // Map computed metric nodes straight onto display boards
         document.getElementById("wDisplay").innerText = displayMetrics.w.toFixed(4);
         document.getElementById("tmDisplay").innerText = displayMetrics.tm.toFixed(4);
         document.getElementById("v4Display").innerText = displayMetrics.v4.toFixed(4);
         document.getElementById("cmDisplay").innerText = displayMetrics.cm.toFixed(4);
 
-        // Compile chronological verification rows into display body element
         collectionRows.forEach((row, index) => {
             let rowBias = activeNewsState ? row.weightAlpha : 1.0;
-            
-            // Frame A Core calculations
             let metrics_a = processSebraGeometryLayers(row.actualPrice, row.computedH2, row.targetH3, 1.0);
             let solved_p_a = executeQuarticInversion(metrics_a.tm, row.computedH2, row.targetH3, 1.0);
             let variance_a = ((solved_p_a - row.actualPrice) / row.actualPrice) * 100;
 
-            // Frame B Simulation processing calculations
-            let test_spot = (index === 0) ? manualSandboxValue : row.actualPrice;
-            let test_h2 = (index === 0) ? ((row.computedH2 * 4 + manualSandboxValue) / 5) : row.computedH2;
+            let test_spot = (index === 0) ? routed_h1 : row.actualPrice;
+            let test_h2 = (index === 0) ? routed_h2 : row.computedH2;
             let metrics_b = processSebraGeometryLayers(test_spot, test_h2, row.targetH3, rowBias);
             let solved_p_b = executeQuarticInversion(metrics_b.tm, test_h2, row.targetH3, rowBias);
             let variance_b = ((solved_p_b - row.actualPrice) / row.actualPrice) * 100;
@@ -557,8 +283,8 @@ NVDA,2026-07-10,132.80,151.10</textarea>
                 compiledRowHTML += `
                     <tr class="news-injection-row">
                         <td colspan="6" class="news-box-content">
-                            📰 [NEWS CATALYST MULTIPLIER +${row.weightAlpha.toFixed(2)}x]: "${row.newsString}"<br>
-                            ⚡ [TOPOLOGICAL SPRING ACTION]: Frame A Base V₄ Volume: ${metrics_a.v4.toFixed(4)} ──► News-Expanded V₄ Volume: ${metrics_b.v4.toFixed(4)}
+                            📰 [CATALYST MULTIPLIER +${row.weightAlpha.toFixed(2)}x]: "${row.newsString}"<br>
+                            ⚡ [VOLUMETRIC GAP]: Frame A Base V₄: ${metrics_a.v4.toFixed(2)} ──► News-Expanded V₄: ${metrics_b.v4.toFixed(2)}
                         </td>
                     </tr>
                 `;
@@ -566,35 +292,30 @@ NVDA,2026-07-10,132.80,151.10</textarea>
             gridBodyElement.innerHTML += compiledRowHTML;
         });
 
-        // Evolve forward geometric targets to draw timeline projections paths
         const trajectoryExtensions = [
-            { label: "Interval Path Extension Target [T_M + 90]", scalar: 1.30 },
-            { label: "Macro Geometric Matrix Peak Line [T_M + 360]", scalar: 1.75 },
-            { label: "Long-Range Structural Base Maturity [T_M + 720]", scalar: 2.10 }
+            { label: "Short Horizon Target Line [+3 Months]", scalar: 1.30 },
+            { label: "Macro Geometric Matrix Peak Line [+6 Months]", scalar: 1.45 },
+            { label: "Long-Range Structural Base Maturity [+12 Months]", scalar: 1.75 }
         ];
 
         trajectoryExtensions.forEach(extension => {
             let evolvedTM = displayMetrics.tm * extension.scalar;
             let impliedForecastPrice = executeQuarticInversion(evolvedTM, routed_h2, base_h3, base_bias);
+            let predictionVariance = ((impliedForecastPrice - base_h1) / base_h1) * 100;
 
-            let projectionHTML = `
+            gridBodyElement.innerHTML += `
                 <tr style="background: rgba(14, 165, 233, 0.02); border-top: 1px dashed var(--border-active);">
                     <td style="color: var(--border-active); font-weight: 600;">🔮 ${extension.label}</td>
-                    <td style="color: var(--text-muted);">—</td>
-                    <td style="color: var(--text-muted);">—</td>
-                    <td style="color: var(--text-muted);">—</td>
+                    <td>—</td><td>—</td><td>—</td>
                     <td class="font-mono" style="color: var(--border-active); font-weight:700;">$${impliedForecastPrice.toFixed(2)}</td>
-                    <td class="font-mono" style="color: var(--border-active); font-size: 0.8rem;">Projected TM: ${evolvedTM.toFixed(2)}</td>
+                    <td class="${predictionVariance >= 0 ? 'pos-delta' : 'neg-delta'}" style="font-size: 0.82rem;">
+                        ${predictionVariance >= 0 ? '▲' : '▼'} ${predictionVariance >= 0 ? '+' : ''}${predictionVariance.toFixed(2)}% Pred Gap
+                    </td>
                 </tr>
             `;
-            gridBodyElement.innerHTML += projectionHTML;
         });
     }
-
-    // Automatically trigger active rendering pass when runtime DOM parsing resolves
-    window.onload = function() {
-        runSebraSystemEngine();
-    };
+    window.onload = function() { runSebraSystemEngine(); };
 </script>
 </body>
 </html>
