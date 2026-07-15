@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEBRA V44.2 Triple-Convergence Workspace</title>
+    <title>SEBRA V45.7 Monolithic Multi-Engine Quant Workbench</title>
     <style>
         :root {
             --bg-main: #060913;
@@ -17,67 +17,44 @@
             --accent-green: #10B981;
             --accent-warn: #F59E0B;
         }
-        * { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace; }
         body { background-color: var(--bg-main); color: var(--text-main); padding: 24px; font-size: 14px; overflow-x: hidden; }
         .system-container { max-width: 1600px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
         .sys-header {
             background: linear-gradient(135deg, #091020 0%, #050A14 100%);
-            border: 1px solid var(--border-glow); 
-            border-radius: 12px; 
-            padding: 16px 24px;
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            border: 1px solid var(--border-glow); border-radius: 12px; padding: 16px 24px;
+            display: flex; justify-content: space-between; align-items: center; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
         }
         .sys-title-block { display: flex; flex-direction: column; gap: 4px; }
         .sys-title { font-size: 1.3rem; font-weight: 800; letter-spacing: 1.5px; color: #FFF; }
         .sys-subtitle { font-size: 0.78rem; color: var(--text-muted); font-family: monospace; }
         .sys-badge { font-family: monospace; font-size: 0.78rem; color: var(--accent-green); background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); padding: 6px 12px; border-radius: 6px; }
         .filter-deck-card {
-            background: var(--bg-card); 
-            border: 1px solid var(--border-glow); 
-            border-radius: 10px; 
-            padding: 12px 20px;
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            gap: 16px;
+            background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 10px; padding: 12px 20px;
+            display: flex; justify-content: space-between; align-items: center; gap: 16px;
         }
         .horizon-buttons-group { display: flex; gap: 8px; }
         .horizon-btn {
-            background: var(--bg-input); 
-            border: 1px solid var(--border-glow); 
-            color: var(--text-muted);
-            padding: 8px 16px; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-size: 0.8rem;
-            font-weight: 700; 
-            text-transform: uppercase; 
-            transition: all 0.2s ease;
+            background: var(--bg-input); border: 1px solid var(--border-glow); color: var(--text-muted);
+            padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700;
+            text-transform: uppercase; transition: all 0.2s ease;
         }
         .horizon-btn.active {
-            background: var(--accent-blue); 
-            color: #FFF; 
-            border-color: var(--border-active);
+            background: var(--accent-blue); color: #FFF; border-color: var(--border-active);
             box-shadow: 0 0 12px rgba(14, 165, 233, 0.4);
         }
         .workspace-grid { display: grid; grid-template-columns: 320px 1fr; gap: 16px; align-items: start; }
         .control-sidebar { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.2); }
-        .sidebar-section-title { font-size: 0.88rem; font-weight: 700; color: #FFF; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 4px; border-bottom: 1px solid var(--border-glow); }
+        .sidebar-section-title { font-size: 0.88rem; font-weight: 700; color: #FFF; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 4px; border-bottom: 1px solid var(--border-glow); margin-top: 8px; }
+        .sidebar-section-title:first-child { margin-top: 0; }
         .input-group { display: flex; flex-direction: column; gap: 4px; }
         label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
-        .submit-btn { background: var(--accent-blue); color: #FFF; border: none; padding: 10px; border-radius: 6px; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; cursor: pointer; transition: background 0.2s; margin-top: 4px; }
+        .submit-btn { background: var(--accent-blue); color: #FFF; border: none; padding: 10px; border-radius: 6px; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; cursor: pointer; transition: background 0.2s; margin-top: 4px; width: 100%; text-align: center; }
         .submit-btn:hover { background: #0284C7; }
-        select, input[type="number"], textarea { width: 100%; background: var(--bg-input); border: 1px solid var(--border-glow); color: var(--text-main); padding: 8px 10px; border-radius: 6px; font-size: 0.82rem; outline: none; }
+        .secondary-btn { background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border-glow); padding: 8px; border-radius: 6px; font-weight: 700; text-transform: uppercase; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; width: 100%; }
+        .secondary-btn:hover { border-color: var(--border-active); background: #1E293B; }
+        select, input[type="number"], input[type="text"], textarea { width: 100%; background: var(--bg-input); border: 1px solid var(--border-glow); color: var(--text-main); padding: 8px 10px; border-radius: 6px; font-size: 0.82rem; outline: none; }
         select:focus, input:focus { border-color: var(--border-active); }
-        
         .toggle-row { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; border: 1px solid var(--border-glow); }
         .switch-wrap { position: relative; display: inline-block; width: 38px; height: 20px; }
         .switch-wrap input { display: none; }
@@ -85,10 +62,8 @@
         .slider-node:before { position: absolute; content: ""; height: 14px; width: 16px; left: 3px; bottom: 3px; background-color: #FFF; border-radius: 50%; transition: 0.2s; }
         input:checked + .slider-node { background-color: var(--accent-blue); }
         input:checked + .slider-node:before { transform: translateX(16px); }
-        
-        .payload-area { height: 100px; font-family: monospace; font-size: 0.72rem; background: #04070D; color: var(--accent-green); border-color: var(--border-glow); resize: none; text-align: center; font-weight: bold; }
         .chart-card-wrapper { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 10px; padding: 16px; display: none; flex-direction: column; gap: 10px; box-shadow: 0 4px 24px rgba(0,0,0,0.2); }
-        .chart-svg-viewport { width: 100%; height: 160px; background: #050914; border: 1px solid var(--border-glow); border-radius: 6px; }
+        .chart-svg-viewport { width: 100%; height: 200px; background: #050914; border: 1px solid var(--border-glow); border-radius: 6px; }
         .main-content { display: flex; flex-direction: column; gap: 16px; }
         .summary-dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
         .metric-tile { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 10px; padding: 14px 18px; display: flex; flex-direction: column; gap: 4px; position: relative; overflow: hidden; }
@@ -99,10 +74,10 @@
         .table-scroll { width: 100%; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th { background: #070B14; color: var(--text-muted); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 12px 16px; border-bottom: 1px solid var(--border-glow); }
-        td { padding: 12px 16px; border-bottom: 1px solid #10192E; font-size: 0.82rem; }
+        td { padding: 12px 16px; border-bottom: 1px solid #10192E; font-size: 0.82rem; vertical-align: middle; }
         tr:last-child td { border-bottom: none; }
         .news-injection-row { background: #050811; font-size: 0.78rem; color: var(--accent-blue); line-height: 1.6; }
-        .news-box-content { padding: 8px 16px; border-bottom: 1px solid var(--border-glow); }
+        .news-box-content { padding: 12px 16px; border-bottom: 1px solid var(--border-glow); }
         .pos-delta { color: var(--accent-green); font-weight: 600; font-family: monospace; }
         .neg-delta { color: var(--accent-warn); font-weight: 600; font-family: monospace; }
         .font-mono { font-family: monospace; font-size: 0.82rem; }
@@ -114,10 +89,10 @@
 <div class="system-container">
     <header class="sys-header">
         <div class="sys-title-block">
-            <div class="sys-title">🌌 SEBRA V44.2 TRIPLE CONVERGENCE DESK</div>
-            <div class="sys-subtitle">NATURAL PRICES vs LEGACY MODEL vs ACTIVE SCHRÖDINGER ANALYSIS</div>
+            <div class="sys-title">🌌 SEBRA V45.7 PROVISIONING WORKBENCH</div>
+            <div class="sys-subtitle">TRIPLE-ENGINE HISTORICAL EVALUATION DESK WITH INTERACTIVE SCROLL HOOKS</div>
         </div>
-        <div class="sys-badge">TRIPLE ENGINES LOGGED AND SECURE</div>
+        <div class="sys-badge">DATA ENGINE MATRIX ACTIVE :: LOCK CALIBRATED</div>
     </header>
     <div class="filter-deck-card">
         <label style="font-size:0.8rem; font-weight:700; color:#FFF;">Dynamic Horizon Matrix Filtration</label>
@@ -130,14 +105,20 @@
     </div>
     <div class="workspace-grid">
         <div class="control-sidebar">
-            <div class="sidebar-section-title">📋 Automated Feed Terminal</div>
-            <div class="input-group"><label>Memory Data Array Proxy Input</label><textarea class="payload-area" id="bulkInputPortal" readonly placeholder="[ INTEGRATED SYSTEMS RUNNING STABLE ]"></textarea></div>
-            <button class="submit-btn" onclick="executeManualPayloadSubmit()">Refresh Invariant Metrics</button>
-            <div class="input-group"><label for="symbolSelect">Dropdown Focus Ticker</label><select id="symbolSelect" onchange="runSebraSystemEngine()"></select></div>
-            <div class="input-group"><label for="frameSelect">Universe Space Frame</label><select id="frameSelect" onchange="runSebraSystemEngine()"><option value="FRAME_A">Frame A: Snapshot Core Base</option><option value="FRAME_B">Frame B: Warp Sandbox Chamber</option></select></div>
+            <div class="sidebar-section-title">➕ Provision New Ticker Node</div>
+            <div class="input-group"><label>Asset Ticker / Node Symbol</label><input type="text" id="addSymbol" value="PLTR"></div>
+            <div class="input-group"><label>Historical Spot Close ($)</label><input type="number" id="addSpot" value="41.80" step="0.01"></div>
+            <div class="input-group"><label>Historical 180D Macro Center ($)</label><input type="number" id="addMacro" value="45.10" step="0.01"></div>
+            <div class="input-group"><label>Descriptive Fundamental Catalyst Text</label><input type="text" id="addNews" value="Enterprise AIP contracts across federal infrastructure grids drive volumetric expansion."></div>
+            <button class="submit-btn" onclick="executeTickerProvisioning()">Append Asset Node</button>
+            <div class="sidebar-section-title">🔍 Selected Asset Recalibrator</div>
+            <div class="input-group"><label for="symbolSelect">Dropdown Focus Ticker</label><select id="symbolSelect" onchange="synchronizeSidebarControls()"></select></div>
+            <div class="input-group"><label>Shares Volume Held (Input Block)</label><input type="number" id="sharesInput" value="1000" step="1" oninput="executeInteractiveParametersUpdate()"></div>
+            <div class="input-group"><label>Purchase Base Entry Cost (£)</label><input type="number" id="costInput" value="2.50" step="0.01" oninput="executeInteractiveParametersUpdate()"></div>
+            <div class="sidebar-section-title">⚙️ Interface Schematics</div>
             <div class="toggle-row"><label style="margin: 0;">Trajectory Graph View</label><label class="switch-wrap"><input type="checkbox" id="graphToggle" checked onchange="toggleTrajectoryGraphVisibility()"><span class="slider-node"></span></label></div>
-            <div class="toggle-row"><label style="margin: 0;">News Catalysts</label><label class="switch-wrap"><input type="checkbox" id="newsSwitch" checked onchange="runSebraSystemEngine()"><span class="slider-node"></span></label></div>
-            <div class="input-group"><label for="warpPriceInput">Chamber B Overwrite Price ($)</label><input type="number" id="warpPriceInput" value="4.50" step="0.01" oninput="runSebraSystemEngine()"></div>
+            <div class="toggle-row"><label style="margin: 0;">News Catalysts Box</label><label class="switch-wrap"><input type="checkbox" id="newsSwitch" checked onchange="runSebraSystemEngine()"><span class="slider-node"></span></label></div>
+            <button class="secondary-btn" onclick="executeResetToFactoryParity()">Reset Default Dataset</button>
         </div>
         <div class="main-content">
             <div class="chart-card-wrapper" id="trajectoryChartWrapper"><label style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Simplex Core Trajectory Interpolation Wave Curve</label><svg class="chart-svg-viewport" id="svgGraphViewport"></svg></div>
@@ -154,8 +135,8 @@
                         <thead>
                             <tr>
                                 <th>Symbol Node</th>
-                                <th>Chrono Date</th>
-                                <th>Actual Market Close</th>
+                                <th>Chrono Session</th>
+                                <th>Actual Spot Close</th>
                                 <th style="color:var(--text-muted);">Prev Model Calc ($)</th>
                                 <th style="color:var(--border-active);">New Calc Model ($)</th>
                                 <th>Active Model Error %</th>
@@ -172,79 +153,89 @@
     </div>
 </div>
 <script>
-    let PAYLOAD_SNAPSHOT_MATRIX_POOL = {}, STRATEGIC_ACTIVE_HORIZON = 'current'; const FX_USDBGB_CONVERSION_RATE = 0.78;   
-    const PORTFOLIO_LEDGER_LEDGER = {
-        "LAES": { volumeShares: 1000, entryCostGBP: 2.50, news: "SEALSQ H1 revenue jumps up +115% with an active $495M cash fortress.", weight: 1.45 },
-        "SPCX": { volumeShares: 500,  entryCostGBP: 120.00, news: "SpaceX post-IPO float floor criteria lock up heavy institutional volume.", weight: 1.22 },
-        "TSLA": { volumeShares: 100,  entryCostGBP: 350.00, news: "Tesla pushes updated enterprise FSD Beta neural telemetry loops.", weight: 1.05 },
-        "NVDA": { volumeShares: 200,  entryCostGBP: 110.00, news: "NVIDIA AI accelerator blocks print deep capital accumulation runs.", weight: 1.35 }
+    let PAYLOAD_SNAPSHOT_MATRIX_POOL = {}; let STRATEGIC_ACTIVE_HORIZON = 'current'; const FX_USDBGB_CONVERSION_RATE = 0.78;   
+    let PORTFOLIO_LEDGER_LEDGER = {
+        "LAES": { volumeShares: 1000, entryCostGBP: 2.50, news: "SEALSQ H1 revenue expands +115% with a structural $495M asset floor layer.", weight: 1.45 },
+        "SPCX": { volumeShares: 500,  entryCostGBP: 120.00, news: "SpaceX post-IPO float guidelines secure massive institutional infills.", weight: 1.22 },
+        "TSLA": { volumeShares: 100,  entryCostGBP: 350.00, news: "Tesla pushes updated enterprise FSD Beta neural telemetry arrays.", weight: 1.05 },
+        "NVDA": { volumeShares: 200,  entryCostGBP: 110.00, news: "NVIDIA AI accelerator tranches scale past heavy resistance ceilings.", weight: 1.35 }
     };
-    function processSebraGeometryLayers(h1, h2, h3, biasFactor = 1.0) { let w = (Math.abs(h1 - h3) / h3) * h1 * biasFactor; let prod = h1 * h2 * h3 * w; let tm = prod <= 0 ? 0.0001 : Math.pow(prod, 0.25); return { w: w, tm: tm, v4: (Math.sqrt(5) / 96) * Math.pow(Math.sqrt(2.5) * tm, 4), cm: (h1 + h2 + h3 + w) / 4 }; }
-    function executeQuarticInversion(target_tm, h2, h3, biasFactor = 1.0) { 
-        let cp = 0.01, min = Infinity, lim = Math.max(h3 * 8, 160000.0), steps = 25000, step = lim / steps; 
-        for (let idx = 0; idx <= steps; idx++) { 
-            let p = 0.01 + (idx * step), w = ((Math.abs(p - h3) / h3) * p) * biasFactor, tm = Math.pow(p * h2 * h3 * w, 0.25), delta = Math.abs(tm - target_tm); 
-            if (delta < min) { min = delta; cp = p; } 
-        } 
-        return cp; 
+    function processSebraGeometryLayers(h1, h2, h3, biasFactor = 1.0) { let w_raw = (Math.abs(h1 - h3) / h3) * h1; let w_final = w_raw * biasFactor; let total_product = h1 * h2 * h3 * w_final; let tm_index = total_product <= 0 ? 0.0001 : Math.pow(total_product, 0.25); let hyper_volume = (Math.sqrt(5) / 96) * Math.pow(Math.sqrt(2.5) * tm_index, 4); return { w: w_final, tm: tm_index, v4: hyper_volume, cm: (h1 + h2 + h3 + w_final) / 4 }; }
+    function executeQuarticInversion(target_tm, h2, h3, biasFactor = 1.0) {
+        let convergence_price = 0.01; let minimum_residual = Infinity; let exploration_limit = Math.max(h3 * 8, 160000.0); let total_steps = 25000; let allocation_step = exploration_limit / total_steps;
+        for (let idx = 0; idx <= total_steps; idx++) {
+            let trial_p = 0.01 + (idx * allocation_step); let trial_w = ((Math.abs(trial_p - h3) / h3) * trial_p) * biasFactor; let trial_tm = Math.pow(trial_p * h2 * h3 * trial_w, 0.25); let residual_delta = Math.abs(trial_tm - target_tm);
+            if (residual_delta < minimum_residual) { minimum_residual = residual_delta; convergence_price = trial_p; }
+        }
+        return convergence_price;
     }
     function toggleTrajectoryGraphVisibility() { document.getElementById("trajectoryChartWrapper").style.display = document.getElementById("graphToggle").checked ? "flex" : "none"; }
-    function switchActiveHorizon(horizon) { STRATEGIC_ACTIVE_HORIZON = horizon; document.querySelectorAll('.horizon-btn').forEach(b => b.classList.remove('active')); document.getElementById(`btn_${horizon}`).classList.add('active'); runSebraSystemEngine(); }
-    function executeManualPayloadSubmit() { 
-        const selectMenu = document.getElementById("symbolSelect"), previousSelection = selectMenu.value; 
-        PAYLOAD_SNAPSHOT_MATRIX_POOL = {};
-        const staticHistoricalManifest = {
-            "LAES": { spotClose: 2.74, prevModelClose: 2.75, macroCenter: 3.12 },
-            "SPCX": { spotClose: 137.60, prevModelClose: 137.60, macroCenter: 168.40 },
-            "TSLA": { spotClose: 396.77, prevModelClose: 396.77, macroCenter: 412.50 },
-            "NVDA": { spotClose: 134.93, prevModelClose: 134.93, macroCenter: 148.20 }
-        };
-        Object.keys(staticHistoricalManifest).forEach(symbol => { 
-            let core = staticHistoricalManifest[symbol]; 
-            PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol] = [{ timestamp: "2026-07-15", actualPrice: core.spotClose, prevPrice: core.prevModelClose, targetH3: core.macroCenter, newsString: PORTFOLIO_LEDGER_LEDGER[symbol].news, weightAlpha: PORTFOLIO_LEDGER_LEDGER[symbol].weight, computedH2: core.spotClose }]; 
+    function switchActiveHorizon(selectedHorizon) { STRATEGIC_ACTIVE_HORIZON = selectedHorizon; document.querySelectorAll('.horizon-btn').forEach(btn => btn.classList.remove('active')); document.getElementById(`btn_${selectedHorizon}`).classList.add('active'); runSebraSystemEngine(); }
+    function executeManualPayloadSubmit() {
+        const selectMenu = document.getElementById("symbolSelect"); const previousSelection = selectMenu.value; PAYLOAD_SNAPSHOT_MATRIX_POOL = {};
+        const staticHistoricalManifest = { "LAES": { spotClose: 2.74, prevModelClose: 2.75, macroCenter: 3.12 }, "SPCX": { spotClose: 137.60, prevModelClose: 137.60, macroCenter: 168.40 }, "TSLA": { spotClose: 396.77, prevModelClose: 396.77, macroCenter: 412.50 }, "NVDA": { spotClose: 134.93, prevModelClose: 134.93, macroCenter: 148.20 } };
+        Object.keys(staticHistoricalManifest).forEach(symbol => {
+            let coreNode = staticHistoricalManifest[symbol]; if (!PORTFOLIO_LEDGER_LEDGER[symbol]) { PORTFOLIO_LEDGER_LEDGER[symbol] = { volumeShares: 1000, entryCostGBP: 10.00, news: "Appended historical node profile baseline initialized.", weight: 1.15 }; }
+            let metaLedger = PORTFOLIO_LEDGER_LEDGER[symbol]; PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol] = [{ timestamp: "2026-07-15", actualPrice: coreNode.spotClose, prevPrice: coreNode.prevModelClose, targetH3: coreNode.macroCenter, newsString: metaLedger.news, weightAlpha: metaLedger.weight, computedH2: coreNode.spotClose }];
         });
-        selectMenu.innerHTML = ""; 
-        Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).forEach(sym => { let opt = document.createElement("option"); opt.value = sym; opt.text = sym; selectMenu.add(opt); });
-        if (selectMenu.options.length > 0) { selectMenu.value = Array.from(selectMenu.options).some(o => o.value === previousSelection) ? previousSelection : selectMenu.options.value; runSebraSystemEngine(); }
+        selectMenu.innerHTML = ""; Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).forEach(symbol => { let newOption = document.createElement("option"); newOption.value = symbol; newOption.text = symbol; selectMenu.add(newOption); });
+        if (selectMenu.options.length > 0) { selectMenu.value = Array.from(selectMenu.options).some(opt => opt.value === previousSelection) ? previousSelection : selectMenu.options.value; synchronizeSidebarControls(); }
     }
-    function renderDynamicTrajectoryCurve(activePrice, p3m, p6m, p12m) { 
-        const svg = document.getElementById("svgGraphViewport"); if (!svg) return; svg.innerHTML = ""; 
-        const coordinates = [{ x: 40, y: activePrice, lbl: "Current" }, { x: 140, y: p3m, lbl: "3 Months" }, { x: 240, y: p6m, lbl: "6 Months" }, { x: 340, y: p12m, lbl: "12 Months" }];
-        const prices = [activePrice, p3m, p6m, p12m]; const maxPrice = Math.max(...prices) * 1.1; const minPrice = Math.min(...prices) * 0.9; const priceRange = maxPrice - minPrice || 1.0;
-        let pathD = ""; 
-        coordinates.forEach((pt, i) => { 
-            let scaledY = 140 - ((pt.y - minPrice) / priceRange) * 110; pt.scaledX = pt.x; pt.scaledY = scaledY; pathD += (i === 0) ? `M ${pt.scaledX} ${pt.scaledY}` : ` L ${pt.scaledX} ${pt.scaledY}`; 
-        }); 
-        let pathElement = document.createElementNS("http://w3.org", "path"); pathElement.setAttribute("d", pathD); pathElement.setAttribute("stroke", "#38BDF8"); pathElement.setAttribute("stroke-width", "2.5"); pathElement.setAttribute("fill", "none"); svg.appendChild(pathElement);
-        coordinates.forEach(pt => { 
-            let circle = document.createElementNS("http://w3.org", "circle"); circle.setAttribute("cx", pt.scaledX); circle.setAttribute("cy", pt.scaledY); circle.setAttribute("r", "4"); circle.setAttribute("fill", "#FFF"); svg.appendChild(circle); 
-            let txt = document.createElementNS("http://w3.org", "text"); txt.setAttribute("x", pt.scaledX - 15); txt.setAttribute("y", pt.scaledY - 10); txt.setAttribute("fill", "#64748B"); txt.setAttribute("font-size", "9px"); txt.textContent = `${pt.lbl}: $${pt.y.toFixed(2)}`; svg.appendChild(txt); 
-        }); 
+    function executeTickerProvisioning() {
+        let sym = document.getElementById("addSymbol").value.toUpperCase().trim(); let spot = parseFloat(document.getElementById("addSpot").value) || 10.0; let macro = parseFloat(document.getElementById("addMacro").value) || 10.0; let news = document.getElementById("addNews").value.trim(); if (!sym) return;
+        PORTFOLIO_LEDGER_LEDGER[sym] = { volumeShares: 1000, entryCostGBP: spot * 0.70, news: news, weight: 1.20 }; executeManualPayloadSubmit(); document.getElementById("symbolSelect").value = sym; synchronizeSidebarControls();
     }
-    function calculateSchrodingerWavefunction(v4Metric) { 
-        const gridPoints = 50; let psi = new Array(gridPoints).fill(0), probabilityDensity = new Array(gridPoints).fill(0);
-        let localizedEnergyPotential = Math.max(100.0 - (Math.log10(v4Metric + 1) * 15), 5.0), totalNormalizedWeight = 0; 
-        for (let i = 0; i < gridPoints; i++) { 
-            let wavePhase = (Math.PI * i) / (gridPoints - 1), rawPsiAmplitude = Math.sin(wavePhase), edgeDecayFactor = Math.exp(-i * (localizedEnergyPotential / 400)) * Math.sin(quantumGlobalTimePhase * 0.05); 
-            psi[i] = rawPsiAmplitude * (1.0 + edgeDecayFactor * 0.15); probabilityDensity[i] = Math.pow(psi[i], 2); totalNormalizedWeight += probabilityDensity[i]; 
-        } 
+    function synchronizeSidebarControls() {
+        const focusSymbol = document.getElementById("symbolSelect").value; if (!focusSymbol || !PORTFOLIO_LEDGER_LEDGER[focusSymbol]) return;
+        let meta = PORTFOLIO_LEDGER_LEDGER[focusSymbol]; document.getElementById("sharesInput").value = meta.volumeShares; document.getElementById("costInput").value = meta.entryCostGBP.toFixed(2);
+        runSebraSystemEngine();
+    }
+    function executeInteractiveParametersUpdate() {
+        const focusSymbol = document.getElementById("symbolSelect").value; if (!focusSymbol || !PORTFOLIO_LEDGER_LEDGER[focusSymbol]) return;
+        PORTFOLIO_LEDGER_LEDGER[focusSymbol].volumeShares = parseFloat(document.getElementById("sharesInput").value) || 0; PORTFOLIO_LEDGER_LEDGER[focusSymbol].entryCostGBP = parseFloat(document.getElementById("costInput").value) || 0.01;
+        runSebraSystemEngine();
+    }
+    function executeResetToFactoryParity() {
+        PORTFOLIO_LEDGER_LEDGER = { "LAES": { volumeShares: 1000, entryCostGBP: 2.50, news: "SEALSQ H1 revenue expands +115% with a structural $495M asset floor layer.", weight: 1.45 }, "SPCX": { volumeShares: 500,  entryCostGBP: 120.00, news: "SpaceX post-IPO float guidelines secure massive institutional infills.", weight: 1.22 }, "TSLA": { volumeShares: 100,  entryCostGBP: 350.00, news: "Tesla pushes updated enterprise FSD Beta neural telemetry arrays.", weight: 1.05 }, "NVDA": { volumeShares: 200,  entryCostGBP: 110.00, news: "NVIDIA AI accelerator tranches scale past heavy resistance ceilings.", weight: 1.35 } };
+        executeManualPayloadSubmit();
+    }
+    function renderDynamicTrajectoryCurve(activePrice, p3m, p6m, p12m) {
+        const svg = document.getElementById("svgGraphViewport"); if (!svg) return; svg.innerHTML = ""; const coordinates = [{ x: 50, y: activePrice, lbl: "Spot" }, { x: 140, y: p3m, lbl: "3M Proj" }, { x: 230, y: p6m, lbl: "6M Proj" }, { x: 320, y: p12m, lbl: "12M Proj" }]; const prices = [activePrice, p3m, p6m, p12m]; const maxPrice = Math.max(...prices) * 1.08; const minPrice = Math.min(...prices) * 0.92; const priceRange = maxPrice - minPrice || 1.0; let pathD = ""; coordinates.forEach((pt, i) => { let scaledY = 180 - ((pt.y - minPrice) / priceRange) * 150; pt.scaledX = pt.x; pt.scaledY = scaledY; pathD += (i === 0) ? `M ${pt.scaledX} ${pt.scaledY}` : ` L ${pt.scaledX} ${pt.scaledY}`; }); let pathElement = document.createElementNS("http://w3.org", "path"); pathElement.setAttribute("d", pathD); pathElement.setAttribute("stroke", "#38BDF8"); pathElement.setAttribute("stroke-width", "3"); pathElement.setAttribute("fill", "none"); svg.appendChild(pathElement);
+        coordinates.forEach(pt => { let circle = document.createElementNS("http://w3.org", "circle"); circle.setAttribute("cx", pt.scaledX); circle.setAttribute("cy", pt.scaledY); circle.setAttribute("r", "5"); circle.setAttribute("fill", "#FFF"); svg.appendChild(circle); let txt = document.createElementNS("http://w3.org", "text"); txt.setAttribute("x", pt.scaledX - 20); txt.setAttribute("y", pt.scaledY - 12); txt.setAttribute("fill", "#64748B"); txt.setAttribute("font-size", "10px"); txt.textContent = `${pt.lbl}: $${pt.y.toFixed(2)}`; svg.appendChild(txt); });
+    }
+    function calculateSchrodingerWavefunction(v4Metric) {
+        const gridPoints = 50; let psi = new Array(gridPoints).fill(0), probabilityDensity = new Array(gridPoints).fill(0); let localizedEnergyPotential = Math.max(100.0 - (Math.log10(v4Metric + 1) * 15), 5.0), totalNormalizedWeight = 0; for (let i = 0; i < gridPoints; i++) { let wavePhase = (Math.PI * i) / (gridPoints - 1), rawPsiAmplitude = Math.sin(wavePhase), edgeDecayFactor = Math.exp(-i * (localizedEnergyPotential / 400)) * Math.sin(quantumGlobalTimePhase * 0.05); psi[i] = rawPsiAmplitude * (1.0 + edgeDecayFactor * 0.15); probabilityDensity[i] = Math.pow(psi[i], 2); totalNormalizedWeight += probabilityDensity[i]; }
         if (totalNormalizedWeight > 0) { for (let i = 0; i < gridPoints; i++) { probabilityDensity[i] = probabilityDensity[i] / totalNormalizedWeight; } }
-        let waveNumberK = Math.sqrt(Math.max(0.1, localizedEnergyPotential)) * 0.08, barrierThickness2A = 1.25, tunnelingCoefficientT = 1.0 / (1.0 + (Math.pow(localizedEnergyPotential, 2) / 40.0) * Math.pow(Math.sinh(waveNumberK * barrierThickness2A), 2));
-        return { probabilityArray: probabilityDensity, tunnelingProbability: Math.min(Math.max(tunnelingCoefficientT, 0.0001), 0.9999), eigenEnergyLevel: localizedEnergyPotential * 0.0245 }; 
+        let waveNumberK = Math.sqrt(Math.max(0.1, localizedEnergyPotential)) * 0.08, barrierThickness2A = 1.25, tunnelingCoefficientT = 1.0 / (1.0 + (Math.pow(localizedEnergyPotential, 2) / 40.0) * Math.pow(Math.sinh(waveNumberK * barrierThickness2A), 2)); return { probabilityArray: probabilityDensity, tunnelingProbability: Math.min(Math.max(tunnelingCoefficientT, 0.0001), 0.9999), eigenEnergyLevel: localizedEnergyPotential * 0.0245 }; 
     }
     let quantumGlobalTimePhase = 0;
     function paintQuantumSwirlVortex(canvasId, magnitude) { const canvas = document.getElementById(canvasId); if (!canvas) return; const ctx = canvas.getContext("2d"); const w = canvas.width = 50, h = canvas.height = 50; ctx.clearRect(0, 0, w, h); let spinSpeed = Math.min(Math.max(magnitude * 0.05, 0.02), 0.35), spiralRadius = Math.min(Math.max(Math.log10(magnitude + 1) * 4, 3.0), 22.0); ctx.save(); ctx.translate(w / 2, h / 2); ctx.rotate(quantumGlobalTimePhase * spinSpeed * 2); ctx.beginPath(); ctx.strokeStyle = "rgba(56, 189, 248, 0.4)"; ctx.lineWidth = 1.2; for (let theta = 0; theta < 30; theta += 0.1) { let r = (spiralRadius / 30) * theta, x = r * Math.cos(theta), y = r * Math.sin(theta); if (theta === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); } ctx.stroke(); ctx.restore(); }
     function animateQuantumDisplayWave(hypervolume) { const canvas = document.getElementById("quantumDisplayCanvas"); if (!canvas) return; const ctx = canvas.getContext("2d"); const w = canvas.width = 100, h = canvas.height = 40; ctx.clearRect(0, 0, w, h); let energyAmplitude = Math.min(Math.max(Math.log10(hypervolume + 1) * 6, 2.0), 18.0); ctx.beginPath(); ctx.strokeStyle = "#38BDF8"; ctx.lineWidth = 1.5; for (let x = 0; x < w; x++) { let y = (h / 2) + Math.sin((x * 0.1) + quantumGlobalTimePhase) * energyAmplitude; if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); } ctx.stroke(); quantumGlobalTimePhase += 0.12; paintQuantumSwirlVortex("swirlCanvas_W", window.activeMetricTracker_W || 1.0); paintQuantumSwirlVortex("swirlCanvas_TM", window.activeMetricTracker_TM || 1.0); paintQuantumSwirlVortex("swirlCanvas_CM", window.activeMetricTracker_CM || 1.0); requestAnimationFrame(() => animateQuantumDisplayWave(window.currentHypervolumeTracker || 1.0)); }
     function runSebraSystemEngine() {
-        const dropdownFocusSymbol = document.getElementById("symbolSelect").value, UniverseFrame = document.getElementById("frameSelect").value, activeNewsState = document.getElementById("newsSwitch").checked, manualSandboxValue = parseFloat(document.getElementById("warpPriceInput").value) || 1.0, gridBodyElement = document.getElementById("ledgerInjectTarget"); if (!dropdownFocusSymbol) return; gridBodyElement.innerHTML = ""; 
-        Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).forEach(symbol => { const dataRows = PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol]; if (!dataRows || dataRows.length === 0) return; dataRows.forEach((rowItem, rowIndex) => { let rowShares = PORTFOLIO_LEDGER_LEDGER[symbol]?.volumeShares || 0, rowEntryPriceGBP = PORTFOLIO_LEDGER_LEDGER[symbol]?.entryCostGBP || 0, rowBias = activeNewsState ? (rowItem.weightAlpha || 1.10) : 1.0, eval_h1 = (symbol === dropdownFocusSymbol && UniverseFrame === "FRAME_B") ? manualSandboxValue : rowItem.actualPrice, eval_h2 = (symbol === dropdownFocusSymbol && UniverseFrame === "FRAME_B") ? ((rowItem.computedH2 * 4 + manualSandboxValue) / 5) : rowItem.computedH2, eval_h3 = rowItem.targetH3, baseMetrics = processSebraGeometryLayers(eval_h1, eval_h2, eval_h3, rowBias);
+        const dropdownFocusSymbol = document.getElementById("symbolSelect").value, activeNewsState = document.getElementById("newsSwitch").checked, gridBodyElement = document.getElementById("ledgerInjectTarget"); if (!dropdownFocusSymbol) return; gridBodyElement.innerHTML = ""; 
+        Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).forEach(symbol => { const dataRows = PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol]; if (!dataRows || dataRows.length === 0) return; dataRows.forEach((rowItem) => {
+                let rowShares = PORTFOLIO_LEDGER_LEDGER[symbol]?.volumeShares || 0, rowEntryPriceGBP = PORTFOLIO_LEDGER_LEDGER[symbol]?.entryCostGBP || 0, rowBias = 1.0; let eval_h1 = rowItem.actualPrice, eval_h2 = rowItem.computedH2, eval_h3 = rowItem.targetH3, baseMetrics = processSebraGeometryLayers(eval_h1, eval_h2, eval_h3, rowBias);
                 if (symbol === dropdownFocusSymbol) { document.getElementById("wDisplay").innerText = baseMetrics.w.toFixed(4); document.getElementById("tmDisplay").innerText = baseMetrics.tm.toFixed(4); document.getElementById("v4Display").innerText = baseMetrics.v4.toFixed(4); document.getElementById("cmDisplay").innerText = baseMetrics.cm.toFixed(4); window.activeMetricTracker_W = baseMetrics.w; window.activeMetricTracker_TM = baseMetrics.tm; window.activeMetricTracker_CM = baseMetrics.cm; window.currentHypervolumeTracker = baseMetrics.v4; let p3 = executeQuarticInversion(baseMetrics.tm * 1.30, eval_h2, eval_h3, rowBias), p6 = executeQuarticInversion(baseMetrics.tm * 1.45, eval_h2, eval_h3, rowBias), p12 = executeQuarticInversion(baseMetrics.tm * 1.75, eval_h2, eval_h3, rowBias); renderDynamicTrajectoryCurve(eval_h1, p3, p6, p12); }
                 let horizonScalar = 1.0; if (STRATEGIC_ACTIVE_HORIZON === '3m') { horizonScalar = 1.30; } if (STRATEGIC_ACTIVE_HORIZON === '6m') { horizonScalar = 1.45; } if (STRATEGIC_ACTIVE_HORIZON === '12m') { horizonScalar = 1.75; }
                 let calculatedModelPriceUSD = executeQuarticInversion(baseMetrics.tm * horizonScalar, eval_h2, eval_h3, rowBias), variancePercentage = ((calculatedModelPriceUSD - eval_h1) / eval_h1) * 100, displayedSpotPriceUSD = rowItem.actualPrice, displayedSpotPriceGBP = displayedSpotPriceUSD * FX_USDBGB_CONVERSION_RATE, netPositionValueGBP = (calculatedModelPriceUSD * FX_USDBGB_CONVERSION_RATE) * rowShares;
-                let rowHTML = `<tr style="${symbol === dropdownFocusSymbol ? 'background: rgba(56, 189, 248, 0.04); border-left: 3px solid var(--border-active);' : ''}"><td style="font-weight:700; color:#FFF;">⚡ ${symbol}</td><td class="font-mono" style="color:var(--text-muted);">2026-07-15</td><td class="font-mono" style="font-weight:600; color:#FFF;">$${displayedSpotPriceUSD.toFixed(2)} / £${displayedSpotPriceGBP.toFixed(2)}</td><td class="font-mono" style="color:var(--text-muted); font-style:italic;">$${rowItem.prevPrice.toFixed(2)}</td><td class="font-mono" style="font-weight:700; color:var(--border-active); background: rgba(56,189,248,0.02); border-left: 1px dashed var(--border-active); border-right: 1px dashed var(--border-active); padding-left:12px;">$${calculatedModelPriceUSD.toFixed(2)}</td><td class="${variancePercentage >= 0 ? 'pos-delta' : 'neg-delta'}">${variancePercentage >= 0 ? '+' : ''}${variancePercentage.toFixed(2)}%</td><td class="font-mono">${rowShares.toLocaleString()}</td><td class="font-mono">£${rowEntryPriceGBP.toFixed(2)}</td><td class="font-mono" style="font-weight:700; color:#FFF;">£${netPositionValueGBP.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td></tr>`; gridBodyElement.innerHTML += rowHTML; }); });
+                let rowHTML = `<tr style="${symbol === dropdownFocusSymbol ? 'background: rgba(56, 189, 248, 0.04); border-left: 3px solid var(--border-active);' : ''}"><td style="font-weight:700; color:#FFF;">⚡ ${symbol}</td><td class="font-mono" style="color:var(--text-muted);">2026-07-15</td><td class="font-mono" style="font-weight:600; color:#FFF;">$${displayedSpotPriceUSD.toFixed(2)} / £${displayedSpotPriceGBP.toFixed(2)}</td><td class="font-mono" style="color:var(--text-muted); font-style:italic;">$${rowItem.prevPrice.toFixed(2)}</td><td class="font-mono" style="font-weight:700; color:var(--border-active); background: rgba(56,189,248,0.02); border-left: 1px dashed var(--border-active); border-right: 1px dashed var(--border-active); padding-left:12px;">$${calculatedModelPriceUSD.toFixed(2)}</td><td class="${variancePercentage >= 0 ? 'pos-delta' : 'neg-delta'}">${variancePercentage >= 0 ? '+' : ''}${variancePercentage.toFixed(2)}%</td><td class="font-mono">${rowShares.toLocaleString()}</td><td class="font-mono">£${rowEntryPriceGBP.toFixed(2)}</td><td class="font-mono" style="font-weight:700; color:#FFF;">£${netPositionValueGBP.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td></tr>`;
+                if (activeNewsState && symbol === dropdownFocusSymbol) { rowHTML += `<tr class="news-injection-row"><td colspan="9" class="news-box-content">📰 [FUNDAMENTAL CATALYST Matrix]: "${rowItem.newsString}"</td></tr>`; } gridBodyElement.innerHTML += rowHTML; }); });
     }
     const originalSebraSystemEngine = runSebraSystemEngine;
-    runSebraSystemEngine = function() { originalSebraSystemEngine(); const focusSymbol = document.getElementById("symbolSelect").value; if (!focusSymbol || !PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol]) return; const activeNode = PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol], focusUniverseFrame = document.getElementById("frameSelect").value, activeNewsState = document.getElementById("newsSwitch").checked, inputSandboxOverride = parseFloat(document.getElementById("warpPriceInput").value) || 1.0; let target_h1 = (focusUniverseFrame === "FRAME_B") ? inputSandboxOverride : activeNode.actualPrice, target_h2 = (focusUniverseFrame === "FRAME_B") ? ((activeNode.computedH2 * 4 + inputSandboxOverride) / 5) : activeNode.computedH2, target_h3 = activeNode.targetH3, currentBiasWeight = activeNewsState ? (activeNode.weightAlpha || 1.10) : 1.0; let activeGeometries = processSebraGeometryLayers(target_h1, target_h2, target_h3, currentBiasWeight), waveQuantumOutputs = calculateSchrodingerWavefunction(activeGeometries.v4); document.getElementById("ledgerTitleAnchor").innerText = `Unified Relational Portfolio Hub :: [💥 Wave Tunneling: ${(waveQuantumOutputs.tunnelingProbability * 100).toFixed(2)}%]`; const volumeCardLabel = document.querySelector(".metric-tile:nth-child(3) label"); if (volumeCardLabel) volumeCardLabel.innerHTML = `Simplex Hyper-Volume (V4) <span style="color:var(--border-active); font-size:9px;">[Ψ-Eigen: ${waveQuantumOutputs.eigenEnergyLevel.toFixed(3)} eV]</span>`; const svgElement = document.getElementById("svgGraphViewport"); if (svgElement && document.getElementById("graphToggle").checked) { let pathPointsString = ""; let gridStepsCount = waveQuantumOutputs.probabilityArray.length; waveQuantumOutputs.probabilityArray.forEach((probWeight, idx) => { let coordX = 40 + (idx / (gridStepsCount - 1)) * 300, coordY = 150 - (probWeight * 280); pathPointsString += (idx === 0) ? `M ${coordX} ${coordY}` : ` L ${coordX} ${coordY}`; }); let quantumWaveLinePath = document.createElementNS("http://w3.org", "path"); quantumWaveLinePath.setAttribute("d", pathPointsString); quantumWaveLinePath.setAttribute("stroke", "rgba(16, 185, 129, 0.65)"); quantumWaveLinePath.setAttribute("stroke-width", "2.0"); quantumWaveLinePath.setAttribute("stroke-dasharray", "4,4"); quantumWaveLinePath.setAttribute("fill", "none"); svgElement.appendChild(quantumWaveLinePath); } };
+    runSebraSystemEngine = function() {
+        originalSebraSystemEngine(); const focusSymbol = document.getElementById("symbolSelect").value; if (!focusSymbol || !PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol]) return;
+        const activeNode = PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol], activeNewsState = document.getElementById("newsSwitch").checked;
+        let target_h1 = activeNode.actualPrice, target_h2 = activeNode.computedH2, target_h3 = activeNode.targetH3;
+        let activeGeometries = processSebraGeometryLayers(target_h1, target_h2, target_h3, 1.0), waveQuantumOutputs = calculateSchrodingerWavefunction(activeGeometries.v4);
+        document.getElementById("ledgerTitleAnchor").innerText = `Unified Relational Portfolio Hub :: [💥 Wave Tunneling: ${(waveQuantumOutputs.tunnelingProbability * 100).toFixed(2)}%]`;
+        const volumeCardLabel = document.querySelector(".metric-tile:nth-child(3) label"); if (volumeCardLabel) volumeCardLabel.innerHTML = `Simplex Hyper-Volume (V4) <span style="color:var(--border-active); font-size:9px;">[Ψ-Eigen: ${waveQuantumOutputs.eigenEnergyLevel.toFixed(3)} eV]</span>`;
+        const svgElement = document.getElementById("svgGraphViewport");
+        if (svgElement && document.getElementById("graphToggle").checked) {
+            let pathPointsString = ""; let gridStepsCount = waveQuantumOutputs.probabilityArray.length;
+            waveQuantumOutputs.probabilityArray.forEach((probWeight, idx) => { let coordX = 50 + (idx / (gridStepsCount - 1)) * 270, coordY = 190 - (probWeight * 450); pathPointsString += (idx === 0) ? `M ${coordX} ${coordY}` : ` L ${coordX} ${coordY}`; });
+            let quantumWaveLinePath = document.createElementNS("http://w3.org", "path"); quantumWaveLinePath.setAttribute("d", pathPointsString); quantumWaveLinePath.setAttribute("stroke", "rgba(16, 185, 129, 0.65)"); quantumWaveLinePath.setAttribute("stroke-width", "2.0"); quantumWaveLinePath.setAttribute("stroke-dasharray", "4,4"); quantumWaveLinePath.setAttribute("fill", "none"); svgElement.appendChild(quantumWaveLinePath);
+        }
+    };
     setInterval(() => { if(typeof runSebraSystemEngine === 'function' && Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).length > 0){ const sym = document.getElementById("symbolSelect").value; if (sym) runSebraSystemEngine(); } }, 100);
     window.onload = function() { executeManualPayloadSubmit(); toggleTrajectoryGraphVisibility(); animateQuantumDisplayWave(1.0); };
 </script>
