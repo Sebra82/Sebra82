@@ -458,6 +458,169 @@ AMD,2026-07-15,168.40,179.20        <div class="main-content">
         });
     }
     window.onload = function() { executeManualPayloadSubmit(); toggleTrajectoryGraphVisibility(); animateQuantumDisplayWave(1.0); };
+
+                    // ==========================================
+    // PART 14: SCHRÖDINGER INTERFACE OVERLAY HOOK & TERMINAL TAGS
+    // ==========================================
+    
+    // OVERRIDE INTERFACE CORE FUNCTION: Injects wavefunction data right into your local runtime engine loops
+    const originalSebraSystemEngine = runSebraSystemEngine;
+    runSebraSystemEngine = function() {
+        // Execute the baseline ledger mapping sequence first
+        originalSebraSystemEngine();
+        
+        const focusSymbol = document.getElementById("symbolSelect").value;
+        if (!focusSymbol || !PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol]) return;
+        
+        const activeNode = PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol][0];
+        const focusUniverseFrame = document.getElementById("frameSelect").value;
+        const activeNewsState = document.getElementById("newsSwitch").checked;
+        const inputSandboxOverride = parseFloat(document.getElementById("warpPriceInput").value) || 1.0;
+        
+        let target_h1 = (focusUniverseFrame === "FRAME_B") ? inputSandboxOverride : activeNode.actualPrice;
+        let target_h2 = (focusUniverseFrame === "FRAME_B") ? ((activeNode.computedH2 * 4 + inputSandboxOverride) / 5) : activeNode.computedH2;
+        let target_h3 = activeNode.targetH3;
+        let currentBiasWeight = activeNewsState ? (activeNode.weightAlpha || 1.10) : 1.0;
+        
+        let activeGeometries = processSebraGeometryLayers(target_h1, target_h2, target_h3, currentBiasWeight);
+        
+        // Solve structural Schrödinger wave metrics out of active simplex hyper-volumes
+        let waveQuantumOutputs = calculateSchrodingerWavefunction(activeGeometries.v4);
+        
+        // Update interface title anchors to reflect active state collapse diagnostic readings
+        document.getElementById("ledgerTitleAnchor").innerText += ` :: [💥 Ψ COEFF LOCKED: Tunneling Odds ${(waveQuantumOutputs.tunnelingProbability * 100).toFixed(2)}%]`;
+        
+        // Dynamically alter layout tile titles to display eigenvalue energy metrics
+        const volumeCardLabel = document.querySelector(".metric-tile:nth-child(3) label");
+        if (volumeCardLabel) volumeCardLabel.innerHTML = `Simplex Hyper-Volume (V4) <span style="color:var(--border-active); font-size:9px;">[Ψ-Eigen: ${waveQuantumOutputs.eigenEnergyLevel.toFixed(3)} eV]</span>`;
+        
+        // Draw the probabilistic wavefunction density path curve onto your SVG chart overlay layer
+        const svgElement = document.getElementById("svgGraphViewport");
+        if (svgElement && document.getElementById("graphToggle").checked) {
+            let pathPointsString = "";
+            let gridStepsCount = waveQuantumOutputs.probabilityArray.length;
+            
+            waveQuantumOutputs.probabilityArray.forEach((probWeight, idx) => {
+                let coordX = 40 + (idx / (gridStepsCount - 1)) * 300;
+                let coordY = 150 - (probWeight * 280); // Vertically scale probability height peaks
+                pathPointsString += (idx === 0) ? `M ${coordX} ${coordY}` : ` L ${coordX} ${coordY}`;
+            });
+            
+    // ==========================================
+    // PART 14: SCHRÖDINGER INTERFACE OVERLAY HOOK & TERMINAL TAGS
+    // ==========================================
+    
+    // OVERRIDE INTERFACE CORE FUNCTION: Injects wavefunction data right into your local runtime engine loops
+    const originalSebraSystemEngine = runSebraSystemEngine;
+    runSebraSystemEngine = function() {
+        // Execute the baseline ledger mapping sequence first
+        originalSebraSystemEngine();
+        
+        const focusSymbol = document.getElementById("symbolSelect").value;
+        if (!focusSymbol || !PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol]) return;
+        
+        const activeNode = PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol][0];
+        const focusUniverseFrame = document.getElementById("frameSelect").value;
+        const activeNewsState = document.getElementById("newsSwitch").checked;
+        const inputSandboxOverride = parseFloat(document.getElementById("warpPriceInput").value) || 1.0;
+        
+        let target_h1 = (focusUniverseFrame === "FRAME_B") ? inputSandboxOverride : activeNode.actualPrice;
+        let target_h2 = (focusUniverseFrame === "FRAME_B") ? ((activeNode.computedH2 * 4 + inputSandboxOverride) / 5) : activeNode.computedH2;
+        let target_h3 = activeNode.targetH3;
+        let currentBiasWeight = activeNewsState ? (activeNode.weightAlpha || 1.10) : 1.0;
+        
+        let activeGeometries = processSebraGeometryLayers(target_h1, target_h2, target_h3, currentBiasWeight);
+        
+        // Solve structural Schrödinger wave metrics out of active simplex hyper-volumes
+        let waveQuantumOutputs = calculateSchrodingerWavefunction(activeGeometries.v4);
+        
+        // Update interface title anchors to reflect active state collapse diagnostic readings
+        document.getElementById("ledgerTitleAnchor").innerText += ` :: [💥 Ψ COEFF LOCKED: Tunneling Odds ${(waveQuantumOutputs.tunnelingProbability * 100).toFixed(2)}%]`;
+        
+        // Dynamically alter layout tile titles to display eigenvalue energy metrics
+        const volumeCardLabel = document.querySelector(".metric-tile:nth-child(3) label");
+        if (volumeCardLabel) volumeCardLabel.innerHTML = `Simplex Hyper-Volume (V4) <span style="color:var(--border-active); font-size:9px;">[Ψ-Eigen: ${waveQuantumOutputs.eigenEnergyLevel.toFixed(3)} eV]</span>`;
+        
+        // Draw the probabilistic wavefunction density path curve onto your SVG chart overlay layer
+        const svgElement = document.getElementById("svgGraphViewport");
+        if (svgElement && document.getElementById("graphToggle").checked) {
+            let pathPointsString = "";
+            let gridStepsCount = waveQuantumOutputs.probabilityArray.length;
+            
+            waveQuantumOutputs.probabilityArray.forEach((probWeight, idx) => {
+                let coordX = 40 + (idx / (gridStepsCount - 1)) * 300;
+                let coordY = 150 - (probWeight * 280); // Vertically scale probability height peaks
+                pathPointsString += (idx === 0) ? `M ${coordX} ${coordY}` : ` L ${coordX} ${coordY}`;
+            });
+            
+    // ==========================================
+    // PART 14: SCHRÖDINGER INTERFACE OVERLAY HOOK & TERMINAL TAGS
+    // ==========================================
+    
+    // OVERRIDE INTERFACE CORE FUNCTION: Injects wavefunction data right into your local runtime engine loops
+    const originalSebraSystemEngine = runSebraSystemEngine;
+    runSebraSystemEngine = function() {
+        // Execute the baseline ledger mapping sequence first
+        originalSebraSystemEngine();
+        
+        const focusSymbol = document.getElementById("symbolSelect").value;
+        if (!focusSymbol || !PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol]) return;
+        
+        const activeNode = PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol][0];
+        const focusUniverseFrame = document.getElementById("frameSelect").value;
+        const activeNewsState = document.getElementById("newsSwitch").checked;
+        const inputSandboxOverride = parseFloat(document.getElementById("warpPriceInput").value) || 1.0;
+        
+        let target_h1 = (focusUniverseFrame === "FRAME_B") ? inputSandboxOverride : activeNode.actualPrice;
+        let target_h2 = (focusUniverseFrame === "FRAME_B") ? ((activeNode.computedH2 * 4 + inputSandboxOverride) / 5) : activeNode.computedH2;
+        let target_h3 = activeNode.targetH3;
+        let currentBiasWeight = activeNewsState ? (activeNode.weightAlpha || 1.10) : 1.0;
+        
+        let activeGeometries = processSebraGeometryLayers(target_h1, target_h2, target_h3, currentBiasWeight);
+        
+        // Solve structural Schrödinger wave metrics out of active simplex hyper-volumes
+        let waveQuantumOutputs = calculateSchrodingerWavefunction(activeGeometries.v4);
+        
+        // Update interface title anchors to reflect active state collapse diagnostic readings
+        document.getElementById("ledgerTitleAnchor").innerText += ` :: [💥 Ψ COEFF LOCKED: Tunneling Odds ${(waveQuantumOutputs.tunnelingProbability * 100).toFixed(2)}%]`;
+        
+        // Dynamically alter layout tile titles to display eigenvalue energy metrics
+        const volumeCardLabel = document.querySelector(".metric-tile:nth-child(3) label");
+        if (volumeCardLabel) volumeCardLabel.innerHTML = `Simplex Hyper-Volume (V4) <span style="color:var(--border-active); font-size:9px;">[Ψ-Eigen: ${waveQuantumOutputs.eigenEnergyLevel.toFixed(3)} eV]</span>`;
+        
+        // Draw the probabilistic wavefunction density path curve onto your SVG chart overlay layer
+        const svgElement = document.getElementById("svgGraphViewport");
+        if (svgElement && document.getElementById("graphToggle").checked) {
+            let pathPointsString = "";
+            let gridStepsCount = waveQuantumOutputs.probabilityArray.length;
+            
+            waveQuantumOutputs.probabilityArray.forEach((probWeight, idx) => {
+                let coordX = 40 + (idx / (gridStepsCount - 1)) * 300;
+                let coordY = 150 - (probWeight * 280); // Vertically scale probability height peaks
+                pathPointsString += (idx === 0) ? `M ${coordX} ${coordY}` : ` L ${coordX} ${coordY}`;
+            });
+            
+            let quantumWaveLinePath = document.createElementNS("http://w3.org", "path");
+            quantumWaveLinePath.setAttribute("d", pathPointsString);
+            quantumWaveLinePath.setAttribute("stroke", "rgba(16, 185, 129, 0.65)"); // Render probability peaks in high-glow emerald green
+            quantumWaveLinePath.setAttribute("stroke-width", "2.0");
+            quantumWaveLinePath.setAttribute("stroke-dasharray", "4,4"); // Use a dashed structure to separate probability clouds from fixed trends
+            quantumWaveLinePath.setAttribute("fill", "none");
+            svgElement.appendChild(quantumWaveLinePath);
+        }
+    };
+    
+    // Background task re-calibration loop to update oscillator animation phase states
+    setInterval(() => {
+        if(typeof runSebraSystemEngine === 'function' && Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).length > 0){
+            // Soft refresh the graphics view matrix to drive wave propagation movements smoothly
+            const dropdownFocusSymbol = document.getElementById("symbolSelect").value;
+            if (dropdownFocusSymbol) runSebraSystemEngine();
+        }
+    }, 100);
 </script>
 </body>
 </html>
+
+
+                    
