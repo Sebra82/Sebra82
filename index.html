@@ -160,7 +160,15 @@
         "TSLA": { volumeShares: 100,  entryCostGBP: 350.00, news: "Tesla pushes updated enterprise FSD Beta neural telemetry arrays.", weight: 1.05 },
         "NVDA": { volumeShares: 200,  entryCostGBP: 110.00, news: "NVIDIA AI accelerator tranches scale past heavy resistance ceilings.", weight: 1.35 }
     };
-    function processSebraGeometryLayers(h1, h2, h3, biasFactor = 1.0) { let w_raw = (Math.abs(h1 - h3) / h3) * h1; let w_final = w_raw * biasFactor; let total_product = h1 * h2 * h3 * w_final; let tm_index = total_product <= 0 ? 0.0001 : Math.pow(total_product, 0.25); let hyper_volume = (Math.sqrt(5) / 96) * Math.pow(Math.sqrt(2.5) * tm_index, 4); return { w: w_final, tm: tm_index, v4: hyper_volume, cm: (h1 + h2 + h3 + w_final) / 4 }; }
+
+    function processSebraGeometryLayers(h1, h2, h3, biasFactor = 1.0) { 
+        let w_raw = (Math.abs(h1 - h3) / h3) * h1; 
+        let w_final = w_raw * biasFactor; 
+        let total_product = h1 * h2 * h3 * w_final; 
+        let tm_index = total_product <= 0 ? 0.0001 : Math.pow(total_product, 0.25); 
+        return { w: w_final, tm: tm_index, v4: (Math.sqrt(5) / 96) * Math.pow(Math.sqrt(2.5) * tm_index, 4), cm: (h1 + h2 + h3 + w_final) / 4 }; 
+    }
+
     function executeQuarticInversion(target_tm, h2, h3, biasFactor = 1.0) {
         let convergence_price = 0.01; let minimum_residual = Infinity; let exploration_limit = Math.max(h3 * 8, 160000.0); let total_steps = 25000; let allocation_step = exploration_limit / total_steps;
         for (let idx = 0; idx <= total_steps; idx++) {
@@ -169,6 +177,7 @@
         }
         return convergence_price;
     }
+    
     function toggleTrajectoryGraphVisibility() { document.getElementById("trajectoryChartWrapper").style.display = document.getElementById("graphToggle").checked ? "flex" : "none"; }
     function switchActiveHorizon(selectedHorizon) { STRATEGIC_ACTIVE_HORIZON = selectedHorizon; document.querySelectorAll('.horizon-btn').forEach(btn => btn.classList.remove('active')); document.getElementById(`btn_${selectedHorizon}`).classList.add('active'); runSebraSystemEngine(); }
     function executeManualPayloadSubmit() {
@@ -181,20 +190,24 @@
         selectMenu.innerHTML = ""; Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).forEach(symbol => { let newOption = document.createElement("option"); newOption.value = symbol; newOption.text = symbol; selectMenu.add(newOption); });
         if (selectMenu.options.length > 0) { selectMenu.value = Array.from(selectMenu.options).some(opt => opt.value === previousSelection) ? previousSelection : selectMenu.options.value; synchronizeSidebarControls(); }
     }
+
     function executeTickerProvisioning() {
         let sym = document.getElementById("addSymbol").value.toUpperCase().trim(); let spot = parseFloat(document.getElementById("addSpot").value) || 10.0; let macro = parseFloat(document.getElementById("addMacro").value) || 10.0; let news = document.getElementById("addNews").value.trim(); if (!sym) return;
         PORTFOLIO_LEDGER_LEDGER[sym] = { volumeShares: 1000, entryCostGBP: spot * 0.70, news: news, weight: 1.20 }; executeManualPayloadSubmit(); document.getElementById("symbolSelect").value = sym; synchronizeSidebarControls();
     }
+
     function synchronizeSidebarControls() {
         const focusSymbol = document.getElementById("symbolSelect").value; if (!focusSymbol || !PORTFOLIO_LEDGER_LEDGER[focusSymbol]) return;
         let meta = PORTFOLIO_LEDGER_LEDGER[focusSymbol]; document.getElementById("sharesInput").value = meta.volumeShares; document.getElementById("costInput").value = meta.entryCostGBP.toFixed(2);
         runSebraSystemEngine();
     }
+
     function executeInteractiveParametersUpdate() {
         const focusSymbol = document.getElementById("symbolSelect").value; if (!focusSymbol || !PORTFOLIO_LEDGER_LEDGER[focusSymbol]) return;
         PORTFOLIO_LEDGER_LEDGER[focusSymbol].volumeShares = parseFloat(document.getElementById("sharesInput").value) || 0; PORTFOLIO_LEDGER_LEDGER[focusSymbol].entryCostGBP = parseFloat(document.getElementById("costInput").value) || 0.01;
         runSebraSystemEngine();
     }
+
     function executeResetToFactoryParity() {
         PORTFOLIO_LEDGER_LEDGER = { "LAES": { volumeShares: 1000, entryCostGBP: 2.50, news: "SEALSQ H1 revenue expands +115% with a structural $495M asset floor layer.", weight: 1.45 }, "SPCX": { volumeShares: 500,  entryCostGBP: 120.00, news: "SpaceX post-IPO float guidelines secure massive institutional infills.", weight: 1.22 }, "TSLA": { volumeShares: 100,  entryCostGBP: 350.00, news: "Tesla pushes updated enterprise FSD Beta neural telemetry arrays.", weight: 1.05 }, "NVDA": { volumeShares: 200,  entryCostGBP: 110.00, news: "NVIDIA AI accelerator tranches scale past heavy resistance ceilings.", weight: 1.35 } };
         executeManualPayloadSubmit();
@@ -203,13 +216,17 @@
         const svg = document.getElementById("svgGraphViewport"); if (!svg) return; svg.innerHTML = ""; const coordinates = [{ x: 50, y: activePrice, lbl: "Spot" }, { x: 140, y: p3m, lbl: "3M Proj" }, { x: 230, y: p6m, lbl: "6M Proj" }, { x: 320, y: p12m, lbl: "12M Proj" }]; const prices = [activePrice, p3m, p6m, p12m]; const maxPrice = Math.max(...prices) * 1.08; const minPrice = Math.min(...prices) * 0.92; const priceRange = maxPrice - minPrice || 1.0; let pathD = ""; coordinates.forEach((pt, i) => { let scaledY = 180 - ((pt.y - minPrice) / priceRange) * 150; pt.scaledX = pt.x; pt.scaledY = scaledY; pathD += (i === 0) ? `M ${pt.scaledX} ${pt.scaledY}` : ` L ${pt.scaledX} ${pt.scaledY}`; }); let pathElement = document.createElementNS("http://w3.org", "path"); pathElement.setAttribute("d", pathD); pathElement.setAttribute("stroke", "#38BDF8"); pathElement.setAttribute("stroke-width", "3"); pathElement.setAttribute("fill", "none"); svg.appendChild(pathElement);
         coordinates.forEach(pt => { let circle = document.createElementNS("http://w3.org", "circle"); circle.setAttribute("cx", pt.scaledX); circle.setAttribute("cy", pt.scaledY); circle.setAttribute("r", "5"); circle.setAttribute("fill", "#FFF"); svg.appendChild(circle); let txt = document.createElementNS("http://w3.org", "text"); txt.setAttribute("x", pt.scaledX - 20); txt.setAttribute("y", pt.scaledY - 12); txt.setAttribute("fill", "#64748B"); txt.setAttribute("font-size", "10px"); txt.textContent = `${pt.lbl}: $${pt.y.toFixed(2)}`; svg.appendChild(txt); });
     }
+
     function calculateSchrodingerWavefunction(v4Metric) {
         const gridPoints = 50; let psi = new Array(gridPoints).fill(0), probabilityDensity = new Array(gridPoints).fill(0); let localizedEnergyPotential = Math.max(100.0 - (Math.log10(v4Metric + 1) * 15), 5.0), totalNormalizedWeight = 0; for (let i = 0; i < gridPoints; i++) { let wavePhase = (Math.PI * i) / (gridPoints - 1), rawPsiAmplitude = Math.sin(wavePhase), edgeDecayFactor = Math.exp(-i * (localizedEnergyPotential / 400)) * Math.sin(quantumGlobalTimePhase * 0.05); psi[i] = rawPsiAmplitude * (1.0 + edgeDecayFactor * 0.15); probabilityDensity[i] = Math.pow(psi[i], 2); totalNormalizedWeight += probabilityDensity[i]; }
         if (totalNormalizedWeight > 0) { for (let i = 0; i < gridPoints; i++) { probabilityDensity[i] = probabilityDensity[i] / totalNormalizedWeight; } }
         let waveNumberK = Math.sqrt(Math.max(0.1, localizedEnergyPotential)) * 0.08, barrierThickness2A = 1.25, tunnelingCoefficientT = 1.0 / (1.0 + (Math.pow(localizedEnergyPotential, 2) / 40.0) * Math.pow(Math.sinh(waveNumberK * barrierThickness2A), 2)); return { probabilityArray: probabilityDensity, tunnelingProbability: Math.min(Math.max(tunnelingCoefficientT, 0.0001), 0.9999), eigenEnergyLevel: localizedEnergyPotential * 0.0245 }; 
-        let quantumGlobalTimePhase = 0;
+    }
+
+    let quantumGlobalTimePhase = 0;
     function paintQuantumSwirlVortex(canvasId, magnitude) { const canvas = document.getElementById(canvasId); if (!canvas) return; const ctx = canvas.getContext("2d"); const w = canvas.width = 50, h = canvas.height = 50; ctx.clearRect(0, 0, w, h); let spinSpeed = Math.min(Math.max(magnitude * 0.05, 0.02), 0.35), spiralRadius = Math.min(Math.max(Math.log10(magnitude + 1) * 4, 3.0), 22.0); ctx.save(); ctx.translate(w / 2, h / 2); ctx.rotate(quantumGlobalTimePhase * spinSpeed * 2); ctx.beginPath(); ctx.strokeStyle = "rgba(56, 189, 248, 0.4)"; ctx.lineWidth = 1.2; for (let theta = 0; theta < 30; theta += 0.1) { let r = (spiralRadius / 30) * theta, x = r * Math.cos(theta), y = r * Math.sin(theta); if (theta === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); } ctx.stroke(); ctx.restore(); }
     function animateQuantumDisplayWave(hypervolume) { const canvas = document.getElementById("quantumDisplayCanvas"); if (!canvas) return; const ctx = canvas.getContext("2d"); const w = canvas.width = 100, h = canvas.height = 40; ctx.clearRect(0, 0, w, h); let energyAmplitude = Math.min(Math.max(Math.log10(hypervolume + 1) * 6, 2.0), 18.0); ctx.beginPath(); ctx.strokeStyle = "#38BDF8"; ctx.lineWidth = 1.5; for (let x = 0; x < w; x++) { let y = (h / 2) + Math.sin((x * 0.1) + quantumGlobalTimePhase) * energyAmplitude; if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); } ctx.stroke(); quantumGlobalTimePhase += 0.12; paintQuantumSwirlVortex("swirlCanvas_W", window.activeMetricTracker_W || 1.0); paintQuantumSwirlVortex("swirlCanvas_TM", window.activeMetricTracker_TM || 1.0); paintQuantumSwirlVortex("swirlCanvas_CM", window.activeMetricTracker_CM || 1.0); requestAnimationFrame(() => animateQuantumDisplayWave(window.currentHypervolumeTracker || 1.0)); }
+
     function runSebraSystemEngine() {
         const dropdownFocusSymbol = document.getElementById("symbolSelect").value, activeNewsState = document.getElementById("newsSwitch").checked, gridBodyElement = document.getElementById("ledgerInjectTarget"); if (!dropdownFocusSymbol) return; gridBodyElement.innerHTML = ""; 
         Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).forEach(symbol => { const dataRows = PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol]; if (!dataRows || dataRows.length === 0) return; dataRows.forEach((rowItem) => {
@@ -221,7 +238,24 @@
                 let displayedSpotPriceUSD = rowItem.actualPrice;
                 let displayedSpotPriceGBP = displayedSpotPriceUSD * FX_USDBGB_CONVERSION_RATE;
                 let netPositionValueGBP = (rowItem.prevPrice * FX_USDBGB_CONVERSION_RATE) * rowShares;
-                let rowHTML = `<tr style="${symbol === dropd    const originalSebraSystemEngine = runSebraSystemEngine;
+                let rowHTML = `<tr style="${symbol === dropdownFocusSymbol ? 'background: rgba(56, 189, 248, 0.04); border-left: 3px solid var(--border-active);' : ''}"><td style="font-weight:700; color:#FFF;">⚡ ${symbol}</td><td class="font-mono" style="color:var(--text-muted);">2026-07-15</td><td class="font-mono" style="font-weight:600; color:#FFF;">$${displayedSpotPriceUSD.toFixed(2)} / £${displayedSpotPriceGBP.toFixed(2)}</td><td class="font-mono" style="color:#FFF; font-weight:700; background:rgba(255,255,255,0.02); padding-left:6px;">$${rowItem.prevPrice.toFixed(2)}</td><td class="font-mono" style="color:var(--text-muted); font-style:italic;">$${calculatedModelPriceUSD.toFixed(2)}</td><td class="${variancePercentage >= 0 ? 'pos-delta' : 'neg-delta'}">${variancePercentage >= 0 ? '+' : ''}${variancePercentage.toFixed(2)}%</td><td class="font-mono">${rowShares.toLocaleString()}</td><td class="font-mono">£${rowEntryPriceGBP.toFixed(2)}</td><td class="font-mono" style="font-weight:700; color:#FFF;">£${netPositionValueGBP.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td></tr>`;
+                if (activeNewsState && symbol === dropdownFocusSymbol) { rowHTML += `<tr class="news-injection-row"><td colspan="9" class="news-box-content">📰 [FUNDAMENTAL CATALYST Matrix]: "${rowItem.newsString}"</td></tr>`; } gridBodyElement.innerHTML += rowHTML; }); });
+    }
+
+    const originalSebraSystemEngine = runSebraSystemEngine;
+    runSebraSystemEngine = function() {
+        originalSebraSystemEngine(); const focusSymbol = document.getElementById("symbolSelect").value; if (!focusSymbol || !PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol]) return;
+        const activeNode = PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol], activeNewsState = document.getElementById("newsSwitch").checked;
+        let target_h1 = activeNode.actualPrice, target_h2 = activeNode.computedH2, target_h3 = activeNode.targetH3;
+        let activeGeometries = processSebraGeometryLayers(target_h1, target_h2, target_h3, 1.0), waveQuantumOutputs = calculateSchrodingerWavefunction(activeGeometries.v4);
+        document.getElementById("ledgerTitleAnchor").innerText = `Unified Relational Portfolio Hub :: [💥 Wave Tunneling: ${(waveQuantumOutputs.tunnelingProbability * 100).toFixed(2)}%]`;
+        const volumeCardLabel = document.querySelector(".metric-tile:nth-child(3) label"); if (volumeCardLabel) volumeCardLabel.innerHTML = `Simplex Hyper-Volume (V4) <span style="color:var(--border-active); font-size:9px;">[Ψ-Eigen: ${waveQuantumOutputs.eigenEnergyLevel.toFixed(3)} eV]</span>`;
+        const svgElement = document.getElementById("svgGraphViewport");
+                let rowHTML = `<tr style="${symbol === dropdownFocusSymbol ? 'background: rgba(56, 189, 248, 0.04); border-left: 3px solid var(--border-active);' : ''}"><td style="font-weight:700; color:#FFF;">⚡ ${symbol}</td><td class="font-mono" style="color:var(--text-muted);">2026-07-15</td><td class="font-mono" style="font-weight:600; color:#FFF;">$${displayedSpotPriceUSD.toFixed(2)} / £${displayedSpotPriceGBP.toFixed(2)}</td><td class="font-mono" style="color:#FFF; font-weight:700; background:rgba(255,255,255,0.02); padding-left:6px;">$${rowItem.prevPrice.toFixed(2)}</td><td class="font-mono" style="color:var(--text-muted); font-style:italic;">$${calculatedModelPriceUSD.toFixed(2)}</td><td class="${variancePercentage >= 0 ? 'pos-delta' : 'neg-delta'}">${variancePercentage >= 0 ? '+' : ''}${variancePercentage.toFixed(2)}%</td><td class="font-mono">${rowShares.toLocaleString()}</td><td class="font-mono">£${rowEntryPriceGBP.toFixed(2)}</td><td class="font-mono" style="font-weight:700; color:#FFF;">£${netPositionValueGBP.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td></tr>`;
+                if (activeNewsState && symbol === dropdownFocusSymbol) { rowHTML += `<tr class="news-injection-row"><td colspan="9" class="news-box-content">📰 [FUNDAMENTAL CATALYST Matrix]: "${rowItem.newsString}"</td></tr>`; } gridBodyElement.innerHTML += rowHTML; }); });
+    }
+
+    const originalSebraSystemEngine = runSebraSystemEngine;
     runSebraSystemEngine = function() {
         originalSebraSystemEngine(); const focusSymbol = document.getElementById("symbolSelect").value; if (!focusSymbol || !PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol]) return;
         const activeNode = PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol], activeNewsState = document.getElementById("newsSwitch").checked;
@@ -233,7 +267,15 @@
         if (svgElement && document.getElementById("graphToggle").checked) {
             let pathPointsString = ""; let gridStepsCount = waveQuantumOutputs.probabilityArray.length;
             waveQuantumOutputs.probabilityArray.forEach((probWeight, idx) => { let coordX = 50 + (idx / (gridStepsCount - 1)) * 270, coordY = 190 - (probWeight * 450); pathPointsString += (idx === 0) ? `M ${coordX} ${coordY}` : ` L ${coordX} ${coordY}`; });
-            let quantumWaveLinePath = document.createElementNS("http://w3.org", "path"); quantumWaveLinePath.setAttribute("d", pathPointsString); quantumWaveLinePath.setAttribute("stroke", "rgba(16, 185, 129, 0.65)"); quantumWaveLinePath.setAttribute("stroke-width", "2.0"); quantumWaveLinePath.setAttribute("stroke-dasharray", "4,4"); quantumWaveLinePath.setAttribute("fill", "none"); svgElement.appendChild(quantumWaveLinePath);
+            
+            // W3C CANONICAL NAMESPACE CALIBRATION: Relinked to complete the emerald probability path curves overlay
+            let quantumWaveLinePath = document.createElementNS("http://w3.org", "path"); 
+            quantumWaveLinePath.setAttribute("d", pathPointsString); 
+            quantumWaveLinePath.setAttribute("stroke", "rgba(16, 185, 129, 0.65)"); 
+            quantumWaveLinePath.setAttribute("stroke-width", "2.0"); 
+            quantumWaveLinePath.setAttribute("stroke-dasharray", "4,4"); 
+            quantumWaveLinePath.setAttribute("fill", "none"); 
+            svgElement.appendChild(quantumWaveLinePath);
         }
     };
     setInterval(() => { if(typeof runSebraSystemEngine === 'function' && Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).length > 0) { const sym = document.getElementById("symbolSelect").value; if (sym) runSebraSystemEngine(); } }, 100);
