@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEBRA V39.0 Historical API Module</title>
+    <title>SEBRA V39.5 Production Client</title>
     <style>
         :root {
             --bg-main: #060913;
@@ -17,10 +17,7 @@
             --accent-green: #10B981;
             --accent-warn: #F59E0B;
         }
-        * { 
-            box-sizing: border-box; margin: 0; padding: 0; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace; }
         body { background-color: var(--bg-main); color: var(--text-main); padding: 24px; font-size: 14px; overflow-x: hidden; }
         .system-container { max-width: 1600px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
         .sys-header {
@@ -110,10 +107,10 @@
 <div class="system-container">
     <header class="sys-header">
         <div class="sys-title-block">
-            <div class="sys-title">🌌 SEBRA V39.0 HISTORICAL YAHOO ENGINE</div>
-            <div class="sys-subtitle">AUTOMATED LAST PRICE 6-MONTH RE-ROUTER INTERFACE</div>
+            <div class="sys-title">🌌 SEBRA V39.5 DYNAMIC AUTO-BOOT WORKSPACE</div>
+            <div class="sys-subtitle">SCALE-INVARIANT TOPOLOGICAL ENVIRONMENT MATRIX</div>
         </div>
-        <div class="sys-badge">DATA ENGINE: YAHOO HISTORY API ARCHITECTURE LOCKED</div>
+        <div class="sys-badge">FX BASIS ANCHOR: GBP/USD @ 0.78 LOCK</div>
     </header>
 
     <div class="filter-deck-card">
@@ -128,12 +125,29 @@
 
     <div class="workspace-grid">
         <div class="control-sidebar">
-            <div class="sidebar-section-title">📋 Automated Input Terminal</div>
+            <div class="sidebar-section-title">📋 Data Ingestion Portal</div>
             <div class="input-group">
-                <label>Background Yahoo Data Feed Proxy Monitor</label>
-                <textarea class="payload-area" id="bulkInputPortal" readonly placeholder="[ SECURE YAHOO HISTORICAL CHANNELS CONNECTED ]"></textarea>
+                <label>Paste Raw CSV Rows Matrix Block Here</label>
+<textarea class="payload-area" id="bulkInputPortal" placeholder="[ READY FOR PORTFOLIO CSV PASTE-OVER ]">Symbol,Date,Spot_Close,Macro_Center
+LAES,2026-07-15,2.75,3.12
+LAES,2026-07-14,2.72,3.15
+LAES,2026-07-13,2.71,3.18
+LAES,2026-06-15,3.15,3.32
+LAES,2025-12-15,4.11,3.85
+SPCX,2026-07-15,137.60,168.40
+SPCX,2026-07-14,145.30,169.10
+TSLA,2026-07-15,396.77,412.50
+TSLA,2026-07-13,394.76,414.10
+NVDA,2026-07-15,134.93,148.20
+NVDA,2026-07-13,130.04,149.50
+PLTR,2026-07-15,41.80,45.10
+AAPL,2026-07-15,182.50,191.40
+MSFT,2026-07-15,420.10,438.50
+AMD,2026-07-15,168.40,179.20
+COIN,2026-07-15,224.60,248.10
+BTC,2026-07-15,64250.00,61200.00</textarea>
             </div>
-            <button class="submit-btn" onclick="executeManualPayloadSubmit()">Query Yahoo Endpoints</button>
+            <button class="submit-btn" onclick="executeManualPayloadSubmit()">Submit Overwrite Data</button>
 
             <div class="sidebar-section-title" style="margin-top: 5px;">🔍 Select Active Node</div>
             <div class="input-group">
@@ -229,7 +243,12 @@
         "SPCX": { volumeShares: 500,  entryCostGBP: 120.00, news: "SpaceX consolidates post-IPO structural float floor guidelines.", weight: 1.22 },
         "TSLA": { volumeShares: 100,  entryCostGBP: 350.00, news: "Tesla pushes updated full FSD Beta telemetry across enterprise frames.", weight: 1.05 },
         "NVDA": { volumeShares: 200,  entryCostGBP: 110.00, news: "NVIDIA accelerators scale ahead of crucial upcoming Q2 earnings print.", weight: 1.35 },
-        "BTC":  { volumeShares: 0.8,  entryCostGBP: 52000.00, news: "Bitcoin network difficulty maps absolute structural network hash breakouts.", weight: 1.40 }
+        "PLTR": { volumeShares: 1500, entryCostGBP: 28.00, news: "Palantir integrates enterprise AIP contracts across federal infrastructure grids.", weight: 1.18 },
+        "AAPL": { volumeShares: 250,  entryCostGBP: 170.00, news: "Apple isolates decentralized silicon architectural components locally.", weight: 1.08 },
+        "MSFT": { volumeShares: 120,  entryCostGBP: 400.00, news: "Microsoft deploys custom cloud models to decrease operational latency.", weight: 1.12 },
+        "AMD":  { volumeShares: 300,  entryCostGBP: 150.00, news: "AMD captures localized server processing market shares past macro walls.", weight: 1.15 },
+        "COIN": { volumeShares: 80,   entryCostGBP: 210.00, news: "Coinbase clearing tranches expand cleanly following digital liquidity inflows.", weight: 1.25 },
+        "BTC":  { volumeShares: 0.8,   entryCostGBP: 52000.00, news: "Bitcoin network difficulty maps absolute structural network hash breakouts.", weight: 1.40 }
     };
 
     function processSebraGeometryLayers(h1, h2, h3, biasFactor = 1.0) {
@@ -268,73 +287,50 @@
         runSebraSystemEngine();
     }
 
-    // UPDATED SLOT: Queries ://yahoo.com asset history datasets asynchronously via query1 framework
-    async function executeManualPayloadSubmit() {
+    function executeManualPayloadSubmit() {
+        const textPayload = document.getElementById("bulkInputPortal").value;
         const selectMenu = document.getElementById("symbolSelect");
-        const inputPortal = document.getElementById("bulkInputPortal");
-        const targetTickers = Object.keys(PORTFOLIO_LEDGER_LEDGER);
+        const lines = textPayload.trim().split('\n');
+        if (lines.length <= 1) return;
         
         const previousSelection = selectMenu.value;
         PAYLOAD_SNAPSHOT_MATRIX_POOL = {};
-        inputPortal.placeholder = "[ INTERROGATING YAHOO HISTORICAL DATABASES... ]";
 
-        try {
-            for (let symbol of targetTickers) {
-                let lastClosingPriceUSD = 0;
-                let rollingSixMonthAverageUSD = 0;
-                
-                if (symbol === "BTC") {
-                    const response = await fetch("https://coingecko.com");
-                    const data = await response.json();
-                    lastClosingPriceUSD = parseFloat(data.bitcoin.usd);
-                    rollingSixMonthAverageUSD = lastClosingPriceUSD * 0.9525; 
-                } else {
-                    // Targets 6m historical array directly to draw trailing closes and isolate the true backward average
-                    const response = await fetch(`https://corsproxy.io{symbol}?range=6m&interval=1d`);
-                    const data = await response.json();
-                    const chartResult = data.chart.result[0];
-                    
-                    lastClosingPriceUSD = parseFloat(chartResult.meta.regularMarketPrice);
-                    
-                    const historicalCloses = chartResult.indicators.quote[0].close;
-                    const cleanCloses = historicalCloses.filter(val => val !== null && val !== undefined);
-                    rollingSixMonthAverageUSD = cleanCloses.reduce((sum, val) => sum + val, 0) / cleanCloses.length;
-                }
+        for (let i = 1; i < lines.length; i++) {
+            let cleanLine = lines[i].replace(/[\r\n]+/g, '').trim();
+            let row = cleanLine.split(',');
+            if (row.length < 4) continue;
+            
+            let symbol = row.toUpperCase().trim();
+            let chronoDate = row.trim();
+            let spotClose = parseFloat(row);
+            let macroBase = parseFloat(row);
+            
+            if (isNaN(spotClose) || isNaN(macroBase)) continue;
 
-                let currentChronoNode = new Date().toISOString().split('T')[0];
-                let metaLedger = PORTFOLIO_LEDGER_LEDGER[symbol];
+            if (!PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol]) { PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol] = []; }
+            let metaLedger = PORTFOLIO_LEDGER_LEDGER[symbol] || { str: "Custom portfolio tracking matrix row node item.", weight: 1.10 };
 
-                PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol] = [{
-                    timestamp: currentChronoNode,
-                    actualPrice: lastClosingPriceUSD,
-                    targetH3: rollingSixMonthAverageUSD,
-                    newsString: metaLedger.news || "Yahoo history closing index localized.",
-                    weightAlpha: metaLedger.weight || 1.10,
-                    computedH2: lastClosingPriceUSD
-                }];
-            }
-
-            selectMenu.innerHTML = "";
-            Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).forEach(symbol => {
-                let newOption = document.createElement("option");
-                newOption.value = symbol; newOption.text = symbol; selectMenu.add(newOption);
+            PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol].push({
+                timestamp: chronoDate, actualPrice: spotClose, targetH3: macroBase,
+                newsString: metaLedger.news || "Matrix data re-routed successfully.",
+                weightAlpha: metaLedger.weight || 1.10, computedH2: spotClose
             });
+        }
 
-            inputPortal.value = "";
-            inputPortal.placeholder = "[ YAHOO DATA INGESTED — ENVIRONMENT RE-CALCULATED ]";
+        selectMenu.innerHTML = "";
+        Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).forEach(symbol => {
+            let newOption = document.createElement("option"); newOption.value = symbol; newOption.text = symbol; selectMenu.add(newOption);
+        });
 
-            if (selectMenu.options.length > 0) {
-                let checkMatch = Array.from(selectMenu.options).some(opt => opt.value === previousSelection);
-                selectMenu.value = checkMatch ? previousSelection : selectMenu.options[0].value;
-                runSebraSystemEngine();
-            }
-        } catch (apiError) {
-            console.error("Yahoo API Ingestion Failure Exception:", apiError);
-            inputPortal.placeholder = "[ SERVICE OVERFLOW STANDBY — CHECK NETWORK CONFIG ]";
+        if (selectMenu.options.length > 0) {
+            selectMenu.value = Array.from(selectMenu.options).some(o => o.value === previousSelection) ? previousSelection : selectMenu.options[0].value;
+            runSebraSystemEngine();
         }
     }
     function renderDynamicTrajectoryCurve(activePrice, p3m, p6m, p12m) {
         const svg = document.getElementById("svgGraphViewport");
+        if (!svg) return;
         svg.innerHTML = ""; 
         
         const coordinates = [
@@ -370,10 +366,13 @@
             let txt = document.createElementNS("http://w3.org", "text");
             txt.setAttribute("x", pt.scaledX - 15); txt.setAttribute("y", pt.scaledY - 10);
             txt.setAttribute("fill", "#64748B"); txt.setAttribute("font-size", "9px");
-            txt.textContent = `${pt.lbl}: $${pt.y.toFixed(1)}`;
+            txt.textContent = `${pt.lbl}: $${pt.y.toFixed(2)}`;
             svg.appendChild(txt);
         });
     }
+    // ==========================================
+    // PART 12: REAL-TIME QUANTUM WAVE & SWIRL ANIMATION CODE
+    // ==========================================
     let quantumGlobalTimePhase = 0;
     
     function paintQuantumSwirlVortex(canvasId, calculationMagnitude) {
@@ -386,15 +385,20 @@
         let spinSpeed = Math.min(Math.max(calculationMagnitude * 0.05, 0.02), 0.35);
         let spiralRadius = Math.min(Math.max(Math.log10(calculationMagnitude + 1) * 4, 3.0), 22.0);
         
-        ctx.save(); ctx.translate(w / 2, h / 2); ctx.rotate(quantumGlobalTimePhase * spinSpeed * 2);
-        ctx.beginPath(); ctx.strokeStyle = "rgba(56, 189, 248, 0.4)"; ctx.lineWidth = 1.2;
+        ctx.save(); 
+        ctx.translate(w / 2, h / 2); 
+        ctx.rotate(quantumGlobalTimePhase * spinSpeed * 2);
+        ctx.beginPath(); 
+        ctx.strokeStyle = "rgba(56, 189, 248, 0.4)"; 
+        ctx.lineWidth = 1.2;
         
         for (let theta = 0; theta < 30; theta += 0.1) {
             let r = (spiralRadius / 30) * theta;
             let x = r * Math.cos(theta); let y = r * Math.sin(theta);
             if (theta === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
         }
-        ctx.stroke(); ctx.restore();
+        ctx.stroke(); 
+        ctx.restore();
     }
 
     function animateQuantumDisplayWave(hypervolumeMetric) {
@@ -403,9 +407,12 @@
         const ctx = canvas.getContext("2d");
         const w = canvas.width = 100; const h = canvas.height = 40;
         ctx.clearRect(0, 0, w, h);
+        
         let energyAmplitude = Math.min(Math.max(Math.log10(hypervolumeMetric + 1) * 6, 2.0), 18.0);
         
-        ctx.beginPath(); ctx.strokeStyle = "#38BDF8"; ctx.lineWidth = 1.5;
+        ctx.beginPath(); 
+        ctx.strokeStyle = "#38BDF8"; 
+        ctx.lineWidth = 1.5;
         for (let x = 0; x < w; x++) {
             let y = (h / 2) + Math.sin((x * 0.1) + quantumGlobalTimePhase) * energyAmplitude;
             if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
@@ -421,43 +428,12 @@
         requestAnimationFrame(() => animateQuantumDisplayWave(window.currentHypervolumeTracker || 1.0));
     }
 
-    function runSebraSystemEngine() {
-        const dropdownFocusSymbol = document.getElementById("symbolSelect").value;
-        const UniverseFrame = document.getElementById("frameSelect").value;
-        const activeNewsState = document.getElementById("newsSwitch").checked;
-        const manualSandboxValue = parseFloat(document.getElementById("warpPriceInput").value) || 1.0;
-        const gridBodyElement = document.getElementById("ledgerInjectTarget");
-        
-        if (!dropdownFocusSymbol) return;
-        gridBodyElement.innerHTML = ""; 
-        document.getElementById("ledgerTitleAnchor").innerText = `Unified Relational Tensor Hub :: Active Horizon Filter -> [${STRATEGIC_ACTIVE_HORIZON.toUpperCase()}]`;
-
-        Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).forEach(symbol => {
-            const dataRows = PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol];
-            if (!dataRows || dataRows.length === 0) return;
-            
-            dataRows.forEach((rowItem, rowIndex) => {
-                if (STRATEGIC_ACTIVE_HORIZON !== 'current' && rowIndex > 0) return;
-
-                let rowShares = PORTFOLIO_LEDGER_LEDGER[symbol]?.volumeShares || 0;
-                let rowEntryPriceGBP = PORTFOLIO_LEDGER_LEDGER[symbol]?.entryCostGBP || 0;
-                let rowBias = activeNewsState ? (rowItem.weightAlpha || 1.10) : 1.0;
-
-                let eval_h1 = (symbol === dropdownFocusSymbol && UniverseFrame === "FRAME_B" && rowIndex === 0) ? manualSandboxValue : rowItem.actualPrice;
-                let eval_h2 = (symbol === dropdownFocusSymbol && UniverseFrame === "FRAME_B" && rowIndex === 0) ? ((rowItem.computedH2 * 4 + manualSandboxValue) / 5) : rowItem.computedH2;
-                let eval_h3 = rowItem.targetH3;
-
-                let baseMetrics = processSebraGeometryLayers(eval_h1, eval_h2, eval_h3, rowBias);
-                
-                if (symbol === dropdownFocusSymbol && rowIndex === 0) {
-                    document.getElementById("wDisplay").innerText = baseMetrics.w.toFixed(4);
-                    document.getElementById("tmDisplay").innerText = baseMetrics.tm.toFixed(4);
-                    document.getElementById("v4Display").innerText = baseMetrics.v4.toFixed(4);
-                    document.getElementById("cmDisplay").innerText = baseMetrics.cm.toFixed(4);
-                    
-                    window.activeMetricTracker_W = baseMetrics.w;
-                    window.activeMetricTracker_
-
-
-
-        
+    // SYSTEM INITIALIZATION INGESTION TRIGGER
+    window.onload = function() { 
+        executeManualPayloadSubmit(); 
+        toggleTrajectoryGraphVisibility(); 
+        animateQuantumDisplayWave(1.0); 
+    };
+</script>
+</body>
+</html>
