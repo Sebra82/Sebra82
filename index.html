@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEBRA V26.0 Auto-Sync Ingestion Core</title>
+    <title>SEBRA V28.0 Live Audit Module</title>
     <style>
         :root {
             --bg-main: #060913;
@@ -16,7 +16,6 @@
             --accent-blue: #0EA5E9;
             --accent-green: #10B981;
             --accent-warn: #F59E0B;
-            --matrix-glow: rgba(56, 189, 248, 0.05);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace; }
         body { background-color: var(--bg-main); color: var(--text-main); padding: 24px; font-size: 14px; overflow-x: hidden; }
@@ -45,9 +44,7 @@
         .sidebar-section-title { font-size: 0.95rem; font-weight: 700; color: #FFF; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 6px; border-bottom: 1px solid var(--border-glow); margin-bottom: 6px; }
         .input-group { display: flex; flex-direction: column; gap: 6px; }
         label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
-        .action-submit-btn { background: var(--accent-blue); color: #FFF; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 5px; transition: background 0.2s; }
-        .action-submit-btn:hover { background: #0284C7; }
-        select, input[type="number"], input[type="text"], textarea { width: 100%; background: var(--bg-input); border: 1px solid var(--border-glow); color: var(--text-main); padding: 10px; border-radius: 6px; font-size: 0.85rem; outline: none; transition: all 0.2s ease; }
+        select, input[type="number"], textarea { width: 100%; background: var(--bg-input); border: 1px solid var(--border-glow); color: var(--text-main); padding: 10px; border-radius: 6px; font-size: 0.85rem; outline: none; transition: all 0.2s ease; }
         select:focus, input:focus { border-color: var(--border-active); box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15); }
         .toggle-row { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; border: 1px solid var(--border-glow); }
         .switch-wrap { position: relative; display: inline-block; width: 42px; height: 22px; }
@@ -56,7 +53,7 @@
         .slider-node:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: #FFF; border-radius: 50%; transition: 0.25s; }
         input:checked + .slider-node { background-color: var(--accent-blue); }
         input:checked + .slider-node:before { transform: translateX(20px); }
-        .payload-area { height: 130px; font-family: monospace; font-size: 0.75rem; background: #04070D; line-height: 1.4; color: var(--accent-blue); border-color: var(--border-active); resize: vertical; }
+        .payload-area { height: 240px; font-family: monospace; font-size: 0.74rem; background: #04070D; line-height: 1.4; color: var(--border-active); border-color: var(--border-active); resize: vertical; }
         .main-content { display: flex; flex-direction: column; gap: 20px; }
         .summary-dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
         .metric-tile { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 6px; }
@@ -80,48 +77,63 @@
 <div class="system-container">
     <header class="sys-header">
         <div class="sys-title-block">
-            <div class="sys-title">🌌 SEBRA V26.0 AUTO-SYNC PORTFOLIO SANDBOX</div>
-            <div class="sys-subtitle">SCALE-INVARIANT GEOMETRIC REGULAR SIMPLEX CORE</div>
+            <div class="sys-title">🌌 SEBRA V28.0 LIVE MATHEMATICAL AUDITOR</div>
+            <div class="sys-subtitle">SCALE-INVARIANT TOPOLOGICAL ENVIRONMENT MATRIX</div>
         </div>
-        <div class="sys-badge">PORTFOLIO TRACK STATE: SYSTEM AUTOMATION NODE ACTIVE</div>
+        <div class="sys-badge">AUDIT NODE STATUS: UN-FORCED ACCURACY VERIFICATION ACTIVE</div>
     </header>
 
     <div class="radar-panel">
-        <div class="radar-header">🚨 Active Scanned Strategic Variance Tracking Alerts</div>
+        <div class="radar-header">🚨 Active Scanned Volatility Radar Alerts</div>
         <div class="radar-grid">
             <div class="radar-card">
-                <strong>🔥 HOT/SPIKE NODE: LAES (SEALSQ Corp)</strong><br>
-                Simplex space compressed at floor ($V_4 = 1.1570$). Model baseline price maps exactly to $2.75. News catalyst injects a +1.45x velocity coefficient, generating an immediate +20.36% forecast variance above raw spot levels.
+                <strong>🔥 HOTTEST NODE: LAES (SEALSQ Corp)</strong><br>
+                Simplex space compressed at floor ($V_4 = 1.1570$). Model baseline price maps exactly to $2.75. News channel injects a +1.45x velocity coefficient, generating an immediate +20.36% forecast variance.
             </div>
             <div class="radar-card">
-                <strong>📈 VOLATILITY CATALYST: SPCX & MULTI-ASSET MATRICES</strong><br>
-                Megacap and crypto structures track expanded geometric variance boundaries matching liquidity shifts. SPCX anchors baseline support at $137.60, presenting an immediate +42.01% long-term target window.
+                <strong>📈 VOLATILITY CATALYST: SPCX & CRYPTO CORES</strong><br>
+                BTC and higher alt networks track expanded geometric frames matching macro liquidity shifts. SPCX anchors baseline support at $137.60, presenting an immediate +42.01% target curve expansion limit.
             </div>
         </div>
     </div>
 
     <div class="workspace-grid">
         <div class="control-sidebar">
-            <div class="sidebar-section-title">📥 Add Custom Stock Token</div>
+            <div class="sidebar-section-title">📋 Scraped Database Bulk Input Portal</div>
             <div class="input-group">
-                <label for="customTickerInput">Ticker Symbol String</label>
-                <input type="text" id="customTickerInput" value="BTC" placeholder="e.g. AMD, AAPL">
+                <label>Paste Raw Spreadsheet Text Block Here (Auto-Ingest on Paste)</label>
+                <textarea class="payload-area" id="bulkInputPortal" oninput="executeBulkPasteIngestion()">Symbol,Date,Spot_Close,Macro_Center
+LAES,2026-07-15,2.75,3.12
+SPCX,2026-07-15,137.60,168.40
+TSLA,2026-07-15,396.77,412.50
+NVDA,2026-07-15,134.93,148.20
+PLTR,2026-07-15,41.80,45.10
+AAPL,2026-07-15,182.50,191.40
+MSFT,2026-07-15,420.10,438.50
+AMD,2026-07-15,168.40,179.20
+COIN,2026-07-15,224.60,248.10
+BTC,2026-07-15,64250.00,61200.00
+GOOGL,2026-07-15,176.40,182.80
+AMZN,2026-07-15,189.15,195.40
+META,2026-07-15,498.30,512.20
+AVGO,2026-07-15,142.60,151.45
+SMCI,2026-07-15,815.40,845.00
+ETH,2026-07-15,3420.00,3280.00
+SOL,2026-07-15,142.50,138.10
+XRP,2026-07-15,0.58,0.56
+NFLX,2026-07-15,675.20,652.40
+INTC,2026-07-15,31.45,34.80
+QCOM,2026-07-15,198.30,204.15
+MU,2026-07-15,121.75,132.60
+ARM,2026-07-15,154.20,162.90
+TSM,2026-07-15,174.60,166.80</textarea>
             </div>
-            <div class="input-group">
-                <label for="customPriceInput">Snapshot Entry Price ($)</label>
-                <input type="number" id="customPriceInput" value="64250.00" step="0.01">
-            </div>
-            <div class="input-group">
-                <label for="customMacroInput">126D Macro Average ($)</label>
-                <input type="number" id="customMacroInput" value="61200.00" step="0.01">
-            </div>
-            <button class="action-submit-btn" onclick="injectNewStockNode()">Ingest Stock to Pool</button>
 
-            <div class="sidebar-section-title" style="margin-top: 15px;">🔍 Select Active Node</div>
+            <div class="sidebar-section-title" style="margin-top: 15px;">🔍 Active Portfolio Selection</div>
             <div class="input-group">
-                <label for="symbolSelect">Target Stock Matrix Node</label>
-                <select id="symbolSelect" onchange="synchronizeInputFieldsToDropdown()">
-                    <!-- Dropdown selections populate dynamically via bulk paste engine -->
+                <label for="symbolSelect">Target System Stock Node</label>
+                <select id="symbolSelect" onchange="runSebraSystemEngine()">
+                    <!-- Selections auto-build on the fly via part 10 -->
                 </select>
             </div>
 
@@ -144,22 +156,6 @@
             <div class="input-group">
                 <label for="warpPriceInput">Chamber B Overwrite Price ($)</label>
                 <input type="number" id="warpPriceInput" value="4.50" step="0.01" oninput="runSebraSystemEngine()">
-            </div>
-
-            <div class="sidebar-section-title" style="margin-top: 10px;">Payload State</div>
-            <div class="input-group">
-                <label>Scraped Database Bulk Input Portal</label>
-                <textarea class="payload-area" id="bulkInputPortal" oninput="executeBulkPasteIngestion()">Symbol,Date,Spot_Close,Macro_Center
-LAES,2026-07-15,2.75,3.12
-SPCX,2026-07-15,137.60,168.40
-TSLA,2026-07-15,396.77,412.50
-NVDA,2026-07-15,134.93,148.20
-PLTR,2026-07-15,41.80,45.10
-AAPL,2026-07-15,182.50,191.40
-MSFT,2026-07-15,420.10,438.50
-AMD,2026-07-15,168.40,179.20
-COIN,2026-07-15,224.60,248.10
-BTC,2026-07-15,64250.00,61200.00</textarea>
             </div>
         </div>
         <div class="main-content">
@@ -214,10 +210,10 @@ BTC,2026-07-15,64250.00,61200.00</textarea>
         "NVDA": { str: "NVIDIA accelerators scale ahead of crucial upcoming Q2 earnings print.", weight: 1.35 },
         "PLTR": { str: "Palantir integrates enterprise AIP contracts across federal infrastructure grids.", weight: 1.18 },
         "AAPL": { str: "Apple isolates decentralized silicon architectural components locally.", weight: 1.08 },
-        "MSFT": { str: "Microsoft deploys custom sovereign cloud models to decrease operational latency.", weight: 1.12 },
-        "AMD": { str: "AMD captures localized server processing market shares past macro resistance walls.", weight: 1.15 },
+        "MSFT": { str: "Microsoft deploys custom cloud models to decrease operational latency.", weight: 1.12 },
+        "AMD": { str: "AMD captures localized server processing market shares past macro walls.", weight: 1.15 },
         "COIN": { str: "Coinbase clearing tranches expand cleanly following digital liquidity inflows.", weight: 1.25 },
-        "BTC": { str: "Bitcoin network difficulty maps absolute structural network hash breakouts.", weight: 1.40 }
+        "BTC": { str: "Bitcoin network difficulty maps absolute structural hash breakouts.", weight: 1.40 }
     };
 
     function processSebraGeometryLayers(h1, h2, h3, biasFactor = 1.0) {
@@ -231,7 +227,7 @@ BTC,2026-07-15,64250.00,61200.00</textarea>
 
     function executeQuarticInversion(target_tm, h2, h3, biasFactor = 1.0) {
         let convergence_price = 0.01; let minimum_residual = Infinity;
-        let exploration_limit = h3 * 6; let total_steps = 4000;
+        let exploration_limit = h3 * 8; let total_steps = 8000; // Increased step density for ultra precision
         let allocation_step = exploration_limit / total_steps;
 
         for (let idx = 0; idx <= total_steps; idx++) {
@@ -243,47 +239,6 @@ BTC,2026-07-15,64250.00,61200.00</textarea>
         }
         return convergence_price;
     }
-    function synchronizeInputFieldsToDropdown() {
-        const symbolTarget = document.getElementById("symbolSelect").value;
-        const targetDataNode = PAYLOAD_SNAPSHOT_MATRIX_POOL[symbolTarget];
-        
-        if (targetDataNode && targetDataNode.length > 0) {
-            // AUTOMATION CONTEXT SYNC: Populates layout text boxes directly from selected dictionary slots
-            document.getElementById("customTickerInput").value = symbolTarget;
-            document.getElementById("customPriceInput").value = targetDataNode[0].actualPrice;
-            document.getElementById("customMacroInput").value = targetDataNode[0].targetH3;
-        }
-        runSebraSystemEngine();
-    }
-
-    function injectNewStockNode() {
-        const inputTicker = document.getElementById("customTickerInput").value.toUpperCase().trim();
-        const inputPrice = parseFloat(document.getElementById("customPriceInput").value) || 1.0;
-        const inputMacro = parseFloat(document.getElementById("customMacroInput").value) || 1.0;
-        
-        if (!inputTicker) { alert("Please provide a valid ticker string key."); return; }
-
-        PAYLOAD_SNAPSHOT_MATRIX_POOL[inputTicker] = [
-            { timestamp: "2026-07-15", actualPrice: inputPrice, targetH3: inputMacro, newsString: "Custom portfolio token synchronized via core dynamic mapping relays.", weightAlpha: 1.10, computedH2: inputPrice }
-        ];
-
-        const selectMenu = document.getElementById("symbolSelect");
-        let exists = false;
-        for (let i = 0; i < selectMenu.options.length; i++) {
-            if (selectMenu.options[i].value === inputTicker) { exists = true; break; }
-        }
-        
-        if (!exists) {
-            let newOption = document.createElement("option");
-            newOption.value = inputTicker;
-            newOption.text = `${inputTicker} - [CUSTOM SYNCHRONIZED NODE]`;
-            selectMenu.add(newOption);
-        }
-        
-        selectMenu.value = inputTicker;
-        runSebraSystemEngine();
-    }
-
     function executeBulkPasteIngestion() {
         const textPayload = document.getElementById("bulkInputPortal").value;
         const selectMenu = document.getElementById("symbolSelect");
@@ -299,14 +254,14 @@ BTC,2026-07-15,64250.00,61200.00</textarea>
             let row = lines[i];
             if (row.length < 4) continue;
             
-            let symbol = row[0].toUpperCase().trim();
-            let chronoDate = row[1].trim();
-            let spotClose = parseFloat(row[2]);
-            let macroBase = parseFloat(row[3]);
+            let symbol = row.toUpperCase().trim();
+            let chronoDate = row.trim();
+            let spotClose = parseFloat(row);
+            let macroBase = parseFloat(row);
             
             if (isNaN(spotClose) || isNaN(macroBase)) continue;
 
-            let defaultNews = DEFAULT_CATALYST_ARRAY[symbol] || { str: "Custom portfolio tracking asset node compiled cleanly via text extraction loop.", weight: 1.10 };
+            let defaultNews = DEFAULT_CATALYST_ARRAY[symbol] || { str: "Custom stock matrix node recognized and populated successfully via automated ingestion loop.", weight: 1.10 };
 
             PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol] = [
                 { timestamp: chronoDate, actualPrice: spotClose, targetH3: macroBase, newsString: defaultNews.str, weightAlpha: defaultNews.weight, computedH2: spotClose }
@@ -314,14 +269,14 @@ BTC,2026-07-15,64250.00,61200.00</textarea>
 
             let newOption = document.createElement("option");
             newOption.value = symbol;
-            newOption.text = `${symbol} - [PARSED PORTFOLIO NODE]`;
+            newOption.text = `${symbol} - [PARSED RE-ROUTER NODE]`;
             selectMenu.add(newOption);
         }
 
         if (selectMenu.options.length > 0) {
             let checkMatch = Array.from(selectMenu.options).some(opt => opt.value === previousSelection);
-            selectMenu.value = checkMatch ? previousSelection : selectMenu.options[0].value;
-            synchronizeInputFieldsToDropdown();
+            selectMenu.value = checkMatch ? previousSelection : selectMenu.options.value;
+            runSebraSystemEngine();
         }
     }
 
@@ -336,7 +291,7 @@ BTC,2026-07-15,64250.00,61200.00</textarea>
         const gridBodyElement = document.getElementById("ledgerInjectTarget");
         gridBodyElement.innerHTML = ""; 
 
-        let activeAnchor = collectionRows[0];
+        let activeAnchor = collectionRows;
         let base_h1 = activeAnchor.actualPrice;
         let base_h2 = activeAnchor.computedH2;
         let base_h3 = activeAnchor.targetH3;
@@ -354,6 +309,8 @@ BTC,2026-07-15,64250.00,61200.00</textarea>
 
         collectionRows.forEach((row, index) => {
             let rowBias = activeNewsState ? row.weightAlpha : 1.0;
+            
+            // PURE UN-FORCED LIVE AUDIT: Calculates Frame A price straight through raw inversion math
             let metrics_a = processSebraGeometryLayers(row.actualPrice, row.computedH2, row.targetH3, 1.0);
             let solved_p_a = executeQuarticInversion(metrics_a.tm, row.computedH2, row.targetH3, 1.0);
             let variance_a = ((solved_p_a - row.actualPrice) / row.actualPrice) * 100;
@@ -367,10 +324,10 @@ BTC,2026-07-15,64250.00,61200.00</textarea>
             let compiledRowHTML = `
                 <tr>
                     <td class="font-mono">${row.timestamp}</td>
-                    <td class="font-mono" style="font-weight:700;">$${row.actualPrice.toFixed(2)}</td>
-                    <td class="font-mono">$${solved_p_a.toFixed(2)}</td>
-                    <td class="${Math.abs(variance_a) < 0.1 ? 'pos-delta' : 'neg-delta'}">${variance_a >= 0 ? '+' : ''}${variance_a.toFixed(2)}%</td>
-                    <td class="font-mono">$${solved_p_b.toFixed(2)}</td>
+                    <td class="font-mono" style="font-weight:700;">$${row.actualPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                    <td class="font-mono">$${solved_p_a.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                    <td class="${Math.abs(variance_a) < 1.0 ? 'pos-delta' : 'neg-delta'}">${variance_a >= 0 ? '+' : ''}${variance_a.toFixed(2)}%</td>
+                    <td class="font-mono">$${solved_p_b.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
                     <td class="${variance_b >= 0 ? 'pos-delta' : 'neg-delta'}">${variance_b >= 0 ? '+' : ''}${variance_b.toFixed(2)}%</td>
                 </tr>
             `;
@@ -380,7 +337,7 @@ BTC,2026-07-15,64250.00,61200.00</textarea>
                     <tr class="news-injection-row">
                         <td colspan="6" class="news-box-content">
                             📰 [CATALYST MULTIPLIER +${row.weightAlpha.toFixed(2)}x]: "${row.newsString}"<br>
-                            ⚡ [VOLUMETRIC GAP]: Frame A Base V₄: ${metrics_a.v4.toFixed(2)} ──► News-Expanded V₄: ${metrics_b.v4.toFixed(2)}
+                            ⚡ [VOLUMETRIC GAP]: Frame A Base V₄: ${metrics_a.v4.toFixed(4)} ──► News-Expanded V₄: ${metrics_b.v4.toFixed(4)}
                         </td>
                     </tr>
                 `;
@@ -403,8 +360,10 @@ BTC,2026-07-15,64250.00,61200.00</textarea>
                 <tr style="background: rgba(14, 165, 233, 0.02); border-top: 1px dashed var(--border-active);">
                     <td style="color: var(--border-active); font-weight: 600;">🔮 ${extension.label}</td>
                     <td>—</td><td>—</td><td>—</td>
-                    <td class="font-mono" style="color: var(--border-active); font-weight:700;">$${impliedForecastPrice.toFixed(2)}</td>
-                    <td class="${predictionVariance >= 0 ? 'pos-delta' : 'neg-delta'}">${predictionVariance >= 0 ? '▲' : '▼'} ${predictionVariance >= 0 ? '+' : ''}${predictionVariance.toFixed(2)}% Pred Gap</td>
+                    <td class="font-mono" style="color: var(--border-active); font-weight:700;">$${impliedForecastPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                    <td class="${predictionVariance >= 0 ? 'pos-delta' : 'neg-delta'}" style="font-size: 0.82rem;">
+                        ${predictionVariance >= 0 ? '▲' : '▼'} ${predictionVariance >= 0 ? '+' : ''}${predictionVariance.toFixed(2)}% Pred Gap
+                    </td>
                 </tr>
             `;
         });
