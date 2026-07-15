@@ -207,8 +207,7 @@
         const gridPoints = 50; let psi = new Array(gridPoints).fill(0), probabilityDensity = new Array(gridPoints).fill(0); let localizedEnergyPotential = Math.max(100.0 - (Math.log10(v4Metric + 1) * 15), 5.0), totalNormalizedWeight = 0; for (let i = 0; i < gridPoints; i++) { let wavePhase = (Math.PI * i) / (gridPoints - 1), rawPsiAmplitude = Math.sin(wavePhase), edgeDecayFactor = Math.exp(-i * (localizedEnergyPotential / 400)) * Math.sin(quantumGlobalTimePhase * 0.05); psi[i] = rawPsiAmplitude * (1.0 + edgeDecayFactor * 0.15); probabilityDensity[i] = Math.pow(psi[i], 2); totalNormalizedWeight += probabilityDensity[i]; }
         if (totalNormalizedWeight > 0) { for (let i = 0; i < gridPoints; i++) { probabilityDensity[i] = probabilityDensity[i] / totalNormalizedWeight; } }
         let waveNumberK = Math.sqrt(Math.max(0.1, localizedEnergyPotential)) * 0.08, barrierThickness2A = 1.25, tunnelingCoefficientT = 1.0 / (1.0 + (Math.pow(localizedEnergyPotential, 2) / 40.0) * Math.pow(Math.sinh(waveNumberK * barrierThickness2A), 2)); return { probabilityArray: probabilityDensity, tunnelingProbability: Math.min(Math.max(tunnelingCoefficientT, 0.0001), 0.9999), eigenEnergyLevel: localizedEnergyPotential * 0.0245 }; 
-    }
-       let quantumGlobalTimePhase = 0;
+        let quantumGlobalTimePhase = 0;
     function paintQuantumSwirlVortex(canvasId, magnitude) { const canvas = document.getElementById(canvasId); if (!canvas) return; const ctx = canvas.getContext("2d"); const w = canvas.width = 50, h = canvas.height = 50; ctx.clearRect(0, 0, w, h); let spinSpeed = Math.min(Math.max(magnitude * 0.05, 0.02), 0.35), spiralRadius = Math.min(Math.max(Math.log10(magnitude + 1) * 4, 3.0), 22.0); ctx.save(); ctx.translate(w / 2, h / 2); ctx.rotate(quantumGlobalTimePhase * spinSpeed * 2); ctx.beginPath(); ctx.strokeStyle = "rgba(56, 189, 248, 0.4)"; ctx.lineWidth = 1.2; for (let theta = 0; theta < 30; theta += 0.1) { let r = (spiralRadius / 30) * theta, x = r * Math.cos(theta), y = r * Math.sin(theta); if (theta === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); } ctx.stroke(); ctx.restore(); }
     function animateQuantumDisplayWave(hypervolume) { const canvas = document.getElementById("quantumDisplayCanvas"); if (!canvas) return; const ctx = canvas.getContext("2d"); const w = canvas.width = 100, h = canvas.height = 40; ctx.clearRect(0, 0, w, h); let energyAmplitude = Math.min(Math.max(Math.log10(hypervolume + 1) * 6, 2.0), 18.0); ctx.beginPath(); ctx.strokeStyle = "#38BDF8"; ctx.lineWidth = 1.5; for (let x = 0; x < w; x++) { let y = (h / 2) + Math.sin((x * 0.1) + quantumGlobalTimePhase) * energyAmplitude; if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); } ctx.stroke(); quantumGlobalTimePhase += 0.12; paintQuantumSwirlVortex("swirlCanvas_W", window.activeMetricTracker_W || 1.0); paintQuantumSwirlVortex("swirlCanvas_TM", window.activeMetricTracker_TM || 1.0); paintQuantumSwirlVortex("swirlCanvas_CM", window.activeMetricTracker_CM || 1.0); requestAnimationFrame(() => animateQuantumDisplayWave(window.currentHypervolumeTracker || 1.0)); }
     function runSebraSystemEngine() {
@@ -218,19 +217,11 @@
                 if (symbol === dropdownFocusSymbol) { document.getElementById("wDisplay").innerText = baseMetrics.w.toFixed(4); document.getElementById("tmDisplay").innerText = baseMetrics.tm.toFixed(4); document.getElementById("v4Display").innerText = baseMetrics.v4.toFixed(4); document.getElementById("cmDisplay").innerText = baseMetrics.cm.toFixed(4); window.activeMetricTracker_W = baseMetrics.w; window.activeMetricTracker_TM = baseMetrics.tm; window.activeMetricTracker_CM = baseMetrics.cm; window.currentHypervolumeTracker = baseMetrics.v4; let p3 = executeQuarticInversion(baseMetrics.tm * 1.30, eval_h2, eval_h3, rowBias), p6 = executeQuarticInversion(baseMetrics.tm * 1.45, eval_h2, eval_h3, rowBias), p12 = executeQuarticInversion(baseMetrics.tm * 1.75, eval_h2, eval_h3, rowBias); renderDynamicTrajectoryCurve(eval_h1, p3, p6, p12); }
                 let horizonScalar = 1.0; if (STRATEGIC_ACTIVE_HORIZON === '3m') { horizonScalar = 1.30; } if (STRATEGIC_ACTIVE_HORIZON === '6m') { horizonScalar = 1.45; } if (STRATEGIC_ACTIVE_HORIZON === '12m') { horizonScalar = 1.75; }
                 let calculatedModelPriceUSD = executeQuarticInversion(baseMetrics.tm * horizonScalar, eval_h2, eval_h3, rowBias);
-                
-                // CALIBRATION PATCH: Routes calculation context away from active slider and locks it to the Previous Model column parameters
                 let variancePercentage = ((rowItem.prevPrice - eval_h1) / eval_h1) * 100;
                 let displayedSpotPriceUSD = rowItem.actualPrice;
                 let displayedSpotPriceGBP = displayedSpotPriceUSD * FX_USDBGB_CONVERSION_RATE;
                 let netPositionValueGBP = (rowItem.prevPrice * FX_USDBGB_CONVERSION_RATE) * rowShares;
-
-                let rowHTML = `<tr style="${symbol === dropdownFocusSymbol ? 'background: rgba(56, 189, 248, 0.04); border-left: 3px solid var(--border-active);' : ''}"><td style="font-weight:700; color:#FFF;">⚡ ${symbol}</td><td class="font-mono" style="color:var(--text-muted);">2026-07-15</td><td class="font-mono" style="font-weight:600; color:#FFF;">$${displayedSpotPriceUSD.toFixed(2)} / £${displayedSpotPriceGBP.toFixed(2)}</td><td class="font-mono" style="color:#FFF; font-weight:700; background:rgba(255,255,255,0.02); padding-left:6px;">$${rowItem.prevPrice.toFixed(2)}</td><td class="font-mono" style="color:var(--text-muted); font-style:italic;">$${calculatedModelPriceUSD.toFixed(2)}</td><td class="${variancePercentage >= 0 ? 'pos-delta' : 'neg-delta'}">${variancePercentage >= 0 ? '+' : ''}${variancePercentage.toFixed(2)}%</td><td class="font-mono">${rowShares.toLocaleString()}</td><td class="font-mono">£${rowEntryPriceGBP.toFixed(2)}</td><td class="font-mono" style="font-weight:700; color:#FFF;">£${netPositionValueGBP.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td></tr>`;
-                if (activeNewsState && symbol === dropdownFocusSymbol) { rowHTML += `<tr class="news-injection-row"><td colspan="9" class="news-box-content">📰 [FUNDAMENTAL CATALYST Matrix]: "${rowItem.newsString}"</td></tr>`; } gridBodyElement.innerHTML += rowHTML; }); });
-    }
-
-    }
-    const originalSebraSystemEngine = runSebraSystemEngine;
+                let rowHTML = `<tr style="${symbol === dropd    const originalSebraSystemEngine = runSebraSystemEngine;
     runSebraSystemEngine = function() {
         originalSebraSystemEngine(); const focusSymbol = document.getElementById("symbolSelect").value; if (!focusSymbol || !PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol]) return;
         const activeNode = PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol], activeNewsState = document.getElementById("newsSwitch").checked;
@@ -245,7 +236,7 @@
             let quantumWaveLinePath = document.createElementNS("http://w3.org", "path"); quantumWaveLinePath.setAttribute("d", pathPointsString); quantumWaveLinePath.setAttribute("stroke", "rgba(16, 185, 129, 0.65)"); quantumWaveLinePath.setAttribute("stroke-width", "2.0"); quantumWaveLinePath.setAttribute("stroke-dasharray", "4,4"); quantumWaveLinePath.setAttribute("fill", "none"); svgElement.appendChild(quantumWaveLinePath);
         }
     };
-    setInterval(() => { if(typeof runSebraSystemEngine === 'function' && Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).length > 0){ const sym = document.getElementById("symbolSelect").value; if (sym) runSebraSystemEngine(); } }, 100);
+    setInterval(() => { if(typeof runSebraSystemEngine === 'function' && Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).length > 0) { const sym = document.getElementById("symbolSelect").value; if (sym) runSebraSystemEngine(); } }, 100);
     window.onload = function() { executeManualPayloadSubmit(); toggleTrajectoryGraphVisibility(); animateQuantumDisplayWave(1.0); };
 </script>
 </body>
