@@ -433,6 +433,174 @@ BTC,2026-07-15,64250.00,61200.00</textarea>
         executeManualPayloadSubmit(); 
         toggleTrajectoryGraphVisibility(); 
         animateQuantumDisplayWave(1.0); 
+
+    function toggleTrajectoryGraphVisibility() {
+        const toggleState = document.getElementById("graphToggle").checked;
+        document.getElementById("trajectoryChartWrapper").style.display = toggleState ? "flex" : "none";
+    }
+
+    function switchActiveHorizon(selectedHorizon) {
+        STRATEGIC_ACTIVE_HORIZON = selectedHorizon;
+        document.querySelectorAll('.horizon-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`btn_${selectedHorizon}`).classList.add('active');
+        runSebraSystemEngine();
+    }
+
+    // STATIC OFFLINE PARSER: Processes spreadsheet structures without internet calls
+    function executeManualPayloadSubmit() {
+        const inputPortal = document.getElementById("bulkInputPortal");
+        const textPayload = inputPortal.value;
+        const selectMenu = document.getElementById("symbolSelect");
+        const lines = textPayload.trim().split('\n');
+        if (lines.length <= 1) return;
+        
+        const previousSelection = selectMenu.value;
+        PAYLOAD_SNAPSHOT_MATRIX_POOL = {};
+
+        for (let i = 1; i < lines.length; i++) {
+            let cleanLine = lines[i].replace(/[\r\n]+/g, '').trim();
+            let row = cleanLine.split(',');
+            if (row.length < 4) continue;
+            
+            let symbol = row[0].toUpperCase().trim();
+            let chronoDateStr = row[1].trim();
+            let spotClose = parseFloat(row[2]);
+            let macroBase = parseFloat(row[3]);
+            
+            if (isNaN(spotClose) || isNaN(macroBase)) continue;
+
+            // Retrospective micro-window alignment loop logic
+            let targetNodeDate = new Date(chronoDateStr);
+            let activeHorizonAnchor = new Date("2026-07-15");
+            let chronologicalDistanceDays = (activeHorizonAnchor - targetNodeDate) / (1000 * 60 * 60 * 24);
+            
+            if (chronologicalDistanceDays > 180 || chronologicalDistanceDays < 0) continue;
+
+            if (!PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol]) { PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol] = []; }
+            let metaLedger = PORTFOLIO_LEDGER_LEDGER[symbol] || { str: "Static historical data vector segment added cleanly.", weight: 1.10 };
+
+            PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol].push({
+                timestamp: chronoDateStr, actualPrice: spotClose, targetH3: macroBase,
+                newsString: metaLedger.news || "Offline database token mapped cleanly.",
+                weightAlpha: metaLedger.weight || 1.10, computedH2: spotClose
+            });
+        }
+
+        selectMenu.innerHTML = "";
+        Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).forEach(symbol => {
+            let newOption = document.createElement("option"); newOption.value = symbol; newOption.text = symbol; selectMenu.add(newOption);
+        });
+
+        // Wipes visualization field to guarantee zero interface clutter footprint
+        inputPortal.value = "";
+        inputPortal.placeholder = "[ STREAM LOADED — REDIRECTED TO ENGINE MEMORY ]";
+
+        if (selectMenu.options.length > 0) {
+            let checkMatch = Array.from(selectMenu.options).some(opt => opt.value === previousSelection);
+            selectMenu.value = checkMatch ? previousSelection : selectMenu.options[0].value;
+            runSebraSystemEngine();
+        }
+    }
+    function renderDynamicTrajectoryCurve(activePrice, p3m, p6m, p12m) {
+        const svg = document.getElementById("svgGraphViewport");
+        if (!svg) return;
+        svg.innerHTML = ""; 
+        
+        const coordinates = [
+            { x: 40,  y: activePrice, lbl: "Current" },
+            { x: 140, y: p3m,         lbl: "3 Months" },
+            { x: 240, y: p6m,         lbl: "6 Months" },
+            { x: 340, y: p12m,        lbl: "12 Months" }
+        ];
+
+        const prices = [activePrice, p3m, p6m, p12m];
+        const maxPrice = Math.max(...prices) * 1.1;
+        const minPrice = Math.min(...prices) * 0.9;
+        const priceRange = maxPrice - minPrice || 1.0;
+
+        let pathD = "";
+        coordinates.forEach((pt, i) => {
+            let scaledY = 140 - ((pt.y - minPrice) / priceRange) * 110;
+            pt.scaledX = pt.x; pt.scaledY = scaledY;
+            pathD += (i === 0) ? `M ${pt.scaledX} ${pt.scaledY}` : ` L ${pt.scaledX} ${pt.scaledY}`;
+        });
+
+        let pathElement = document.createElementNS("http://w3.org", "path");
+        pathElement.setAttribute("d", pathD); pathElement.setAttribute("stroke", "#38BDF8");
+        pathElement.setAttribute("stroke-width", "2.5"); pathElement.setAttribute("fill", "none");
+        svg.appendChild(pathElement);
+
+        coordinates.forEach(pt => {
+            let circle = document.createElementNS("http://w3.org", "circle");
+            circle.setAttribute("cx", pt.scaledX); circle.setAttribute("cy", pt.scaledY);
+            circle.setAttribute("r", "4"); circle.setAttribute("fill", "#FFF");
+            svg.appendChild(circle);
+
+            let txt = document.createElementNS("http://w3.org", "text");
+            txt.setAttribute("x", pt.scaledX - 15); txt.setAttribute("y", pt.scaledY - 10);
+            txt.setAttribute("fill", "#64748B"); txt.setAttribute("font-size", "9px");
+            txt.textContent = `${pt.lbl}: $${pt.y.toFixed(2)}`;
+            svg.appendChild(txt);
+        });
+    }
+    let quantumGlobalTimePhase = 0;
+    
+    function paintQuantumSwirlVortex(canvasId, calculationMagnitude) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        const w = canvas.width = 50; const h = canvas.height = 50;
+        ctx.clearRect(0, 0, w, h);
+        
+        let spinSpeed = Math.min(Math.max(calculationMagnitude * 0.05, 0.02), 0.35);
+        let spiralRadius = Math.min(Math.max(Math.log10(calculationMagnitude + 1) * 4, 3.0), 22.0);
+        
+        ctx.save(); ctx.translate(w / 2, h / 2); ctx.rotate(quantumGlobalTimePhase * spinSpeed * 2);
+        ctx.beginPath(); ctx.strokeStyle = "rgba(56, 189, 248, 0.4)"; ctx.lineWidth = 1.2;
+        
+        for (let theta = 0; theta < 30; theta += 0.1) {
+            let r = (spiralRadius / 30) * theta;
+            let x = r * Math.cos(theta); let y = r * Math.sin(theta);
+            if (theta === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke(); ctx.restore();
+    }
+
+    function animateQuantumDisplayWave(hypervolumeMetric) {
+        const canvas = document.getElementById("quantumDisplayCanvas");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        const w = canvas.width = 100; const h = canvas.height = 40;
+        ctx.clearRect(0, 0, w, h);
+        let energyAmplitude = Math.min(Math.max(Math.log10(hypervolumeMetric + 1) * 6, 2.0), 18.0);
+        
+        ctx.beginPath(); ctx.strokeStyle = "#38BDF8"; ctx.lineWidth = 1.5;
+        for (let x = 0; x < w; x++) {
+            let y = (h / 2) + Math.sin((x * 0.1) + quantumGlobalTimePhase) * energyAmplitude;
+            if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        
+        quantumGlobalTimePhase += 0.12;
+        
+        paintQuantumSwirlVortex("swirlCanvas_W", window.activeMetricTracker_W || 1.0);
+        paintQuantumSwirlVortex("swirlCanvas_TM", window.activeMetricTracker_TM || 1.0);
+        paintQuantumSwirlVortex("swirlCanvas_CM", window.activeMetricTracker_CM || 1.0);
+        
+        requestAnimationFrame(() => animateQuantumDisplayWave(window.currentHypervolumeTracker || 1.0));
+    }
+
+    // INTERFACE STARTUP TRIGGERS
+    window.onload = function() { 
+        executeManualPayloadSubmit(); 
+        toggleTrajectoryGraphVisibility(); 
+        animateQuantumDisplayWave(1.0); 
+    };
+</script>
+</body>
+</html>
+
+        
     };
 </script>
 </body>
