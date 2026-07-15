@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEBRA V40.1 Static Historical Matrix Suite</title>
+    <title>SEBRA V41.0 Production Calibrator Core</title>
     <style>
         :root {
             --bg-main: #060913;
@@ -17,30 +17,55 @@
             --accent-green: #10B981;
             --accent-warn: #F59E0B;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        }
         body { background-color: var(--bg-main); color: var(--text-main); padding: 24px; font-size: 14px; overflow-x: hidden; }
         .system-container { max-width: 1600px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
         .sys-header {
             background: linear-gradient(135deg, #091020 0%, #050A14 100%);
-            border: 1px solid var(--border-glow); border-radius: 12px; padding: 16px 24px;
-            display: flex; justify-content: space-between; align-items: center; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            border: 1px solid var(--border-glow); 
+            border-radius: 12px; 
+            padding: 16px 24px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
         }
         .sys-title-block { display: flex; flex-direction: column; gap: 4px; }
         .sys-title { font-size: 1.3rem; font-weight: 800; letter-spacing: 1.5px; color: #FFF; }
         .sys-subtitle { font-size: 0.78rem; color: var(--text-muted); font-family: monospace; }
         .sys-badge { font-family: monospace; font-size: 0.78rem; color: var(--accent-green); background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); padding: 6px 12px; border-radius: 6px; }
         .filter-deck-card {
-            background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 10px; padding: 12px 20px;
-            display: flex; justify-content: space-between; align-items: center; gap: 16px;
+            background: var(--bg-card); 
+            border: 1px solid var(--border-glow); 
+            border-radius: 10px; 
+            padding: 12px 20px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            gap: 16px;
         }
         .horizon-buttons-group { display: flex; gap: 8px; }
         .horizon-btn {
-            background: var(--bg-input); border: 1px solid var(--border-glow); color: var(--text-muted);
-            padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700;
-            text-transform: uppercase; transition: all 0.2s ease;
+            background: var(--bg-input); 
+            border: 1px solid var(--border-glow); 
+            color: var(--text-muted);
+            padding: 8px 16px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 0.8rem;
+            font-weight: 700; 
+            text-transform: uppercase; 
+            transition: all 0.2s ease;
         }
         .horizon-btn.active {
-            background: var(--accent-blue); color: #FFF; border-color: var(--border-active);
+            background: var(--accent-blue); 
+            color: #FFF; 
+            border-color: var(--border-active);
             box-shadow: 0 0 12px rgba(14, 165, 233, 0.4);
         }
         .workspace-grid { display: grid; grid-template-columns: 320px 1fr; gap: 16px; align-items: start; }
@@ -61,7 +86,7 @@
         input:checked + .slider-node { background-color: var(--accent-blue); }
         input:checked + .slider-node:before { transform: translateX(16px); }
         
-        .payload-area { height: 100px; font-family: monospace; font-size: 0.72rem; background: #04070D; color: var(--accent-green); border-color: var(--border-glow); resize: none; text-align: center; font-weight: bold; }
+        .payload-area { height: 140px; font-family: monospace; font-size: 0.7rem; background: #04070D; color: var(--border-active); border: 1px solid var(--border-glow); resize: vertical; text-align: left; }
         .chart-card-wrapper { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 10px; padding: 16px; display: none; flex-direction: column; gap: 10px; box-shadow: 0 4px 24px rgba(0,0,0,0.2); }
         .chart-svg-viewport { width: 100%; height: 160px; background: #050914; border: 1px solid var(--border-glow); border-radius: 6px; }
         .main-content { display: flex; flex-direction: column; gap: 16px; }
@@ -90,10 +115,10 @@
 <div class="system-container">
     <header class="sys-header">
         <div class="sys-title-block">
-            <div class="sys-title">🌌 SEBRA V40.1 DECOUPLED MATRIX WORKSPACE</div>
-            <div class="sys-subtitle">AUTOMATED BACKWARD CHRONO INGESTION CORE</div>
+            <div class="sys-title">🌌 SEBRA V41.0 UN-TRUNCATED DEPLOYMENT BASE</div>
+            <div class="sys-subtitle">DECOUPLED SCHRÖDINGER MULTI-HORIZON VALIDATOR WORKBENCH</div>
         </div>
-        <div class="sys-badge">DATA ENGINE STATUS: STATIC OFFLINE PARSER LOCKED</div>
+        <div class="sys-badge">DATA FEED BASIS: HISTORICAL SYNC ACTIVE</div>
     </header>
 
     <div class="filter-deck-card">
@@ -108,10 +133,10 @@
 
     <div class="workspace-grid">
         <div class="control-sidebar">
-            <div class="sidebar-section-title">📋 Automated Input Terminal</div>
+            <div class="sidebar-section-title">📋 Offline Spreadsheet Portal</div>
             <div class="input-group">
-                <label>Paste Over Historical CSV Dataset Here</label>
-                <textarea class="payload-area" id="bulkInputPortal" placeholder="[ READY FOR PORTFOLIO CSV PASTE-OVER ]">Symbol,Date,Spot_Close,Macro_Center
+                <label>Paste Over Historical CSV Spreadsheet Matrix Block Here</label>
+                <textarea class="payload-area" id="bulkInputPortal" oninput="executeManualPayloadSubmit()">Symbol,Date,Spot_Close,Macro_Center
 LAES,2026-07-15,2.75,3.12
 LAES,2026-07-14,2.72,3.15
 LAES,2026-07-13,2.71,3.18
@@ -126,7 +151,41 @@ NVDA,2026-07-13,130.04,149.50
 PLTR,2026-07-15,41.80,45.10
 AAPL,2026-07-15,182.50,191.40
 MSFT,2026-07-15,420.10,438.50
-AMD,2026-07-15,168.40,179.20        <div class="main-content">
+AMD,2026-07-15,168.40,179.20
+COIN,2026-07-15,224.60,248.10
+BTC,2026-07-15,64250.00,61200.00</textarea>
+            </div>
+            <button class="submit-btn" onclick="executeManualPayloadSubmit()">Overwrite & Recalculate</button>
+
+            <div class="sidebar-section-title" style="margin-top: 5px;">🔍 Select Active Node</div>
+            <div class="input-group">
+                <label for="symbolSelect">Dropdown Focus Ticker</label>
+                <select id="symbolSelect" onchange="runSebraSystemEngine()"></select>
+            </div>
+            <div class="input-group">
+                <label for="frameSelect">Universe Space Frame</label>
+                <select id="frameSelect" onchange="runSebraSystemEngine()">
+                    <option value="FRAME_A">Frame A: Snapshot Core Base</option>
+                    <option value="FRAME_B">Frame B: Warp Sandbox Chamber</option>
+                </select>
+            </div>
+            <div class="toggle-row">
+                <label style="margin: 0;">Trajectory Graph View</label>
+                <label class="switch-wrap">
+                    <input type="checkbox" id="graphToggle" checked onchange="toggleTrajectoryGraphVisibility()"><span class="slider-node"></span></label>
+            </div>
+            <div class="toggle-row">
+                <label style="margin: 0;">News Catalysts</label>
+                <label class="switch-wrap">
+                    <input type="checkbox" id="newsSwitch" checked onchange="runSebraSystemEngine()"><span class="slider-node"></span></label>
+            </div>
+            <div class="input-group">
+                <label for="warpPriceInput">Chamber B Overwrite Price ($)</label>
+                <input type="number" id="warpPriceInput" value="4.50" step="0.01" oninput="runSebraSystemEngine()">
+            </div>
+        </div>
+
+        <div class="main-content">
             <div class="chart-card-wrapper" id="trajectoryChartWrapper">
                 <label style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Simplex Core Trajectory Interpolation Wave Curve</label>
                 <svg class="chart-svg-viewport" id="svgGraphViewport"></svg>
@@ -180,7 +239,135 @@ AMD,2026-07-15,168.40,179.20        <div class="main-content">
 </div>
 
 <script>
-    let PAYLOAD_SNAPSHOT_MATRIX_POOL = {};
+<div class="system-container">
+    <header class="sys-header">
+        <div class="sys-title-block">
+            <div class="sys-title">🌌 SEBRA V41.0 UN-TRUNCATED DEPLOYMENT BASE</div>
+            <div class="sys-subtitle">DECOUPLED SCHRÖDINGER MULTI-HORIZON VALIDATOR WORKBENCH</div>
+        </div>
+        <div class="sys-badge">DATA FEED BASIS: HISTORICAL SYNC ACTIVE</div>
+    </header>
+
+    <div class="filter-deck-card">
+        <label style="font-size:0.8rem; font-weight:700; color:#FFF;">Dynamic Horizon Matrix Filtration</label>
+        <div class="horizon-buttons-group">
+            <button class="horizon-btn active" id="btn_current" onclick="switchActiveHorizon('current')">Current Close</button>
+            <button class="horizon-btn" id="btn_3m" onclick="switchActiveHorizon('3m')">3 Months</button>
+            <button class="horizon-btn" id="btn_6m" onclick="switchActiveHorizon('6m')">6 Months</button>
+            <button class="horizon-btn" id="btn_12m" onclick="switchActiveHorizon('12m')">12 Months</button>
+        </div>
+    </div>
+
+    <div class="workspace-grid">
+        <div class="control-sidebar">
+            <div class="sidebar-section-title">📋 Offline Spreadsheet Portal</div>
+            <div class="input-group">
+                <label>Paste Over Historical CSV Spreadsheet Matrix Block Here</label>
+                <textarea class="payload-area" id="bulkInputPortal" oninput="executeManualPayloadSubmit()">Symbol,Date,Spot_Close,Macro_Center
+LAES,2026-07-15,2.75,3.12
+LAES,2026-07-14,2.72,3.15
+LAES,2026-07-13,2.71,3.18
+LAES,2026-06-15,3.15,3.32
+LAES,2025-12-15,4.11,3.85
+SPCX,2026-07-15,137.60,168.40
+SPCX,2026-07-14,145.30,169.10
+TSLA,2026-07-15,396.77,412.50
+TSLA,2026-07-13,394.76,414.10
+NVDA,2026-07-15,134.93,148.20
+NVDA,2026-07-13,130.04,149.50
+PLTR,2026-07-15,41.80,45.10
+AAPL,2026-07-15,182.50,191.40
+MSFT,2026-07-15,420.10,438.50
+AMD,2026-07-15,168.40,179.20
+COIN,2026-07-15,224.60,248.10
+BTC,2026-07-15,64250.00,61200.00</textarea>
+            </div>
+            <button class="submit-btn" onclick="executeManualPayloadSubmit()">Overwrite & Recalculate</button>
+
+            <div class="sidebar-section-title" style="margin-top: 5px;">🔍 Select Active Node</div>
+            <div class="input-group">
+                <label for="symbolSelect">Dropdown Focus Ticker</label>
+                <select id="symbolSelect" onchange="runSebraSystemEngine()"></select>
+            </div>
+            <div class="input-group">
+                <label for="frameSelect">Universe Space Frame</label>
+                <select id="frameSelect" onchange="runSebraSystemEngine()">
+                    <option value="FRAME_A">Frame A: Snapshot Core Base</option>
+                    <option value="FRAME_B">Frame B: Warp Sandbox Chamber</option>
+                </select>
+            </div>
+            <div class="toggle-row">
+                <label style="margin: 0;">Trajectory Graph View</label>
+                <label class="switch-wrap">
+                    <input type="checkbox" id="graphToggle" checked onchange="toggleTrajectoryGraphVisibility()"><span class="slider-node"></span></label>
+            </div>
+            <div class="toggle-row">
+                <label style="margin: 0;">News Catalysts</label>
+                <label class="switch-wrap">
+                    <input type="checkbox" id="newsSwitch" checked onchange="runSebraSystemEngine()"><span class="slider-node"></span></label>
+            </div>
+            <div class="input-group">
+                <label for="warpPriceInput">Chamber B Overwrite Price ($)</label>
+                <input type="number" id="warpPriceInput" value="4.50" step="0.01" oninput="runSebraSystemEngine()">
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="chart-card-wrapper" id="trajectoryChartWrapper">
+                <label style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Simplex Core Trajectory Interpolation Wave Curve</label>
+                <svg class="chart-svg-viewport" id="svgGraphViewport"></svg>
+            </div>
+
+            <div class="summary-dashboard">
+                <div class="metric-tile">
+                    <label>Velocity Vector (W)</label>
+                    <div class="metric-value font-mono" id="wDisplay">0.0000</div>
+                    <canvas class="quantum-swirl-canvas" id="swirlCanvas_W"></canvas>
+                </div>
+                <div class="metric-tile">
+                    <label>Trajectory Index (TM)</label>
+                    <div class="metric-value font-mono" id="tmDisplay" style="color: var(--accent-blue);">0.0000</div>
+                    <canvas class="quantum-swirl-canvas" id="swirlCanvas_TM"></canvas>
+                </div>
+                <div class="metric-tile">
+                    <label>Simplex Hyper-Volume (V4)</label>
+                    <div class="metric-value font-mono" id="v4Display">0.0000</div>
+                    <canvas class="quantum-wave-canvas" id="quantumDisplayCanvas"></canvas>
+                </div>
+                <div class="metric-tile">
+                    <label>Center Matrix Mass (CM)</label>
+                    <div class="metric-value font-mono" id="cmDisplay">0.0000</div>
+                    <canvas class="quantum-swirl-canvas" id="swirlCanvas_CM"></canvas>
+                </div>
+            </div>
+
+            <div class="ledger-container">
+                <div class="ledger-title-bar" id="ledgerTitleAnchor">Comprehensive Portfolio Tensor Matrix Block View</div>
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Symbol Node</th>
+                                <th>Chrono Date</th>
+                                <th>Market Price ($ / £)</th>
+                                <th>Model Price ($)</th>
+                                <th>Active Model Error %</th>
+                                <th>Shares Held</th>
+                                <th>Purchase Cost (£)</th>
+                                <th>Net Position Value (£)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ledgerInjectTarget"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+        let PAYLOAD_SNAPSHOT_MATRIX_POOL = {};
     let STRATEGIC_ACTIVE_HORIZON = 'current'; 
     const FX_USDBGB_CONVERSION_RATE = 0.78;   
 
@@ -191,9 +378,9 @@ AMD,2026-07-15,168.40,179.20        <div class="main-content">
         "NVDA": { volumeShares: 200,  entryCostGBP: 110.00, news: "NVIDIA accelerators scale ahead of crucial upcoming Q2 earnings print.", weight: 1.35 },
         "PLTR": { volumeShares: 1500, entryCostGBP: 28.00, news: "Palantir enterprise AIP contracts across federal infrastructure grids.", weight: 1.18 },
         "AAPL": { volumeShares: 120,  entryCostGBP: 175.00, news: "Apple isolates decentralized silicon architectural components locally.", weight: 1.08 },
-        "MSFT": { volumeShares: 80,   entryCostGBP: 400.00, news: "Microsoft deploys custom cloud models to decrease operational latency.", weight: 1.12 },
-        "AMD":  { volumeShares: 140,  entryCostGBP: 155.00, news: "AMD captures localized server processing market shares past macro walls.", weight: 1.15 },
-        "COIN": { volumeShares: 90,   entryCostGBP: 210.00, news: "Coinbase clearing tranches expand cleanly following digital liquidity inflows.", weight: 1.25 },
+        "MSFT": { volumeShares: 80,   entryCostGBP: 400.00, news: "Microsoft cloud matrices minimize internal tracking latencies.", weight: 1.12 },
+        "AMD":  { volumeShares: 140,  entryCostGBP: 155.00, news: "AMD captures localized server processing market shares past resistance.", weight: 1.15 },
+        "COIN": { volumeShares: 90,   entryCostGBP: 210.00, news: "Coinbase clearing tranches expand following massive volume inflows.", weight: 1.25 },
         "BTC":  { volumeShares: 0.8,   entryCostGBP: 52000.00, news: "Bitcoin network difficulty maps absolute structural network hash breakouts.", weight: 1.40 }
     };
 
@@ -262,22 +449,20 @@ AMD,2026-07-15,168.40,179.20        <div class="main-content">
             if (chronologicalDistanceDays > 180 || chronologicalDistanceDays < 0) continue;
 
             if (!PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol]) { PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol] = []; }
-            let metaLedger = PORTFOLIO_LEDGER_LEDGER[symbol] || { str: "Custom configuration matrix asset row tracking node.", weight: 1.10 };
+            let metaLedger = PORTFOLIO_LEDGER_LEDGER[symbol] || { str: "Static historical data vector node row.", weight: 1.10 };
 
             PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol].push({
                 timestamp: chronoDateStr, actualPrice: spotClose, targetH3: macroBase,
-                newsString: metaLedger.news || "Matrix data re-routed seamlessly.",
+                newsString: metaLedger.news || "Historical file matrix node mapped.",
                 weightAlpha: metaLedger.weight || 1.10, computedH2: spotClose
             });
         }
 
         selectMenu.innerHTML = "";
         Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).forEach(symbol => {
-            let newOption = document.createElement("option"); newOption.value = symbol; newOption.text = symbol; selectMenu.add(newOption);
+            let newOption = document.createElement("option");
+            newOption.value = symbol; newOption.text = symbol; selectMenu.add(newOption);
         });
-
-        inputPortal.value = "";
-        inputPortal.placeholder = "[ INGESTION POOL LOCKED — DECOUPLED LOOP RUNNING ]";
 
         if (selectMenu.options.length > 0) {
             let checkMatch = Array.from(selectMenu.options).some(opt => opt.value === previousSelection);
@@ -327,6 +512,32 @@ AMD,2026-07-15,168.40,179.20        <div class="main-content">
             svg.appendChild(txt);
         });
     }
+    function calculateSchrodingerWavefunction(v4Metric) {
+        const gridPoints = 50; 
+        let psi = new Array(gridPoints).fill(0);
+        let probabilityDensity = new Array(gridPoints).fill(0);
+        let localizedEnergyPotential = Math.max(100.0 - (Math.log10(v4Metric + 1) * 15), 5.0);
+        
+        let totalNormalizedWeight = 0;
+        for (let i = 0; i < gridPoints; i++) {
+            let wavePhase = (Math.PI * i) / (gridPoints - 1);
+            let rawPsiAmplitude = Math.sin(wavePhase);
+            let edgeDecayFactor = Math.exp(-i * (localizedEnergyPotential / 400)) * Math.sin(quantumGlobalTimePhase * 0.05);
+            psi[i] = rawPsiAmplitude * (1.0 + edgeDecayFactor * 0.15);
+            probabilityDensity[i] = Math.pow(psi[i], 2);
+            totalNormalizedWeight += probabilityDensity[i];
+        }
+
+        if (totalNormalizedWeight > 0) {
+            for (let i = 0; i < gridPoints; i++) { probabilityDensity[i] = probabilityDensity[i] / totalNormalizedWeight; }
+        }
+
+        let waveNumberK = Math.sqrt(Math.max(0.1, localizedEnergyPotential)) * 0.08;
+        let barrierThickness2A = 1.25; 
+        let tunnelingCoefficientT = 1.0 / (1.0 + (Math.pow(localizedEnergyPotential, 2) / 40.0) * Math.pow(Math.sinh(waveNumberK * barrierThickness2A), 2));
+
+        return { probabilityArray: probabilityDensity, tunnelingProbability: Math.min(Math.max(tunnelingCoefficientT, 0.0001), 0.9999), eigenEnergyLevel: localizedEnergyPotential * 0.0245 };
+    }
     let quantumGlobalTimePhase = 0;
     
     function paintQuantumSwirlVortex(canvasId, calculationMagnitude) {
@@ -370,6 +581,7 @@ AMD,2026-07-15,168.40,179.20        <div class="main-content">
         paintQuantumSwirlVortex("swirlCanvas_W", window.activeMetricTracker_W || 1.0);
         paintQuantumSwirlVortex("swirlCanvas_TM", window.activeMetricTracker_TM || 1.0);
         paintQuantumSwirlVortex("swirlCanvas_CM", window.activeMetricTracker_CM || 1.0);
+        
         requestAnimationFrame(() => animateQuantumDisplayWave(window.currentHypervolumeTracker || 1.0));
     }
 
@@ -382,7 +594,7 @@ AMD,2026-07-15,168.40,179.20        <div class="main-content">
         
         if (!dropdownFocusSymbol) return;
         gridBodyElement.innerHTML = ""; 
-        document.getElementById("ledgerTitleAnchor").innerText = `Unified Relational Tensor Hub :: Active Horizon Filter -> [${STRATEGIC_ACTIVE_HORIZON.toUpperCase()}]`;
+        document.getElementById("ledgerTitleAnchor").innerText = `Unified Portfolio Ledger View [Horizon: ${STRATEGIC_ACTIVE_HORIZON.toUpperCase()}]`;
 
         Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).forEach(symbol => {
             const dataRows = PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol];
@@ -447,8 +659,7 @@ AMD,2026-07-15,168.40,179.20        <div class="main-content">
                     rowHTML += `
                         <tr class="news-injection-row">
                             <td colspan="8" class="news-box-content">
-                                📰 [${symbol} CATALYST +${rowItem.weightAlpha.toFixed(2)}x]: "${rowItem.newsString}" <br>
-                                ⚡ [VOLUMETRIC REBOUND]: Simplex Space 4D Hyper-Volume: ${baseMetrics.v4.toFixed(4)}
+                                📰 [${symbol} CATALYST +${rowItem.weightAlpha.toFixed(2)}x]: "${rowItem.newsString}"
                             </td>
                         </tr>
                     `;
@@ -457,18 +668,9 @@ AMD,2026-07-15,168.40,179.20        <div class="main-content">
             });
         });
     }
-    window.onload = function() { executeManualPayloadSubmit(); toggleTrajectoryGraphVisibility(); animateQuantumDisplayWave(1.0); };
-
-                    // ==========================================
-    // PART 14: SCHRÖDINGER INTERFACE OVERLAY HOOK & TERMINAL TAGS
-    // ==========================================
-    
-    // OVERRIDE INTERFACE CORE FUNCTION: Injects wavefunction data right into your local runtime engine loops
     const originalSebraSystemEngine = runSebraSystemEngine;
     runSebraSystemEngine = function() {
-        // Execute the baseline ledger mapping sequence first
         originalSebraSystemEngine();
-        
         const focusSymbol = document.getElementById("symbolSelect").value;
         if (!focusSymbol || !PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol]) return;
         
@@ -483,18 +685,13 @@ AMD,2026-07-15,168.40,179.20        <div class="main-content">
         let currentBiasWeight = activeNewsState ? (activeNode.weightAlpha || 1.10) : 1.0;
         
         let activeGeometries = processSebraGeometryLayers(target_h1, target_h2, target_h3, currentBiasWeight);
-        
-        // Solve structural Schrödinger wave metrics out of active simplex hyper-volumes
         let waveQuantumOutputs = calculateSchrodingerWavefunction(activeGeometries.v4);
         
-        // Update interface title anchors to reflect active state collapse diagnostic readings
-        document.getElementById("ledgerTitleAnchor").innerText += ` :: [💥 Ψ COEFF LOCKED: Tunneling Odds ${(waveQuantumOutputs.tunnelingProbability * 100).toFixed(2)}%]`;
+        document.getElementById("ledgerTitleAnchor").innerText += ` :: [💥 Wave Tunneling: ${(waveQuantumOutputs.tunnelingProbability * 100).toFixed(2)}%]`;
         
-        // Dynamically alter layout tile titles to display eigenvalue energy metrics
         const volumeCardLabel = document.querySelector(".metric-tile:nth-child(3) label");
         if (volumeCardLabel) volumeCardLabel.innerHTML = `Simplex Hyper-Volume (V4) <span style="color:var(--border-active); font-size:9px;">[Ψ-Eigen: ${waveQuantumOutputs.eigenEnergyLevel.toFixed(3)} eV]</span>`;
         
-        // Draw the probabilistic wavefunction density path curve onto your SVG chart overlay layer
         const svgElement = document.getElementById("svgGraphViewport");
         if (svgElement && document.getElementById("graphToggle").checked) {
             let pathPointsString = "";
@@ -502,125 +699,28 @@ AMD,2026-07-15,168.40,179.20        <div class="main-content">
             
             waveQuantumOutputs.probabilityArray.forEach((probWeight, idx) => {
                 let coordX = 40 + (idx / (gridStepsCount - 1)) * 300;
-                let coordY = 150 - (probWeight * 280); // Vertically scale probability height peaks
-                pathPointsString += (idx === 0) ? `M ${coordX} ${coordY}` : ` L ${coordX} ${coordY}`;
-            });
-            
-    // ==========================================
-    // PART 14: SCHRÖDINGER INTERFACE OVERLAY HOOK & TERMINAL TAGS
-    // ==========================================
-    
-    // OVERRIDE INTERFACE CORE FUNCTION: Injects wavefunction data right into your local runtime engine loops
-    const originalSebraSystemEngine = runSebraSystemEngine;
-    runSebraSystemEngine = function() {
-        // Execute the baseline ledger mapping sequence first
-        originalSebraSystemEngine();
-        
-        const focusSymbol = document.getElementById("symbolSelect").value;
-        if (!focusSymbol || !PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol]) return;
-        
-        const activeNode = PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol][0];
-        const focusUniverseFrame = document.getElementById("frameSelect").value;
-        const activeNewsState = document.getElementById("newsSwitch").checked;
-        const inputSandboxOverride = parseFloat(document.getElementById("warpPriceInput").value) || 1.0;
-        
-        let target_h1 = (focusUniverseFrame === "FRAME_B") ? inputSandboxOverride : activeNode.actualPrice;
-        let target_h2 = (focusUniverseFrame === "FRAME_B") ? ((activeNode.computedH2 * 4 + inputSandboxOverride) / 5) : activeNode.computedH2;
-        let target_h3 = activeNode.targetH3;
-        let currentBiasWeight = activeNewsState ? (activeNode.weightAlpha || 1.10) : 1.0;
-        
-        let activeGeometries = processSebraGeometryLayers(target_h1, target_h2, target_h3, currentBiasWeight);
-        
-        // Solve structural Schrödinger wave metrics out of active simplex hyper-volumes
-        let waveQuantumOutputs = calculateSchrodingerWavefunction(activeGeometries.v4);
-        
-        // Update interface title anchors to reflect active state collapse diagnostic readings
-        document.getElementById("ledgerTitleAnchor").innerText += ` :: [💥 Ψ COEFF LOCKED: Tunneling Odds ${(waveQuantumOutputs.tunnelingProbability * 100).toFixed(2)}%]`;
-        
-        // Dynamically alter layout tile titles to display eigenvalue energy metrics
-        const volumeCardLabel = document.querySelector(".metric-tile:nth-child(3) label");
-        if (volumeCardLabel) volumeCardLabel.innerHTML = `Simplex Hyper-Volume (V4) <span style="color:var(--border-active); font-size:9px;">[Ψ-Eigen: ${waveQuantumOutputs.eigenEnergyLevel.toFixed(3)} eV]</span>`;
-        
-        // Draw the probabilistic wavefunction density path curve onto your SVG chart overlay layer
-        const svgElement = document.getElementById("svgGraphViewport");
-        if (svgElement && document.getElementById("graphToggle").checked) {
-            let pathPointsString = "";
-            let gridStepsCount = waveQuantumOutputs.probabilityArray.length;
-            
-            waveQuantumOutputs.probabilityArray.forEach((probWeight, idx) => {
-                let coordX = 40 + (idx / (gridStepsCount - 1)) * 300;
-                let coordY = 150 - (probWeight * 280); // Vertically scale probability height peaks
-                pathPointsString += (idx === 0) ? `M ${coordX} ${coordY}` : ` L ${coordX} ${coordY}`;
-            });
-            
-    // ==========================================
-    // PART 14: SCHRÖDINGER INTERFACE OVERLAY HOOK & TERMINAL TAGS
-    // ==========================================
-    
-    // OVERRIDE INTERFACE CORE FUNCTION: Injects wavefunction data right into your local runtime engine loops
-    const originalSebraSystemEngine = runSebraSystemEngine;
-    runSebraSystemEngine = function() {
-        // Execute the baseline ledger mapping sequence first
-        originalSebraSystemEngine();
-        
-        const focusSymbol = document.getElementById("symbolSelect").value;
-        if (!focusSymbol || !PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol]) return;
-        
-        const activeNode = PAYLOAD_SNAPSHOT_MATRIX_POOL[focusSymbol][0];
-        const focusUniverseFrame = document.getElementById("frameSelect").value;
-        const activeNewsState = document.getElementById("newsSwitch").checked;
-        const inputSandboxOverride = parseFloat(document.getElementById("warpPriceInput").value) || 1.0;
-        
-        let target_h1 = (focusUniverseFrame === "FRAME_B") ? inputSandboxOverride : activeNode.actualPrice;
-        let target_h2 = (focusUniverseFrame === "FRAME_B") ? ((activeNode.computedH2 * 4 + inputSandboxOverride) / 5) : activeNode.computedH2;
-        let target_h3 = activeNode.targetH3;
-        let currentBiasWeight = activeNewsState ? (activeNode.weightAlpha || 1.10) : 1.0;
-        
-        let activeGeometries = processSebraGeometryLayers(target_h1, target_h2, target_h3, currentBiasWeight);
-        
-        // Solve structural Schrödinger wave metrics out of active simplex hyper-volumes
-        let waveQuantumOutputs = calculateSchrodingerWavefunction(activeGeometries.v4);
-        
-        // Update interface title anchors to reflect active state collapse diagnostic readings
-        document.getElementById("ledgerTitleAnchor").innerText += ` :: [💥 Ψ COEFF LOCKED: Tunneling Odds ${(waveQuantumOutputs.tunnelingProbability * 100).toFixed(2)}%]`;
-        
-        // Dynamically alter layout tile titles to display eigenvalue energy metrics
-        const volumeCardLabel = document.querySelector(".metric-tile:nth-child(3) label");
-        if (volumeCardLabel) volumeCardLabel.innerHTML = `Simplex Hyper-Volume (V4) <span style="color:var(--border-active); font-size:9px;">[Ψ-Eigen: ${waveQuantumOutputs.eigenEnergyLevel.toFixed(3)} eV]</span>`;
-        
-        // Draw the probabilistic wavefunction density path curve onto your SVG chart overlay layer
-        const svgElement = document.getElementById("svgGraphViewport");
-        if (svgElement && document.getElementById("graphToggle").checked) {
-            let pathPointsString = "";
-            let gridStepsCount = waveQuantumOutputs.probabilityArray.length;
-            
-            waveQuantumOutputs.probabilityArray.forEach((probWeight, idx) => {
-                let coordX = 40 + (idx / (gridStepsCount - 1)) * 300;
-                let coordY = 150 - (probWeight * 280); // Vertically scale probability height peaks
+                let coordY = 150 - (probWeight * 280); 
                 pathPointsString += (idx === 0) ? `M ${coordX} ${coordY}` : ` L ${coordX} ${coordY}`;
             });
             
             let quantumWaveLinePath = document.createElementNS("http://w3.org", "path");
             quantumWaveLinePath.setAttribute("d", pathPointsString);
-            quantumWaveLinePath.setAttribute("stroke", "rgba(16, 185, 129, 0.65)"); // Render probability peaks in high-glow emerald green
+            quantumWaveLinePath.setAttribute("stroke", "rgba(16, 185, 129, 0.65)"); 
             quantumWaveLinePath.setAttribute("stroke-width", "2.0");
-            quantumWaveLinePath.setAttribute("stroke-dasharray", "4,4"); // Use a dashed structure to separate probability clouds from fixed trends
+            quantumWaveLinePath.setAttribute("stroke-dasharray", "4,4"); 
             quantumWaveLinePath.setAttribute("fill", "none");
             svgElement.appendChild(quantumWaveLinePath);
         }
     };
     
-    // Background task re-calibration loop to update oscillator animation phase states
     setInterval(() => {
         if(typeof runSebraSystemEngine === 'function' && Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).length > 0){
-            // Soft refresh the graphics view matrix to drive wave propagation movements smoothly
             const dropdownFocusSymbol = document.getElementById("symbolSelect").value;
             if (dropdownFocusSymbol) runSebraSystemEngine();
         }
     }, 100);
+
+    window.onload = function() { executeManualPayloadSubmit(); toggleTrajectoryGraphVisibility(); animateQuantumDisplayWave(1.0); };
 </script>
 </body>
 </html>
-
-
-                    
