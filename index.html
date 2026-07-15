@@ -154,6 +154,8 @@
 
         let h1 = staticClosePrice, h2 = chronologicalCloses[chronologicalCloses.length - 5] || h1;
         let h3 = chronologicalCloses.reduce((a, b) => a + b, 0) / chronologicalCloses.length;
+        
+        // FIX: Removed internal comma error to avoid layout calculations from breaking
         let macro_w = Math.max(1e-5, Math.abs((h1 - h3) / h3) * h1);
         const tm = Math.pow(h1 * h2 * h3 * macro_w, 1/4);
         
@@ -209,11 +211,13 @@
       });
       document.getElementById('svgGraphContainer').innerHTML = markup + `</svg>`;
     }
+
     function addNewTransactionRow(p = 0, s = 0, trig = true) {
       const container = document.getElementById('transactionRowsContainer'); const row = document.createElement('div'); row.className = 'transaction-row';
       row.innerHTML = `<div class="input-group"><label>Purchase Price</label><input type="number" class="tx-price" value="${p ? p.toFixed(2) : ''}" step="0.01" style="width: 110px;" oninput="executeBlenderRecalculation()"></div><div class="input-group"><label>Shares Volume</label><input type="number" class="tx-shares" value="${s||''}" step="1" style="width: 110px;" oninput="executeBlenderRecalculation()"></div><div style="margin-top: 14px;"><button class="btn-delete" onclick="this.parentElement.parentElement.remove(); executeBlenderRecalculation();">Delete</button></div>`;
       container.appendChild(row); if (trig) executeBlenderRecalculation();
     }
+
     function executeBlenderRecalculation() {
       const pIn = document.getElementsByClassName('tx-price'), sIn = document.getElementsByClassName('tx-shares'); let totalCapital = 0, totalShares = 0;
       for (let i = 0; i < pIn.length; i++) { let p = parseFloat(pIn[i].value) || 0, s = parseFloat(sIn[i].value) || 0; totalCapital += (p * s); totalShares += s; }
@@ -223,17 +227,21 @@
       else { pEl.innerText = `${ret >= 0 ? '+' : '-'}${activeCurrency}${Math.abs(ret).toFixed(2)} (${ret >= 0 ? '+' : ''}${pct.toFixed(2)}%)`; pEl.className = ret >= 0 ? "card-value text-green" : "card-value text-red"; }
       savePortfolioToCache();
     }
+
     function savePortfolioToCache() {
       const sym = document.getElementById('tickerSelect').value, p = Array.from(document.getElementsByClassName('tx-price')).map(el => parseFloat(el.value) || 0), s = Array.from(document.getElementsByClassName('tx-shares')).map(el => parseFloat(el.value) || 0);
       localStorage.setItem(`quant_portfolio_${sym}`, JSON.stringify(p.map((v, i) => ({ price: v, shares: s[i] })))); localStorage.setItem(`quant_active_ticker`, sym);
     }
+
     function loadPortfolioFromCache(sym) {
       const container = document.getElementById('transactionRowsContainer'); container.innerHTML = ""; const cached = localStorage.getItem(`quant_portfolio_${sym}`);
       if (cached) { const payload = JSON.parse(cached); if (payload.length > 0) { payload.forEach(r => addNewTransactionRow(r.price, r.shares, false)); return; } }
       addNewTransactionRow(staticClosePrice * 0.95, 100, false);
     }
+
     function onTickerChange() { const sym = document.getElementById('tickerSelect').value; localStorage.setItem(`quant_active_ticker`, sym); triggerAutonomousTapeSync(sym); loadPortfolioFromCache(sym); }
     function computeTrendEngine() { triggerAutonomousTapeSync(document.getElementById('tickerSelect').value); }
+
     window.addEventListener('DOMContentLoaded', () => {
       const globalActiveCacheTicker = localStorage.getItem(`quant_active_ticker`) || "LAES";
       document.getElementById('tickerSelect').value = globalActiveCacheTicker; loadPortfolioFromCache(globalActiveCacheTicker); triggerAutonomousTapeSync(globalActiveCacheTicker);
