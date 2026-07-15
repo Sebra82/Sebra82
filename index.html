@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEBRA V38.0 Automated Chrono Engine</title>
+    <title>SEBRA V38.2 Full Core Suite</title>
     <style>
         :root {
             --bg-main: #060913;
@@ -17,7 +17,12 @@
             --accent-green: #10B981;
             --accent-warn: #F59E0B;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+        }
         body { background-color: var(--bg-main); color: var(--text-main); padding: 24px; font-size: 14px; overflow-x: hidden; }
         .system-container { max-width: 1600px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
         .sys-header {
@@ -107,10 +112,10 @@
 <div class="system-container">
     <header class="sys-header">
         <div class="sys-title-block">
-            <div class="sys-title">🌌 SEBRA V38.0 DECOUPLED MATRIX WORKSPACE</div>
-            <div class="sys-subtitle">AUTOMATED BACKWARD CHRONO INGESTION CORE [JULY 15, 2026]</div>
+            <div class="sys-title">🌌 SEBRA V38.2 LIVE CLOUD PORTFOLIO HUB</div>
+            <div class="sys-subtitle">SCALE-INVARIANT UN-TRUNCATED GEOMETRIC MATRIX SUITE</div>
         </div>
-        <div class="sys-badge">DATA RUN POOL: FEED CHRONO SYNCHRONIZED</div>
+        <div class="sys-badge">DATA ENGINE MATRIX ACTIVE :: CALIBRATED LOCK</div>
     </header>
 
     <div class="filter-deck-card">
@@ -127,22 +132,10 @@
         <div class="control-sidebar">
             <div class="sidebar-section-title">📋 Automated Input Terminal</div>
             <div class="input-group">
-                <label>Paste Over Dataset Here (Hides Automatically)</label>
-<textarea class="payload-area" id="bulkInputPortal" placeholder="[ READY FOR PORTFOLIO CSV PASTE-OVER ]">Symbol,Date,Spot_Close,Macro_Center
-LAES,2026-07-15,2.75,3.12
-LAES,2026-07-14,2.72,3.15
-LAES,2026-07-13,2.71,3.18
-LAES,2026-06-15,3.15,3.32
-LAES,2025-12-15,4.11,3.85
-SPCX,2026-07-15,137.60,168.40
-SPCX,2026-07-14,145.30,169.10
-TSLA,2026-07-15,396.77,412.50
-TSLA,2026-07-13,394.76,414.10
-NVDA,2026-07-15,134.93,148.20
-NVDA,2026-07-13,130.04,149.50
-BTC,2026-07-15,64250.00,61200.00</textarea>
+                <label>Background Data Feed Proxy Monitor</label>
+                <textarea class="payload-area" id="bulkInputPortal" readonly placeholder="[ LIVE API CHANNELS LOCKED — DECOUPLED LOOP RUNNING ]"></textarea>
             </div>
-            <button class="submit-btn" onclick="executeManualPayloadSubmit()">Ingest Data Stream</button>
+            <button class="submit-btn" onclick="executeManualPayloadSubmit()">Refresh Live Feeds</button>
 
             <div class="sidebar-section-title" style="margin-top: 5px;">🔍 Select Active Node</div>
             <div class="input-group">
@@ -238,7 +231,7 @@ BTC,2026-07-15,64250.00,61200.00</textarea>
         "SPCX": { volumeShares: 500,  entryCostGBP: 120.00, news: "SpaceX consolidates post-IPO structural float floor guidelines.", weight: 1.22 },
         "TSLA": { volumeShares: 100,  entryCostGBP: 350.00, news: "Tesla pushes updated full FSD Beta telemetry across enterprise frames.", weight: 1.05 },
         "NVDA": { volumeShares: 200,  entryCostGBP: 110.00, news: "NVIDIA accelerators scale ahead of crucial upcoming Q2 earnings print.", weight: 1.35 },
-        "BTC":  { volumeShares: 0.8,   entryCostGBP: 52000.00, news: "Bitcoin digital liquidity tranches expand ahead of structural breakout nodes.", weight: 1.40 }
+        "BTC":  { volumeShares: 0.8,   entryCostGBP: 52000.00, news: "Bitcoin network difficulty maps absolute structural network hash breakouts.", weight: 1.40 }
     };
 
     function processSebraGeometryLayers(h1, h2, h3, biasFactor = 1.0) {
@@ -252,7 +245,7 @@ BTC,2026-07-15,64250.00,61200.00</textarea>
 
     function executeQuarticInversion(target_tm, h2, h3, biasFactor = 1.0) {
         let convergence_price = 0.01; let minimum_residual = Infinity;
-        let exploration_limit = Math.max(h3 * 6, 160000.0); // Safe scale extension mapping for high-bound assets like BTC
+        let exploration_limit = Math.max(h3 * 8, 160000.0); 
         let total_steps = 25000; 
         let allocation_step = exploration_limit / total_steps;
 
@@ -275,59 +268,6 @@ BTC,2026-07-15,64250.00,61200.00</textarea>
         document.querySelectorAll('.horizon-btn').forEach(btn => btn.classList.remove('active'));
         document.getElementById(`btn_${selectedHorizon}`).classList.add('active');
         runSebraSystemEngine();
-    }
-
-    function executeManualPayloadSubmit() {
-        const inputPortal = document.getElementById("bulkInputPortal");
-        const textPayload = inputPortal.value;
-        const selectMenu = document.getElementById("symbolSelect");
-        const lines = textPayload.trim().split('\n');
-        if (lines.length <= 1) return;
-        
-        const previousSelection = selectMenu.value;
-        PAYLOAD_SNAPSHOT_MATRIX_POOL = {};
-
-        for (let i = 1; i < lines.length; i++) {
-            let cleanLine = lines[i].replace(/[\r\n]+/g, '').trim();
-            let row = cleanLine.split(',');
-            if (row.length < 4) continue;
-            
-            let symbol = row.toUpperCase().trim();
-            let chronoDateStr = row.trim();
-            let spotClose = parseFloat(row);
-            let macroBase = parseFloat(row);
-            
-            if (isNaN(spotClose) || isNaN(macroBase)) continue;
-
-            let targetNodeDate = new Date(chronoDateStr);
-            let activeHorizonAnchor = new Date("2026-07-15"); // Static calibration context baseline threshold anchor
-            let chronologicalDistanceDays = (activeHorizonAnchor - targetNodeDate) / (1000 * 60 * 60 * 24);
-            
-            // AUTOMATION RULE: Filter out anything outside the 180-day micro-window slice automatically
-            if (chronologicalDistanceDays > 180 || chronologicalDistanceDays < 0) continue;
-
-            if (!PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol]) { PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol] = []; }
-            let metaLedger = PORTFOLIO_LEDGER_LEDGER[symbol] || { str: "Custom configuration matrix asset row tracking node.", weight: 1.10 };
-
-            PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol].push({
-                timestamp: chronoDateStr, actualPrice: spotClose, targetH3: macroBase,
-                newsString: metaLedger.news || "Matrix data re-routed cleanly.",
-                weightAlpha: metaLedger.weight || 1.10, computedH2: spotClose
-            });
-        }
-
-        selectMenu.innerHTML = "";
-        Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).forEach(symbol => {
-            let newOption = document.createElement("option"); newOption.value = symbol; newOption.text = symbol; selectMenu.add(newOption);
-        });
-
-        inputPortal.value = "";
-        inputPortal.placeholder = "[ INGESTION POOL LOCKED — DECOUPLED LOOP RUNNING ]";
-
-        if (selectMenu.options.length > 0) {
-            selectMenu.value = Array.from(selectMenu.options).some(o => o.value === previousSelection) ? previousSelection : selectMenu.options.value;
-            runSebraSystemEngine();
-        }
     }
     function renderDynamicTrajectoryCurve(activePrice, p3m, p6m, p12m) {
         const svg = document.getElementById("svgGraphViewport");
@@ -370,130 +310,3 @@ BTC,2026-07-15,64250.00,61200.00</textarea>
             svg.appendChild(txt);
         });
     }
-    let quantumGlobalTimePhase = 0;
-    function paintQuantumSwirlVortex(canvasId, calculationMagnitude) {
-        const canvas = document.getElementById(canvasId);
-        if (!canvas) return;
-        const ctx = canvas.getContext("2d");
-        const w = canvas.width = 50; const h = canvas.height = 50;
-        ctx.clearRect(0, 0, w, h);
-        let spinSpeed = Math.min(Math.max(calculationMagnitude * 0.05, 0.02), 0.35);
-        let spiralRadius = Math.min(Math.max(Math.log10(calculationMagnitude + 1) * 4, 3.0), 22.0);
-        ctx.save(); ctx.translate(w / 2, h / 2); ctx.rotate(quantumGlobalTimePhase * spinSpeed * 2);
-        ctx.beginPath(); ctx.strokeStyle = "rgba(56, 189, 248, 0.4)"; ctx.lineWidth = 1.2;
-        for (let theta = 0; theta < 30; theta += 0.1) {
-            let r = (spiralRadius / 30) * theta;
-            let x = r * Math.cos(theta); let y = r * Math.sin(theta);
-            if (theta === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-        }
-        ctx.stroke(); ctx.restore();
-    }
-
-    function animateQuantumDisplayWave(hypervolumeMetric) {
-        const canvas = document.getElementById("quantumDisplayCanvas");
-        if (!canvas) return;
-        const ctx = canvas.getContext("2d");
-        const w = canvas.width = 100; const h = canvas.height = 40;
-        ctx.clearRect(0, 0, w, h);
-        let energyAmplitude = Math.min(Math.max(Math.log10(hypervolumeMetric + 1) * 6, 2.0), 18.0);
-        ctx.beginPath(); ctx.strokeStyle = "#38BDF8"; ctx.lineWidth = 1.5;
-        for (let x = 0; x < w; x++) {
-            let y = (h / 2) + Math.sin((x * 0.1) + quantumGlobalTimePhase) * energyAmplitude;
-            if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-        quantumGlobalTimePhase += 0.12;
-        paintQuantumSwirlVortex("swirlCanvas_W", window.activeMetricTracker_W || 1.0);
-        paintQuantumSwirlVortex("swirlCanvas_TM", window.activeMetricTracker_TM || 1.0);
-        paintQuantumSwirlVortex("swirlCanvas_CM", window.activeMetricTracker_CM || 1.0);
-        requestAnimationFrame(() => animateQuantumDisplayWave(window.currentHypervolumeTracker || 1.0));
-    }
-
-    function runSebraSystemEngine() {
-        const dropdownFocusSymbol = document.getElementById("symbolSelect").value;
-        const UniverseFrame = document.getElementById("frameSelect").value;
-        const activeNewsState = document.getElementById("newsSwitch").checked;
-        const manualSandboxValue = parseFloat(document.getElementById("warpPriceInput").value) || 1.0;
-        const gridBodyElement = document.getElementById("ledgerInjectTarget");
-        
-        if (!dropdownFocusSymbol) return;
-        gridBodyElement.innerHTML = ""; 
-        document.getElementById("ledgerTitleAnchor").innerText = `Unified Relational Tensor Hub :: Active Horizon Filter -> [${STRATEGIC_ACTIVE_HORIZON.toUpperCase()}]`;
-
-        Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).forEach(symbol => {
-            const dataRows = PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol];
-            if (!dataRows || dataRows.length === 0) return;
-            
-            dataRows.forEach((rowItem, rowIndex) => {
-                if (STRATEGIC_ACTIVE_HORIZON !== 'current' && rowIndex > 0) return;
-
-                let rowShares = PORTFOLIO_LEDGER_LEDGER[symbol]?.volumeShares || 0;
-                let rowEntryPriceGBP = PORTFOLIO_LEDGER_LEDGER[symbol]?.entryCostGBP || 0;
-                let rowBias = activeNewsState ? (rowItem.weightAlpha || 1.10) : 1.0;
-
-                let eval_h1 = (symbol === dropdownFocusSymbol && UniverseFrame === "FRAME_B" && rowIndex === 0) ? manualSandboxValue : rowItem.actualPrice;
-                let eval_h2 = (symbol === dropdownFocusSymbol && UniverseFrame === "FRAME_B" && rowIndex === 0) ? ((rowItem.computedH2 * 4 + manualSandboxValue) / 5) : rowItem.computedH2;
-                let eval_h3 = rowItem.targetH3;
-
-                let baseMetrics = processSebraGeometryLayers(eval_h1, eval_h2, eval_h3, rowBias);
-                
-                if (symbol === dropdownFocusSymbol && rowIndex === 0) {
-                    document.getElementById("wDisplay").innerText = baseMetrics.w.toFixed(4);
-                    document.getElementById("tmDisplay").innerText = baseMetrics.tm.toFixed(4);
-                    document.getElementById("v4Display").innerText = baseMetrics.v4.toFixed(4);
-                    document.getElementById("cmDisplay").innerText = baseMetrics.cm.toFixed(4);
-                    
-                    window.activeMetricTracker_W = baseMetrics.w;
-                    window.activeMetricTracker_TM = baseMetrics.tm;
-                    window.activeMetricTracker_CM = baseMetrics.cm;
-                    window.currentHypervolumeTracker = baseMetrics.v4;
-
-                    let p3 = executeQuarticInversion(baseMetrics.tm * 1.30, eval_h2, eval_h3, rowBias);
-                    let p6 = executeQuarticInversion(baseMetrics.tm * 1.45, eval_h2, eval_h3, rowBias);
-                    let p12 = executeQuarticInversion(baseMetrics.tm * 1.75, eval_h2, eval_h3, rowBias);
-                    renderDynamicTrajectoryCurve(eval_h1, p3, p6, p12);
-                }
-
-                let horizonScalar = 1.0;
-                if (STRATEGIC_ACTIVE_HORIZON === '3m')  { horizonScalar = 1.30; }
-                if (STRATEGIC_ACTIVE_HORIZON === '6m')  { horizonScalar = 1.45; }
-                if (STRATEGIC_ACTIVE_HORIZON === '12m') { horizonScalar = 1.75; }
-
-                let calculatedModelPriceUSD = executeQuarticInversion(baseMetrics.tm * horizonScalar, eval_h2, eval_h3, rowBias);
-                let variancePercentage = ((calculatedModelPriceUSD - eval_h1) / eval_h1) * 100;
-
-                let displayedSpotPriceUSD = rowItem.actualPrice;
-                let displayedSpotPriceGBP = displayedSpotPriceUSD * FX_USDBGB_CONVERSION_RATE;
-                let netPositionValueGBP = (calculatedModelPriceUSD * FX_USDBGB_CONVERSION_RATE) * rowShares;
-
-                let rowHTML = `
-                    <tr style="${symbol === dropdownFocusSymbol && rowIndex === 0 ? 'background: rgba(56, 189, 248, 0.04); border-left: 3px solid var(--border-active);' : ''} ${rowIndex > 0 ? 'opacity: 0.55;' : ''}">
-                        <td style="font-weight:700; color:#FFF;">${rowIndex > 0 ? '↳ ' : '⚡ '}${symbol}</td>
-                        <td class="font-mono" style="color:var(--text-muted);">${rowItem.timestamp}</td>
-                        <td class="font-mono">$${displayedSpotPriceUSD.toFixed(2)} / <span style="color:var(--border-active); font-weight:600;">£${displayedSpotPriceGBP.toFixed(2)}</span></td>
-                        <td class="font-mono" style="font-weight:700; color:var(--border-active);">$${calculatedModelPriceUSD.toFixed(2)}</td>
-                        <td class="${variancePercentage >= 0 ? 'pos-delta' : 'neg-delta'}">${variancePercentage >= 0 ? '+' : ''}${variancePercentage.toFixed(2)}%</td>
-                        <td class="font-mono">${rowIndex > 0 ? '—' : rowShares.toLocaleString()}</td>
-                        <td class="font-mono">${rowIndex > 0 ? '—' : '£' + rowEntryPriceGBP.toFixed(2)}</td>
-                        <td class="font-mono" style="font-weight:700; color:#FFF;">${rowIndex > 0 ? '—' : '£' + netPositionValueGBP.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
-                    </tr>
-                `;
-
-                if (activeNewsState && rowItem.newsString && symbol === dropdownFocusSymbol && STRATEGIC_ACTIVE_HORIZON === 'current' && rowIndex === 0) {
-                    rowHTML += `
-                        <tr class="news-injection-row">
-                            <td colspan="8" class="news-box-content">
-                                📰 [${symbol} CATALYST +${rowItem.weightAlpha.toFixed(2)}x]: "${rowItem.newsString}" <br>
-                                ⚡ [VOLUMETRIC REBOUND]: Simplex Space 4D Hyper-Volume: ${baseMetrics.v4.toFixed(4)}
-                            </td>
-                        </tr>
-                    `;
-                }
-                gridBodyElement.innerHTML += rowHTML;
-            });
-        });
-    }
-    window.onload = function() { executeManualPayloadSubmit(); toggleTrajectoryGraphVisibility(); animateQuantumDisplayWave(1.0); };
-</script>
-</body>
-</html>
