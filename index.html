@@ -1,92 +1,398 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Prediction Engine</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prediction Engine - Failsafe V18.5</title>
   <style>
-    :root { --bg-main:#060a12;--bg-panel:#0d1527;--border-color:#1e293b;--text-primary:#f8fafc;--text-muted:#64748b;--matrix-purple:#c084fc;--signal-buy:#22c55e;--signal-sell:#ef4444;--accent-blue:#38bdf8; }
-    body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background-color:var(--bg-main);color:var(--text-primary);margin:0;padding:12px; }
-    .app-container { max-width:1250px;margin:0 auto; }
-    header { margin-bottom:12px;border-bottom:1px solid var(--border-color);padding-bottom:8px;display:flex;justify-content:space-between;align-items:center; }
-    h1 { margin:0;font-size:18px;color:#ffffff;font-weight:700;letter-spacing:-0.5px; }
-    .panel-grid-top { display:grid;grid-template-columns:1fr 1.1fr;gap:12px;margin-bottom:12px; }
-    @media (max-width:868px) { .panel-grid-top { grid-template-columns:1fr; } }
-    .control-matrix,.profit-ledger,.data-panel { background-color:var(--bg-panel);border:1px solid var(--border-color);border-radius:8px;padding:12px;box-shadow:0 4px 20px rgba(0,0,0,0.4); }
-    .input-row { display:flex;gap:10px;align-items:center;flex-wrap:wrap; }
-    .input-row-top { border-bottom:1px solid var(--border-color);padding-bottom:10px;margin-bottom:10px; }
-    .input-group { display:flex;flex-direction:column;gap:3px; }
-    label { font-size:9px;font-weight:700;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.5px; }
-    input,select { background-color:var(--bg-main);border:1px solid var(--border-color);color:#ffffff;padding:6px 10px;border-radius:4px;font-size:12px;font-weight:600; }
-    button { background-color:var(--matrix-purple);color:#ffffff;border:none;padding:8px 14px;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:0.5px; }
-    .btn-delete { background-color:#3b0712;padding:4px 8px;font-size:10px;color:#ef4444;border:1px solid #7f1d1d;border-radius:4px;cursor:pointer; }
-    .transaction-row { display:flex;gap:10px;align-items:center;margin-bottom:6px;background:var(--bg-main);padding:6px;border-radius:4px;border:1px solid var(--border-color); }
-    .compact-table { width:100%;border-collapse:collapse;font-size:11px;text-align:left; }
-    .compact-table th { padding:5px 6px;color:var(--text-muted);font-weight:700;text-transform:uppercase;font-size:9px;border-bottom:1px solid var(--border-color); }
-    .compact-table td { padding:6px;border-bottom:1px solid #1e293b;font-weight:500; }
-    .profit-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:8px; }
-    @media (max-width:580px) { .profit-grid { grid-template-columns:repeat(2, 1fr); } }
-    .profit-card { background-color:var(--bg-main);border:1px solid var(--border-color);border-radius:4px;padding:8px;text-align:center; }
-    .ledger-title { font-size:11px;font-weight:700;text-transform:uppercase;color:#fff;margin-bottom:8px;border-bottom:1px solid var(--border-color);padding-bottom:4px;display:flex;justify-content:space-between;align-items:center;letter-spacing:0.5px; }
-    .card-label { font-size:9px;color:var(--text-muted);text-transform:uppercase;font-weight:600;margin-bottom:2px; }
-    .card-value { font-size:14px;font-weight:700; }
-    .badge { padding:2px 5px;border-radius:4px;font-size:9px;font-weight:700;text-transform:uppercase;display:inline-block; }
-    .badge-buy { background-color:#064e3b;color:var(--signal-buy);border:1px solid #047857; }
-    .badge-sell { background-color:#7f1d1d;color:var(--signal-sell);border:1px solid #b91c1c; }
-    .badge-hold { background-color:#1e293b;color:var(--text-muted);border:1px solid #334155; }
-    .graph-container { background:var(--bg-main);border:1px solid var(--border-color);border-radius:6px;padding:4px;position:relative;display:flex;justify-content:center;align-items:center;height:75px; }
-    .interactive-node { cursor:pointer;transition:all 0.15s ease; } .interactive-node:hover { stroke:#ffffff;stroke-width:2px; }
-    .quant-chart-tooltip { position:absolute;display:none;background:rgba(13,21,39,0.95);border:1px solid var(--matrix-purple);border-radius:4px;padding:6px 10px;font-size:10px;font-family:monospace;color:#fff;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,0.6);z-index:100;line-height:1.3; }
-    .highlight-purple { color:var(--matrix-purple); } .highlight-blue { color:var(--accent-blue); }
-    .text-green { color:var(--signal-buy) !important; } .text-red { color:var(--signal-sell) !important; }
+    :root { 
+      --bg-main: #060a12;
+      --bg-panel: #0d1527;
+      --border-color: #1e293b;
+      --text-primary: #f8fafc;
+      --text-muted: #64748b;
+      --matrix-purple: #c084fc;
+      --signal-buy: #22c55e;
+      --signal-sell: #ef4444;
+      --accent-blue: #38bdf8; 
+    }
+    
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      margin: 0;
+      padding: 12px; 
+    }
+    
+    .app-container { 
+      max-width: 1250px;
+      margin: 0 auto; 
+    }
+    
+    header { 
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center; 
+    }
+    
+    header h1 { 
+      margin: 0;
+      font-size: 18px;
+      color: #ffffff;
+      font-weight: 700;
+      letter-spacing: -0.5px; 
+    }
+    
+    header p {
+      margin: 2px 0 0 0;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .panel-grid-top { 
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 12px;
+      margin-bottom: 12px; 
+    }
+    
+    @media (max-width: 868px) { 
+      .panel-grid-top { grid-template-columns: 1fr; } 
+    }
+    
+    .control-matrix, .profit-ledger, .data-panel { 
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4); 
+    }
+    
+    .input-row { 
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap; 
+    }
+    
+    .input-row-top { 
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+      margin-bottom: 10px; 
+    }
+    
+    .input-group { 
+      display: flex;
+      flex-direction: column;
+      gap: 3px; 
+    }
+    
+    label { 
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.5px; 
+    }
+    
+    input, select { 
+      background-color: var(--bg-main);
+      border: 1px solid var(--border-color);
+      color: #ffffff;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600; 
+    }
+    
+    button { 
+      background-color: var(--matrix-purple);
+      color: #ffffff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px; 
+    }
+    
+    .btn-delete { 
+      background-color: #3b0712;
+      padding: 4px 8px;
+      font-size: 10px;
+      color: #ef4444;
+      border: 1px solid #7f1d1d;
+      border-radius: 4px;
+      cursor: pointer; 
+    }
+    
+    .transaction-row { 
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 6px;
+      background: var(--bg-main);
+      padding: 6px;
+      border-radius: 4px;
+      border: 1px solid var(--border-color); 
+    }
+    .compact-table { 
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      text-align: left; 
+    }
+    
+    .compact-table th { 
+      padding: 5px 6px;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 9px;
+      border-bottom: 1px solid var(--border-color); 
+    }
+    
+    .compact-table td { 
+      padding: 6px;
+      border-bottom: 1px solid #1e293b;
+      font-weight: 500; 
+    }
+    
+    .profit-grid { 
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 8px; 
+    }
+    
+    @media (max-width: 580px) { 
+      .profit-grid { grid-template-columns: repeat(2, 1fr); } 
+    }
+    
+    .profit-card { 
+      background-color: var(--bg-main);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 8px;
+      text-align: center; 
+    }
+    
+    .ledger-title { 
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 8px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      letter-spacing: 0.5px; 
+    }
+    
+    .card-label { 
+      font-size: 9px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 2px; 
+    }
+    
+    .card-value { 
+      font-size: 14px;
+      font-weight: 700; 
+    }
+    
+    .badge { 
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      display: inline-block; 
+    }
+    
+    .badge-buy { background-color: #064e3b; color: var(--signal-buy); border: 1px solid #047857; }
+    .badge-sell { background-color: #7f1d1d; color: var(--signal-sell); border: 1px solid #b91c1c; }
+    .badge-hold { background-color: #1e293b; color: var(--text-muted); border: 1px solid #334155; }
+    
+    .graph-container { 
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 4px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 75px; 
+    }
+    
+    .interactive-node { cursor: pointer; transition: all 0.15s ease; } 
+    .interactive-node:hover { stroke: #ffffff; stroke-width: 2px; }
+    
+    .quant-chart-tooltip { 
+      position: absolute;
+      display: none;
+      background: rgba(13, 21, 39, 0.95);
+      border: 1px solid var(--matrix-purple);
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-size: 10px;
+      font-family: monospace;
+      color: #fff;
+      pointer-events: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      z-index: 100;
+      line-height: 1.3; 
+    }
+    
+    .highlight-purple { color: var(--matrix-purple); } 
+    .highlight-blue { color: var(--accent-blue); }
+    .text-green { color: var(--signal-buy) !important; } 
+    .text-red { color: var(--signal-sell) !important; }
   </style>
 </head>
 <body>
   <div class="app-container">
-    <header><div><h1>🌌 Prediction Engine</h1><p>128-Point Multi-Asset Geometric Horizon Matrix</p></div><div><span class="badge badge-hold" style="color:var(--matrix-purple);border-color:var(--matrix-purple);">Failsafe Active V18.5</span></div></header>
+    <header>
+      <div>
+        <h1>🌌 Prediction Engine</h1>
+        <p>128-Point Multi-Asset Geometric Horizon Matrix</p>
+      </div>
+      <div>
+        <span class="badge badge-hold" style="color:var(--matrix-purple);border-color:var(--matrix-purple);">Failsafe Active V18.5</span>
+      </div>
+    </header>
+
     <div class="control-matrix" style="margin-bottom:12px;">
       <div class="ledger-title">⚙️ Station System Asset Configuration & Portfolio Multi-Buy Blender</div>
       <div class="input-row input-row-top">
-        <div class="input-group"><label for="tickerSelect">Tracked Asset Universe</label>
+        <div class="input-group">
+          <label for="tickerSelect">Tracked Asset Universe</label>
           <select id="tickerSelect" onchange="onTickerChange()" style="width:220px;">
             <optgroup label="💼 Your Core Custom Tracking Assets">
-              <option value="LAES" selected>LAES (SEALSQ Corp)</option><option value="NVDA">NVDA (NVIDIA Corp)</option><option value="TSLA">TSLA (Tesla Inc)</option><option value="AAPL">AAPL (Apple Inc)</option><option value="GME">GME (GameStop Corp)</option><option value="SOC">SOC (Sable Offshore Corp)</option><option value="RKTO">RKTO (Rocket One Inc)</option><option value="SPCX">SPCX (Space Exploration Tech)</option><option value="ABAT">ABAT (American Battery)</option><option value="RR.L">RR.L (Rolls-Royce Holdings)</option><option value="BRTX">BRTX (BioRestorative)</option>
+              <option value="LAES" selected>LAES (SEALSQ Corp)</option>
+              <option value="NVDA">NVDA (NVIDIA Corp)</option>
+              <option value="TSLA">TSLA (Tesla Inc)</option>
+              <option value="AAPL">AAPL (Apple Inc)</option>
+              <option value="GME">GME (GameStop Corp)</option>
+              <option value="SOC">SOC (Sable Offshore Corp)</option>
+              <option value="RKTO">RKTO (Rocket One Inc)</option>
+              <option value="SPCX">SPCX (Space Exploration Tech)</option>
+              <option value="ABAT">ABAT (American Battery)</option>
+              <option value="RR.L">RR.L (Rolls-Royce Holdings)</option>
+              <option value="BRTX">BRTX (BioRestorative)</option>
             </optgroup>
             <optgroup label="🔥 Top 10 Trending Global Tech Leaders">
-              <option value="MSFT">MSFT (Microsoft Corp)</option><option value="AMZN">AMZN (Amazon.com Inc)</option><option value="META">META (Meta Platforms)</option><option value="GOOGL">GOOGL (Alphabet Inc)</option><option value="NFLX">NFLX (Netflix Inc)</option><option value="AMD">AMD (Advanced Micro)</option><option value="PLTR">PLTR (Palantir Tech)</option><option value="COIN">COIN (Coinbase Global)</option><option value="SOFI">SOFI (SoFi Tech)</option><option value="MARA">MARA (MARA Digital)</option>
+              <option value="MSFT">MSFT (Microsoft Corp)</option>
+              <option value="AMZN">AMZN (Amazon.com Inc)</option>
+              <option value="META">META (Meta Platforms)</option>
+              <option value="GOOGL">GOOGL (Alphabet Inc)</option>
+              <option value="NFLX">NFLX (Netflix Inc)</option>
+              <option value="AMD">AMD (Advanced Micro)</option>
+              <option value="PLTR">PLTR (Palantir Tech)</option>
+              <option value="COIN">COIN (Coinbase Global)</option>
+              <option value="SOFI">SOFI (SoFi Tech)</option>
+              <option value="MARA">MARA (MARA Digital)</option>
             </optgroup>
           </select>
         </div>
-        <div class="input-group"><label for="timeframeSelect">Resolution Horizon</label><select id="timeframeSelect" onchange="computeTrendEngine()" style="width:140px;"><option value="daily" selected>Daily Lookback</option><option value="weekly">Weekly Lookback</option><option value="monthly">6-Monthly Lookback</option></select></div>
-        <div class="input-group"><label style="color:var(--matrix-purple); font-weight:700;">Last Closed Price</label><input type="text" id="marketStaticCloseDisplay" value="Syncing..." style="width:130px;font-weight:800;color:var(--matrix-purple);text-align:center;" readonly /></div>
-        <div style="margin-left:auto;padding-top:12px;"><button onclick="addNewTransactionRow(0, 0, true)">+ Add Entry Tier Row</button></div>
+        <div class="input-group">
+          <label for="timeframeSelect">Resolution Horizon</label>
+          <select id="timeframeSelect" onchange="computeTrendEngine()" style="width:140px;">
+            <option value="daily" selected>Daily Lookback</option>
+            <option value="weekly">Weekly Lookback</option>
+            <option value="monthly">6-Monthly Lookback</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label style="color:var(--matrix-purple); font-weight:700;">Last Closed Price</label>
+          <input type="text" id="marketStaticCloseDisplay" value="Syncing..." style="width:130px;font-weight:800;color:var(--matrix-purple);text-align:center;" readonly />
+        </div>
+        <div style="margin-left:auto;padding-top:12px;">
+          <button onclick="addNewTransactionRow(0, 0, true)">+ Add Entry Tier Row</button>
+        </div>
       </div>
       <div id="transactionRowsContainer" style="max-height:130px;overflow-y:auto;padding:4px 0;"></div>
     </div>
     <div class="profit-ledger" style="margin-bottom:12px;">
       <div class="ledger-title">📋 Position Evaluation Summary Matrix</div>
       <div class="profit-grid">
-        <div class="profit-card"><div class="card-label">Blended VWAC</div><div class="card-value highlight-purple" id="ledger-avg-cost">-</div></div>
-        <div class="profit-card"><div class="card-label">Net Performance</div><div class="card-value" id="ledger-current-profit">-</div></div>
-        <div class="profit-card" style="border-left:2px solid var(--accent-blue);"><div class="card-label">Accumulation Target</div><div class="card-value text-green" id="ledger-alpha-profit">-</div></div>
-        <div class="profit-card" style="border-left:2px solid var(--matrix-purple);"><div class="card-label">Saturated Exit Ceiling</div><div class="card-value text-red" id="ledger-beta-profit">-</div></div>
+        <div class="profit-card">
+          <div class="card-label">Blended VWAC</div>
+          <div class="card-value highlight-purple" id="ledger-avg-cost">-</div>
+        </div>
+        <div class="profit-card">
+          <div class="card-label">Net Performance</div>
+          <div class="card-value" id="ledger-current-profit">-</div>
+        </div>
+        <div class="profit-card" style="border-left:2px solid var(--accent-blue);">
+          <div class="card-label">Accumulation Target</div>
+          <div class="card-value text-green" id="ledger-alpha-profit">-</div>
+        </div>
+        <div class="profit-card" style="border-left:2px solid var(--matrix-purple);">
+          <div class="card-label">Saturated Exit Ceiling</div>
+          <div class="card-value text-red" id="ledger-beta-profit">-</div>
+        </div>
       </div>
     </div>
+
     <div class="panel-grid-top" style="margin-bottom:12px;">
       <div class="data-panel">
         <div class="ledger-title" id="historyPanelTitle">📋 Lookback Horizon Matrix</div>
-        <div style="max-height:190px;overflow-y:auto;"><table class="compact-table"><thead><tr><th>Node Horizon Window</th><th>Intrinsic Model</th><th>Actual Close</th><th>Variance Trigger</th><th>Signal</th></tr></thead><tbody id="historicalTableBody"></tbody></table></div>
+        <div style="max-height:190px;overflow-y:auto;">
+          <table class="compact-table">
+            <thead>
+              <tr>
+                <th>Node Horizon Window</th>
+                <th>Intrinsic Model</th>
+                <th>Actual Close</th>
+                <th>Variance Trigger</th>
+                <th>Signal</th>
+              </tr>
+            </thead>
+            <tbody id="historicalTableBody"></tbody>
+          </table>
+        </div>
       </div>
       <div class="data-panel">
         <div class="ledger-title">🔮 Predictive Forward Macro Calendar Horizons</div>
-        <div style="max-height:190px;overflow-y:auto;"><table class="compact-table"><thead><tr><th>Catalyst Horizon Event</th><th>Projected Target</th><th>Implied Gain %</th><th>Action Blueprint</th></tr></thead><tbody id="predictiveTableBody"></tbody></table></div>
+        <div style="max-height:190px;overflow-y:auto;">
+          <table class="compact-table">
+            <thead>
+              <tr>
+                <th>Catalyst Horizon Event</th>
+                <th>Projected Target</th>
+                <th>Implied Gain %</th>
+                <th>Action Blueprint</th>
+              </tr>
+            </thead>
+            <tbody id="predictiveTableBody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
+
     <div class="data-panel" style="position:relative; margin-bottom:12px;">
       <div class="ledger-title">📊 Consolidated Wave Trajectory Corridor (True Model Trajectory vs Actual Closes)</div>
       <div class="graph-container" id="svgGraphContainer"></div>
       <div id="chartTooltipOverlay" class="quant-chart-tooltip"></div>
     </div>
+  </div>
+
   <script>
-    let staticClosePrice = 2.82; let activeCurrency = "$";
+    let staticClosePrice = 2.82; 
+    let activeCurrency = "$";
+    window.hasLiveTape = false;
+
     const MasterVirtualTape = {
       "LAES": { close: 2.82, fx: "$", dh: [2.65, 2.71, 3.45, 4.12, 3.35, 2.90, 2.82], tape: [2.60, 2.71, 3.38, 4.18, 3.28, 2.85, 2.82], f: [2.65, 1.85, 4.50, 5.20, 5.88, 6.20, 8.03, 9.58] },
       "NVDA": { close: 124.50, fx: "$", dh: [134.46, 130.20, 118.10, 122.40, 124.50], tape: [134.46, 130.20, 118.10, 122.40, 124.50], f: [128.00, 132.50, 145.00, 152.00, 168.00, 180.52, 224.10, 267.67] },
@@ -110,23 +416,160 @@
       "SOFI": { close: 6.90, fx: "$", dh: [6.45, 6.58, 6.70, 6.82, 6.90], tape: [6.45, 6.58, 6.70, 6.82, 6.90], f: [7.10, 6.35, 7.85, 8.40, 8.90, 10.65, 12.80, 14.50] },
       "MARA": { close: 18.20, fx: "$", dh: [16.85, 17.20, 17.65, 17.98, 18.20], tape: [16.85, 17.20, 17.65, 17.98, 18.20], f: [18.80, 15.90, 21.40, 23.20, 24.80, 30.50, 37.20, 43.50] }
     };
+    function getDynamicMatrixData(basePrice, ticker) { 
+      const data = MasterVirtualTape[ticker] || { dh:[basePrice], tape:[basePrice], f:[basePrice] }; 
+      return { 
+        c: basePrice, 
+        ob: basePrice * 0.82, 
+        ss: basePrice * 1.24, 
+        dh: data.dh, 
+        tape: data.tape, 
+        f: data.f 
+      }; 
+    }
+
     function generateSmartHistoricalWave(basePrice, ticker, tf) {
       let fx = ticker.includes("RR.L") ? "" : "$";
       let d60 = [basePrice, basePrice * 1.028, basePrice * 1.187, basePrice * 1.460, basePrice * 1.223, basePrice * 0.961, basePrice * 0.939];
       let tape = [basePrice, basePrice * 1.010, basePrice * 1.198, basePrice * 1.482, basePrice * 1.163, basePrice * 0.961, basePrice * 0.922];
+      
       if (tf === 'weekly') {
-        d60 = [basePrice, basePrice * 1.099, basePrice * 1.163, basePrice * 1.198, basePrice * 1.223, basePrice * 1.425, basePrice * 1.815]; tape = d60;
+        d60 = [basePrice, basePrice * 1.099, basePrice * 1.163, basePrice * 1.198, basePrice * 1.223, basePrice * 1.425, basePrice * 1.815]; 
+        tape = d60;
       } else if (tf === 'monthly') {
-        d60 = [basePrice, basePrice * 1.010, basePrice * 1.163, basePrice * 1.482, basePrice * 1.198, basePrice * 0.961, basePrice * 0.922]; tape = d60;
+        d60 = [basePrice, basePrice * 1.010, basePrice * 1.163, basePrice * 1.482, basePrice * 1.163, basePrice * 0.961, basePrice * 0.922]; 
+        tape = d60;
       }
+      
       let fArr = [basePrice * 0.939, basePrice * 0.656, basePrice * 1.595, basePrice * 1.844, basePrice * 2.085, basePrice * 2.198, basePrice * 2.847, basePrice * 3.397];
-      if(MasterVirtualTape[ticker] && !window.hasLiveTape) {
-         return { close: basePrice, ob: basePrice * 0.82, ss: basePrice * 1.24, fx: fx, h: MasterVirtualTape[ticker].dh, t: MasterVirtualTape[ticker].tape, f: MasterVirtualTape[ticker].f };
+      
+      if (MasterVirtualTape[ticker] && !window.hasLiveTape) {
+         return { 
+           close: basePrice, 
+           ob: basePrice * 0.82, 
+           ss: basePrice * 1.24, 
+           fx: fx, 
+           h: MasterVirtualTape[ticker].dh, 
+           t: MasterVirtualTape[ticker].tape, 
+           f: MasterVirtualTape[ticker].f 
+         };
       }
       return { close: basePrice, ob: basePrice * 0.82, ss: basePrice * 1.24, fx: fx, h: d60, t: tape, f: fArr };
     }
 
-    // ⚡ PROD FIX: 1.5-Second Controller Timeout prevents the "Syncing..." text freeze pattern permanently
+    function evaluateLiveAnchorSignal(nodeModelPrice, liveClosePrice) { 
+      let ratio = nodeModelPrice / liveClosePrice; 
+      if (ratio < 0.97) return "BUY"; 
+      if (ratio > 1.03) return "SELL"; 
+      return "HOLD"; 
+    }
+
+    function handleNodeClick(p) { 
+      addNewTransactionRow(p, 10, true); 
+    }
+    function showTooltip(e, txt) { 
+      const tt = document.getElementById('chartTooltipOverlay'); 
+      tt.innerHTML = txt; 
+      tt.style.display = 'block'; 
+      const r = document.getElementById('svgGraphContainer').getBoundingClientRect(); 
+      tt.style.left = (e.clientX - r.left + 12) + 'px'; 
+      tt.style.top = (e.clientY - r.top - 12) + 'px'; 
+    }
+    
+    function hideTooltip() { 
+      document.getElementById('chartTooltipOverlay').style.display = 'none'; 
+    }
+
+    function updateStaticSessionTape(ticker) { 
+      const data = MasterVirtualTape[ticker] || { close: 100.00, fx: "$" }; 
+      staticClosePrice = data.close; 
+      activeCurrency = data.fx; 
+    }
+
+    function onTickerChange() { 
+      const sym = document.getElementById('tickerSelect').value; 
+      localStorage.setItem(`quant_active_ticker`, sym); 
+      triggerAutonomousTapeSync(sym); 
+      loadPortfolioFromCache(sym); 
+    }
+    function generateNativeSvgGraph(h, f, ob, ss, tape) {
+      const pts = [...h, ...f]; 
+      const max = Math.max(...pts, ...tape) * 1.05; 
+      const min = Math.min(...pts, ...tape) * 0.95; 
+      const r = max - min; 
+      const w = 480, ht = 75;
+      
+      let yBuy = ht - ((ob - min) / r) * (ht - 20) - 10; 
+      let ySell = ht - ((ss - min) / r) * (ht - 20) - 10;
+      
+      let markup = `<svg viewBox="0 0 ${w} ${ht}" style="width:100%; height:100%;"><rect x="20" y="2" width="${w-40}" height="${Math.max(2, ySell-2)}" fill="#3b0712" fill-opacity="0.35" /><rect x="20" y="${yBuy}" width="${w-40}" height="${Math.max(2, ht-yBuy-2)}" fill="#064e3b" fill-opacity="0.35" />`;
+      let mStr = "", tStr = ""; 
+      
+      h.forEach((v, i) => { 
+        let x = (i / (pts.length - 1)) * (w - 40) + 20; 
+        let y = ht - ((v - min) / r) * (ht - 20) - 10; 
+        mStr += (i===0?'M':'L') + `${x},${y} `; 
+      });
+      
+      f.forEach((v, i) => { 
+        let idx = i + h.length; 
+        let x = (idx / (pts.length - 1)) * (w - 40) + 20; 
+        let y = ht - ((v - min) / r) * (ht - 20) - 10; 
+        mStr += (i===0?'M':'L') + `${x},${y} `; 
+      });
+      
+      tape.forEach((v, i) => { 
+        let x = (i / (pts.length - 1)) * (w - 40) + 20; 
+        let y = ht - ((v - min) / r) * (ht - 20) - 10; 
+        tStr += (i===0?'M':'L') + `${x},${y} `; 
+      });
+      
+      markup += `<path d="${mStr}" fill="none" stroke="#c084fc" stroke-width="2" /><path d="${tStr}" fill="none" stroke="#38bdf8" stroke-width="1.8" stroke-dasharray="3,2" />`;
+      
+      pts.forEach((v, i) => {
+        let x = (i / (pts.length - 1)) * (w - 40) + 20; 
+        let y = ht - ((v - min) / r) * (ht - 20) - 10; 
+        let isF = i >= h.length; 
+        let c = isF ? "#c084fc" : "#ffffff";
+        let txt = `<strong>Node</strong><br/>Value: ${activeCurrency}${v.toFixed(2)}${activeCurrency===''?' GBX':''}`; 
+        markup += `<circle class="interactive-node" cx="${x}" cy="${y}" r="3.2" fill="${c}" onclick="handleNodeClick(${v})" onmousemove="showTooltip(event, '${txt}')" onmouseout="hideTooltip();"></circle>`;
+      });
+      
+      document.getElementById('svgGraphContainer').innerHTML = markup + `</svg>`;
+    }
+
+    function addNewTransactionRow(p = 0, s = 0, trig = true) {
+      const container = document.getElementById('transactionRowsContainer'); 
+      const row = document.createElement('div'); 
+      row.className = 'transaction-row';
+      row.innerHTML = `<div class="input-group"><label>Purchase Price</label><input type="number" class="tx-price" value="${p ? p.toFixed(2) : ''}" step="0.01" style="width: 110px;" oninput="computeTrendEngine()"></div><div class="input-group"><label>Shares Volume</label><input type="number" class="tx-shares" value="${s||''}" step="1" style="width: 110px;" oninput="computeTrendEngine()"></div><div style="margin-top: 14px;"><button class="btn-delete" onclick="this.parentElement.parentElement.remove(); computeTrendEngine();">Delete</button></div>`;
+      container.appendChild(row); 
+      if (trig) computeTrendEngine();
+    }
+
+    function savePortfolioToCache() {
+      const sym = document.getElementById('tickerSelect').value; 
+      const prices = Array.from(document.getElementsByClassName('tx-price')).map(el => parseFloat(el.value) || 0); 
+      const shares = Array.from(document.getElementsByClassName('tx-shares')).map(el => parseFloat(el.value) || 0);
+      const payload = prices.map((p, i) => ({ price: p, shares: shares[i] })); 
+      localStorage.setItem(`quant_portfolio_${sym}`, JSON.stringify(payload)); 
+      localStorage.setItem(`quant_active_ticker`, sym);
+    }
+
+    function loadPortfolioFromCache(sym) {
+      const container = document.getElementById('transactionRowsContainer'); 
+      container.innerHTML = ""; 
+      const cached = localStorage.getItem(`quant_portfolio_${sym}`);
+      if (cached) { 
+        const payload = JSON.parse(cached); 
+        if (payload.length > 0) { 
+          payload.forEach(r => addNewTransactionRow(r.price, r.shares, false)); 
+          return; 
+        } 
+      }
+      addNewTransactionRow(staticClosePrice * 0.95, 100, false);
+    }
+
     async function triggerAutonomousTapeSync(ticker) {
       document.getElementById('marketStaticCloseDisplay').value = "Syncing...";
       updateStaticSessionTape(ticker);
@@ -143,94 +586,97 @@
         if (response.ok) {
           const wrapper = await response.json();
           const payload = JSON.parse(wrapper.contents);
-          const meta = payload.chart.result[0].meta;
+          const meta = payload.chart.result.meta;
           if (meta && meta.regularMarketPrice) {
             staticClosePrice = meta.regularMarketPrice;
             window.hasLiveTape = true;
           }
         }
       } catch (err) { 
-        console.warn("Failsafe Route Triggered: Using System 2026 Core Baseline."); 
+        console.warn("Failsafe circuit online: Using static asset cache."); 
       } finally {
         clearTimeout(timeoutId);
         computeTrendEngine();
       }
     }
-
-    function getDynamicMatrixData(basePrice, ticker) { const data = MasterVirtualTape[ticker] || { dh:[basePrice], tape:[basePrice], f:[basePrice] }; return { c: basePrice, ob: basePrice * 0.82, ss: basePrice * 1.24, dh: data.dh, tape: data.tape, f: data.f }; }
-    function evaluateLiveAnchorSignal(nodeModelPrice, liveClosePrice) { let ratio = nodeModelPrice / liveClosePrice; if (ratio < 0.97) return "BUY"; if (ratio > 1.03) return "SELL"; return "HOLD"; }
-    function handleNodeClick(p) { addNewTransactionRow(p, 10, true); }
-    function showTooltip(e, txt) { const tt = document.getElementById('chartTooltipOverlay'); tt.innerHTML = txt; tt.style.display = 'block'; const r = document.getElementById('svgGraphContainer').getBoundingClientRect(); tt.style.left = (e.clientX - r.left + 12) + 'px'; tt.style.top = (e.clientY - r.top - 12) + 'px'; }
-    function hideTooltip() { document.getElementById('chartTooltipOverlay').style.display = 'none'; }
-
-    function generateNativeSvgGraph(h, f, ob, ss, tape) {
-      const pts = [...h, ...f]; const max = Math.max(...pts, ...tape) * 1.05; const min = Math.min(...pts, ...tape) * 0.95; const r = max - min; const w = 480, ht = 75;
-      let yBuy = ht - ((ob - min) / r) * (ht - 20) - 10; let ySell = ht - ((ss - min) / r) * (ht - 20) - 10;
-      let markup = `<svg viewBox="0 0 ${w} ${ht}" style="width:100%; height:100%;"><rect x="20" y="2" width="${w-40}" height="${Math.max(2, ySell-2)}" fill="#3b0712" fill-opacity="0.35" /><rect x="20" y="${yBuy}" width="${w-40}" height="${Math.max(2, ht-yBuy-2)}" fill="#064e3b" fill-opacity="0.35" />`;
-      let mStr = "", tStr = ""; h.forEach((v, i) => { let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 20) - 10; mStr += (i===0?'M':'L') + `${x},${y} `; });
-      f.forEach((v, i) => { let idx = i + h.length; let x = (idx / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 20) - 10; mStr += (i===0?'M':'L') + `${x},${y} `; });
-      tape.forEach((v, i) => { let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 20) - 10; tStr += (i===0?'M':'L') + `${x},${y} `; });
-      markup += `<path d="${mStr}" fill="none" stroke="#c084fc" stroke-width="2" /><path d="${tStr}" fill="none" stroke="#38bdf8" stroke-width="1.8" stroke-dasharray="3,2" />`;
-      pts.forEach((v, i) => {
-        let x = (i / (pts.length - 1)) * (w - 40) + 20; let y = ht - ((v - min) / r) * (ht - 20) - 10; let isF = i >= h.length; let c = isF ? "#c084fc" : "#ffffff";
-        let txt = `<strong>Node</strong><br/>Value: ${activeCurrency}${v.toFixed(2)}${activeCurrency===''?' GBX':''}`; markup += `<circle class="interactive-node" cx="${x}" cy="${y}" r="3.2" fill="${c}" onclick="handleNodeClick(${v})" onmousemove="showTooltip(event, '${txt}')" onmouseout="hideTooltip();"></circle>`;
-      });
-      document.getElementById('svgGraphContainer').innerHTML = markup + `</svg>`;
-    }
-    function addNewTransactionRow(p = 0, s = 0, trig = true) {
-      const container = document.getElementById('transactionRowsContainer'); const row = document.createElement('div'); row.className = 'transaction-row';
-      row.innerHTML = `<div class="input-group"><label>Purchase Price</label><input type="number" class="tx-price" value="${p ? p.toFixed(2) : ''}" step="0.01" style="width: 110px;" oninput="computeTrendEngine()"></div><div class="input-group"><label>Shares Volume</label><input type="number" class="tx-shares" value="${s||''}" step="1" style="width: 110px;" oninput="computeTrendEngine()"></div><div style="margin-top: 14px;"><button class="btn-delete" onclick="this.parentElement.parentElement.remove(); computeTrendEngine();">Delete</button></div>`;
-      container.appendChild(row); if (trig) computeTrendEngine();
-    }
-    function savePortfolioToCache() {
-      const sym = document.getElementById('tickerSelect').value; const prices = Array.from(document.getElementsByClassName('tx-price')).map(el => parseFloat(el.value) || 0); const shares = Array.from(document.getElementsByClassName('tx-shares')).map(el => parseFloat(el.value) || 0);
-      const payload = prices.map((p, i) => ({ price: p, shares: shares[i] })); localStorage.setItem(`quant_portfolio_${sym}`, JSON.stringify(payload)); localStorage.setItem(`quant_active_ticker`, sym);
-    }
-    function loadPortfolioFromCache(sym) {
-      const container = document.getElementById('transactionRowsContainer'); container.innerHTML = ""; const cached = localStorage.getItem(`quant_portfolio_${sym}`);
-      if (cached) { const payload = JSON.parse(cached); if (payload.length > 0) { payload.forEach(r => addNewTransactionRow(r.price, r.shares, false)); return; } }
-      addNewTransactionRow(staticClosePrice * 0.95, 100, false);
-    }
-    function updateStaticSessionTape(ticker) { const data = MasterVirtualTape[ticker] || { close: 100.00, fx:"$" }; staticClosePrice = data.close; activeCurrency = data.fx; }
-    function onTickerChange() { const sym = document.getElementById('tickerSelect').value; localStorage.setItem(`quant_active_ticker`, sym); triggerAutonomousTapeSync(sym); loadPortfolioFromCache(sym); }
     function computeTrendEngine() {
-      const sym = document.getElementById('tickerSelect').value; const tf = document.getElementById('timeframeSelect').value;
-      const priceInputs = document.getElementsByClassName('tx-price'); const shareInputs = document.getElementsByClassName('tx-shares');
-      let totalCapital = 0, totalShares = 0; for (let i = 0; i < priceInputs.length; i++) { let p = parseFloat(priceInputs[i].value) || 0; let s = parseFloat(shareInputs[i].value) || 0; totalCapital += (p * s); totalShares += s; }
-      let vwac = totalShares > 0 ? (totalCapital / totalShares) : 0; document.getElementById('ledger-avg-cost').innerText = activeCurrency + vwac.toFixed(2) + (activeCurrency===''?' GBX':'');
-      const cls = staticClosePrice; document.getElementById('marketStaticCloseDisplay').value = activeCurrency + cls.toFixed(2) + (activeCurrency===''?' GBX':'');
+      const sym = document.getElementById('tickerSelect').value; 
+      const tf = document.getElementById('timeframeSelect').value;
+      const priceInputs = document.getElementsByClassName('tx-price'); 
+      const shareInputs = document.getElementsByClassName('tx-shares');
+      
+      let totalCapital = 0, totalShares = 0; 
+      for (let i = 0; i < priceInputs.length; i++) { 
+        let p = parseFloat(priceInputs[i].value) || 0; 
+        let s = parseFloat(shareInputs[i].value) || 0; 
+        totalCapital += (p * s); 
+        totalShares += s; 
+      }
+      
+      let vwac = totalShares > 0 ? (totalCapital / totalShares) : 0; 
+      document.getElementById('ledger-avg-cost').innerText = activeCurrency + vwac.toFixed(2) + (activeCurrency===''?' GBX':'');
+      
+      const cls = staticClosePrice; 
+      document.getElementById('marketStaticCloseDisplay').value = activeCurrency + cls.toFixed(2) + (activeCurrency===''?' GBX':'');
       
       const active = generateSmartHistoricalWave(cls, sym, tf);
-      const val = cls * totalShares; const ret = val - totalCapital; const pct = totalCapital > 0 ? (ret / totalCapital) * 100 : 0; const pEl = document.getElementById('ledger-current-profit');
-      if (totalShares === 0 || vwac === 0) { pEl.innerText = "0.00 (0.00%)"; pEl.className = "card-value"; }
-      else { pEl.innerText = `${ret >= 0 ? '+' : '-'}${activeCurrency}${Math.abs(ret).toFixed(2)}${activeCurrency===''?' GBX':''} (${ret >= 0 ? '+' : ''}${pct.toFixed(2)}%)`; pEl.className = ret >= 0 ? "card-value text-green" : "card-value text-red"; }
-      document.getElementById('ledger-alpha-profit').innerText = activeCurrency + active.ob.toFixed(2) + (activeCurrency===''?' GBX':''); document.getElementById('ledger-beta-profit').innerText = activeCurrency + active.ss.toFixed(2) + (activeCurrency===''?' GBX':'');
+      const val = cls * totalShares; 
+      const ret = val - totalCapital; 
+      const pct = totalCapital > 0 ? (ret / totalCapital) * 100 : 0; 
+      const pEl = document.getElementById('ledger-current-profit');
+      
+      if (totalShares === 0 || vwac === 0) { 
+        pEl.innerText = "0.00 (0.00%)"; 
+        pEl.className = "card-value"; 
+      } else { 
+        pEl.innerText = `${ret >= 0 ? '+' : '-'}${activeCurrency}${Math.abs(ret).toFixed(2)}${activeCurrency===''?' GBX':''} (${ret >= 0 ? '+' : ''}${pct.toFixed(2)}%)`; 
+        pEl.className = ret >= 0 ? "card-value text-green" : "card-value text-red"; 
+      }
+      
+      document.getElementById('ledger-alpha-profit').innerText = activeCurrency + active.ob.toFixed(2) + (activeCurrency===''?' GBX':''); 
+      document.getElementById('ledger-beta-profit').innerText = activeCurrency + active.ss.toFixed(2) + (activeCurrency===''?' GBX':'');
       
       let hLabels = ["Mid July Node (Today)", "Early July Node", "Late June Node", "Mid June Node", "Early June Node", "May 19th Node", "Early May Node"];
-      if (tf === 'weekly') { hLabels = ["W7 Node (Today Anchor)", "W6 Trailing Node", "W5 Trailing Node", "W4 Trailing Node", "W3 Trailing Node", "W2 Trailing Node", "W1 Trailing Node"]; }
-      else if (tf === 'monthly') { hLabels = ["M6 Node (Today Anchor)", "M5 Trailing Node", "M4 Trailing Node", "M3 Trailing Node", "M2 Trailing Node", "M1 Trailing Node", "Initial Launch Base"]; }
+      if (tf === 'weekly') { 
+        hLabels = ["W7 Node (Today Anchor)", "W6 Trailing Node", "W5 Trailing Node", "W4 Trailing Node", "W3 Trailing Node", "W2 Trailing Node", "W1 Trailing Node"]; 
+      } else if (tf === 'monthly') { 
+        hLabels = ["M6 Node (Today Anchor)", "M5 Trailing Node", "M4 Trailing Node", "M3 Trailing Node", "M2 Trailing Node", "M1 Trailing Node", "Initial Launch Base"]; 
+      }
       
       document.getElementById('historyPanelTitle').innerText = `📋 Lookback Horizon Matrix (${tf.toUpperCase()} View - Latest to Lowest Date Node Progression)`;
-      const hTab = document.getElementById('historicalTableBody'); hTab.innerHTML = "";
+      const hTab = document.getElementById('historicalTableBody'); 
+      hTab.innerHTML = "";
+      
       active.h.forEach((hp, idx) => {
-        let tVal = active.t[idx] || hp; let variance = ((hp - cls) / cls) * 100; let liveSignal = evaluateLiveAnchorSignal(hp, cls);
-        hTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${hp})"><td><span class="highlight-blue">${hLabels[idx]}</span></td><td>${activeCurrency}${hp.toFixed(2)}${activeCurrency===''?' GBX':''}</td><td>${activeCurrency}${tVal.toFixed(2)}${activeCurrency===''?' GBX':''}</td><td class="${variance>=0?'text-green':'text-red'}">${variance>=0?'+':''}${variance.toFixed(2)}%</td><td><span class="badge ${liveSignal==='BUY'?'badge-buy':liveSignal==='SELL'?'badge-sell':'badge-hold'}">${liveSignal}</span></td></tr>`;
+        let tVal = active.t[idx] || hp; 
+        let variance = ((hp - cls) / cls) * 100; 
+        let liveSignal = evaluateLiveAnchorSignal(hp, cls);
+        hTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${hp})"><td><span class="highlight-blue">${hLabels[idx]}</span></td><td>${activeCurrency}${hp.toFixed(2)}${activeCurrency===''?' GBX':''}</td><td>${activeCurrency}${tVal.toFixed(2)}${activeCurrency===''?' GBX':''}</td><td>${variance >= 0 ? '+' : ''}${variance.toFixed(2)}%</td><td><span class="badge ${liveSignal === 'BUY' ? 'badge-buy' : liveSignal === 'SELL' ? 'badge-sell' : 'badge-hold'}">${liveSignal}</span></td></tr>`;
       });
-      const pTab = document.getElementById('predictiveTableBody'); pTab.innerHTML = "";
-      const fLabels = ["August Forecast", "September Target Floor", "October Horizon Breakout", "November Trajectory", "January Realization Peak", "April Expansion Ceiling (9-Mo)", "October Trajectory Peak (18-Mo)", "July Macro Zenith (24-Mo Top)"]; 
-      fLabels.forEach((hName, idx) => {
-        let fPrice = active.f[idx]; let gain = ((fPrice - cls) / cls) * 100;
-        let blueprintStr = "HOLD"; let badgeClass = "badge-hold";
-        if (gain < -3.0) { blueprintStr = "STRONG BUY"; badgeClass = "badge-buy"; }
-        else if (gain > 50.0) { blueprintStr = "LIQUIDATE CEILING"; badgeClass = "badge-sell"; }
-        else if (gain > 3.0) { blueprintStr = "SCALED SELL"; badgeClass = "badge-sell"; }
-        pTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${fPrice})"><td><span class="highlight-purple">${hName}</span></td><td style="font-weight:700;">${activeCurrency}${fPrice.toFixed(2)}${activeCurrency===''?' GBX':''}</td><td class="${gain>=0?'text-green':'text-red'}">${gain>=0?'+':''}${gain.toFixed(2)}%</td><td><span class="badge ${badgeClass}">${blueprintStr}</span></td></tr>`;
+
+      const fLabels = ["+30-Session Horizon", "+60-Session Horizon", "+90-Session Horizon", "Q3 Macro Target", "Q4 Structural Target", "H1 2027 Geometric Apex", "1-Year Macro Extension", "Terminal Cycle Target"];
+      const pTab = document.getElementById('predictiveTableBody'); 
+      pTab.innerHTML = "";
+      
+      active.f.forEach((fp, idx) => {
+        let impliedGain = cls > 0 ? ((fp - cls) / cls) * 100 : 0;
+        let actionBlueprint = fp > active.ss ? "SCALE EXIT" : fp < active.ob ? "HEAVY BUILD" : "ACCUMULATE";
+        let badgeClass = actionBlueprint === "SCALE EXIT" ? "badge-sell" : actionBlueprint === "HEAVY BUILD" ? "badge-buy" : "badge-hold";
+        
+        pTab.innerHTML += `<tr style="cursor:pointer;" onclick="handleNodeClick(${fp})"><td><span class="highlight-purple">${fLabels[idx]}</span></td><td>${activeCurrency}${fp.toFixed(2)}${activeCurrency===''?' GBX':''}</td><td class="${impliedGain >= 0 ? 'text-green' : 'text-red'}">${impliedGain >= 0 ? '+' : ''}${impliedGain.toFixed(2)}%</td><td><span class="badge ${badgeClass}">${actionBlueprint}</span></td></tr>`;
       });
-      generateNativeSvgGraph(active.h, active.f, active.ob, active.ss, active.t); savePortfolioToCache();
+
+      generateNativeSvgGraph(active.h, active.f, active.ob, active.ss, active.t);
+      savePortfolioToCache();
     }
+
     window.addEventListener('DOMContentLoaded', () => {
-      let rememberedTicker = localStorage.getItem(`quant_active_ticker`) || "LAES";
-      document.getElementById('tickerSelect').value = rememberedTicker; triggerAutonomousTapeSync(rememberedTicker); loadPortfolioFromCache(rememberedTicker);
+      const globalActiveCacheTicker = localStorage.getItem(`quant_active_ticker`) || "LAES";
+      document.getElementById('tickerSelect').value = globalActiveCacheTicker;
+      
+      updateStaticSessionTape(globalActiveCacheTicker);
+      loadPortfolioFromCache(globalActiveCacheTicker);
+      triggerAutonomousTapeSync(globalActiveCacheTicker);
     });
   </script>
 </body>
