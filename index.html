@@ -10,40 +10,40 @@
       --text-primary: #f8fafc;--text-muted: #64748b;--matrix-purple: #c084fc;
       --signal-buy: #22c55e;--signal-sell: #ef4444;--accent-blue: #38bdf8; 
     }
-    body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background-color:var(--bg-main); color:var(--text-primary); margin:0; padding:12px; }
-    .app-container { max-width:1250px; margin:0 auto; }
-    header { margin-bottom:12px; border-bottom:1px solid var(--border-color); padding-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
-    header h1 { margin:0; font-size:18px; color:#ffffff; font-weight:700; letter-spacing:-0.5px; }
-    header p { margin:2px 0 0 0; font-size:11px; color:var(--text-muted); font-weight:500; }
-    .panel-grid-top { display:grid; grid-template-columns:1fr 1.1fr; gap:12px; margin-bottom:12px; }
-    @media (max-width:868px) { .panel-grid-top { grid-template-columns:1fr; } }
-    .control-matrix, .profit-ledger, .data-panel { background-color:var(--bg-panel); border:1px solid var(--border-color); border-radius:8px; padding:12px; box-shadow:0 4px 20px rgba(0,0,0,0.4); }
-    .input-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-    .input-row-top { border-bottom:1px solid var(--border-color); padding-bottom:10px; margin-bottom:10px; }
-    .input-group { display:flex; flex-direction:column; gap:3px; }
-    label { font-size:9px; font-weight:700; text-transform:uppercase; color:var(--text-muted); letter-spacing:0.5px; }
-    input, select { background-color:var(--bg-main); border:1px solid var(--border-color); color:#ffffff; padding:6px 10px; border-radius:4px; font-size:12px; font-weight:600; }
-    button { background-color:var(--matrix-purple); color:#ffffff; border:none; padding:8px 14px; border-radius:4px; font-size:11px; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.5px; }
-    .btn-delete { background-color:#3b0712; padding:4px 8px; font-size:10px; color:#ef4444; border:1px solid #7f1d1d; border-radius:4px; cursor:pointer; }
-    .transaction-row { display:flex; gap:10px; align-items:center; margin-bottom:6px; background:var(--bg-main); padding:6px; border-radius:4px; border:1px solid var(--border-color); }
-    .compact-table { width:100%; border-collapse:collapse; font-size:11px; text-align:left; }
-    .compact-table th { padding:5px 6px; color:var(--text-muted); font-weight:700; text-transform:uppercase; font-size:9px; border-bottom:1px solid var(--border-color); }
-    .compact-table td { padding:6px; border-bottom:1px solid #1e293b; font-weight:500; }
-    .profit-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:8px; }
-    @media (max-width:580px) { .profit-grid { grid-template-columns:repeat(2, 1fr); } }
-    .profit-card { background-color:var(--bg-main); border:1px solid var(--border-color); border-radius:4px; padding:8px; text-align:center; }
-    .ledger-title { font-size:11px; font-weight:700; text-transform:uppercase; color:#fff; margin-bottom:8px; border-bottom:1px solid var(--border-color); padding-bottom:4px; display:flex; justify-content:space-between; align-items:center; letter-spacing:0.5px; }
-    .card-label { font-size:9px; color:var(--text-muted); text-transform:uppercase; font-weight:600; margin-bottom:2px; }
-    .card-value { font-size:14px; font-weight:700; }
-    .badge { padding:2px 5px; border-radius:4px; font-size:9px; font-weight:700; text-transform:uppercase; display:inline-block; }
-    .badge-buy { background-color:#064e3b; color:var(--signal-buy); border:1px solid #047857; }
-    .badge-sell { background-color:#7f1d1d; color:var(--signal-sell); border:1px solid #b91c1c; }
-    .badge-hold { background-color:#1e293b; color:var(--text-muted); border:1px solid #334155; }
-    .graph-container { background:var(--bg-main); border:1px solid var(--border-color); border-radius:6px; padding:4px; position:relative; display:flex; justify-content:center; align-items:center; height:75px; }
-    .interactive-node { cursor:pointer; transition:all 0.15s ease; } .interactive-node:hover { stroke:#ffffff; stroke-width:2px; }
-    .quant-chart-tooltip { position:absolute; display:none; background:rgba(13,21,39,0.95); border:1px solid var(--matrix-purple); border-radius:4px; padding:6px 10px; font-size:10px; font-family:monospace; color:#fff; pointer-events:none; box-shadow:0 4px 12px rgba(0,0,0,0.6); z-index:100; line-height:1.3; }
-    .highlight-purple { color:var(--matrix-purple); } .highlight-blue { color:var(--accent-blue); }
-    .text-green { color:var(--signal-buy) !important; } .text-red { color:var(--signal-sell) !important; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background-color: var(--bg-main); color: var(--text-primary); margin: 0; padding: 12px; }
+    .app-container { max-width: 1250px; margin: 0 auto; }
+    header { margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { margin: 0; font-size: 18px; color: #ffffff; font-weight: 700; letter-spacing: -0.5px; }
+    header p { margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted); font-weight: 500; }
+    .panel-grid-top { display: grid; grid-template-columns: 1fr 1.1fr; gap: 12px; margin-bottom: 12px; }
+    @media (max-width: 868px) { .panel-grid-top { grid-template-columns: 1fr; } }
+    .control-matrix, .profit-ledger, .data-panel { background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4); }
+    .input-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .input-row-top { border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 10px; }
+    .input-group { display: flex; flex-direction: column; gap: 3px; }
+    label { font-size: 9px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; }
+    input, select { background-color: var(--bg-main); border: 1px solid var(--border-color); color: #ffffff; padding: 6px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+    button { background-color: var(--matrix-purple); color: #ffffff; border: none; padding: 8px 14px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; }
+    .btn-delete { background-color: #3b0712; padding: 4px 8px; font-size: 10px; color: #ef4444; border: 1px solid #7f1d1d; border-radius: 4px; cursor: pointer; }
+    .transaction-row { display: flex; gap: 10px; align-items: center; margin-bottom: 6px; background: var(--bg-main); padding: 6px; border-radius: 4px; border: 1px solid var(--border-color); }
+    .compact-table { width: 100%; border-collapse: collapse; font-size: 11px; text-align: left; }
+    .compact-table th { padding: 5px 6px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 9px; border-bottom: 1px solid var(--border-color); }
+    .compact-table td { padding: 6px; border-bottom: 1px solid #1e293b; font-weight: 500; }
+    .profit-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 8px; }
+    @media (max-width: 580px) { .profit-grid { grid-template-columns: repeat(2, 1fr); } }
+    .profit-card { background-color: var(--bg-main); border: 1px solid var(--border-color); border-radius: 4px; padding: 8px; text-align: center; }
+    .ledger-title { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #fff; margin-bottom: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
+    .card-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: 2px; }
+    .card-value { font-size: 14px; font-weight: 700; }
+    .badge { padding: 2px 5px; border-radius: 4px; font-size: 9px; font-weight: 700; text-transform: uppercase; display: inline-block; }
+    .badge-buy { background-color: #064e3b; color: var(--signal-buy); border: 1px solid #047857; }
+    .badge-sell { background-color: #7f1d1d; color: var(--signal-sell); border: 1px solid #b91c1c; }
+    .badge-hold { background-color: #1e293b; color: var(--text-muted); border: 1px solid #334155; }
+    .graph-container { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 6px; padding: 4px; position: relative; display: flex; justify-content: center; align-items: center; height: 75px; }
+    .interactive-node { cursor: pointer; transition: all 0.15s ease; } .interactive-node:hover { stroke: #ffffff; stroke-width: 2px; }
+    .quant-chart-tooltip { position: absolute; display: none; background: rgba(13, 21, 39, 0.95); border: 1px solid var(--matrix-purple); border-radius: 4px; padding: 6px 10px; font-size: 10px; font-family: monospace; color: #fff; pointer-events: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6); z-index: 100; line-height: 1.3; }
+    .highlight-purple { color: var(--matrix-purple); } .highlight-blue { color: var(--accent-blue); }
+    .text-green { color: var(--signal-buy) !important; } .text-red { color: var(--signal-sell) !important; }
   </style>
 </head>
 <body>
@@ -55,7 +55,6 @@
       </div>
       <div><span class="badge badge-hold" style="color:var(--matrix-purple);border-color:var(--matrix-purple);">Failsafe Active V25.0</span></div>
     </header>
-
     <div class="control-matrix" style="margin-bottom:12px;">
       <div class="ledger-title">⚙️ Station System Asset Configuration & Portfolio Multi-Buy Blender</div>
       <div class="input-row input-row-top">
@@ -132,7 +131,6 @@
       "GME": { close: 22.10, fx: "$", dh: [18.20, 19.50, 24.10, 20.80, 22.10], tape: [18.20, 19.50, 24.10, 20.80, 22.10], f: [24.00, 18.00, 32.00, 38.00, 45.00, 43.09, 55.25, 68.51] },
       "SOC": { close: 4.43, fx: "$", dh: [4.20, 4.31, 4.38, 4.40, 4.41, 4.42, 4.43], tape: [4.15, 4.28, 4.35, 4.39, 4.40, 4.42, 4.43], f: [4.55, 3.90, 5.20, 5.80, 6.40, 7.50, 9.20, 11.00] }
     };
-
     function getDynamicMatrixData(basePrice, ticker) { const data = MasterVirtualTape[ticker] || { dh:[basePrice], tape:[basePrice], f:[basePrice] }; return { c: basePrice, ob: basePrice * 0.82, ss: basePrice * 1.24, dh: data.dh, tape: data.tape, f: data.f }; }
     function evaluateLiveAnchorSignal(nodeModelPrice, liveClosePrice) { let ratio = nodeModelPrice / liveClosePrice; if (ratio < 0.97) return "BUY"; if (ratio > 1.03) return "SELL"; return "HOLD"; }
     function handleNodeClick(p) { addNewTransactionRow(p, 10, true); }
@@ -211,13 +209,11 @@
       });
       document.getElementById('svgGraphContainer').innerHTML = markup + `</svg>`;
     }
-
     function addNewTransactionRow(p = 0, s = 0, trig = true) {
       const container = document.getElementById('transactionRowsContainer'); const row = document.createElement('div'); row.className = 'transaction-row';
       row.innerHTML = `<div class="input-group"><label>Purchase Price</label><input type="number" class="tx-price" value="${p ? p.toFixed(2) : ''}" step="0.01" style="width: 110px;" oninput="executeBlenderRecalculation()"></div><div class="input-group"><label>Shares Volume</label><input type="number" class="tx-shares" value="${s||''}" step="1" style="width: 110px;" oninput="executeBlenderRecalculation()"></div><div style="margin-top: 14px;"><button class="btn-delete" onclick="this.parentElement.parentElement.remove(); executeBlenderRecalculation();">Delete</button></div>`;
       container.appendChild(row); if (trig) executeBlenderRecalculation();
     }
-
     function executeBlenderRecalculation() {
       const pIn = document.getElementsByClassName('tx-price'), sIn = document.getElementsByClassName('tx-shares'); let totalCapital = 0, totalShares = 0;
       for (let i = 0; i < pIn.length; i++) { let p = parseFloat(pIn[i].value) || 0, s = parseFloat(sIn[i].value) || 0; totalCapital += (p * s); totalShares += s; }
@@ -227,21 +223,17 @@
       else { pEl.innerText = `${ret >= 0 ? '+' : '-'}${activeCurrency}${Math.abs(ret).toFixed(2)} (${ret >= 0 ? '+' : ''}${pct.toFixed(2)}%)`; pEl.className = ret >= 0 ? "card-value text-green" : "card-value text-red"; }
       savePortfolioToCache();
     }
-
     function savePortfolioToCache() {
       const sym = document.getElementById('tickerSelect').value, p = Array.from(document.getElementsByClassName('tx-price')).map(el => parseFloat(el.value) || 0), s = Array.from(document.getElementsByClassName('tx-shares')).map(el => parseFloat(el.value) || 0);
       localStorage.setItem(`quant_portfolio_${sym}`, JSON.stringify(p.map((v, i) => ({ price: v, shares: s[i] })))); localStorage.setItem(`quant_active_ticker`, sym);
     }
-
     function loadPortfolioFromCache(sym) {
       const container = document.getElementById('transactionRowsContainer'); container.innerHTML = ""; const cached = localStorage.getItem(`quant_portfolio_${sym}`);
       if (cached) { const payload = JSON.parse(cached); if (payload.length > 0) { payload.forEach(r => addNewTransactionRow(r.price, r.shares, false)); return; } }
       addNewTransactionRow(staticClosePrice * 0.95, 100, false);
     }
-
     function onTickerChange() { const sym = document.getElementById('tickerSelect').value; localStorage.setItem(`quant_active_ticker`, sym); triggerAutonomousTapeSync(sym); loadPortfolioFromCache(sym); }
     function computeTrendEngine() { triggerAutonomousTapeSync(document.getElementById('tickerSelect').value); }
-
     window.addEventListener('DOMContentLoaded', () => {
       const globalActiveCacheTicker = localStorage.getItem(`quant_active_ticker`) || "LAES";
       document.getElementById('tickerSelect').value = globalActiveCacheTicker; loadPortfolioFromCache(globalActiveCacheTicker); triggerAutonomousTapeSync(globalActiveCacheTicker);
