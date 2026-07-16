@@ -1,398 +1,301 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌌 SEBRA V48.0 Nexocentric Quant Matrix Suite</title>
-    <style>
-        :root {
-            --bg-main: #060913;
-            --bg-card: #0D1527;
-            --bg-input: #121B32;
-            --border-glow: #1E2E54;
-            --border-active: #38BDF8;
-            --text-main: #E2E8F0;
-            --text-muted: #64748B;
-            --accent-blue: #0EA5E9;
-            --accent-green: #10B981;
-            --accent-warn: #F59E0B;
-            --accent-danger: #EF4444;
-            --sidebar-width: 350px;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace; }
-        body { background-color: var(--bg-main); color: var(--text-main); padding: 24px; font-size: 14px; overflow-x: hidden; }
-        .system-container { max-width: 1650px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
-        .sys-header {
-            background: linear-gradient(135deg, #0A1128 0%, #050A14 100%);
-            border: 1px solid var(--border-glow); border-radius: 16px; padding: 20px 28px;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6); position: relative; overflow: hidden;
-        }
-        .sys-header::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
-            background: linear-gradient(to bottom, var(--border-active), var(--accent-blue));
-        }
-        .sys-title-block { display: flex; flex-direction: column; gap: 4px; }
-        .sys-title { font-size: 1.4rem; font-weight: 800; letter-spacing: 1px; color: #FFF; }
-        .sys-subtitle { font-size: 0.8rem; color: var(--text-muted); font-family: monospace; }
-        .sys-badge { font-family: monospace; font-size: 0.8rem; color: var(--accent-green); background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); padding: 8px 16px; border-radius: 8px; font-weight: bold; }
-        .filter-deck-card {
-            background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 14px; padding: 14px 24px;
-            display: flex; justify-content: space-between; align-items: center; gap: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3); flex-wrap: wrap;
-        }
-        .horizon-buttons-group { display: flex; gap: 8px; align-items: center; }
-        .horizon-label { color: var(--text-muted); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-        .horizon-btn {
-            background: var(--bg-input); border: 1px solid var(--border-glow); color: var(--text-muted);
-            padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 0.82rem; font-weight: 700;
-            text-transform: uppercase; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .horizon-btn:hover { border-color: var(--border-active); color: #FFF; }
-        .horizon-btn.active { background: var(--accent-blue); color: #FFF; border-color: var(--border-active); box-shadow: 0 0 16px rgba(14, 165, 233, 0.4); }
-        .workspace-grid { display: grid; grid-template-columns: var(--sidebar-width) 1fr; gap: 20px; align-items: start; }
-        .control-sidebar { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
-        .sidebar-section-title { font-size: 0.82rem; font-weight: 700; color: #FFF; text-transform: uppercase; letter-spacing: 1px; padding-bottom: 6px; border-bottom: 2px solid var(--border-glow); margin-top: 10px; display: flex; align-items: center; gap: 6px; }
-        .sidebar-section-title:first-child { margin-top: 0; }
-        .input-group { display: flex; flex-direction: column; gap: 6px; }
-        label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
-        .submit-btn { background: var(--accent-blue); color: #FFF; border: none; padding: 12px; border-radius: 8px; font-weight: 700; text-transform: uppercase; font-size: 0.82rem; cursor: pointer; transition: all 0.2s ease; width: 100%; text-align: center; margin-top: 6px; box-shadow: 0 4px 14px rgba(14, 165, 233, 0.2); }
-        .submit-btn:hover { background: #0284C7; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(14, 165, 233, 0.3); }
-        .secondary-btn { background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border-glow); padding: 10px; border-radius: 8px; font-weight: 700; text-transform: uppercase; font-size: 0.78rem; cursor: pointer; transition: all 0.2s; width: 100%; }
-        .secondary-btn:hover { border-color: var(--border-active); background: #1E293B; }
-        select, input[type="number"], input[type="text"], textarea { width: 100%; background: var(--bg-input); border: 1px solid var(--border-glow); color: var(--text-main); padding: 10px 12px; border-radius: 8px; font-size: 0.85rem; outline: none; transition: border 0.2s ease; }
-        select:focus, input:focus, textarea:focus { border-color: var(--border-active); box-shadow: 0 0 10px rgba(56, 189, 248, 0.15); }
-        select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://w3.org' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px; padding-right: 40px; }
-        .toggle-row { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-glow); }
-        .switch-wrap { position: relative; display: inline-block; width: 42px; height: 22px; }
-        .switch-wrap input { display: none; }
-        .slider-node { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #1E293B; border-radius: 30px; transition: 0.2s; }
-        .slider-node:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: #FFF; border-radius: 50%; transition: 0.2s; }
-        input:checked + .slider-node { background-color: var(--accent-blue); }
-        input:checked + .slider-node:before { transform: translateX(20px); }
-        .chart-card-wrapper { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
-        .chart-svg-viewport { width: 100%; height: 240px; background: #040814; border: 1px solid var(--border-glow); border-radius: 10px; overflow: hidden; }
-        .main-content { display: flex; flex-direction: column; gap: 20px; }
-        .summary-dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-        .metric-tile { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 14px; padding: 18px 22px; display: flex; flex-direction: column; gap: 6px; position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.2); transition: border 0.3s ease; }
-        .metric-tile:hover { border-color: rgba(56, 189, 248, 0.3); }
-        .metric-value { font-size: 1.8rem; font-weight: 800; font-family: monospace; color: #FFF; letter-spacing: -0.5px; line-height: 1.2; }
-        .predictive-sub-panel { background: rgba(4, 7, 20, 0.4); padding: 10px; border-radius: 8px; border: 1px dashed var(--border-glow); margin-top: 6px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 0.78rem; font-family: monospace; }
-        .predictive-sub-panel span { display: flex; justify-content: space-between; color: var(--text-muted); }
-        .predictive-sub-panel b { color: var(--text-main); font-weight: 600; }
-        .ledger-container { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 14px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
-        .ledger-title-bar { padding: 16px 24px; font-size: 0.88rem; font-weight: 700; text-transform: uppercase; background: #0A101F; border-bottom: 1px solid var(--border-glow); letter-spacing: 0.5px; }
-        .table-scroll { width: 100%; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { background: #070B14; color: var(--text-muted); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; padding: 16px 20px; border-bottom: 1px solid var(--border-glow); letter-spacing: 0.5px; }
-        td { padding: 16px 20px; border-bottom: 1px solid #10192E; font-size: 0.88rem; vertical-align: middle; }
-        tr:hover td { background: rgba(56, 189, 248, 0.02); }
-        .news-injection-row { background: #050812; font-size: 0.84rem; color: var(--accent-blue); line-height: 1.6; }
-        .news-box-content { padding: 16px 24px; border-bottom: 1px solid var(--border-glow); border-left: 3px solid var(--border-active); }
-        .pos-delta { color: var(--accent-green); font-weight: 600; font-family: monospace; }
-        .neg-delta { color: var(--accent-danger); font-weight: 600; font-family: monospace; }
-        .status-badge { font-size: 0.72rem; font-weight: 800; padding: 5px 10px; border-radius: 6px; text-transform: uppercase; font-family: monospace; display: inline-block; letter-spacing: 0.5px; }
-        .status-buy { background: rgba(16, 185, 129, 0.12); color: var(--accent-green); border: 1px solid rgba(16, 185, 129, 0.25); }
-        .status-sell { background: rgba(239, 68, 68, 0.12); color: var(--accent-danger); border: 1px solid rgba(239, 68, 68, 0.25); }
-        .status-hold { background: rgba(245, 158, 11, 0.12); color: var(--accent-warn); border: 1px solid rgba(245, 158, 11, 0.25); }
-        .font-mono { font-family: monospace; }
-    </style>
-</head>
-<body>
-<div class="system-container">
-    <header class="sys-header">
-        <div class="sys-title-block">
-            <div class="sys-title">🌌 SEBRA V48.0 NEXOCENTRIC QUANT MATRIX</div>
-            <div class="sys-subtitle">TIME-SERIES SUITE & DESCRIPTIVE FUNDAMENTAL CATALYST DISPATCH [JULY 15, 2026]</div>
-        </div>
-        <div class="sys-badge" id="globalSessionBadge">CALIBRATION ENGINE ACTIVE</div>
-    </header>
-
-    <div class="filter-deck-card">
-        <div class="horizon-buttons-group">
-            <span class="horizon-label">Projection Target:</span>
-            <button class="horizon-btn active" id="btn_current" onclick="switchActiveHorizon('current')">Actual Spot</button>
-            <button class="horizon-btn" id="btn_30d" onclick="switchActiveHorizon('30d')">30 Days</button>
-            <button class="horizon-btn" id="btn_60d" onclick="switchActiveHorizon('60d')">60 Days</button>
-            <button class="horizon-btn" id="btn_120d" onclick="switchActiveHorizon('120d')">120 Days</button>
-            <button class="horizon-btn" id="btn_180d" onclick="switchActiveHorizon('180d')">180 Days</button>
-        </div>
-        <div class="horizon-buttons-group">
-            <span class="horizon-label">Base Currency:</span>
-            <button class="horizon-btn active" id="currency_usd" onclick="toggleDisplayCurrency('USD')">USD ($)</button>
-            <button class="horizon-btn" id="currency_gbp" onclick="toggleDisplayCurrency('GBP')">GBP (£)</button>
-        </div>
-    </div>
-    <div class="workspace-grid">
-        <div class="control-sidebar">
-            <div class="sidebar-section-title">✨ Focus Asset Profile</div>
-            <div class="input-group">
-                <label for="symbolSelect">Select Active Token Node</label>
-                <select id="symbolSelect" onchange="synchronizeSidebarControls()"></select>
-            </div>
-            
-            <div class="sidebar-section-title">📊 Local Allocation Tuner</div>
-            <div class="input-group">
-                <label>Shares Volume Held</label>
-                <input type="number" id="sharesInput" value="1000" step="1" oninput="executeInteractiveParametersUpdate()">
-            </div>
-            <div class="input-group">
-                <label>Purchase Cost Basis (GBP Base)</label>
-                <input type="number" id="costInput" value="2.50" step="0.01" oninput="executeInteractiveParametersUpdate()">
-            </div>
-            
-            <div class="sidebar-section-title">🛠️ Custom Asset Ingestion</div>
-            <div class="input-group"><label>New Node Symbol</label><input type="text" id="addSymbol" placeholder="e.g. CRWD, AMD"></div>
-            <div class="input-group"><label>Actual Spot Close ($)</label><input type="number" id="addSpot" value="150.00" step="0.01"></div>
-            <div class="input-group"><label>Model Prediction Close ($)</label><input type="number" id="addModel" value="142.50" step="0.01"></div>
-            <div class="input-group"><label>Descriptive Catalyst Narrative</label><input type="text" id="addNews" placeholder="Core event details..."></div>
-            <div class="input-group"><label>Catalyst Anchor Date</label><input type="text" id="addDate" value="2026-08-01" placeholder="YYYY-MM-DD"></div>
-            <button class="submit-btn" onclick="executeTickerProvisioning()">Ingest Custom Stock Node</button>
-            <button class="secondary-btn" style="margin-top: 4px;" onclick="executeResetToFactoryParity()">Restore Factory Defaults</button>
-        </div>
-        <div class="main-content">
-            <div class="chart-card-wrapper" id="trajectoryChartWrapper">
-                <label style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Simplex Real-Time Trajectory & Time-Series Prediction Wave Curves</label>
-                <svg class="chart-svg-viewport" id="svgGraphViewport"></svg>
-            </div>
-
-            <div class="summary-dashboard">
-                <div class="metric-tile">
-                    <label id="lbl_close">Close Price</label>
-                    <div class="metric-value font-mono" id="closeDisplay">0.00</div>
-                    <div id="badgeDisplay" style="margin-top:4px;"></div>
-                </div>
-                <div class="metric-tile">
-                    <label>Active Model Error %</label>
-                    <div class="metric-value font-mono" id="errorDisplay" style="color: var(--accent-blue);">0.00%</div>
-                    <div class="predictive-sub-panel" style="grid-template-columns:1fr; text-align:center;">
-                        <span>vs Actual Market Baseline Matrix</span>
-                    </div>
-                </div>
-                <div class="metric-tile">
-                    <label>Short-Horizon Forecasts</label>
-                    <div class="metric-value font-mono" id="v4Display" style="color: var(--accent-green); font-size: 1.2rem; margin-top:2px; margin-bottom:2px;">Engine Calibrated</div>
-                    <div class="predictive-sub-panel">
-                        <span>30D: <b id="sub_30">0.00</b></span>
-                        <span>60D: <b id="sub_60">0.00</b></span>
-                    </div>
-                </div>
-                <div class="metric-tile">
-                    <label>Long-Horizon Forecasts</label>
-                    <div class="metric-value font-mono" id="cmDisplay" style="color: var(--accent-blue); font-size: 1.2rem; margin-top:2px; margin-bottom:2px;">Polynomial Solved</div>
-                    <div class="predictive-sub-panel">
-                        <span>120D: <b id="sub_120">0.00</b></span>
-                        <span>180D: <b id="sub_180">0.00</b></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="ledger-container">
-                <div class="ledger-title-bar" id="ledgerTitleAnchor">Comprehensive Portfolio Tensor Matrix Block View</div>
-                <div class="table-scroll">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Symbol Node</th>
-                                <th>Chrono Session</th>
-                                <th>Actual Close Base</th>
-                                <th style="color:var(--text-muted);">Model Prediction</th>
-                                <th style="color:var(--border-active);">Active Model Error %</th>
-                                <th>Signal Status</th>
-                                <th>Shares Held</th>
-                                <th>Purchase Cost</th>
-                                <th>Net Position Value</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ledgerInjectTarget"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- SEBRA Nexocentric Engine v69.5 - Part 1 of 16 -->
+<script>
+  window.SEBRA_CONFIG = {
+    VERSION: "69.5",
+    GBP_SCALAR: 0.78,
+    TRAJECTORY_COEFFICIENT: 1.12,
+    DEFAULT_SHARE_INVENTORY: 100,
+    MAX_ROWS_LIMIT: 200,
+    CHRONO_SESSION: "16/07/2026"
+  };
+</script>
+<!-- SEBRA Nexocentric Engine v69.5 - Part 2 of 16 -->
+<style>
+  :root {
+    --bg-main: #060913;
+    --bg-card: #0D1527;
+    --bg-input: #121B32;
+    --border-glow: #1E2E54;
+    --border-active: #38BDF8;
+    --text-main: #E2E8F0;
+    --text-muted: #64748B;
+    --accent-blue: #0EA5E9;
+    --accent-green: #10B981;
+    --accent-warn: #F59E0B;
+    --accent-danger: #EF4444;
+    --yellow-box: #FEF08A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, sans-serif; }
+  body { background-color: var(--bg-main); color: var(--text-main); padding: 12px; font-size: 13px; overflow-x: hidden; }
+  .system-container { width: 100%; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+</style>
+<!-- SEBRA Nexocentric Engine v69.5 - Part 3 of 16 -->
+<div class="sys-header-block" style="background: linear-gradient(135deg, #0A1128 0%, #050A14 100%); border: 1px solid var(--border-glow); border-radius: 12px; padding: 14px; position: relative; overflow: hidden; margin-bottom: 4px;">
+  <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, var(--border-active), var(--accent-blue));"></div>
+  <div style="font-weight: 800; font-size: 13px; color: #FFF; letter-spacing: 0.5px; text-transform: uppercase;">🌌 SEBRA MOBILE TERMINAL</div>
+  <div id="sysSubTitleText" style="font-size: 9px; color: var(--text-muted); font-family: monospace; margin-top: 2px;">LOGIC STATE: STOCHASTIC CORE DISCONNECTED</div>
+</div>
+<!-- SEBRA Nexocentric Engine v69.5 - Part 4 of 16 -->
+<div class="kpi-dashboard-grid" style="display: flex; gap: 8px;">
+  <div style="flex: 1; background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 10px; padding: 10px; text-align: center;">
+    <span style="display: block; font-size: 8px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Net Portfolio Valuation</span>
+    <div id="kpiNetValuationCell" style="font-size: 16px; font-weight: 800; font-family: monospace; color: #FFF; margin-top: 2px;">$ 0.00</div>
+  </div>
+</div>
+<!-- SEBRA Nexocentric Engine v69.5 - Part 5 of 16 -->
+<div id="kpiErrorCard" style="flex: 1; background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 10px; padding: 10px; text-align: center;">
+  <span style="display: block; font-size: 8px; font-weight: 700; color: var(--accent-blue); text-transform: uppercase; letter-spacing: 0.5px;">Mean System Drift Error</span>
+  <div id="kpiMeanErrorCell" style="font-size: 16px; font-weight: 800; font-family: monospace; color: var(--accent-blue); margin-top: 2px;">0.00%</div>
 </div>
 <script>
-    let PAYLOAD_SNAPSHOT_MATRIX_POOL = {};
-    let STRATEGIC_ACTIVE_HORIZON = 'current'; 
-    let GLOBAL_DISPLAY_CURRENCY = 'USD';
-    const FX_USDBGB_CONVERSION_RATE = 0.78;   
-
-    let PORTFOLIO_LEDGER_LEDGER = {
-        "LAES": { volumeShares: 1000, entryCostBase: 2.50, news: "SEALSQ H1 revenue expands +115% with a structural micro-architecture defense layer rollout.", statusDate: "2026-06-12", spotClose: 2.74, prevPrice: 2.75 },
-        "SPCX": { volumeShares: 500,  entryCostBase: 120.00, news: "SpaceX structural platform float floor guidelines lock up macro asset institutional blocks.", statusDate: "2026-07-01", spotClose: 137.60, prevPrice: 154.20 },
-        "TSLA": { volumeShares: 100,  entryCostBase: 350.00, news: "Tesla enterprise neural network infrastructure completes FSD simulation cluster scaling.", statusDate: "2026-07-10", spotClose: 396.77, prevPrice: 382.40 },
-        "NVDA": { volumeShares: 200,  entryCostBase: 110.00, news: "NVIDIA next-gen tensor architecture tranches expand past global validation ceilings.", statusDate: "2026-07-14", spotClose: 134.93, prevPrice: 142.10 },
-        "AAPL": { volumeShares: 150,  entryCostBase: 175.20, news: "Localized consumer device private-AI matrix parameters secure edge data isolation loops.", statusDate: "2026-05-20", spotClose: 182.50, prevPrice: 181.00 },
-        "PLTR": { volumeShares: 1200, entryCostBase: 24.50,  news: "Palantir enterprise AIP contracts cross federal infrastructure networks to extend addressable bounds.", statusDate: "2026-06-30", spotClose: 41.80, prevPrice: 46.30 },
-        "AMD":  { volumeShares: 300,  entryCostBase: 135.00, news: "MI325X hardware computing accelerator blocks execute broad cloud infrastructure infills.", statusDate: "2026-07-05", spotClose: 144.20, prevPrice: 138.90 },
-        "MSFT": { volumeShares: 80,   entryCostBase: 390.00, news: "Azure hyperscale data container frameworks log sustained multi-tenant growth paths.", statusDate: "2026-06-18", spotClose: 421.15, prevPrice: 445.60 },
-        "AMZN": { volumeShares: 400,  entryCostBase: 160.00, news: "AWS server capacity grid expansion captures structural microservice volume runs.", statusDate: "2026-07-12", spotClose: 184.40, prevPrice: 176.20 },
-        "META": { volumeShares: 120,  entryCostBase: 410.00, news: "Llama open-weights language models solidify deep advertising algorithmic execution tiers.", statusDate: "2026-06-25", spotClose: 498.30, prevPrice: 512.40 }
-    };
-
-    function processSebraGeometryLayers(h1, h2) {
-        let h3 = h1 * 1.12; 
-        let w_raw = (Math.abs(h1 - h3) / h3) * h1;
-        let total_product = h1 * h2 * h3 * w_raw;
-        let tm_index = total_product <= 0 ? 0.0001 : Math.pow(total_product, 0.25);
-        return { tm: tm_index, macroCenter: h3 };
-    }
-    function executeQuarticInversion(target_tm, h2, h3) {
-        let convergence_price = 0.01; let minimum_residual = Infinity;
-        let exploration_limit = Math.max(h3 * 8, 160000.0); 
-        let total_steps = 15000; let allocation_step = exploration_limit / total_steps;
-
-        for (let idx = 0; idx <= total_steps; idx++) {
-            let trial_p = 0.01 + (idx * allocation_step);
-            let trial_w = (Math.abs(trial_p - h3) / h3) * trial_p;
-            let trial_tm = Math.pow(trial_p * h2 * h3 * trial_w, 0.25);
-            let residual_delta = Math.abs(trial_tm - target_tm);
-            if (residual_delta < minimum_residual) { minimum_residual = residual_delta; convergence_price = trial_p; }
-        }
-        return convergence_price;
-    }
-
-    function switchActiveHorizon(selectedHorizon) {
-        STRATEGIC_ACTIVE_HORIZON = selectedHorizon;
-        document.querySelectorAll('.horizon-btn').forEach(btn => { if(btn.id.startsWith('btn_')) btn.classList.remove('active'); });
-        document.getElementById(`btn_${selectedHorizon}`).classList.add('active');
-        runSebraSystemEngine();
-    }
-
-    function toggleDisplayCurrency(currencyMode) {
-        GLOBAL_DISPLAY_CURRENCY = currencyMode;
-        document.getElementById("currency_usd").classList.toggle("active", currencyMode === 'USD');
-        document.getElementById("currency_gbp").classList.toggle("active", currencyMode === 'GBP');
-        runSebraSystemEngine();
-    }
-    function executeManualPayloadSubmit() {
-        const selectMenu = document.getElementById("symbolSelect");
-        const previousSelection = selectMenu.value;
-        PAYLOAD_SNAPSHOT_MATRIX_POOL = {};
-        
-        Object.keys(PORTFOLIO_LEDGER_LEDGER).forEach(symbol => {
-            let node = PORTFOLIO_LEDGER_LEDGER[symbol];
-            PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol] = [{
-                timestamp: "2026-07-15", actualPrice: node.spotClose, prevPrice: node.prevPrice,
-                newsString: node.news, statusDate: node.statusDate, computedH2: node.spotClose
-            }];
-        });
-
-        selectMenu.innerHTML = "";
-        Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).forEach(symbol => {
-            let newOption = document.createElement("option"); newOption.value = symbol; newOption.text = symbol; selectMenu.add(newOption);
-        });
-
-        if (selectMenu.options.length > 0) {
-            selectMenu.value = Array.from(selectMenu.options).some(opt => opt.value === previousSelection) ? previousSelection : selectMenu.options.value;
-            synchronizeSidebarControls();
-        }
-    }
-
-    function synchronizeSidebarControls() {
-        const focusSymbol = document.getElementById("symbolSelect").value;
-        if (!focusSymbol || !PORTFOLIO_LEDGER_LEDGER[focusSymbol]) return;
-        
-        let meta = PORTFOLIO_LEDGER_LEDGER[focusSymbol];
-        document.getElementById("sharesInput").value = meta.volumeShares;
-        document.getElementById("costInput").value = meta.entryCostBase.toFixed(2);
-        
-        runSebraSystemEngine();
-    }
-    function executeInteractiveParametersUpdate() {
-        const focusSymbol = document.getElementById("symbolSelect").value;
-        if (!focusSymbol || !PORTFOLIO_LEDGER_LEDGER[focusSymbol]) return;
-        
-        PORTFOLIO_LEDGER_LEDGER[focusSymbol].volumeShares = parseFloat(document.getElementById("sharesInput").value) || 0;
-        PORTFOLIO_LEDGER_LEDGER[focusSymbol].entryCostBase = parseFloat(document.getElementById("costInput").value) || 0.01;
-        
-        runSebraSystemEngine();
-    }
-
-    function executeTickerProvisioning() {
-        let sym = document.getElementById("addSymbol").value.toUpperCase().trim();
-        let spot = parseFloat(document.getElementById("addSpot").value) || 10.0;
-        let model = parseFloat(document.getElementById("addModel").value) || 10.0;
-        let news = document.getElementById("addNews").value.trim() || "Dynamic asset provisioning tranche registered.";
-        let targetDate = document.getElementById("addDate").value.trim() || "2026-07-15";
-        if (!sym) return;
-
-        PORTFOLIO_LEDGER_LEDGER[sym] = { volumeShares: 1000, entryCostBase: spot, news: news, statusDate: targetDate, spotClose: spot, prevPrice: model };
-        executeManualPayloadSubmit();
-        document.getElementById("symbolSelect").value = sym;
-        synchronizeSidebarControls();
-    }
-
-    function executeResetToFactoryParity() {
-        PORTFOLIO_LEDGER_LEDGER = {
-            "LAES": { volumeShares: 1000, entryCostBase: 2.50, news: "SEALSQ H1 revenue expands +115% with a structural micro-architecture defense layer rollout.", statusDate: "2026-06-12", spotClose: 2.74, prevPrice: 2.75 },
-            "SPCX": { volumeShares: 500,  entryCostBase: 120.00, news: "SpaceX structural platform float floor guidelines lock up macro asset institutional blocks.", statusDate: "2026-07-01", spotClose: 137.60, prevPrice: 154.20 },
-            "TSLA": { volumeShares: 100,  entryCostBase: 350.00, news: "Tesla enterprise neural network infrastructure completes FSD simulation cluster scaling.", statusDate: "2026-07-10", spotClose: 396.77, prevPrice: 382.40 },
-            "NVDA": { volumeShares: 200,  entryCostBase: 110.00, news: "NVIDIA next-gen tensor architecture tranches expand past global validation ceilings.", statusDate: "2026-07-14", spotClose: 134.93, prevPrice: 142.10 },
-            "AAPL": { volumeShares: 150,  entryCostBase: 175.20, news: "Localized consumer device private-AI matrix parameters secure edge data isolation loops.", statusDate: "2026-05-20", spotClose: 182.50, prevPrice: 181.00 },
-            "PLTR": { volumeShares: 1200, entryCostBase: 24.50,  news: "Palantir enterprise AIP contracts cross federal infrastructure networks to extend addressable bounds.", statusDate: "2026-06-30", spotClose: 41.80, prevPrice: 46.30 },
-            "AMD":  { volumeShares: 300,  entryCostBase: 135.00, news: "MI325X hardware computing accelerator blocks execute broad cloud infrastructure infills.", statusDate: "2026-07-05", spotClose: 144.20, prevPrice: 138.90 },
-            "MSFT": { volumeShares: 80,   entryCostBase: 390.00, news: "Azure hyperscale data container frameworks log sustained multi-tenant growth paths.", statusDate: "2026-06-18", spotClose: 421.15, prevPrice: 445.60 },
-            "AMZN": { volumeShares: 400,  entryCostBase: 160.00, news: "AWS server capacity grid expansion captures structural microservice volume runs.", statusDate: "2026-07-12", spotClose: 184.40, prevPrice: 176.20 },
-            "META": { volumeShares: 120,  entryCostBase: 410.00, news: "Llama open-weights language models solidify deep advertising algorithmic execution tiers.", statusDate: "2026-06-25", spotClose: 498.30, prevPrice: 512.40 }
-        };
-        executeManualPayloadSubmit();
-    }
-    function renderDynamicTrajectoryCurve(vSpot, p30, p60, p120, p180) {
-        const svg = document.getElementById("svgGraphViewport"); if (!svg) return; svg.innerHTML = "";
-        const points = [{ x: 60, y: vSpot, lbl: "Actual Spot" }, { x: 140, y: p30, lbl: "+30D" }, { x: 220, y: p60, lbl: "+60D" }, { x: 300, y: p120, lbl: "+120D" }, { x: 380, y: p180, lbl: "+180D" }];
-        const prices = [vSpot, p30, p60, p120, p180]; const max = Math.max(...prices) * 1.06, min = Math.min(...prices) * 0.94, range = max - min || 1.0;
-        let pathD = ""; points.forEach((pt, i) => { pt.sX = pt.x; pt.sY = 210 - ((pt.y - min) / range) * 170; pathD += (i === 0) ? `M ${pt.sX} ${pt.sY}` : ` L ${pt.sX} ${pt.sY}`; });
-        let path = document.createElementNS("http://w3.org", "path"); path.setAttribute("d", pathD); path.setAttribute("stroke", "#38BDF8"); path.setAttribute("stroke-width", "3.5"); path.setAttribute("fill", "none"); svg.appendChild(path);
-        points.forEach(pt => {
-            let c = document.createElementNS("http://w3.org", "circle"); c.setAttribute("cx", pt.sX); c.setAttribute("cy", pt.sY); c.setAttribute("r", "5"); c.setAttribute("fill", "#FFF"); svg.appendChild(c);
-            let t = document.createElementNS("http://w3.org", "text"); t.setAttribute("x", pt.sX - 24); t.setAttribute("y", pt.sY - 14); t.setAttribute("fill", "#64748B"); t.setAttribute("font-size", "10px"); t.textContent = `${pt.lbl}:${GLOBAL_DISPLAY_CURRENCY === 'USD'?'$':'£'}${(pt.y*(GLOBAL_DISPLAY_CURRENCY==='USD'?1.0:FX_USDBGB_CONVERSION_RATE)).toFixed(2)}`; svg.appendChild(t);
-        });
-    }
-
-    function runSebraSystemEngine() {
-        const dropdownFocusSymbol = document.getElementById("symbolSelect").value, gridBodyElement = document.getElementById("ledgerInjectTarget"); if (!dropdownFocusSymbol) return; gridBodyElement.innerHTML = "";
-        const cc = (GLOBAL_DISPLAY_CURRENCY === 'USD') ? 1.0 : FX_USDBGB_CONVERSION_RATE, symSign = (GLOBAL_DISPLAY_CURRENCY === 'USD') ? '$' : '£';
-        document.getElementById("lbl_close").innerText = `Close Price (${GLOBAL_DISPLAY_CURRENCY})`;
-
-        Object.keys(PAYLOAD_SNAPSHOT_MATRIX_POOL).forEach(symbol => {
-            PAYLOAD_SNAPSHOT_MATRIX_POOL[symbol].forEach((rowItem) => {
-                let node = PORTFOLIO_LEDGER_LEDGER[symbol]; let rowShares = node.volumeShares, rowEntryCostBase = node.entryCostBase, eval_h1 = rowItem.actualPrice, eval_h2 = rowItem.computedH2;
-                let bases = processSebraGeometryLayers(eval_h1, eval_h2);
-                let p30 = executeQuarticInversion(bases.tm * 1.10, eval_h2, bases.macroCenter), p60 = executeQuarticInversion(bases.tm * 1.20, eval_h2, bases.macroCenter), p120 = executeQuarticInversion(bases.tm * 1.35, eval_h2, bases.macroCenter), p180 = executeQuarticInversion(bases.tm * 1.50, eval_h2, bases.macroCenter);
-                
-                let horizonScalar = 1.0; if (STRATEGIC_ACTIVE_HORIZON === '30d') horizonScalar = 1.10; if (STRATEGIC_ACTIVE_HORIZON === '60d') horizonScalar = 1.20; if (STRATEGIC_ACTIVE_HORIZON === '120d') horizonScalar = 1.35; if (STRATEGIC_ACTIVE_HORIZON === '180d') horizonScalar = 1.50;
-                let calculatedModelPriceUSD = (STRATEGIC_ACTIVE_HORIZON === 'current') ? rowItem.prevPrice : executeQuarticInversion(bases.tm * horizonScalar, eval_h2, bases.macroCenter);
-                let activeModelError = ((rowItem.prevPrice - eval_h1) / eval_h1) * 100;
-                
-                if (symbol === dropdownFocusSymbol) {
-                    document.getElementById("closeDisplay").innerText = `${symSign}${(eval_h1 * cc).toFixed(2)}`;
-                    document.getElementById("sub_30").innerText = `${symSign}${(p30 * cc).toFixed(2)}`; document.getElementById("sub_60").innerText = `${symSign}${(p60 * cc).toFixed(2)}`;
-                    document.getElementById("sub_120").innerText = `${symSign}${(p120 * cc).toFixed(2)}`; document.getElementById("sub_180").innerText = `${symSign}${(p180 * cc).toFixed(2)}`;
-                    document.getElementById("errorDisplay").innerText = `${activeModelError >= 0 ? '+' : ''}${activeModelError.toFixed(2)}%`;
-                    
-                    let badge = document.getElementById("badgeDisplay");
-                    if (activeModelError < -3.0) { badge.innerHTML = `<span class="status-badge status-buy">BUY SIGNAL</span>`; }
-                    else if (activeModelError > 3.0) { badge.innerHTML = `<span class="status-badge status-sell">SELL SIGNAL</span>`; }
-                    else { badge.innerHTML = `<span class="status-badge status-hold">HOLD STATUS</span>`; }
-                    renderDynamicTrajectoryCurve(eval_h1, p30, p60, p120, p180);
-                }
-                
-                let tableDisplayError = ((calculatedModelPriceUSD - eval_h1) / eval_h1) * 100;
-                let netPositionValueBase = (calculatedModelPriceUSD * cc) * rowShares;
-                let rowHTML = `<tr style="${symbol === dropdownFocusSymbol ? 'background: rgba(56, 189, 248, 0.04); border-left: 3px solid var(--border-active);' : ''}">
-                    <td style="font-weight:700; color:#FFF;">⚡ ${symbol}</td><td class="font-mono" style="color:var(--text-muted);">2026-07-15</td>
-                    <td class="font-mono">${symSign}${(eval_h1 * cc).toFixed(2)}</td><td class="font-mono" style="color:#FFF; font-weight: 600;">${symSign}${(calculatedModelPriceUSD * cc).toFixed(2)}</td>
-                    <td class="${tableDisplayError >= 0 ? 'pos-delta' : 'neg-delta'}">${tableDisplayError >= 0 ? '+' : ''}${tableDisplayError.toFixed(2)}%</td>
-                    <td>${activeModelError < -3.0 ? '<span class="status-badge status-buy">BUY</span>' : activeModelError > 3.0 ? '<span class="status-badge status-sell">SELL</span>' : '<span class="status-badge status-hold">HOLD</span>'}</td>
-                    <td class="font-mono">${rowShares.toLocaleString()}</td><td class="font-mono">${symSign}${(rowEntryCostBase * cc).toFixed(2)}</td>
-                    <td class="font-mono" style="font-weight:700; color:#FFF;">${symSign}${netPositionValueBase.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
-                </tr>`;
-                if (symbol === dropdownFocusSymbol) { rowHTML += `<tr class="news-injection-row"><td colspan="9" class="news-box-content">📰 [FUNDAMENTAL CATALYST Matrix] (ISSUED: ${rowItem.statusDate}): "${rowItem.newsString}"</td></tr>`; } gridBodyElement.innerHTML += rowHTML;
-            });
-        });
-    }
-    window.onload = function() { executeManualPayloadSubmit(); };
+  // Hooks cards into flex alignment containment layers instantly
+  document.addEventListener("DOMContentLoaded", function() {
+    var grid = document.querySelector(".kpi-dashboard-grid");
+    if(grid) { grid.appendChild(document.getElementById("kpiErrorCard")); }
+  });
 </script>
-</body>
-</html>
+<!-- SEBRA Nexocentric Engine v69.5 - Part 6 of 16 -->
+<div class="panel-card">
+  <h4>📥 Ingest Custom Asset Ticker</h4>
+  <div style="margin-bottom: 8px;">
+    <label style="display: block; font-size: 9px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 3px;">Asset Symbol Node</label>
+    <input type="text" id="sidebarTickerInput" placeholder="e.g. NVDA, BP.L" style="text-transform: uppercase;">
+  </div>
+  <div style="margin-bottom: 8px;">
+    <label style="display: block; font-size: 9px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 3px;">Shares Inventory Count</label>
+    <input type="number" id="sidebarSharesInput" value="100">
+  </div>
+  <button type="button" onclick="executeLocalIngestSubmission()">Action Live Ingest</button>
+</div>
+<style>
+  .panel-card { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 12px; padding: 12px; margin-bottom: 4px; }
+  h4 { margin-top: 0; margin-bottom: 8px; font-size: 11px; font-weight: 700; color: #FFF; text-transform: uppercase; }
+  button { width: 100%; padding: 8px; background: var(--accent-blue); color: #FFF; border: none; border-radius: 6px; font-weight: 700; font-size: 11px; text-transform: uppercase; cursor: pointer; }
+  button:hover { background: #0284C7; }
+</style>
+<!-- SEBRA Nexocentric Engine v69.5 - Part 7 of 16 -->
+<div class="panel-card">
+  <h4>✏️ Submit Parameter Overwrite</h4>
+  <div style="margin-bottom: 8px;">
+    <label style="display: block; font-size: 9px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 3px;">Target Node Select</label>
+    <select id="sidebarOverrideNodeSelector"></select>
+  </div>
+  <div style="margin-bottom: 8px;">
+    <label style="display: block; font-size: 9px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 3px;">Last Scraped Spot ($)</label>
+    <input type="number" id="sidebarOverrideSpot" step="0.01" placeholder="Keep current if blank">
+  </div>
+  <div style="margin-bottom: 8px;">
+    <label style="display: block; font-size: 9px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 3px;">Your Model Prediction ($)</label>
+    <input type="number" id="sidebarOverridePred" step="0.01" placeholder="Keep current if blank">
+  </div>
+  <button type="button" style="background: var(--bg-main); border: 1px solid var(--border-glow);" onclick="executeLocalOverrideSubmission()">Submit Overwrite</button>
+</div>
+<!-- SEBRA Nexocentric Engine v69.5 - Part 8 of 16 -->
+<div class="panel-card">
+  <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; border: 1px solid var(--border-glow);">
+    <label style="margin-bottom: 0;">Auto-Sort Alert Priority</label>
+    <label class="switch-container" style="position: relative; display: inline-block; width: 34px; height: 20px;">
+      <input type="checkbox" id="sidebarToggleSort" onchange="runMatrixRecompilationSweep()" style="display:none;">
+      <span class="slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #1E293B; border-radius: 20px; transition: 0.2s;"></span>
+    </label>
+  </div>
+</div>
+<style>
+  .switch-container input:checked + .slider { background-color: var(--accent-blue); }
+  .switch-container class .slider:before { position: absolute; content: ""; height: 14px; width: 16px; left: 3px; bottom: 3px; background-color: #FFF; border-radius: 50%; transition: 0.2s; }
+  .switch-container input:checked + .slider:before { transform: translateX(14px); }
+</style>
+<!-- SEBRA Nexocentric Engine v69.5 - Part 9 of 16 -->
+<div class="grid-card-outer" style="background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 12px; overflow: hidden; margin-top: 4px;">
+  <div class="mobile-viewport-scroll" style="width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;">
+    <table id="sebraMobileTable">
+      <thead>
+        <tr>
+          <th>Node</th><th>Web Spot</th><th>Your Model</th><th>Active Error</th><th>Shares</th><th>Net Value</th><th>Signal Badge</th><th>When To Buy</th><th id="hdrDynamicHorizon">Horizon Target</th>
+        </tr>
+      </thead>
+      <tbody id="sebraMobileTbody"></tbody>
+    </table>
+  </div>
+</div>
+<style>
+  table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  th { background: #0A1224; color: var(--text-main); font-weight: 700; padding: 10px 8px; text-transform: uppercase; font-size: 8px; border-bottom: 2px solid var(--border-glow); text-align: center; }
+  td { padding: 10px 8px; border-bottom: 1px solid var(--border-glow); font-family: monospace; text-align: right; }
+  td:first-child { text-align: center; font-weight: bold; font-family: inherit; color: #FFF; }
+  .badge { display: block; padding: 2px 4px; border-radius: 4px; font-size: 7px; font-weight: bold; text-align: center; border: 1px solid transparent; }
+  .b-hot-buy { background: rgba(16,185,129,0.1); color: var(--accent-green); border-color: rgba(16,185,129,0.2); }
+  .b-urgent-sell { background: rgba(239,68,68,0.1); color: var(--accent-danger); border-color: rgba(239,68,68,0.2); }
+  .b-hold { background: rgba(100,116,139,0.1); color: var(--text-muted); border-color: rgba(100,116,139,0.2); }
+</style>
+<!-- SEBRA Nexocentric Engine v69.5 - Part 10 of 16 -->
+<div class="panel-card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+  <div style="display: flex; gap: 4px;" id="horizonBtnDeck">
+    <button class="h-btn active" onclick="switchActiveHorizon('30D')">30D</button>
+    <button class="h-btn" onclick="switchActiveHorizon('60D')">60D</button>
+    <button class="h-btn" onclick="switchActiveHorizon('120D')">120D</button>
+    <button class="h-btn" onclick="switchActiveHorizon('180D')">180D</button>
+  </div>
+</div>
+<style>
+  .h-btn { padding: 6px 12px; background: var(--bg-input); border: 1px solid var(--border-glow); color: var(--text-muted); border-radius: 6px; cursor: pointer; font-size: 10px; font-weight: bold; text-transform: uppercase; }
+  .h-btn:hover { border-color: var(--border-active); color: #FFF; }
+  .h-btn.active { background: var(--accent-blue); color: #FFF; border-color: var(--border-active); box-shadow: 0 0 8px rgba(14,165,233,0.3); }
+</style>
+<!-- SEBRA Nexocentric Engine v69.5 - Part 11 of 16 -->
+<div id="currencySelectorDeck" style="display: flex; gap: 4px;">
+  <button class="h-btn active" id="ccUSD" onclick="switchActiveCurrency('USD')">USD ($)</button>
+  <button class="h-btn" id="ccGBP" onclick="switchActiveCurrency('GBP')">GBP (£)</button>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var deck = document.getElementById("horizonBtnDeck");
+    if(deck && deck.parentNode) { deck.parentNode.appendChild(document.getElementById("currencySelectorDeck")); }
+  });
+</script>
+<!-- SEBRA Nexocentric Engine v69.5 - Part 12 of 16 -->
+<div class="panel-card" style="margin-bottom: 4px;">
+  <span style="font-size: 9px; font-weight: 700; color: var(--text-muted); display: block; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Live Multi-Horizon Trajectory Vectors</span>
+  <div id="svgViewportFrame" style="width: 100%; height: 140px; background: #040814; border: 1px solid var(--border-glow); border-radius: 8px; overflow: hidden;"></div>
+</div>
+<!-- SEBRA Nexocentric Engine v69.5 - Part 13 of 16 -->
+<script>
+  /**
+   * Continuous-Time Quartic Root Transformation Function
+   */
+  function solveGeometricHorizonTarget(spotClose, timelineKey) {
+    var c = window.SEBRA_CONFIG.TRAJECTORY_COEFFICIENT;
+    var h3 = spotClose * c;
+    var rate = Math.abs(spotClose - h3) / h3;
+    var baseRoot = Math.pow((spotClose * spotClose * h3), 1/3);
+    var index = baseRoot * (1 + rate);
+    
+    if (timelineKey === "30D")  return index * 1.10;
+    if (timelineKey === "60D")  return index * 1.20;
+    if (timelineKey === "120D") return index * 1.35;
+    if (timelineKey === "180D") return index * 1.50;
+    return index;
+  }
+</script>
+<!-- SEBRA Nexocentric Engine v69.5 - Part 14 of 16 -->
+<script>
+  window.LOCAL_DATABASE_REGISTRY = {
+    "LAES": { spot: 2.74,   pred: 2.75,   shares: 100 },
+    "SPCX": { spot: 132.00, pred: 154.20, shares: 250 },
+    "TSLA": { spot: 396.77, pred: 382.40, shares: 100 },
+    "NVDA": { spot: 134.93, pred: 142.10, shares: 100 },
+    "AAPL": { spot: 182.50, pred: 181.00, shares: 100 },
+    "PLTR": { spot: 41.80,  pred: 46.30,  shares: 100 },
+    "AMD":  { spot: 144.20, pred: 138.90, shares: 100 },
+    "MSFT": { spot: 421.15, pred: 445.60, shares: 100 },
+    "AMZN": { spot: 184.40, pred: 176.20, shares: 250 },
+    "META": { spot: 498.30, pred: 512.40, shares: 100 }
+  };
+  
+  // Auto-allocate 200 out-of-sample data nodes with zero pricing in code script
+  for (var i = 11; i <= window.SEBRA_CONFIG.MAX_ROWS_LIMIT; i++) {
+    var key = "NODE-" + i;
+    var proceduralSpot = parseFloat((25.0 + (Math.sin(i) * 10.5) + (i * 0.25)).toFixed(2));
+    window.LOCAL_DATABASE_REGISTRY[key] = { spot: proceduralSpot, pred: proceduralSpot, shares: 100 };
+  }
+</script>
+<!-- SEBRA Nexocentric Engine v69.5 - Part 15 of 16 -->
+<script>
+  function executeLocalIngestSubmission() {
+    var t = document.getElementById("sidebarTickerInput").value.trim().toUpperCase();
+    var s = parseInt(document.getElementById("sidebarSharesInput").value);
+    if(!t || isNaN(s)) { alert("Enter valid parameters fields."); return; }
+    
+    var randomSpotPrice = parseFloat((40 + Math.random() * 200).toFixed(2));
+    window.LOCAL_DATABASE_REGISTRY[t] = { spot: randomSpotPrice, pred: randomSpotPrice, shares: s };
+    
+    document.getElementById("sidebarTickerInput").value = "";
+    runMatrixRecompilationSweep();
+  }
+
+  function executeLocalOverrideSubmission() {
+    var t = document.getElementById("sidebarOverrideNodeSelector").value;
+    var s = document.getElementById("sidebarOverrideSpot").value;
+    var p = document.getElementById("sidebarOverridePred").value;
+    
+    if(s) window.LOCAL_DATABASE_REGISTRY[t].spot = parseFloat(s);
+    if(p) window.LOCAL_DATABASE_REGISTRY[t].pred = parseFloat(p);
+    
+    document.getElementById("sidebarOverrideSpot").value = "";
+    document.getElementById("sidebarOverridePred").value = "";
+    runMatrixRecompilationSweep();
+  }
+</script>
+<!-- SEBRA Nexocentric Engine v69.5 - Part 16 of 16 -->
+<script>
+  var GLOBAL_TIMELINE = "30D";
+  var GLOBAL_CURRENCY = "USD";
+
+  function switchActiveHorizon(k) { GLOBAL_TIMELINE = k; updateButtonState(".h-btn", k); runMatrixRecompilationSweep(); }
+  function switchActiveCurrency(k) { GLOBAL_CURRENCY = k; updateButtonState("#cc"+k, k); runMatrixRecompilationSweep(); }
+  
+  function updateButtonState(selector, value) {
+    document.querySelectorAll(selector).forEach(function(btn) {
+      if(btn.id.includes(value) || btn.innerText.includes(value)) btn.classList.add("active");
+      else if(!btn.id.includes("cc") && !btn.innerText.includes("$") && !btn.innerText.includes("£")) btn.classList.remove("active");
+    });
+  }
+
+  function runMatrixRecompilationSweep() {
+    var tbody = document.getElementById("sebraMobileTbody");
+    var select = document.getElementById("sidebarOverrideNodeSelector");
+    tbody.innerHTML = ""; select.innerHTML = "";
+
+    var fx = (GLOBAL_CURRENCY === "GBP") ? window.SEBRA_CONFIG.GBP_SCALAR : 1.00;
+    var gl = (GLOBAL_CURRENCY === "GBP") ? "£" : "$";
+    
+    document.getElementById("hdrDynamicHorizon").innerText = GLOBAL_TIMELINE + " Target";
+    document.getElementById("sysSubTitleText").innerText = "LOGIC STATE: OFFLINE ALIGNED // VIEWPORT FIXED";
+
+    var totVal = 0, totErr = 0, count = 0;
+    var rowsList = [];
+
+    for (var ticker in window.LOCAL_DATABASE_REGISTRY) {
+      var n = window.LOCAL_DATABASE_REGISTRY[ticker];
+      var err = ((n.pred - n.spot) / n.spot) * 100;
+      var cap = n.spot * n.shares * fx;
+
+      totVal += cap; totErr += Math.abs(err); count++;
+
+      var entryText = "Active", badgeCls = "b-hold", badgeTxt = "HOLD STATUS", rank = 3;
+      if(err < -4.00) { entryText = gl + (n.pred * 0.90 * fx).toFixed(1); badgeCls = "b-urgent-sell"; badgeTxt = "🚨 SELL"; rank = 2; }
+      else if(err > 10.00) { badgeCls = "b-hot-buy"; badgeTxt = "🔥 BUY"; rank = 1; }
+
+      rowsList.push({ t: ticker, spot: n.spot * fx, pred: n.pred * fx, err: err, shares: n.shares, val: cap, cls: badgeCls, txt: badgeTxt, entry: entryText, target: solveGeometricHorizonTarget(n.spot, GLOBAL_TIMELINE) * fx, rank: rank });
+      
+      var opt = document.createElement("option"); opt.value = ticker; opt.innerText = ticker; select.appendChild(opt);
+    }
+
+    if(document.getElementById("sidebarToggleSort").checked) { rowsList.sort(function(a,b){ return a.rank - b.rank; }); }
+
+    rowsList.forEach(function(r) {
+      tbody.innerHTML += "<tr><td class='font-bold'>" + r.t + "</td><td>" + gl + r.spot.toFixed(1) + "</td><td class='yellow-bg'>" + gl + r.pred.toFixed(1) + "</td><td>" + r.err.toFixed(1) + "%</td><td>" + r.shares + "</td><td class='font-bold'>" + gl + Math.round(r.val) + "</td><td><span class='badge " + r.cls + "'>" + r.txt + "</span></td><td class='italic-text'>" + r.entry + "</td><td>" + gl + r.target.toFixed(1) + "</td></tr>";
+    });
+
+    document.getElementById("kpiTotalValuation").innerText = gl + " " + Math.round(totVal).toLocaleString();
+    document.getElementById("kpiMeanError").innerText = (totErr / count).toFixed(2) + "%";
+    plotSvgChart(rowsList.slice(0, 10));
+  }
+
+  function plotSvgChart(data) {
+    var frame = document.getElementById("svgViewportFrame");
+    var w = frame.clientWidth || 320, h = 140, p = 25;
+    var max = Math.max.apply(Math, data.map(function(o){return Math.max(o.spot, o.target);})) * 1.1;
+    var step = (w - p*2) / (data.length - 1);
+    
+    var spotStr = "", targStr = "", labels = "<svg width='100%' height='100%'>";
+    data.forEach(function(r, i) {
+      var x = p + i*step, yS = (h-p) - (r.spot/max)*(h-p*2), yT = (h-p) - (r.target/max)*(h-p*2);
+      spotStr += (i===0?"M ":"L ")+x+","+yS+" "; targStr += (i===0?"M ":"L ")+x+","+yT+" ";
+      labels += "<text x='"+x+"' y='"+(h-5)+"' fill='#64748B' font-size='8' text-anchor='middle'>"+r.t+"</text>";
+    });
+    frame.innerHTML = labels + "<path d='"+spotStr+"' fill='none' stroke='#475569' stroke-width='1.5' stroke-dasharray='3,3'/>" + "<path d='"+targStr+"' fill='none' stroke='#38BDF8' stroke-width='1.5'/>" + "</svg>";
+  }
+
+  window.onload = function() { runMatrixRecompilationSweep(); };
+</script>
