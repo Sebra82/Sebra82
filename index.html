@@ -3,27 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🌌 SEBRA Multi-Module Quant Terminal</title>
-    <!-- Injects the core stylesheet design constants directly -->
-    <link rel="stylesheet" href="Theme.css">
-    <link rel="stylesheet" href="Badges.css">
+    <title>🌌 SEBRA V115.0 Autonomous Quantum Matrix Terminal</title>
+    <!-- Combined Modular Core Stylesheet Injection Framework -->
+    <link rel="stylesheet" href="style_core.css">
+    <link rel="stylesheet" href="style_badges.css">
 </head>
 <body>
     <div class="system-wrapper">
-        <!-- Structural UI segments loaded at runtime -->
-        <div id="header-hood-container"></div>
-        <div id="filter-deck-container"></div>
-        <div id="kpi-tiles-container"></div>
+        <!-- Structural Content Shell Targets Filled By Runtime Handshake Imports -->
+        <header id="apex-header-hood-target"></header>
+        <nav id="filter-deck-card-target"></nav>
+        <section id="summary-dashboard-kpi-target"></section>
         
         <div class="workspace-split-grid">
-            <div id="sidebar-panel-container"></div>
-            <div id="ledger-grid-container"></div>
+            <aside id="control-sidebar-form-target"></aside>
+            <main style="display:flex; flex-direction:column; gap:14px;">
+                <div id="financial-ledger-table-target"></div>
+                <div id="trajectory-curves-viewport-target"></div>
+            </main>
         </div>
     </div>
 
-    <!-- Orchestrated script load framework matrix sequential stack -->
-    <script src="Math_Geometric.js"></script>
-    <s:root {
+    <!-- Script Application Execution Inversion Engine Dependency Chain Matrix -->
+    <script src="config_system.js"></script>
+    <script src="math_geometric.js"></script>
+    <script src="math_log_return.js"></script>
+    <script src="registry_base.js"></script>
+    <script src="registry_expanded.js"></script>
+    <script src="actions_overwrite.js"></script>
+    <script src="core_bootstrap.js"></script>
+</body>
+</html>
+/* Master Graphics Palette & High-Contrast Layout Constraint Tokens */
+:root {
     --bg-main: #060913;
     --bg-card: #0D1527;
     --bg-input: #121B32;
@@ -36,83 +48,117 @@
     --accent-warn: #F59E0B;
     --accent-danger: #EF4444;
     --yellow-neon: #FEF08A;
+    --sidebar-width: 330px;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: monospace; }
-body { background-color: var(--bg-main); color: var(--text-main); padding: 16px; font-size: 13px; overflow-x: hidden; }
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace; }
+body { background-color: var(--bg-main); color: var(--text-main); padding: 16px; font-size: 13px; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 .system-wrapper { max-width: 1650px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
 .panel-card { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 10px; padding: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
-.workspace-split-grid { display: grid; grid-template-columns: 330px 1fr; gap: 14px; align-items: start; }
+.workspace-split-grid { display: grid; grid-template-columns: var(--sidebar-width) 1fr; gap: 14px; align-items: start; }
 .form-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
 table { width: 100%; border-collapse: collapse; font-size: 12px; }
-th { background-color: #0A1224; color: var(--text-muted); font-weight: 700; padding: 10px; text-transform: uppercase; font-size: 10px; border-bottom: 2px solid var(--border-glow); text-align: right; }
-td { padding: 10px; border-bottom: 1px solid var(--border-glow); text-align: right; }
-tr:hover td { background-color: rgba(56, 189, 248, 0.03); }
-.yellow-neon-box { color: var(--yellow-neon); font-weight: 600; }
-<script>
-    // System configuration parameter mapping definitions
-    window.SEBRA_CONFIG = {
-        GBP_CONVERSION_SCALAR: 0.78, // Institutional WM/Refinitiv Fix Constant
-        GEOMETRIC_EXPANSION_RATE: 1.12,
-        STRICT_DECIMAL_PLACES: 2,
-        CHRONO_SESSION_DATE: "16/07/2026",
-        DEFAULT_CURRENCY_STATE: "USD",
-        DEFAULT_TIMELINE_HORIZON: "CLOSE"
-    };
-</script>
-<div class="panel-card" style="background: linear-gradient(135deg, #0A1128 0%, #050A14 100%); position: relative; overflow: hidden; margin-bottom: 14px;">
+th { background-color: #0A1224; color: var(--text-muted); font-weight: 700; padding: 10px 12px; text-transform: uppercase; font-size: 0.65rem; border-bottom: 2px solid var(--border-glow); text-align: right; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border-glow); text-align: right; color: var(--text-main); }
+tr:hover td { background-color: rgba(56, 189, 248, 0.04); }
+.yellow-neon-box { color: var(--yellow-neon); font-weight: 600; background-color: rgba(254, 240, 138, 0.01); }
+/**
+ * SEBRA Quant Parameter Suite v115.0 - Parameter Constants Module
+ * Central invariant tokens for managing baseline cross-currency fixes and rounding.
+ */
+window.SEBRA_CONFIG = {
+    GBP_CONVERSION_SCALAR: 0.78, // Institutional WM/Refinitiv 4:00 PM London Close Spot Fix
+    GEOMETRIC_EXPANSION_RATE: 1.12, // Quartic Root non-linear velocity scaling limit
+    STRICT_DECIMAL_PLACES: 2, // Mandatory ledger precision rendering token
+    CHRONO_SESSION_DATE: "16/07/2026", // Audited market realities capture timeline anchor
+    DEFAULT_CURRENCY_STATE: "USD",
+    DEFAULT_TIMELINE_HORIZON: "CLOSE"
+};
+<!-- Content Layer Fragment - Loaded dynamically into index.html master shell -->
+<div class="panel-card" style="background: linear-gradient(135deg, #0A1128 0%, #050A14 100%); position: relative; overflow: hidden; display: flex; justify-content: space-between; align-items: center; padding: 16px 20px;">
     <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, var(--border-active), var(--accent-blue));"></div>
-    <h1 style="font-size: 1.25rem; font-weight: 800; color: #FFF;">🌌 SEBRA MULTI-MODULE QUANT WORKBENCH</h1>
-    <p id="sysSubTitleText" style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; margin-top: 2px;">Data Regime: Decoupled Parameter Ledger System Initialized Stable</p>
-</div>
-<div class="panel-card" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; margin-bottom: 14px;">
-    <div style="display: flex; gap: 6px; align-items: center;">
-        <span style="color: var(--text-muted); font-size: 0.72rem; font-weight: 700; text-transform: uppercase;">Horizon View:</span>
-        <button class="horizon-btn active" id="hzCLOSE" onclick="switchTimelineHorizon('CLOSE')" style="background: var(--bg-input); border: 1px solid var(--border-glow); color: #FFF; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Current Close</button>
-        <button class="horizon-btn" id="hz180D" onclick="switchTimelineHorizon('180D')" style="background: var(--bg-input); border: 1px solid var(--border-glow); color: var(--text-muted); padding: 6px 12px; border-radius: 4px; cursor: pointer;">180 Days</button>
-        <button class="horizon-btn" id="hz1Y" onclick="switchTimelineHorizon('1Y')" style="background: var(--bg-input); border: 1px solid var(--border-glow); color: var(--text-muted); padding: 6px 12px; border-radius: 4px; cursor: pointer;">1 Year</button>
+    <div>
+        <h1 style="font-size: 1.25rem; font-weight: 800; color: #FFF; letter-spacing: 0.5px;">🌌 SEBRA V115.0 CORE WORKBENCH</h1>
+        <span id="sysSubTitleText" style="font-size: 0.72rem; color: var(--text-muted); font-family: monospace; text-transform: uppercase; letter-spacing: 0.5px;">SYSTEM STATUS: ENFORCING ENTIRELY DECOUPLED INDEPENDENT WORKSPACE MATRIX</span>
     </div>
-    <div style="display: flex; gap: 6px; align-items: center;">
-        <span style="color: var(--text-muted); font-size: 0.72rem; font-weight: 700; text-transform: uppercase;">Currency:</span>
-        <button class="currency-btn active" id="ccUSD" onclick="switchCurrencyState('USD')" style="background: var(--bg-input); border: 1px solid var(--border-glow); color: #FFF; padding: 6px 12px; border-radius: 4px; cursor: pointer;">USD ($)</button>
-        <button class="currency-btn" id="ccGBP" onclick="switchCurrencyState('GBP')" style="background: var(--bg-input); border: 1px solid var(--border-glow); color: var(--text-muted); padding: 6px 12px; border-radius: 4px; cursor: pointer;">GBP (£)</button>
+    <div style="text-align: right; font-family: monospace; font-size: 11px; color: var(--border-active);">EOD RE-EVALUATION LOG</div>
+</div>
+<!-- Content Layer Fragment - Loaded dynamically into index.html master shell -->
+<div class="panel-card" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; flex-wrap: wrap; gap: 12px;">
+    <div class="horizon-buttons-group">
+        <span class="horizon-label" style="color: var(--text-muted); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 6px;">Trajectory Horizon View:</span>
+        <button class="horizon-btn active" id="hzCLOSE" onclick="switchTimelineHorizon('CLOSE')">Current Close</button>
+        <button class="horizon-btn" id="hz180D" onclick="switchTimelineHorizon('180D')">180 Days</button>
+        <button class="horizon-btn" id="hz1Y" onclick="switchTimelineHorizon('1Y')">1 Year</button>
+    </div>
+    <div class="horizon-buttons-group">
+        <span class="horizon-label" style="color: var(--text-muted); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 6px;">Currency Layer:</span>
+        <button class="horizon-btn active" id="ccUSD" onclick="switchCurrencyState('USD')">USD ($)</button>
+        <button class="horizon-btn" id="ccGBP" onclick="switchCurrencyState('GBP')">GBP (£)</button>
     </div>
 </div>
-<div class="summary-dashboard" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px;">
-    <div class="panel-card" style="background-color: #0A1124;"><span class="kpi-label-text">DROPDOWN FOCUS PRICE</span><div id="kpiClosePrice" class="kpi-value-text">$ -- . --</div></div>
-    <div class="panel-card"><span class="kpi-label-text" style="color: var(--border-active);">ABSOLUTE ACCURACY %</span><div id="kpiActiveAccuracy" class="kpi-value-text" style="color: var(--border-active);">-- . -- %</div></div>
-    <div class="panel-card"><span class="kpi-label-text" style="color: var(--accent-blue);">ACTIVE VARIANCE DELTA</span><div id="kpiActiveVariance" class="kpi-value-text" style="color: var(--accent-blue);">-- . -- %</div></div>
-    <div class="panel-card"><span class="kpi-label-text">SIGNAL STATUS BADGE</span><div id="kpiSignalBadge" class="kpi-value-text" style="font-size: 1.15rem; color: var(--text-muted); padding-top: 2px;">STANDBY</div></div>
+<!-- Content Layer Fragment - Loaded dynamically into index.html master shell -->
+<div class="summary-dashboard" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%;">
+    <div class="panel-card" style="background-color: #0A1124; padding: 12px 16px; display: flex; flex-direction: column; gap: 4px;">
+        <span class="kpi-label-text" style="font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">DROPDOWN FOCUS PRICE</span>
+        <div id="kpiClosePrice" class="kpi-value-text" style="font-size: 1.3rem; font-weight: 800; font-family: monospace; color: #FFF;">$ 0.00</div>
+    </div>
+    <div class="panel-card" style="padding: 12px 16px; display: flex; flex-direction: column; gap: 4px;">
+        <span class="kpi-label-text" style="font-size: 0.65rem; font-weight: 700; color: var(--border-active); text-transform: uppercase; letter-spacing: 0.5px;">ABSOLUTE ACCURACY %</span>
+        <div id="kpiActiveAccuracy" class="kpi-value-text" style="font-size: 1.3rem; font-weight: 800; font-family: monospace; color: var(--border-active);">0.00 %</div>
+    </div>
+    <div class="panel-card" style="padding: 12px 16px; display: flex; flex-direction: column; gap: 4px;">
+        <span class="kpi-label-text" style="font-size: 0.65rem; font-weight: 700; color: var(--accent-blue); text-transform: uppercase; letter-spacing: 0.5px;">ACTIVE VARIANCE DELTA</span>
+        <div id="kpiActiveVariance" class="kpi-value-text" style="font-size: 1.3rem; font-weight: 800; font-family: monospace; color: var(--accent-blue);">0.00 %</div>
+    </div>
+    <div class="panel-card" style="padding: 12px 16px; display: flex; flex-direction: column; gap: 4px;">
+        <span class="kpi-label-text" style="font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">SIGNAL STATUS BADGE</span>
+        <div id="kpiSignalBadge" class="kpi-value-text" style="font-size: 1.15rem; font-weight: 800; color: var(--text-muted); padding-top: 2px;">STANDBY</div>
+    </div>
 </div>
-<aside class="panel-card" style="display: flex; flex-direction: column; gap: 12px;">
-    <h2 style="font-size: 11px; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid var(--border-glow); padding-bottom: 4px; color: #FFF;">🎯 Selection & Input Overwrite</h2>
+<!-- Content Layer Fragment - Loaded dynamically into index.html master shell -->
+<div class="control-sidebar" style="background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+    <div class="sidebar-section-title" style="font-size: 0.75rem; font-weight: 700; color: #FFF; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 6px; border-bottom: 2px solid var(--border-glow);">🎯 Target Asset Selection</div>
     <div class="form-group">
-        <label>Active Target Focus</label>
-        <select id="sidebarAssetDropdownSelector" onchange="syncTopDashboardSummaryCards()" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-glow); color: #FFF; padding: 8px; border-radius: 6px;"></select>
+        <label style="font-weight: 700; font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase;">Active Target Focus</label>
+        <select id="sidebarAssetDropdownSelector" onchange="runSystemRecompilationPassLoop()" style="width:100%; background:var(--bg-input); border:1px solid var(--border-glow); color:#FFF; padding:8px 10px; border-radius:6px; font-size:13px; outline:none;"></select>
     </div>
-    <div class="form-group" style="margin-top: 8px;">
-        <label>Manual Close Price Base</label>
-        <input type="number" id="sidebarSpotInput" step="0.01" placeholder="e.g. 134.44" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-glow); color: #FFF; padding: 8px; border-radius: 6px;">
+    
+    <div class="sidebar-section-title" style="font-size: 0.75rem; font-weight: 700; color: #FFF; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 6px; border-bottom: 2px solid var(--border-glow); margin-top: 8px;">✏️ Overwrite Intercepts</div>
+    <div class="form-group">
+        <label style="font-weight: 700; font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase;">Manual Close Price Base</label>
+        <input type="number" id="sidebarSpotInput" step="0.01" placeholder="e.g. 134.44" style="width:100%; background:var(--bg-input); border:1px solid var(--border-glow); color:#FFF; padding:8px 10px; border-radius:6px; font-size:13px; outline:none;">
     </div>
     <div class="form-group">
-        <label>Manual Model Prediction Target</label>
-        <input type="number" id="sidebarModelInput" step="0.01" placeholder="e.g. 147.88" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-glow); color: #FFF; padding: 8px; border-radius: 6px;">
+        <label style="font-weight: 700; font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase;">Manual Model Prediction Target</label>
+        <input type="number" id="sidebarModelInput" step="0.01" placeholder="e.g. 147.88" style="width:100%; background:var(--bg-input); border:1px solid var(--border-glow); color:#FFF; padding:8px 10px; border-radius:6px; font-size:13px; outline:none;">
     </div>
-    <button type="button" onclick="submitModelOverwriteAction()" style="width: 100%; padding: 10px; background-color: var(--accent-blue); color: #FFF; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; text-transform: uppercase;">Commit & Overwrite</button>
-</aside>
-<main class="panel-card" style="overflow-x: auto; padding: 0;">
-    <div style="padding: 10px 14px; background: #0A1224; font-size: 0.7rem; font-weight: bold; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid var(--border-glow);">AUTHENTIC MARKET REALITY GRID LEDGER</div>
-    <table id="sebraMasterTable">
-        <thead>
-            <tr>
-                <th style="text-align: center;">Node</th><th>Chrono Close</th><th>Verified Close Price</th><th>Your Prediction</th><th>Variance Delta</th><th>Absolute Accuracy %</th><th>Signal Alert State</th><th>180-Day Target</th><th>1-Year Target</th>
-            </tr>
-        </thead>
-        <tbody id="sebraMasterTbody">
-            <!-- Populated row-by-row by runtime recompilation loops -->
-        </tbody>
-    </table>
-</main>
+    <button type="button" onclick="submitModelOverwriteAction()" style="width:100%; padding:10px; background-color:var(--accent-blue); color:#FFF; border:none; border-radius:6px; font-weight:700; cursor:pointer; text-transform:uppercase; font-size:0.78rem; letter-spacing:0.5px;">Commit Parameters</button>
+</div>
+<!-- Content Layer Fragment - Loaded dynamically into index.html master shell -->
+<div class="viewport-table-container" style="background-color: var(--bg-card); border-radius: 10px; border: 1px solid var(--border-glow); overflow: hidden; box-shadow: 0 6px 24px rgba(0,0,0,0.4);">
+    <div style="padding: 10px 14px; background: #0A1224; font-size: 0.7rem; font-weight: bold; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--border-glow);">AUTHENTIC MARKET REALITY GRID LEDGER</div>
+    <div style="width: 100%; overflow-x: auto;">
+        <table id="sebraMasterTable" style="width:100%; border-collapse:collapse; font-size:12px;">
+            <thead>
+                <tr>
+                    <th style="text-align: center; background-color: #0A1224; color: var(--text-muted); font-weight: 700; padding: 10px 12px; text-transform: uppercase; font-size: 0.65rem; border-bottom: 2px solid var(--border-glow);">Node</th>
+                    <th style="background-color: #0A1224; color: var(--text-muted); font-weight: 700; padding: 10px 12px; text-transform: uppercase; font-size: 0.65rem; border-bottom: 2px solid var(--border-glow); text-align: center;">Chrono Close</th>
+                    <th style="background-color: #0A1224; color: var(--text-muted); font-weight: 700; padding: 10px 12px; text-transform: uppercase; font-size: 0.65rem; border-bottom: 2px solid var(--border-glow);">Verified Close Price</th>
+                    <th style="background-color: #0A1224; color: var(--text-muted); font-weight: 700; padding: 10px 12px; text-transform: uppercase; font-size: 0.65rem; border-bottom: 2px solid var(--border-glow);">Your Prediction</th>
+                    <th style="background-color: #0A1224; color: var(--text-muted); font-weight: 700; padding: 10px 12px; text-transform: uppercase; font-size: 0.65rem; border-bottom: 2px solid var(--border-glow);">Variance Delta</th>
+                    <th style="background-color: #0A1224; color: var(--text-muted); font-weight: 700; padding: 10px 12px; text-transform: uppercase; font-size: 0.65rem; border-bottom: 2px solid var(--border-glow);">Absolute Accuracy %</th>
+                    <th style="background-color: #0A1224; color: var(--text-muted); font-weight: 700; padding: 10px 12px; text-transform: uppercase; font-size: 0.65rem; border-bottom: 2px solid var(--border-glow); text-align: center;">Signal Alert State</th>
+                    <th style="background-color: #0A1224; color: var(--text-muted); font-weight: 700; padding: 10px 12px; text-transform: uppercase; font-size: 0.65rem; border-bottom: 2px solid var(--border-glow);">180-Day Target</th>
+                    <th style="background-color: #0A1224; color: var(--text-muted); font-weight: 700; padding: 10px 12px; text-transform: uppercase; font-size: 0.65rem; border-bottom: 2px solid var(--border-glow);">1-Year Target</th>
+                </tr>
+            </thead>
+            <tbody id="sebraMasterTbody">
+                <!-- Programmatically targeted and generated by bootstrap compilation engines -->
+            </tbody>
+        </table>
+    </div>
+</div>
 /* Styling definitions for active signal allocation tags */
 .badge-slot {
     display: block;
@@ -128,15 +174,16 @@ tr:hover td { background-color: rgba(56, 189, 248, 0.03); }
 .badge-buy { background: rgba(14, 165, 233, 0.1); color: var(--accent-blue); border-color: rgba(14, 165, 233, 0.2); }
 .badge-sell { background: rgba(245, 158, 11, 0.1); color: var(--accent-warn); border-color: rgba(245, 158, 11, 0.2); }
 .badge-hold { background: rgba(100, 116, 139, 0.1); color: var(--text-muted); border-color: rgba(100, 116, 139, 0.2); }
-<div class="panel-card" style="margin-top: 14px;">
-    <span class="kpi-label-text" style="margin-bottom: 6px; display: block;">Simplex Real-Time Trajectory Time-Series Prediction Wave Curves</span>
+<!-- Content Layer Fragment - Loaded dynamically into index.html master shell -->
+<div class="panel-card" style="background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 10px; padding: 16px;">
+    <span class="kpi-label-text" style="font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block;">Simplex Real-Time Trajectory Time-Series Prediction Wave Curves</span>
     <div id="svgWorkbenchViewport" style="width: 100%; height: 160px; background: #040814; border: 1px solid var(--border-glow); border-radius: 8px; overflow: hidden;">
-        <!-- Injected line graphics painted natively client side -->
+        <!-- Injected line graphics painted natively client side via vector array passes -->
     </div>
 </div>
 /**
  * SEBRA Mathematics Loop - Part 11 (Quartic Root Trajectory Expansion)
- * Projects forward trend limits across a non-linear velocity distribution.
+ * Projects forward trend limits across a non-linear geometric velocity distribution.
  */
 function solveGeometricHorizonTarget(spotPriceValue, timelineKeyID) {
     var rate = window.SEBRA_CONFIG ? window.SEBRA_CONFIG.GEOMETRIC_EXPANSION_RATE : 1.12;
@@ -148,13 +195,14 @@ function solveGeometricHorizonTarget(spotPriceValue, timelineKeyID) {
     return indexCurve;
 }
 /**
- * SEBRA Mathematics Loop - Part 12 (Geometric Brownian Motion Engine)
- * Replaces linear formulas with a stable logarithmic return coefficient.
+ * SEBRA Mathematics Loop - Part 12 (Geometric Brownian Motion Drift Solver)
+ * Measures true continuous velocity factors by back-tracking historic sessions arrays.
  */
 function calculateQuantumStochasticDrift(currentSpotUSD, historic6MUSD, vol6M) {
-    // Calculates true logarithmic rate of change over a half-year window
+    // Computes continuous exponential half-year geometric velocity parameter
     var logDriftFactor = Math.log(currentSpotUSD / historic6MUSD);
     var nextHorizonPredictionUSD = currentSpotUSD * Math.exp((logDriftFactor - (vol6M * vol6M) / 2) * 0.25);
+    
     return {
         drift: logDriftFactor,
         calculatedPredUSD: nextHorizonPredictionUSD
@@ -201,7 +249,7 @@ function submitModelOverwriteAction() {
     document.getElementById("sidebarSpotInput").value = "";
     document.getElementById("sidebarModelInput").value = "";
     
-    // Fires compilation loops across the unified system stack
+    // Forces instant execution pass across compilation engines
     runSystemRecompilationPassLoop();
 }
 /**
@@ -209,9 +257,11 @@ function submitModelOverwriteAction() {
  * Blends base registries and executes calculation passes down to 2 decimal places.
  */
 window.ACTIVE_WORKING_POOL = {};
+var TIMELINE_FOCUS = "CLOSE";
+var CURRENCY_FOCUS = "USD";
 
-function initSystemWorkbenchVault() {
-    // Merges parameters into a unified active array container cleanly
+function initSystemModelInterface() {
+    // Bind mock injection layout segments natively to simulation frames
     Object.assign(window.ACTIVE_WORKING_POOL, window.DEFAULT_QUANT_REGISTRY, window.EXPANDED_UK_QUANT_REGISTRY);
     
     var dropdown = document.getElementById("sidebarAssetDropdownSelector");
@@ -232,21 +282,32 @@ function runSystemRecompilationPassLoop() {
     
     var fxScalar = window.SEBRA_CONFIG.GBP_CONVERSION_SCALAR;
     var gl = (CURRENCY_FOCUS === "GBP") ? "£" : "$";
+    var chartRows = [];
 
     for (var ticker in window.ACTIVE_WORKING_POOL) {
         var n = window.ACTIVE_WORKING_POOL[ticker];
         
         var spotInUSD = (n.currency === "GBP") ? (n.spot / fxScalar) : n.spot;
+        var histInUSD = (n.currency === "GBP") ? (n.hist6M / fxScalar) : n.hist6M;
         var predInUSD = (n.currency === "GBP") ? (n.fixedPred / fxScalar) : n.fixedPred;
         
         var renderSpot = (CURRENCY_FOCUS === "GBP") ? (spotInUSD * fxScalar) : spotInUSD;
         var renderPred = (CURRENCY_FOCUS === "GBP") ? (predInUSD * fxScalar) : predInUSD;
         
+        // Execute continuous stochastic verification pass calculations
+        var driftCalculus = calculateQuantumStochasticDrift(spotInUSD, histInUSD, n.vol6M);
         var variance = ((renderPred - renderSpot) / renderSpot) * 100;
         var accuracy = 100 - Math.abs(variance); if (accuracy < 0) accuracy = 0;
         
         var h180 = solveGeometricHorizonTarget(spotInUSD, "180D") * ((CURRENCY_FOCUS === "GBP") ? fxScalar : 1.00);
         var h1y  = solveGeometricHorizonTarget(spotInUSD, "1Y") * ((CURRENCY_FOCUS === "GBP") ? fxScalar : 1.00);
+        var dynamicHorizonTarget = (TIMELINE_FOCUS === "180D") ? h180 : ((TIMELINE_FOCUS === "1Y") ? h1y : renderSpot);
+
+        var bCls = "badge-hold", bTxt = "HOLD STATUS";
+        if (driftCalculus.drift > 1.50) { bCls = "badge-urgent-sell"; bTxt = "🚨 OVEREXTENDED"; }
+        else if (driftCalculus.drift < -0.40) { bCls = "badge-hot-buy"; bTxt = "🔥 DEEP VALUE"; }
+        else if (variance > 5.00) { bCls = "badge-sell"; bTxt = "SELL MOMENTUM"; }
+        else if (variance < -3.00) { bCls = "badge-buy"; bTxt = "BUY SIGNAL"; }
 
         tbody.innerHTML += "<tr>" +
             "<td><b>" + ticker + "</b><br><small style='color:var(--text-muted);'>" + n.name + "</small></td>" +
@@ -255,12 +316,15 @@ function runSystemRecompilationPassLoop() {
             "<td class='yellow-neon-box'>" + gl + renderPred.toFixed(2) + "</td>" +
             "<td style='color:" + (variance >= 0 ? "var(--accent-green)" : "var(--accent-danger)") + ";'>" + (variance > 0 ? "+" : "") + variance.toFixed(2) + "%</td>" +
             "<td style='font-weight:bold; color:var(--border-active);'>" + accuracy.toFixed(2) + "%</td>" +
-            "<td><span class='badge-slot badge-hold'>HOLD STATUS</span></td>" +
+            "<td><span class='badge-slot " + bCls + "'>" + bTxt + "</span></td>" +
             "<td>" + gl + h180.toFixed(2) + "</td>" +
             "<td>" + gl + h1y.toFixed(2) + "</td>" +
             "</tr>";
+
+        chartRows.push({ ticker: ticker, spot: renderSpot, target: dynamicHorizonTarget });
     }
     syncTopDashboardSummaryCards();
+    paintVectorTrajectoryWaveChart(chartRows.slice(0, 10), gl);
 }
 
 function syncTopDashboardSummaryCards() {
@@ -278,12 +342,47 @@ function syncTopDashboardSummaryCards() {
     document.getElementById("kpiClosePrice").innerText = gl + " " + spot.toFixed(2);
     document.getElementById("kpiActiveVariance").innerText = (v > 0 ? "+" : "") + v.toFixed(2) + "%";
     document.getElementById("kpiActiveAccuracy").innerText = a.toFixed(2) + "%";
-    document.getElementById("kpiSignalBadge").innerText = v > 5.00 ? "SELL MOMENTUM" : (v < -3.00 ? "BUY SIGNAL" : "HOLD STATUS");
+    
+    var topBCls = "HOLD STATUS";
+    if (v > 5.00) topBCls = "SELL MOMENTUM";
+    else if (v < -3.00) topBCls = "BUY SIGNAL";
+    document.getElementById("kpiSignalBadge").innerText = topBCls;
+    document.getElementById("kpiSignalBadge").style.color = v > 5.00 ? "var(--accent-warn)" : (v < -3.00 ? "var(--accent-blue)" : "var(--text-muted)");
 }
 
-function switchTimelineHorizon(k) { runSystemRecompilationPassLoop(); }
-function switchCurrencyState(k) { CURRENCY_FOCUS = k; runSystemRecompilationPassLoop(); }
+function paintVectorTrajectoryWaveChart(focusRowsList, glyphMask) {
+    var viewport = document.getElementById("svgWorkbenchViewport");
+    if (!viewport || !focusRowsList || focusRowsList.length === 0) return;
+    
+    var w = viewport.clientWidth || 900, h = 160, p = 30;
+    var maxVal = Math.max.apply(Math, focusRowsList.map(function(o){ return Math.max(o.spot, o.target); })) * 1.1;
+    var stepX = (w - p * 2) / (focusRowsList.length - 1);
+    
+    var pathSpot = "", pathTarget = "", labelSvg = "<svg width='100%' height='100%'>";
+    
+    focusRowsList.forEach(function(item, idx) {
+        var x = p + (idx * stepX);
+        var yS = (h - p) - ((item.spot / maxVal) * (h - p * 2));
+        var yT = (h - p) - ((item.target / maxVal) * (h - p * 2));
+        
+        pathSpot += (idx === 0 ? "M " : "L ") + x + "," + yS + " ";
+        pathTarget += (idx === 0 ? "M " : "L ") + x + "," + yT + " ";
+        
+        labelSvg += "<circle cx='" + x + "' cy='" + yS + "' r='2.5' fill='#475569'/>";
+        labelSvg += "<circle cx='" + x + "' cy='" + yT + "' r='2.5' fill='#38BDF8'/>";
+        labelSvg += "<text x='" + x + "' y='" + (h - 10) + "' fill='#64748B' font-size='8' font-weight='bold' text-anchor='middle'>" + item.ticker + "</text>";
+    });
+    
+    viewport.innerHTML = labelSvg + 
+        "<path d='" + pathSpot + "' fill='none' stroke='#475569' stroke-width='1' stroke-dasharray='2,2'/>" +
+        "<path d='" + pathTarget + "' fill='none' stroke='#38BDF8' stroke-width='1.5'/>" + "</svg>";
+}
 
-// Wire the bootstrap initializer directly to the page initialization pass
-document.addEventListener("DOMContentLoaded", initSystemWorkbenchVault);
+function switchTimelineHorizon(k) { TIMELINE_FOCUS = k; toggleBtnClass(".horizon-btn", k); runSystemRecompilationPassLoop(); }
+function switchCurrencyState(k) { CURRENCY_FOCUS = k; toggleBtnClass("#cc"+k, k); runSystemRecompilationPassLoop(); }
+function toggleBtnClass(cls, val) { document.querySelectorAll(cls).forEach(function(b) { if (b.id.includes(val) || b.innerText.includes(val)) b.classList.add("active"); else if (!b.id.includes("cc") && !b.innerText.includes("$") && !b.innerText.includes("£")) b.classList.remove("active"); }); }
+
+// Bootstrap initial configuration hook directly into document container load pass
+document.addEventListener("DOMContentLoaded", initSystemModelInterface);
 </script>
+
