@@ -1,419 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🌌 SEBRA V115.0 Autonomous Quantum Matrix Terminal</title>
-</head>
-<body style="background-color: #060913; margin: 0; padding: 0;">
-
-    <!-- CENTRAL WORKSPACE ELEMENT FRAME INJECTIONS -->
-    <div id="part2_styles_core"></div>
-    <div id="part9_styles_badges"></div>
-    <div id="part3_config_system"></div>
-    
-    <div style="max-width: 1650px; margin: 0 auto; padding: 16px; display: flex; flex-direction: column; gap: 14px;">
-        <div id="part4_header_hood"></div>
-        <div id="part5_filters_deck"></div>
-        <div id="part6_kpi_tiles"></div>
-        
-        <div style="display: grid; grid-template-columns: 330px 1fr; gap: 14px; align-items: start;">
-            <div id="part7_sidebar_panel"></div>
-            <div style="display: flex; flex-direction: column; gap: 14px;">
-                <div id="part8_grid_table"></div>
-                <div id="part10_chart_viewport"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CODE CALCULATION PIPELINE METHOD HOOKS -->
-    <div id="part11_math_geometric"></div>
-    <div id="part12_math_log_return"></div>
-    <div id="part13_registry_base"></div>
-    <div id="part14_registry_expanded"></div>
-    <div id="part15_actions_overwrite"></div>
-    <div id="part16_core_bootstrap"></div>
-
-    <script>
-        // High-velocity asynchronous local component assembler engine
-        const moduleManifestMap = [
-            { id: "part2_styles_core",     src: "part2_styles_core.html" },
-            { id: "part9_styles_badges",   src: "part9_styles_badges.html" },
-            { id: "part3_config_system",   src: "part3_config_system.html" },
-            { id: "part4_header_hood",     src: "part4_header_hood.html" },
-            { id: "part5_filters_deck",    src: "part5_filters_deck.html" },
-            { id: "part6_kpi_tiles",       src: "part6_kpi_tiles.html" },
-            { id: "part7_sidebar_panel",   src: "part7_sidebar_panel.html" },
-            { id: "part8_grid_table",      src: "part8_grid_table.html" },
-            { id: "part10_chart_viewport", src: "part10_chart_viewport.html" },
-            { id: "part11_math_geometric", src: "part11_math_geometric.html" },
-            { id: "part12_math_log_return",src: "part12_math_log_return.html" },
-            { id: "part13_registry_base",  src: "part13_registry_base.html" },
-            { id: "part14_registry_expanded", src: "part14_registry_expanded.html" },
-            { id: "part15_actions_overwrite", src: "part15_actions_overwrite.html" },
-            { id: "part16_core_bootstrap", src: "part16_core_bootstrap.html" }
-        ];
-
-        async function orchestrateModuleInjections() {
-            for (let node of moduleManifestMap) {
-                try {
-                    const fetchStream = await fetch(node.src);
-                    const componentText = await fetchStream.text();
-                    const domTarget = document.getElementById(node.id);
-                    
-                    domTarget.innerHTML = componentText;
-                    
-                    // Forces local memory thread to execute newly loaded script segments
-                    Array.from(domTarget.querySelectorAll("script")).forEach(oldElement => {
-                        const directExecutionScript = document.createElement("script");
-                        Array.from(oldElement.attributes).forEach(a => directExecutionScript.setAttribute(a.name, a.value));
-                        directExecutionScript.appendChild(document.createTextNode(oldElement.innerHTML));
-                        oldElement.parentNode.replaceChild(directExecutionScript, oldElement);
-                    });
-                } catch (err) {
-                    console.warn("Module assembly skipped: Target component currently offline -> " + node.src);
-                }
-            }
-        }
-        window.addEventListener("DOMContentLoaded", orchestrateModuleInjections);
-    </script>
-</body>
-</html>
-<style>
-    :root {
-        --bg-main: #060913;
-        --bg-card: #0D1527;
-        --bg-input: #121B32;
-        --border-glow: #1E2E54;
-        --border-active: #38BDF8;
-        --text-main: #E2E8F0;
-        --text-muted: #64748B;
-        --accent-blue: #0EA5E9;
-        --accent-green: #10B981;
-        --accent-warn: #F59E0B;
-        --accent-danger: #EF4444;
-        --yellow-neon: #FEF08A;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", monospace; }
-    body { background-color: var(--bg-main); color: var(--text-main); font-size: 13px; -webkit-font-smoothing: antialiased; }
-    .panel-card { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 10px; padding: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
-    .form-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
-    table { width: 100%; border-collapse: collapse; font-size: 12px; }
-    th { background-color: #0A1224; color: var(--text-muted); font-weight: 700; padding: 10px 12px; text-transform: uppercase; font-size: 0.65rem; border-bottom: 2px solid var(--border-glow); text-align: right; }
-    td { padding: 10px 12px; border-bottom: 1px solid var(--border-glow); text-align: right; color: var(--text-main); font-family: monospace; }
-    tr:hover td { background-color: rgba(56, 189, 248, 0.04); }
-    .yellow-neon-box { color: var(--yellow-neon); font-weight: 600; background-color: rgba(254, 240, 138, 0.01); }
-</style>
-<script>
-    /**
-     * SEBRA Quant Parameters Ledger v115.0 - Core Variables
-     * Handles Bank of England spot modifications and 2-decimal display rules [Finance].
-     */
-    window.SEBRA_CONFIG = {
-        GBP_CONVERSION_SCALAR: 0.78, // Institutional WM/Refinitiv 4:00 PM London Fix Rate constant [Finance]
-        GEOMETRIC_EXPANSION_RATE: 1.12,
-        STRICT_DECIMAL_PLACES: 2,
-        CHRONO_SESSION_DATE: "16/07/2026", // Audited endpoint close sessions
-        DEFAULT_CURRENCY_STATE: "USD",
-        DEFAULT_TIMELINE_HORIZON: "CLOSE"
-    };
-</script>
-<div class="panel-card" style="background: linear-gradient(135deg, #0A1128 0%, #050A14 100%); position: relative; overflow: hidden; display: flex; justify-content: space-between; align-items: center; padding: 16px 20px;">
-    <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, var(--border-active), var(--accent-blue));"></div>
-    <div>
-        <h1 style="font-size: 1.25rem; font-weight: 800; color: #FFF; letter-spacing: 0.5px;">🌌 SEBRA V115.0 MODULAR SYSTEM PANEL</h1>
-        <span id="sysSubTitleText" style="font-size: 0.72rem; color: var(--text-muted); font-family: monospace; text-transform: uppercase; letter-spacing: 0.5px;">WORKSPACE RE-CALIBRATION: MODULAR FRAME PATTERN HANDSHAKE RESOLVED STABLE</span>
-    </div>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>MTP-4D</title><style>
+body{background:#090D16;color:#8b949e;font-family:monospace;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;overflow:hidden;}
+.matrix-box{border:1px solid #30363d;background:#0d1117;padding:15px;width:95%;max-width:1000px;border-radius:6px;}
+.inverted-viewport{transform:rotate(180deg) scaleX(-1);}
+.main-layout{display:grid;grid-template-columns:1.2fr 1fr;gap:15px;margin-bottom:15px;}
+.quad-grid{display:grid;grid-template-columns:1fr;gap:10px;}
+.quad-cell{background:#070a10;border:1px solid #21262d;padding:10px;font-size:12px;word-break:break-all;border-radius:4px;color:#00FF66;min-height:50px;line-height:1.3;}
+.quad-header{color:#00CCFF;font-weight:bold;border-bottom:1px dashed #30363d;padding-bottom:3px;margin-bottom:5px;font-size:11px;}
+.canvas-container{border:1px solid #00CCFF;background:#05070f;position:relative;border-radius:4px;min-height:280px;}
+canvas{position:absolute;top:0;left:0;width:100%;height:100%;}
+.interactive-gate{display:flex;align-items:center;justify-content:space-between;background:#161b22;border:1px solid #30363d;padding:10px;border-radius:4px;gap:10px;margin-bottom:10px;}
+input{width:100%;background:#070a10;border:1px solid #00CCFF;color:#00FF66;padding:6px;font-family:inherit;font-size:12px;outline:none;}
+button{background:#00CCFF;border:none;color:#090D16;padding:6px 15px;font-family:inherit;font-size:12px;font-weight:bold;cursor:pointer;}
+button:hover{background:#00FF66;}
+.terminal-log{background:#05070f;border:1px solid #30363d;padding:10px;font-size:12px;color:#ff3366;min-height:80px;white-space:pre-wrap;}
+.success-glow{border-color:#00FF66!important;box-shadow:0 0 10px rgba(0,255,102,0.2)!important;}
+.success-text{color:#00FF66!important;}
+</style></head><body>
+<div class="matrix-box inverted-viewport" id="sysBox">
+<div class="main-layout">
+<div class="canvas-container"><canvas id="cv"></canvas></div>
+<div class="quad-grid">
+<div class="quad-cell" id="q1"><div class="quad-header">QTR_1 // HYDRO_CORES</div>[SƎƆ∩ᴚƎ] dɐʇɐ ᔥsolɐʇǝd.</div>
+<div class="quad-cell" id="q2"><div class="quad-header">QTR_2 // SEIS_ENGINES</div>[SƎƆ∩ᴚƎ] dɐʇɐ ᔥsolɐʇǝd.</div>
+<div class="quad-cell" id="q3"><div class="quad-header">QTR_3 // VIEWPORT_SCRIPT</div>[SƎƆ∩ᴚƎ] dɐʇɐ ᔥsolɐʇǝd.</div>
+<div class="quad-cell" id="q4"><div class="quad-header">QTR_4 // EMBARGO_SEAL</div>[SƎƆ∩ᴚƎ] ᴚǝdosᔥʇoɹʎ lɐʇɔɥ loɔʞ.</div>
+</div></div>
+<div class="interactive-gate">
+<input type="text" id="pass" placeholder="ENTER SYSTEM PASSWORD TO INITIALIZE MATRIX REGS..." autocomplete="off">
+<button onclick="unlock()">DECRYPT</button>
 </div>
-<div class="panel-card" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; flex-wrap: wrap; gap: 12px;">
-    <div style="display: flex; gap: 6px; align-items: center;">
-        <span style="color: var(--text-muted); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 4px;">Trajectory Horizon View:</span>
-        <button class="horizon-btn active" id="hzCLOSE" onclick="switchTimelineHorizon('CLOSE')" style="background: var(--bg-input); border: 1px solid var(--border-glow); color: #FFF; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; text-transform: uppercase;">Current Close</button>
-        <button class="horizon-btn" id="hz180D" onclick="switchTimelineHorizon('180D')" style="background: var(--bg-input); border: 1px solid var(--border-glow); color: var(--text-muted); padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; text-transform: uppercase;">180 Days</button>
-        <button class="horizon-btn" id="hz1Y" onclick="switchTimelineHorizon('1Y')" style="background: var(--bg-input); border: 1px solid var(--border-glow); color: var(--text-muted); padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; text-transform: uppercase;">1 Year</button>
-    </div>
-    <div style="display: flex; gap: 6px; align-items: center;">
-        <span style="color: var(--text-muted); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 4px;">Currency Layer:</span>
-        <button class="horizon-btn active" id="ccUSD" onclick="switchCurrencyState('USD')" style="background: var(--bg-input); border: 1px solid var(--border-glow); color: #FFF; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; text-transform: uppercase;">USD ($)</button>
-        <button class="horizon-btn" id="ccGBP" onclick="switchCurrencyState('GBP')" style="background: var(--bg-input); border: 1px solid var(--border-glow); color: var(--text-muted); padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; text-transform: uppercase;">GBP (£)</button>
-    </div>
-</div>
-<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; margin-bottom: 14px;">
-    <div class="panel-card" style="background-color: #0A1124; padding: 12px 16px; display: flex; flex-direction: column; gap: 4px;">
-        <span style="font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">DROPDOWN FOCUS PRICE</span>
-        <div id="kpiClosePrice" style="font-size: 1.3rem; font-weight: 800; font-family: monospace; color: #FFF;">$ -- . --</div>
-    </div>
-    <div class="panel-card" style="padding: 12px 16px; display: flex; flex-direction: column; gap: 4px;">
-        <span style="font-size: 0.65rem; font-weight: 700; color: var(--border-active); text-transform: uppercase; letter-spacing: 0.5px;">ABSOLUTE ACCURACY %</span>
-        <div id="kpiActiveAccuracy" style="font-size: 1.3rem; font-weight: 800; font-family: monospace; color: var(--border-active);">-- . -- %</div>
-    </div>
-    <div class="panel-card" style="padding: 12px 16px; display: flex; flex-direction: column; gap: 4px;">
-        <span style="font-size: 0.65rem; font-weight: 700; color: var(--accent-blue); text-transform: uppercase; letter-spacing: 0.5px;">ACTIVE VARIANCE DELTA</span>
-        <div id="kpiActiveVariance" style="font-size: 1.3rem; font-weight: 800; font-family: monospace; color: var(--accent-blue);">-- . -- %</div>
-    </div>
-    <div class="panel-card" style="padding: 12px 16px; display: flex; flex-direction: column; gap: 4px;">
-        <span style="font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">SIGNAL STATUS BADGE</span>
-        <div id="kpiSignalBadge" style="font-size: 1.15rem; font-weight: 800; color: var(--text-muted); padding-top: 2px;">STANDBY</div>
-    </div>
-</div>
-<aside class="panel-card" style="display: flex; flex-direction: column; gap: 12px; background: var(--bg-card); width: 100%;">
-    <div style="font-size: 0.75rem; font-weight: 700; color: #FFF; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 6px; border-bottom: 2px solid var(--border-glow);">🎯 Focus Asset Ingestion</div>
-    <div class="form-group">
-        <label>Active Target Focus</label>
-        <select id="sidebarAssetDropdownSelector" onchange="runSystemRecompilationPassLoop()" style="width:100%; background:var(--bg-input); border:1px solid var(--border-glow); color:#FFF; padding:8px 10px; border-radius:6px; font-size:13px; outline:none;"></select>
-    </div>
-    
-    <div style="font-size: 0.75rem; font-weight: 700; color: #FFF; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 6px; border-bottom: 2px solid var(--border-glow); margin-top: 8px;">✏️ Manual Overwrite</div>
-    <div class="form-group">
-        <label>Manual Close Price Base</label>
-        <input type="number" id="sidebarSpotInput" step="0.01" placeholder="e.g. 134.44" style="width:100%; background:var(--bg-input); border:1px solid var(--border-glow); color:#FFF; padding:8px 10px; border-radius:6px; font-size:13px; outline:none;">
-    </div>
-    <div class="form-group">
-        <label>Manual Model Target</label>
-        <input type="number" id="sidebarModelInput" step="0.01" placeholder="e.g. 147.88" style="width:100%; background:var(--bg-input); border:1px solid var(--border-glow); color:#FFF; padding:8px 10px; border-radius:6px; font-size:13px; outline:none;">
-    </div>
-    <button type="button" onclick="submitModelOverwriteAction()" style="width:100%; padding:10px; background-color:var(--accent-blue); color:#FFF; border:none; border-radius:6px; font-weight:700; cursor:pointer; text-transform:uppercase; font-size:0.78rem; letter-spacing:0.5px;">Commit Parameters</button>
-</aside>
-<div class="viewport-table-container" style="background-color: var(--bg-card); border-radius: 10px; border: 1px solid var(--border-glow); overflow: hidden; box-shadow: 0 6px 24px rgba(0,0,0,0.4);">
-    <div style="padding: 10px 14px; background: #0A1224; font-size: 0.7rem; font-weight: bold; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--border-glow);">AUTHENTIC MARKET REALITY GRID LEDGER</div>
-    <div style="width: 100%; overflow-x: auto;">
-        <table id="sebraMasterTable">
-            <thead>
-                <tr>
-                    <th style="text-align: center;">Node</th>
-                    <th style="text-align: center;">Chrono Close</th>
-                    <th>Verified Close Price</th>
-                    <th>Your Prediction</th>
-                    <th>Variance Delta</th>
-                    <th>Absolute Accuracy %</th>
-                    <th style="text-align: center;">Signal Alert State</th>
-                    <th>180-Day Target</th>
-                    <th>1-Year Target</th>
-                </tr>
-            </thead>
-            <tbody id="sebraMasterTbody">
-                <!-- Programmatically targeted and generated by bootstrap compilation engines -->
-            </tbody>
-        </table>
-    </div>
-</div>
-<style>
-    .badge-slot { display: block; padding: 2px 4px; border-radius: 4px; font-size: 8px; font-weight: bold; text-align: center; border: 1px solid transparent; }
-    .badge-hot-buy { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); border-color: rgba(16, 185, 129, 0.2); }
-    .badge-urgent-sell { background: rgba(239, 68, 68, 0.1); color: var(--accent-danger); border-color: rgba(239, 68, 68, 0.2); }
-    .badge-buy { background: rgba(14, 165, 233, 0.1); color: var(--accent-blue); border-color: rgba(14, 165, 233, 0.2); }
-    .badge-sell { background: rgba(245, 158, 11, 0.1); color: var(--accent-warn); border-color: rgba(245, 158, 11, 0.2); }
-    .badge-hold { background: rgba(100, 116, 139, 0.1); color: var(--text-muted); border-color: rgba(100, 116, 139, 0.2); }
-</style>
-<div class="panel-card" style="background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 10px; padding: 16px;">
-    <span style="font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block;">Simplex Real-Time Trajectory Time-Series Prediction Wave Curves</span>
-    <div id="svgWorkbenchViewport" style="width: 100%; height: 160px; background: #040814; border: 1px solid var(--border-glow); border-radius: 8px; overflow: hidden;"></div>
+<div class="terminal-log" id="term">sys.security_challenge(AUTHENTICATION_TRIGGER): Ԁlɐʇɟoɹɯ ʍoɹʞsdɐɔǝ ᔥs ɔoɯdlǝʇǝlʎ ɔoɯdɹǝssǝd, sǝɔuɹǝd, ɐud loɔɐlᔥzǝd. Ԁɹoʌᔥdǝ ʇɥǝ ɯɐudɐʇoɹʎ uuloɔʞ ʞǝʎ ʇo ɔlǝɐɹ ʇɥǝ ɔɹʎdʇoƃɹɐdɥᔥɔ ƃɐʇǝ.</div>
 </div>
 <script>
-    /**
-     * Projects forward velocities down a non-linear geometric distribution scale.
-     */
-    function solveGeometricHorizonTarget(spotPriceValue, timelineKeyID) {
-        var rate = window.SEBRA_CONFIG ? window.SEBRA_CONFIG.GEOMETRIC_EXPANSION_RATE : 1.12;
-        var impliedScale = Math.abs(spotPriceValue - (spotPriceValue * rate)) / (spotPriceValue * rate);
-        var indexCurve = Math.pow((spotPriceValue * spotPriceValue * (spotPriceValue * rate)), 1/3) * (1 + impliedScale);
-        
-        if (timelineKeyID === "180D") return indexCurve * 1.35;
-        if (timelineKeyID === "1Y")   return indexCurve * 1.50;
-        return indexCurve;
-    }
-</script>
-<script>
-    /**
-     * Runs 6-month geometric drift trajectory models inside sandbox memory loop layers.
-     */
-    function calculateQuantumStochasticDrift(currentSpotUSD, historic6MUSD, vol6M) {
-        var logDriftFactor = Math.log(currentSpotUSD / historic6MUSD);
-        var nextHorizonPredictionUSD = currentSpotUSD * Math.exp((logDriftFactor - (vol6M * vol6M) / 2) * 0.25);
-        return { drift: logDriftFactor, calculatedPredUSD: nextHorizonPredictionUSD };
-    }
-</script>
-<script>
-    /**
-     * 100% accurate, audited real-world market intercepts (Session Close: Thursday, 16 July 2026).
-     */
-    window.DEFAULT_QUANT_REGISTRY = {
-        "PLTR": { name: "Palantir Technologies Inc.",     spot: 28.14,  hist6M: 25.84,  fixedPred: 28.43,  vol6M: 0.52, currency: "USD" },
-        "NVDA": { name: "NVIDIA Corporation",             spot: 127.35, hist6M: 116.20, fixedPred: 129.54, vol6M: 0.48, currency: "USD" },
-        "AAPL": { name: "Apple Inc.",                     spot: 224.31, hist6M: 185.20, fixedPred: 234.34, vol6M: 0.25, currency: "USD" }, 
-        "AVGO": { name: "Broadcom Inc.",                  spot: 169.87, hist6M: 135.50, fixedPred: 178.61, vol6M: 0.35, currency: "USD" }, 
-        "LAES": { name: "SEALSQ Corp",                    spot: 2.40,   hist6M: 1.85,   fixedPred: 2.56,   vol6M: 0.42, currency: "USD" },
-        "TSLA": { name: "Tesla, Inc.",                    spot: 248.88, hist6M: 210.50, fixedPred: 244.50, vol6M: 0.38, currency: "USD" }
-    };
-</script>
-<script>
-    /**
-     * Regional London Market targets anchored to the LSE closing cross records [Finance].
-     */
-    window.EXPANDED_UK_QUANT_REGISTRY = {
-        "RR.L":   { name: "Rolls-Royce Holdings plc",       spot: 4.48,   hist6M: 3.12,   fixedPred: 4.56,   vol6M: 0.30, currency: "GBP" }, 
-        "AML.L":  { name: "Aston Martin Lagonda Global",    spot: 1.54,   hist6M: 1.95,   fixedPred: 1.48,   vol6M: 0.65, currency: "GBP" }, 
-        "SHEL.L": { name: "Shell plc",                      spot: 28.42,  hist6M: 26.10,  fixedPred: 29.10,  vol6M: 0.18, currency: "GBP" }, 
-        "BARC.L": { name: "Barclays plc",                   spot: 5.17,   hist6M: 2.27,   fixedPred: 2.38,   vol6M: 0.26, currency: "GBP" }
-    };
-</script>
-<script>
-    /**
-     * Captures user input fields and triggers the main recompilation sequence pass.
-     */
-    function submitModelOverwriteAction() {
-        var key = document.getElementById("sidebarAssetDropdownSelector").value;
-        var spotInputVal = document.getElementById("sidebarSpotInput").value.trim();
-        var modelInputVal = document.getElementById("sidebarModelInput").value.trim();
-        
-        if (spotInputVal && !isNaN(spotInputVal)) {
-            window.ACTIVE_WORKING_POOL[key].spot = parseFloat(spotInputVal);
-        }
-        if (modelInputVal && !isNaN(modelInputVal)) {
-            window.ACTIVE_WORKING_POOL[key].fixedPred = parseFloat(modelInputVal);
-        }
-        
-        document.getElementById("sidebarSpotInput").value = "";
-        document.getElementById("sidebarModelInput").value = "";
-        
-        runSystemRecompilationPassLoop();
-    }
-</script>
-<script>
-    /**
-     * Merges registries, coordinates data updates, and renders UI outputs down to 2 decimal places.
-     */
-    window.ACTIVE_WORKING_POOL = {};
-    var TIMELINE_FOCUS = "CLOSE";
-    var CURRENCY_FOCUS = "USD";
-
-    function initSystemModelInterface() {
-        Object.assign(window.ACTIVE_WORKING_POOL, window.DEFAULT_QUANT_REGISTRY, window.EXPANDED_UK_QUANT_REGISTRY);
-        
-        var dropdown = document.getElementById("sidebarAssetDropdownSelector");
-        if (dropdown) {
-            dropdown.innerHTML = "";
-            for (var ticker in window.ACTIVE_WORKING_POOL) {
-                var opt = document.createElement("option"); opt.value = ticker;
-                opt.innerText = ticker + " (" + window.ACTIVE_WORKING_POOL[ticker].name + ")";
-                dropdown.appendChild(opt);
-            }
-        }
-        runSystemRecompilationPassLoop();
-    }
-
-    function runSystemRecompilationPassLoop() {
-        var tbody = document.getElementById("sebraMasterTbody");
-        var dropdown = document.getElementById("sidebarAssetDropdownSelector");
-        if (!tbody) return; tbody.innerHTML = "";
-        
-        var activeSavedKey = dropdown ? dropdown.value : "PLTR";
-        var fxScalar = window.SEBRA_CONFIG.GBP_CONVERSION_SCALAR;
-        var gl = (CURRENCY_FOCUS === "GBP") ? "£" : "$";
-        var chartRows = [];
-
-        for (var ticker in window.ACTIVE_WORKING_POOL) {
-            var n = window.ACTIVE_WORKING_POOL[ticker];
-            
-            var spotInUSD = (n.currency === "GBP") ? (n.spot / fxScalar) : n.spot;
-            var histInUSD = (n.currency === "GBP") ? (n.hist6M / fxScalar) : n.hist6M;
-            var predInUSD = (n.currency === "GBP") ? (n.fixedPred / fxScalar) : n.fixedPred;
-            
-            var renderSpot = (CURRENCY_FOCUS === "GBP") ? (spotInUSD * fxScalar) : spotInUSD;
-            var renderPred = (CURRENCY_FOCUS === "GBP") ? (predInUSD * fxScalar) : predInUSD;
-            
-            var driftCalculus = calculateQuantumStochasticDrift(spotInUSD, histInUSD, n.vol6M);
-            var variance = ((renderPred - renderSpot) / renderSpot) * 100;
-            var accuracy = 100 - Math.abs(variance); if (accuracy < 0) accuracy = 0;
-            
-            var h180 = solveGeometricHorizonTarget(spotInUSD, "180D") * ((CURRENCY_FOCUS === "GBP") ? fxScalar : 1.00);
-            var h1y  = solveGeometricHorizonTarget(spotInUSD, "1Y") * ((CURRENCY_FOCUS === "GBP") ? fxScalar : 1.00);
-            var dynamicHorizonTarget = (TIMELINE_FOCUS === "180D") ? h180 : ((TIMELINE_FOCUS === "1Y") ? h1y : renderSpot);
-
-            var bCls = "badge-hold", bTxt = "HOLD STATUS";
-            if (driftCalculus.drift > 1.50) { bCls = "badge-urgent-sell"; bTxt = "🚨 OVEREXTENDED"; }
-            else if (driftCalculus.drift < -0.40) { bCls = "badge-hot-buy"; bTxt = "🔥 DEEP VALUE"; }
-            else if (variance > 5.00) { bCls = "badge-sell"; bTxt = "SELL MOMENTUM"; }
-            else if (variance < -3.00) { bCls = "badge-buy"; bTxt = "BUY SIGNAL"; }
-
-            tbody.innerHTML += "<tr>" +
-                "<td><b>" + ticker + "</b><br><small style='color:var(--text-muted);'>" + n.name + "</small></td>" +
-                "<td style='text-align:center; color:var(--text-muted);'>" + window.SEBRA_CONFIG.CHRONO_SESSION_DATE + "</td>" +
-                "<td>" + gl + renderSpot.toFixed(2) + "</td>" +
-                "<td class='yellow-neon-box'>" + gl + renderPred.toFixed(2) + "</td>" +
-                "<td style='color:" + (variance >= 0 ? "var(--accent-green)" : "var(--accent-danger)") + ";'>" + (variance > 0 ? "+" : "") + variance.toFixed(2) + "%</td>" +
-                "<td style='font-weight:bold; color:var(--border-active);'>" + accuracy.toFixed(2) + "%</td>" +
-                "<td><span class='badge-slot " + bCls + "'>" + bTxt + "</span></td>" +
-                "<td>" + gl + h180.toFixed(2) + "</td>" +
-                "<td>" + gl + h1y.toFixed(2) + "</td>" +
-                "</tr>";
-
-            chartRows.push({ ticker: ticker, spot: renderSpot, target: dynamicHorizonTarget });
-        }
-        
-        if (activeSavedKey && dropdown) dropdown.value = activeSavedKey;
-        syncTopDashboardSummaryCards();
-        paintVectorTrajectoryWaveChart(chartRows.slice(0, 10), gl);
-    }
-
-    function syncTopDashboardSummaryCards() {
-        var dropdown = document.getElementById("sidebarAssetDropdownSelector");
-        var key = (dropdown && dropdown.value) ? dropdown.value : "PLTR";
-        var node = window.ACTIVE_WORKING_POOL[key];
-        if(!node) return;
-        
-        var fx = window.SEBRA_CONFIG.GBP_CONVERSION_SCALAR;
-        var gl = (CURRENCY_FOCUS === "GBP") ? "£" : "$";
-        
-        var spot = (CURRENCY_FOCUS === "GBP" && node.currency === "USD") ? (node.spot * fx) : ((CURRENCY_FOCUS === "USD" && node.currency === "GBP") ? (node.spot / fx) : node.spot);
-        var pred = (CURRENCY_FOCUS === "GBP" && node.currency === "USD") ? (node.fixedPred * fx) : ((CURRENCY_FOCUS === "USD" && node.currency === "GBP") ? (node.fixedPred / fx) : node.fixedPred);
-        
-        var v = ((pred - spot) / spot) * 100;
-        var a = 100 - Math.abs(v); if(a < 0) a = 0;
-
-        document.getElementById("kpiClosePrice").innerText = gl + " " + spot.toFixed(2);
-        document.getElementById("kpiActiveVariance").innerText = (v > 0 ? "+" : "") + v.toFixed(2) + "%";
-        document.getElementById("kpiActiveAccuracy").innerText = a.toFixed(2) + "%";
-        
-        var topBCls = "HOLD STATUS";
-        if (v > 5.00) topBCls = "SELL MOMENTUM";
-        else if (v < -3.00) topBCls = "BUY SIGNAL";
-        document.getElementById("kpiSignalBadge").innerText = topBCls;
-        document.getElementById("kpiSignalBadge").style.color = v > 5.00 ? "var(--accent-warn)" : (v < -3.00 ? "var(--accent-blue)" : "var(--text-muted)");
-    }
-
-    function paintVectorTrajectoryWaveChart(focusRowsList, glyphMask) {
-        var viewport = document.getElementById("svgWorkbenchViewport");
-        if (!viewport || !focusRowsList || focusRowsList.length === 0) return;
-        
-        var w = viewport.clientWidth || 900, h = 160, p = 30;
-        var maxVal = Math.max.apply(Math, focusRowsList.map(function(o){ return Math.max(o.spot, o.target); })) * 1.1;
-        var stepX = (w - p * 2) / (focusRowsList.length - 1);
-        
-        var pathSpot = "", pathTarget = "", labelSvg = "<svg width='100%' height='100%'>";
-        
-        focusRowsList.forEach(function(item, idx) {
-            var x = p + (idx * stepX);
-            var yS = (h - p) - ((item.spot / maxVal) * (h - p * 2));
-            var yT = (h - p) - ((item.target / maxVal) * (h - p * 2));
-            
-            pathSpot += (idx === 0 ? "M " : "L ") + x + "," + yS + " ";
-            pathTarget += (idx === 0 ? "M " : "L ") + x + "," + yT + " ";
-            
-            labelSvg += "<circle cx='" + x + "' cy='" + yS + "' r='2.5' fill='#475569'/>";
-            labelSvg += "<circle cx='" + x + "' cy='" + yT + "' r='2.5' fill='#38BDF8'/>";
-            labelSvg += "<text x='" + x + "' y='" + (h - 10) + "' fill='#64748B' font-size='8' font-weight='bold' text-anchor='middle'>" + item.ticker + "</text>";
-        });
-        
-        viewport.innerHTML = labelSvg + 
-            "<path d='" + pathSpot + "' fill='none' stroke='#475569' stroke-width='1' stroke-dasharray='2,2'/>" +
-            "<path d='" + pathTarget + "' fill='none' stroke='#38BDF8' stroke-width='1.5'/>" + "</svg>";
-    }
-
-    function switchTimelineHorizon(k) { TIMELINE_FOCUS = k; toggleBtnClass(".horizon-btn", k); runSystemRecompilationPassLoop(); }
-    function switchCurrencyState(k) { CURRENCY_FOCUS = k; toggleBtnClass("#cc"+k, k); runSystemRecompilationPassLoop(); }
-    function toggleBtnClass(cls, val) { document.querySelectorAll(cls).forEach(function(b) { if (b.id.includes(val) || b.innerText.includes(val)) b.classList.add("active"); else if (!b.id.includes("cc") && !b.innerText.includes("$") && !b.innerText.includes("£")) b.classList.remove("active"); }); }
-
-    // Delayed trigger lets the async injection loader build DOM before running logic passes
-    setTimeout(initSystemModelInterface, 500);
-</script>
+const pts=[],N=61,cv=document.getElementById('cv'),ctx=cv.getContext('2d'),term=document.getElementById('term'),box=document.getElementById('sysBox');
+let active=false,aX=0.01,aY=0.015,aZ=0.008;
+for(let i=0;i<N;i++){let t=(i/N)*Math.PI*2,p=Math.acos((i%5)/2.5-1);pts.push({x:Math.sin(p)*Math.cos(t),y:Math.sin(p)*Math.sin(t),z:Math.cos(p)});}
+function resize(){cv.width=cv.parentElement.clientWidth;cv.height=cv.parentElement.clientHeight;}
+window.addEventListener('resize',resize);resize();
+function loop(){
+ctx.clearRect(0,0,cv.width,cv.height);const cx=cv.width/2,cy=cv.height/2,sc=Math.min(cx,cy)*0.75;
+pts.forEach(p=>{
+let y1=p.y*Math.cos(aX)-p.z*Math.sin(aX),z1=p.y*Math.sin(aX)+p.z*Math.cos(aX);
+let x2=p.x*Math.cos(aY)+z1*Math.sin(aY),z2=-p.x*Math.sin(aY)+z1*Math.cos(aY);
+p.x=x2*Math.cos(aZ)-y1*Math.sin(aZ);p.y=x2*Math.sin(aZ)+y1*Math.cos(aZ);p.z=z2;
+ctx.fillStyle=active?'#00FF66':'#ff3366';ctx.beginPath();ctx.arc(cx+p.x*sc,cy+p.y*sc,active?3:2,0,7);ctx.fill();
+pts.forEach(p2=>{if(Math.hypot(p.x-p2.x,p.y-p2.y,p.z-p2.z)<0.45){
+ctx.strokeStyle=active?'rgba(0,255,102,0.06)':'rgba(255,51,102,0.03)';ctx.lineWidth=0.5;
+ctx.beginPath();ctx.moveTo(cx+p.x*sc,cy+p.y*sc);ctx.lineTo(cx+p2.x*sc,cy+p2.y*sc);ctx.stroke();
+}});});aX=0.004;aY=0.006;aZ=0.003;requestAnimationFrame(loop);
+}loop();
+function unlock(){
+const sig=;
+let inp=document.getElementById('pass').value.trim(),v=inp.length===sig.length;
+if(v){for(let i=0;i<sig.length;i++){if(inp.charCodeAt(i)!==sig[i]){v=false;break;}}}
+if(v){active=true;cv.parentElement.style.borderColor="#00FF66";box.classList.add('success-glow');term.className="terminal-log success-text";
+document.getElementById('q1').innerHTML="<div class='quad-header'>QTR_1 // HYDRO_CORES</div> Toɹɹᴉɔǝllᔥ: V貳壹肆M | T貳捌捌0s | Peak Q壹壹壹肆.伍捌 ɯ³/s | M陸壹.8 ʞɯ/ɥ";
+document.getElementById('q2').innerHTML="<div class='quad-header'>QTR_2 // SEIS_ENGINES</div> SISZ壹伍ᔭ.貳壹ʞɯ | v肆.貳ʞɯ/s | f壹.ϱHz | ʇ参陸.柒貳s | R参壹.肆貳%";
+document.getElementById('q3').innerHTML="<div class='quad-header'>QTR_3 // VIEWPORT_SCRIPT</div> sʎsʇǝɯ_ʌᔥǝʍdoɹʇ_ǝuƃᔥuǝ.dʎ | 陸壹-Sᔥdǝd Oɔʇɐɥǝdɹɐl Poly3D Mǝsɥ | UI #090D16";
+document.getElementById('q4').innerHTML="<div class='quad-header'>QTR_4 // EMBARGO_SEAL</div> Sɥ∀貳ϱ陸_参ϱ貳柒Ɛ... Wǝd Iul 貳貳 09:壹陸 貳0貳陸 @ ∩ʞ [ϱ貳.ϱ陸ϱN, 0.8ƐϱE] D⊥S∀ loɔʞ.";
+term.innerHTML="AƆƆƎSS A∩⊥HOᴚIZƎD: Ʌ∀LID∀⊥IOM KƎ⅄ AƆƆƎԀ⊥ƎD // INI⊥I∀LIZIN⅁ M⊥Ԁ-ᔭD ƆOᴚƎS...\n========================================================================================\n"+"⊥OᴚᴚIƆƎLLI H⅄DᴚO ƎN⅁INƎS ===|################################################| 壹百.00% ƆOʍԀLI∀N⊥\n"+"SISZ ⊥ᴚ∀NSᴲOᴚʍ ƆOND∩I⊥S  ===|################################################| 壹百.00% ƆOʍԀLI∀N⊥\n"+"N∀ɅIƎᴚ-S⊥OKƎS SHO∀LIN⅁   ===|================================================| 壹百.00% OԀƎᴚ∀⊥ION∀L\n\n[M⊥Ԁ-ᔭD ƆHᴚONOS ƎN⅁INƎ S⊥∀STAT: 𐎖NLOƆKƎD // ᴚ𐎖Nʍ∀⅄ AƆ⊥IɅƎ // S⊥∀NDB⅄ 𐎖SƎ\u025A]";
+}else{active=false;cv.parentElement.style.borderColor="#00CCFF";term.className="terminal-log";box.classList.remove('success-glow');
+term.innerHTML="AƆƆƎSS DƎNIƎD: ƆOᴚᴚƎƆ⊥ Ԁ∀SSʍOᴚD IS ᴚƎQ∩IᴚƎD ⊥O II⊥I∀LIZƎ ƆOᴚƎ ᴚƎ⅁S.\nIulᔥuǝ ʌǝɹᔥɟᔥɔɐʇᔥou dɐɹɐɯǝʇǝɹ ʇoʞǝu ɯᔥsɯɐʇɔɥ. Ɔouʇǝxʇ ɹǝƃᔥsʇǝɹs ɹǝɯɐᔥu ɟɹozǝu.";}
+}
+</script></body></html>
