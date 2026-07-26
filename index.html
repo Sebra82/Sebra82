@@ -13,9 +13,9 @@
         .badge { font-size: 10px; font-weight: bold; color: #ff3366; background: rgba(255,51,102,0.08); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(255,51,102,0.2); font-family: monospace; }
         .layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px; }
         @media(max-width: 768px) { .layout { grid-template-columns: 1fr; } }
-        .vp { border: 1px solid #30363d; background: #03050a; border-radius: 6px; position: relative; height: 340px; touch-action: none; cursor: grab; }
+        .vp { border: 1px solid #30363d; background: #03050a; border-radius: 6px; position: relative; height: 320px; touch-action: none; cursor: grab; }
         canvas { position: absolute; width: 100%; height: 100%; display: block; }
-        .side { display: flex; flex-direction: column; gap: 8px; height: 340px; overflow-y: auto; }
+        .side { display: flex; flex-direction: column; gap: 8px; height: 320px; overflow-y: auto; }
         .card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 10px; }
         .lbl { font-size: 9px; font-weight: 700; color: #8b949e; text-transform: uppercase; border-bottom: 1px solid #21262d; padding-bottom: 2px; margin-bottom: 4px; font-family: monospace; }
         .txt { font-family: monospace; font-size: 11px; color: #ff3366; word-break: break-all; }
@@ -31,16 +31,16 @@
 <body>
 <div class="box" id="wb">
     <div class="hdr">
-        <div class="title" id="t1">M4_V6.99_RECALIBRATED_CORE</div>
+        <div class="title" id="t1">M4_RECALIBRATED_CORE</div>
         <div class="badge" id="bg">SYSTEM_LOCKED</div>
     </div>
     <div class="layout">
         <div class="vp"><canvas id="cv"></canvas></div>
         <div class="side">
-            <div class="card"><div class="lbl" id="l1">QTR_1 // HYDRO_CORES</div><div class="txt" id="d1">[RESTRICTED] Data matrix encrypted.</div></div>
-            <div class="card"><div class="lbl" id="l2">QTR_2 // SEIS_ENGINES</div><div class="txt" id="d2">[RESTRICTED] Data matrix encrypted.</div></div>
-            <div class="card"><div class="lbl" id="l3">QTR_3 // VIEWPORT_SCRIPT</div><div class="txt" id="d3">[RESTRICTED] Data matrix encrypted.</div></div>
-            <div class="card"><div class="lbl" id="l4">QTR_4 // EMBARGO_SEAL</div><div class="txt" id="d4">[RESTRICTED] Cryptographic trace clamped.</div></div>
+            <div class="card"><div class="lbl" id="l1">QTR_1 // HYDRO_CORES</div><div class="txt" id="d1">[RESTRICTED] Locked.</div></div>
+            <div class="card"><div class="lbl" id="l2">QTR_2 // SEIS_ENGINES</div><div class="txt" id="d2">[RESTRICTED] Locked.</div></div>
+            <div class="card"><div class="lbl" id="l3">QTR_3 // VIEWPORT_SCRIPT</div><div class="txt" id="d3">[RESTRICTED] Locked.</div></div>
+            <div class="card"><div class="lbl" id="l4">QTR_4 // EMBARGO_SEAL</div><div class="txt" id="d4">[RESTRICTED] Locked.</div></div>
         </div>
     </div>
     <div class="gate">
@@ -57,6 +57,8 @@ const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
 
 function res() { cv.width = cv.parentElement.clientWidth; cv.height = cv.parentElement.clientHeight; }
 window.addEventListener('resize', res); res();
+
+const conv = (a) => a.map(b => String.fromCharCode(b)).join('');
 
 async function mountStorage() {
     try {
@@ -78,10 +80,10 @@ async function mountStorage() {
                 requestAnimationFrame(loop);
             }
         }, 10);
-    } catch(err) { console.error("Chassis compile timeout:", err); }
+    } catch(err) { console.error("Handshake fail:", err); }
 }
 
-function ptr(e) { return e.targetTouches && e.targetTouches.length > 0 ? { x: e.targetTouches[0].clientX, y: e.targetTouches[0].clientY } : { x: e.clientX, y: e.clientY }; }
+function ptr(e) { return e.targetTouches && e.targetTouches.length > 0 ? { x: e.targetTouches.clientX, y: e.targetTouches.clientY } : { x: e.clientX, y: e.clientY }; }
 function start(e) { drag = true; const p = ptr(e); px = p.x; py = p.y; }
 function move(e) { if (!drag) return; const p = ptr(e); my += (p.x - px) * 0.008; mx += (p.y - py) * 0.008; px = p.x; py = p.y; }
 function end() { drag = false; }
