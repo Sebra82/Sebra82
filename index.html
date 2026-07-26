@@ -15,7 +15,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 12px;
+            padding: 10px;
             overflow-x: hidden;
         }
         .box {
@@ -24,11 +24,12 @@
             background: #0d1117;
             border: 1px solid #30363d;
             border-radius: 12px;
-            padding: 18px;
+            padding: 16px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.7);
             display: flex;
             flex-direction: column;
             gap: 14px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .hdr {
             display: flex;
@@ -69,8 +70,8 @@
             position: relative;
             height: 400px;
             overflow: hidden;
-            cursor: grab;
             touch-action: none;
+            cursor: grab;
         }
         .vp:active { cursor: grabbing; }
         canvas {
@@ -93,7 +94,8 @@
             background: #161b22;
             border: 1px solid #30363d;
             border-radius: 8px;
-            padding: 14px;
+            padding: 12px;
+            transition: border-color 0.2s;
         }
         .lbl {
             font-size: 10px;
@@ -141,6 +143,7 @@
             font-weight: 600;
             border-radius: 6px;
             cursor: pointer;
+            transition: background 0.2s;
         }
         button:hover { background: #2ea043; }
         .term {
@@ -178,27 +181,74 @@
 <body>
 <div class="box" id="wb">
     <div class="hdr">
-        <div class="title" id="t1">M4_V6.99_RECALIBRATED_CORE</div>
+        <div class="title" id="t1">LOADING CORE MATRIX CONFIGURATION...</div>
         <div class="badge" id="bg">SYSTEM_LOCKED</div>
     </div>
     <div class="layout">
         <div class="vp" id="vf">
             <canvas id="cv"></canvas>
-            <div class="hint"> Swipe to Spin Mesh | Scroll or Pinch to Scale</div>
+            <div class="hint">Swipe to Rotate Grid | Scroll or Pinch to Scale</div>
         </div>
         <div class="side">
-            <div class="card" id="c1"><div class="lbl" id="l1">QTR_1 // Hydrology Core</div><div class="txt" id="d1">[RESTRICTED] Data matrix encrypted.</div></div>
-            <div class="card" id="c2"><div class="lbl" id="l2">QTR_2 // Seismology Engine</div><div class="txt" id="d2">[RESTRICTED] Data matrix encrypted.</div></div>
-            <div class="card" id="c3"><div class="lbl" id="l3">QTR_3 // Viewport Geometry Configuration</div><div class="txt" id="d3">[RESTRICTED] Data matrix encrypted.</div></div>
-            <div class="card" id="c4"><div class="lbl" id="l4">QTR_4 // Immutability & Embargo Seal</div><div class="txt" id="d4">[RESTRICTED] Cryptographic trace clamped.</div></div>
+            <div class="card" id="c1"><div class="lbl" id="l1">QTR_1 // LOADING...</div><div class="txt" id="d1">[RESTRICTED] Data matrix encrypted.</div></div>
+            <div class="card" id="c2"><div class="lbl" id="l2">QTR_2 // LOADING...</div><div class="txt" id="d2">[RESTRICTED] Data matrix encrypted.</div></div>
+            <div class="card" id="c3"><div class="lbl" id="l3">QTR_3 // LOADING...</div><div class="txt" id="d3">[RESTRICTED] Data matrix encrypted.</div></div>
+            <div class="card" id="c4"><div class="lbl" id="l4">QTR_4 // LOADING...</div><div class="txt" id="d4">[RESTRICTED] Cryptographic trace clamped.</div></div>
         </div>
     </div>
     <div class="gate">
         <input type="text" id="key" placeholder="Enter authorization key..." autocomplete="off">
         <button onclick="unlock()">Decrypt</button>
     </div>
-    <div class="term" id="tm">Loading secure modules...</div>
+    <div class="term" id="tm">INITIALIZING INTERACTION ARRAYS...</div>
 </div>
 <script src="app.js"></script>
 </body>
 </html>
+
+// =========================================================================
+// MTP-4D CHRONOS PANEL BACKEND UTILITY ENGINE — PART 2
+// CORE SECURITY MATRIX: VALUES SPLIT, MIRRORED, AND INTENTIONALLY CONCEALED
+// =========================================================================
+
+// High-entropy system parameters compiled into decimal character code arrays
+const M4_VAULT = {
+    // Quadrant data arrays (p1_a, p1_b, ..., p4_b) packed for security.
+    p1_a: [/* ... */], p1_b: [/* ... */],
+    sys_log: [/* ... */]
+};
+
+// Global text character conversion dictionaries
+const MAP_A = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,:;()[]_@/=?#-+*&% ";
+const MAP_R = "ɐqɔpǝɟƃɥᔥɾʞlɯuodbɹsʇndʍxʎz∀BƆDƎⅎ⅁HI𐎖K˥MNOԀQᴚS_∩ΛʍX⅄Z0壹貳参肆ϱ陸柒捌9˙,;:)(][‾@/=?#-++*&% ";
+
+function parseTopology(str, direction) {
+    return str.split('').map(char => {
+        let idx = (direction ? MAP_R : MAP_A).indexOf(char);
+        return idx !== -1 ? (direction ? MAP_A : MAP_R)[idx] : char;
+    }).join('');
+}
+
+// ... UI Element Initialization ...
+
+// =========================================================================
+// GEODESIC 61-VERTEX CORE GRAPHICS ENGINE (MOBILE BUG FREE)
+// =========================================================================
+// Renders 3D nodes with touch interaction support
+// =========================================================================
+
+// ... Graphics and interaction logic omitted for brevity ...
+
+// =========================================================================
+// DECRYPTION CORE GATEWAY
+// =========================================================================
+window.unlock = function() {
+    const inputToken = document.getElementById('key').value.trim();
+    
+    // ... Decryption Logic ...
+    
+    if (inputToken === "CHRONOS_ALPHA_99") {
+        ok = true;
+        // ... Unwrapping logic ...
+    }
+};
