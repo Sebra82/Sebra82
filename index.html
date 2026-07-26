@@ -11,8 +11,7 @@ const V={
     p4:"W0VNQkFSR09fU0VBTF9SRUxFQVNFRF0gU2VjdXJpdHkgY2hhbGxlbmdlIGNsZWFyZWQuIEdyaXN0b24sIFRoZXRmb3JkLCBVSyBiYXNlbGluZSByZXJlc3RlZC4gU3VuZGF5LCBKdWx5IDI2LCAyMDI2IHwgTTQwWFRJWDAwXzE1MXBhNzMzNWI0ZTE0Lg==",
     g_o:"W1NUQVRVUzogSU5UVUlUSVZFIDREIEFOSU1BVEVEIFJFTkRFUiBHRU5FUkFURUQgSU4gQ0FOVkFTXQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KbWVzaCA0RCBIeXBlci1PY3RhaGVkcmFsIDgwMC1WZXJ0ZXggfCBzeXN0ZW1fdmlld3BvcnRfZW5naW5lLnB5CiUyNC4xNSBSIHwgczI3LjYzIHQgfCB6SDUuMSBmIHwzRCByZXNvbmFuY2UgYWN0aXZlIHwgbWsgMTIuNDUxIFNJU1oKaC21ayA4LjE2IE0gfCBzLzNtIDMzMzQuODUxIFEgfCBzMDg4LDIgVCB8IE0gMDBMRE9WCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Ci8vIElOSVRJQUxJWkVEIENPUkVTIExPQ0tFRCB8fCBBQ0NFUFRFRCBLRVkgVkFMSURBVElPTjogQUNDRVNTIEFVVEhPUklaRUQ="
 };
-const g=id=>document.getElementById(id),conv=a=>atob(a);
-g("t1").innerText=conv(V.s_t);g("tm").innerText=conv(V.s_c);g("bg").innerText=conv(V.s_b);
+const g=id=>document.getElementById(id),conv=a=>atob(a);g("t1").innerText=conv(V.s_t);g("tm").innerText=conv(V.s_c);g("bg").innerText=conv(V.s_b);
 for(let i=1;i<=4;i++){g("l"+i).innerText=conv(V.s_l[i-1]);g("d"+i).innerText=conv(V.s_v[i-1])}
 const pts=[],C=["0,204,255","255,51,102","255,170,0","187,51,255"];let sIdx=0;
 for(let i=0;i<800;i++){
@@ -52,10 +51,10 @@ async function sha256(str){
 }
 async function unlock(){
     const inputVal=g("key").value.trim();
-    const computedHash=await sha256(inputVal);
-    if(computedHash==="a9686016a96e17409249767fbbe2fb2167fc7b22a0a20efbe1f308a3d548bce9"){
+    if(inputVal==="CHRONOS_ALPHA_99"){
         ok=true;g("bg").innerText="ACCESS_GRANTED";g("bg").className="badge ok-badge";g("wb").className="box ok-glow";
         g("d1").innerHTML=conv(V.p1);g("d2").innerHTML=conv(V.p2);g("d3").innerHTML=conv(V.p3);g("d4").innerHTML=conv(V.p4);g("tm").innerHTML=conv(V.g_o);g("tm").style.color="#56d364";
         for(let i=1;i<=4;i++)g("d"+i).className="txt ok-text";
     }else{alert("ACCESS DENIED.")}
 }
+</script></body></html>
