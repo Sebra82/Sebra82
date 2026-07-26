@@ -1,30 +1,180 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>MTP-4D CHRONOS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTP-4D CHRONOS PANEL</title>
     <style>
-        body{background:#090D16;color:#c9d1d9;font-family:sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;overflow:hidden;}
-        .box{width:95%;max-width:1150px;background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:20px;box-shadow:0 12px 40px rgba(0,0,0,0.6);display:flex;flex-direction:column;gap:15px;}
-        .hdr{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #21262d;padding-bottom:10px;}
-        .title{font-size:15px;font-weight:600;color:#00CCFF;letter-spacing:0.5px;}
-        .badge{font-size:11px;color:#ff3366;background:rgba(255,51,102,0.1);padding:3px 8px;border-radius:12px;border:1px solid rgba(255,51,102,0.2);font-family:monospace;}
-        .layout{display:grid;grid-template-columns:1.4fr 1fr;gap:15px;}
-        .vp{border:1px solid #30363d;background:#05070f;border-radius:6px;position:relative;min-height:360px;height:360px;overflow:hidden;}
-        canvas{position:absolute;top:0;left:0;width:100%;height:100%;display:block;}
-        .side{display:flex;flex-direction:column;gap:10px;max-height:360px;overflow-y:auto;}
-        .card{background:#161b22;border:1px solid #30363d;border-radius:6px;padding:12px;transition:border-color 0.2s;}
-        .lbl{font-size:10px;font-weight:700;color:#8b949e;text-transform:uppercase;border-bottom:1px solid #21262d;padding-bottom:3px;margin-bottom:5px;letter-spacing:0.5px;}
-        .txt{font-family:monospace;font-size:12px;color:#ff3366;line-height:1.4;}
-        .gate{display:flex;background:#161b22;border:1px solid #30363d;padding:10px;border-radius:6px;gap:10px;}
-        input{width:100%;background:#070a10;border:1px solid #30363d;color:#00CCFF;padding:6px 12px;font-family:monospace;font-size:12px;outline:none;border-radius:4px;}
-        input:focus{border-color:#00CCFF;}
-        button{background:#238636;border:none;color:#fff;padding:6px 20px;font-size:12px;font-weight:500;border-radius:4px;cursor:pointer;}
-        button:hover{background:#2ea043;}
-        .term{background:#05070f;border:1px solid #30363d;border-radius:6px;padding:10px;font-family:monospace;font-size:11px;color:#ff3366;min-height:75px;white-space:pre-wrap;line-height:1.4;}
-        .ok-glow{border-color:#2ea043!important;box-shadow:0 0 15px rgba(46,160,67,0.15);}
-        .ok-text{color:#56d364!important;}
-        .ok-badge{color:#56d364!important;background:rgba(56,139,253,0.1)!important;border-color:rgba(56,139,253,0.2)!important;}
+        * { box-sizing: border-box; }
+        body {
+            background: #060913;
+            color: #c9d1d9;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+        .box {
+            width: 100%;
+            max-width: 1200px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .hdr {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #21262d;
+            padding-bottom: 12px;
+        }
+        .title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #00CCFF;
+            letter-spacing: 1px;
+            font-family: monospace;
+        }
+        .badge {
+            font-size: 11px;
+            font-weight: bold;
+            color: #ff3366;
+            background: rgba(255,51,102,0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,51,102,0.3);
+            font-family: monospace;
+        }
+        .layout {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 16px;
+        }
+        @media(max-width: 768px) {
+            .layout { grid-template-columns: 1fr; }
+        }
+        .vp {
+            border: 1px solid #30363d;
+            background: #03050a;
+            border-radius: 8px;
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+            cursor: grab;
+        }
+        .vp:active { cursor: grabbing; }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .side {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            height: 400px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 12px;
+            transition: border-color 0.2s;
+        }
+        .lbl {
+            font-size: 10px;
+            font-weight: 700;
+            color: #8b949e;
+            text-transform: uppercase;
+            border-bottom: 1px solid #21262d;
+            padding-bottom: 4px;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+        .txt {
+            font-family: monospace;
+            font-size: 12px;
+            color: #ff3366;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+        .gate {
+            display: flex;
+            background: #161b22;
+            border: 1px solid #30363d;
+            padding: 10px;
+            border-radius: 8px;
+            gap: 10px;
+        }
+        input {
+            flex: 1;
+            background: #070a10;
+            border: 1px solid #30363d;
+            color: #00CCFF;
+            padding: 8px 12px;
+            font-family: monospace;
+            font-size: 13px;
+            outline: none;
+            border-radius: 6px;
+        }
+        input:focus { border-color: #00CCFF; }
+        button {
+            background: #238636;
+            border: none;
+            color: #fff;
+            padding: 8px 24px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover { background: #2ea043; }
+        .term {
+            background: #03050a;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: monospace;
+            font-size: 11px;
+            color: #ff3366;
+            min-height: 90px;
+            max-height: 150px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            word-break: break-all;
+        }
+        .ok-glow { border-color: #2ea043 !important; box-shadow: 0 0 25px rgba(46,160,67,0.2); }
+        .ok-text { color: #56d364 !important; }
+        .ok-badge { color: #56d364 !important; background: rgba(46,160,67,0.1) !important; border-color: rgba(46,160,67,0.3) !important; }
+        .hint {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            font-size: 10px;
+            color: #8b949e;
+            pointer-events: none;
+            font-family: monospace;
+            background: rgba(0,0,0,0.4);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -34,7 +184,10 @@
         <div class="badge" id="bg">SYSTEM_LOCKED</div>
     </div>
     <div class="layout">
-        <div class="vp" id="vf"><canvas id="cv"></canvas></div>
+        <div class="vp" id="vf">
+            <canvas id="cv"></canvas>
+            <div class="hint"> Drag/Swipe to Rotate | Scroll to Zoom</div>
+        </div>
         <div class="side">
             <div class="card" id="c1"><div class="lbl" id="l1">QTR_1 // Hydrology Core</div><div class="txt" id="d1">[RESTRICTED] Data matrix encrypted.</div></div>
             <div class="card" id="c2"><div class="lbl" id="l2">QTR_2 // Seismology Engine</div><div class="txt" id="d2">[RESTRICTED] Data matrix encrypted.</div></div>
@@ -46,10 +199,12 @@
         <input type="text" id="key" placeholder="Enter authorization key..." autocomplete="off">
         <button onclick="unlock()">Decrypt</button>
     </div>
-    <div class="term" id="tm">Loading secure runtime parameters...</div>
+    <div class="term" id="tm">Loading secure configuration modules...</div>
 </div>
+<script src="app.js"></script>
+</body>
+</html>
 
-<script>
 const store = {
     title: "MTP-4D CHRONOS // VIEWPORT SECURITY MATRIX",
     challenge: "sys.security_challenge(AUTHENTICATION_TRIGGER): Ԁlɐʇɟoɹɯ ʍoɹʞsdɐɔǝ ᔥs ɔoɯdlǝʇǝlʎ ɔoɯdɹǝssǝd, sǝɔuɹǝd, ɐud loɔɐlᔥzǝd. Ԁɹoʌᔥdǝ ʇɥǝ ɯɐudɐʇoɹʎ uuloɔʞ ʞǝʎ ʇo ɔlǝɐɹ ʇɥǝ ɔɹʎdʇoƃRAMA ƃɐʇǝ.",
@@ -73,6 +228,7 @@ function trans(s, d) {
     }).join('');
 }
 
+// Map textual structures
 document.getElementById('t1').innerText = trans(store.title, false);
 document.getElementById('tm').innerText = trans(store.challenge, false);
 for (let i = 1; i <= 4; i++) {
@@ -80,81 +236,118 @@ for (let i = 1; i <= 4; i++) {
     document.getElementById('d' + i).innerText = trans(store.locked_vals[i - 1], false);
 }
 
+// Geodesic 61-Node Engine Initialization
 const pts = [], cv = document.getElementById('cv'), ctx = cv.getContext('2d');
 const tm = document.getElementById('tm'), wb = document.getElementById('wb'), bg = document.getElementById('bg');
-let ok = false, rX = 0.005, rY = 0.008, rZ = 0.003;
 
-const base = [{x:0,y:0,z:1},{x:1,y:0,z:0},{x:0,y:1,z:0},{x:-1,y:0,z:0},{x:0,y:-1,z:0},{x:0,y:0,z:-1}];
-const offs = [{x:0,y:0,z:-3.47},{x:-3.47,y:0,z:0},{x:0,y:-3.47,z:0}];
-offs.forEach(o => {
-    base.forEach(v => {
-        pts.push({x: v.x * 1.5 + o.x, y: v.y * 1.5 + o.y, z: v.z * 1.5 + o.z});
+let ok = false, zoomFactor = 1.0;
+let autoRotX = 0.003, autoRotY = 0.005, manualRotX = 0, manualRotY = 0;
+let isDragging = false, prevMouseX = 0, prevMouseY = 0;
+
+const totalTargetPoints = 61;
+const goldenRatio = (1 + Math.sqrt(5)) / 2;
+for (let i = 0; i < totalTargetPoints; i++) {
+    const theta = 2 * Math.PI * i / goldenRatio;
+    const phi = Math.acos(1 - 2 * (i + 0.5) / totalTargetPoints);
+    pts.push({
+        x: Math.cos(theta) * Math.sin(phi) * 1.8,
+        y: Math.sin(theta) * Math.sin(phi) * 1.8,
+        z: Math.cos(phi) * 1.8
     });
-});
+}
 
 function resize() {
-    const r = cv.parentElement.getBoundingClientRect();
-    cv.width = r.width || 650;
-    cv.height = r.height || 360;
+    cv.width = cv.parentElement.clientWidth;
+    cv.height = cv.parentElement.clientHeight;
 }
 window.addEventListener('resize', resize);
 resize();
 
+// Gesture Triggers
+cv.addEventListener('mousedown', (e) => { isDragging = true; prevMouseX = e.clientX; prevMouseY = e.clientY; });
+window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    manualRotY += (e.clientX - prevMouseX) * 0.007;
+    manualRotX += (e.clientY - prevMouseY) * 0.007;
+    prevMouseX = e.clientX; prevMouseY = e.clientY;
+});
+window.addEventListener('mouseup', () => isDragging = false);
+
+cv.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) return;
+    isDragging = true;
+    prevMouseX = e.touches[0].clientX; prevMouseY = e.touches[0].clientY;
+}, { passive: true });
+cv.addEventListener('touchmove', (e) => {
+    if (!isDragging || e.touches.length !== 1) return;
+    manualRotY += (e.touches[0].clientX - prevMouseX) * 0.009;
+    manualRotX += (e.touches[0].clientY - prevMouseY) * 0.009;
+    prevMouseX = e.touches[0].clientX; prevMouseY = e.touches[0].clientY;
+}, { passive: true });
+window.addEventListener('touchend', () => isDragging = false);
+
+cv.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    zoomFactor = Math.max(0.4, Math.min(zoomFactor - e.deltaY * 0.001, 2.5));
+}, { passive: false });
+
+// Runtime Loop
 function loop() {
     ctx.clearRect(0, 0, cv.width, cv.height);
-    const cx = cv.width / 2, cy = cv.height / 2, zm = Math.min(cx, cy) * 0.18;
+    const cx = cv.width / 2, cy = cv.height / 2, dynamicZoom = Math.min(cx, cy) * 0.28 * zoomFactor;
+    const currentRotX = autoRotX + manualRotX, currentRotY = autoRotY + manualRotY;
     
-    ctx.fillStyle = ok ? '#56d364' : '#ff3366';
-    ctx.beginPath();
-    ctx.arc(cx, cy, 6, 0, 7);
-    ctx.fill();
-    
-    const prj = pts.map(p => {
-        let y1 = p.y * Math.cos(rX) - p.z * Math.sin(rX);
-        let z1 = p.y * Math.sin(rX) + p.z * Math.cos(rX);
-        let x2 = p.x * Math.cos(rY) + z1 * Math.sin(rY);
-        let z2 = -p.x * Math.sin(rY) + z1 * Math.cos(rY);
-        p.x = x2 * Math.cos(rZ) - y1 * Math.sin(rZ);
-        p.y = x2 * Math.sin(rZ) + y1 * Math.cos(rZ);
-        p.z = z2;
-        return {x: cx + p.x * zm, y: cy + p.y * zm};
+    if (!isDragging) { manualRotX *= 0.96; manualRotY *= 0.96; }
+    autoRotX += 0.001; autoRotY += 0.002;
+
+    const projected = pts.map(p => {
+        let y1 = p.y * Math.cos(currentRotX) - p.z * Math.sin(currentRotX);
+        let z1 = p.y * Math.sin(currentRotX) + p.z * Math.cos(currentRotX);
+        let x2 = p.x * Math.cos(currentRotY) + z1 * Math.sin(currentRotY);
+        return { x: cx + x2 * dynamicZoom, y: cy + y1 * dynamicZoom, z: -p.x * Math.sin(currentRotY) + z1 * Math.cos(currentRotY) };
     });
-    
-    for (let i = 0; i < prj.length; i++) {
-        for (let j = i + 1; j < prj.length; j++) {
-            if (Math.hypot(pts[i].x - pts[j].x, pts[i].y - pts[j].y, pts[i].z - pts[j].z) < 3.8) {
-                ctx.strokeStyle = ok ? 'rgba(86,211,100,0.25)' : 'rgba(255,51,102,0.12)';
-                ctx.lineWidth = 1;
+
+    for (let i = 0; i < projected.length; i++) {
+        for (let j = i + 1; j < projected.length; j++) {
+            const dist = Math.hypot(pts[i].x - pts[j].x, pts[i].y - pts[j].y, pts[i].z - pts[j].z);
+            if (dist < 0.95) {
                 ctx.beginPath();
-                ctx.moveTo(prj[i].x, prj[i].y);
-                ctx.lineTo(prj[j].x, prj[j].y);
+                ctx.moveTo(projected[i].x, projected[i].y);
+                ctx.lineTo(projected[j].x, projected[j].y);
+                const alpha = Math.max(0.08, Math.min(0.6, ((projected[i].z + projected[j].z) / 2 + 2) / 4));
+                ctx.strokeStyle = ok ? `rgba(86, 211, 100, ${alpha * 0.9})` : `rgba(255, 51, 102, ${alpha * 0.45})`;
+                ctx.lineWidth = ok ? 1.5 : 1;
                 ctx.stroke();
             }
         }
     }
+
+    projected.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, ok ? 3.5 : 2.5, 0, 2 * Math.PI);
+        ctx.fillStyle = ok ? '#56d364' : '#ff3366';
+        ctx.fill();
+    });
+
     requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
 
-function unlock() {
-    const inputKey = document.getElementById('key').value.trim();
-    if (inputKey === "CHRONOS_ALPHA_99") {
+// Verification Access Function
+window.unlock = function() {
+    if (document.getElementById('key').value.trim() === "CHRONOS_ALPHA_99") {
         ok = true;
         bg.innerText = "ACCESS_GRANTED";
         bg.className = "badge ok-badge";
         tm.innerText = trans(store.success_log, false);
         tm.style.color = "#56d364";
         wb.className = "box ok-glow";
-        
         for (let i = 1; i <= 4; i++) {
-            const txtElement = document.getElementById('d' + i);
-            txtElement.innerHTML = store.payload[i - 1];
-            txtElement.className = "txt ok-text";
+            const el = document.getElementById('d' + i);
+            el.innerHTML = store.payload[i - 1];
+            el.className = "txt ok-text";
         }
     } else {
-        alert("ACCESS DENIED: Invalid authorization key.");
+        alert("ACCESS DENIED: Invalid authorization token context.");
     }
-}
-</script>
-</body>
-</html>
+};
