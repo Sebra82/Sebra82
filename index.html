@@ -41,7 +41,7 @@ function loop(){
             }
         }
     }
-    proj.forEach((p,i)=>{ctx.beginPath();ctx.arc(p.x,p.y,pts[i].g===sIdx?3.5:1.5,0,2*Math.PI);let rgb=pts[i].g===sIdx?C[sIdx]:(ok?C[pts[i].g]:"255,51,102");ctx.fillStyle=`rgb(${rgb})`;ctx.fill()});
+    proj.forEach((p,i)=>{ctx.beginPath();ctx.arc(p.x,p.y,pts[i].g===sIdx?4:1.8,0,2*Math.PI);let rgb=pts[i].g===sIdx?C[sIdx]:(ok?C[pts[i].g]:"255,51,102");ctx.fillStyle=`rgb(${rgb})`;ctx.fill()});
     requestAnimationFrame(loop);
 }requestAnimationFrame(loop);
 async function sha256(str){
