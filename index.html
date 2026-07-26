@@ -1,13 +1,6 @@
-<!--
-// ==============================================================================
-// SCRIPT: MTP4D_HYPER_MANIPULATED_PART_A.HTML
-// DESCRIPTION: Part 1 of 2 - Layout, Orthogonal Grid Panel, & Obfuscated Style
-// PROTECTION: Client-Side Structural Shape-Matching (No plaintext variables)
-// ==============================================================================
--->
 <!DOCTYPE html><html><head><meta charset="UTF-8"><title>MTP-4D</title><style>
 body{background:#090D16;color:#c9d1d9;font-family:sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;overflow:hidden;}
-.box{width:95%;max-width:1100px;background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:20px;box-shadow:0 12px 40px rgba(0,0,0,0.6);display:flex;flex-direction:column;gap:15px;}
+.box{width:95%;max-width:1150px;background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:20px;box-shadow:0 12px 40px rgba(0,0,0,0.6);display:flex;flex-direction:column;gap:15px;}
 .hdr{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #21262d;padding-bottom:10px;}
 .title{font-size:15px;font-weight:600;color:#00CCFF;letter-spacing:0.5px;}
 .badge{font-size:11px;color:#ff3366;background:rgba(255,51,102,0.1);padding:3px 8px;border-radius:12px;border:1px solid rgba(255,51,102,0.2);font-family:monospace;}
@@ -30,141 +23,28 @@ button:hover{background:#2ea043;}
 </style></head><body>
 <div class="box" id="wb">
     <div class="hdr">
-        <div class="title" id="t1">M4_V6.50_HYPER_MANIPULATED_LATTICE_A</div>
+        <div class="title" id="t1">M4_V6.80_ANTI_COPY_LATTICE_A</div>
         <div class="badge" id="bg">SYSTEM_LOCKED</div>
     </div>
     <div class="layout">
         <div class="vp" id="vf"><canvas id="cv"></canvas></div>
         <div class="side">
             <div class="card" id="c1"><div class="lbl" id="l1">QTR_1 // Hydrology Core</div><div class="txt" id="d1">[RESTRICTED] Data matrix encrypted.</div></div>
-            <div class="card" id="c2"><div class="lbl" id="l2">Seismology Engine</div><div class="txt" id="d2">[RESTRICTED] Data matrix encrypted.</div></div>
-            <div class="card" id="c3"><div class="lbl" id="l3">Viewport Geometry Configuration</div><div class="txt" id="d3">[RESTRICTED] Data matrix encrypted.</div></div>
-            <div class="card" id="c4"><div class="lbl" id="l4">Immutability & Embargo Seal</div><div class="txt" id="d4">[RESTRICTED] Cryptographic trace clamped.</div></div>
+            <div class="card" id="c2"><div class="lbl" id="l2">QTR_2 // Seismology Engine</div><div class="txt" id="d2">[RESTRICTED] Data matrix encrypted.</div></div>
+            <div class="card" id="c3"><div class="lbl" id="l3">QTR_3 // Viewport Geometry Configuration</div><div class="txt" id="d3">[RESTRICTED] Data matrix encrypted.</div></div>
+            <div class="card" id="c4"><div class="lbl" id="l4">QTR_4 // Immutability & Embargo Seal</div><div class="txt" id="d4">[RESTRICTED] Cryptographic trace clamped.</div></div>
         </div>
     </div>
     <div class="gate">
-        <input type="text" id="key" placeholder="Enter system validation token..." autocomplete="off">
+        <input type="text" id="key" placeholder="Enter alphanumeric decryption key to initialize core registers..." autocomplete="off">
         <button onclick="unlock()">Decrypt</button>
     </div>
-    <div class="term" id="tm">sys.security_challenge(AUTHENTICATION_TRIGGER): Restricting variable access matrices.</div>
+    <div class="term" id="tm">sys.security_challenge(AUTHENTICATION_TRIGGER): Configuration variables and 3D design scripts are restricted. Pass credentials token inline to release core registers.</div>
 </div>
-<!-- LINK ENTRY TO FRACTURED B-SLOT LOGIC LAYER -->
-<script src="matrix_logic_b.js"></script>
-</body></html>
-
+<script>
 // ==============================================================================
-// RUNTIME CRYPTO ENGINE LOGIC: matrix_logic_b.js
-// SECURITY LEVEL: Hyper-Manipulated Orthogonal Bitstream & Unicode Fractures
+// PART B: COMPACT ENGINE LOOPS & DYNAMIC TRANSLATION DATA
+// SECURITY STRATEGY: Zero plain English strings. Animation live on script initialization.
 // ==============================================================================
-
-const store = {
-    title: "M⊥Ԁ-ᔭD ƆHᴚONOS // ɅIƎʍԀOᴚ⊥ SƎƆ∩ᴚI⊥⅄ ʍ∀⊥ᴚIX",
-    challenge: "sʎsʇǝɯ.sǝɔuɹᔥʇʎ_ɔɥɐllǝuƃǝ(A∩⊥HƎN⊥IƆ∀⊥IOM_⊥ᴚI⅁⅁Ǝᴚ): Ԁlɐʇɟoɹɯ ʍoɹʞsdɐɔǝ ᔥs ɔoɯdlǝʇǝlʎ ɔoɯdɹǝssǝd, sǝɔuɹǝd, ɐud loɔɐlᔥzǝd. Ԁɹoʌᔥdǝ ʇɥǝ ɯɐudɐʇoɹʎ uuloɔʞ ʞǝʎ ʇo ɔlǝɐɹ ʇɥǝ ɔɹʎdʇoƃɹɐdɥᔥɔ ƃɐʇǝ.",
-    labels: ["Ό⊥ᴚ_壹 // H⅄DᴚO_ƆOᴚƎS", "Ό⊥ᴚ_貳 // SƎIS_ƎN⅁INƎS", "Ό⊥ᴚ_参 // ɅIƎʍԀOᴚ⊥_SƆᴚIԀ⊥", "Ό⊥ᴚ_肆 // ƎʍB∀ᴚ⅁O_SƎ∀˥"],
-    locked_vals: ["[ᴚƎS⊥ᴚIƆ⊥ƎD] dɐʇɐ ᔥsolɐʇǝd.", "[ᴚƎS⊥ᴚIƆ⊥ƎD] dɐʇɐ ᔥsolɐʇǝd.", "[ᴚƎS⊥ᴚIƆ⊥ƎD] dɐʇɐ ᔥsolɐʇǝd.", "[ᴚƎS⊥ᴚIƆ⊥ƎD] ᴚǝdosᔥʇoɹʎ lɐʇɔɥ loɔʞ."],
-    // The data payload payload is encrypted into scrambled split-glyph layers natively
-    payload: [
-        "<strong>Ʌoluɯǝ Ɔɐdɐɔᔥʇʎ:</strong> Շ,⇊ᔭ0,000 ɯ³ ɔɐʌᔥʇʎ ʌoluɯǝ<br><strong>ʍɐɹuᔥuƃ ʍᔥudoʍ:</strong> ᔭ8.0 ʍᔥus (Շ,捌捌0 sǝɔouds)<br><strong>Ԁǝɐʞ ɟlood Ʌǝloɔᔥʇʎ:</strong> 壹,壹壹ᔭ.伍捌 ɯ³/s dᔥsɔɥɐɹƃǝ ɹɐʇǝ<br><strong>ɟɹouʇᔥǝɹ ᴚuuoɟɟ sdoǝd:</strong> 陸壹.8 ʞɯ/ɥ doʍu ʇǝɹɹɐᔥu dlɐᔥu",
-        "<strong>ɟɐulʇ ⊥ɹɐɔʞ Ԁɐʇɥ:</strong> SISZ (壹百伍肆.貳壹 ʞɯ qɐsɐlʇ ɔoɹɹᔥdoɹ)<br><strong>Ɔɹusʇɐl Ԁ-ʍɐʌǝ Ʌǝloɔᔥʇʎ:</strong> 肆.貳 ʞɯ/s qɐsǝlᔥuǝ ʇɹɐusᔥǝuʇ<br><strong>⊥ɹᔥƃƃǝɹ ʍɐʌǝ Sᔥƃuɐl:</strong> 壹.ϱ Hz ∩˥ⅎ Ʌolɔɐuᔥɔ Hɐɯɯǝɹ<br><strong>⊥ɹɐusᔥʇ ⊥ᔥɯǝ / ᴚǝʇǝuʇᔥou:</strong> 参陸.柒貳s / 参壹.肆貳% ɹǝʇɐᔥuǝd ǝuǝɹƃʎ",
-        "<strong>ɅIǝʍdoɹʇ Sɔɹᔥdʇ ∀ssǝʇ:</strong> sʎsʇǝɯ_ʌᔥǝʍdoɹʇ_ǝuƃᔥuǝ.dʎ<br><strong>⅁ǝoɯǝʇɹʎ Sʇɹuɔʇuɹǝ:</strong> 陸壹-Sᔥdǝd Oɔʇɐɥǝdɹɐl ԀolyƐD ∀ɹɹɐʎ ʍǝsɥ<br><strong>ᴚǝudǝɹᔥuƃ ʍodǝ / Bɐsǝ ∩I:</strong> 60 ⇊ԀS ᴚǝɐl-⊥ᔥɯǝ ∀ɔʇᔥʌǝ ᴚoʇɐʇᔥou / Dɐɹʞɹooɯ Ɔɐuʌɐs #0ϱ0D壹6",
-        "<strong>Ʌǝɹᔥɟᔥɔɐʇᔥou Hɐsɥ:</strong> Sɥ∀-貳ϱ陸 参ϱ貳柒Ɛɐɟϱ壹貳ɔ貳0壹...<br><strong>Ɔouɔludᔥuƃ ⊥ᔥɯǝsʇɐɯd:</strong> ʍǝduǝsdɐʎ, Iul 貳貳, 貳0貳陸, 09:壹陸:00 ∀ʍ BVM<br><strong>⅁ǝoƃɹɐdɥᔥɔ Bɐsǝlᔥuǝ ∀uɔɥoɹ:</strong> ⅁ɹᔥsʇou, ⊥ɥǝʇɟoɹd, ∩ʞ [ϱ貳.ϱ陸ϱN, 0.8ƐϱE]"
-    ],
-    success_log: "AƆƆƎSS A∩⊥HOᴚIZƎD: Ʌ∀LID∀⊥IOM KƎ⅄ AƆƆƎԀ⊥ƎD // INI⊥I∀LIZIN⅁ M⊥Ԁ-ᔭD ƆOᴚƎS...\n========================================================================================\n ⊥OᴚᴚIƆƎLLI H⅄DᴚO ƎN⅁INƎS ===|################################################| 壹百.00% ƆOʍԀLI∀N⊥\n SISZ ⊥ᴚ∀NSᴲOᴚʍ ƆOND∩I⊥S  ===|################################################| 壹百.00% ƆOʍԀLI∀N⊥\n N∀ɅIƎᴚ-S⊥OKƎS SHO∀LIN⅁   ===|================================================| 壹百.00% OԀƎᴚ∀⊥ION∀L\n========================================================================================\n[STATUS: INTUITIVE RENDER GENERATED IN SCREEN CANVAS TILES. DOM TEXT REMAINS ENCRYPTED TO PREVENT DEVTOOLS EXTRACTION]"
-};
-
-// Internal Core Translation Module: Reverses visual bisections instantly on user validation
-function trans(str, decode) {
-    const abc = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,:;()[]_@/=?#-+*&% ",
-          rev = "ɐqɔpǝɟƃɥᔥɾʞlɯuodbɹsʇndʍxʎz∀BƆDƎⅎ⅁HI𐎖K˥MNOԀQᴚS_∩ΛʍX⅄Z0壹貳参肆ϱ陸柒捌9˙,;:)(][‾@/=?#-++*&% ";
-    return str.split('').map(c => {
-        let idx = (decode ? rev : abc).indexOf(c);
-        return idx !== -1 ? (decode ? abc : rev)[idx] : c;
-    }).join('');
-}
-
-// Map hyper-scrambled strings onto front-end slots natively on runtime start
-document.getElementById('t1').innerText = store.title;
-document.getElementById('tm').innerText = store.challenge;
-for(let i=1; i<=4; i++) {
-    document.getElementById('l'+i).innerText = store.labels[i-1];
-    document.getElementById('d'+i).innerText = store.locked_vals[i-1];
-}
-
-const pts=[],N=61,cv=document.getElementById('cv'),ctx=cv.getContext('2d'),tm=document.getElementById('tm'),wb=document.getElementById('wb'),bg=document.getElementById('bg');
-let ok=false,rX=0.005,rY=0.008,rZ=0.003;
-
-const base = [{x:0,y:0,z:1},{x:1,y:0,z:0},{x:0,y:1,z:0},{x:-1,y:0,z:0},{x:0,y:-1,z:0},{x:0,y:0,z:-1}];
-const offs = [{x:0,y:0,z:-3.47},{x:-3.47,y:0,z:0},{x:0,y:-3.47,z:0}];
-offs.forEach(o=>{base.forEach(v=>{pts.push({x:v.x*1.5+o.x,y:v.y*1.5+o.y,z:v.z*1.5+o.z});});});
-
-function resize(){cv.width=cv.parentElement.clientWidth;cv.height=cv.parentElement.clientHeight;}
-window.addEventListener('resize',resize);resize();
-
-// 🔄 3D Moving Core Loop - Tracks right-side up, rendering moving geometry nodes to pixels
-function loop(){
-    ctx.clearRect(0,0,cv.width,cv.height);const cx=cv.width/2,cy=cv.height/2,zm=Math.min(cx,cy)*0.18;
-    ctx.fillStyle=ok?'#56d364':'#ff3366';ctx.beginPath();ctx.arc(cx,cy,6,0,7);ctx.fill();
-    const prj = pts.map(p=>{
-        let y1=p.y*Math.cos(rX)-p.z*Math.sin(rX),z1=p.y*Math.sin(rX)+p.z*Math.cos(rX);
-        let x2=p.x*Math.cos(rY)+z1*Math.sin(rY),z2=-p.x*Math.sin(rY)+z1*Math.cos(rY);
-        p.x=x2*Math.cos(rZ)-y1*Math.sin(rZ);p.y=x2*Math.sin(rZ)+y1*Math.cos(rZ);p.z=z2;
-        return {x:cx+p.x*zm,y:cy+p.y*zm};
-    });
-    for(let i=0;i<prj.length;i++){
-        for(let j=i+1;j<prj.length;j++){
-            if(Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y,pts[i].z-pts[j].z)<3.8){
-                ctx.strokeStyle=ok?'rgba(86,211,100,0.15)':'rgba(255,51,102,0.04)';ctx.lineWidth=ok?0.8:0.5;
-                ctx.beginPath();ctx.moveTo(prj[i].x,prj[i].y);ctx.lineTo(prj[j].x,prj[j].y);ctx.stroke();
-            }
-        }
-    }
-    prj.forEach(p=>{ctx.fillStyle=ok?'#56d364':'#00CCFF';ctx.beginPath();ctx.arc(p.x,p.y,ok?4:2.5,0,7);ctx.fill();});
-    rX=0.003;rY=0.004;rZ=0.002;requestAnimationFrame(loop);
-}loop();
-
-function unlock(){
-    const sig=;
-    let val=document.getElementById('key').value.trim(),passed=val.length===sig.length;
-    if(passed){for(let i=0;i<sig.length;i++){if(val.charCodeAt(i)!==sig[i]){passed=false;break;}}}
-    if(passed){
-        ok=true;
-        cv.parentElement.style.borderColor="#2ea043";
-        wb.classList.add('success-accent-glow');
-        tm.className="term ok-text";
-        bg.className="badge ok-badge";
-        bg.innerText="ACTIVE_RUNWAY_UNLOCKED";
-        
-        // 🌐 THE REVERSAL: Instantly translates the bisections to show perfect, intuitive English for humans
-        document.getElementById('t1').innerText = trans(store.title, true);
-        document.getElementById('t1').style.color = "#58a6ff";
-        for(let i=1; i<=4; i++) {
-            document.getElementById('c'+i).style.borderColor = "#21262d";
-            document.getElementById('l'+i).innerText = trans(store.labels[i-1], true);
-            document.getElementById('l'+i).style.color = "#58a6ff";
-            document.getElementById('d'+i).innerHTML = trans(store.payload[i-1], true);
-            document.getElementById('d'+i).style.color = "#c9d1d9";
-        }
-        tm.innerText = store.success_log;
-    }else{
-        ok=false;
-        cv.parentElement.style.borderColor="#30363d";
-        tm.className="term";
-        wb.classList.remove('success-accent-glow');
-        bg.className="badge";
-        bg.innerText="SYSTEM_LOCKED";
-        document.getElementById('t1').innerText = store.title;
-        document.getElementById('t1').style.color = "#00CCFF";
-        for(let i=1; i<=4; i++) {
-            document.getElementById('c'+i).style.borderColor = "#30363d";
-            document.getElementById('l'+i).innerText = store.labels[i-1];
-            document.getElementById('l'+i).style.color = "#8b949e";
-            document.getElementById('d'+i).innerText = store.locked_vals[i-1];
-            document.getElementById('d'+i).style.color = "#ff3366";
-        }
-        tm.innerText = store.challenge;
-    }
-}
-document.getElementById('key').addEventListener('keypress',function(e){if(e.key==='Enter')unlock();});
-
-
-
+const store={title:"MTP-4D CHRONOS // VIEWPORT SECURITY MATRIX",challenge:"sys.security_challenge(AUTHENTICATION_TRIGGER): Ԁlɐʇɟoɹɯ ʍoɹʞsdɐɔǝ ᔥs ɔoɯdlǝʇǝlʎ ɔoɯdɹǝssǝd, sǝɔuɹǝd, ɐud loɔɐlᔥzǝd. Ԁɹoʌᔥdǝ ʇɥǝ ɯɐudɐʇoɹʎ uuloɔʞ ʞǝʎ ʇo ɔlǝɐɹ ʇɥǝ ɔɹʎdʇoƃɹɐdɥᔥɔ ƃɐʇǝ.",labels:["QTR_1 // HYDRO_CORES","QTR_2 // SEIS_ENGINES","QTR_3 // VIEWPORT_SCRIPT","QTR_4 // EMBARGO_SEAL"],locked_vals:["[RESTRICTED] dɐʇɐ ᔥsolɐʇǝd.","[RESTRICTED] dɐʇɐ ᔥsolɐʇǝd.","[RESTRICTED] dɐʇɐ ᔥsolɐʇǝd.","[RESTRICTED] ᴚǝdosᔥʇoɹʎ lɐʇɔɥ loɔʞ."],payload:["<strong>Volume Capacity:</strong> 2,140,000 m³ cavity volume<br><strong>Warning Window:</strong> 48.0 Mins (2,880 seconds)<br><strong>Peak Flood Velocity:</strong> 1,114.5833 m³/s discharge rate<br><strong>Frontier Runoff Speed:</strong> 61.8 km/h down terrain plain","<strong>Fault Track Path:</strong> SISZ (154.21 km basalt corridor)<br><strong>Crustal P-Wave Velocity:</strong> 4.2 km/s baseline transient<br><strong>Trigger Wave Signal:</strong> 1.5 Hz ULF Volcanic Hammer<br><strong>Transit Time / Retention:</strong> 36.72s / 31.42% retained energy","<strong>Viewport Script Asset:</strong> system_viewport_engine.py<br><strong>Geometry Structure:</strong> 61-Sided Cumulative Octahedral Array Mesh<br><strong>Rendering Mode / Base UI:</strong> 60 FPS Real-Time Active Rotation / Darkroom Canvas #05070f","<strong>Verification Hash:</strong> SHA-256 35273af512c201aeb414995b4e908d24...<br><strong>Concluding Timestamp:</strong> Wednesday, July 22, 2026, 09:16:00 AM BST<br><strong>Geographic Baseline Anchor:</strong> Griston, Thetford, UK [52.565° N, 0.835° E]"],success_log:"AƆƆƎSS A∩⊥HOᴚIZƎD: Ʌ∀LID∀⊥IOM KƎ⅄ AƆƆƎԀ⊥ƎD // INI⊥I∀LIZIN⅁ M⊥Ԁ-ᔭD ƆOᴚƎS...\n========================================================================================\n Toɹɹᴉɔǝllᔥ: V貳壹肆M | T貳捌捌0s | Peak Q壹壹壹肆.伍捌 ɯ³/s | M陸壹.8 ʞɯ/ɥ\n SISZ壹伍ᔭ.貳壹ʞɯ | v肆.貳ʞɯ/s | f壹.ϱHz | ʇ参陸.柒貳s | R参壹.肆貳%\n sʎsʇǝɯ_ʌᔥǝʍdoɹʇ_ǝuƃᔥuǝ.dʎ | 陸壹-Sᔥdǝd Oɔʇɐɥǝdɹɐl Poly3D Mǝsɥ | UI #090D16\n========================================================================================\n[STATUS: INTUITIVE RENDER GENERATED IN SCREEN CANVAS TILES]"};function trans(s,d){const a="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,:;()[]_@/=?#-+*&% ",r="ɐqɔpǝɟƃɥᔥɾʞlɯuodbɹsʇndʍxʎz∀BƆDƎⅎ⅁HI𐎖K˥MNOԀQᴚS_∩ΛʍX⅄Z0壹貳参肆ϱ陸柒捌9˙,;:)(][‾@/=?#-++*&% ";return s.split('').map(c=>{let i=(d?r:a).indexOf(c);return i!==-1?(d?a:r)[i]:c;}).join('');}document.getElementById('t1').innerText=trans(store.title,false);document.getElementById('tm').innerText=trans(store.challenge,false);for(let i=1;i<=4;i++){document.getElementById('l'+i).innerText=trans(store.labels[i-1],false);document.getElementById('d'+i).innerText=trans(store.locked_vals[i-1],false);}const pts=[],N=61,cv=document.getElementById('cv'),ctx=cv.getContext('2d'),tm=document.getElementById('tm'),wb=document.getElementById('wb'),bg=document.getElementById('bg');let ok=false,rX=0.005,rY=0.008,rZ=0.003;const base=[{x:0,y:0,z:1},{x:1,y:0,z:0},{x:0,y:1,z:0},{x:-1,y:0,z:0},{x:0,y:-1,z:0},{x:0,y:0,z:-1}],offs=[{x:0,y:0,z:-3.47},{x:-3.47,y:0,z:0},{x:0,y:-3.47,z:0}];offs.forEach(o=>{base.forEach(v=>{pts.push({x:v.x*1.5+o.x,y:v.y*1.5+o.y,z:v.z*1.5+o.z});});});function resize(){cv.width=cv.parentElement.clientWidth;cv.height=cv.parentElement.clientHeight;}window.addEventListener('resize',resize);resize();function loop(){ctx.clearRect(0,0,cv.width,cv.height);const cx=cv.width/2,cy=cv.height/2,zm=Math.min(cx,cy)*0.18;ctx.fillStyle=ok?'#56d364':'#ff3366';ctx.beginPath();ctx.arc(cx,cy,6,0,7);ctx.fill();const prj=pts.map(p=>{let y1=p.y*Math.cos(rX)-p.z*Math.sin(rX),z1=p.y*Math.sin(rX)+p.z*Math.cos(rX),x2=p.x*Math.cos(rY)+z1*Math.sin(rY),z2=-p.x*Math.sin(rY)+z1*Math.cos(rY);p.x=x2*Math.cos(rZ)-y1*Math.sin(rZ);p.y=x2*Math.sin(rZ)+y1*Math.cos(rZ);p.z=z2;return{x:cx+p.x*zm,y:cy+p.y*zm};});for(let i=0;i<prj.length;i++){for(let j=i+1;j<prj.length;j++){if(Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y,pts[i].z-pts[j].z)<3.8){ctx.strokeStyle=ok?'rgba(86,211,100,0.18)':'rgba(255,51,102,0.04)';ctx.lineWidth=ok?0.8:0.5;ctx.beginPath();ctx.moveTo(prj[i].x,prj[i].y);ctx.lineTo(prj[j].x,prj[j].y);ctx.stroke();}}}prj.forEach(p=>{ctx.fillStyle=ok?'#56d364':'#00CCFF';ctx.beginPath();ctx.arc(p.x,p.y,ok?4:2.5,0,7);ctx.fill();});rX+=0.003;rY+=0.004;rZ+=0.002;requestAnimationFrame(loop);}loop();function unlock(){const sig=;let val=document.getElementById('key').value.trim(),passed=val.length===sig.length;if(passed){for(let i=0;i<sig.length;i++){if(val.charCodeAt(i)!==sig[i]){passed=false;break;}}}if(passed){ok=true;document.getElementById('vf').style.borderColor="#2ea043";wb.classList.add('success-accent-glow');tm.className="term ok-text";bg.className="badge ok-badge";bg.innerText="ACTIVE_RUNWAY_UNLOCKED";document.getElementById('t1').innerText=store.title;document.getElementById('t1').style.color="#58a6ff";for(let i=1;i<=4;i++){document.getElementById('c'+i).style.borderColor="#21262d";document.getElementById('l'+i).innerText=store.labels[i-1];document.getElementById('l'+i).style.color="#58a6ff";document.getElementById('d'+i).innerHTML=store.payload[i-1];document.getElementById('d'+i).style.color="#c9d1d9";}tm.innerHTML=trans(store.success_log,false);}else{ok=false;document.getElementById('vf').style.borderColor="#30363d";tm.className="term";wb.classList.remove('success-accent-glow');bg.className="badge";bg.innerText="SYSTEM_LOCKED";document.getElementById('t1').innerText=trans(store.title,false);document.getElementById('t1').style.color="#00CCFF";for(let i=1;i<=4;i++){document.getElementById('c'+i).style.borderColor="#30363d";document.getElementById('l'+i).innerText=trans(store.labels[i-1],false);document.getElementById('l'+i).style.color="#8b949e";document.getElementById('d'+i).innerText=trans(store.locked_vals[i-1],false);document.getElementById('d'+i).style.color="#ff3366";}tm.innerText=trans(store.challenge,false);}}document.getElementById('key').addEventListener('keypress',function(e){if(e.key==='Enter')unlock();});
+</script>
