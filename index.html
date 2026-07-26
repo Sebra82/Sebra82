@@ -12,51 +12,51 @@ const V={
     p4:"W0VNQkFSR09fU0VBTF9SRUxFQVNFRF0gU2VjdXJpdHkgY2hhbGxlbmdlIGNsZWFyZWQuIEdyaXN0b24sIFRoZXRmb3JkLCBVSyBiYXNlbGluZSByZXJlc3RlZC4gU3VuZGF5LCBKdWx5IDI2LCAyMDI2IHwgTTQwWFRJWDAwXzE1MXBhNzMzNWI0ZTE0Lg==",
     g_o:"W1NUQVRVUzogSU5UVUlUSVZFIDREIEFOSU1BVEVEIFJFTkRFUiBHRU5FUkFURUQgSU4gQ0FOVkFTXQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KbWVzaCA0RCBIeXBlci1PY3RhaGVkcmFsIDUwMC1WZXJ0ZXggfCBzeXN0ZW1fdmlld3BvcnRfZW5naW5lLnB5CiUyNC4xNSBSIHwgczI3LjYzIHQgfCB6SDUuMSBmIHwzRCByZXNvbmFuY2UgYWN0aXZlIHwgbWsgMTIuNDUxIFNJU1oKaC21ayA4LjE2IE0gfCBzLzNtIDMzMzQuODUxIFEgfCBzMDg4LDIgVCB8IE0gMDBMRE9WCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Ci8vIElOSVRJQUxJWkVEIENPUkVTIExPQ0tFRCB8fCBBQ0NFUFRFRCBLRVkgVkFMSURBVElPTjogQUNDRVNTIEFVVEhPUklaRUQ="
 };
-const $=(i)=>document[O](i),conv=(a)=>atob(a);
-$(O),$("tm")[O]=conv(V.s_c),$("bg")[O]=conv(V.s_b);
-for(let i=1;i<=4;i++){$("l"+i)[O]=conv(V.s_l[i-1]);$("d"+i)[O]=conv(V.s_v[i-1])}
+const $=(i)=>document[O[1]](i),conv=(a)=>atob(a);
+$(O[1]),$("tm")[O[0]]=conv(V.s_c),$("bg")[O[0]]=conv(V.s_b),$("t1")[O[0]]=conv(V.s_t);
+for(let i=1;i<=4;i++){$("l"+i)[O[0]]=conv(V.s_l[i-1]);$("d"+i)[O[0]]=conv(V.s_v[i-1])}
 const pts=[];let sIdx=0;
 for(let i=0;i<500;i++){
-    let t=2*Math.PI*i/1.61803398875,p=Math[O](1-2*(i+0.5)/500);
-    pts[O]({x:Math[O](t)*Math[O](p)*1.8,y:Math[O](t)*Math[O](p)*1.8,z:Math[O](p)*1.8,w:Math[O](t*2)*0.5,oX:Math[O](t)*Math[O](p)*1.8,oY:Math[O](t)*Math[O](p)*1.8,oZ:Math[O](p)*1.8,oW:Math[O](t*2)*0.5,p:t,m:1+0.3*Math[O](t*3),g:i%4});
+    let t=2*Math.PI*i/1.61803398875,p=Math[O[28]](1-2*(i+0.5)/500);
+    pts[O[29]]({x:Math[O[26]](t)*Math[O[27]](p)*1.8,y:Math[O[27]](t)*Math[O[27]](p)*1.8,z:Math[O[27]](p)*1.8,w:Math[O[27]](t*2)*0.5,oX:Math[O[26]](t)*Math[O[27]](p)*1.8,oY:Math[O[27]](t)*Math[O[27]](p)*1.8,oZ:Math[O[27]](p)*1.8,oW:Math[O[27]](t*2)*0.5,p:t,m:1+0.3*Math[O[27]](t*3),g:i%4});
 }
-const cv=$("cv"),ctx=cv[O]("2d");let ok=false,zoom=1.0,rx=0.003,ry=0.005,mx=0,my=0,drag=false,px=0,py=0,f=0;
-function res(){cv.width=cv.parentElement.clientWidth;cv.height=cv.parentElement.clientHeight}window[O](O,res);res();
-function ptr(e){return e[O]&&e[O][O]>0?{x:e[O][O],y:e[O][O]}:{x:e[O],y:e[O]}}
+const cv=$("cv"),ctx=cv[O[24]]("2d");let ok=false,zoom=1.0,rx=0.003,ry=0.005,mx=0,my=0,drag=false,px=0,py=0,f=0;
+function res(){cv.width=cv.parentElement.clientWidth;cv.height=cv.parentElement.clientHeight}window[O[23]](O[22],res);res();
+function ptr(e){return e[O[12]]&&e[O[12]][O[13]]>0?{x:e[O[12]][0][O[14]],y:e[O[12]][0][O[15]]}:{x:e[O[14]],y:e[O[15]]}}
 function start(e){drag=true;const p=ptr(e);px=p.x;py=p.y}
 function move(e){if(!drag)return;const p=ptr(e);my+=(p.x-px)*0.008;mx+=(p.y-py)*0.008;px=p.x;py=p.y}
-cv[O](O,start);window[O](O,move);window[O](O,()=>{drag=false});
-cv[O](O,start,{passive:true});cv[O](O,move,{passive:true});cv[O](O,()=>{drag=false});
-function sel(idx){sIdx=idx;for(let i=1;i<=4;i++){$("c"+i)[O][O](O)}$("c"+(idx+1))[O][O](O)}sel(0);
+cv[O[23]](O[16],start);window[O[23]](O[17],move);window[O[23]](O[18],()=>{drag=false});
+cv[O[23]](O[19],start,{passive:true});cv[O[23]](O[20],move,{passive:true});cv[O[23]](O[21],()=>{drag=false});
+function sel(idx){sIdx=idx;for(let i=1;i<=4;i++){$("c"+i)[O[7]][O[8]](O[6])}$("c"+(idx+1))[O[7]][O[9]](O[6])}sel(0);
 function loop(){
-    f+=0.02;ctx[O](0,0,cv.width,cv.height);const cx=cv.width/2,cy=cv.height/2,scale=Math.min(cx,cy)*0.28*zoom,ax=rx+mx,ay=ry+my,aw=f*0.5;
+    f+=0.02;ctx[O[25]](0,0,cv.width,cv.height);const cx=cv.width/2,cy=cv.height/2,scale=Math.min(cx,cy)*0.28*zoom,ax=rx+mx,ay=ry+my,aw=f*0.5;
     if(!drag){mx*=0.95;my*=0.96}rx+=0.001;ry+=0.002;
     pts.forEach(p=>{
-        let d=Math[O](p.p+f)*0.15*p.m;
-        let tX=p.oX*(1+d),tY=p.oY*(1+d),tZ=p.oZ*(1+d),tW=p.oW+Math[O](f+p.p)*0.3;
-        let cW=Math[O](aw),sW=Math[O](aw);
+        let d=Math[O[27]](p.p+f)*0.15*p.m;
+        let tX=p.oX*(1+d),tY=p.oY*(1+d),tZ=p.oZ*(1+d),tW=p.oW+Math[O[27]](f+p.p)*0.3;
+        let cW=Math[O[26]](aw),sW=Math[O[27]](aw);
         p.z=tZ*cW-tW*sW;p.w=tZ*sW+tW*cW;p.x=tX;p.y=tY;
     });
-    const proj=pts.map(p=>{let y1=p.y*Math[O](ax)-p.z*Math[O](ax),z1=p.y*Math[O](ax)+p.z*Math[O](ax),x2=p.x*Math[O](ay)+z1*Math[O](ay);return{x:cx+x2*scale,y:cy+y1*scale,z:-p.x*Math[O](ay)+z1*Math[O](ay),w:p.w}});
+    const proj=pts.map(p=>{let y1=p.y*Math[O[26]](ax)-p.z*Math[O[27]](ax),z1=p.y*Math[O[27]](ax)+p.z*Math[O[26]](ax),x2=p.x*Math[O[26]](ay)+z1*Math[O[27]](ay);return{x:cx+x2*scale,y:cy+y1*scale,z:-p.x*Math[O[27]](ay)+z1*Math[O[26]](ay),w:p.w}});
     for(let i=0;i<proj.length;i++){
         for(let j=i+1;j<proj.length;j++){
-            let d=Math[O](pts[i].x-pts[j].x,pts[i].y-pts[j].y,pts[i].z-pts[j].z);
+            let d=Math[O[30]](pts[i].x-pts[j].x,pts[i].y-pts[j].y,pts[i].z-pts[j].z);
             if(d<0.45){
-                let isA=(pts[i].g===sIdx||pts[j].g===sIdx);ctx[O]();ctx[O](proj[i].x,proj[i].y);ctx[O](proj[j].x,proj[j].y);
+                let isA=(pts[i].g===sIdx||pts[j].g===sIdx);ctx[O[31]]();ctx[O[32]](proj[i].x,proj[i].y);ctx[O[33]](proj[j].x,proj[j].y);
                 let op=isA?0.6-d*0.5:(ok?0.2-d*0.2:0.15-d*0.15);
                 let factor=1-Math.min(Math.max((proj[i].w+proj[j].w+1)/2,0),1);op*=factor;
-                ctx[O]=isA?`rgba(0,204,255,${op})`:(ok?`rgba(86,211,100,${op})`:`rgba(255,51,102,${op})`);ctx[O]();
+                ctx[O[34]]=isA?`rgba(0,204,255,${op})`:(ok?`rgba(86,211,100,${op})`:`rgba(255,51,102,${op})`);ctx[O[35]]();
             }
         }
     }
-    proj.forEach((p,i)=>{ctx[O]();ctx[O](p.x,p.y,pts[i].g===sIdx?3.5:1.5,0,2*Math.PI);ctx[O]=pts[i].g===sIdx?'#00ccff':(ok?'#56d364':'#ff3366');ctx[O]()});
-    window[O](loop);
-}window[O](loop);
+    proj.forEach((p,i)=>{ctx[O[31]]();ctx[O[36]](p.x,p.y,pts[i].g===sIdx?3.5:1.5,0,2*Math.PI);ctx[O[37]]=pts[i].g===sIdx?'#00ccff':(ok?'#56d364':'#ff3366');ctx[O[38]]()});
+    window[O[39]](loop);
+}window[O[39]](loop);
 function unlock(){
-    if($("key")[O][O]()==_0x3b2a){
-        ok=true;$("bg")[O]="ACCESS_GRANTED";$ ramp=$("bg")[O]="badge ok-badge";$("wb")[O]="box ok-glow";
-        $("d1")[O]=conv(V.p1);$("d2")[O]=conv(V.p2);$("d3")[O]=conv(V.p3);$("d4")[O]=conv(V.p4);$("tm")[O]=conv(V.g_o);$("tm")[O][O]="#56d364";
-        for(let i=1;i<=4;i++)$("d"+i)[O]="txt ok-text";
+    if($("key")[O[10]][O[11]]()==="CHRONOS_ALPHA_99"){
+        ok=true;$("bg")[O[0]]="ACCESS_GRANTED";$("bg")[O[5]]="badge ok-badge";$("wb")[O[5]]="box ok-glow";
+        $("d1")[O[2]]=conv(V.p1);$("d2")[O[2]]=conv(V.p2);$("d3")[O[2]]=conv(V.p3);$("d4")[O[2]]=conv(V.p4);$("tm")[O[2]]=conv(V.g_o);$("tm")[O[3]][O[4]]="#56d364";
+        for(let i=1;i<=4;i++)$("d"+i)[O[5]]="txt ok-text";
     }else{alert("ACCESS DENIED.")}
 }
 </script></body></html>
