@@ -1,70 +1,113 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>M4</title><style>*{box-sizing:border-box;margin:0;padding:0}body{background:#060913;color:#c9d1d9;font-family:sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:10px;overflow:hidden}.box{width:100%;max-width:1100px;background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:10px}.hdr{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #21262d;padding-bottom:8px}.title{font-size:13px;font-weight:700;color:#00ccff;font-family:monospace}.badge{font-size:10px;font-weight:bold;color:#ff3366;background:rgba(255,51,102,0.08);padding:3px 8px;border-radius:12px;border:1px solid rgba(255,51,102,0.2);font-family:monospace}.layout{display:grid;grid-template-columns:1.2fr 1fr;gap:12px}@media(max-width:768px){.layout{grid-template-columns:1fr}}.vp{border:1px solid #30363d;background:#03050a;border-radius:6px;position:relative;height:320px;touch-action:none;cursor:grab}canvas{position:absolute;width:100%;height:100%;display:block}.side{display:flex;flex-direction:column;gap:8px;height:320px;overflow-y:auto}.card{background:#161b22;border:1px solid #30363d;border-radius:6px;padding:10px}.lbl{font-size:9px;font-weight:700;color:#8b949e;text-transform:uppercase;border-bottom:1px solid #21262d;padding-bottom:2px;margin-bottom:4px;font-family:monospace}.txt{font-family:monospace;font-size:11px;color:#ff3366;word-break:break-all}.gate{display:flex;background:#161b22;border:1px solid #30363d;padding:8px;border-radius:6px;gap:8px}input{flex:1;background:#070a10;border:1px solid #30363d;color:#00ccff;padding:6px 10px;font-family:monospace;font-size:12px;outline:none;border-radius:4px}button{background:#238636;border:none;color:#fff;padding:6px 16px;font-size:12px;font-weight:600;border-radius:4px;cursor:pointer}.term{background:#03050a;border:1px solid #30363d;border-radius:6px;padding:10px;font-family:monospace;font-size:11px;color:#ff3366;min-height:70px;max-height:100px;overflow-y:auto;white-space:pre-wrap;word-break:break-all}.ok-glow{border-color:#2ea043!important;box-shadow:0 0 15px rgba(46,160,67,0.15)}.ok-text{color:#56d364!important}.ok-badge{color:#56d364!important;background:rgba(46,160,67,0.08)!important;border-color:rgba(46,160,67,0.2)!important}</style></head><body><div class="box" id="wb"><div class="hdr"><div class="title" id="t1">...</div><div class="badge" id="bg">...</div></div><div class="layout"><div class="vp"><canvas id="cv"></canvas></div><div class="side"><div class="card"><div class="lbl" id="l1">...</div><div class="txt" id="d1">...</div></div><div class="card"><div class="lbl" id="l2">...</div><div class="txt" id="d2">...</div></div><div class="card"><div class="lbl" id="l3">...</div><div class="txt" id="d3">...</div></div><div class="card"><div class="lbl" id="l4">...</div><div class="txt" id="d4">...</div></div></div></div><div class="gate"><input type="password" id="key" placeholder="..." autocomplete="off"><button onclick="unlock()">►</button></div><div class="term" id="tm">...</div></div><div id="vault-slot" style="display:none"></div><script>
-let V=null,pts=[],ok=false,zoom=1.0,rx=0.003,ry=0.005,mx=0,my=0,drag=false,px=0,py=0;
-const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
-function res(){cv.width=cv.parentElement.clientWidth;cv.height=cv.parentElement.clientHeight}window.addEventListener('resize',res);res();
-const conv=(a)=>a.map(b=>String.fromCharCode(b)).join('');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>M4 TEST</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #060913; color: #c9d1d9; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 10px; overflow: hidden; }
+        .box { width: 100%; max-width: 1100px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+        .hdr { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #21262d; padding-bottom: 8px; }
+        .title { font-size: 13px; font-weight: 700; color: #00ccff; font-family: monospace; }
+        .badge { font-size: 10px; font-weight: bold; color: #ff3366; background: rgba(255,51,102,0.08); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(255,51,102,0.2); font-family: monospace; }
+        .layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px; }
+        @media(max-width: 768px) { .layout { grid-template-columns: 1fr; } }
+        .vp { border: 1px solid #30363d; background: #03050a; border-radius: 6px; position: relative; height: 320px; touch-action: none; cursor: grab; }
+        canvas { position: absolute; width: 100%; height: 100%; display: block; }
+        .side { display: flex; flex-direction: column; gap: 8px; height: 320px; overflow-y: auto; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 10px; }
+        .lbl { font-size: 9px; font-weight: 700; color: #8b949e; text-transform: uppercase; border-bottom: 1px solid #21262d; padding-bottom: 2px; margin-bottom: 4px; font-family: monospace; }
+        .txt { font-family: monospace; font-size: 11px; color: #ff3366; word-break: break-all; }
+        .gate { display: flex; background: #161b22; border: 1px solid #30363d; padding: 8px; border-radius: 6px; gap: 8px; }
+        input { flex: 1; background: #070a10; border: 1px solid #30363d; color: #00ccff; padding: 6px 10px; font-family: monospace; font-size: 12px; outline: none; border-radius: 4px; }
+        button { background: #238636; border: none; color: #fff; padding: 6px 16px; font-size: 12px; font-weight: 600; border-radius: 4px; cursor: pointer; }
+        .term { background: #03050a; border: 1px solid #30363d; border-radius: 8px; padding: 12px; font-family: monospace; font-size: 11px; color: #ff3366; min-height: 70px; max-height: 100px; overflow-y: auto; white-space: pre-wrap; word-break: break-all; }
+        .ok-glow { border-color: #2ea043 !important; box-shadow: 0 0 15px rgba(46,160,67,0.15); }
+        .ok-text { color: #56d364 !important; }
+        .ok-badge { color: #56d364 !important; background: rgba(46,160,67,0.08) !important; border-color: rgba(46,160,67,0.2) !important; }
+    </style>
+</head>
+<body>
+<div class="box" id="wb">
+    <div class="hdr">
+        <div class="title">M4_DIAGNOSTIC_CHASSIS</div>
+        <div class="badge" id="bg">TEST_MODE</div>
+    </div>
+    <div class="layout">
+        <div class="vp"><canvas id="cv"></canvas></div>
+        <div class="side">
+            <div class="card"><div class="lbl">QTR_1 // PLATFORM_TEST</div><div class="txt" id="d1">Viewport rendering active. Swipe sphere to verify physics grid.</div></div>
+            <div class="card"><div class="lbl">QTR_2 // CACHE_STATE</div><div class="txt" id="d2">Local storage tracking stable.</div></div>
+            <div class="card"><div class="lbl">QTR_3 // SECURITY_GATE</div><div class="txt" id="d3">Decryption system offline for test loop.</div></div>
+            <div class="card"><div class="lbl">QTR_4 // VERIFICATION</div><div class="txt" id="d4">Enter passkey string below to test engine response.</div></div>
+        </div>
+    </div>
+    <div class="gate">
+        <input type="password" id="key" placeholder="Enter key string..." autocomplete="off">
+        <button onclick="unlock()">►</button>
+    </div>
+    <div class="term" id="tm">sys.diagnostic(LOOP_RUNNING): Standing by for test credential check...</div>
+</div>
 
-async function mountStorage(){
-    try{
-        const text=await fetch('data.html').then(res=>res.text());
-        const slot=document.getElementById('vault-slot');slot.innerHTML=text;
-        const injectedScript=slot.querySelector('script');
-        if(injectedScript){
-            const runner=document.createElement('script');
-            runner.text=injectedScript.text;document.body.appendChild(runner);
-        }
-        let verificationInterval=setInterval(()=>{
-            if(window.M4_SECURE_VAULT){
-                clearInterval(verificationInterval);V=window.M4_SECURE_VAULT;
-                document.getElementById('t1').innerText=conv(V.s_t);
-                document.getElementById('tm').innerText=conv(V.s_c);
-                document.getElementById('bg').innerText=conv(V.s_b);
-                for(let i=1;i<=4;i++){
-                    document.getElementById('l'+i).innerText=conv(V.s_l[i-1]);
-                    document.getElementById('d'+i).innerText=conv(V.s_v[i-1]);
-                }
-                pts=V.XYZ.map(p=>({x:p.x,y:p.y,z:p.z}));requestAnimationFrame(loop);
-            }
-        },10);
-    }catch(err){console.error("Handshake fail:",err)}
-}
-function ptr(e){return e.targetTouches&&e.targetTouches.length>0?{x:e.targetTouches[0].clientX,y:e.targetTouches[0].clientY}:{x:e.clientX,y:e.clientY}}
-function start(e){drag=true;const p=ptr(e);px=p.x;py=p.y}
-function move(e){if(!drag)return;const p=ptr(e);my+=(p.x-px)*0.008;mx+=(p.y-py)*0.008;px=p.x;py=p.y}
-function end(){drag=false}
-cv.addEventListener('mousedown',start);window.addEventListener('mousemove',move);window.addEventListener('mouseup',end);
-cv.addEventListener('touchstart',start,{passive:true});cv.addEventListener('touchmove',move,{passive:true});cv.addEventListener('touchend',end);
+<script>
+// Lightweight test geometry array map to confirm canvas pipeline functions cleanly
+const testPoints = [
+    {x:0, y:0.6, z:1.5}, {x:0.5, y:0.2, z:1.5}, {x:-0.4, y:-0.4, z:1.5}, {x:-0.4, y:0.4, z:1.5}, {x:0.5, y:-0.2, z:1.5},
+    {x:0.4, y:0.7, z:1.2}, {x:-0.1, y:0.8, z:1.2}, {x:-0.6, y:0.5, z:1.2}, {x:-0.7, y:0.2, z:1.2}, {x:-0.6, y:-0.5, z:1.2},
+    {x:-0.2, y:-0.7, z:1.2}, {x:0.3, y:-0.7, z:1.2}, {x:0.7, y:-0.3, z:1.2}, {x:0.7, y:0.1, z:1.2}, {x:0.8, y:0.6, z:0.9},
+    {x:0, y:1.0, z:0.9}, {x:-0.8, y:0.7, z:0.9}, {x:-1.0, y:-0.2, z:0.9}, {x:-0.6, y:-0.8, z:0.9}, {x:0.3, y:-0.9, z:0.9},
+    {x:1.0, y:-0.3, z:0.9}, {x:1.0, y:0.3, z:0.9}, {x:0.9, y:0.8, z:0.5}, {x:0, y:1.2, z:0.5}, {x:-0.9, y:0.7, z:0.5},
+    {x:-1.1, y:-0.3, z:0.5}, {x:-0.5, y:-1.0, z:0.5}, {x:0.4, y:-1.0, z:0.5}, {x:1.1, y:-0.2, z:0.5}, {x:1.0, y:0.5, z:0.5}
+];
 
-function loop(){
-    ctx.clearRect(0,0,cv.width,cv.height);
-    const cx=cv.width/2,cy=cv.height/2,scale=Math.min(cx,cy)*0.28*zoom,ax=rx+mx,ay=ry+my;
-    if(!drag){mx*=0.95;my*=0.96}rx+=0.001;ry+=0.002;
-    const proj=pts.map(p=>{
-        let y1=p.y*Math.cos(ax)-p.z*Math.sin(ax),z1=p.y*Math.sin(ax)+p.z*Math.cos(ax),x2=p.x*Math.cos(ay)+z1*Math.sin(ay);
-        return{x:cx+x2*scale,y:cy+y1*scale,z:-p.x*Math.sin(ay)+z1*Math.cos(ay)}
+const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+let ok = false, zoom = 1.0, rx = 0.003, ry = 0.005, mx = 0, my = 0, drag = false, px = 0, py = 0;
+
+function res() { cv.width = cv.parentElement.clientWidth; cv.height = cv.parentElement.clientHeight; }
+window.addEventListener('resize', res); res();
+
+function ptr(e) { return e.targetTouches && e.targetTouches.length > 0 ? { x: e.targetTouches.clientX, y: e.targetTouches.clientY } : { x: e.clientX, y: e.clientY }; }
+function start(e) { drag = true; const p = ptr(e); px = p.x; py = p.y; }
+function move(e) { if (!drag) return; const p = ptr(e); my += (p.x - px) * 0.008; mx += (p.y - py) * 0.008; px = p.x; py = p.y; }
+function end() { drag = false; }
+
+cv.addEventListener('mousedown', start); window.addEventListener('mousemove', move); window.addEventListener('mouseup', end);
+cv.addEventListener('touchstart', start, { passive: true }); cv.addEventListener('touchmove', move, { passive: true }); cv.addEventListener('touchend', end);
+
+function loop() {
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    const cx = cv.width / 2, cy = cv.height / 2, scale = Math.min(cx, cy) * 0.28 * zoom, ax = rx + mx, ay = ry + my;
+    if (!drag) { mx *= 0.95; my *= 0.96; } rx += 0.001; ry += 0.002;
+
+    const proj = testPoints.map(p => {
+        let y1 = p.y * Math.cos(ax) - p.z * Math.sin(ax), z1 = p.y * Math.sin(ax) + p.z * Math.cos(ax), x2 = p.x * Math.cos(ay) + z1 * Math.sin(ay);
+        return { x: cx + x2 * scale, y: cy + y1 * scale, z: -p.x * Math.sin(ay) + z1 * Math.cos(ay) };
     });
-    for(let i=0;i<proj.length;i++){
-        for(let j=i+1;j<proj.length;j++){
-            if(Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y,pts[i].z-pts[j].z)<0.95){
-                ctx.beginPath();ctx.moveTo(proj[i].x,proj[i].y);ctx.lineTo(proj[j].x,proj[j].y);
-                ctx.strokeStyle=ok?`rgba(86,211,100,0.35)`:`rgba(255,51,102,0.25)`;ctx.stroke()
+
+    for (let i = 0; i < proj.length; i++) {
+        for (let j = i + 1; j < proj.length; j++) {
+            if (Math.hypot(testPoints[i].x - testPoints[j].x, testPoints[i].y - testPoints[j].y, testPoints[i].z - testPoints[j].z) < 0.95) {
+                ctx.beginPath(); ctx.moveTo(proj[i].x, proj[i].y); ctx.lineTo(proj[j].x, proj[j].y);
+                ctx.strokeStyle = ok ? `rgba(86,211,100,0.35)` : `rgba(255,51,102,0.25)`; ctx.stroke();
             }
         }
     }
-    proj.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,ok?3.5:2.5,0,2*Math.PI);ctx.fillStyle=ok?'#56d364':'#ff3366';ctx.fill()});
-    requestAnimationFrame(loop)
+    proj.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, ok ? 3.5 : 2.5, 0, 2 * Math.PI); ctx.fillStyle = ok ? '#56d364' : '#ff3366'; ctx.fill(); });
+    requestAnimationFrame(loop);
 }
-function unlock(){
-    if(!V)return;
-    if(document.getElementById('key').value.trim()==="CHRONOS_ALPHA_99"){
-        ok=true;document.getElementById('bg').innerText="ACCESS_GRANTED";
-        document.getElementById('bg').className="badge ok-badge";document.getElementById('wb').className="box ok-glow";
-        const rev=(a)=>[...a].reverse().map(x=>String.fromCharCode(x)).join('');
-        document.getElementById('d1').innerHTML=rev(V.p1);document.getElementById('d2').innerHTML=rev(V.p2);
-        document.getElementById('d3').innerHTML=rev(V.p3);document.getElementById('d4').innerHTML=rev(V.p4);
-        document.getElementById('tm').innerText=[...V.g_o].reverse().map(x=>String.fromCharCode(x)).join('');
-        document.getElementById('tm').style.color="#56d364";for(let i=1;i<=4;i++)document.getElementById('d'+i).className="txt ok-text"
-    }else{alert("ACCESS DENIED.")}
+requestAnimationFrame(loop);
+
+function unlock() {
+    if (document.getElementById('key').value.trim() === "CHRONOS_ALPHA_99") {
+        ok = true;
+        document.getElementById('bg').innerText = "TEST_SUCCESS";
+        document.getElementById('bg').className = "badge ok-badge"; document.getElementById('wb').className = "box ok-glow";
+        document.getElementById('tm').innerText = ">> SUCCESS: Engine handshake active.\n>> Response color matrix transitioned to verified green.";
+        document.getElementById('tm').style.color = "#56d364";
+        for (let i = 1; i <= 4; i++) document.getElementById('d' + i).className = "txt ok-text";
+    } else { alert("TEST DENIED: Use CHRONOS_ALPHA_99"); }
 }
-window.addEventListener('DOMContentLoaded',mountStorage);
-</script></body></html>
+</script>
+</body>
+</html>
