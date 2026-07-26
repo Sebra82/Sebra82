@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MTP-4D CHRONOS PANEL</title>
     <style>
         * { box-sizing: border-box; }
@@ -15,7 +15,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 10px;
+            padding: 12px;
             overflow-x: hidden;
         }
         .box {
@@ -24,12 +24,11 @@
             background: #0d1117;
             border: 1px solid #30363d;
             border-radius: 12px;
-            padding: 16px;
+            padding: 18px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.7);
             display: flex;
             flex-direction: column;
             gap: 14px;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .hdr {
             display: flex;
@@ -71,6 +70,7 @@
             height: 400px;
             overflow: hidden;
             cursor: grab;
+            touch-action: none;
         }
         .vp:active { cursor: grabbing; }
         canvas {
@@ -93,8 +93,7 @@
             background: #161b22;
             border: 1px solid #30363d;
             border-radius: 8px;
-            padding: 12px;
-            transition: border-color 0.2s;
+            padding: 14px;
         }
         .lbl {
             font-size: 10px;
@@ -142,7 +141,6 @@
             font-weight: 600;
             border-radius: 6px;
             cursor: pointer;
-            transition: background 0.2s;
         }
         button:hover { background: #2ea043; }
         .term {
@@ -171,7 +169,7 @@
             color: #8b949e;
             pointer-events: none;
             font-family: monospace;
-            background: rgba(0,0,0,0.4);
+            background: rgba(0,0,0,0.5);
             padding: 2px 6px;
             border-radius: 4px;
         }
@@ -186,7 +184,7 @@
     <div class="layout">
         <div class="vp" id="vf">
             <canvas id="cv"></canvas>
-            <div class="hint"> Drag/Swipe to Rotate | Scroll to Zoom</div>
+            <div class="hint"> Swipe to Spin Mesh | Scroll or Pinch to Scale</div>
         </div>
         <div class="side">
             <div class="card" id="c1"><div class="lbl" id="l1">QTR_1 // Hydrology Core</div><div class="txt" id="d1">[RESTRICTED] Data matrix encrypted.</div></div>
@@ -199,155 +197,8 @@
         <input type="text" id="key" placeholder="Enter authorization key..." autocomplete="off">
         <button onclick="unlock()">Decrypt</button>
     </div>
-    <div class="term" id="tm">Loading secure configuration modules...</div>
+    <div class="term" id="tm">Loading secure modules...</div>
 </div>
 <script src="app.js"></script>
 </body>
 </html>
-
-const store = {
-    title: "MTP-4D CHRONOS // VIEWPORT SECURITY MATRIX",
-    challenge: "sys.security_challenge(AUTHENTICATION_TRIGGER): Ԁlɐʇɟoɹɯ ʍoɹʞsdɐɔǝ ᔥs ɔoɯdlǝʇǝlʎ ɔoɯdɹǝssǝd, sǝɔuɹǝd, ɐud loɔɐlᔥzǝd. Ԁɹoʌᔥdǝ ʇɥǝ ɯɐudɐʇoɹʎ uuloɔʞ ʞǝʎ ʇo ɔlǝɐɹ ʇɥǝ ɔɹʎdʇoƃRAMA ƃɐʇǝ.",
-    labels: ["QTR_1 // HYDRO_CORES","QTR_2 // SEIS_ENGINES","QTR_3 // VIEWPORT_SCRIPT","QTR_4 // EMBARGO_SEAL"],
-    locked_vals: ["[RESTRICTED] dɐʇɐ ᔥsolɐʇǝd.","[RESTRICTED] dɐʇɐ ᔥsolɐʇǝd.","[RESTRICTED] dɐʇɐ ᔥsolɐʇǝd.","[RESTRICTED] ᴚǝdosᔥʇoɹʎ lɐʇɔɥ loɔ."],
-    payload: [
-        "<strong>Volume Capacity:</strong> 2,140,000 m³ cavity volume<br><strong>Warning Window:</strong> 48.0 Mins (2,880 seconds)<br><strong>Peak Flood Velocity:</strong> 1,114.5833 m³/s discharge rate<br><strong>Frontier Runoff Speed:</strong> 61.8 km/h down terrain plain",
-        "<strong>Fault Track Path:</strong> SISZ (154.21 km basalt corridor)<br><strong>Crustal P-Wave Velocity:</strong> 4.2 km/s baseline transient<br><strong>Trigger Wave Signal:</strong> 1.5 Hz ULF Volcanic Hammer<br><strong>Transit Time / Retention:</strong> 36.72s / 31.42% retained energy",
-        "<strong>Viewport Script Asset:</strong> system_viewport_engine.py<br><strong>Geometry Structure:</strong> 61-Sided Cumulative Octahedral Array Mesh<br><strong>Rendering Mode / Base UI:</strong> 60 FPS Real-Time Active Rotation / Darkroom Canvas #05070f",
-        "<strong>Verification Hash:</strong> SHA-256 35273af512c201aeb414995b4e908d24...<br><strong>Concluding Timestamp:</strong> Wednesday, July 22, 2026, 09:16:00 AM BST<br><strong>Geographic Baseline Anchor:</strong> Griston, Thetford, UK [52.565° N, 0.835° E]"
-    ],
-    success_log: "AƆƆƎSS A∩⊥HOᴚIZƎD: Ʌ∀LID∀⊥IOM KƎ⅄ AƆƆƎԀ⊥ƎD // INI⊥I∀LIZIN⅁ M⊥Ԁ-ᔭD ƆOᴚƎS...\n========================================================================================\n Toɹɹᴉɔǝllᔥ: V貳壹肆M | T貳捌捌0s | Peak Q壹壹壹肆.伍捌 ɯ³/s | M陸壹.8 ʞɯ/ɥ\n SISZ壹伍ᔭ.貳壹ʞɯ | v肆.貳ʞɯ/s | f壹.ϱHz | ʇ参陸.柒貳s | R参壹.肆貳%\n sʎsʇǝɯ_ʌᔥǝʍdoɹʇ_ǝuƃᔥuǝ.dʎ | 陸壹-Sᔥdǝd Oɔʇɐɥǝdɹɐl Poly3D Mǝsɥ | UI #090D16\n========================================================================================\n[STATUS: INTUITIVE RENDER GENERATED IN SCREEN CANVAS TILES]"
-};
-
-function trans(s, d) {
-    const a = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,:;()[]_@/=?#-+*&% ";
-    const r = "ɐqɔpǝɟƃɥᔥɾʞlɯuodbɹsʇndʍxʎz∀BƆDƎⅎ⅁HI𐎖K˥MNOԀQᴚS_∩ΛʍX⅄Z0壹貳参肆ϱ陸柒捌9˙,;:)(][‾@/=?#-++*&% ";
-    return s.split('').map(c => {
-        let i = (d ? r : a).indexOf(c);
-        return i !== -1 ? (d ? a : r)[i] : c;
-    }).join('');
-}
-
-// Map textual structures
-document.getElementById('t1').innerText = trans(store.title, false);
-document.getElementById('tm').innerText = trans(store.challenge, false);
-for (let i = 1; i <= 4; i++) {
-    document.getElementById('l' + i).innerText = trans(store.labels[i - 1], false);
-    document.getElementById('d' + i).innerText = trans(store.locked_vals[i - 1], false);
-}
-
-// Geodesic 61-Node Engine Initialization
-const pts = [], cv = document.getElementById('cv'), ctx = cv.getContext('2d');
-const tm = document.getElementById('tm'), wb = document.getElementById('wb'), bg = document.getElementById('bg');
-
-let ok = false, zoomFactor = 1.0;
-let autoRotX = 0.003, autoRotY = 0.005, manualRotX = 0, manualRotY = 0;
-let isDragging = false, prevMouseX = 0, prevMouseY = 0;
-
-const totalTargetPoints = 61;
-const goldenRatio = (1 + Math.sqrt(5)) / 2;
-for (let i = 0; i < totalTargetPoints; i++) {
-    const theta = 2 * Math.PI * i / goldenRatio;
-    const phi = Math.acos(1 - 2 * (i + 0.5) / totalTargetPoints);
-    pts.push({
-        x: Math.cos(theta) * Math.sin(phi) * 1.8,
-        y: Math.sin(theta) * Math.sin(phi) * 1.8,
-        z: Math.cos(phi) * 1.8
-    });
-}
-
-function resize() {
-    cv.width = cv.parentElement.clientWidth;
-    cv.height = cv.parentElement.clientHeight;
-}
-window.addEventListener('resize', resize);
-resize();
-
-// Gesture Triggers
-cv.addEventListener('mousedown', (e) => { isDragging = true; prevMouseX = e.clientX; prevMouseY = e.clientY; });
-window.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-    manualRotY += (e.clientX - prevMouseX) * 0.007;
-    manualRotX += (e.clientY - prevMouseY) * 0.007;
-    prevMouseX = e.clientX; prevMouseY = e.clientY;
-});
-window.addEventListener('mouseup', () => isDragging = false);
-
-cv.addEventListener('touchstart', (e) => {
-    if (e.touches.length !== 1) return;
-    isDragging = true;
-    prevMouseX = e.touches[0].clientX; prevMouseY = e.touches[0].clientY;
-}, { passive: true });
-cv.addEventListener('touchmove', (e) => {
-    if (!isDragging || e.touches.length !== 1) return;
-    manualRotY += (e.touches[0].clientX - prevMouseX) * 0.009;
-    manualRotX += (e.touches[0].clientY - prevMouseY) * 0.009;
-    prevMouseX = e.touches[0].clientX; prevMouseY = e.touches[0].clientY;
-}, { passive: true });
-window.addEventListener('touchend', () => isDragging = false);
-
-cv.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    zoomFactor = Math.max(0.4, Math.min(zoomFactor - e.deltaY * 0.001, 2.5));
-}, { passive: false });
-
-// Runtime Loop
-function loop() {
-    ctx.clearRect(0, 0, cv.width, cv.height);
-    const cx = cv.width / 2, cy = cv.height / 2, dynamicZoom = Math.min(cx, cy) * 0.28 * zoomFactor;
-    const currentRotX = autoRotX + manualRotX, currentRotY = autoRotY + manualRotY;
-    
-    if (!isDragging) { manualRotX *= 0.96; manualRotY *= 0.96; }
-    autoRotX += 0.001; autoRotY += 0.002;
-
-    const projected = pts.map(p => {
-        let y1 = p.y * Math.cos(currentRotX) - p.z * Math.sin(currentRotX);
-        let z1 = p.y * Math.sin(currentRotX) + p.z * Math.cos(currentRotX);
-        let x2 = p.x * Math.cos(currentRotY) + z1 * Math.sin(currentRotY);
-        return { x: cx + x2 * dynamicZoom, y: cy + y1 * dynamicZoom, z: -p.x * Math.sin(currentRotY) + z1 * Math.cos(currentRotY) };
-    });
-
-    for (let i = 0; i < projected.length; i++) {
-        for (let j = i + 1; j < projected.length; j++) {
-            const dist = Math.hypot(pts[i].x - pts[j].x, pts[i].y - pts[j].y, pts[i].z - pts[j].z);
-            if (dist < 0.95) {
-                ctx.beginPath();
-                ctx.moveTo(projected[i].x, projected[i].y);
-                ctx.lineTo(projected[j].x, projected[j].y);
-                const alpha = Math.max(0.08, Math.min(0.6, ((projected[i].z + projected[j].z) / 2 + 2) / 4));
-                ctx.strokeStyle = ok ? `rgba(86, 211, 100, ${alpha * 0.9})` : `rgba(255, 51, 102, ${alpha * 0.45})`;
-                ctx.lineWidth = ok ? 1.5 : 1;
-                ctx.stroke();
-            }
-        }
-    }
-
-    projected.forEach(p => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, ok ? 3.5 : 2.5, 0, 2 * Math.PI);
-        ctx.fillStyle = ok ? '#56d364' : '#ff3366';
-        ctx.fill();
-    });
-
-    requestAnimationFrame(loop);
-}
-requestAnimationFrame(loop);
-
-// Verification Access Function
-window.unlock = function() {
-    if (document.getElementById('key').value.trim() === "CHRONOS_ALPHA_99") {
-        ok = true;
-        bg.innerText = "ACCESS_GRANTED";
-        bg.className = "badge ok-badge";
-        tm.innerText = trans(store.success_log, false);
-        tm.style.color = "#56d364";
-        wb.className = "box ok-glow";
-        for (let i = 1; i <= 4; i++) {
-            const el = document.getElementById('d' + i);
-            el.innerHTML = store.payload[i - 1];
-            el.className = "txt ok-text";
-        }
-    } else {
-        alert("ACCESS DENIED: Invalid authorization token context.");
-    }
-};
