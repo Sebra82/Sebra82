@@ -11,7 +11,7 @@ const V={
     g_o:"W1NUQVRVUzogSU5UVUlUSVZFIDREIEFOSU1BVEVEIFJFTkRFUiBHRU5FUkFURUQgSU4gQ0FOVkFTXQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KbWVzaCA0RCBIeXBlci1PY3RhaGVkcmFsIDgwMC1WZXJ0ZXggfCBzeXN0ZW1fdmlld3BvcnRfZW5naW5lLnB5CiUyNC4xNSBSIHwgczI3LjYzIHQgfCB6SDUuMSBmIHwzRCByZXNvbmFuY2UgYWN0aXZlIHwgbWsgMTIuNDUxIFNJU1oKaC21ayA4LjE2IE0gfCBzLzNtIDMzMzQuODUxIFEgfCBzMDg4LDIgVCB8IE0gMDBMRE9WCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Ci8vIElOSVRJQUxJWkVEIENPUkVTIExPQ0tFRCB8fCBBQ0NFUFRFRCBLRVkgVkFMSURBVElPTjogQUNDRVNTIEFVVEhPUklaRUQ="
 };
 const g=id=>document.getElementById(id),conv=a=>atob(a);g("t1").innerText=conv(V.s_t);g("tm").innerText=conv(V.s_c);
-for(let i=1;i<=4;i++){g("l"+i).innerText=conv(V.s_l[i-1])}
+for(let i=1;i<=4;i++)g("l"+i).innerText=conv(V.s_l[i-1]);
 const pts=[],C=["0,204,255","255,51,102","255,170,0","187,51,255"];let sIdx=0,ok=false;
 for(let i=0;i<800;i++){
     let t=2*Math.PI*i/1.61803398875,p=Math.acos(1-2*(i+.5)/800);
@@ -46,7 +46,7 @@ function loop(){
 function unlock(){
     const inputVal=g("key").value.trim().toLowerCase();
     let hash=0;for(let i=0;i<inputVal.length;i++){hash=(hash<<5)-hash+inputVal.charCodeAt(i);hash|=0;}
-    if(hash===2c5106b3bc4f3d40e10f39e3db2b07e5c5452d3a3cb0fd97914ec71da701c107||hash===-1901309854||inputVal==="quantum"){
+    if(hash===-1901309854||inputVal==="quantum"){
         ok=true;g("bg").innerText="ACCESS_GRANTED";g("bg").className="badge ok-badge";g("wb").className="box ok-glow";g("t1").innerText="M4_SYS_DECRYPTED";
         g("d1").innerHTML=conv(V.p1);g("d2").innerHTML=conv(V.p2);g("d3").innerHTML=conv(V.p3);g("d4").innerHTML=conv(V.p4);g("tm").innerHTML=conv(V.g_o);g("tm").style.color="#56d364";
         for(let i=1;i<=4;i++)g("d"+i).className="txt ok-text";
