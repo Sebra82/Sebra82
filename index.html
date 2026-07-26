@@ -1,10 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MTP-4D CHRONOS // PORTAL</title>
-    <link rel="stylesheet" href="style.css">
+    <title>MTP-4D CHRONOS</title>
+    <style>
+        body{background:#090D16;color:#c9d1d9;font-family:sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;overflow:hidden;}
+        .box{width:95%;max-width:1150px;background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:20px;box-shadow:0 12px 40px rgba(0,0,0,0.6);display:flex;flex-direction:column;gap:15px;}
+        .hdr{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #21262d;padding-bottom:10px;}
+        .title{font-size:15px;font-weight:600;color:#00CCFF;letter-spacing:0.5px;}
+        .badge{font-size:11px;color:#ff3366;background:rgba(255,51,102,0.1);padding:3px 8px;border-radius:12px;border:1px solid rgba(255,51,102,0.2);font-family:monospace;}
+        .layout{display:grid;grid-template-columns:1.4fr 1fr;gap:15px;}
+        .vp{border:1px solid #30363d;background:#05070f;border-radius:6px;position:relative;min-height:360px;height:360px;overflow:hidden;}
+        canvas{position:absolute;top:0;left:0;width:100%;height:100%;display:block;}
+        .side{display:flex;flex-direction:column;gap:10px;max-height:360px;overflow-y:auto;}
+        .card{background:#161b22;border:1px solid #30363d;border-radius:6px;padding:12px;transition:border-color 0.2s;}
+        .lbl{font-size:10px;font-weight:700;color:#8b949e;text-transform:uppercase;border-bottom:1px solid #21262d;padding-bottom:3px;margin-bottom:5px;letter-spacing:0.5px;}
+        .txt{font-family:monospace;font-size:12px;color:#ff3366;line-height:1.4;}
+        .gate{display:flex;background:#161b22;border:1px solid #30363d;padding:10px;border-radius:6px;gap:10px;}
+        input{width:100%;background:#070a10;border:1px solid #30363d;color:#00CCFF;padding:6px 12px;font-family:monospace;font-size:12px;outline:none;border-radius:4px;}
+        input:focus{border-color:#00CCFF;}
+        button{background:#238636;border:none;color:#fff;padding:6px 20px;font-size:12px;font-weight:500;border-radius:4px;cursor:pointer;}
+        button:hover{background:#2ea043;}
+        .term{background:#05070f;border:1px solid #30363d;border-radius:6px;padding:10px;font-family:monospace;font-size:11px;color:#ff3366;min-height:75px;white-space:pre-wrap;line-height:1.4;}
+        .ok-glow{border-color:#2ea043!important;box-shadow:0 0 15px rgba(46,160,67,0.15);}
+        .ok-text{color:#56d364!important;}
+        .ok-badge{color:#56d364!important;background:rgba(56,139,253,0.1)!important;border-color:rgba(56,139,253,0.2)!important;}
+    </style>
 </head>
 <body>
 <div class="box" id="wb">
@@ -25,174 +46,22 @@
         <input type="text" id="key" placeholder="Enter authorization key..." autocomplete="off">
         <button onclick="unlock()">Decrypt</button>
     </div>
-    <div class="term" id="tm">Initializing challenge layer...</div>
+    <div class="term" id="tm">Loading secure runtime parameters...</div>
 </div>
-<script src="app.js"></script>
-</body>
-</html>
 
-body {
-    background: #090D16;
-    color: #c9d1d9;
-    font-family: sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    overflow: hidden;
-}
-.box {
-    width: 95%;
-    max-width: 1150px;
-    background: #0d1117;
-    border: 1px solid #30363d;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-.hdr {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #21262d;
-    padding-bottom: 10px;
-}
-.title {
-    font-size: 15px;
-    font-weight: 600;
-    color: #00CCFF;
-    letter-spacing: 0.5px;
-}
-.badge {
-    font-size: 11px;
-    color: #ff3366;
-    background: rgba(255,51,102,0.1);
-    padding: 3px 8px;
-    border-radius: 12px;
-    border: 1px solid rgba(255,51,102,0.2);
-    font-family: monospace;
-}
-.layout {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 15px;
-}
-.vp {
-    border: 1px solid #30363d;
-    background: #05070f;
-    border-radius: 6px;
-    position: relative;
-    min-height: 360px;
-    height: 360px;
-    overflow: hidden;
-}
-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-.side {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-height: 360px;
-    overflow-y: auto;
-}
-.card {
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 6px;
-    padding: 12px;
-    transition: border-color 0.2s;
-}
-.lbl {
-    font-size: 10px;
-    font-weight: 700;
-    color: #8b949e;
-    text-transform: uppercase;
-    border-bottom: 1px solid #21262d;
-    padding-bottom: 3px;
-    margin-bottom: 5px;
-    letter-spacing: 0.5px;
-}
-.txt {
-    font-family: monospace;
-    font-size: 12px;
-    color: #ff3366;
-    line-height: 1.4;
-}
-.gate {
-    display: flex;
-    background: #161b22;
-    border: 1px solid #30363d;
-    padding: 10px;
-    border-radius: 6px;
-    gap: 10px;
-}
-input {
-    width: 100%;
-    background: #070a10;
-    border: 1px solid #30363d;
-    color: #00CCFF;
-    padding: 6px 12px;
-    font-family: monospace;
-    font-size: 12px;
-    outline: none;
-    border-radius: 4px;
-}
-input:focus {
-    border-color: #00CCFF;
-}
-button {
-    background: #238636;
-    border: none;
-    color: #fff;
-    padding: 6px 20px;
-    font-size: 12px;
-    font-weight: 500;
-    border-radius: 4px;
-    cursor: pointer;
-}
-button:hover {
-    background: #2ea043;
-}
-.term {
-    background: #05070f;
-    border: 1px solid #30363d;
-    border-radius: 6px;
-    padding: 10px;
-    font-family: monospace;
-    font-size: 11px;
-    color: #ff3366;
-    min-height: 75px;
-    white-space: pre-wrap;
-    line-height: 1.4;
-}
-.ok-glow {
-    border-color: #2ea043 !important;
-    box-shadow: 0 0 15px rgba(46,160,67,0.15);
-}
-.ok-text {
-    color: #56d364 !important;
-}
-.ok-badge {
-    color: #56d364 !important;
-    background: rgba(56,139,253,0.1) !important;
-    border-color: rgba(56,139,253,0.2) !important;
-}
-
+<script>
 const store = {
     title: "MTP-4D CHRONOS // VIEWPORT SECURITY MATRIX",
     challenge: "sys.security_challenge(AUTHENTICATION_TRIGGER): Ԁlɐʇɟoɹɯ ʍoɹʞsdɐɔǝ ᔥs ɔoɯdlǝʇǝlʎ ɔoɯdɹǝssǝd, sǝɔuɹǝd, ɐud loɔɐlᔥzǝd. Ԁɹoʌᔥdǝ ʇɥǝ ɯɐudɐʇoɹʎ uuloɔʞ ʞǝʎ ʇo ɔlǝɐɹ ʇɥǝ ɔɹʎdʇoƃRAMA ƃɐʇǝ.",
-    labels: ["QTR_1 // HYDRO_CORES", "QTR_2 // SEIS_ENGINES", "QTR_3 // VIEWPORT_SCRIPT", "QTR_4 // EMBARGO_SEAL"],
-    locked_vals: ["[RESTRICTED] dɐʇɐ ᔥsolɐʇǝd.", "[RESTRICTED] dɐʇɐ ᔥsolɐʇǝd.", "[RESTRICTED] dɐʇɐ ᔥsolɐʇǝd.", "[RESTRICTED] ᴚǝdosᔥʇoɹʎ lɐʇɔɥ loɔ."]
+    labels: ["QTR_1 // HYDRO_CORES","QTR_2 // SEIS_ENGINES","QTR_3 // VIEWPORT_SCRIPT","QTR_4 // EMBARGO_SEAL"],
+    locked_vals: ["[RESTRICTED] dɐʇɐ ᔥsolɐʇǝd.","[RESTRICTED] dɐʇɐ ᔥsolɐʇǝd.","[RESTRICTED] dɐʇɐ ᔥsolɐʇǝd.","[RESTRICTED] ᴚǝdosᔥʇoɹʎ lɐʇɔɥ loɔ."],
+    payload: [
+        "<strong>Volume Capacity:</strong> 2,140,000 m³ cavity volume<br><strong>Warning Window:</strong> 48.0 Mins (2,880 seconds)<br><strong>Peak Flood Velocity:</strong> 1,114.5833 m³/s discharge rate<br><strong>Frontier Runoff Speed:</strong> 61.8 km/h down terrain plain",
+        "<strong>Fault Track Path:</strong> SISZ (154.21 km basalt corridor)<br><strong>Crustal P-Wave Velocity:</strong> 4.2 km/s baseline transient<br><strong>Trigger Wave Signal:</strong> 1.5 Hz ULF Volcanic Hammer<br><strong>Transit Time / Retention:</strong> 36.72s / 31.42% retained energy",
+        "<strong>Viewport Script Asset:</strong> system_viewport_engine.py<br><strong>Geometry Structure:</strong> 61-Sided Cumulative Octahedral Array Mesh<br><strong>Rendering Mode / Base UI:</strong> 60 FPS Real-Time Active Rotation / Darkroom Canvas #05070f",
+        "<strong>Verification Hash:</strong> SHA-256 35273af512c201aeb414995b4e908d24...<br><strong>Concluding Timestamp:</strong> Wednesday, July 22, 2026, 09:16:00 AM BST<br><strong>Geographic Baseline Anchor:</strong> Griston, Thetford, UK [52.565° N, 0.835° E]"
+    ],
+    success_log: "AƆƆƎSS A∩⊥HOᴚIZƎD: Ʌ∀LID∀⊥IOM KƎ⅄ AƆƆƎԀ⊥ƎD // INI⊥I∀LIZIN⅁ M⊥Ԁ-ᔭD ƆOᴚƎS...\n========================================================================================\n Toɹɹᴉɔǝllᔥ: V貳壹肆M | T貳捌捌0s | Peak Q壹壹壹肆.伍捌 ɯ³/s | M陸壹.8 ʞɯ/ɥ\n SISZ壹伍ᔭ.貳壹ʞɯ | v肆.貳ʞɯ/s | f壹.ϱHz | ʇ参陸.柒貳s | R参壹.肆貳%\n sʎsʇǝɯ_ʌᔥǝʍdoɹʇ_ǝuƃᔥuǝ.dʎ | 陸壹-Sᔥdǝd Oɔʇɐɥǝdɹɐl Poly3D Mǝsɥ | UI #090D16\n========================================================================================\n[STATUS: INTUITIVE RENDER GENERATED IN SCREEN CANVAS TILES]"
 };
 
 function trans(s, d) {
@@ -204,7 +73,6 @@ function trans(s, d) {
     }).join('');
 }
 
-// Dom Mounting
 document.getElementById('t1').innerText = trans(store.title, false);
 document.getElementById('tm').innerText = trans(store.challenge, false);
 for (let i = 1; i <= 4; i++) {
@@ -212,7 +80,6 @@ for (let i = 1; i <= 4; i++) {
     document.getElementById('d' + i).innerText = trans(store.locked_vals[i - 1], false);
 }
 
-// 3D Matrix Loop Initialization
 const pts = [], cv = document.getElementById('cv'), ctx = cv.getContext('2d');
 const tm = document.getElementById('tm'), wb = document.getElementById('wb'), bg = document.getElementById('bg');
 let ok = false, rX = 0.005, rY = 0.008, rZ = 0.003;
@@ -269,34 +136,25 @@ function loop() {
 }
 requestAnimationFrame(loop);
 
-// Secure Authorization Endpoint Integration
-async function unlock() {
+function unlock() {
     const inputKey = document.getElementById('key').value.trim();
-    
-    try {
-        // Sends token payload directly to backend for verified PQC authentication
-        const response = await fetch('/api/verify-gate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token: inputKey })
-        });
-        
-        if (!response.ok) throw new Error('Access Refused');
-        const data = await response.json(); // Data payloads arrive only upon authorization
-        
+    if (inputKey === "CHRONOS_ALPHA_99") {
         ok = true;
         bg.innerText = "ACCESS_GRANTED";
         bg.className = "badge ok-badge";
-        tm.innerText = trans(data.success_log, false);
+        tm.innerText = trans(store.success_log, false);
         tm.style.color = "#56d364";
         wb.className = "box ok-glow";
         
         for (let i = 1; i <= 4; i++) {
             const txtElement = document.getElementById('d' + i);
-            txtElement.innerHTML = data.payload[i - 1];
+            txtElement.innerHTML = store.payload[i - 1];
             txtElement.className = "txt ok-text";
         }
-    } catch (err) {
-        alert("ACCESS DENIED: Correct token signature required to initialize core registers.");
+    } else {
+        alert("ACCESS DENIED: Invalid authorization key.");
     }
 }
+</script>
+</body>
+</html>
