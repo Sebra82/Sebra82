@@ -50,11 +50,17 @@ async function sha256(str){
 async function unlock(){
     const inputVal=g("key").value.trim().toLowerCase();
     const computedHash=await sha256(inputVal);
-    const targetHash="2c5106b3bc4f3d40e10f39e3db2b07e5c5452d3a3cb0fd97914ec71da701c107";
-    if(inputVal==="quantum"||computedHash===targetHash){
-        ok=true;g("bg").innerText="ACCESS_GRANTED";g("bg").className="badge ok-badge";g("wb").className="box ok-glow";g("t1").innerText="M4_SYS_DECRYPTED";
-        g("d1").innerHTML=conv(V.p1);g("d2").innerHTML=conv(V.p2);g("d3").innerHTML=conv(V.p3);g("d4").innerHTML=conv(V.p4);g("tm").innerHTML=conv(V.g_o);g("tm").style.color="#56d364";
-        for(let i=1;i<=4;i++)g("d"+i).className="txt ok-text";
+    // Secure One-Way Signature Gate: 'quantum' text string has been completely erased.
+    if(computedHash==="2c5106b3bc4f3d40e10f39e3db2b07e5c5452d3a3cb0fd97914ec71da701c107"){
+        ok=true;
+        const maskKey=inputVal.split('').reduce((acc,char)=>acc+char.charCodeAt(0),0)-665;
+        let out="";for(let i=0;i<M.length;i++)out+=String.fromCharCode(M[i]^maskKey);
+        const pieces=out.split(String.fromCharCode(37)+String.fromCharCode(37));
+        if(pieces.length>=5){
+            g("bg").innerText="ACCESS_GRANTED";g("bg").className="badge ok-badge";g("wb").className="box ok-glow";g("t1").innerText="M4_SYS_DECRYPTED";
+            for(let i=1;i<=4;i++){g("d"+i).innerText=pieces[i-1];g("d"+i).className="txt ok-text";}
+            g("tm").innerText=pieces.slice(4).join("\n");g("tm").style.color="#56d364";
+        }else{alert("DECRYPTION CORRUPTED")}
     }else{alert("ACCESS DENIED.")}
 }
 </script></body></html>
