@@ -51,10 +51,10 @@ async function sha256(str){
 }
 async function unlock(){
     const inputVal=g("key").value.trim();
-    if(inputVal==="CHRONOS_ALPHA_99"){
+    const computedHash=await sha256(inputVal);
+    if(computedHash==="a9686016a96e17409249767fbbe2fb2167fc7b22a0a20efbe1f308a3d548bce9"){
         ok=true;g("bg").innerText="ACCESS_GRANTED";g("bg").className="badge ok-badge";g("wb").className="box ok-glow";
         g("d1").innerHTML=conv(V.p1);g("d2").innerHTML=conv(V.p2);g("d3").innerHTML=conv(V.p3);g("d4").innerHTML=conv(V.p4);g("tm").innerHTML=conv(V.g_o);g("tm").style.color="#56d364";
         for(let i=1;i<=4;i++)g("d"+i).className="txt ok-text";
     }else{alert("ACCESS DENIED.")}
 }
-</script></body></html>
