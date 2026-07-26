@@ -31,23 +31,23 @@
 <body>
 <div class="box" id="wb">
     <div class="hdr">
-        <div class="title" id="t1">...</div>
-        <div class="badge" id="bg">...</div>
+        <div class="title" id="t1">M4_V6.99_RECALIBRATED_CORE</div>
+        <div class="badge" id="bg">SYSTEM_LOCKED</div>
     </div>
     <div class="layout">
         <div class="vp"><canvas id="cv"></canvas></div>
         <div class="side">
-            <div class="card"><div class="lbl" id="l1">...</div><div class="txt" id="d1">...</div></div>
-            <div class="card"><div class="lbl" id="l2">...</div><div class="txt" id="d2">...</div></div>
-            <div class="card"><div class="lbl" id="l3">...</div><div class="txt" id="d3">...</div></div>
-            <div class="card"><div class="lbl" id="l4">...</div><div class="txt" id="d4">...</div></div>
+            <div class="card"><div class="lbl" id="l1">QTR_1 // HYDRO_CORES</div><div class="txt" id="d1">[RESTRICTED] Locked.</div></div>
+            <div class="card"><div class="lbl" id="l2">QTR_2 // SEIS_ENGINES</div><div class="txt" id="d2">[RESTRICTED] Locked.</div></div>
+            <div class="card"><div class="lbl" id="l3">QTR_3 // VIEWPORT_SCRIPT</div><div class="txt" id="d3">[RESTRICTED] Locked.</div></div>
+            <div class="card"><div class="lbl" id="l4">QTR_4 // EMBARGO_SEAL</div><div class="txt" id="d4">[RESTRICTED] Locked.</div></div>
         </div>
     </div>
     <div class="gate">
-        <input type="password" id="key" placeholder="..." autocomplete="off">
+        <input type="password" id="key" placeholder="Enter security passphrase..." autocomplete="off">
         <button onclick="unlock()">►</button>
     </div>
-    <div class="term" id="tm">...</div>
+    <div class="term" id="tm">sys.security_challenge(AUTHENTICATION_TRIGGER): Matrix registers locked. Enter credentials key string inline to release internal assets.</div>
 </div>
 <div id="vault-slot" style="display:none;"></div>
 
@@ -58,9 +58,6 @@ const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
 function res() { cv.width = cv.parentElement.clientWidth; cv.height = cv.parentElement.clientHeight; }
 window.addEventListener('resize', res); res();
 
-const conv = (a) => a.map(b => String.fromCharCode(b)).join('');
-
-// ASYNCHRONOUS INITIALIZATION AND MEMORY ASSEMBLY WINDOW HANDSHAKE
 async function mountStorage() {
     try {
         const text = await fetch('data.html').then(res => res.text());
@@ -73,20 +70,15 @@ async function mountStorage() {
             document.body.appendChild(runner);
         }
         
-        // Wait minor window frame spacing to ensure object assignment stabilizes
-        setTimeout(() => {
-            V = window.M4_SECURE_VAULT;
-            document.getElementById('t1').innerText = conv(V.s_t);
-            document.getElementById('tm').innerText = conv(V.s_c);
-            document.getElementById('bg').innerText = conv(V.s_b);
-            for (let i = 1; i <= 4; i++) {
-                document.getElementById('l' + i).innerText = conv(V.s_l[i - 1]);
-                document.getElementById('d' + i).innerText = conv(V.s_v[i - 1]);
+        let verificationInterval = setInterval(() => {
+            if (window.M4_SECURE_VAULT) {
+                clearInterval(verificationInterval);
+                V = window.M4_SECURE_VAULT;
+                V.XYZ.forEach(p => pts.push({ x: p, y: p, z: p }));
+                requestAnimationFrame(loop);
             }
-            V.XYZ.forEach(p => pts.push({ x: p, y: p, z: p }));
-            requestAnimationFrame(loop);
-        }, 50);
-    } catch(err) { console.error("Handshake loop down:", err); }
+        }, 10);
+    } catch(err) { console.error("Chasis compile timeout:", err); }
 }
 
 function ptr(e) { return e.targetTouches && e.targetTouches.length > 0 ? { x: e.targetTouches.clientX, y: e.targetTouches.clientY } : { x: e.clientX, y: e.clientY }; }
@@ -125,11 +117,11 @@ function unlock() {
         ok = true;
         document.getElementById('bg').innerText = "ACCESS_GRANTED";
         document.getElementById('bg').className = "badge ok-badge"; document.getElementById('wb').className = "box ok-glow";
-        const rev = (a, b) => [...a, ...b].reverse().map(x => String.fromCharCode(x)).join('');
-        document.getElementById('d1').innerHTML = rev(V.p1, []);
-        document.getElementById('d2').innerHTML = rev(V.p2, []);
-        document.getElementById('d3').innerHTML = rev(V.p3, []);
-        document.getElementById('d4').innerHTML = rev(V.p4, []);
+        const rev = (a) => [...a].reverse().map(x => String.fromCharCode(x)).join('');
+        document.getElementById('d1').innerHTML = rev(V.p1);
+        document.getElementById('d2').innerHTML = rev(V.p2);
+        document.getElementById('d3').innerHTML = rev(V.p3);
+        document.getElementById('d4').innerHTML = rev(V.p4);
         document.getElementById('tm').innerText = [...V.g_o].reverse().map(x => String.fromCharCode(x)).join('');
         document.getElementById('tm').style.color = "#56d364";
         for (let i = 1; i <= 4; i++) document.getElementById('d' + i).className = "txt ok-text";
@@ -141,9 +133,10 @@ window.addEventListener('DOMContentLoaded', mountStorage);
 </body>
 </html>
 
+
 <script>
 window.M4_SECURE_VAULT = {
-    p1: [104,47,109,107,32,56,46,49,54,32,77,32,124,32,115,47,51,109,32,51,51,51,52,46,56,53,49,32,81,32,124,32,115,48,56,56,44,50,32,84,32,124,32,77,32,48,48,4c,44,56,10,101,116,97,114,32,101,103,114,97,104,99,115,105,100,32,115,47,109,107,32,51,51,58,53,46,52,49,49,49,32,81,32,107,97,101,80,32,124,32,115,48,56,56,50,32,116,32,46,115,110,105,77,32,48,46,56,52,32,118,119,111,100,110,105,87,32,103,110,105,110,114,97,87,32,124,32,101,109,117,108,111,118,32,121,116,105,118,97,99,32,51,109,32,48,48,48,48,52,49,50],
+    p1: [104,47,109,107,32,56,46,49,54,32,77,32,124,32,115,47,51,109,32,51,51,51,52,46,56,53,49,32,81,32,124,32,115,48,56,56,44,50,32,84,32,124,32,77,32,48,48,4c,44,56,10,101,116,97,114,32,101,103,114,97,104,99,115,105,100,32,115,47,109,107,32,51,51,5,53,46,52,49,49,49,32,81,32,107,97,101,80,32,124,32,115,48,56,56,50,32,116,32,46,115,110,105,77,32,48,46,56,52,32,118,119,111,100,110,105,87,32,103,110,105,110,114,97,87,32,124,32,101,109,117,108,111,118,32,121,116,105,118,97,99,32,51,109,32,48,48,48,48,52,49,50],
     p2: [116,110,101,105,115,110,97,114,116,32,101,110,105,108,101,115,97,98,32,115,47,109,107,32,50,46,52,32,118,32,124,32,109,107,32,49,50,46,52,53,49,32,83,73,83,90,10,104,47,109,107,32,56,46,49,54,32,77,32,124,32,115,47,51,109,32,51,51,51,52,46,56,53,49,32,81,32,124,32,115,48,56,56,44,50,32,84,32,124,32,77,32,48,48,4c,44,56,10,121,103,114,101,110,101,32,100,101,110,105,97,116,101,114,32,37,51,50,46,49,51,32,47,32,115,50,55,46,54,51,32,58,110,111,105,116,110,101,116,101,82,32,47,32,101,109,105,84,32,116,105,115,110,97,114,84,60,114,98,62,114,101,109,109,97,72,32,99,105,110,97,99,108,111,86,32,70,76,85,32,122,72,53,46,49,32,58,108,97,110,103,105,83,32,101,118,97,87,32,114,101,103,103,105,114,84,60,114,98,62,101,110,105,108,101,100,105,114,114,111,99,32,116,108,97,115,97,98,32,109,107,32,49,50,46,52,53,49,32,90,83,73,83,32,58,104,116,97,80,32,107,99,97,114,84,32,116,108,117,97,70],
     p3: [121,112,46,101,110,105,103,110,101,95,116,114,111,112,119,101,105,118,95,109,101,116,115,121,115,32,58,116,101,115,115,65,32,116,112,105,114,99,83,32,116,114,111,112,119,101,105,86,60,114,98,62,104,115,101,77,32,121,114,114,65,32,108,97,114,100,101,104,97,116,99,79,32,101,118,105,116,97,108,117,109,117,67,32,100,101,100,105,83,45,49,陸,32,58,101,114,117,116,99,117,114,116,83,32,121,114,116,101,109,111,101,71,60,114,98,62,54,48,32,83,80,70,32,116,97,32,110,111,105,116,97,116,111,82,32,101,118,105,116,99,65,32,101,109,105,84,45,108,97,101,82,32,58,101,100,111,77,32,103,110,105,114,101,100,110,101,82],
     p4: [104,47,109,107,32,56,46,49,54,32,77,32,124,32,115,47,51,109,32,51,51,51,52,46,56,53,49,32,81,32,124,32,115,48,56,56,44,50,32,84,32,124,32,77,32,48,48,4c,44,56,10,95,49,53,50,97,55,51,51,53,98,52,101,49,52,95,54,53,50,65,72,67,72,121,32,124,32,77,65,32,48,48,58,54,49,58,48,48,32,54,83,66,32,54,50,48,50,32,44,50,50,32,121,108,117,74,32,121,97,100,115,101,110,100,101,87,32,124,32,75,85,32,100,114,111,102,116,101,104,84,32,44,110,111,116,115,105,114,71],
@@ -159,8 +152,9 @@ window.M4_SECURE_VAULT = {
     s_v: [,
  ,
  ,
-        [91,82,69,83,84,82,73,67,84,69,68,93,32,67,114,121,112,116,111,103,114,97,112,104,105,99,32,116,114,97,99,101,32,99,108,97,109,112,101,100,46]
+        [91,82,69,83,84,82,73,67,84,69,68,93,32,67,114,121,112,116,111,103,114,97,112,104,105,99,32,108,111,111,112,32,108,111,99,107,101,100,46]
     ],
     XYZ: [[0,.46,1.7],[.4,.1,1.7],[-.3,-.3,1.7],[-.3,.3,1.7],[.4,-.1,1.7],[.3,.5,1.6],[-.1,.7,1.6],[-.5,.4,1.6],[-.6,.1,1.6],[-.5,-.4,1.6],[-.1,-.6,1.6],[.3,-.6,1.6],[.6,-.2,1.6],[.6,.1,1.6],[.7,.6,1.4],[0,.9,1.4],[-.7,.6,1.4],[-.9,-.1,1.4],[-.5,-.7,1.4],[.3,-.9,1.4],[1,-.2,1.4],[.9,.3,1.4],[.8,.7,1.1],[0,1.1,1.1],[-.9,.6,1.1],[-1.1,-.2,1.1],[-.5,-1,1.1],[.4,-1,1.1],[1.1,-.2,1.1],[1,.4,1.1],[1,.7,.8],[0,1.2,.8],[-1,.7,.8],[-1.2,-.2,.8],[-.5,-1,.8],[.5,-1.1,.8],[1.2,-.2,.8],[1.1,.5,.8],[.8,.8,.5],[0,1.1,.5],[-.7,.8,.5],[-1.1,.2,.5],[-.8,-.7,.5],[0,-1.1,.5],[.8,-.7,.5],[1.1,.2,.5],[.7,.8,.5],[0,-1.1,.5],[-.8,-.7,.5],[-1.1,.2,.5],[-.7,.8,.5],[0,1.1,.5],[.8,.7,.5],[1.1,-.2,.5],[.7,-.8,.5],[0,1.1,.2],[-.8,.7,.2],[-1.1,-.2,.2],[-.7,-.8,.2],[.4,-1,.2],[1,.4,.2]]
 };
 </script>
+
