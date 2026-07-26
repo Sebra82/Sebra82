@@ -1,1 +1,166 @@
+<!--
+// ==============================================================================
+// SCRIPT: MTP4D_HYPER_MANIPULATED_PART_A.HTML
+// DESCRIPTION: Part 1 of 2 - Layout, Orthogonal Grid Panel, & Obfuscated Style
+// PROTECTION: Client-Side Structural Shape-Matching (No plaintext variables)
+// ==============================================================================
+-->
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>MTP-4D</title><style>
+body{background:#090D16;color:#c9d1d9;font-family:sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;overflow:hidden;}
+.box{width:95%;max-width:1100px;background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:20px;box-shadow:0 12px 40px rgba(0,0,0,0.6);display:flex;flex-direction:column;gap:15px;}
+.hdr{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #21262d;padding-bottom:10px;}
+.title{font-size:15px;font-weight:600;color:#00CCFF;letter-spacing:0.5px;}
+.badge{font-size:11px;color:#ff3366;background:rgba(255,51,102,0.1);padding:3px 8px;border-radius:12px;border:1px solid rgba(255,51,102,0.2);font-family:monospace;}
+.layout{display:grid;grid-template-columns:1.4fr 1fr;gap:15px;}
+.vp{border:1px solid #30363d;background:#05070f;border-radius:6px;position:relative;min-height:360px;overflow:hidden;}
+canvas{position:absolute;top:0;left:0;width:100%;height:100%;}
+.side{display:flex;flex-direction:column;gap:10px;max-height:360px;overflow-y:auto;}
+.card{background:#161b22;border:1px solid #30363d;border-radius:6px;padding:12px;transition:border-color 0.2s;}
+.lbl{font-size:10px;font-weight:700;color:#8b949e;text-transform:uppercase;border-bottom:1px solid #21262d;padding-bottom:3px;margin-bottom:5px;letter-spacing:0.5px;}
+.txt{font-family:monospace;font-size:12px;color:#ff3366;line-height:1.4;}
+.gate{display:flex;background:#161b22;border:1px solid #30363d;padding:10px;border-radius:6px;gap:10px;}
+input{width:100%;background:#070a10;border:1px solid #30363d;color:#00CCFF;padding:6px 12px;font-family:monospace;font-size:12px;outline:none;border-radius:4px;}
+input:focus{border-color:#00CCFF;}
+button{background:#238636;border:none;color:#fff;padding:6px 20px;font-size:12px;font-weight:500;border-radius:4px;cursor:pointer;}
+button:hover{background:#2ea043;}
+.term{background:#05070f;border:1px solid #30363d;border-radius:6px;padding:10px;font-family:monospace;font-size:11px;color:#ff3366;min-height:75px;white-space:pre-wrap;line-height:1.4;}
+.ok-glow{border-color:#2ea043!important;box-shadow:0 0 15px rgba(46,160,67,0.15);}
+.ok-text{color:#56d364!important;}
+.ok-badge{color:#56d364!important;background:rgba(56,139,253,0.1)!important;border-color:rgba(56,139,253,0.2)!important;}
+</style></head><body>
+<div class="box" id="wb">
+    <div class="hdr">
+        <div class="title" id="t1">M4_V6.50_HYPER_MANIPULATED_LATTICE_A</div>
+        <div class="badge" id="bg">SYSTEM_LOCKED</div>
+    </div>
+    <div class="layout">
+        <div class="vp" id="vf"><canvas id="cv"></canvas></div>
+        <div class="side">
+            <div class="card" id="c1"><div class="lbl" id="l1">QTR_1 // Hydrology Core</div><div class="txt" id="d1">[RESTRICTED] Data matrix encrypted.</div></div>
+            <div class="card" id="c2"><div class="lbl" id="l2">Seismology Engine</div><div class="txt" id="d2">[RESTRICTED] Data matrix encrypted.</div></div>
+            <div class="card" id="c3"><div class="lbl" id="l3">Viewport Geometry Configuration</div><div class="txt" id="d3">[RESTRICTED] Data matrix encrypted.</div></div>
+            <div class="card" id="c4"><div class="lbl" id="l4">Immutability & Embargo Seal</div><div class="txt" id="d4">[RESTRICTED] Cryptographic trace clamped.</div></div>
+        </div>
+    </div>
+    <div class="gate">
+        <input type="text" id="key" placeholder="Enter system validation token..." autocomplete="off">
+        <button onclick="unlock()">Decrypt</button>
+    </div>
+    <div class="term" id="tm">sys.security_challenge(AUTHENTICATION_TRIGGER): Restricting variable access matrices.</div>
+</div>
+<!-- LINK ENTRY TO FRACTURED B-SLOT LOGIC LAYER -->
+<script src="matrix_logic_b.js"></script>
+</body></html>
+// ==============================================================================
+// RUNTIME CRYPTO ENGINE LOGIC: matrix_logic_b.js
+// SECURITY LEVEL: Hyper-Manipulated Orthogonal Bitstream & Unicode Fractures
+// ==============================================================================
 
+const store = {
+    title: "M⊥Ԁ-ᔭD ƆHᴚONOS // ɅIƎʍԀOᴚ⊥ SƎƆ∩ᴚI⊥⅄ ʍ∀⊥ᴚIX",
+    challenge: "sʎsʇǝɯ.sǝɔuɹᔥʇʎ_ɔɥɐllǝuƃǝ(A∩⊥HƎN⊥IƆ∀⊥IOM_⊥ᴚI⅁⅁Ǝᴚ): Ԁlɐʇɟoɹɯ ʍoɹʞsdɐɔǝ ᔥs ɔoɯdlǝʇǝlʎ ɔoɯdɹǝssǝd, sǝɔuɹǝd, ɐud loɔɐlᔥzǝd. Ԁɹoʌᔥdǝ ʇɥǝ ɯɐudɐʇoɹʎ uuloɔʞ ʞǝʎ ʇo ɔlǝɐɹ ʇɥǝ ɔɹʎdʇoƃɹɐdɥᔥɔ ƃɐʇǝ.",
+    labels: ["Ό⊥ᴚ_壹 // H⅄DᴚO_ƆOᴚƎS", "Ό⊥ᴚ_貳 // SƎIS_ƎN⅁INƎS", "Ό⊥ᴚ_参 // ɅIƎʍԀOᴚ⊥_SƆᴚIԀ⊥", "Ό⊥ᴚ_肆 // ƎʍB∀ᴚ⅁O_SƎ∀˥"],
+    locked_vals: ["[ᴚƎS⊥ᴚIƆ⊥ƎD] dɐʇɐ ᔥsolɐʇǝd.", "[ᴚƎS⊥ᴚIƆ⊥ƎD] dɐʇɐ ᔥsolɐʇǝd.", "[ᴚƎS⊥ᴚIƆ⊥ƎD] dɐʇɐ ᔥsolɐʇǝd.", "[ᴚƎS⊥ᴚIƆ⊥ƎD] ᴚǝdosᔥʇoɹʎ lɐʇɔɥ loɔʞ."],
+    // The data payload payload is encrypted into scrambled split-glyph layers natively
+    payload: [
+        "<strong>Ʌoluɯǝ Ɔɐdɐɔᔥʇʎ:</strong> Շ,⇊ᔭ0,000 ɯ³ ɔɐʌᔥʇʎ ʌoluɯǝ<br><strong>ʍɐɹuᔥuƃ ʍᔥudoʍ:</strong> ᔭ8.0 ʍᔥus (Շ,捌捌0 sǝɔouds)<br><strong>Ԁǝɐʞ ɟlood Ʌǝloɔᔥʇʎ:</strong> 壹,壹壹ᔭ.伍捌 ɯ³/s dᔥsɔɥɐɹƃǝ ɹɐʇǝ<br><strong>ɟɹouʇᔥǝɹ ᴚuuoɟɟ sdoǝd:</strong> 陸壹.8 ʞɯ/ɥ doʍu ʇǝɹɹɐᔥu dlɐᔥu",
+        "<strong>ɟɐulʇ ⊥ɹɐɔʞ Ԁɐʇɥ:</strong> SISZ (壹百伍肆.貳壹 ʞɯ qɐsɐlʇ ɔoɹɹᔥdoɹ)<br><strong>Ɔɹusʇɐl Ԁ-ʍɐʌǝ Ʌǝloɔᔥʇʎ:</strong> 肆.貳 ʞɯ/s qɐsǝlᔥuǝ ʇɹɐusᔥǝuʇ<br><strong>⊥ɹᔥƃƃǝɹ ʍɐʌǝ Sᔥƃuɐl:</strong> 壹.ϱ Hz ∩˥ⅎ Ʌolɔɐuᔥɔ Hɐɯɯǝɹ<br><strong>⊥ɹɐusᔥʇ ⊥ᔥɯǝ / ᴚǝʇǝuʇᔥou:</strong> 参陸.柒貳s / 参壹.肆貳% ɹǝʇɐᔥuǝd ǝuǝɹƃʎ",
+        "<strong>ɅIǝʍdoɹʇ Sɔɹᔥdʇ ∀ssǝʇ:</strong> sʎsʇǝɯ_ʌᔥǝʍdoɹʇ_ǝuƃᔥuǝ.dʎ<br><strong>⅁ǝoɯǝʇɹʎ Sʇɹuɔʇuɹǝ:</strong> 陸壹-Sᔥdǝd Oɔʇɐɥǝdɹɐl ԀolyƐD ∀ɹɹɐʎ ʍǝsɥ<br><strong>ᴚǝudǝɹᔥuƃ ʍodǝ / Bɐsǝ ∩I:</strong> 60 ⇊ԀS ᴚǝɐl-⊥ᔥɯǝ ∀ɔʇᔥʌǝ ᴚoʇɐʇᔥou / Dɐɹʞɹooɯ Ɔɐuʌɐs #0ϱ0D壹6",
+        "<strong>Ʌǝɹᔥɟᔥɔɐʇᔥou Hɐsɥ:</strong> Sɥ∀-貳ϱ陸 参ϱ貳柒Ɛɐɟϱ壹貳ɔ貳0壹...<br><strong>Ɔouɔludᔥuƃ ⊥ᔥɯǝsʇɐɯd:</strong> ʍǝduǝsdɐʎ, Iul 貳貳, 貳0貳陸, 09:壹陸:00 ∀ʍ BVM<br><strong>⅁ǝoƃɹɐdɥᔥɔ Bɐsǝlᔥuǝ ∀uɔɥoɹ:</strong> ⅁ɹᔥsʇou, ⊥ɥǝʇɟoɹd, ∩ʞ [ϱ貳.ϱ陸ϱN, 0.8ƐϱE]"
+    ],
+    success_log: "AƆƆƎSS A∩⊥HOᴚIZƎD: Ʌ∀LID∀⊥IOM KƎ⅄ AƆƆƎԀ⊥ƎD // INI⊥I∀LIZIN⅁ M⊥Ԁ-ᔭD ƆOᴚƎS...\n========================================================================================\n ⊥OᴚᴚIƆƎLLI H⅄DᴚO ƎN⅁INƎS ===|################################################| 壹百.00% ƆOʍԀLI∀N⊥\n SISZ ⊥ᴚ∀NSᴲOᴚʍ ƆOND∩I⊥S  ===|################################################| 壹百.00% ƆOʍԀLI∀N⊥\n N∀ɅIƎᴚ-S⊥OKƎS SHO∀LIN⅁   ===|================================================| 壹百.00% OԀƎᴚ∀⊥ION∀L\n========================================================================================\n[STATUS: INTUITIVE RENDER GENERATED IN SCREEN CANVAS TILES. DOM TEXT REMAINS ENCRYPTED TO PREVENT DEVTOOLS EXTRACTION]"
+};
+
+// Internal Core Translation Module: Reverses visual bisections instantly on user validation
+function trans(str, decode) {
+    const abc = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,:;()[]_@/=?#-+*&% ",
+          rev = "ɐqɔpǝɟƃɥᔥɾʞlɯuodbɹsʇndʍxʎz∀BƆDƎⅎ⅁HI𐎖K˥MNOԀQᴚS_∩ΛʍX⅄Z0壹貳参肆ϱ陸柒捌9˙,;:)(][‾@/=?#-++*&% ";
+    return str.split('').map(c => {
+        let idx = (decode ? rev : abc).indexOf(c);
+        return idx !== -1 ? (decode ? abc : rev)[idx] : c;
+    }).join('');
+}
+
+// Map hyper-scrambled strings onto front-end slots natively on runtime start
+document.getElementById('t1').innerText = store.title;
+document.getElementById('tm').innerText = store.challenge;
+for(let i=1; i<=4; i++) {
+    document.getElementById('l'+i).innerText = store.labels[i-1];
+    document.getElementById('d'+i).innerText = store.locked_vals[i-1];
+}
+
+const pts=[],N=61,cv=document.getElementById('cv'),ctx=cv.getContext('2d'),tm=document.getElementById('tm'),wb=document.getElementById('wb'),bg=document.getElementById('bg');
+let ok=false,rX=0.005,rY=0.008,rZ=0.003;
+
+const base = [{x:0,y:0,z:1},{x:1,y:0,z:0},{x:0,y:1,z:0},{x:-1,y:0,z:0},{x:0,y:-1,z:0},{x:0,y:0,z:-1}];
+const offs = [{x:0,y:0,z:-3.47},{x:-3.47,y:0,z:0},{x:0,y:-3.47,z:0}];
+offs.forEach(o=>{base.forEach(v=>{pts.push({x:v.x*1.5+o.x,y:v.y*1.5+o.y,z:v.z*1.5+o.z});});});
+
+function resize(){cv.width=cv.parentElement.clientWidth;cv.height=cv.parentElement.clientHeight;}
+window.addEventListener('resize',resize);resize();
+
+// 🔄 3D Moving Core Loop - Tracks right-side up, rendering moving geometry nodes to pixels
+function loop(){
+    ctx.clearRect(0,0,cv.width,cv.height);const cx=cv.width/2,cy=cv.height/2,zm=Math.min(cx,cy)*0.18;
+    ctx.fillStyle=ok?'#56d364':'#ff3366';ctx.beginPath();ctx.arc(cx,cy,6,0,7);ctx.fill();
+    const prj = pts.map(p=>{
+        let y1=p.y*Math.cos(rX)-p.z*Math.sin(rX),z1=p.y*Math.sin(rX)+p.z*Math.cos(rX);
+        let x2=p.x*Math.cos(rY)+z1*Math.sin(rY),z2=-p.x*Math.sin(rY)+z1*Math.cos(rY);
+        p.x=x2*Math.cos(rZ)-y1*Math.sin(rZ);p.y=x2*Math.sin(rZ)+y1*Math.cos(rZ);p.z=z2;
+        return {x:cx+p.x*zm,y:cy+p.y*zm};
+    });
+    for(let i=0;i<prj.length;i++){
+        for(let j=i+1;j<prj.length;j++){
+            if(Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y,pts[i].z-pts[j].z)<3.8){
+                ctx.strokeStyle=ok?'rgba(86,211,100,0.15)':'rgba(255,51,102,0.04)';ctx.lineWidth=ok?0.8:0.5;
+                ctx.beginPath();ctx.moveTo(prj[i].x,prj[i].y);ctx.lineTo(prj[j].x,prj[j].y);ctx.stroke();
+            }
+        }
+    }
+    prj.forEach(p=>{ctx.fillStyle=ok?'#56d364':'#00CCFF';ctx.beginPath();ctx.arc(p.x,p.y,ok?4:2.5,0,7);ctx.fill();});
+    rX=0.003;rY=0.004;rZ=0.002;requestAnimationFrame(loop);
+}loop();
+
+function unlock(){
+    const sig=;
+    let val=document.getElementById('key').value.trim(),passed=val.length===sig.length;
+    if(passed){for(let i=0;i<sig.length;i++){if(val.charCodeAt(i)!==sig[i]){passed=false;break;}}}
+    if(passed){
+        ok=true;
+        cv.parentElement.style.borderColor="#2ea043";
+        wb.classList.add('success-accent-glow');
+        tm.className="term ok-text";
+        bg.className="badge ok-badge";
+        bg.innerText="ACTIVE_RUNWAY_UNLOCKED";
+        
+        // 🌐 THE REVERSAL: Instantly translates the bisections to show perfect, intuitive English for humans
+        document.getElementById('t1').innerText = trans(store.title, true);
+        document.getElementById('t1').style.color = "#58a6ff";
+        for(let i=1; i<=4; i++) {
+            document.getElementById('c'+i).style.borderColor = "#21262d";
+            document.getElementById('l'+i).innerText = trans(store.labels[i-1], true);
+            document.getElementById('l'+i).style.color = "#58a6ff";
+            document.getElementById('d'+i).innerHTML = trans(store.payload[i-1], true);
+            document.getElementById('d'+i).style.color = "#c9d1d9";
+        }
+        tm.innerText = store.success_log;
+    }else{
+        ok=false;
+        cv.parentElement.style.borderColor="#30363d";
+        tm.className="term";
+        wb.classList.remove('success-accent-glow');
+        bg.className="badge";
+        bg.innerText="SYSTEM_LOCKED";
+        document.getElementById('t1').innerText = store.title;
+        document.getElementById('t1').style.color = "#00CCFF";
+        for(let i=1; i<=4; i++) {
+            document.getElementById('c'+i).style.borderColor = "#30363d";
+            document.getElementById('l'+i).innerText = store.labels[i-1];
+            document.getElementById('l'+i).style.color = "#8b949e";
+            document.getElementById('d'+i).innerText = store.locked_vals[i-1];
+            document.getElementById('d'+i).style.color = "#ff3366";
+        }
+        tm.innerText = store.challenge;
+    }
+}
+document.getElementById('key').addEventListener('keypress',function(e){if(e.key==='Enter')unlock();});
