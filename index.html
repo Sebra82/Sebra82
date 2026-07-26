@@ -1,45 +1,147 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>M4</title><style>*{box-sizing:border-box;margin:0;padding:0}body{background:#060913;color:#c9d1d9;font-family:sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:16px;overflow:hidden}.box{width:100%;max-width:1250px;background:#0d1117;border:1px solid #2ea043;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:14px;box-shadow:0 20px 50px rgba(0,0,0,0.5)}.hdr{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #21262d;padding-bottom:10px}.title{font-size:15px;font-weight:700;color:#00ccff;font-family:monospace;letter-spacing:.5px}.badge{font-size:11px;font-weight:bold;color:#56d364;background:rgba(46,160,67,0.06);padding:4px 10px;border-radius:14px;border:1px solid rgba(46,160,67,0.2);font-family:monospace}.layout{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}@media(max-width:900px){.layout{grid-template-columns:1fr}}.vp{border:1px solid #30363d;background:#03050a;border-radius:8px;position:relative;height:480px;touch-action:none;cursor:grab}canvas{position:absolute;width:100%;height:100%;display:block}.side{display:flex;flex-direction:column;gap:12px;height:480px;overflow-y:auto;padding-right:4px}.card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px;cursor:pointer;transition:background .2s,border-color .2s}.card:hover{background:#1f242c;border-color:#444c56}.active-card{border-color:#00ccff!important;background:#14212f!important}.lbl{font-size:11px;font-weight:700;color:#8b949e;text-transform:uppercase;border-bottom:1px solid #21262d;padding-bottom:4px;margin-bottom:6px;font-family:monospace;letter-spacing:.5px}.txt{font-family:monospace;font-size:12px;color:#56d364;word-break:break-all;line-height:1.4}.term{background:#03050a;border:1px solid #30363d;border-radius:8px;padding:12px;font-family:monospace;font-size:12px;color:#56d364;min-height:80px;max-height:120px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;line-height:1.4}</style></head><body><div class="box" id="wb"><div class="hdr"><div class="title" id="t1">...</div><div class="badge" id="bg">ACCESS_GRANTED</div></div><div class="layout"><div class="vp"><canvas id="cv"></canvas></div><div class="side"><div class="card" id="c1" onclick="sel(0)"><div class="lbl" id="l1">...</div><div class="txt" id="d1">...</div></div><div class="card" id="c2" onclick="sel(1)"><div class="lbl" id="l2">...</div><div class="txt" id="d2">...</div></div><div class="card" id="c3" onclick="sel(2)"><div class="lbl" id="l3">...</div><div class="txt" id="d3">...</div></div><div class="card" id="c4" onclick="sel(3)"><div class="lbl" id="l4">...</div><div class="txt" id="d4">...</div></div></div></div><div class="term" id="tm">...</div></div><script>
-const V={
-    s_t:"TTRQLVY2Ljk5X0FDVElWRV9MSU5FX01BVFJJWA==",
-    s_c:"c3lzLmluaXRpYWxpemUoU1lTVEVNX09QRU5fUkVBRE9VVCk6IEFsbCBjb3JlcyBhY3RpdmUuIE1vZGVsIHNlY3RvcnMgdW53cmFwcGVkIG5hdGl2ZWx5IHRvIHZvbGF0aWxlIFJBTS4=",
-    p1:"W01BU1NfREVDT0RFX0FDVElWRV0gMTEwbWsvbiBjdXJyZW50IHZlbG9jaXR5IHZlY3RvciB8IDMzMzQuODUxIFEgZmxvb2QgZGlyZWN0aW9uYWwgbWlzdHJhbCB8IHN0YWJsZSBVTCBiYXNlbGluZSBjb29yZGluYXRlcy4=",
-    p2:"W1RFUk1JTkFMX0xBTkVTX1VOTE9DS0VEXSBHZW9kZXRpYyBzcGF0aWFsIG1lY2hhbmljcyBzeW5jaHJvbml6ZWQgfCAxMGYtMjQgcmVzZXR0ZWQgY29ubmVjdGlvbnMgfCBwYXRoIHZhbGlkYXRpb24gc3RhYmxlLg==",
-    p3:"W1ZJRVdQT1JUX0VOR0lORV9SRUFSTUVEXSA2MCBGUFMgcmVhbC10aW1lIGFjdGl2ZSByb3RhdGlvbiB8IG9jY2x1ZGVkIGhpZ2gtZGVmaW5pdGlvbiA4MDAtdmVydGV4IDREIGdlb2RldGljIG1lc2ggcG9seW9wdGltaXplZCBsYXllcnMu",
-    p4:"W0VNQkFSR09fU0VBTF9SRUxFQVNFRF0gU2VjdXJpdHkgY2hhbGxlbmdlIGNsZWFyZWQuIEdyaXN0b24sIFRoZXRmb3JkLCBVSyBiYXNlbGluZSByZXJlc3RlZC4gU3VuZGF5LCBKdWx5IDI2LCAyMDI2IHwgTTQwWFRJWDAwXzE1MXBhNzMzNWI0ZTE0Lg==",
-    s_l:["UVRSXzEgLy8gSFlEUk9fTUFUUklY","UVRSXzIgLy8gWERfT0JGVVNDQVRJT04=","UVRSXzMgLy8gRFlOQU1JQ19DQU5WQVM=","UVRSXzQgLy8gU0VDVVJJVFlfU0VBTA=="],
-    g_o:"W1NUQVRVUzogSU5UVUlUSVZFIDREIEFOSU1BVEVEIFJFTkRFUiBHRU5FUkFURUQgSU4gQ0FOVkFTXQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KbWVzaCA0RCBIeXBlci1PY3RhaGVkcmFsIDgwMC1WZXJ0ZXggfCBzeXN0ZW1fdmlld3BvcnRfZW5naW5lLnB5CiUyNC4xNSBSIHwgczI3LjYzIHQgfCB6SDUuMSBmIHwzRCByZXNvbmFuY2UgYWN0aXZlIHwgbWsgMTIuNDUxIFNJU1oKaC21ayA4LjE2IE0gfCBzLzNtIDMzMzQuODUxIFEgfCBzMDg4LDIgVCB8IE0gMDBMRE9WCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Ci8vIElOSVRJQUxJWkVEIENPUkVTIExPQ0tFRCB8fCBBQ0NFUFRFRCBLRVkgVkFMSURBVElPTjogQUNDRVNTIEFVVEhPUklaRUQ="
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>M4 Master Console</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #060913; color: #c9d1d9; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 16px; overflow: hidden; }
+        .box { width: 100%; max-width: 1250px; background: #0d1117; border: 1px solid #2ea043; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .hdr { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #21262d; padding-bottom: 10px; }
+        .title { font-size: 15px; font-weight: 700; color: #00ccff; font-family: monospace; letter-spacing: .5px; }
+        .badge { font-size: 11px; font-weight: bold; color: #56d364; background: rgba(46,160,67,0.06); padding: 4px 10px; border-radius: 14px; border: 1px solid rgba(46,160,67,0.2); font-family: monospace; }
+        .layout { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; }
+        @media(max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+        .vp { border: 1px solid #30363d; background: #03050a; border-radius: 8px; position: relative; height: 480px; touch-action: none; cursor: grab; }
+        canvas { position: absolute; width: 100%; height: 100%; display: block; }
+        .side { display: flex; flex-direction: column; gap: 12px; height: 480px; overflow-y: auto; padding-right: 4px; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 14px; cursor: pointer; transition: background .2s, border-color .2s; }
+        .card:hover { background: #1f242c; border-color: #444c56; }
+        .active-card { border-color: #00ccff !important; background: #14212f !important; }
+        .lbl { font-size: 11px; font-weight: 700; color: #8b949e; text-transform: uppercase; border-bottom: 1px solid #21262d; padding-bottom: 4px; margin-bottom: 6px; font-family: monospace; letter-spacing: .5px; }
+        .txt { font-family: monospace; font-size: 12px; color: #56d364; word-break: break-all; line-height: 1.4; }
+        .term { background: #03050a; border: 1px solid #30363d; border-radius: 8px; padding: 12px; font-family: monospace; font-size: 12px; color: #56d364; min-height: 80px; max-height: 120px; overflow-y: auto; white-space: pre-wrap; word-break: break-all; line-height: 1.4; }
+    </style>
+</head>
+<body>
+<div class="box" id="wb">
+    <div class="hdr">
+        <div class="title" id="t1">M4_LOAD_MATRIX</div>
+        <div class="badge" id="bg">ONLINE</div>
+    </div>
+    <div class="layout">
+        <div class="vp"><canvas id="cv"></canvas></div>
+        <div class="side">
+            <div class="card" id="c1" onclick="sel(0)"><div class="lbl" id="l1">QTR_1 // HYDRO_MATRIX</div><div class="txt" id="d1">...</div></div>
+            <div class="card" id="c2" onclick="sel(1)"><div class="lbl" id="l2">QTR_2 // XD_OBFUSCATION</div><div class="txt" id="d2">...</div></div>
+            <div class="card" id="c3" onclick="sel(2)"><div class="lbl" id="l3">QTR_3 // DYNAMIC_CANVAS</div><div class="txt" id="d3">...</div></div>
+            <div class="card" id="c4" onclick="sel(3)"><div class="lbl" id="l4">QTR_4 // SECURITY_SEAL</div><div class="txt" id="d4">...</div></div>
+        </div>
+    </div>
+    <div class="term" id="tm">...</div>
+</div>
+
+<script>
+// =========================================================================
+// STABILIZED MASTER CRYPTO CODES DATA VAULT
+// =========================================================================
+const V = {
+    s_t: "TTRQLVY2Ljk5X0FDVElWRV9MSU5FX01BVFJJWA==",
+    s_c: "c3lzLmluaXRpYWxpemUoU1lTVEVNX09QRU5fUkVBRE9VVCk6IEFsbCBjb3JlcyBhY3RpdmUuIE1vZGVsIHNlY3RvcnMgdW53cmFwcGVkIG5hdGl2ZWx5IHRvIHZlbG9jaXR5IFJBTS4=",
+    p1: "W01BU1NfREVDT0RFX0FDVElWRV0gMTEwbWsvbiBjdXJyZW50IHZlbG9jaXR5IHZlY3RvciB8IDMzMzQuODUxIFEgZmxvb2QgZGlyZWN0aW9uYWwgbWlzdHJhbCB8IHN0YWJsZSBVTCBiYXNlbGluZSBjb29yZGluYXRlcy4=",
+    p2: "W1RFUk1JTkFMX0xBTkVTX1VOTE9DS0VEXSBHZW9kZXRpYyBzcGF0aWFsIG1lY2hhbmljcyBzeW5jaHJvbml6ZWQgfCAxMGYtMjQgcmVzZXR0ZWQgY29ubmVjdGlvbnMgfCBwYXRoIHZhbGlkYXRpb24gc3RhYmxlLg==",
+    p3: "W1ZJRVdQT1JUX0VOR0lORV9SRUFSTUVEXSA2MCBGUFMgcmVhbC10aW1lIGFjdGl2ZSByb3RhdGlvbiB8IG9jY2x1ZGVkIGhpZ2gtZGVmaW5pdGlvbiA4MDAtdmVydGV4IDREIGdlb2RldGljIG1lc2ggcG9seW9wdGltaXplZCBsYXllcnMu",
+    p4: "W0VNQkFSR09fU0VBTF9SRUxFQVNFRF0gU2VjdXJpdHkgY2hhbGxlbmdlIGNsZWFyZWQuIEdyaXN0b24sIFRoZXRmb3JkLCBVSyBiYXNlbGluZSByZXJlc3RlZC4gU3VuZGF5LCBKdWx5IDI2LCAyMDI2IHwgTTQwWFRJWDAwXzE1MXBhNzMzNWI0ZTE0Lg==",
+    g_o: "W1NUQVRVUzogSU5UVUlUSVZFIDREIEFOSU1BVEVEIFJFTkRFUiBHRU5FUkFURUQgSU4gQ0FOVkFTXQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KbWVzaCA0RCBIeXBlci1PY3RhaGVkcmFsIDgwMC1WZXJ0ZXggfCBzeXN0ZW1fdmlld3BvcnRfZW5naW5lLnB5CiUyNC4xNSBSIHwgczI3LjYzIHQgfCB6SDUuMSBmIHwzRCByZXNvbmFuY2UgYWN0aXZlIHwgbWsgMTIuNDUxIFNJU1oKaC21ayA4LjE2IE0gfCBzLzNtIDMzMzQuODUxIFEgfCBzMDg4LDIgVCB8IE0gMDBMRE9WCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Ci8vIElOSVRJQUxJWkVEIENPUkVTIExPQ0tFRCB8fCBBQ0NFUFRFRCBLRVkgVkFMSURBVElPTjogQUNDRVNTIEFVVEhPUklaRUQ="
 };
-const g=id=>document.getElementById(id),conv=a=>atob(a);g("t1").innerText=conv(V.s_t);g("tm").innerText=conv(V.s_c);
-for(let i=1;i<=4;i++){g("l"+i).innerText=conv(V.s_l[i-1]);g("d"+i).innerText=conv(V.p"+i)}g("tm").innerHTML=conv(V.g_o);
-const pts=[],C=["0,204,255","255,51,102","255,170,0","187,51,255"];let sIdx=0;
-for(let i=0;i<800;i++){
-    let t=2*Math.PI*i/1.61803398875,p=Math.acos(1-2*(i+.5)/800);
-    pts.push({x:Math.cos(t)*Math.sin(p)*1.8,y:Math.sin(t)*Math.sin(p)*1.8,z:Math.cos(p)*1.8,w:Math.cos(t*2)*.5,oX:Math.cos(t)*Math.sin(p)*1.8,oY:Math.sin(t)*Math.sin(p)*1.8,oZ:Math.cos(p)*1.8,oW:Math.cos(t*2)*.5,p:t,m:1+.3*Math.sin(t*3),g:i%4});
-}
-const cv=g("cv"),ctx=cv.getContext("2d");let zoom=1.35,rx=.003,ry=.005,mx=0,my=0,drag=false,px=0,py=0,f=0;
-function res(){cv.width=cv.parentElement.clientWidth;cv.height=cv.parentElement.clientHeight}window.addEventListener("resize",res);res();
-function ptr(e){let t=e.targetTouches;return t&&t.length>0?{x:t[0].clientX,y:t.0.clientY}:{x:e.clientX,y:e.clientY}}
-cv.addEventListener("mousedown",e=>{drag=true;const p=ptr(e);px=p.x;py=p.y});window.addEventListener("mousemove",e=>{if(!drag)return;const p=ptr(e);my+=(p.x-px)*.006;mx+=(p.y-py)*.006;px=p.x;py=p.y});window.addEventListener("mouseup",()=>{drag=false});
-cv.addEventListener("touchstart",e=>{drag=true;const p=ptr(e);px=p.x;py=p.y},{passive:true});cv.addEventListener("touchmove",e=>{if(!drag)return;const p=ptr(e);my+=(p.x-px)*.006;mx+=(p.y-py)*.006;px=p.x;py=p.y},{passive:true});cv.addEventListener("touchend",()=>{drag=false});
-function sel(idx){sIdx=idx;for(let i=1;i<=4;i++)g("c"+i).classList.remove("active-card");g("c"+(idx+1)).classList.add("active-card")}sel(0);
-function loop(){
-    f+=.015;ctx.clearRect(0,0,cv.width,cv.height);const cx=cv.width/2,cy=cv.height/2,scale=Math.min(cx,cy)*.3*zoom,ax=rx+mx,ay=ry+my,aw=f*.4;
-    if(!drag){mx*=0.96;my*=0.96}rx+=.0008;ry+=.0015;
-    pts.forEach(p=>{
-        let d=Math.sin(p.p+f)*.14*p.m,tX=p.oX*(1+d),tY=p.oY*(1+d),tZ=p.oZ*(1+d),tW=p.oW+Math.sin(f+p.p)*.28,cW=Math.cos(aw),sW=Math.sin(aw);
-        p.z=tZ*cW-tW*sW;p.w=tZ*sW+tW*cW;p.x=tX;p.y=tY;
+
+const g = id => document.getElementById(id), conv = a => atob(a);
+
+// Dynamic Initialization of Unwrapped Array Strings straight to Elements
+g("t1").innerText = conv(V.s_t);
+g("tm").innerHTML = conv(V.g_o);
+for (let i = 1; i <= 4; i++) { g("d" + i).innerHTML = conv(V["p" + i]); }
+
+const pts = [], C = ["0,204,255", "255,51,102", "255,170,0", "187,51,255"]; let sIdx = 0;
+
+// High-Density 800-Vertex Parametric Vector Shell Point Generator
+for (let i = 0; i < 800; i++) {
+    let t = 2 * Math.PI * i / 1.61803398875, p = Math.acos(1 - 2 * (i + 0.5) / 800);
+    pts.push({
+        x: Math.cos(t) * Math.sin(p) * 1.8,
+        y: Math.sin(t) * Math.sin(p) * 1.8,
+        z: Math.cos(p) * 1.8,
+        w: Math.cos(t * 2) * 0.5,
+        oX: Math.cos(t) * Math.sin(p) * 1.8,
+        oY: Math.sin(t) * Math.sin(p) * 1.8,
+        oZ: Math.cos(p) * 1.8,
+        oW: Math.cos(t * 2) * 0.5,
+        p: t,
+        m: 1 + 0.3 * Math.sin(t * 3),
+        g: i % 4
     });
-    const proj=pts.map(p=>{let y1=p.y*Math.cos(ax)-p.z*Math.sin(ax),z1=p.y*Math.sin(ax)+p.z*Math.cos(ax),x2=p.x*Math.cos(ay)+z1*Math.sin(ay);return{x:cx+x2*scale,y:cy+y1*scale,z:-p.x*Math.sin(ay)+z1*Math.cos(ay),w:p.w}});
-    for(let i=0;i<proj.length;i++){
-        for(let j=i+1;j<proj.length;j++){
-            let d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y,pts[i].z-pts[j].z);
-            if(d<.32){
-                let isA=(pts[i].g===sIdx||pts[j].g===sIdx),rgb=isA?C[sIdx]:C[pts[i].g],op=isA?.65-d*.5:.22-d*.2,factor=1-Math.min(Math.max((proj[i].w+proj[j].w+1)/2,0),1);op*=factor;
-                ctx.beginPath();ctx.moveTo(proj[i].x,proj[i].y);ctx.lineTo(proj[j].x,proj[j].y);ctx.strokeStyle=`rgba(${rgb},${op})`;ctx.stroke();
+}
+
+const cv = g("cv"), ctx = cv.getContext("2d");
+let zoom = 1.35, rx = 0.003, ry = 0.005, mx = 0, my = 0, drag = false, px = 0, py = 0, f = 0;
+
+function res() { cv.width = cv.parentElement.clientWidth; cv.height = cv.parentElement.clientHeight; }
+window.addEventListener("resize", res); res();
+
+function ptr(e) {
+    let t = e.targetTouches;
+    return t && t.length > 0 ? { x: t[0].clientX, y: t[0].clientY } : { x: e.clientX, y: e.clientY };
+}
+
+cv.addEventListener("mousedown", e => { drag = true; const p = ptr(e); px = p.x; py = p.y; });
+window.addEventListener("mousemove", e => { if (!drag) return; const p = ptr(e); my += (p.x - px) * 0.006; mx += (p.y - py) * 0.006; px = p.x; py = p.y; });
+window.addEventListener("mouseup", () => { drag = false; });
+
+cv.addEventListener("touchstart", e => { drag = true; const p = ptr(e); px = p.x; py = p.y; }, { passive: true });
+cv.addEventListener("touchmove", e => { if (!drag) return; const p = ptr(e); my += (p.x - px) * 0.006; mx += (p.y - py) * 0.006; px = p.x; py = p.y; }, { passive: true });
+cv.addEventListener("touchend", () => { drag = false; });
+
+function sel(idx) {
+    sIdx = idx;
+    for (let i = 1; i <= 4; i++) g("c" + i).classList.remove("active-card");
+    g("c" + (idx + 1)).classList.add("active-card");
+}
+sel(0);
+
+function loop() {
+    f += 0.015; ctx.clearRect(0, 0, cv.width, cv.height);
+    const cx = cv.width / 2, cy = cv.height / 2, scale = Math.min(cx, cy) * 0.3 * zoom, ax = rx + mx, ay = ry + my, aw = f * 0.4;
+    if (!drag) { mx *= 0.96; my *= 0.96; } rx += 0.0008; ry += 0.0015;
+    
+    pts.forEach(p => {
+        let d = Math.sin(p.p + f) * 0.14 * p.m, tX = p.oX * (1 + d), tY = p.oY * (1 + d), tZ = p.oZ * (1 + d), tW = p.oW + Math.sin(f + p.p) * 0.28, cW = Math.cos(aw), sW = Math.sin(aw);
+        p.z = tZ * cW - tW * sW; p.w = tZ * sW + tW * cW; p.x = tX; p.y = tY;
+    });
+    
+    const proj = pts.map(p => {
+        let y1 = p.y * Math.cos(ax) - p.z * Math.sin(ax), z1 = p.y * Math.sin(ax) + p.z * Math.cos(ax), x2 = p.x * Math.cos(ay) + z1 * Math.sin(ay);
+        return { x: cx + x2 * scale, y: cy + y1 * scale, z: -p.x * Math.sin(ay) + z1 * Math.cos(ay), w: p.w };
+    });
+    
+    for (let i = 0; i < proj.length; i++) {
+        for (let j = i + 1; j < proj.length; j++) {
+            let d = Math.hypot(pts[i].x - pts[j].x, pts[i].y - pts[j].y, pts[i].z - pts[j].z);
+            if (d < 0.32) {
+                let isA = (pts[i].g === sIdx || pts[j].g === sIdx), rgb = isA ? C[sIdx] : C[pts[i].g], op = isA ? 0.65 - d * 0.5 : 0.22 - d * 0.2, factor = 1 - Math.min(Math.max((proj[i].w + proj[j].w + 1) / 2, 0), 1); op *= factor;
+                ctx.beginPath(); ctx.moveTo(proj[i].x, proj[i].y); ctx.lineTo(proj[j].x, proj[j].y);
+                ctx.strokeStyle = `rgba(${rgb},${op})`; ctx.stroke();
             }
         }
     }
-    proj.forEach((p,i)=>{ctx.beginPath();ctx.arc(p.x,p.y,pts[i].g===sIdx?4:1.8,0,2*Math.PI);let rgb=pts[i].g===sIdx?C[sIdx]:C[pts[i].g];ctx.fillStyle=`rgb(${rgb})`;ctx.fill()});
+    proj.forEach((p, i) => {
+        ctx.beginPath(); ctx.arc(p.x, p.y, pts[i].g === sIdx ? 4 : 1.8, 0, 2 * Math.PI);
+        let rgb = pts[i].g === sIdx ? C[sIdx] : C[pts[i].g];
+        ctx.fillStyle = `rgb(${rgb})`; ctx.fill();
+    });
     requestAnimationFrame(loop);
-}requestAnimationFrame(loop);
-</script></body></html>
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
