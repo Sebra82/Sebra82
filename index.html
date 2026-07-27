@@ -1,167 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>M4P</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: monospace; font-size: 9px; }
-        body { background: #090D16; color: #00CCFF; padding: 10px; display: flex; justify-content: center; }
-        .c { width: 100%; max-width: 980px; display: flex; flex-direction: column; gap: 6px; }
-        .h { display: flex; justify-content: space-between; align-items: center; }
-        .b { font-weight: bold; padding: 2px 6px; border: 1px solid #F05; color: #F05; background: rgba(255,0,85,0.05); border-radius: 4px; }
-        .b.u { border-color: #0F6; color: #0F6; background: rgba(0,255,102,0.05); }
-        .w { width: 100%; height: 300px; background: #000; border: 1px solid #1a2333; border-radius: 4px; }
-        canvas { width: 100%; height: 100%; display: block; }
-        .p { border: 1px solid #1a2333; border-radius: 4px; padding: 6px; background: rgba(9,13,22,0.6); }
-        .p.a { border-color: #00CCFF; background: rgba(0,204,255,0.02); }
-        .ph { display: flex; justify-content: space-between; margin-bottom: 2px; color: #8ab4f8; }
-        .ps { color: #F05; }
-        .ps.v { color: #0F6; }
-        .g { display: flex; gap: 6px; margin-top: 2px; }
-        input { background: #000; border: 1px solid #00CCFF; color: #0F6; padding: 4px; flex-grow: 1; border-radius: 3px; outline: none; }
-        button { background: rgba(0,204,255,0.1); border: 1px solid #00CCFF; color: #00CCFF; padding: 4px 8px; cursor: pointer; border-radius: 3px; }
-        .o { margin-top: 4px; color: #0F6; white-space: pre-wrap; display: none; }
-    </style>
-</head>
-<body>
-
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>M</title><style>
+*{box-sizing:border-box;margin:0;padding:0;user-select:none;font-family:monospace;font-size:9px;}
+body{background:#090D16;color:#00CCFF;padding:10px;display:flex;justify-content:center;}
+.c{width:100%;max-width:980px;display:flex;flex-direction:column;gap:5px;}
+.h{display:flex;justify-content:space-between;align-items:center;}
+.b{font-weight:bold;padding:2px 6px;border:1px solid #F05;color:#F05;background:rgba(255,0,85,.05);border-radius:4px;}
+.b.u{border-color:#0F6;color:#0F6;background:rgba(0,255,102,.05);}
+.w{width:100%;height:300px;background:#000;border:1px solid #1a2333;border-radius:4px;}
+canvas{width:100%;height:100%;display:block;}
+.p{border:1px solid #1a2333;border-radius:4px;padding:5px;background:rgba(9,13,22,.6);}
+.p.a{border-color:#00CCFF;background:rgba(0,204,255,.02);}
+.ph{display:flex;justify-content:space-between;margin-bottom:2px;color:#8ab4f8;}
+.ps{color:#F05;}.ps.v{color:#0F6;}
+.g{display:flex;gap:5px;margin-top:2px;}
+input{background:#000;border:1px solid #00CCFF;color:#0F6;padding:4px;flex-grow:1;border-radius:3px;outline:none;}
+button{background:rgba(0,204,255,.1);border:1px solid #00CCFF;color:#00CCFF;padding:4px 8px;cursor:pointer;border-radius:3px;}
+.o{margin-top:4px;color:#0F6;white-space:pre-wrap;display:none;}
+</style></head><body>
 <div class="c">
     <div class="h"><div>M4P-V6.99_ACTIVE_LINE_MATRIX</div><div class="b" id="b">ENC_LOCKED</div></div>
     <div class="w"><canvas id="canvas"></canvas></div>
     <div class="p a" id="cp">
-        <div class="ph"><span>SYS_VAULT_GATEWAY // CORE_VALIDATOR</span><span class="ps" id="gs">[VAULT STATUS] System payload locked. Enter authorization key.</span></div>
-        <div class="g"><input type="password" id="gk" placeholder="EXECUTE GATE PHRASE AUTH..."><button onclick="auth()">ENTER</button></div>
+        <div class="ph"><span>SYS_VAULT_GATEWAY // CORE_VALIDATOR</span><span class="ps" id="gs">[VAULT STATUS] Locked. Enter key.</span></div>
+        <div class="g"><input type="password" id="gk" placeholder="AUTH..."><button onclick="auth()">ENTER</button></div>
     </div>
     <div id="q"></div>
 </div>
-
 <script>
-    // 🔄 LINE MATRIX LOOKUP PIPELINE
-    const _X = {
-        'A': "-", 'B': "--", 'C': "---", 'D': "----", 'E': "-----", 'H': "--------", 
-        'J': "----------", 'X': "------------------------------", 'Y': "------------------------------------------------------------", 'Z': "----------------------------------------------------------------------------------------------------"
-    };
-    const _L1 = _X['A'].length, _L2 = _X['B'].length, _L4 = _X['D'].length, _L5 = _X['E'].length, _L10 = _X['J'].length, _L30 = _X['X'].length, _L60 = _X['Y'].length, _L100 = _X['Z'].length;
-
-    // 📦 COMPRESSED DATA REGISTER ARRAY (Paste your matrix block here)
-    const M = [];
-
-    const TARGET = "0d2f0980ff3ec551b9ab62689ef2e3d3fa54e3d93cb566cf2c2f6d2036573c00";
-
-    const names = ["HYDRO_MATRIX", "XD_OBFUSCATION", "DYNAMIC_CANVAS", "SECURITY_SEAL"];
-    const qDiv = document.getElementById("q");
-    names.forEach((n, i) => {
-        qDiv.innerHTML += `<div class="p" id="q${i+1}"><div class="ph"><span>QTR_${i+1} // ${n}</span><span class="ps" id="s${i+1}">[AES-256 VAULT ENCRYPTED]</span></div><div class="o" id="o${i+1}"></div></div><div style="height:6px"></div>`;
+const _X=["-","--","---","----","-----","--------","----------","------------------------------","------------------------------------------------------------","----------------------------------------------------------------------------------------------------"];
+const _L1=_X[0].length,_L2=_X[1].length,_L4=_X[3].length,_L5=_X[4].length,_L10=_X[6].length,_L30=_X[7].length,_L60=_X[8].length;
+const M=[]; // Paste your numerical array directly here
+const TARGET="0d2f0980ff3ec551b9ab62689ef2e3d3fa54e3d93cb566cf2c2f6d2036573c00";
+const NM=["HYDRO_MATRIX","XD_OBFUSCATION","DYNAMIC_CANVAS","SECURITY_SEAL"];
+NM.forEach((n,i)=>{document.getElementById("q").innerHTML+=`<div class="p" id="q${i}"><div class="ph"><span>QTR_${i+1} // ${n}</span><span class="ps" id="s${i}">[AES-256 VAULT ENCRYPTED]</span></div><div class="o" id="o${i}"></div></div><div style="height:5px"></div>`;});
+async function auth(){
+    const inp=document.getElementById("gk").value,buf=new TextEncoder().encode(inp),hash=await crypto.subtle.digest('SHA-256',buf);
+    const hex=Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(_L2,'0')).join('');
+    if(hex===TARGET||inp.toLowerCase()==="chronos"){
+        const key=inp.toLowerCase().split('').reduce((a,c)=>a+c.charCodeAt(0),0)-649;let res="";
+        for(let j=0;j<M.length;j++)res+=String.fromCharCode((j%_L2===0)?(M[j]^key)^0x0F:(M[j]^key)-_L5);
+        const split=res.split(String.fromCharCode(37)+String.fromCharCode(37));
+        document.getElementById("b").innerText="ENC_UNLOCKED";document.getElementById("b").className="b u";
+        document.getElementById("gs").innerText="[SUCCESS] Core interlock accepted.";document.getElementById("gs").className="ps v";
+        for(let i=0;i<split.length&&i<NM.length;i++){
+            document.getElementById(`q${i}`).className="p a";document.getElementById(`s${i}`).innerText="[DECRYPTED]";
+            document.getElementById(`s${i}`).className="ps v";const el=document.getElementById(`o${i}`);el.innerText=split[i].trim();el.style.display="block";
+        }
+    }else{document.getElementById("gs").innerText="[FAILED] Signature mismatch.";document.getElementById("gk").value="";}
+}
+const cv=document.getElementById("canvas"),cx=cv.getContext("2d");let w,h,pts=[],rx=0,ry=0,drag=!1,sx,sy;
+function resize(){w=cv.width=cv.parentElement.clientWidth;h=cv.height=cv.parentElement.clientHeight;}
+window.addEventListener("resize",resize);resize();
+const config=[[_L10,1.2],[_L30,3.0],[_L60,5.5]];let idx=0;
+config.forEach(([tot,rad])=>{
+    for(let i=0;i<tot;i++){
+        let phi=Math.acos(1-_L2*(i+.5)/tot),th=Math.PI*(1+Math.sqrt(_L5))*i;
+        let x=rad*Math.sin(phi)*Math.cos(th)*_L30,y=rad*Math.sin(phi)*Math.sin(th)*_L30,z=rad*Math.cos(phi)*_L30;
+        let tx=x*Math.cos(idx)-y*Math.sin(idx),ty=x*Math.sin(idx)+y*Math.cos(idx),tz=z+(Math.sin(x+y)*.15);
+        if(idx%_L2===0){tx*=.5;ty*=.5;tz*=.5;}pts.push({x:tx,y:ty,z:tz});idx++;
+    }
+});
+function ptr(e){return(e.touches&&e.touches[0])||(e.targetTouches&&e.targetTouches[0])||e;}
+const start=(e)=>{drag=!0;const p=ptr(e);sx=p.clientX;sy=p.clientY;};
+const move=(e)=>{if(!drag)return;const p=ptr(e);rx+=(p.clientY-sy)*.005;ry+=(p.clientX-sx)*.005;sx=p.clientX;sy=p.clientY;};
+const stop=()=>drag=!1;
+cv.addEventListener("mousedown",start);window.addEventListener("mousemove",move);window.addEventListener("mouseup",stop);
+cv.addEventListener("touchstart",start,{passive:!0});cv.addEventListener("touchmove",move,{passive:!0});cv.addEventListener("touchend",stop);
+function frame(){
+    cx.clearRect(0,0,w,h);let midX=w/_L2,midY=h/_L2;if(!drag){ry+=.002;rx+=.001;}
+    let tpts=pts.map(p=>{
+        let y1=p.y*Math.cos(rx)-p.z*Math.sin(rx),z1=p.y*Math.sin(rx)+p.z*Math.cos(rx);
+        let x2=p.x*Math.cos(ry)+z1*Math.sin(ry),z2=-p.x*Math.sin(ry)+z1*Math.cos(ry);
+        return{x:x2+midX,y:y1+midY,z:z2};
     });
-
-    async function auth() {
-        const inp = document.getElementById("gk").value;
-        const buf = new TextEncoder().encode(inp);
-        const hash = await crypto.subtle.digest('SHA-256', buf);
-        const hex = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(_L2, '0')).join('');
-
-        // Double-verification lock fallback to catch case-insensitive inputs seamlessly
-        if (hex === TARGET || inp.toLowerCase() === "chronos") {
-            const key = inp.toLowerCase().split('').reduce((a, c) => a + c.charCodeAt(0), 0) - 649;
-            let res = "";
-            for (let j = 0; j < M.length; j++) {
-                if (j % _L2 === 0) res += String.fromCharCode((M[j] ^ key) ^ 0x0F);
-                else res += String.fromCharCode((M[j] ^ key) - _L5);
-            }
-
-            const split = res.split(String.fromCharCode(37) + String.fromCharCode(37));
-            document.getElementById("b").innerText = "ENC_UNLOCKED";
-            document.getElementById("b").className = "b u";
-            document.getElementById("gs").innerText = "[SUCCESS] Core interlock acceptance confirmed.";
-            document.getElementById("gs").className = "ps v";
-
-            for (let i = 0; i < split.length && i < names.length; i++) {
-                document.getElementById(`q${i+1}`).className = "p a";
-                document.getElementById(`s${i+1}`).innerText = "[DECRYPTED]";
-                document.getElementById(`s${i+1}`).className = "ps v";
-                const el = document.getElementById(`o${i+1}`);
-                el.innerText = split[i].trim();
-                el.style.display = "block";
-            }
-        } else {
-            document.getElementById("gs").innerText = "[FAILED] Signature discrepancy detected.";
-            document.getElementById("gk").value = "";
+    let fc=0;cx.strokeStyle="rgba(0,255,102,0.04)";cx.lineWidth=.5;
+    for(let i=0;i<tpts.length&&fc<800;i++){
+        for(let j=i+1;j<tpts.length&&fc<800;j++){
+            let d=Math.hypot(tpts[i].x-tpts[j].x,tpts[i].y-tpts[j].y);
+            if(d>20&&d<90){cx.beginPath();cx.moveTo(tpts[i].x,tpts[i].y);cx.lineTo(tpts[j].x,tpts[j].y);cx.stroke();fc++;}
         }
     }
-
-    // 📊 TOPOGRAPHY INTERACTION CANVAS ENGINE
-    const cv = document.getElementById("canvas"), cx = cv.getContext("2d");
-    let w, h, pts = [], rx = 0, ry = 0, drag = false, sx, sy;
-
-    function resize() { w = cv.width = cv.parentElement.clientWidth; h = cv.height = cv.parentElement.clientHeight; }
-    window.addEventListener("resize", resize); resize();
-
-    // Map precisely 100 geodetic tracking points
-    const config = [[_L10, 1.2], [_L30, 3.0], [_L60, 5.5]];
-    let idx = 0;
-    config.forEach(([tot, rad]) => {
-        for (let i = 0; i < tot; i++) {
-            let phi = Math.acos(1 - _L2 * (i + 0.5) / tot);
-            let th = Math.PI * (1 + Math.sqrt(_L5)) * i;
-            
-            // Multiply raw values by projection multiplier factor to scale viewport size correctly
-            let x = rad * Math.sin(phi) * Math.cos(th) * _L30;
-            let y = rad * Math.sin(phi) * Math.sin(th) * _L30;
-            let z = rad * Math.cos(phi) * _L30;
-            
-            let tx = x * Math.cos(idx) - y * Math.sin(idx);
-            let ty = x * Math.sin(idx) + y * Math.cos(idx);
-            let tz = z + (Math.sin(x + y) * 0.15);
-
-            if (idx % _L2 === 0) { tx *= 0.5; ty *= 0.5; tz *= 0.5; }
-            pts.push({ x: tx, y: ty, z: tz });
-            idx++;
-        }
-    });
-
-    function ptr(e) { return (e.touches && e.touches[0]) || (e.targetTouches && e.targetTouches[0]) || e; }
-    const start = (e) => { drag = true; const p = ptr(e); sx = p.clientX; sy = p.clientY; };
-    const move = (e) => { if (!drag) return; const p = ptr(e); rx += (p.clientY - sy) * 0.005; ry += (p.clientX - sx) * 0.005; sx = p.clientX; sy = p.clientY; };
-    const stop = () => drag = false;
-
-    cv.addEventListener("mousedown", start); window.addEventListener("mousemove", move); window.addEventListener("mouseup", stop);
-    cv.addEventListener("touchstart", start, { passive: true }); cv.addEventListener("touchmove", move, { passive: true }); cv.addEventListener("touchend", stop);
-
-    function frame() {
-        cx.clearRect(0, 0, w, h);
-        let midX = w / _L2, midY = h / _L2;
-        if (!drag) { ry += 0.002; rx += 0.001; }
-
-        let tpts = pts.map(p => {
-            let y1 = p.y * Math.cos(rx) - p.z * Math.sin(rx);
-            let z1 = p.y * Math.sin(rx) + p.z * Math.cos(rx);
-            let x2 = p.x * Math.cos(ry) + z1 * Math.sin(ry);
-            let z2 = -p.x * Math.sin(ry) + z1 * Math.cos(ry);
-            return { x: x2 + midX, y: y1 + midY, z: z2 };
-        });
-
-        let fc = 0; cx.strokeStyle = "rgba(0, 255, 102, 0.04)"; cx.lineWidth = 0.5;
-        for (let i = 0; i < tpts.length && fc < 800; i++) {
-            for (let j = i + 1; j < tpts.length && fc < 800; j++) {
-                let d = Math.hypot(tpts[i].x - tpts[j].x, tpts[i].y - tpts[j].y);
-                // Connections filter matched against scaled viewport dimensions
-                if (d > 20 && d < 90) {
-                    cx.beginPath(); cx.moveTo(tpts[i].x, tpts[i].y); cx.lineTo(tpts[j].x, tpts[j].y); cx.stroke(); fc++;
-                }
-            }
-        }
-
-        tpts.forEach(p => {
-            cx.fillStyle = p.z > 0 ? "#00CCFF" : "#ff0055";
-            cx.beginPath(); cx.arc(p.x, p.y, p.z > 0 ? 2.0 : 1.2, 0, _L2 * Math.PI); cx.fill();
-        });
-
-        cx.fillStyle = "#FFFFFF"; cx.beginPath(); cx.arc(midX, midY, 3, 0, _L2 * Math.PI); cx.fill();
-        requestAnimationFrame(frame);
-    }
-    frame();
-</script>
-
-</body>
-</html>
+    tpts.forEach(p=>{cx.fillStyle=p.z>0?"#00CCFF":"#ff0055";cx.beginPath();cx.arc(p.x,p.y,p.z>0?2:1.2,0,_L2*Math.PI);cx.fill();});
+    cx.fillStyle="#FFFFFF";cx.beginPath();cx.arc(midX,midY,3,0,_L2*Math.PI);cx.fill();requestAnimationFrame(frame);
+}frame();
+</script></body></html>
