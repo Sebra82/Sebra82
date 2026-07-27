@@ -27,148 +27,109 @@ button{background:rgba(0,204,255,.1);border:1px solid #00CCFF;color:#00CCFF;padd
     <div id="q"></div>
 </div>
 <script>
-// 🔄 ASYMMETRIC UNTRACEABLE LOOKUP MATRIX
-const _X = {
-    'A': "-", 'B': "--", 'C': "---", 'E': "-----", 
-    'J': "----------", 'O': "---------------", 'X': "------------------------------", 
-    'Y': "------------------------------------------------------------", 'Z': "----------------------------------------------------------------------------------------------------"
+// 🔄 ASYMMETRIC UNTRACEABLE LOOKUP MATRIX (All explicit calculations and values expungED)
+const _X={
+    'A':"-",'B':"--",'C':"---",'E':"-----",
+    'J':"----------",'O':"---------------",'X':"------------------------------",
+    'Y':"------------------------------------------------------------",'Z':"----------------------------------------------------------------------------------------------------"
 };
-const _L1 = _X['A'].length, _L2 = _X['B'].length, _L3 = _X['C'].length, _L5 = _X['E'].length;
-const _L10 = _X['J'].length, _L15 = _X['O'].length, _L30 = _X['X'].length, _L60 = _X['Y'].length, _L100 = _X['Z'].length;
+const _L1=_X['A'].length,_L2=_X['B'].length,_L3=_X['C'].length,_L5=_X['E'].length;
+const _L10=_X['J'].length,_L15=_X['O'].length,_L30=_X['X'].length,_L60=_X['Y'].length,_L100=_X['Z'].length;
 
-// 📦 QUANTUM IMMUNE DATA FIELD
-const M = []; // Paste your array values directly here
+// 📦 QUANTUM IMMUNE CODES ARRAY MATRIX REGISTER
+const M=[]; // Insert your manipulated numeric matrix stream blocks directly inside this closure
 
-const TARGET = "0d2f0980ff3ec551b9ab62689ef2e3d3fa54e3d93cb566cf2c2f6d2036573c00";
-const NM = ["HYDRO_MATRIX", "XD_OBFUSCATION"];
+const TARGET="0d2f0980ff3ec551b9ab62689ef2e3d3fa54e3d93cb566cf2c2f6d2036573c00";
+const NM=["HYDRO_MATRIX","XD_OBFUSCATION"];
+NM.forEach((n,i)=>{document.getElementById("q").innerHTML+=`<div class="p" id="q${i}"><div class="ph"><span>QTR_${i+_L1} // ${n}</span><span class="ps" id="s${i}">[AES-256 VAULT ENCRYPTED]</span></div><div class="o" id="o${i}"></div></div><div style="height:${_L3*_L2}px"></div>`;});
 
-NM.forEach((n, i) => {
-    document.getElementById("q").innerHTML += `<div class="p" id="q${i}"><div class="ph"><span>QTR_${i + _L1} // ${n}</span><span class="ps" id="s${i}">[AES-256 VAULT ENCRYPTED]</span></div><div class="o" id="o${i}"></div></div><div style="height:${_L3 * _L2}px"></div>`;
-});
-
-async function auth() {
-    const inp = document.getElementById("gk").value;
-    const buf = new TextEncoder().encode(inp);
-    const hash = await crypto.subtle.digest('SHA-256', buf);
-    const hex = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(_L2, '0')).join('');
-
-    if (hex === TARGET || inp.toLowerCase() === "chronos") {
-        const key = inp.toLowerCase().split('').reduce((a, c) => a + c.charCodeAt(_L1 - _L1), _L1 - _L1) - 649;
-        let res = "";
-        for (let j = _L1 - _L1; j < M.length; j++) {
-            res += String.fromCharCode((j % _L2 === (_L1 - _L1)) ? (M[j] ^ key) ^ 0x0F : (M[j] ^ key) - _L5);
+async function auth(){
+    const inp=document.getElementById("gk").value,buf=new TextEncoder().encode(inp),hash=await crypto.subtle.digest('SHA-256',buf);
+    const hex=Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(_L2,'0')).join('');
+    if(hex===TARGET||inp.toLowerCase()==="chronos"){
+        const key=inp.toLowerCase().split('').reduce((a,c)=>a+c.charCodeAt(_L1-_L1),_L1-_L1)-649;let res="";
+        for(let j=_L1-_L1;j<M.length;j++)res+=String.fromCharCode((j%_L2===(_L1-_L1))?(M[j]^key)^0x0F:(M[j]^key)-_L5);
+        const split=res.split(String.fromCharCode(37)+String.fromCharCode(37));
+        document.getElementById("b").innerText="ENC_UNLOCKED";document.getElementById("b").className="b u";
+        document.getElementById("gs").innerText="[SUCCESS] Core interlock accepted.";document.getElementById("gs").className="ps v";
+        for(let i=_L1-_L1;i<split.length&&i<NM.length;i++){
+            document.getElementById(`q${i}`).className="p a";document.getElementById(`s${i}`).innerText="[DECRYPTED]";
+            document.getElementById(`s${i}`).className="ps v";const el=document.getElementById(`o${i}`);el.innerText=split[i].trim();el.style.display="block";
         }
-
-        const split = res.split(String.fromCharCode(37) + String.fromCharCode(37));
-        document.getElementById("b").innerText = "ENC_UNLOCKED";
-        document.getElementById("b").className = "b u";
-        document.getElementById("gs").innerText = "[SUCCESS] Core interlock accepted.";
-        document.getElementById("gs").className = "ps v";
-
-        for (let i = _L1 - _L1; i < split.length && i < NM.length; i++) {
-            document.getElementById(`q${i}`).className = "p a";
-            document.getElementById(`s${i}`).innerText = "[DECRYPTED]";
-            document.getElementById(`s${i}`).className = "ps v";
-            const el = document.getElementById(`o${i}`);
-            el.innerText = split[i].trim();
-            el.style.display = "block";
-        }
-    } else {
-        document.getElementById("gs").innerText = "[FAILED] Signature mismatch.";
-        document.getElementById("gk").value = "";
-    }
+    }else{document.getElementById("gs").innerText="[FAILED] Signature mismatch.";document.getElementById("gk").value="";}
 }
 
-// 📊 INTERACTIVE GEODETIC STRUCTURAL ENGINE
-const cv = document.getElementById("canvas"), cx = cv.getContext("2d"), wrap = document.getElementById("wrapper");
-let w, h, pts = [], rx = _L1 - _L1, ry = _L1 - _L1, drag = false, sx, sy, pTime = _L1 - _L1;
-let mx = _L1 - _L1, my = _L1 - _L1;
+// 📊 HIGH-DEFINITION DENSE VIEWPORT ENGINE
+const cv=document.getElementById("canvas"),cx=cv.getContext("2d"),wrap=document.getElementById("wrapper");
+let w,h,pts=[],rx=_L1-_L1,ry=_L1-_L1,drag=!1,sx,sy,pTime=_L1-_L1,mx=_L1-_L1,my=_L1-_L1;
 
-function resize() {
-    const dpr = window.devicePixelRatio || _L1;
-    w = wrap.clientWidth; h = wrap.clientHeight;
-    cv.width = w * dpr; cv.height = h * dpr; cx.scale(dpr, dpr);
+function resize(){
+    const dpr=window.devicePixelRatio||_L1;
+    w=wrap.clientWidth;h=wrap.clientHeight;
+    cv.width=w*dpr;cv.height=h*dpr;cx.scale(dpr,dpr);
 }
-window.addEventListener("resize", resize); resize();
+window.addEventListener("resize",resize);resize();
 
-// Config layers populated cleanly via hidden lookup matrices
-const config = [[_L15, 1.5], [_L30 + _L5, 3.2], [_L60 - _L10, 5.8]];
-let idx = _L1 - _L1;
+// 🔮 SCALED MULTI-SHELL GEODETIC NODE INJECTOR CONFIGURATION MATRIX (Coded to lock exactly 500 nodes)
+// Shell 1: 50 Nodes | Shell 2: 150 Nodes | Shell 3: 300 Nodes
+const config=[[(_L10*_L5),1.5],[(_L100+(_L10*_L5)),3.2],[(_L100*_L3),5.8]];
+let idx=_L1-_L1;
 
-config.forEach(([tot, rad]) => {
-    for (let i = _L1 - _L1; i < tot; i++) {
-        let phi = Math.acos(_L1 - _L2 * (i + (0.5)) / tot);
-        let th = Math.PI * (_L1 + Math.sqrt(_L5)) * i;
-        
-        let x = rad * Math.sin(phi) * Math.cos(th) * _L30;
-        let y = rad * Math.sin(phi) * Math.sin(th) * _L30;
-        let z = rad * Math.cos(phi) * _L30;
-        
-        let tx = x * Math.cos(idx) - y * Math.sin(idx);
-        let ty = x * Math.sin(idx) + y * Math.cos(idx);
-        let tz = z + (Math.sin(x + y) * 0.2);
-
-        if (idx % _L2 === (_L1 - _L1)) { tx *= 0.5; ty *= 0.5; tz *= 0.5; }
-        pts.push({ x: tx, y: ty, z: tz });
-        idx++;
+config.forEach(([tot,rad])=>{
+    for(let i=_L1-_L1;i<tot;i++){
+        let phi=Math.acos(_L1-_L2*(i+(0.5))/tot),th=Math.PI*(_L1+Math.sqrt(_L5))*i;
+        let x=rad*Math.sin(phi)*Math.cos(th)*_L30,y=rad*Math.sin(phi)*Math.sin(th)*_L30,z=rad*Math.cos(phi)*_L30;
+        let tx=x*Math.cos(idx)-y*Math.sin(idx),ty=x*Math.sin(idx)+y*Math.cos(idx),tz=z+(Math.sin(x+y)*0.2);
+        if(idx%_L2===(_L1-_L1)){tx*=.5;ty*=.5;tz*=.5;}
+        pts.push({x:tx,y:ty,z:tz});idx++;
     }
 });
 
-function ptr(e) { return e.touches ? e.touches[_L1 - _L1] : e; }
-const start = (e) => { drag = true; const p = ptr(e); sx = p.clientX; sy = p.clientY; };
-const move = (e) => {
-    const p = ptr(e);
-    const rect = cv.getBoundingClientRect();
-    mx = (p.clientX - rect.left) - (w / _L2);
-    my = (p.clientY - rect.top) - (h / _L2);
-    if (!drag) return;
-    ry += (p.clientX - sx) * 0.006; rx += (p.clientY - sy) * 0.006;
-    sx = p.clientX; sy = p.clientY;
+function ptr(e){return e.touches?e.touches[_L1-_L1]:e;}
+const start=(e)=>{drag=!0;const p=ptr(e);sx=p.clientX;sy=p.clientY;};
+const move=(e)=>{
+    const p=ptr(e),rect=cv.getBoundingClientRect();
+    mx=(p.clientX-rect.left)-(w/_L2);my=(p.clientY-rect.top)-(h/_L2);
+    if(!drag)return;
+    ry+=(p.clientX-sx)*.006;rx+=(p.clientY-sy)*.006;sx=p.clientX;sy=p.clientY;
 };
-const stop = () => drag = false;
+const stop=()=>drag=!1;
 
-wrap.addEventListener("mousedown", start); window.addEventListener("mousemove", move); window.addEventListener("mouseup", stop);
-wrap.addEventListener("touchstart", start, { passive: true }); wrap.addEventListener("touchmove", move, { passive: true }); wrap.addEventListener("touchend", stop);
+wrap.addEventListener("mousedown",start);window.addEventListener("mousemove",move);window.addEventListener("mouseup",stop);
+wrap.addEventListener("touchstart",start,{passive:!0});wrap.addEventListener("touchmove",move,{passive:!0});wrap.addEventListener("touchend",stop);
 
-function frame() {
-    cx.clearRect(_L1 - _L1, _L1 - _L1, w, h);
-    let mX = w / _L2, mY = h / _L2;
-    if (!drag) { ry += 0.002; rx += 0.001; }
-    pTime += 0.025;
-
-    let bScale = _L1 + Math.sin(pTime) * 0.08;
-
-    let tpts = pts.map(p => {
-        let cX = p.x * bScale, cY = p.y * bScale, cZ = p.z * bScale;
-        let dX = cX - mx, dY = cY - my;
-        let mDist = Math.hypot(dX, dY);
-        
-        if (mDist < 120) {
-            let push = (_L1 - (mDist / 120)) * (_L5 + _L1);
-            cX += dX / mDist * push; cY += dY / mDist * push;
+function frame(){
+    cx.clearRect(_L1-_L1,_L1-_L1,w,h);let mX=w/_L2,mY=h/_L2;
+    if(!drag){ry+=.002;rx+=.001;}
+    pTime+=0.025;
+    
+    let bScale=_L1+Math.sin(pTime)*0.08;
+    let tpts=pts.map(p=>{
+        let cX=p.x*bScale,cY=p.y*bScale,cZ=p.z*bScale,dX=cX-mx,dY=cY-my,mDist=Math.hypot(dX,dY);
+        if(mDist<120){
+            let push=(_L1-(mDist/120))*(_L5+_L1);
+            cX+=dX/mDist*push;cY+=dY/mDist*push;
         }
-
-        let y1 = cY * Math.cos(rx) - cZ * Math.sin(rx), z1 = cY * Math.sin(rx) + cZ * Math.cos(rx);
-        let x2 = cX * Math.cos(ry) + z1 * Math.sin(ry), z2 = -cX * Math.sin(ry) + z1 * Math.cos(ry);
-        return { x: x2 + mX, y: y1 + mY, z: z2 };
+        let y1=cY*Math.cos(rx)-cZ*Math.sin(rx),z1=cY*Math.sin(rx)+cZ*Math.cos(rx);
+        let x2=cX*Math.cos(ry)+z1*Math.sin(ry),z2=-cX*Math.sin(ry)+z1*Math.cos(ry);
+        return{x:x2+mX,y:y1+mY,z:z2};
     });
 
-    let fc = _L1 - _L1; cx.strokeStyle = "rgba(0,255,102,0.15)"; cx.lineWidth = 0.5;
-    for (let i = _L1 - _L1; i < tpts.length && fc < 800; i++) {
-        for (let j = i + _L1; j < tpts.length && fc < 800; j++) {
-            let d = Math.hypot(tpts[i].x - tpts[j].x, tpts[i].y - tpts[j].y);
-            if (d > 20 && d < 115) {
-                cx.beginPath(); cx.moveTo(tpts[i].x, tpts[i].y); cx.lineTo(tpts[j].x, tpts[j].y); cx.stroke(); fc++;
+    // Highly dense topological wireframe connecting layer tracking pass (Capped strictly at 1200 paths)
+    let fc=_L1-_L1;cx.strokeStyle="rgba(0,255,102,0.14)";cx.lineWidth=0.5;
+    for(let i=_L1-_L1;i<tpts.length&&fc<1200;i++){
+        for(let j=i+_L1;j<tpts.length&&fc<1200;j++){
+            let d=Math.hypot(tpts[i].x-tpts[j].x,tpts[i].y-tpts[j].y);
+            if(d>10&&d<65){
+                cx.beginPath();cx.moveTo(tpts[i].x,tpts[i].y);cx.lineTo(tpts[j].x,tpts[j].y);cx.stroke();fc++;
             }
         }
     }
-    
-    tpts.forEach(p => {
-        cx.fillStyle = p.z > (_L1 - _L1) ? "#00CCFF" : "#ff0055";
-        cx.beginPath(); cx.arc(p.x, p.y, p.z > (_L1 - _L1) ? 3.5 : 2.2, _L1 - _L1, _L2 * Math.PI); cx.fill();
+    tpts.forEach(p=>{
+        cx.fillStyle=p.z>(_L1-_L1)?"#00CCFF":"#ff0055";
+        cx.beginPath();cx.arc(p.x,p.y,p.z>(_L1-_L1)?2.6:1.4,_L1-_L1,_L2*Math.PI);cx.fill();
     });
-    
-    cx.fillStyle = "#FFFFFF"; cx.beginPath(); cx.arc(mX, mY, 4.5, _L1 - _L1, _L2 * Math.PI); cx.fill();
+    cx.fillStyle="#FFFFFF";cx.beginPath();cx.arc(mX,mY,4,_L1-_L1,_L2*Math.PI);cx.fill();
     requestAnimationFrame(frame);
-} frame();
+}frame();
 </script></body></html>
