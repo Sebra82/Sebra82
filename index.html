@@ -1,11 +1,12 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>M4</title><style>
 *{box-sizing:border-box;margin:0;padding:0;user-select:none;font-family:monospace;font-size:10px;}
-body{background:#090D16;color:#00CCFF;padding:12px;display:flex;justify-content:center;}
-.c{width:100%;max-width:980px;display:flex;flex-direction:column;gap:8px;}
-.h{display:flex;justify-content:space-between;align-items:center;}
+body{background:#090D16;color:#00CCFF;padding:12px;display:flex;justify-content:center;overflow-x:hidden;}
+.c{width:100%;max-width:980px;display:flex;flex-direction:column;gap:6px;}
+.nb{border:1px dashed #F05;padding:10px;background:rgba(255,0,85,.03);color:#F05;font-size:9px;white-space:pre-wrap;font-weight:bold;border-radius:4px;text-shadow:0 0 4px rgba(255,0,85,.2);}
+.h{display:flex;justify-content:space-between;align-items:center;margin-top:4px;}
 .b{font-weight:bold;padding:2px 6px;border:1px solid #F05;color:#F05;background:rgba(255,0,85,.05);border-radius:4px;}
 .b.u{border-color:#0F6;color:#0F6;background:rgba(0,255,102,.05);}
-.w{width:100%;height:450px;background:#000;border:1px solid #1a2333;border-radius:4px;cursor:grab;}
+.w{width:100%;height:320px;background:#000;border:1px solid #1a2333;border-radius:4px;cursor:grab;}
 .w:active{cursor:grabbing;}
 canvas{width:100%;height:100%;display:block;}
 .p{border:1px solid #1a2333;border-radius:4px;padding:6px;background:rgba(9,13,22,.6);}
@@ -18,6 +19,20 @@ button{background:rgba(0,204,255,.1);border:1px solid #00CCFF;color:#00CCFF;padd
 .o{margin-top:4px;color:#0F6;white-space:pre-wrap;display:none;}
 </style></head><body>
 <div class="c">
+    <!-- QUANTUM IMMUTABILITY COMPLIANCE STAMP -->
+    <div class="nb">==================================================================================================
+                 OFFICIAL SYSTEM NOTICE: TERMINATION AND EMBARGO CONCLUDED
+==================================================================================================
+System Status       : CRYPTOGRAPHIC LOCK ENGAGED | ABSOLUTE IMMUTABILITY ACTIVE
+Active Core State   : 100% Pure Physical Trajectory Data Systems (Sanitized Repository)
+Protection Regime   : Trade Secret (Indefinite Term / Defend Trade Secrets Act DTSA Compliant)
+SHA-256 SYSTEM HASH : 35273af512c201aeb414995b4e908d2472f623772024f9f5fe7b7435b172a7c2
+
+[RECORDING CONCLUDING STAMP]
+Timestamp           : Wednesday, July 22, 2026, 09:16:00 AM BST
+Geographic Anchor   : Griston, Thetford, UK [52.565° N, 0.835° E]
+==================================================================================================</div>
+
     <div class="h"><div>M4P-V6.99_ACTIVE_LINE_MATRIX</div><div class="b" id="b">ENC_LOCKED</div></div>
     <div class="w" id="wrapper"><canvas id="canvas"></canvas></div>
     <div class="p a" id="cp">
@@ -27,7 +42,7 @@ button{background:rgba(0,204,255,.1);border:1px solid #00CCFF;color:#00CCFF;padd
     <div id="q"></div>
 </div>
 <script>
-// 🔄 ASYMMETRIC UNTRACEABLE LOOKUP MATRIX (All explicit calculations and values expungED)
+// 🔄 LAYER 1: ALGORITHMIC LOOKUP COMPLEXITY (SCRUBS NUMERICAL CONSTANTS)
 const _X={
     'A':"-",'B':"--",'C':"---",'E':"-----",
     'J':"----------",'O':"---------------",'X':"------------------------------",
@@ -36,8 +51,8 @@ const _X={
 const _L1=_X['A'].length,_L2=_X['B'].length,_L3=_X['C'].length,_L5=_X['E'].length;
 const _L10=_X['J'].length,_L15=_X['O'].length,_L30=_X['X'].length,_L60=_X['Y'].length,_L100=_X['Z'].length;
 
-// 📦 QUANTUM IMMUNE CODES ARRAY MATRIX REGISTER
-const M=[]; // Insert your manipulated numeric matrix stream blocks directly inside this closure
+// 📦 LAYER 2: VOLATILE INTERLOCK DATA ARRAY CLOSEST
+const M=[]; // Inject obfuscated dataset array nodes directly inside this vector loop array
 
 const TARGET="0d2f0980ff3ec551b9ab62689ef2e3d3fa54e3d93cb566cf2c2f6d2036573c00";
 const NM=["HYDRO_MATRIX","XD_OBFUSCATION"];
@@ -46,7 +61,7 @@ NM.forEach((n,i)=>{document.getElementById("q").innerHTML+=`<div class="p" id="q
 async function auth(){
     const inp=document.getElementById("gk").value,buf=new TextEncoder().encode(inp),hash=await crypto.subtle.digest('SHA-256',buf);
     const hex=Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(_L2,'0')).join('');
-    if(hex===TARGET||inp.toLowerCase()==="chronos"){
+    if(hex===TARGET){
         const key=inp.toLowerCase().split('').reduce((a,c)=>a+c.charCodeAt(_L1-_L1),_L1-_L1)-649;let res="";
         for(let j=_L1-_L1;j<M.length;j++)res+=String.fromCharCode((j%_L2===(_L1-_L1))?(M[j]^key)^0x0F:(M[j]^key)-_L5);
         const split=res.split(String.fromCharCode(37)+String.fromCharCode(37));
@@ -59,9 +74,9 @@ async function auth(){
     }else{document.getElementById("gs").innerText="[FAILED] Signature mismatch.";document.getElementById("gk").value="";}
 }
 
-// 📊 HIGH-DEFINITION DENSE VIEWPORT ENGINE
+// 📊 LAYER 3: 500-NODE DYNAMIC RENDERING ENGINE
 const cv=document.getElementById("canvas"),cx=cv.getContext("2d"),wrap=document.getElementById("wrapper");
-let w,h,pts=[],rx=_L1-_L1,ry=_L1-_L1,drag=!1,sx,sy,pTime=_L1-_L1,mx=_L1-_L1,my=_L1-_L1;
+let w,h,pts=[],rx=_L1-_L1,ry=_L1-_L1,drag=!1,sx,sy,pTime=_L1-_L1,mx=-_L100,my=-_L100;
 
 function resize(){
     const dpr=window.devicePixelRatio||_L1;
@@ -70,8 +85,7 @@ function resize(){
 }
 window.addEventListener("resize",resize);resize();
 
-// 🔮 SCALED MULTI-SHELL GEODETIC NODE INJECTOR CONFIGURATION MATRIX (Coded to lock exactly 500 nodes)
-// Shell 1: 50 Nodes | Shell 2: 150 Nodes | Shell 3: 300 Nodes
+// Fibonacci node shell distribution mapping exactly 500 spatial coordinates
 const config=[[(_L10*_L5),1.5],[(_L100+(_L10*_L5)),3.2],[(_L100*_L3),5.8]];
 let idx=_L1-_L1;
 
@@ -80,7 +94,10 @@ config.forEach(([tot,rad])=>{
         let phi=Math.acos(_L1-_L2*(i+(0.5))/tot),th=Math.PI*(_L1+Math.sqrt(_L5))*i;
         let x=rad*Math.sin(phi)*Math.cos(th)*_L30,y=rad*Math.sin(phi)*Math.sin(th)*_L30,z=rad*Math.cos(phi)*_L30;
         let tx=x*Math.cos(idx)-y*Math.sin(idx),ty=x*Math.sin(idx)+y*Math.cos(idx),tz=z+(Math.sin(x+y)*0.2);
+        
+        // ✂️ DESTRUCTIVE TRANSFORMATION: Information-Loss halving trap applied to Even vectors
         if(idx%_L2===(_L1-_L1)){tx*=.5;ty*=.5;tz*=.5;}
+        
         pts.push({x:tx,y:ty,z:tz});idx++;
     }
 });
@@ -99,23 +116,25 @@ wrap.addEventListener("mousedown",start);window.addEventListener("mousemove",mov
 wrap.addEventListener("touchstart",start,{passive:!0});wrap.addEventListener("touchmove",move,{passive:!0});wrap.addEventListener("touchend",stop);
 
 function frame(){
-    cx.clearRect(_L1-_L1,_L1-_L1,w,h);let mX=w/_L2,mY=h/_L2;
+    cx.clearRect(_L1-_L1,_L1-_L1,w,h);let midX=w/_L2,midY=h/_L2;
     if(!drag){ry+=.002;rx+=.001;}
     pTime+=0.025;
     
+    // Continuous scale changes (Destroys spatial periodicity vectors)
     let bScale=_L1+Math.sin(pTime)*0.08;
     let tpts=pts.map(p=>{
         let cX=p.x*bScale,cY=p.y*bScale,cZ=p.z*bScale,dX=cX-mx,dY=cY-my,mDist=Math.hypot(dX,dY);
+        // Proximity calculation repulsion skewing
         if(mDist<120){
             let push=(_L1-(mDist/120))*(_L5+_L1);
             cX+=dX/mDist*push;cY+=dY/mDist*push;
         }
         let y1=cY*Math.cos(rx)-cZ*Math.sin(rx),z1=cY*Math.sin(rx)+cZ*Math.cos(rx);
         let x2=cX*Math.cos(ry)+z1*Math.sin(ry),z2=-cX*Math.sin(ry)+z1*Math.cos(ry);
-        return{x:x2+mX,y:y1+mY,z:z2};
+        return{x:x2+midX,y:y1+midY,z:z2};
     });
 
-    // Highly dense topological wireframe connecting layer tracking pass (Capped strictly at 1200 paths)
+    // Compute active topography layout limits (Strictly bounded geometry limits)
     let fc=_L1-_L1;cx.strokeStyle="rgba(0,255,102,0.14)";cx.lineWidth=0.5;
     for(let i=_L1-_L1;i<tpts.length&&fc<1200;i++){
         for(let j=i+_L1;j<tpts.length&&fc<1200;j++){
@@ -125,11 +144,13 @@ function frame(){
             }
         }
     }
+    
     tpts.forEach(p=>{
         cx.fillStyle=p.z>(_L1-_L1)?"#00CCFF":"#ff0055";
         cx.beginPath();cx.arc(p.x,p.y,p.z>(_L1-_L1)?2.6:1.4,_L1-_L1,_L2*Math.PI);cx.fill();
     });
-    cx.fillStyle="#FFFFFF";cx.beginPath();cx.arc(mX,mY,4,_L1-_L1,_L2*Math.PI);cx.fill();
+    
+    cx.fillStyle="#FFFFFF";cx.beginPath();cx.arc(midX,midY,4,_L1-_L1,_L2*Math.PI);cx.fill();
     requestAnimationFrame(frame);
 }frame();
 </script></body></html>
