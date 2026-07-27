@@ -47,7 +47,9 @@ async function auth(){
     }else{document.getElementById("gs").innerText="[FAILED] Signature mismatch.";document.getElementById("gk").value="";}
 }
 const cv=document.getElementById("canvas"),cx=cv.getContext("2d"),wrap=document.getElementById("wrapper");
-let w,h,pts=[],rx=0,ry=0,drag=!1,sx,sy;
+let w,h,pts=[],rx=0,ry=0,drag=!1,sx,sy,pulseTime=0;
+let mouseX=0,mouseY=0; // Tracks live interaction displacement vectors
+
 function resize(){
     const dpr=window.devicePixelRatio||1;
     w=wrap.clientWidth;h=wrap.clientHeight;
@@ -55,42 +57,76 @@ function resize(){
 }
 window.addEventListener("resize",resize);resize();
 
-// 🔮 INTENSE 4D TOPOGRAPHY GENERATOR (Increased density + explicit scaling transforms)
+// 🔮 INTENSE 4D TOPOGRAPHY GENERATOR (100 Nodes Geodetic Layer Allocation Set)
 const config=[[15,1.5],[35,3.2],[50,5.8]];let idx=0;
-config.forEach(([tot,rad])=>{
+config.forEach(([tot,rad]) => {
     for(let i=0;i<tot;i++){
         let phi=Math.acos(1-2*(i+.5)/tot),th=Math.PI*(1+Math.sqrt(5))*i;
-        // Zoom and scale boundaries optimized to fill out the 450px canvas window
         let x=rad*Math.sin(phi)*Math.cos(th)*32,y=rad*Math.sin(phi)*Math.sin(th)*32,z=rad*Math.cos(phi)*32;
         let tx=x*Math.cos(idx)-y*Math.sin(idx),ty=x*Math.sin(idx)+y*Math.cos(idx),tz=z+(Math.sin(x+y)*.2);
-        if(idx%2===0){tx*=.5;ty*=.5;tz*=.5;}pts.push({x:tx,y:ty,z:tz});idx++;
+        if(idx%2===0){tx*=.5;ty*=.5;tz*=.5;}
+        // Store phase bias parameter directly in the vertex record to power local distortion engines
+        pts.push({x:tx,y:ty,z:tz,baseRad:rad,bias:idx});
+        idx++;
     }
 });
 
 function ptr(e){return e.touches?e.touches[0]:e;}
 const start=(e)=>{drag=!0;const p=ptr(e);sx=p.clientX;sy=p.clientY;};
-const move=(e)=>{if(!drag)return;const p=ptr(e);ry+=(p.clientX-sx)*.006;rx+=(p.clientY-sy)*.006;sx=p.clientX;sy=p.clientY;};
+const move=(e)=>{
+    const p=ptr(e);
+    // Track cursor coordinates relative to screen canvas center for physics projection distortions
+    const rect=cv.getBoundingClientRect();
+    mouseX=(p.clientX-rect.left)-(w/2);
+    mouseY=(p.clientY-rect.top)-(h/2);
+    if(!drag)return;
+    ry+=(p.clientX-sx)*.006;rx+=(p.clientY-sy)*.006;sx=p.clientX;sy=p.clientY;
+};
 const stop=()=>drag=!1;
 
 wrap.addEventListener("mousedown",start);window.addEventListener("mousemove",move);window.addEventListener("mouseup",stop);
-wrap.addEventListener("touchstart",start,{passive:!0});window.addEventListener("touchmove",move,{passive:!0});window.addEventListener("touchend",stop);
+wrap.addEventListener("touchstart",start,{passive:!0});wrap.addEventListener("touchmove",move,{passive:!0});wrap.addEventListener("touchend",stop);
 
 function frame(){
-    cx.clearRect(0,0,w,h);let midX=w/2,midY=h/2;if(!drag){ry+=.002;rx+=.001;}
+    cx.clearRect(0,0,w,h);let midX=w/2,midY=h/2;
+    if(!drag){ry+=.002;rx+=.001;}
+    pulseTime+=0.025; // Powers the dynamic breathing loop
+
+    // Compute live metric breathing expansion scalar
+    let breatheScale=1+Math.sin(pulseTime)*0.08;
+
     let tpts=pts.map(p=>{
-        let y1=p.y*Math.cos(rx)-p.z*Math.sin(rx),z1=p.y*Math.sin(rx)+p.z*Math.cos(rx);
-        let x2=p.x*Math.cos(ry)+z1*Math.sin(ry),z2=-p.x*Math.sin(ry)+z1*Math.cos(ry);
+        // Apply synchronized breathing contraction directly to structural vertex positions
+        let curX=p.x*breatheScale,curY=p.y*breatheScale,curZ=p.z*breatheScale;
+        
+        // Interactive proximity field tracking: warp nodes closest to active user mouse positions
+        let dx=curX-mouseX,dy=curY-mouseY;
+        let mouseDist=Math.hypot(dx,dy);
+        if(mouseDist<120){
+            let pushFactor=(1-(mouseDist/120))*6;
+            curX+=dx/mouseDist*pushFactor;curY+=dy/mouseDist*pushFactor;
+        }
+
+        let y1=curY*Math.cos(rx)-curZ*Math.sin(rx),z1=curY*Math.sin(rx)+curZ*Math.cos(rx);
+        let x2=curX*Math.cos(ry)+z1*Math.sin(ry),z2=-curX*Math.sin(ry)+z1*Math.cos(ry);
         return{x:x2+midX,y:y1+midY,z:z2};
     });
-    // High-definition interlocking vertex wireframe mapping logic
-    let fc=0;cx.strokeStyle="rgba(0,255,102,0.14)";cx.lineWidth=.5;
+
+    // High-definition interactive network linking pass
+    let fc=0;cx.strokeStyle="rgba(0,255,102,0.15)";cx.lineWidth=.5;
     for(let i=0;i<tpts.length&&fc<800;i++){
         for(let j=i+1;j<tpts.length&&fc<800;j++){
             let d=Math.hypot(tpts[i].x-tpts[j].x,tpts[i].y-tpts[j].y);
-            if(d>20&&d<110){cx.beginPath();cx.moveTo(tpts[i].x,tpts[i].y);cx.lineTo(tpts[j].x,tpts[j].y);cx.stroke();fc++;}
+            if(d>20&&d<115){
+                cx.beginPath();cx.moveTo(tpts[i].x,tpts[i].y);cx.lineTo(tpts[j].x,tpts[j].y);cx.stroke();fc++;
+            }
         }
     }
-    tpts.forEach(p=>{cx.fillStyle=p.z>0?"#00CCFF":"#ff0055";cx.beginPath();cx.arc(p.x,p.y,p.z>0?3.2:2,0,2*Math.PI);cx.fill();});
-    cx.fillStyle="#FFFFFF";cx.beginPath();cx.arc(midX,midY,4.5,0,2*Math.PI);cx.fill();requestAnimationFrame(frame);
+    tpts.forEach(p=>{
+        cx.fillStyle=p.z>0?"#00CCFF":"#ff0055";cx.beginPath();
+        cx.arc(p.x,p.y,p.z>0?3.5:2.2,0,2*Math.PI);cx.fill();
+    });
+    cx.fillStyle="#FFFFFF";cx.beginPath();cx.arc(midX,midY,4.5,0,2*Math.PI);cx.fill();
+    requestAnimationFrame(frame);
 }frame();
 </script></body></html>
