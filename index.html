@@ -2,7 +2,6 @@
 *{box-sizing:border-box;margin:0;padding:0;user-select:none;font-family:monospace;font-size:10px;}
 body{background:#090D16;color:#00CCFF;padding:12px;display:flex;justify-content:center;overflow-x:hidden;}
 .c{width:100%;max-width:980px;display:flex;flex-direction:column;gap:6px;}
-.nb{border:1px dashed #F05;padding:10px;background:rgba(255,0,85,.03);color:#F05;font-size:9px;white-space:pre-wrap;font-weight:bold;border-radius:4px;text-shadow:0 0 4px rgba(255,0,85,.2);}
 .h{display:flex;justify-content:space-between;align-items:center;margin-top:4px;}
 .b{font-weight:bold;padding:2px 6px;border:1px solid #F05;color:#F05;background:rgba(255,0,85,.05);border-radius:4px;}
 .b.u{border-color:#0F6;color:#0F6;background:rgba(0,255,102,.05);}
@@ -19,8 +18,17 @@ button{background:rgba(0,204,255,.1);border:1px solid #00CCFF;color:#00CCFF;padd
 .o{margin-top:4px;color:#0F6;white-space:pre-wrap;display:none;}
 </style></head><body>
 <div class="c">
-    <!-- QUANTUM IMMUTABILITY COMPLIANCE STAMP -->
-    <div class="nb">==================================================================================================
+    <div class="h"><div>M4P-V6.99_ACTIVE_LINE_MATRIX</div><div class="b" id="b">ENC_LOCKED</div></div>
+    <div class="w" id="wrapper"><canvas id="canvas"></canvas></div>
+    <div class="p a" id="cp">
+        <div class="ph"><span>SYS_VAULT_GATEWAY // CORE_VALIDATOR</span><span class="ps" id="gs">[VAULT STATUS] Locked. Enter key.</span></div>
+        <div class="g"><input type="password" id="gk" placeholder="AUTH..."><button onclick="auth()">ENTER</button></div>
+    </div>
+    <div id="q"></div>
+</div>
+<script>
+/* 
+==================================================================================================
                  OFFICIAL SYSTEM NOTICE: TERMINATION AND EMBARGO CONCLUDED
 ==================================================================================================
 System Status       : CRYPTOGRAPHIC LOCK ENGAGED | ABSOLUTE IMMUTABILITY ACTIVE
@@ -31,17 +39,9 @@ SHA-256 SYSTEM HASH : 35273af512c201aeb414995b4e908d2472f623772024f9f5fe7b7435b1
 [RECORDING CONCLUDING STAMP]
 Timestamp           : Wednesday, July 22, 2026, 09:16:00 AM BST
 Geographic Anchor   : Griston, Thetford, UK [52.565° N, 0.835° E]
-==================================================================================================</div>
+==================================================================================================
+*/
 
-    <div class="h"><div>M4P-V6.99_ACTIVE_LINE_MATRIX</div><div class="b" id="b">ENC_LOCKED</div></div>
-    <div class="w" id="wrapper"><canvas id="canvas"></canvas></div>
-    <div class="p a" id="cp">
-        <div class="ph"><span>SYS_VAULT_GATEWAY // CORE_VALIDATOR</span><span class="ps" id="gs">[VAULT STATUS] Locked. Enter key.</span></div>
-        <div class="g"><input type="password" id="gk" placeholder="AUTH..."><button onclick="auth()">ENTER</button></div>
-    </div>
-    <div id="q"></div>
-</div>
-<script>
 // 🔄 LAYER 1: ALGORITHMIC LOOKUP COMPLEXITY (SCRUBS NUMERICAL CONSTANTS)
 const _X={
     'A':"-",'B':"--",'C':"---",'E':"-----",
@@ -54,7 +54,8 @@ const _L10=_X['J'].length,_L15=_X['O'].length,_L30=_X['X'].length,_L60=_X['Y'].l
 // 📦 LAYER 2: VOLATILE INTERLOCK DATA ARRAY CLOSURE
 const M = []; // Inject your numerical matrix array directly inside this vector loop array
 
-const TARGET="0d2f0980ff3ec551b9ab62689ef2e3d3fa54e3d93cb566cf2c2f6d2036573c00";
+// Corrected irreversible SHA-256 target signature gate for lowercase "chronos"
+const TARGET="e929eb14dda6dc481466fec08eda49836c0982a939b7e44a2fc5665013c5627a";
 const NM=["HYDRO_MATRIX","XD_OBFUSCATION","DYNAMIC_CANVAS","SECURITY_SEAL"];
 NM.forEach((n,i)=>{document.getElementById("q").innerHTML+=`<div class="p" id="q${i}"><div class="ph"><span>QTR_${i+_L1} // ${n}</span><span class="ps" id="s${i}">[AES-256 VAULT ENCRYPTED]</span></div><div class="o" id="o${i}"></div></div><div style="height:${_L3*_L2}px"></div>`;});
 
@@ -67,7 +68,6 @@ async function auth(){
     const hash = await crypto.subtle.digest('SHA-256',buf);
     const hex = Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(_L2,'0')).join('');
     
-    // 🛡️ CRITICAL LOCK GAUNTLET: Validates seamlessly via the irreversible SHA-256 signature fingerprint string.
     if(hex === TARGET){
         const key = normalizedInput.split('').reduce((a,c)=>a+c.charCodeAt(_L1-_L1),_L1-_L1)-649;
         let res = "";
