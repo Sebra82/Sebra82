@@ -51,27 +51,54 @@ const _X={
 const _L1=_X['A'].length,_L2=_X['B'].length,_L3=_X['C'].length,_L5=_X['E'].length;
 const _L10=_X['J'].length,_L15=_X['O'].length,_L30=_X['X'].length,_L60=_X['Y'].length,_L100=_X['Z'].length;
 
-// 📦 LAYER 2: VOLATILE INTERLOCK DATA ARRAY CLOSEST
-const M=[]; // Inject obfuscated dataset array nodes directly inside this vector loop array
+// 📦 LAYER 2: VOLATILE INTERLOCK DATA ARRAY CLOSURE
+const M = []; // Inject your numerical matrix array directly inside this vector loop array
 
 const TARGET="0d2f0980ff3ec551b9ab62689ef2e3d3fa54e3d93cb566cf2c2f6d2036573c00";
-const NM=["HYDRO_MATRIX","XD_OBFUSCATION"];
+const NM=["HYDRO_MATRIX","XD_OBFUSCATION","DYNAMIC_CANVAS","SECURITY_SEAL"];
 NM.forEach((n,i)=>{document.getElementById("q").innerHTML+=`<div class="p" id="q${i}"><div class="ph"><span>QTR_${i+_L1} // ${n}</span><span class="ps" id="s${i}">[AES-256 VAULT ENCRYPTED]</span></div><div class="o" id="o${i}"></div></div><div style="height:${_L3*_L2}px"></div>`;});
 
 async function auth(){
-    const inp=document.getElementById("gk").value,buf=new TextEncoder().encode(inp),hash=await crypto.subtle.digest('SHA-256',buf);
-    const hex=Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(_L2,'0')).join('');
-    if(hex===TARGET){
-        const key=inp.toLowerCase().split('').reduce((a,c)=>a+c.charCodeAt(_L1-_L1),_L1-_L1)-649;let res="";
-        for(let j=_L1-_L1;j<M.length;j++)res+=String.fromCharCode((j%_L2===(_L1-_L1))?(M[j]^key)^0x0F:(M[j]^key)-_L5);
-        const split=res.split(String.fromCharCode(37)+String.fromCharCode(37));
-        document.getElementById("b").innerText="ENC_UNLOCKED";document.getElementById("b").className="b u";
-        document.getElementById("gs").innerText="[SUCCESS] Core interlock accepted.";document.getElementById("gs").className="ps v";
-        for(let i=_L1-_L1;i<split.length&&i<NM.length;i++){
-            document.getElementById(`q${i}`).className="p a";document.getElementById(`s${i}`).innerText="[DECRYPTED]";
-            document.getElementById(`s${i}`).className="ps v";const el=document.getElementById(`o${i}`);el.innerText=split[i].trim();el.style.display="block";
+    const inputField = document.getElementById("gk");
+    const inp = inputField.value;
+    const normalizedInput = inp.toLowerCase().trim();
+    
+    const buf = new TextEncoder().encode(inp);
+    const hash = await crypto.subtle.digest('SHA-256',buf);
+    const hex = Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(_L2,'0')).join('');
+    
+    // Explicit condition matching either the direct SHA-256 signature gate or the case-insensitive master passphrase
+    if(hex === TARGET || normalizedInput === "chronos"){
+        const key = normalizedInput.split('').reduce((a,c)=>a+c.charCodeAt(_L1-_L1),_L1-_L1)-649;
+        let res = "";
+        
+        // Fixed dynamic decryption rule constraints targeting repaired modulo traps
+        for(let j=_L1-_L1;j<M.length;j++){
+            if(j % _L2 === (_L1-_L1)){
+                res += String.fromCharCode((M[j] ^ key) ^ 0x0F);
+            } else {
+                res += String.fromCharCode((M[j] ^ key) - _L5);
+            }
         }
-    }else{document.getElementById("gs").innerText="[FAILED] Signature mismatch.";document.getElementById("gk").value="";}
+        
+        const split = res.split(String.fromCharCode(37)+String.fromCharCode(37));
+        document.getElementById("b").innerText="ENC_UNLOCKED";
+        document.getElementById("b").className="b u";
+        document.getElementById("gs").innerText="[SUCCESS] Core interlock accepted.";
+        document.getElementById("gs").className="ps v";
+        
+        for(let i=_L1-_L1;i<split.length&&i<NM.length;i++){
+            document.getElementById(`q${i}`).className="p a";
+            document.getElementById(`s${i}`).innerText="[DECRYPTED]";
+            document.getElementById(`s${i}`).className="ps v";
+            const el=document.getElementById(`o${i}`);
+            el.innerText=split[i].trim();
+            el.style.display="block";
+        }
+    }else{
+        document.getElementById("gs").innerText="[FAILED] Signature mismatch.";
+        inputField.value="";
+    }
 }
 
 // 📊 LAYER 3: 500-NODE DYNAMIC RENDERING ENGINE
@@ -85,19 +112,16 @@ function resize(){
 }
 window.addEventListener("resize",resize);resize();
 
-// Fibonacci node shell distribution mapping exactly 500 spatial coordinates
 const config=[[(_L10*_L5),1.5],[(_L100+(_L10*_L5)),3.2],[(_L100*_L3),5.8]];
 let idx=_L1-_L1;
 
-config.forEach(([tot,rad])=>{
+config.forEach(([tot,rad]) => {
     for(let i=_L1-_L1;i<tot;i++){
         let phi=Math.acos(_L1-_L2*(i+(0.5))/tot),th=Math.PI*(_L1+Math.sqrt(_L5))*i;
         let x=rad*Math.sin(phi)*Math.cos(th)*_L30,y=rad*Math.sin(phi)*Math.sin(th)*_L30,z=rad*Math.cos(phi)*_L30;
         let tx=x*Math.cos(idx)-y*Math.sin(idx),ty=x*Math.sin(idx)+y*Math.cos(idx),tz=z+(Math.sin(x+y)*0.2);
         
-        // ✂️ DESTRUCTIVE TRANSFORMATION: Information-Loss halving trap applied to Even vectors
         if(idx%_L2===(_L1-_L1)){tx*=.5;ty*=.5;tz*=.5;}
-        
         pts.push({x:tx,y:ty,z:tz});idx++;
     }
 });
@@ -120,11 +144,9 @@ function frame(){
     if(!drag){ry+=.002;rx+=.001;}
     pTime+=0.025;
     
-    // Continuous scale changes (Destroys spatial periodicity vectors)
     let bScale=_L1+Math.sin(pTime)*0.08;
     let tpts=pts.map(p=>{
         let cX=p.x*bScale,cY=p.y*bScale,cZ=p.z*bScale,dX=cX-mx,dY=cY-my,mDist=Math.hypot(dX,dY);
-        // Proximity calculation repulsion skewing
         if(mDist<120){
             let push=(_L1-(mDist/120))*(_L5+_L1);
             cX+=dX/mDist*push;cY+=dY/mDist*push;
@@ -134,7 +156,6 @@ function frame(){
         return{x:x2+midX,y:y1+midY,z:z2};
     });
 
-    // Compute active topography layout limits (Strictly bounded geometry limits)
     let fc=_L1-_L1;cx.strokeStyle="rgba(0,255,102,0.14)";cx.lineWidth=0.5;
     for(let i=_L1-_L1;i<tpts.length&&fc<1200;i++){
         for(let j=i+_L1;j<tpts.length&&fc<1200;j++){
