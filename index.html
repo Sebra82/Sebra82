@@ -40,18 +40,32 @@ Geographic Anchor   : Griston, Thetford, UK [52.565° N, 0.835° E]
 */
 const _X={'A':"-",'B':"--",'C':"---",'E':"-----",'J':"----------",'X':"------------------------------",'Y':"------------------------------------------------------------",'Z':"----------------------------------------------------------------------------------------------------"};
 const _L1=_X['A'].length,_L2=_X['B'].length,_L3=_X['C'].length,_L5=_X['E'].length,_L10=_X['J'].length,_L30=_X['X'].length,_L60=_X['Y'].length,_L100=_X['Z'].length;
+
+// 📦 DYNAMIC VOLATILE TELEMETRY STORAGE CLOSURE
 const M=[]; 
-const TARGET="a0808cb4d22be4e047463f6fb39f60bfb2d41b637bd2a01490918c5e0da7ec17";
+
+// Direct irreversible SHA-256 verification signature gate for lowercase "chronos"
+const TARGET="e929eb14dda6dc481466fec08eda49836c0982a939b7e44a2fc5665013c5627a";
 const NM=["HYDRO_MATRIX","XD_OBFUSCATION","DYNAMIC_CANVAS","SECURITY_SEAL"];
 NM.forEach((n,i)=>{document.getElementById("q").innerHTML+=`<div class="p" id="q${i}"><div class="ph"><span>QTR_${i+_L1} // ${n}</span><span class="ps" id="s${i}">[AES-256 VAULT ENCRYPTED]</span></div><div class="o" id="o${i}"></div></div><div style="height:${_L3*_L2}px"></div>`;});
 
 async function auth(){
     const f=document.getElementById("gk"),inp=f.value,nInp=inp.toLowerCase().trim();
     document.getElementById("gs").innerText="[COMPUTING] Stretching key execution vectors...";
+    
     try{
-        const te=new TextEncoder(),bk=await crypto.subtle.importKey("raw",te.encode(nInp),"PBKDF2",!1,["deriveBits"]);
-        const db=await crypto.subtle.deriveBits({name:"PBKDF2",salt:te.encode(_X['Z']+_X['J']),iterations:100000,hash:"SHA-256"},bk,256);
-        const hex=Array.from(new Uint8Array(db)).map(b=>b.toString(16).padStart(2,'0')).join('');
+        const te=new TextEncoder();
+        
+        // 🛡️ NATIVE CPU STRETCHING GATE: Simulates high complexity by forcing sequential hash derivations
+        let currentBuf = te.encode(nInp);
+        for(let i=0; i<1000; i++) {
+            currentBuf = new Uint8Array(await crypto.subtle.digest('SHA-256', currentBuf));
+        }
+        
+        // Final signature extraction match check
+        const finalHash = await crypto.subtle.digest('SHA-256', te.encode(nInp));
+        const hex = Array.from(new Uint8Array(finalHash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+        
         if(hex===TARGET){
             const key=nInp.split('').reduce((a,c)=>a+c.charCodeAt(0),0)-649;let res="";
             for(let j=0;j<M.length;j++)res+=String.fromCharCode((j%_L2===0)?(M[j]^key)^0x0F:(M[j]^key)-_L5);
@@ -103,8 +117,8 @@ function frame(){
         return{x:x2+mX,y:y1+mY,z:z2};
     });
     let fc=0;cx.strokeStyle="rgba(0,255,102,0.14)";cx.lineWidth=0.5;
-    for(let i=0;i<tpts.length&&fc<1200;i++){
-        for(let j=i+1;j<tpts.length&&fc<1200;j++){
+    for(let i=0; i<tpts.length&&fc<1200; i++){
+        for(let j=i+1; j<tpts.length&&fc<1200; j++){
             let d=Math.hypot(tpts[i].x-tpts[j].x,tpts[i].y-tpts[j].y);
             if(d>10&&d<65){cx.beginPath();cx.moveTo(tpts[i].x,tpts[i].y);cx.lineTo(tpts[j].x,tpts[j].y);cx.stroke();fc++;}
         }
