@@ -3,71 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>M4P - V6.99_ACTIVE_LINE_MATRIX</title>
+    <title>M4P</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
-        body { background-color: #090D16; color: #00CCFF; font-family: monospace; font-size: 9px; display: flex; justify-content: center; padding: 10px; overflow-x: hidden; }
-        .container { width: 100%; max-width: 980px; display: flex; flex-direction: column; gap: 8px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: monospace; font-size: 9px; }
+        body { background: #090D16; color: #00CCFF; padding: 10px; display: flex; justify-content: center; }
+        .c { width: 100%; max-width: 980px; display: flex; flex-direction: column; gap: 6px; }
         .h { display: flex; justify-content: space-between; align-items: center; }
-        .badge { font-weight: bold; padding: 2px 6px; border: 1px solid #FF0055; border-radius: 4px; color: #FF0055; background: rgba(255,0,85,0.05); }
-        .badge.u { border-color: #00FF66; color: #00FF66; background: rgba(0,255,102,0.05); }
-        .cw { width: 100%; height: 300px; background: #000; border: 1px solid #1a2333; border-radius: 4px; }
+        .b { font-weight: bold; padding: 2px 6px; border: 1px solid #F05; color: #F05; background: rgba(255,0,85,0.05); border-radius: 4px; }
+        .b.u { border-color: #0F6; color: #0F6; background: rgba(0,255,102,0.05); }
+        .w { width: 100%; height: 300px; background: #000; border: 1px solid #1a2333; border-radius: 4px; }
         canvas { width: 100%; height: 100%; display: block; }
-        .p { border: 1px solid #1a2333; border-radius: 4px; padding: 8px; background: rgba(9,13,22,0.6); }
+        .p { border: 1px solid #1a2333; border-radius: 4px; padding: 6px; background: rgba(9,13,22,0.6); }
         .p.a { border-color: #00CCFF; background: rgba(0,204,255,0.02); }
-        .p-h { display: flex; justify-content: space-between; margin-bottom: 4px; color: #8ab4f8; }
-        .p-s { color: #FF0055; }
-        .p-s.v { color: #00FF66; }
-        .g-w { display: flex; gap: 8px; margin-top: 4px; }
-        input { background: #000; border: 1px solid #00CCFF; color: #00FF66; font-family: monospace; padding: 4px; flex-grow: 1; border-radius: 3px; outline: none; }
-        button { background: rgba(0,204,255,0.1); border: 1px solid #00CCFF; color: #00CCFF; padding: 4px 10px; cursor: pointer; font-family: monospace; border-radius: 3px; }
-        .out { margin-top: 6px; color: #00FF66; white-space: pre-wrap; display: none; }
+        .ph { display: flex; justify-content: space-between; margin-bottom: 2px; color: #8ab4f8; }
+        .ps { color: #F05; }
+        .ps.v { color: #0F6; }
+        .g { display: flex; gap: 6px; margin-top: 2px; }
+        input { background: #000; border: 1px solid #00CCFF; color: #0F6; padding: 4px; flex-grow: 1; border-radius: 3px; outline: none; }
+        button { background: rgba(0,204,255,0.1); border: 1px solid #00CCFF; color: #00CCFF; padding: 4px 8px; cursor: pointer; border-radius: 3px; }
+        .o { margin-top: 4px; color: #0F6; white-space: pre-wrap; display: none; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="h">
-        <div>M4P-V6.99_ACTIVE_LINE_MATRIX</div>
-        <div class="badge" id="b">ENC_LOCKED</div>
-    </div>
-
-    <div class="cw"><canvas id="c"></canvas></div>
-
+<div class="c">
+    <div class="h"><div>M4P-V6.99_ACTIVE_LINE_MATRIX</div><div class="b" id="b">ENC_LOCKED</div></div>
+    <div class="w"><canvas id="canvas"></canvas></div>
     <div class="p a" id="cp">
-        <div class="p-h">
-            <span>SYS_VAULT_GATEWAY // CORE_VALIDATOR</span>
-            <span class="p-s" id="gs">[VAULT STATUS] System payload locked. Enter authorization key.</span>
-        </div>
-        <div class="g-w">
-            <input type="password" id="gk" placeholder="EXECUTE GATE PHRASE AUTH...">
-            <button onclick="auth()">ENTER</button>
-        </div>
+        <div class="ph"><span>SYS_VAULT_GATEWAY // CORE_VALIDATOR</span><span class="ps" id="gs">[VAULT STATUS] System payload locked. Enter authorization key.</span></div>
+        <div class="g"><input type="password" id="gk" placeholder="EXECUTE GATE PHRASE AUTH..."><button onclick="auth()">ENTER</button></div>
     </div>
-
-    <div class="p" id="q1"><div class="p-h"><span>QTR_1 // HYDRO_MATRIX</span><span class="p-s">[AES-256 VAULT ENCRYPTED]</span></div><div class="out" id="o1"></div></div>
-    <div class="p" id="q2"><div class="p-h"><span>QTR_2 // XD_OBFUSCATION</span><span class="p-s">[AES-256 VAULT ENCRYPTED]</span></div><div class="out" id="o2"></div></div>
-    <div class="p" id="q3"><div class="p-h"><span>QTR_3 // DYNAMIC_CANVAS</span><span class="p-s">[AES-256 VAULT ENCRYPTED]</span></div><div class="out" id="o3"></div></div>
-    <div class="p" id="q4"><div class="p-h"><span>QTR_4 // SECURITY_SEAL</span><span class="p-s">[AES-256 VAULT ENCRYPTED]</span></div><div class="out" id="o4"></div></div>
+    <div id="q"></div>
 </div>
 
 <script>
-    // 🔄 RECURSIVE LOOKUP MATRIX: Numerical scalars calculated from structural string lines
+    // 🔄 LINE MATRIX LOOKUP PIPELINE
     const _X = {
-        'A': "-", 'B': "--", 'C': "---", 'D': "----", 'E': "-----",
-        'H': "--------", 'J': "----------", 'L': "------------",
-        'O': "---------------", 'X': "------------------------------",
-        'Y': "------------------------------------------------------------",
-        'Z': "----------------------------------------------------------------------------------------------------"
+        'A': "-", 'B': "--", 'C': "---", 'D': "----", 'E': "-----", 'H': "--------", 
+        'J': "----------", 'X': "------------------------------", 'Y': "------------------------------------------------------------", 'Z': "----------------------------------------------------------------------------------------------------"
     };
+    const _L1 = _X['A'].length, _L2 = _X['B'].length, _L4 = _X['D'].length, _L5 = _X['E'].length, _L10 = _X['J'].length, _L30 = _X['X'].length, _L60 = _X['Y'].length, _L100 = _X['Z'].length;
 
-    const _L1 = _X['A'].length, _L2 = _X['B'].length, _L4 = _X['D'].length, _L5 = _X['E'].length;
-    const _L10 = _X['J'].length, _L30 = _X['X'].length, _L60 = _X['Y'].length, _L100 = _X['Z'].length;
-
-    // 📦 RECONSTRUCTIVE DATA MATRIX CORE STREAM
+    // 📦 ABSOLUTE COMPRESSED CORE MATRIX REGISTER
     const M = [];
 
     const TARGET = "0d2f0980ff3ec551b9ab62689ef2e3d3fa54e3d93cb566cf2c2f6d2036573c00";
+
+    // Dynamically spawn template elements to shred code footprint size
+    const names = ["HYDRO_MATRIX", "XD_OBFUSCATION", "DYNAMIC_CANVAS", "SECURITY_SEAL"];
+    const qDiv = document.getElementById("q");
+    names.forEach((n, i) => {
+        qDiv.innerHTML += `<div class="p" id="q${i+1}"><div class="ph"><span>QTR_${i+1} // ${n}</span><span class="ps" id="s${i+1}">[AES-256 VAULT ENCRYPTED]</span></div><div class="o" id="o${i+1}"></div></div><div style="height:6px"></div>`;
+    });
 
     async function auth() {
         const inp = document.getElementById("gk").value;
@@ -76,26 +63,24 @@
         const hex = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(_L2, '0')).join('');
 
         if (hex === TARGET) {
-            const key = inp.toLowerCase().split('').reduce((a, c) => a + c.charCodeAt(_L1 - _L1), _L1 - _L1) - 649;
+            const key = inp.toLowerCase().split('').reduce((a, c) => a + c.charCodeAt(0), 0) - 649;
             let res = "";
-            for (let j = _L1 - _L1; j < M.length; j++) {
-                if (j % _L10 === (_L1 - _L1)) {
-                    res += String.fromCharCode((M[j] ^ key) ^ 0x0F);
-                } else {
-                    res += String.fromCharCode((M[j] ^ key) - _L5);
-                }
+            for (let j = 0; j < M.length; j++) {
+                if (j % _L2 === 0) res += String.fromCharCode((M[j] ^ key) ^ 0x0F);
+                else res += String.fromCharCode((M[j] ^ key) - _L5);
             }
 
             const split = res.split(String.fromCharCode(37) + String.fromCharCode(37));
             document.getElementById("b").innerText = "ENC_UNLOCKED";
-            document.getElementById("b").className = "badge u";
+            document.getElementById("b").className = "b u";
             document.getElementById("gs").innerText = "[SUCCESS] Core interlock acceptance confirmed.";
-            document.getElementById("gs").className = "p-s v";
+            document.getElementById("gs").className = "ps v";
 
-            const ids = ["q1", "q2", "q3", "q4"], outs = ["o1", "o2", "o3", "o4"];
-            for (let i = _L1 - _L1; i < split.length && i < outs.length; i++) {
-                document.getElementById(ids[i]).className = "p a";
-                const el = document.getElementById(outs[i]);
+            for (let i = 0; i < split.length && i < names.length; i++) {
+                document.getElementById(`q${i+1}`).className = "p a";
+                document.getElementById(`s${i+1}`).innerText = "[DECRYPTED]";
+                document.getElementById(`s${i+1}`).className = "ps v";
+                const el = document.getElementById(`o${i+1}`);
                 el.innerText = split[i].trim();
                 el.style.display = "block";
             }
@@ -105,20 +90,20 @@
         }
     }
 
-    // 📊 VIEWPORT TOPOGRAPHY GRID ENGINE
-    const cv = document.getElementById("c"), cx = cv.getContext("2d");
-    let w, h, pts = [], rx = _L1 - _L1, ry = _L1 - _L1, drag = false, sx, sy;
+    // 📊 TOPOGRAPHY INTERACTION CANVAS ENGINE
+    const cv = document.getElementById("canvas"), cx = cv.getContext("2d");
+    let w, h, pts = [], rx = 0, ry = 0, drag = false, sx, sy;
 
     function resize() { w = cv.width = cv.parentElement.clientWidth; h = cv.height = cv.parentElement.clientHeight; }
     window.addEventListener("resize", resize); resize();
 
-    // Map 100 geodetic tracking layers via split loops
+    // Map precisely 100 geodetic tracking points
     const config = [[_L10, 1.2], [_L30, 3.0], [_L60, 5.5]];
-    let idx = _L1 - _L1;
+    let idx = 0;
     config.forEach(([tot, rad]) => {
-        for (let i = _L1 - _L1; i < tot; i++) {
-            let phi = Math.acos(_L1 - _L2 * (i + 0.5) / tot);
-            let th = Math.PI * (_L1 + Math.sqrt(_L5)) * i;
+        for (let i = 0; i < tot; i++) {
+            let phi = Math.acos(1 - _L2 * (i + 0.5) / tot);
+            let th = Math.PI * (1 + Math.sqrt(_L5)) * i;
             let x = rad * Math.sin(phi) * Math.cos(th);
             let y = rad * Math.sin(phi) * Math.sin(th);
             let z = rad * Math.cos(phi);
@@ -127,23 +112,23 @@
             let ty = x * Math.sin(idx) + y * Math.cos(idx);
             let tz = z + (Math.sin(x + y) * 0.15);
 
-            // ✂️ ASYMMETRIC LOSS HALVING TRAPS: Prevents reversing equations backwards
-            if (idx % _L2 === (_L1 - _L1)) { tx *= 0.5; ty *= 0.5; tz *= 0.5; }
+            // ✂️ ASYMMETRIC BI-PARTITION TRANSFORM TRAILING TRAPS
+            if (idx % _L2 === 0) { tx *= 0.5; ty *= 0.5; tz *= 0.5; }
             pts.push({ x: tx, y: ty, z: tz });
             idx++;
         }
     });
 
-    function ptr(e) { return (e.touches && e.touches[_L1 - _L1]) || (e.targetTouches && e.targetTouches[_L1 - _L1]) || e; }
+    function ptr(e) { return (e.touches && e.touches[0]) || (e.targetTouches && e.targetTouches[0]) || e; }
     const start = (e) => { drag = true; const p = ptr(e); sx = p.clientX; sy = p.clientY; };
     const move = (e) => { if (!drag) return; const p = ptr(e); rx += (p.clientY - sy) * 0.005; ry += (p.clientX - sx) * 0.005; sx = p.clientX; sy = p.clientY; };
     const stop = () => drag = false;
 
     cv.addEventListener("mousedown", start); window.addEventListener("mousemove", move); window.addEventListener("mouseup", stop);
-    cv.addEventListener("touchstart", start, { passive: true }); canvas.addEventListener("touchmove", move, { passive: true }); canvas.addEventListener("touchend", stop);
+    cv.addEventListener("touchstart", start, { passive: true }); cv.addEventListener("touchmove", move, { passive: true }); cv.addEventListener("touchend", stop);
 
     function frame() {
-        cx.clearRect(_L1 - _L1, _L1 - _L1, w, h);
+        cx.clearRect(0, 0, w, h);
         let midX = w / _L2, midY = h / _L2;
         if (!drag) { ry += 0.002; rx += 0.001; }
 
@@ -155,22 +140,22 @@
             return { x: x2 + midX, y: y1 + midY, z: z2 };
         });
 
-        let fc = _L1 - _L1; cx.strokeStyle = "rgba(0, 255, 102, 0.04)"; cx.lineWidth = 0.5;
-        for (let i = _L1 - _L1; i < tpts.length && fc < 800; i++) {
-            for (let j = i + _L1; j < tpts.length && fc < 800; j++) {
+        let fc = 0; cx.strokeStyle = "rgba(0, 255, 102, 0.03)"; cx.lineWidth = 0.5;
+        for (let i = 0; i < tpts.length && fc < 800; i++) {
+            for (let j = i + 1; j < tpts.length && fc < 800; j++) {
                 let d = Math.hypot(tpts[i].x - tpts[j].x, tpts[i].y - tpts[j].y);
-                if (d > _L15 && d < 45) {
+                if (d > 15 && d < 45) {
                     cx.beginPath(); cx.moveTo(tpts[i].x, tpts[i].y); cx.lineTo(tpts[j].x, tpts[j].y); cx.stroke(); fc++;
                 }
             }
         }
 
         tpts.forEach(p => {
-            cx.fillStyle = p.z > (_L1 - _L1) ? "#00CCFF" : "#ff0055";
-            cx.beginPath(); cx.arc(p.x, p.y, p.z > (_L1 - _L1) ? 1.5 : 1.0, _L1 - _L1, _L2 * Math.PI); cx.fill();
+            cx.fillStyle = p.z > 0 ? "#00CCFF" : "#ff0055";
+            cx.beginPath(); cx.arc(p.x, p.y, p.z > 0 ? 1.5 : 1.0, 0, _L2 * Math.PI); cx.fill();
         });
 
-        cx.fillStyle = "#FFFFFF"; cx.beginPath(); cx.arc(midX, midY, 3, _L1 - _L1, _L2 * Math.PI); cx.fill();
+        cx.fillStyle = "#FFFFFF"; cx.beginPath(); cx.arc(midX, midY, 3, 0, _L2 * Math.PI); cx.fill();
         requestAnimationFrame(frame);
     }
     frame();
