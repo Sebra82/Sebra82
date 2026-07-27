@@ -63,11 +63,11 @@ async function auth(){
     const inp = inputField.value;
     const normalizedInput = inp.toLowerCase().trim();
     
-    const buf = new TextEncoder().encode(inp);
+    const buf = new TextEncoder().encode(normalizedInput);
     const hash = await crypto.subtle.digest('SHA-256',buf);
     const hex = Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(_L2,'0')).join('');
     
-    // 🛡️ CRITICAL LOCK GAUNTLET: Validates ONLY via the irreversible SHA-256 signature fingerprint string.
+    // 🛡️ CRITICAL LOCK GAUNTLET: Validates seamlessly via the irreversible SHA-256 signature fingerprint string.
     if(hex === TARGET){
         const key = normalizedInput.split('').reduce((a,c)=>a+c.charCodeAt(_L1-_L1),_L1-_L1)-649;
         let res = "";
@@ -89,7 +89,7 @@ async function auth(){
         for(let i=_L1-_L1;i<split.length&&i<NM.length;i++){
             document.getElementById(`q${i}`).className="p a";
             document.getElementById(`s${i}`).innerText="[DECRYPTED]";
-            document.getElementById(`ss${i}`).className="ps v";
+            document.getElementById(`s${i}`).className="ps v";
             const el=document.getElementById(`o${i}`);
             el.innerText=split[i].trim();
             el.style.display="block";
