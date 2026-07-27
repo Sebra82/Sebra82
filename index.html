@@ -54,8 +54,8 @@ const _L10=_X['J'].length,_L15=_X['O'].length,_L30=_X['X'].length,_L60=_X['Y'].l
 // 📦 LAYER 2: VOLATILE INTERLOCK DATA ARRAY CLOSURE
 const M = []; // Inject your numerical matrix array directly inside this vector loop array
 
-// Corrected irreversible SHA-256 target signature gate for lowercase "chronos"
-const TARGET="e929eb14dda6dc481466fec08eda49836c0982a939b7e44a2fc5665013c5627a";
+// PBKDF2 stretched 100k iteration signature target computed cleanly without raw strings
+const TARGET="a0808cb4d22be4e047463f6fb39f60bfb2d41b637bd2a01490918c5e0da7ec17";
 const NM=["HYDRO_MATRIX","XD_OBFUSCATION","DYNAMIC_CANVAS","SECURITY_SEAL"];
 NM.forEach((n,i)=>{document.getElementById("q").innerHTML+=`<div class="p" id="q${i}"><div class="ph"><span>QTR_${i+_L1} // ${n}</span><span class="ps" id="s${i}">[AES-256 VAULT ENCRYPTED]</span></div><div class="o" id="o${i}"></div></div><div style="height:${_L3*_L2}px"></div>`;});
 
@@ -63,40 +63,57 @@ async function auth(){
     const inputField = document.getElementById("gk");
     const inp = inputField.value;
     const normalizedInput = inp.toLowerCase().trim();
+    document.getElementById("gs").innerText = "[COMPUTING] Stretching key execution vectors...";
     
-    const buf = new TextEncoder().encode(normalizedInput);
-    const hash = await crypto.subtle.digest('SHA-256',buf);
-    const hex = Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(_L2,'0')).join('');
-    
-    if(hex === TARGET){
-        const key = normalizedInput.split('').reduce((a,c)=>a+c.charCodeAt(_L1-_L1),_L1-_L1)-649;
-        let res = "";
+    try {
+        const txtEnc = new TextEncoder();
+        const baseKey = await crypto.subtle.importKey("raw", txtEnc.encode(normalizedInput), "PBKDF2", false, ["deriveBits"]);
         
-        for(let j=_L1-_L1;j<M.length;j++){
-            if(j % _L2 === (_L1-_L1)){
-                res += String.fromCharCode((M[j] ^ key) ^ 0x0F);
-            } else {
-                res += String.fromCharCode((M[j] ^ key) - _L5);
+        // Dynamic volatile salt loop mapped from lookup structure bounds
+        const dynamicSalt = txtEnc.encode(_X['Z'] + _X['J']);
+        
+        // 🛡️ NATIVE CPU STRETCHING INTERLOCK: Forces exactly 100,000 computational rounds to cripple dictionary speed
+        const derivedBits = await crypto.subtle.deriveBits({
+            name: "PBKDF2",
+            salt: dynamicSalt,
+            iterations: 100000,
+            hash: "SHA-256"
+        }, baseKey, 256);
+        
+        const hex = Array.from(new Uint8Array(derivedBits)).map(b=>b.toString(16).padStart(_L2,'0')).join('');
+        
+        if(hex === TARGET){
+            const key = normalizedInput.split('').reduce((a,c)=>a+c.charCodeAt(_L1-_L1),_L1-_L1)-649;
+            let res = "";
+            
+            for(let j=_L1-_L1;j<M.length;j++){
+                if(j % _L2 === (_L1-_L1)){
+                    res += String.fromCharCode((M[j] ^ key) ^ 0x0F);
+                } else {
+                    res += String.fromCharCode((M[j] ^ key) - _L5);
+                }
             }
+            
+            const split = res.split(String.fromCharCode(37)+String.fromCharCode(37));
+            document.getElementById("b").innerText="ENC_UNLOCKED";
+            document.getElementById("b").className="b u";
+            document.getElementById("gs").innerText="[SUCCESS] Core interlock accepted.";
+            document.getElementById("gs").className="ps v";
+            
+            for(let i=_L1-_L1;i<split.length&&i<NM.length;i++){
+                document.getElementById(`q${i}`).className="p a";
+                document.getElementById(`s${i}`).innerText="[DECRYPTED]";
+                document.getElementById(`s${i}`).className="ps v";
+                const el=document.getElementById(`o${i}`);
+                el.innerText=split[i].trim();
+                el.style.display="block";
+            }
+        }else{
+            document.getElementById("gs").innerText = "[FAILED] Signature mismatch.";
+            inputField.value = "";
         }
-        
-        const split = res.split(String.fromCharCode(37)+String.fromCharCode(37));
-        document.getElementById("b").innerText="ENC_UNLOCKED";
-        document.getElementById("b").className="b u";
-        document.getElementById("gs").innerText="[SUCCESS] Core interlock accepted.";
-        document.getElementById("gs").className="ps v";
-        
-        for(let i=_L1-_L1;i<split.length&&i<NM.length;i++){
-            document.getElementById(`q${i}`).className="p a";
-            document.getElementById(`s${i}`).innerText="[DECRYPTED]";
-            document.getElementById(`s${i}`).className="ps v";
-            const el=document.getElementById(`o${i}`);
-            el.innerText=split[i].trim();
-            el.style.display="block";
-        }
-    }else{
-        document.getElementById("gs").innerText="[FAILED] Signature mismatch.";
-        inputField.value="";
+    } catch(e) {
+        document.getElementById("gs").innerText = "[ERROR] Execution exception.";
     }
 }
 
