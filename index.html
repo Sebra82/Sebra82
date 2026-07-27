@@ -6,7 +6,6 @@ body{background:#090D16;color:#00CCFF;padding:12px;display:flex;justify-content:
 .b{font-weight:bold;padding:2px 6px;border:1px solid #F05;color:#F05;background:rgba(255,0,85,.05);border-radius:4px;}
 .b.u{border-color:#0F6;color:#0F6;background:rgba(0,255,102,.05);}
 .w{width:100%;height:320px;background:#000;border:1px solid #1a2333;border-radius:4px;cursor:grab;}
-.w:active{cursor:grabbing;}
 canvas{width:100%;height:100%;display:block;}
 .p{border:1px solid #1a2333;border-radius:4px;padding:6px;background:rgba(9,13,22,.6);}
 .p.a{border-color:#00CCFF;background:rgba(0,204,255,.02);}
@@ -19,7 +18,7 @@ button{background:rgba(0,204,255,.1);border:1px solid #00CCFF;color:#00CCFF;padd
 </style></head><body>
 <div class="c">
     <div class="h"><div>M4P-V6.99_ACTIVE_LINE_MATRIX</div><div class="b" id="b">ENC_LOCKED</div></div>
-    <div class="w" id="wrapper"><canvas id="canvas"></canvas></div>
+    <div class="w" id="wr"><canvas id="cv"></canvas></div>
     <div class="p a" id="cp">
         <div class="ph"><span>SYS_VAULT_GATEWAY // CORE_VALIDATOR</span><span class="ps" id="gs">[VAULT STATUS] Locked. Enter key.</span></div>
         <div class="g"><input type="password" id="gk" placeholder="AUTH..."><button onclick="auth()">ENTER</button></div>
@@ -35,159 +34,83 @@ System Status       : CRYPTOGRAPHIC LOCK ENGAGED | ABSOLUTE IMMUTABILITY ACTIVE
 Active Core State   : 100% Pure Physical Trajectory Data Systems (Sanitized Repository)
 Protection Regime   : Trade Secret (Indefinite Term / Defend Trade Secrets Act DTSA Compliant)
 SHA-256 SYSTEM HASH : 35273af512c201aeb414995b4e908d2472f623772024f9f5fe7b7435b172a7c2
-
-[RECORDING CONCLUDING STAMP]
 Timestamp           : Wednesday, July 22, 2026, 09:16:00 AM BST
 Geographic Anchor   : Griston, Thetford, UK [52.565° N, 0.835° E]
 ==================================================================================================
 */
-
-// 🔄 LAYER 1: ALGORITHMIC LOOKUP COMPLEXITY (SCRUBS NUMERICAL CONSTANTS)
-const _X={
-    'A':"-",'B':"--",'C':"---",'E':"-----",
-    'J':"----------",'O':"---------------",'X':"------------------------------",
-    'Y':"------------------------------------------------------------",'Z':"----------------------------------------------------------------------------------------------------"
-};
-const _L1=_X['A'].length,_L2=_X['B'].length,_L3=_X['C'].length,_L5=_X['E'].length;
-const _L10=_X['J'].length,_L15=_X['O'].length,_L30=_X['X'].length,_L60=_X['Y'].length,_L100=_X['Z'].length;
-
-// 📦 LAYER 2: VOLATILE INTERLOCK DATA ARRAY CLOSURE
-const M = []; // Inject your numerical matrix array directly inside this vector loop array
-
-// PBKDF2 stretched 100k iteration signature target computed cleanly without raw strings
+const _X={'A':"-",'B':"--",'C':"---",'E':"-----",'J':"----------",'X':"------------------------------",'Y':"------------------------------------------------------------",'Z':"----------------------------------------------------------------------------------------------------"};
+const _L1=_X['A'].length,_L2=_X['B'].length,_L3=_X['C'].length,_L5=_X['E'].length,_L10=_X['J'].length,_L30=_X['X'].length,_L60=_X['Y'].length,_L100=_X['Z'].length;
+const M=[]; 
 const TARGET="a0808cb4d22be4e047463f6fb39f60bfb2d41b637bd2a01490918c5e0da7ec17";
 const NM=["HYDRO_MATRIX","XD_OBFUSCATION","DYNAMIC_CANVAS","SECURITY_SEAL"];
 NM.forEach((n,i)=>{document.getElementById("q").innerHTML+=`<div class="p" id="q${i}"><div class="ph"><span>QTR_${i+_L1} // ${n}</span><span class="ps" id="s${i}">[AES-256 VAULT ENCRYPTED]</span></div><div class="o" id="o${i}"></div></div><div style="height:${_L3*_L2}px"></div>`;});
 
 async function auth(){
-    const inputField = document.getElementById("gk");
-    const inp = inputField.value;
-    const normalizedInput = inp.toLowerCase().trim();
-    document.getElementById("gs").innerText = "[COMPUTING] Stretching key execution vectors...";
-    
-    try {
-        const txtEnc = new TextEncoder();
-        const baseKey = await crypto.subtle.importKey("raw", txtEnc.encode(normalizedInput), "PBKDF2", false, ["deriveBits"]);
-        
-        // Dynamic volatile salt loop mapped from lookup structure bounds
-        const dynamicSalt = txtEnc.encode(_X['Z'] + _X['J']);
-        
-        // 🛡️ NATIVE CPU STRETCHING INTERLOCK: Forces exactly 100,000 computational rounds to cripple dictionary speed
-        const derivedBits = await crypto.subtle.deriveBits({
-            name: "PBKDF2",
-            salt: dynamicSalt,
-            iterations: 100000,
-            hash: "SHA-256"
-        }, baseKey, 256);
-        
-        const hex = Array.from(new Uint8Array(derivedBits)).map(b=>b.toString(16).padStart(_L2,'0')).join('');
-        
-        if(hex === TARGET){
-            const key = normalizedInput.split('').reduce((a,c)=>a+c.charCodeAt(_L1-_L1),_L1-_L1)-649;
-            let res = "";
-            
-            for(let j=_L1-_L1;j<M.length;j++){
-                if(j % _L2 === (_L1-_L1)){
-                    res += String.fromCharCode((M[j] ^ key) ^ 0x0F);
-                } else {
-                    res += String.fromCharCode((M[j] ^ key) - _L5);
-                }
+    const f=document.getElementById("gk"),inp=f.value,nInp=inp.toLowerCase().trim();
+    document.getElementById("gs").innerText="[COMPUTING] Stretching key execution vectors...";
+    try{
+        const te=new TextEncoder(),bk=await crypto.subtle.importKey("raw",te.encode(nInp),"PBKDF2",!1,["deriveBits"]);
+        const db=await crypto.subtle.deriveBits({name:"PBKDF2",salt:te.encode(_X['Z']+_X['J']),iterations:100000,hash:"SHA-256"},bk,256);
+        const hex=Array.from(new Uint8Array(db)).map(b=>b.toString(16).padStart(2,'0')).join('');
+        if(hex===TARGET){
+            const key=nInp.split('').reduce((a,c)=>a+c.charCodeAt(0),0)-649;let res="";
+            for(let j=0;j<M.length;j++)res+=String.fromCharCode((j%_L2===0)?(M[j]^key)^0x0F:(M[j]^key)-_L5);
+            const split=res.split(String.fromCharCode(37)+String.fromCharCode(37));
+            document.getElementById("b").innerText="ENC_UNLOCKED";document.getElementById("b").className="b u";
+            document.getElementById("gs").innerText="[SUCCESS] Core interlock accepted.";document.getElementById("gs").className="ps v";
+            for(let i=0;i<split.length&&i<NM.length;i++){
+                document.getElementById(`q${i}`).className="p a";document.getElementById(`s${i}`).innerText="[DECRYPTED]";
+                document.getElementById(`s${i}`).className="ps v";const el=document.getElementById(`o${i}`);el.innerText=split[i].trim();el.style.display="block";
             }
-            
-            const split = res.split(String.fromCharCode(37)+String.fromCharCode(37));
-            document.getElementById("b").innerText="ENC_UNLOCKED";
-            document.getElementById("b").className="b u";
-            document.getElementById("gs").innerText="[SUCCESS] Core interlock accepted.";
-            document.getElementById("gs").className="ps v";
-            
-            for(let i=_L1-_L1;i<split.length&&i<NM.length;i++){
-                document.getElementById(`q${i}`).className="p a";
-                document.getElementById(`s${i}`).innerText="[DECRYPTED]";
-                document.getElementById(`s${i}`).className="ps v";
-                const el=document.getElementById(`o${i}`);
-                el.innerText=split[i].trim();
-                el.style.display="block";
-            }
-        }else{
-            document.getElementById("gs").innerText = "[FAILED] Signature mismatch.";
-            inputField.value = "";
-        }
-    } catch(e) {
-        document.getElementById("gs").innerText = "[ERROR] Execution exception.";
-    }
+        }else{document.getElementById("gs").innerText="[FAILED] Signature mismatch.";f.value="";}
+    }catch(e){document.getElementById("gs").innerText="[ERROR] Execution exception.";}
 }
 
-// 📊 LAYER 3: 500-NODE DYNAMIC RENDERING ENGINE
-const cv=document.getElementById("canvas"),cx=cv.getContext("2d"),wrap=document.getElementById("wrapper");
-let w,h,pts=[],rx=_L1-_L1,ry=_L1-_L1,drag=!1,sx,sy,pTime=_L1-_L1,mx=-_L100,my=-_L100;
-
-function resize(){
-    const dpr=window.devicePixelRatio||_L1;
-    w=wrap.clientWidth;h=wrap.clientHeight;
-    cv.width=w*dpr;cv.height=h*dpr;cx.scale(dpr,dpr);
-}
+const c=document.getElementById("cv"),cx=c.getContext("2d"),wr=document.getElementById("wr");
+let w,h,pts=[],rx=0,ry=0,drag=!1,sx,sy,pTime=0,mx=-_L100,my=-_L100;
+function resize(){const dpr=window.devicePixelRatio||1;w=wr.clientWidth;h=wr.clientHeight;c.width=w*dpr;c.height=h*dpr;cx.scale(dpr,dpr);}
 window.addEventListener("resize",resize);resize();
 
-const config=[[(_L10*_L5),1.5],[(_L100+(_L10*_L5)),3.2],[(_L100*_L3),5.8]];
-let idx=_L1-_L1;
-
-config.forEach(([tot,rad]) => {
-    for(let i=_L1-_L1;i<tot;i++){
-        let phi=Math.acos(_L1-_L2*(i+(0.5))/tot),th=Math.PI*(_L1+Math.sqrt(_L5))*i;
+const cfg=[[(_L10*_L5),1.5],[(_L100+(_L10*_L5)),3.2],[(_L100*_L3),5.8]];let idx=0;
+cfg.forEach(([tot,rad])=>{
+    for(let i=0;i<tot;i++){
+        let phi=Math.acos(1-2*(i+0.5)/tot),th=Math.PI*(1+Math.sqrt(_L5))*i;
         let x=rad*Math.sin(phi)*Math.cos(th)*_L30,y=rad*Math.sin(phi)*Math.sin(th)*_L30,z=rad*Math.cos(phi)*_L30;
         let tx=x*Math.cos(idx)-y*Math.sin(idx),ty=x*Math.sin(idx)+y*Math.cos(idx),tz=z+(Math.sin(x+y)*0.2);
-        
-        if(idx%_L2===(_L1-_L1)){tx*=.5;ty*=.5;tz*=.5;}
+        if(idx%_L2===0){tx*=.5;ty*=.5;tz*=.5;}
         pts.push({x:tx,y:ty,z:tz});idx++;
     }
 });
 
-function ptr(e){return e.touches?e.touches[_L1-_L1]:e;}
-const start=(e)=>{drag=!0;const p=ptr(e);sx=p.clientX;sy=p.clientY;};
-const move=(e)=>{
-    const p=ptr(e),rect=cv.getBoundingClientRect();
-    mx=(p.clientX-rect.left)-(w/_L2);my=(p.clientY-rect.top)-(h/_L2);
-    if(!drag)return;
-    ry+=(p.clientX-sx)*.006;rx+=(p.clientY-sy)*.006;sx=p.clientX;sy=p.clientY;
+function ptr(e){return e.touches?e.touches[0]:e;}
+const st=(e)=>{drag=!0;const p=ptr(e);sx=p.clientX;sy=p.clientY;};
+const mv=(e)=>{
+    const p=ptr(e),rect=c.getBoundingClientRect();mx=(p.clientX-rect.left)-(w/2);my=(p.clientY-rect.top)-(h/2);
+    if(!drag)return;ry+=(p.clientX-sx)*.006;rx+=(p.clientY-sy)*.006;sx=p.clientX;sy=p.clientY;
 };
-const stop=()=>drag=!1;
-
-wrap.addEventListener("mousedown",start);window.addEventListener("mousemove",move);window.addEventListener("mouseup",stop);
-wrap.addEventListener("touchstart",start,{passive:!0});wrap.addEventListener("touchmove",move,{passive:!0});wrap.addEventListener("touchend",stop);
+const sp=()=>drag=!1;
+wr.addEventListener("mousedown",st);window.addEventListener("mousemove",mv);window.addEventListener("mouseup",sp);
+wr.addEventListener("touchstart",st,{passive:!0});wr.addEventListener("touchmove",mv,{passive:!0});wr.addEventListener("touchend",sp);
 
 function frame(){
-    cx.clearRect(_L1-_L1,_L1-_L1,w,h);let midX=w/_L2,midY=h/_L2;
-    if(!drag){ry+=.002;rx+=.001;}
-    pTime+=0.025;
-    
-    let bScale=_L1+Math.sin(pTime)*0.08;
+    cx.clearRect(0,0,w,h);let mX=w/2,mY=h/2;if(!drag){ry+=.002;rx+=.001;}pTime+=0.025;
+    let bS=1+Math.sin(pTime)*0.08;
     let tpts=pts.map(p=>{
-        let cX=p.x*bScale,cY=p.y*bScale,cZ=p.z*bScale,dX=cX-mx,dY=cY-my,mDist=Math.hypot(dX,dY);
-        if(mDist<120){
-            let push=(_L1-(mDist/120))*(_L5+_L1);
-            cX+=dX/mDist*push;cY+=dY/mDist*push;
-        }
+        let cX=p.x*bS,cY=p.y*bS,cZ=p.z*bS,dX=cX-mx,dY=cY-my,md=Math.hypot(dX,dY);
+        if(md<120){let psh=(1-(md/120))*(_L5+1);cX+=dX/md*psh;cY+=dY/md*psh;}
         let y1=cY*Math.cos(rx)-cZ*Math.sin(rx),z1=cY*Math.sin(rx)+cZ*Math.cos(rx);
         let x2=cX*Math.cos(ry)+z1*Math.sin(ry),z2=-cX*Math.sin(ry)+z1*Math.cos(ry);
-        return{x:x2+midX,y:y1+midY,z:z2};
+        return{x:x2+mX,y:y1+mY,z:z2};
     });
-
-    let fc=_L1-_L1;cx.strokeStyle="rgba(0,255,102,0.14)";cx.lineWidth=0.5;
-    for(let i=_L1-_L1;i<tpts.length&&fc<1200;i++){
-        for(let j=i+_L1;j<tpts.length&&fc<1200;j++){
+    let fc=0;cx.strokeStyle="rgba(0,255,102,0.14)";cx.lineWidth=0.5;
+    for(let i=0;i<tpts.length&&fc<1200;i++){
+        for(let j=i+1;j<tpts.length&&fc<1200;j++){
             let d=Math.hypot(tpts[i].x-tpts[j].x,tpts[i].y-tpts[j].y);
-            if(d>10&&d<65){
-                cx.beginPath();cx.moveTo(tpts[i].x,tpts[i].y);cx.lineTo(tpts[j].x,tpts[j].y);cx.stroke();fc++;
-            }
+            if(d>10&&d<65){cx.beginPath();cx.moveTo(tpts[i].x,tpts[i].y);cx.lineTo(tpts[j].x,tpts[j].y);cx.stroke();fc++;}
         }
     }
-    
-    tpts.forEach(p=>{
-        cx.fillStyle=p.z>(_L1-_L1)?"#00CCFF":"#ff0055";
-        cx.beginPath();cx.arc(p.x,p.y,p.z>(_L1-_L1)?2.6:1.4,_L1-_L1,_L2*Math.PI);cx.fill();
-    });
-    
-    cx.fillStyle="#FFFFFF";cx.beginPath();cx.arc(midX,midY,4,_L1-_L1,_L2*Math.PI);cx.fill();
+    tpts.forEach(p=>{cx.fillStyle=p.z>0?"#00CCFF":"#ff0055";cx.beginPath();cx.arc(p.x,p.y,p.z>0?2.6:1.4,0,2*Math.PI);cx.fill();});
+    cx.fillStyle="#FFFFFF";cx.beginPath();cx.arc(mX,mY,4,0,2*Math.PI);cx.fill();
     requestAnimationFrame(frame);
 }frame();
 </script></body></html>
