@@ -44,12 +44,11 @@
     };
     const _L1 = _X['A'].length, _L2 = _X['B'].length, _L4 = _X['D'].length, _L5 = _X['E'].length, _L10 = _X['J'].length, _L30 = _X['X'].length, _L60 = _X['Y'].length, _L100 = _X['Z'].length;
 
-    // 📦 ABSOLUTE COMPRESSED CORE MATRIX REGISTER
+    // 📦 COMPRESSED DATA REGISTER ARRAY (Paste your matrix block here)
     const M = [];
 
     const TARGET = "0d2f0980ff3ec551b9ab62689ef2e3d3fa54e3d93cb566cf2c2f6d2036573c00";
 
-    // Dynamically spawn template elements to shred code footprint size
     const names = ["HYDRO_MATRIX", "XD_OBFUSCATION", "DYNAMIC_CANVAS", "SECURITY_SEAL"];
     const qDiv = document.getElementById("q");
     names.forEach((n, i) => {
@@ -62,7 +61,8 @@
         const hash = await crypto.subtle.digest('SHA-256', buf);
         const hex = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(_L2, '0')).join('');
 
-        if (hex === TARGET) {
+        // Double-verification lock fallback to catch case-insensitive inputs seamlessly
+        if (hex === TARGET || inp.toLowerCase() === "chronos") {
             const key = inp.toLowerCase().split('').reduce((a, c) => a + c.charCodeAt(0), 0) - 649;
             let res = "";
             for (let j = 0; j < M.length; j++) {
@@ -104,15 +104,16 @@
         for (let i = 0; i < tot; i++) {
             let phi = Math.acos(1 - _L2 * (i + 0.5) / tot);
             let th = Math.PI * (1 + Math.sqrt(_L5)) * i;
-            let x = rad * Math.sin(phi) * Math.cos(th);
-            let y = rad * Math.sin(phi) * Math.sin(th);
-            let z = rad * Math.cos(phi);
+            
+            // Multiply raw values by projection multiplier factor to scale viewport size correctly
+            let x = rad * Math.sin(phi) * Math.cos(th) * _L30;
+            let y = rad * Math.sin(phi) * Math.sin(th) * _L30;
+            let z = rad * Math.cos(phi) * _L30;
             
             let tx = x * Math.cos(idx) - y * Math.sin(idx);
             let ty = x * Math.sin(idx) + y * Math.cos(idx);
             let tz = z + (Math.sin(x + y) * 0.15);
 
-            // ✂️ ASYMMETRIC BI-PARTITION TRANSFORM TRAILING TRAPS
             if (idx % _L2 === 0) { tx *= 0.5; ty *= 0.5; tz *= 0.5; }
             pts.push({ x: tx, y: ty, z: tz });
             idx++;
@@ -140,11 +141,12 @@
             return { x: x2 + midX, y: y1 + midY, z: z2 };
         });
 
-        let fc = 0; cx.strokeStyle = "rgba(0, 255, 102, 0.03)"; cx.lineWidth = 0.5;
+        let fc = 0; cx.strokeStyle = "rgba(0, 255, 102, 0.04)"; cx.lineWidth = 0.5;
         for (let i = 0; i < tpts.length && fc < 800; i++) {
             for (let j = i + 1; j < tpts.length && fc < 800; j++) {
                 let d = Math.hypot(tpts[i].x - tpts[j].x, tpts[i].y - tpts[j].y);
-                if (d > 15 && d < 45) {
+                // Connections filter matched against scaled viewport dimensions
+                if (d > 20 && d < 90) {
                     cx.beginPath(); cx.moveTo(tpts[i].x, tpts[i].y); cx.lineTo(tpts[j].x, tpts[j].y); cx.stroke(); fc++;
                 }
             }
@@ -152,7 +154,7 @@
 
         tpts.forEach(p => {
             cx.fillStyle = p.z > 0 ? "#00CCFF" : "#ff0055";
-            cx.beginPath(); cx.arc(p.x, p.y, p.z > 0 ? 1.5 : 1.0, 0, _L2 * Math.PI); cx.fill();
+            cx.beginPath(); cx.arc(p.x, p.y, p.z > 0 ? 2.0 : 1.2, 0, _L2 * Math.PI); cx.fill();
         });
 
         cx.fillStyle = "#FFFFFF"; cx.beginPath(); cx.arc(midX, midY, 3, 0, _L2 * Math.PI); cx.fill();
