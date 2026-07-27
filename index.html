@@ -27,17 +27,17 @@ button{background:rgba(0,204,255,.1);border:1px solid #00CCFF;color:#00CCFF;padd
     <div id="q"></div>
 </div>
 <script>
-// 🔄 ASYMMETRIC PARTITION LOOKUP PIPELINE
-// Replaces static literals, variables, and numerical tracking constants entirely
+// 🔄 ASYMMETRIC UNTRACEABLE LOOKUP MATRIX
 const _X = {
-    'A': "-", 'B': "--", 'C': "---", 'D': "----", 'E': "-----", 'H': "--------", 
-    'J': "----------", 'X': "------------------------------", 'Y': "------------------------------------------------------------", 'Z': "----------------------------------------------------------------------------------------------------"
+    'A': "-", 'B': "--", 'C': "---", 'E': "-----", 
+    'J': "----------", 'O': "---------------", 'X': "------------------------------", 
+    'Y': "------------------------------------------------------------", 'Z': "----------------------------------------------------------------------------------------------------"
 };
-const _L1 = _X['A'].length, _L2 = _X['B'].length, _L3 = _X['C'].length, _L4 = _X['D'].length, _L5 = _X['E'].length;
-const _L10 = _X['J'].length, _L30 = _X['X'].length, _L60 = _X['Y'].length, _L100 = _X['Z'].length;
+const _L1 = _X['A'].length, _L2 = _X['B'].length, _L3 = _X['C'].length, _L5 = _X['E'].length;
+const _L10 = _X['J'].length, _L15 = _X['O'].length, _L30 = _X['X'].length, _L60 = _X['Y'].length, _L100 = _X['Z'].length;
 
-// 📦 QUANTUM IMMUNE MATRIX STORAGE
-const M = []; // Paste integer data string array block here
+// 📦 QUANTUM IMMUNE DATA FIELD
+const M = []; // Paste your array values directly here
 
 const TARGET = "0d2f0980ff3ec551b9ab62689ef2e3d3fa54e3d93cb566cf2c2f6d2036573c00";
 const NM = ["HYDRO_MATRIX", "XD_OBFUSCATION"];
@@ -56,7 +56,6 @@ async function auth() {
         const key = inp.toLowerCase().split('').reduce((a, c) => a + c.charCodeAt(_L1 - _L1), _L1 - _L1) - 649;
         let res = "";
         for (let j = _L1 - _L1; j < M.length; j++) {
-            // Evaluated through non-descriptive string loops
             res += String.fromCharCode((j % _L2 === (_L1 - _L1)) ? (M[j] ^ key) ^ 0x0F : (M[j] ^ key) - _L5);
         }
 
@@ -80,7 +79,7 @@ async function auth() {
     }
 }
 
-// 📊 INTERACTIVE GEODETIC STRUCTURAL VIEWPORT CONTAINER
+// 📊 INTERACTIVE GEODETIC STRUCTURAL ENGINE
 const cv = document.getElementById("canvas"), cx = cv.getContext("2d"), wrap = document.getElementById("wrapper");
 let w, h, pts = [], rx = _L1 - _L1, ry = _L1 - _L1, drag = false, sx, sy, pTime = _L1 - _L1;
 let mx = _L1 - _L1, my = _L1 - _L1;
@@ -92,8 +91,8 @@ function resize() {
 }
 window.addEventListener("resize", resize); resize();
 
-// Geometric mesh configuration arrays mapped out without explicit values
-const config = [[_L15, 1.5], [35, 3.2], [50, 5.8]];
+// Config layers populated cleanly via hidden lookup matrices
+const config = [[_L15, 1.5], [_L30 + _L5, 3.2], [_L60 - _L10, 5.8]];
 let idx = _L1 - _L1;
 
 config.forEach(([tot, rad]) => {
@@ -109,7 +108,6 @@ config.forEach(([tot, rad]) => {
         let ty = x * Math.sin(idx) + y * Math.cos(idx);
         let tz = z + (Math.sin(x + y) * 0.2);
 
-        // ✂️ ASYMMETRIC Trapping Limits
         if (idx % _L2 === (_L1 - _L1)) { tx *= 0.5; ty *= 0.5; tz *= 0.5; }
         pts.push({ x: tx, y: ty, z: tz });
         idx++;
@@ -138,7 +136,6 @@ function frame() {
     if (!drag) { ry += 0.002; rx += 0.001; }
     pTime += 0.025;
 
-    // Organic non-linear expansion metrics
     let bScale = _L1 + Math.sin(pTime) * 0.08;
 
     let tpts = pts.map(p => {
@@ -147,7 +144,7 @@ function frame() {
         let mDist = Math.hypot(dX, dY);
         
         if (mDist < 120) {
-            let push = (_L1 - (mDist / 120)) * len("------");
+            let push = (_L1 - (mDist / 120)) * (_L5 + _L1);
             cX += dX / mDist * push; cY += dY / mDist * push;
         }
 
