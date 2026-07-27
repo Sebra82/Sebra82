@@ -30,7 +30,7 @@ const _X=["-","--","---","----","-----","--------","----------","---------------
 const _L1=_X.length,_L2=_X.length,_L4=_X.length,_L5=_X.length,_L10=_X.length,_L30=_X.length,_L60=_X.length;
 const M=[]; // Paste your encrypted numerical array directly here
 const TARGET="0d2f0980ff3ec551b9ab62689ef2e3d3fa54e3d93cb566cf2c2f6d2036573c00";
-const NM=["HYDRO_MATRIX","XD_OBFUSCATION"]; // Dropped to exactly 2 active metrics panels
+const NM=["HYDRO_MATRIX","XD_OBFUSCATION"];
 NM.forEach((n,i)=>{document.getElementById("q").innerHTML+=`<div class="p" id="q${i}"><div class="ph"><span>QTR_${i+1} // ${n}</span><span class="ps" id="s${i}">[AES-256 VAULT ENCRYPTED]</span></div><div class="o" id="o${i}"></div></div><div style="height:6px"></div>`;});
 async function auth(){
     const inp=document.getElementById("gk").value,buf=new TextEncoder().encode(inp),hash=await crypto.subtle.digest('SHA-256',buf);
@@ -49,41 +49,41 @@ async function auth(){
 }
 const cv=document.getElementById("canvas"),cx=cv.getContext("2d");let w,h,pts=[],rx=0,ry=0,drag=!1,sx,sy;
 function resize(){
-    const dpr=window.devicePixelRatio||1; // Anti-aliasing high definition scaler activation
+    const dpr=window.devicePixelRatio||1;
     w=cv.parentElement.clientWidth;h=cv.parentElement.clientHeight;
     cv.width=w*dpr;cv.height=h*dpr;cx.scale(dpr,dpr);
 }
 window.addEventListener("resize",resize);resize();
-const config=[[_L10,1.5],[_L30,3.8],[_L60,6.8]];let idx=0; // Coordinates layout vectors expanded on screen
+const config=[[10,1.2],[30,3.0],[60,5.5]];let idx=0;
 config.forEach(([tot,rad])=>{
     for(let i=0;i<tot;i++){
-        let phi=Math.acos(1-_L2*(i+.5)/tot),th=Math.PI*(1+Math.sqrt(_L5))*i;
-        let x=rad*Math.sin(phi)*Math.cos(th)*40,y=rad*Math.sin(phi)*Math.sin(th)*40,z=rad*Math.cos(phi)*40; // Zoom factor increased
+        let phi=Math.acos(1-2*(i+.5)/tot),th=Math.PI*(1+Math.sqrt(5))*i;
+        let x=rad*Math.sin(phi)*Math.cos(th)*24,y=rad*Math.sin(phi)*Math.sin(th)*24,z=rad*Math.cos(phi)*24;
         let tx=x*Math.cos(idx)-y*Math.sin(idx),ty=x*Math.sin(idx)+y*Math.cos(idx),tz=z+(Math.sin(x+y)*.15);
-        if(idx%_L2===0){tx*=.5;ty*=.5;tz*=.5;}pts.push({x:tx,y:ty,z:tz});idx++;
+        if(idx%2===0){tx*=.5;ty*=.5;tz*=.5;}pts.push({x:tx,y:ty,z:tz});idx++;
     }
 });
 function ptr(e){return(e.touches&&e.touches[0])||(e.targetTouches&&e.targetTouches[0])||e;}
 const start=(e)=>{drag=!0;const p=ptr(e);sx=p.clientX;sy=p.clientY;};
-const move=(e)=>{if(!drag)return;const p=ptr(e);rx+=(p.clientY-sy)*.004;ry+=(p.clientX-sx)*.004;sx=p.clientX;sy=p.clientY;};
+const move=(e)=>{if(!drag)return;const p=ptr(e);rx+=(p.clientY-sy)*.008;ry+=(p.clientX-sx)*.008;sx=p.clientX;sy=p.clientY;};
 const stop=()=>drag=!1;
 cv.addEventListener("mousedown",start);window.addEventListener("mousemove",move);window.addEventListener("mouseup",stop);
-cv.addEventListener("touchstart",start,{passive:!0});cv.addEventListener("touchmove",move,{passive:!0});cv.addEventListener("touchend",stop);
+cv.addEventListener("touchstart",start,{passive:!0});window.addEventListener("touchmove",move,{passive:!0});window.addEventListener("touchend",stop);
 function frame(){
-    cx.clearRect(0,0,w,h);let midX=w/_L2,midY=h/_L2;if(!drag){ry+=.002;rx+=.001;}
+    cx.clearRect(0,0,w,h);let midX=w/2,midY=h/2;if(!drag){ry+=.004;rx+=.002;}
     let tpts=pts.map(p=>{
         let y1=p.y*Math.cos(rx)-p.z*Math.sin(rx),z1=p.y*Math.sin(rx)+p.z*Math.cos(rx);
         let x2=p.x*Math.cos(ry)+z1*Math.sin(ry),z2=-p.x*Math.sin(ry)+z1*Math.cos(ry);
         return{x:x2+midX,y:y1+midY,z:z2};
     });
-    let fc=0;cx.strokeStyle="rgba(0,255,102,0.06)";cx.lineWidth=.5; // High visibility stroke definition lines
+    let fc=0;cx.strokeStyle="rgba(0,255,102,0.12)";cx.lineWidth=.6;
     for(let i=0;i<tpts.length&&fc<800;i++){
         for(let j=i+1;j<tpts.length&&fc<800;j++){
             let d=Math.hypot(tpts[i].x-tpts[j].x,tpts[i].y-tpts[j].y);
-            if(d>25&&d<110){cx.beginPath();cx.moveTo(tpts[i].x,tpts[i].y);cx.lineTo(tpts[j].x,tpts[j].y);cx.stroke();fc++;}
+            if(d>15&&d<75){cx.beginPath();cx.moveTo(tpts[i].x,tpts[i].y);cx.lineTo(tpts[j].x,tpts[j].y);cx.stroke();fc++;}
         }
     }
-    tpts.forEach(p=>{cx.fillStyle=p.z>0?"#00CCFF":"#ff0055";cx.beginPath();cx.arc(p.x,p.y,p.z>0?2.5:1.5,0,_L2*Math.PI);cx.fill();});
-    cx.fillStyle="#FFFFFF";cx.beginPath();cx.arc(midX,midY,3.5,0,_L2*Math.PI);cx.fill();requestAnimationFrame(frame);
+    tpts.forEach(p=>{cx.fillStyle=p.z>0?"#00CCFF":"#ff0055";cx.beginPath();cx.arc(p.x,p.y,p.z>0?3:1.8,0,2*Math.PI);cx.fill();});
+    cx.fillStyle="#FFFFFF";cx.beginPath();cx.arc(midX,midY,4,0,2*Math.PI);cx.fill();requestAnimationFrame(frame);
 }frame();
 </script></body></html>
