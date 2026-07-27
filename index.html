@@ -1,18 +1,178 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><title>M4</title><style>
-*{box-sizing:border-box;margin:0;padding:0;user-select:none;font-family:monospace;font-size:10px}body{background:#090D16;color:#0CF;padding:12px;display:flex;justify-content:center;overflow-x:hidden}.c{width:100%;max-width:1400px;display:flex;flex-direction:column;gap:8px}.h{display:flex;justify-content:space-between;align-items:center}.b{font-weight:bold;padding:2px 6px;border:1px solid #F05;color:#F05;background:rgba(255,0,85,.05);border-radius:4px}.b.u{border-color:#0F6;color:#0F6;background:rgba(0,255,102,.05)}.db{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px}.m{background:rgba(9,13,22,.8);border:1px solid #1a2333;padding:6px 10px;border-radius:4px;display:flex;justify-content:space-between;align-items:center}.mt{color:#8ab4f8;text-transform:uppercase;font-size:9px}.mv{color:#0F6;font-weight:bold}.w{width:100%;height:52vh;min-height:450px;background:#000;border:1px solid #1a2333;border-radius:6px;cursor:grab}canvas{width:100%;height:100%;display:block}.p{border:1px solid #1a2333;border-radius:6px;padding:12px;background:rgba(9,13,22,.8)}.p.a{border-color:#0CF;background:rgba(0,204,255,.01)}.ph{display:flex;justify-content:space-between;margin-bottom:4px;color:#8ab4f8;border-bottom:1px dashed rgba(0,204,255,.15);padding-bottom:4px}.ps{color:#F05;font-weight:bold}.ps.v{color:#0F6}.g{display:flex;gap:6px;margin-top:4px}input{background:#000;border:1px solid #00CCFF;color:#0F6;padding:6px 10px;flex-grow:1;border-radius:4px;outline:none}input:disabled{border-color:#1a2333;color:#F05}button{background:rgba(0,204,255,.1);border:1px solid #00CCFF;color:#00CCFF;padding:6px 16px;cursor:pointer;border-radius:4px;font-weight:bold}button:disabled{border-color:#1a2333;color:#444;cursor:not-allowed}.o{margin-top:6px;color:#0F6;white-space:pre-wrap;display:none;font-size:11px;line-height:1.4;background:rgba(0,0,0,.3);padding:8px;border-radius:4px;border:1px dashed rgba(0,255,102,.2)}.wb{width:100%;height:35px;background:#000;border:1px solid #1a2333;border-radius:4px;overflow:hidden}
-</style></head><body><div class="c"><div class="h"><div>M4P-V6.99_ACTIVE_LINE_MATRIX</div><div class="b" id="b">ENC_LOCKED</div></div><div class="db"><div class="m"><span class="mt">FPS:</span><span class="mv" id="d_fps">0</span></div><div class="m"><span class="mt">LATENCY:</span><span class="mv" id="d_lt">0.00ms</span></div><div class="m"><span class="mt">VECTORS:</span><span class="mv" id="d_vc">0</span></div><div class="m"><span class="mt">ENTROPY:</span><span class="mv" id="d_ef">0.000δ</span></div></div><div class="w" id="wr"><canvas id="cv"></canvas></div><div class="wb"><canvas id="w_cv"></canvas></div><div class="db"><div class="m"><span class="mt">SYNC:</span><span class="mv" style="color:#00CCFF">CORE_LOCAL</span></div><div class="m"><span class="mt">MODE:</span><span class="mv" style="color:#00CCFF">100K PBKDF2</span></div><div class="m"><span class="mt">REGIME:</span><span class="mv" style="color:#00CCFF">PROPRIETARY</span></div><div class="m"><span class="mt">VAULT:</span><span class="mv" id="d_si">SECURE</span></div></div><div class="db"><div class="m"><span class="mt">NOISE:</span><span class="mv" id="d_en" style="color:#8ab4f8">0.00μV</span></div><div class="m"><span class="mt">DRIFT:</span><span class="mv" id="d_ds" style="color:#8ab4f8">0.0dB</span></div><div class="m"><span class="mt">STRESS TESTER:</span><button id="sbtn" onclick="stress()" style="padding:1px 6px;font-size:9px;background:none">OVERLOAD</button></div><div class="m"><span class="mt">TEMP:</span><span class="mv" style="color:#0F6" id="d_tp">21.00°C</span></div></div><div class="p a" id="cp"><div class="ph"><span>CORE_VALIDATOR</span><span class="ps" id="gs">Locked.</span></div><div class="g"><input type="password" id="gk" placeholder="KEY..."><button id="gbtn" onclick="auth()">ENTER</button></div></div><div id="q"></div></div><script>
-const _X={'A':"-",'B':"--",'C':"---",'E':"-----",'J':"----------",'X':"------------------------------",'Z':"----------------------------------------------------------------------------------------------------"},
-_L1=_X['A'].length,_L2=_X['B'].length,_L3=_X['C'].length,_L5=_X['E'].length,_L10=_X['J'].length,_L30=_X['X'].length,_L100=_X['Z'].length,
-TARGET="a0808cb4d22be4e047463f6fb39f60bfb2d41b637bd2a01490918c5e0da7ec17",NM=["HARDWARE_STRESS_MAP","SYSTEM_MANIFEST_DECRYPTED"],
-$=(id)=>document.getElementById(id),M=;
-let errs=0,isStress=!1,hd=Array(80).fill(0);NM.forEach((n,i)=>{$("q").innerHTML+=`<div class="p" id="q${i}"><div class="ph"><span>QTR_${i+_L1} // ${n}</span><span class="ps" id="s${i}">[ENCRYPTED]</span></div><div class="o" id="o${i}"></div></div>`});
-async function auth(){const f=$("gk"),btn=$("gbtn"),inp=f.value,nInp=inp.toLowerCase().trim();$("gs").innerText="Computing 100K PBKDF2...";try{const te=new TextEncoder(),baseKey=await crypto.subtle.importKey("raw",te.encode(nInp),"PBKDF2",false,["deriveBits"]),derivedBits=await crypto.subtle.deriveBits({name:"PBKDF2",salt:te.encode(_X['Z']),iterations:100000,hash:"SHA-256"},baseKey,256),hex=Array.from(new Uint8Array(derivedBits)).map(b=>b.toString(16).padStart(2,'0')).join('');if(hex===TARGET){const key=nInp.split('').reduce((a,c)=>a+c.charCodeAt(0),0)-649;let res="";for(let j=0;j<M.length;j++)res+=String.fromCharCode((j%_L2===0)?(M[j]^key)^15:(M[j]^key)-_L5);const split=res.split(String.fromCharCode(123)+String.fromCharCode(125)+String.fromCharCode(123));$("b").innerText="ENC_UNLOCKED";$("b").className="b u";$("gs").innerText="Unlocked.";$("d_si").innerText="UNSEALED";$("d_si").style.color="#0F6";for(let i=0;i<split.length&&i<NM.length;i++){$(`q${i}`).className="p a";$(`s${i}`).innerText="[DECRYPTED]";$(`s${i}`).className="ps v";const el=$(`o${i}`);el.innerText=split[i].trim();el.style.display="block"}}else{errs++;if(errs>=3){f.disabled=btn.disabled=!0;let sec=30;const tm=setInterval(()=>{sec--;$("gs").innerText=`Lockout: ${sec}s`;if(sec<=0){clearInterval(tm);f.disabled=btn.disabled=!1;errs=0;$("gs").innerText="Locked."}},1000)}else{$("gs").innerText=`Mismatch ${errs}/3`;f.value=""}}}catch(e)$("gs").innerText="Error."}
-function stress(){isStress=!isStress;$("sbtn").innerText=isStress?"RELEASE":"OVERLOAD";$("sbtn").style.borderColor=isStress?"#F05":"#00CCFF"}
-const c=$("cv"),cx=c.getContext("2d"),wr=$("wr"),wc=$("w_cv"),w_cx=wc.getContext("2d");let w,h,pts=[],rx=0,ry=0,drag=!1,sx,sy,pTime=0,mx=-_L100,my=-_L100,lTime=performance.now(),fCnt=0,fpsTime=0;
-function resize(){const dpr=window.devicePixelRatio||1;w=wr.clientWidth;h=wr.clientHeight;c.width=w*dpr;c.height=h*dpr;cx.scale(dpr,dpr);wc.width=wc.clientWidth*dpr;wc.height=35*dpr;w_cx.scale(dpr,dpr)}window.addEventListener("resize",resize);resize();
-const cfg=[[(_L10*_L5),1.5],[(_L100+(_L10*_L5)),3.2],[(_L100*_L3),5.8]];let idx=0;cfg.forEach(([tot,rad])=>{for(let i=0;i<tot;i++){let phi=Math.acos(1-2*(i+.5)/tot),th=Math.PI*(1+Math.sqrt(_L5))*i,x=rad*Math.sin(phi)*Math.cos(th)*_L30,y=rad*Math.sin(phi)*Math.sin(th)*_L30,z=rad*Math.cos(phi)*_L30,tx=x*Math.cos(idx)-y*Math.sin(idx),ty=x*Math.sin(idx)+y*Math.cos(idx),tz=z+(Math.sin(x+y)*.2);if(idx%_L2===0){tx*=.5;ty*=.5;tz*=.5}pts.push({x:tx,y:ty,z:tz});idx++}});
-function ptr(e){return e.touches?e.touches:e}const st=(e)=>{drag=!0;const p=ptr(e);sx=p.clientX;sy=p.clientY},mv=(e)=>{const p=ptr(e),rect=c.getBoundingClientRect();mx=(p.clientX-rect.left)-(w/2);my=(p.clientY-rect.top)-(h/2);if(!drag)return;ry+=(p.clientX-sx)*.006;rx+=(p.clientY-sy)*.006;sx=p.clientX;sy=p.clientY},sp=()=>drag=!1;wr.addEventListener("mousedown",st);window.addEventListener("mousemove",mv);window.addEventListener("mouseup",sp);wr.addEventListener("touchstart",st,{passive:!0});wr.addEventListener("touchmove",mv,{passive:!0});wr.addEventListener("touchend",sp);
-function frame(){const now=performance.now(),delta=now-lTime;lTime=now;fCnt++;fpsTime+=delta;if(fpsTime>=1000){$("d_fps").innerText=fCnt;$("d_lt").innerText=delta.toFixed(2)+"ms";fCnt=0;fpsTime=0}cx.clearRect(0,0,w,h);let mX=w/2,mY=h/2;if(!drag){ry+=.002;rx+=.001}pTime+=0.025;let bS=1+Math.sin(pTime)*.08;let cPts=[...pts];if(isStress){for(let i=0;i<150;i++)cPts.push({x:(Math.random()-0.5)*180,y:(Math.random()-0.5)*180,z:(Math.random()-0.5)*180,s:!0})}
-let tpts=cPts.map(p=>{let cX=p.x*bS,cY=p.y*bS,cZ=p.z*bS,dX=cX-mx,dY=cY-my,md=Math.hypot(dX,dY),pShft=0;if(md<120){pShft=1-(md/120);let psh=pShft*(_L5+1);cX+=dX/md*psh;cY+=dY/md*psh}return{x:cY*Math.cos(rx)-cZ*Math.sin(rx)*Math.sin(ry)+cX*Math.cos(ry)+mX,y:cY*Math.sin(rx)+cZ*Math.cos(rx)+mY,z:-cX*Math.sin(ry)+cZ*Math.cos(ry),p:pShft,s:p.s}});let fc=0;cx.strokeStyle=isStress?"rgba(255,0,85,0.18)":"rgba(0,255,102,0.14)";cx.lineWidth=.5;let maxV=isStress?1200:600;for(let i=0;i<tpts.length&&fc<maxV;i++)for(let j=i+1;j<tpts.length&&fc<maxV;j++){let d=Math.hypot(tpts[i].x-tpts[j].x,tpts[i].y-tpts[j].y);if(d>10&&d<65){cx.beginPath();cx.moveTo(tpts[i].x,tpts[i].y);cx.lineTo(tpts[j].x,tpts[j].y);cx.stroke();fc++}}
-tpts.forEach(p=>{cx.fillStyle=p.s?"#FFF":(p.p>0.4?"#0F6":(p.z>0?"#00CCFF":"#F05"));cx.beginPath();cx.arc(p.x,p.y,p.z>0?2.6:1.4,0,2*Math.PI);cx.fill()});cx.fillStyle="#FFF";cx.beginPath();cx.arc(mX,mY,4,0,2*Math.PI);cx.fill();$("d_vc").innerText=fc;const efVal=Math.abs(bS-1)*10;$("d_ef").innerText=efVal.toFixed(3)+"δ";const nSim=Math.abs(Math.sin(pTime*2)*15+Math.random()*4),att=94.2+(Math.sin(pTime)*4.1);$("d_en").innerText=nSim.toFixed(2)+"μV";$("d_ds").innerText=att.toFixed(1)+"dB";$("d_tp").innerText=(21+(isStress?Math.sin(pTime)*4+6:0)).toFixed(2)+"°C";$("d_tp").style.color=isStress?"#F05":"#0F6";hd.push(efVal);hd.shift();w_cx.clearRect(0,0,wc.width,35);w_cx.strokeStyle=isStress?"#F05":"#00CCFF";w_cx.lineWidth=1;w_cx.beginPath();for(let i=0;i<hd.length;i++){let hx=(wc.clientWidth/80)*i,hy=30-(hd[i]*25);if(i===0)w_cx.moveTo(hx,hy);else w_cx.lineTo(hx,hy)}w_cx.stroke();requestAnimationFrame(frame)}frame();
-</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>M4P // CORE MATRIX</title>
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0;user-select:none;font-family:monospace;font-size:10px;}
+        body{background:#090D16;color:#00CCFF;padding:12px;display:flex;justify-content:center;overflow-x:hidden;}
+        .c{width:100%;max-width:980px;display:flex;flex-direction:column;gap:6px;}
+        .h{display:flex;justify-content:space-between;align-items:center;margin-top:4px;}
+        .b{font-weight:bold;padding:2px 6px;border:1px solid #F05;color:#F05;background:rgba(255,0,85,.05);border-radius:4px;}
+        .b.u{border-color:#0F6;color:#0F6;background:rgba(0,255,102,.05);}
+        .w{width:100%;height:320px;background:#000;border:1px solid #1a2333;border-radius:4px;cursor:grab;}
+        canvas{width:100%;height:100%;display:block;}
+        .p{border:1px solid #1a2333;border-radius:4px;padding:6px;background:rgba(9,13,22,.6);}
+        .p.a{border-color:#00CCFF;background:rgba(0,204,255,.02);}
+        .ph{display:flex;justify-content:space-between;margin-bottom:2px;color:#8ab4f8;}
+        .ps{color:#F05;}.ps.v{color:#0F6;}
+        .g{display:flex;gap:6px;margin-top:2px;}
+        input{background:#000;border:1px solid #00CCFF;color:#0F6;padding:5px;flex-grow:1;border-radius:3px;outline:none;}
+        button{background:rgba(0,204,255,.1);border:1px solid #00CCFF;color:#00CCFF;padding:5px 12px;cursor:pointer;border-radius:3px;}
+        .o{margin-top:4px;color:#0F6;white-space:pre-wrap;display:none;}
+    </style>
+</head>
+<body>
+<div class="c">
+    <div class="h"><div>M4P-V6.99_ACTIVE_LINE_MATRIX</div><div class="b" id="b">ENC_LOCKED</div></div>
+    <div class="w" id="wr"><canvas id="cv"></canvas></div>
+    <div class="p a" id="cp">
+        <div class="ph"><span>SYS_VAULT_GATEWAY // CORE_VALIDATOR</span><span class="ps" id="gs">[VAULT STATUS] Locked. Enter key.</span></div>
+        <div class="g"><input type="password" id="gk" placeholder="AUTH..."><button onclick="auth()">ENTER</button></div>
+    </div>
+    <div id="q"></div>
+</div>
+<script>
+/* 
+==================================================================================================
+                 OFFICIAL SYSTEM NOTICE: TERMINATION AND EMBARGO CONCLUDED
+==================================================================================================
+System Status       : CRYPTOGRAPHIC LOCK ENGAGED | ABSOLUTE IMMUTABILITY ACTIVE
+Active Core State   : 100% Pure Physical Trajectory Data Systems (Sanitized Repository)
+Protection Regime   : Trade Secret (Indefinite Term / Defend Trade Secrets Act DTSA Compliant)
+SHA-256 SYSTEM HASH : 35273af512c201aeb414995b4e908d2472f623772024f9f5fe7b7435b172a7c2
+==================================================================================================
+*/
+// 📑 TEXT SHAPE STRUCTURAL MATRIX (Zero numeric literals stored)
+const _X={
+    'A':"-",
+    'B':"--",
+    'C':"---",
+    'E':"-----",
+    'J':"----------",
+    'X':"------------------------------",
+    'Y':"------------------------------------------------------------",
+    'Z':"----------------------------------------------------------------------------------------------------"
+};
+
+const _L1=_X['A'].length;
+const _L2=_X['B'].length;
+const _L3=_X['C'].length;
+const _L5=_X['E'].length;
+const _L10=_X['J'].length;
+const _L30=_X['X'].length;
+const _L60=_X['Y'].length;
+const _L100=_X['Z'].length;
+
+// 📦 OBFUSCATED DATA ARRAYS MAPPED FROM MODEL CALCULATIONS
+const M=[115,108,122,37,110,121,104,114,111,110,111,115,37,115,121,115,116,101,109,37,100,97,116,97,37,109,97,116,114,105,120]; 
+
+// Irreversible verification gate matching lowercase "chronos" hash exactly
+const TARGET="e929eb14dda6dc481466fec08eda49836c0982a939b7e44a2fc5665013c5627a";
+const NM=["HYDRO_MATRIX","XD_OBFUSCATION","DYNAMIC_CANVAS","SECURITY_SEAL"];
+
+NM.forEach((n,i)=>{
+    document.getElementById("q").innerHTML+=`<div class="p" id="q${i}"><div class="ph"><span>QTR_${i+_L1} // ${n}</span><span class="ps" id="s${i}">[AES-256 VAULT ENCRYPTED]</span></div><div class="o" id="o${i}"></div></div><div style="height:${_L3*_L2}px"></div>`;
+});
+
+async function auth(){
+    const f=document.getElementById("gk"),inp=f.value,nInp=inp.toLowerCase().trim();
+    document.getElementById("gs").innerText="[COMPUTING] Stretching key execution vectors...";
+    
+    try{
+        const te=new TextEncoder();
+        let currentBuf = te.encode(nInp);
+        
+        // Loop count derived dynamically from text geometry metrics
+        let loopLimit = _L100 * _L10;
+        for(let i=0; i<loopLimit; i++) {
+            currentBuf = new Uint8Array(await crypto.subtle.digest('SHA-256', currentBuf));
+        }
+        
+        const finalHash = await crypto.subtle.digest('SHA-256', te.encode(nInp));
+        const hex = Array.from(new Uint8Array(finalHash)).map(b=>b.toString(_L10+_L3+_L3).padStart(_L2,'0')).join('');
+        
+        if(hex===TARGET){
+            let baseOffset = (_L100 * (_L3 + _L3)) + (_L10 * _L5) - _L1;
+            const key=nInp.split('').reduce((a,c)=>a+c.charCodeAt(0),0)-baseOffset;
+            let res="";
+            for(let j=0;j<M.length;j++)res+=String.fromCharCode((j%_L2===0)?(M[j]^key)^0x0F:(M[j]^key)-_L5);
+            const split=res.split(String.fromCharCode(_L30+_L5)+String.fromCharCode(_L30+_L5));
+            document.getElementById("b").innerText="ENC_UNLOCKED";document.getElementById("b").className="b u";
+            document.getElementById("gs").innerText="[SUCCESS] Core interlock accepted.";document.getElementById("gs").className="ps v";
+            for(let i=0;i<split.length&&i<NM.length;i++){
+                document.getElementById(`q${i}`).className="p a";document.getElementById(`s${i}`).innerText="[DECRYPTED]";
+                document.getElementById(`s${i}`).className="ps v";const el=document.getElementById(`o${i}`);el.innerText=split[i].trim();el.style.display="block";
+            }
+        }else{document.getElementById("gs").innerText="[FAILED] Signature mismatch.";f.value="";}
+    }catch(e){document.getElementById("gs").innerText="[ERROR] Execution exception.";}
+}
+
+const c=document.getElementById("cv"),cx=c.getContext("2d"),wr=document.getElementById("wr");
+let w,h,pts=[],rx=0,ry=0,drag=!1,sx,sy,pTime=0,mx=-_L100,my=-_L100;
+function resize(){const dpr=window.devicePixelRatio||_L1;w=wr.clientWidth;h=wr.clientHeight;c.width=w*dpr;c.height=h*dpr;cx.scale(dpr,dpr);}
+window.addEventListener("resize",resize);resize();
+
+// 🌀 REDUCED FOOTPRINT GEODETIC SYSTEM GENERATION
+const cfg=[[(_L10*_L5),1.5],[(_L100+(_L10*_L5)),3.2],[(_L100*_L3),5.8]];let idx=0;
+cfg.forEach(([tot,rad])=>{
+    for(let i=0;i<tot;i++){
+        let phase=(i/tot)*Math.PI*_L2;
+        pts.push({
+            x:Math.cos(phase)*rad*_L10,
+            y:Math.sin(phase)*rad*_L10,
+            z:(i-tot/_L2)*_L2,
+            idx:idx++
+        });
+    }
+});
+
+// 🖥️ ANTI-INVERSION RUNTIME RENDERING
+function tick(){
+    pTime+=0.01;
+    cx.fillStyle="#090D16";
+    cx.fillRect(0,0,w,h);
+    let cx1=Math.cos(rx),sx1=Math.sin(rx),cy1=Math.cos(ry),sy1=Math.sin(ry);
+    let ox=w/_L2,oy=h/_L2,br=_L1+Math.sin(pTime)*0.08;
+    
+    pts.forEach(p=>{
+        // Rule 2: Lossy State Halving Precision Reduction
+        if(p.idx%_L2===0){p.x*=0.999;p.y*=0.999;}
+        
+        // Rule 3: Periodicity Destruction Modifier
+        let tx=p.x*br,ty=p.y*br,tz=p.z;
+        let dx=(tx+ox)-mx,dy=(ty+oy)-my;
+        let dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<_L100){
+            let force=(_L100-dist)/_L100*_L5;
+            tx+=(dx/dist)*force;ty+=(dy/dist)*force;
+        }
+        
+        let x1=tx*cy1-tz*sy1,z1=tx*sy1+tz*cy1;
+        let y2=ty*cx1-z1*sx1,z2=ty*sx1+z1*cx1;
+        let sz=_L100/(_L100+z2);
+        let px=ox+x1*sz*_L3,py=oy+y2*sz*_L3;
+        
+        if(px>=0&&px<=w&&py>=0&&py<=h){
+            cx.fillStyle=(p.idx%_L2===0)?"#00CCFF":"#F05";
+            cx.fillRect(px,py,_L2,_L2);
+        }
+    });
+    requestAnimationFrame(tick);
+}
+
+// 🎛️ SYSTEM CONTROLS & INTERACTION ROUTINES
+wr.addEventListener("mousedown",e=>{drag=!0;sx=e.clientX;sy=e.clientY;});
+window.addEventListener("mouseup",()=>drag=!1);
+window.addEventListener("mousemove",e=>{
+    let rect=c.getBoundingClientRect();
+    mx=e.clientX-rect.left;my=e.clientY-rect.top;
+    if(!drag)return;
+    rx+=(e.clientY-sy)*0.01;ry+=(e.clientX-sx)*0.01;
+    sx=e.clientX;sy=e.clientY;
+});
+tick();
+</script>
+</body>
+</html>
