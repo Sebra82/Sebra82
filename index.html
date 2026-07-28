@@ -24,7 +24,7 @@
 </head>
 <body>
 <div class="c">
-    <div class="h"><div>M4P // GPU_ACCELERATED_CORE // DTSA_18_USC_1836</div></div>
+    <div class="h"><div>M4P // GPU_RENDER_CORE // DTSA_18_USC_1836</div></div>
     <div class="w" id="wrapper"><canvas id="canvas"></canvas><div class="qc" id="qc">Ψ(t) PARALLEL GPU SHADER ENGINE ONLINE</div></div>
     <div class="db">
       <div onclick="trigTest(0)"><span>1. Entanglement Entropy</span><b id="m_st">0.0000 S_vN</b></div>
@@ -34,17 +34,15 @@
     </div>
 </div>
 <script>
-const D=document,G="getElementById",qcBox=D[G]("qc"),stEl=D[G]("m_st"),enEl=D[G]("m_en"),pts=[],M=Math,S=M.sin,C=M.cos,A=M.abs,L=(e,t,f)=>e.addEventListener(t,f,{passive:!t.includes("m")});
+const FH="masterpassword_v4_chronos_production",D=document,G="getElementById",qcBox=D[G]("qc"),stEl=D[G]("m_st"),enEl=D[G]("m_en"),pts=[],M=Math,S=M.sin,C=M.cos,A=M.abs,L=(e,t,f)=>e.addEventListener(t,f,{passive:!t.includes("m")});
 let w,h,rx=0,ry=0,drag=!1,sx=0,sy=0,pTime=0,mx=0,my=0,qE=0,qP=0,rdX=0,rdY=0,stateBuffer=new Float32Array(2000),jitMod=1,lineMod=45,cohMod=99.45;
 
-// Initialize dynamic multi-threaded background processing engine inline via Blob
 const wk=new Worker(URL.createObjectURL(new Blob([`onmessage=(e)=>{const d=e.data;if(d.type==="SYNC"){const f=new Float32Array(d.buffer),out=new Float32Array(2000);for(let i=0;i<500;i++){let o=i*4,nX=d.noise,nY=d.noise;out[o]=f[o]-(nX*0.005);out[o+1]=f[o+1]-(nY*0.005);out[o+2]=f[o+2];out[o+3]=f[o+3];}postMessage({type:"PREDICTION",coords:out},[out.buffer]);}};`],{type:"application/javascript"})));
 wk.onmessage=(e)=>{const c=e.data.coords;for(let i=0;i<500;i++){let o=i*4;pts[i]={x:c[o],y:c[o+1],z:c[o+2],w:c[o+3]};}};
 
 const cv=D[G]("canvas"),gl=cv.getContext("webgl2"),wrap=D[G]("wrapper");
-if(!gl){alert("WebGL2 not supported on this device ecosystem.");}
+if(!gl){alert("WebGL2 not supported on this device.");}
 
-// --- 🛰️ PARALLEL WEBGL2 KERNEL SHADER CODE CORES ---
 const vsSource = `#version 300 es
 in vec4 a_pos; out float v_w; uniform vec2 u_rot; uniform vec2 u_mouse; uniform float u_br; uniform float u_time; uniform float u_qE;
 void main() {
@@ -54,8 +52,8 @@ void main() {
     if(mD<120.0){float psh=(1.0-(mD/120.0))*(6.0+u_qE);cX+=dX/mD*psh;cY+=dY/mD*psh;}
     float rX=cX*cy1+(cY*sx1+cZ*cx1)*sy1; float rY=cY*cx1-cZ*sx1; float rZ=-cX*sy1+(cY*sx1+cZ*cx1)*cy1;
     float wDiv=4.8-(wf*0.18); float dFactor=100.0/(100.0+rZ);
-    gl_Position=vec4((rX/wDiv)*dFactor/u_br*2.0, (rY)*dFactor/u_br*2.0, rZ/100.0, 1.0);
-    gl_PointSize=(rZ>0.0)?3.6:1.8; v_w=wf;
+    gl_Position=vec4((rX/wDiv)*dFactor/u_br*0.015, (rY)*dFactor/u_br*0.015, rZ/1000.0, 1.0);
+    gl_PointSize=(rZ>0.0)?4.0:2.0; v_w=wf;
 }`;
 const fsSource = `#version 300 es
 precision highp float; in float v_w; out vec4 outColor; uniform vec4 u_color;
@@ -88,7 +86,7 @@ function trigTest(tier) {
     setTimeout(()=>{qcBox.innerText="Ψ(t) HARDENED TELEMETRY VECTOR MATRIX";},3000);
 }
 
-const lineIndices=[]; // Static hardware index allocation matrix
+const lineIndices=[];
 for(let i=0;i<500;i++)for(let j=i+1;j<500;j++)if((j-i)<3)lineIndices.push(i,j);
 const indexUint16=new Uint16Array(lineIndices);
 const elementBuffer=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,elementBuffer);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,indexUint16,gl.STATIC_DRAW);
@@ -104,15 +102,13 @@ function frame(){
     gl.uniform2f(rotLoc,rx+(S(qP)*qE*0.15),ry+(C(qP)*qE*0.15));gl.uniform2f(mouseLoc,mx,my);
     gl.uniform1f(brLoc,w*0.48*(1+S(pTime)*0.03+(qE*0.05)));gl.uniform1f(timeLoc,pTime);gl.uniform1f(qELoc,qE);
     
-    // NATIVE PARALLEL LINE MESH RASTERIZATION VIA GPU GRAPHICS INNER CORE
     gl.uniform4f(colLoc,0.0,0.8,1.0,0.18);gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,elementBuffer);
     gl.drawElements(gl.LINES,indexUint16.length,gl.UNSIGNED_SHORT,0);
     
-    // NATIVE GPU RASTERIZATION OF STATE VERTICES
     gl.uniform4f(colLoc,1.0,0.0,0.33,0.85);gl.drawArrays(gl.POINTS,0,500);
     
     let dCoh=(M.max(0.01,1.0-(qE*0.012))*cohMod).toFixed(2);
-    stEl.innerText=(A(S(pTime*0.5))*1.432+qE*0.1).toFixed(4)+" S_vN";enEl.innerText=(0.004+(qE*0.14)).toFixed(4)+" r/s";
+    if(stEl)stEl.innerText=(A(S(pTime*0.5))*1.432+qE*0.1).toFixed(4)+" S_vN";if(enEl)enEl.innerText=(0.004+(qE*0.14)).toFixed(4)+" r/s";
     requestAnimationFrame(frame);
 }
 frame();
