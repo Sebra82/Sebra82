@@ -5,122 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sebra82 // Quantum Horizon Core</title>
     <style>
-        /* Zero spatial layout padding overhead */
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: monospace; font-size: 0.45rem; line-height: 1; }
-        body { background: #000; color: #47515c; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; user-select: none; }
-
-        /* Restored wide high-fidelity dashboard frame width */
-        .dashboard-frame { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 4px; }
-        
-        /* Fully expanded visualizer canvas viewport frame height */
-        .visualizer-container { width: 100%; height: 240px; position: relative; }
-        #constellationCanvas { width: 100%; height: 100%; position: absolute; }
-
-        /* Unified horizontal telemetry metrics deck */
-        .metrics-block { display: flex; justify-content: space-between; align-items: center; padding: 2px 4px; border-bottom: 1px dashed rgba(8, 18, 31, 0.3); }
-        .metric-item { display: flex; align-items: center; gap: 2px; cursor: pointer; }
-        .m-lbl { font-size: 0.4rem; color: #141a22; font-weight: bold; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: monospace; line-height: 1; font-size: 0.42rem; }
+        body { background: #000; color: #47515c; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; user-select: none; padding: 4px; }
+        .dashboard-frame { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 2px; }
+        .visualizer-container { width: 100%; height: 260px; background: #000; border: 1px solid #04090e; position: relative; }
+        #constellationCanvas { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+        .metrics-bar { display: flex; justify-content: space-between; align-items: center; background: rgba(2,4,6,0.99); border: 1px solid #04090e; padding: 3px 6px; font-size: 0.4rem; }
+        .metric-item { display: flex; align-items: center; gap: 3px; cursor: pointer; }
+        .m-lbl { color: #2c353f; font-weight: bold; }
         .m-val { font-weight: bold; font-variant-numeric: tabular-nums; }
-
-        /* Transparent engineering parameter sliders */
-        .input-grid { display: flex; justify-content: space-between; padding: 2px 4px; }
-        .control-box { display: flex; align-items: center; gap: 3px; }
-        .param-label { color: #141a22; font-weight: bold; font-size: 0.38rem; }
-        .param-input {
-            width: 36px;
-            background: transparent;
-            border: none;
-            color: #00f3ff;
-            font-size: 0.45rem;
-            text-align: right;
-            outline: none;
-            font-weight: bold;
-        }
-
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 2px; }
+        .control-box { display: flex; align-items: center; justify-content: space-between; background: rgba(2,4,6,0.99); border: 1px solid #04090e; padding: 3px 5px; }
+        .param-label { color: #2c353f; font-weight: bold; font-size: 0.36rem; }
+        .param-input { width: 40px; background: transparent; border: none; color: #00f3ff; font-size: 0.42rem; text-align: right; outline: none; font-weight: bold; }
+        .param-input:focus { color: #00ff66; }
         .hl-cyn { color: #00f3ff; }
         .hl-grn { color: #00ff66; }
     </style>
 </head>
 <body>
-
     <div class="dashboard-frame">
-        <!-- High-Density Volumetric Constellation Core Visualizer Space -->
-        <div class="visualizer-container">
-            <canvas id="constellationCanvas"></canvas>
+        <div class="visualizer-container"><canvas id="constellationCanvas"></canvas></div>
+        <div class="metrics-bar">
+            <div class="metric-item" onclick="spinEntropy()"><span class="m-lbl">ENTR:</span><span class="m-val hl-grn" id="entropyVal">.962</span></div>
+            <div class="metric-item" onclick="spinPhase()"><span class="m-lbl">PHAS:</span><span class="m-val hl-grn" id="phaseVal">.004</span></div>
+            <div class="metric-item" onclick="scrambleSubspace()"><span class="m-lbl">HILB:</span><span class="m-val hl-cyn" id="subspaceVal">2⁵⁰⁰</span></div>
+            <div class="metric-item" onclick="scrambleMesh()"><span class="m-lbl">MESH:</span><span class="m-val hl-cyn" id="meshSyncText">SYNC</span></div>
         </div>
-
-        <!-- Telemetry Data Strip -->
-        <div class="metrics-block">
-            <div class="metric-item" onclick="spinEntropy()">
-                <span class="m-lbl">ENTR:</span>
-                <span class="m-val hl-grn" id="entropyVal">.962</span>
-            </div>
-            <div class="metric-item" onclick="spinPhase()">
-                <span class="m-lbl">PHAS:</span>
-                <span class="m-val hl-grn" id="phaseVal">.004</span>
-            </div>
-            <div class="metric-item" onclick="scrambleSubspace()">
-                <span class="m-lbl">HILB:</span>
-                <span class="m-val hl-cyn" id="subspaceVal">2⁵⁰⁰</span>
-            </div>
-            <div class="metric-item" onclick="scrambleMesh()">
-                <span class="m-lbl">MESH:</span>
-                <span class="m-val hl-cyn" id="meshSyncText">SYNC</span>
-            </div>
-        </div>
-
-        <!-- Parametric Simulation Configuration Inputs Deck -->
         <div class="input-grid">
-            <div class="control-box"><span class="param-label">NOD</span><input type="number" class="param-input" id="cfgNodes" value="500" min="10" max="999" onchange="updateSimulation()"></div>
-            <div class="control-box"><span class="param-label">PRX</span><input type="number" class="param-input" id="cfgProx" value="28" min="5" max="80" onchange="updateSimulation()"></div>
+            <div class="control-box"><span class="param-label">NOD</span><input type="number" class="param-input" id="cfgNodes" value="500" min="10" max="800" onchange="updateSimulation()"></div>
+            <div class="control-box"><span class="param-label">PRX</span><input type="number" class="param-input" id="cfgProx" value="28" min="5" max="60" onchange="updateSimulation()"></div>
             <div class="control-box"><span class="param-label">VX</span><input type="number" class="param-input" id="cfgVelX" value="0.0015" step="0.0005" onchange="updateSimulation()"></div>
             <div class="control-box"><span class="param-label">VY</span><input type="number" class="param-input" id="cfgVelY" value="0.003" step="0.0005" onchange="updateSimulation()"></div>
         </div>
     </div>
-
     <script>
-        const SYSTEM_STATE = Object.freeze({
-            entropyVal: '.962', phaseVal: '.004', subspaceVal: '2⁵⁰⁰', meshVal: 'SYNC',
-            matrixChars: "ΨΩαβX01%"
-        });
-
+        const SYSTEM_STATE = Object.freeze({ entropyVal: '.962', phaseVal: '.004', subspaceVal: '2⁵⁰⁰', meshVal: 'SYNC', matrixChars: "ΨΩαβX01%" });
         const activeLoops = new Map();
         const canvas = document.getElementById('constellationCanvas');
         const ctx = canvas?.getContext('2d');
         let nodes = [], angleX = 0, angleY = 0;
-
-        // Boot configuration locked directly to 500 nodes matrix tracking capability
         let simCount = 500, simProx = 28, simVelX = 0.0015, simVelY = 0.003;
 
-        function resizeCanvas() {
-            if (!canvas) return;
-            canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
-            initConstellation();
-        }
-
-        // Massively Expanded 500+ High-Density Node Matrix Loop
+        function resizeCanvas() { if (!canvas) return; canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; initConstellation(); }
         function initConstellation() {
             nodes = [];
             for (let i = 0; i < simCount; i++) {
-                const theta = (i / simCount) * Math.PI * 16;
+                const theta = (i / simCount) * Math.PI * 14;
                 const r = 2.4 * (Math.sin(i * 0.05) + 1.2);
-                nodes.push({ 
-                    x: Math.cos(theta) * r + (Math.random() - 0.5) * 0.2, 
-                    y: (i / simCount) * 5.0 - 2.5, 
-                    z: Math.sin(theta) * r + (Math.random() - 0.5) * 0.2, 
-                    color: i % i === 0 ? '#ff0055' : '#00f3ff' 
-                });
+                nodes.push({ x: Math.cos(theta) * r + (Math.random() - 0.5) * 0.2, y: (i / simCount) * 5.0 - 2.5, z: Math.sin(theta) * r, color: i % 3 === 0 ? '#ff0055' : '#00f3ff' });
             }
         }
-
         function updateSimulation() {
-            simCount = parseInt(document.getElementById('cfgNodes').value) || 500;
-            simProx = parseInt(document.getElementById('cfgProx').value) || 28;
-            simVelX = parseFloat(document.getElementById('cfgVelX').value) || 0.0015;
-            simVelY = parseFloat(document.getElementById('cfgVelY').value) || 0.003;
+            // Anti-Overflow Sanitization Boundaries
+            let rawNodes = parseInt(document.getElementById('cfgNodes').value);
+            let rawProx = parseInt(document.getElementById('cfgProx').value);
+            let rawVelX = parseFloat(document.getElementById('cfgVelX').value);
+            let rawVelY = parseFloat(document.getElementById('cfgVelY').value);
+
+            simCount = isNaN(rawNodes) ? 500 : Math.max(10, Math.min(800, rawNodes));
+            simProx = isNaN(rawProx) ? 28 : Math.max(5, Math.min(60, rawProx));
+            simVelX = isNaN(rawVelX) ? 0.0015 : Math.max(-0.05, Math.min(0.05, rawVelX));
+            simVelY = isNaN(rawVelY) ? 0.003 : Math.max(-0.05, Math.min(0.05, rawVelY));
+
+            document.getElementById('cfgNodes').value = simCount;
+            document.getElementById('cfgProx').value = simProx;
+            document.getElementById('cfgVelX').value = simVelX;
+            document.getElementById('cfgVelY').value = simVelY;
             initConstellation();
         }
-
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
@@ -128,64 +81,44 @@
             if (!ctx || !canvas) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             const cx = canvas.width / 2, cy = canvas.height / 2, projected = [];
-
             nodes.forEach(n => {
                 let x1 = n.x * Math.cos(angleY) - n.z * Math.sin(angleY);
                 let z1 = n.x * Math.sin(angleY) + n.z * Math.cos(angleY);
                 let y2 = n.y * Math.cos(angleX) - z1 * Math.sin(angleX);
                 let z2 = n.y * Math.sin(angleX) + z1 * Math.cos(angleX);
-                
-                const factor = 110 / (4.8 - z2);
-                projected.push({ x: cx + x1 * factor, y: cy + y2 * factor, z: z2, color: n.color });
+                projected.push({ x: cx + x1 * (110 / (4.8 - z2)), y: cy + y2 * (110 / (4.8 - z2)), z: z2, color: n.color });
             });
-
-            // Ultra-fine line weight limits (0.08px) to draw 500 nodes clearly without overlap canvas muddying
-            ctx.lineWidth = 0.08; 
+            ctx.lineWidth = 0.08;
             for (let i = 0; i < projected.length; i++) {
-                // Highly optimized local pairing loop constraints preventing mobile CPU crashes
-                for (let j = i + 1; j < Math.min(i + 4, projected.length); j++) {
+                for (let j = i + 1; j < Math.min(i + 5, projected.length); j++) {
                     if (Math.hypot(projected[i].x - projected[j].x, projected[i].y - projected[j].y) < simProx) {
-                        ctx.strokeStyle = 'rgba(0,243,255,0.06)';
+                        ctx.strokeStyle = projected[i].color === '#ff0055' ? 'rgba(255,0,85,0.08)' : 'rgba(0,243,255,0.08)';
                         ctx.beginPath(); ctx.moveTo(projected[i].x, projected[i].y); ctx.lineTo(projected[j].x, projected[j].y); ctx.stroke();
                     }
                 }
             }
-
-            projected.forEach(p => {
-                ctx.fillStyle = '#00f3ff';
-                ctx.beginPath(); ctx.arc(p.x, p.y, Math.max(0.2, (4.8 - p.z) * 0.45), 0, Math.PI * 2); ctx.fill();
-            });
-
+            projected.forEach(p => { ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, Math.max(0.3, (4.8 - p.z) * 0.55), 0, Math.PI * 2); ctx.fill(); });
             angleX += simVelX; angleY += simVelY;
             requestAnimationFrame(animateConstellation);
         }
         animateConstellation();
 
-        // --- Defensive Asynchronous Manipulation Engine Loops ---
         function clearLoop(key) { if (activeLoops.has(key)) { clearInterval(activeLoops.get(key)); activeLoops.delete(key); } }
-
         function scrambleText(elementId, original) {
             const el = document.getElementById(elementId); if (!el) return;
-            clearLoop(elementId);
-            let steps = 0, maxSteps = 6;
+            clearLoop(elementId); let steps = 0, maxSteps = 6;
             const interval = setInterval(() => {
                 el.innerText = original.split("").map((c, i) => (i < (steps / maxSteps) * original.length) ? c : SYSTEM_STATE.matrixChars[Math.floor(Math.random() * SYSTEM_STATE.matrixChars.length)]).join("");
                 if (++steps >= maxSteps) { clearInterval(interval); activeLoops.delete(elementId); el.innerText = original; }
-            }, 40);
-            activeLoops.set(elementId, interval);
+            }, 40); activeLoops.set(elementId, interval);
         }
-
         function scrambleMesh() { scrambleText('meshSyncText', SYSTEM_STATE.meshVal); }
-
         function manipulateNumbers(elementId, generateFunc, finalVal) {
             const el = document.getElementById(elementId); if (!el) return;
-            clearLoop(elementId);
-            let d = 0;
+            clearLoop(elementId); let d = 0;
             const interval = setInterval(() => { el.innerText = generateFunc(); if ((d += 40) > 240) { clearInterval(interval); activeLoops.delete(elementId); el.innerText = finalVal; } }, 40);
             activeLoops.set(elementId, interval);
         }
-
-        // Click-triggered logic parameter functions
         function spinEntropy() { manipulateNumbers('entropyVal', () => (Math.random() * 0.9).toFixed(3).substring(1), SYSTEM_STATE.entropyVal); }
         function spinPhase() { manipulateNumbers('phaseVal', () => (Math.random() * 0.009).toFixed(3).substring(1), SYSTEM_STATE.phaseVal); }
         function scrambleSubspace() { manipulateNumbers('subspaceVal', () => `2⁵${Math.floor(Math.random() * 9)}`, SYSTEM_STATE.subspaceVal); }
