@@ -3,106 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sebra82 // Quantum Atto-Console</title>
+    <title>Sebra82 // Quantum Core</title>
     <style>
-        :root {
-            --bg: #000;
-            --pnl: rgba(2,4,6,0.99);
-            --brd: #020508;
-            --cyn: #00f3ff;
-            --grn: #00ff66;
-            --mtd: #141a22;
-        }
+        /* Complete elimination of spatial padding, frames, and background layout overhead */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: monospace; font-size: 0.38rem; line-height: 1; }
+        body { background: #000; color: #47515c; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; user-select: none; }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: monospace; line-height: 1; font-size: 0.38rem; }
+        /* Absolute minimalist 110px micro-column container footprint */
+        .dashboard-frame { width: 110px; display: flex; flex-direction: column; gap: 2px; }
+        
+        .visualizer-container { width: 100%; height: 75px; position: relative; }
+        #constellationCanvas { width: 100%; height: 100%; position: absolute; }
 
-        body {
-            background: var(--bg);
-            color: #38414a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
-            user-select: none;
-            padding: 1px;
-        }
-
-        .dashboard-frame {
-            width: 100%;
-            max-width: 110px;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5px;
-        }
-
-        .sys-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: bold;
-        }
-        .header-tag { 
-            color: var(--cyn); 
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 80%;
-        }
-
-        /* 75px vertical height specifically optimized for high-density rendering */
-        .visualizer-container {
-            width: 100%;
-            height: 75px;
-            background: #000;
-            border: 1px solid var(--brd);
-            position: relative;
-        }
-        #constellationCanvas {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0; left: 0;
-        }
-
-        .metrics-block {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1px;
-            background: var(--pnl);
-            border: 1px solid var(--brd);
-            padding: 1px;
-        }
+        /* Transparent, zero-border variable interaction deck */
+        .metrics-block { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; }
         .metric-item { display: flex; flex-direction: column; cursor: pointer; }
-        .m-lbl { font-size: 0.34rem; color: var(--mtd); font-weight: bold; letter-spacing: -0.2px; }
+        .m-lbl { font-size: 0.34rem; color: #141a22; font-weight: bold; }
         .m-val { font-weight: bold; font-variant-numeric: tabular-nums; }
 
-        .pipeline-card {
-            background: var(--pnl);
-            border: 1px solid var(--brd);
-            padding: 1px 1.5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
+        /* Inline simulation tuning modifiers */
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; }
+        .control-box { display: flex; align-items: center; justify-content: space-between; }
+        .param-label { color: #141a22; font-weight: bold; font-size: 0.32rem; }
+        .param-input {
+            width: 32px;
+            background: transparent;
+            border: none;
+            color: #00f3ff;
+            font-size: 0.38rem;
+            text-align: right;
+            outline: none;
+            font-weight: bold;
         }
 
-        .hl-cyn { color: var(--cyn); }
-        .hl-grn { color: var(--grn); }
+        .hl-cyn { color: #00f3ff; }
+        .hl-grn { color: #00ff66; }
     </style>
 </head>
 <body>
 
     <div class="dashboard-frame">
-        <div class="sys-header">
-            <span class="header-tag" id="mainHeader" onclick="scrambleHeader()">M4P//6.99</span>
-            <span class="hl-grn">ON</span>
-        </div>
-
+        <!-- 1. 3D Structural Neural Visualizer -->
         <div class="visualizer-container">
             <canvas id="constellationCanvas"></canvas>
         </div>
 
+        <!-- 2. Core Telemetry Logic Matrix (Maintains all historical calculation parameters) -->
         <div class="metrics-block">
             <div class="metric-item" onclick="spinEntropy()">
                 <span class="m-lbl">ENTR</span>
@@ -122,20 +68,19 @@
             </div>
         </div>
 
-        <div class="pipeline-card" onclick="scramblePipe(1)">
-            <span class="hl-cyn" id="pipeLabel1">Q1//HYD</span>
-            <span class="hl-grn" id="pipeStatus1">OK</span>
-        </div>
-        <div class="pipeline-card" onclick="scramblePipe(2)">
-            <span class="hl-cyn" id="pipeLabel2">Q2//XD</span>
-            <span class="hl-grn" id="pipeStatus2">OK</span>
+        <!-- 3. Dynamic Physics Variable Modifiers (Tied directly to the 3D generation looping algorithms) -->
+        <div class="input-grid">
+            <div class="control-box"><span class="param-label">NOD</span><input type="number" class="param-input" id="cfgNodes" value="72" onchange="updateSimulation()"></div>
+            <div class="control-box"><span class="param-label">PRX</span><input type="number" class="param-input" id="cfgProx" value="13" onchange="updateSimulation()"></div>
+            <div class="control-box"><span class="param-label">VX</span><input type="number" class="param-input" id="cfgVelX" value="0.002" step="0.001" onchange="updateSimulation()"></div>
+            <div class="control-box"><span class="param-label">VY</span><input type="number" class="param-input" id="cfgVelY" value="0.004" step="0.001" onchange="updateSimulation()"></div>
         </div>
     </div>
 
     <script>
+        // System Config & Immutable Memory States Lookup
         const SYSTEM_STATE = Object.freeze({
-            headerVal: 'M4P//6.99', entropyVal: '.962', phaseVal: '.004',
-            subspaceVal: '2⁵⁰⁰', meshVal: 'SYNC', pipe1Val: 'Q1//HYD', pipe2Val: 'Q2//XD',
+            entropyVal: '.962', phaseVal: '.004', subspaceVal: '2⁵⁰⁰', meshVal: 'SYNC',
             matrixChars: "ΨΩαβX01%"
         });
 
@@ -144,20 +89,31 @@
         const ctx = canvas?.getContext('2d');
         let nodes = [], angleX = 0, angleY = 0;
 
+        // Dynamic Simulation States
+        let simCount = 72, simProx = 13, simVelX = 0.002, simVelY = 0.004;
+
         function resizeCanvas() {
             if (!canvas) return;
             canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
             initConstellation();
         }
 
+        // Intricate High-Fidelity 3D Neural strands calculation
         function initConstellation() {
             nodes = [];
-            const count = 72; // Kept high-fidelity detailed array density
-            for (let i = 0; i < count; i++) {
-                const theta = (i / count) * Math.PI * 10;
+            for (let i = 0; i < simCount; i++) {
+                const theta = (i / simCount) * Math.PI * 10;
                 const r = 1.3 * (Math.sin(i * 0.04) + 0.8);
-                nodes.push({ x: Math.cos(theta) * r, y: (i / count) * 4.6 - 2.3, z: Math.sin(theta) * r, color: i % 3 === 0 ? '#ff0055' : '#00f3ff' });
+                nodes.push({ x: Math.cos(theta) * r, y: (i / simCount) * 4.6 - 2.3, z: Math.sin(theta) * r, color: i % 3 === 0 ? '#ff0055' : '#00f3ff' });
             }
+        }
+
+        function updateSimulation() {
+            simCount = parseInt(document.getElementById('cfgNodes').value) || 72;
+            simProx = parseInt(document.getElementById('cfgProx').value) || 13;
+            simVelX = parseFloat(document.getElementById('cfgVelX').value) || 0.002;
+            simVelY = parseFloat(document.getElementById('cfgVelY').value) || 0.004;
+            initConstellation();
         }
 
         window.addEventListener('resize', resizeCanvas);
@@ -176,10 +132,10 @@
                 projected.push({ x: cx + x1 * (30 / (3.2 - z2)), y: cy + y2 * (30 / (3.2 - z2)), z: z2, color: n.color });
             });
 
-            ctx.lineWidth = 0.1; // Extensively lightened to trace micro lines sharply
+            ctx.lineWidth = 0.1;
             for (let i = 0; i < projected.length; i++) {
                 for (let j = i + 1; j < Math.min(i + 4, projected.length); j++) {
-                    if (Math.hypot(projected[i].x - projected[j].x, projected[i].y - projected[j].y) < 13) {
+                    if (Math.hypot(projected[i].x - projected[j].x, projected[i].y - projected[j].y) < simProx) {
                         ctx.strokeStyle = projected[i].color === '#ff0055' ? 'rgba(255,0,85,0.06)' : 'rgba(0,243,255,0.06)';
                         ctx.beginPath(); ctx.moveTo(projected[i].x, projected[i].y); ctx.lineTo(projected[j].x, projected[j].y); ctx.stroke();
                     }
@@ -191,11 +147,12 @@
                 ctx.beginPath(); ctx.arc(p.x, p.y, Math.max(0.12, (3.2 - p.z) * 0.2), 0, Math.PI * 2); ctx.fill();
             });
 
-            angleX += 0.002; angleY += 0.004;
+            angleX += simVelX; angleY += simVelY;
             requestAnimationFrame(animateConstellation);
         }
         animateConstellation();
 
+        // Safe Anti-Collision Interaction Routines
         function clearLoop(key) { if (activeLoops.has(key)) { clearInterval(activeLoops.get(key)); activeLoops.delete(key); } }
 
         function scrambleText(elementId, original) {
@@ -203,20 +160,13 @@
             clearLoop(elementId);
             let steps = 0, maxSteps = 6;
             const interval = setInterval(() => {
-                el.innerText = original.split("").map((c, i) => (i < (steps / maxSteps) * original.length || c === "/") ? c : SYSTEM_STATE.matrixChars[Math.floor(Math.random() * SYSTEM_STATE.matrixChars.length)]).join("");
+                el.innerText = original.split("").map((c, i) => (i < (steps / maxSteps) * original.length) ? c : SYSTEM_STATE.matrixChars[Math.floor(Math.random() * SYSTEM_STATE.matrixChars.length)]).join("");
                 if (++steps >= maxSteps) { clearInterval(interval); activeLoops.delete(elementId); el.innerText = original; }
             }, 40);
             activeLoops.set(elementId, interval);
         }
 
-        function scrambleHeader() { scrambleText('mainHeader', SYSTEM_STATE.headerVal); }
         function scrambleMesh() { scrambleText('meshSyncText', SYSTEM_STATE.meshVal); }
-        function scramblePipe(id) { 
-            scrambleText(`pipeLabel${id}`, SYSTEM_STATE[`pipe${id}Val`]);
-            const s = document.getElementById(`pipeStatus${id}`); if(!s) return;
-            s.innerText = "FX"; s.className = "hl-cyn";
-            setTimeout(() => { s.innerText = "OK"; s.className = "hl-grn"; }, 240);
-        }
 
         function manipulateNumbers(elementId, generateFunc, finalVal) {
             const el = document.getElementById(elementId); if (!el) return;
