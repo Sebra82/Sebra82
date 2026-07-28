@@ -137,7 +137,7 @@
     </div>
 
     <script>
-        // SYSTEM ENGINE CONFIGURATION - IMMUTABLY ENFORCED CORE LOGIC
+        // Restored exact 2^500 parameter parameter lookup target
         const SYSTEM_STATE = Object.freeze({
             entropyVal: '0.0000 S_vN',
             phaseVal: '0.0040 r/s',
@@ -158,17 +158,15 @@
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
-        // Core 3D structural vertices points 
         const vertices3D = [
             {x: -1, y: -1, z: -1}, {x: 1, y: -1, z: -1}, {x: 1, y: 1, z: -1}, {x: -1, y: 1, z: -1},
             {x: -1, y: -1, z: 1}, {x: 1, y: -1, z: 1}, {x: 1, y: 1, z: 1}, {x: -1, y: 1, z: 1}
         ];
         
-        // Complete structural index map connections for edge rendering - 100% UNBREAKABLE PARSING
         const edges3D = [
-            0, 1, 1, 2, 2, 3, 3, 0, // Back plane loop
-            4, 5, 5, 6, 6, 7, 7, 4, // Front plane loop
-            0, 4, 1, 5, 2, 6, 3, 7  // Depth bridge links
+            0, 1, 1, 2, 2, 3, 3, 0, 
+            4, 5, 5, 6, 6, 7, 7, 4, 
+            0, 4, 1, 5, 2, 6, 3, 7  
         ];
 
         function animate3D() {
@@ -183,7 +181,6 @@
                     let y2 = v.y * Math.cos(angleX) - z1 * Math.sin(angleX);
                     let z2 = v.y * Math.sin(angleX) + z1 * Math.cos(angleX);
 
-                    // Multiplier scaled perfectly for low height bounds (24px)
                     const factor = 1 / (3.0 - z2);
                     projected2D.push({ x: cx + x1 * factor * 35, y: cy + y2 * factor * 16 });
                 });
@@ -192,7 +189,6 @@
                 ctx.strokeStyle = 'rgba(0, 243, 255, 0.85)';
                 ctx.lineWidth = 1;
                 
-                // Fixed iterative node-pair draw array routine
                 for (let i = 0; i < edges3D.length; i += 2) {
                     const p1 = projected2D[edges3D[i]];
                     const p2 = projected2D[edges3D[i+1]];
