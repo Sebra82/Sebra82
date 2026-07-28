@@ -107,9 +107,9 @@
 
     <div class="console-container">
         <header>
-            <div class="title-group" data-value="Ψ(t) M4P // DTSA_18_USC_1836" onclick="scrambleText(this)">
-                <div class="core-title">M4 Ultra</div>
-                <div class="core-spec">M4P // RENDER // 1836</div>
+            <div class="title-group" onclick="scrambleHeader()">
+                <div class="core-title" id="mainTitle">M4 Ultra</div>
+                <div class="core-spec" id="subSpec">M4P // RENDER // 1836</div>
             </div>
             <div class="pulse-dot"></div>
         </header>
@@ -131,12 +131,13 @@
             </div>
             <div class="metric-card" id="nnCard">
                 <span>Neural</span>
-                <span class="metric-value hl-green" id="ewcVal" data-value="EMBEDDED">EMBEDDED</span>
+                <span class="metric-value hl-green" id="ewcVal">EMBEDDED</span>
             </div>
         </main>
     </div>
 
     <script>
+        // System Config & Immutable Baseline State Lookup
         const SYSTEM_STATE = Object.freeze({
             entropyVal: '0.0000 S_vN',
             phaseVal: '0.0040 r/s',
@@ -157,11 +158,18 @@
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
+        // 3D Geometry vertices definition
         const vertices3D = [
             {x: -1, y: -1, z: -1}, {x: 1, y: -1, z: -1}, {x: 1, y: 1, z: -1}, {x: -1, y: 1, z: -1},
             {x: -1, y: -1, z: 1}, {x: 1, y: -1, z: 1}, {x: 1, y: 1, z: 1}, {x: -1, y: 1, z: 1}
         ];
-        const edges3D =;
+        
+        // Corrected plain pairing matrix sequence definition
+        const edges3D = [
+            0, 1, 1, 2, 2, 3, 3, 0,
+            4, 5, 5, 6, 6, 7, 7, 4,
+            0, 4, 1, 5, 2, 6, 3, 7
+        ];
 
         function animate3D() {
             if (!ctx || !canvas) return;
@@ -182,10 +190,14 @@
                 ctx.beginPath();
                 ctx.strokeStyle = 'rgba(0, 243, 255, 0.8)';
                 ctx.lineWidth = 1;
-                edges3D.forEach((e, idx) => {
-                    if (idx % 2 === 0) ctx.moveTo(projected2D[e].x, projected2D[e].y);
-                    else ctx.lineTo(projected2D[e].x, projected2D[e].y);
-                });
+                
+                // Fixed standard loop index sequence targeting
+                for (let i = 0; i < edges3D.length; i += 2) {
+                    const p1 = projected2D[edges3D[i]];
+                    const p2 = projected2D[edges3D[i+1]];
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                }
                 ctx.stroke();
                 angleX += 0.012; angleY += 0.018;
             } catch (e) {}
@@ -193,17 +205,20 @@
         }
         animate3D();
 
-        function scrambleText(element) {
+        // Optimized Header Descrambler Routine
+        function scrambleHeader() {
+            const specEl = document.getElementById('subSpec');
+            if (!specEl) return;
             const original = "M4P // RENDER // 1836";
-            const subEl = element.querySelector('.core-spec') || element;
-            if (activeLoops.text.has(subEl)) clearInterval(activeLoops.text.get(subEl));
+            
+            if (activeLoops.text.has(specEl)) clearInterval(activeLoops.text.get(specEl));
             let iter = 0;
             const interval = setInterval(() => {
-                subEl.innerText = original.split("").map((c, i) => i < iter ? original[i] : (c === " " ? " " : SYSTEM_STATE.matrixChars[Math.floor(Math.random() * SYSTEM_STATE.matrixChars.length)])).join("");
-                if (iter >= original.length) { clearInterval(interval); subEl.innerText = original; }
+                specEl.innerText = original.split("").map((c, i) => i < iter ? original[i] : (c === " " ? " " : SYSTEM_STATE.matrixChars[Math.floor(Math.random() * SYSTEM_STATE.matrixChars.length)])).join("");
+                if (iter >= original.length) { clearInterval(interval); specEl.innerText = original; }
                 iter += 2;
             }, 20);
-            activeLoops.text.set(subEl, interval);
+            activeLoops.text.set(specEl, interval);
         }
 
         function manipulateNumbers(elementId, min, max, decimals, suffix) {
