@@ -22,7 +22,7 @@
     button{background:rgba(0,204,255,.1);border:1px solid #00CCFF;color:#00CCFF;padding:5px 12px;cursor:pointer;border-radius:3px;}
     .o{margin-top:4px;color:#0F6;white-space:pre-wrap;display:none;}
     .qc{position:absolute;bottom:8px;left:8px;right:8px;background:rgba(5,7,11,0.85);border:1px solid #141e30;padding:4px 6px;border-radius:2px;color:#00CCFF;pointer-events:none;font-size:8px;}
-    .db{border:1px solid #141e30;border-radius:4px;padding:8px;background:rgba(16,27,43,.1);display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+    .db{border:1px solid #1a2333;border-radius:4px;padding:8px;background:rgba(16,27,43,.1);display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
     .db div{border-left:2px solid #1A2B42;padding-left:6px;}
     .db div span{color:#526E85;text-transform:uppercase;font-size:8px;display:block;}
     .db div b{color:#0F6;font-size:11px;}
@@ -30,43 +30,46 @@
 </head>
 <body>
 <div class="c">
-    <div class="h"><div>M4P-V6.99_TRANSFORMER_THREAD_SHELL</div><div class="b" id="b">ENC_LOCKED</div></div>
-    <div class="w" id="wrapper"><canvas id="canvas"></canvas><div class="qc" id="qc">Ψ(t) WAITING FOR BACKGROUND CORE WORKER...</div></div>
+    <div class="h"><div>M4P-V6.99_INFINITE_TOPOLOGY_SHELL</div><div class="b" id="b">ENC_LOCKED</div></div>
+    <div class="w" id="wrapper"><canvas id="canvas"></canvas><div class="qc" id="qc">Ψ(t) WAITING FOR GRAPH ARCHITECTURE...</div></div>
     <div class="p a">
         <div class="ph"><span>SYS_VAULT_GATEWAY</span><span class="ps" id="gs">Locked. Enter key.</span></div>
         <div class="g"><input type="password" id="gk"><button onclick="auth()">ENTER</button></div>
     </div>
     <div class="db">
-      <div><span>Coherence Layer</span><b id="m_st">100.00%</b></div>
-      <div><span>AI Stream Velocity</span><b id="m_en">0.0000 r/s</b></div>
-      <div><span>Latent Attention Fields</span><b>4-HEAD TRANSFORMER</b></div>
-      <div><span>Background Thread Sync</span><b id="m_sy">OFFLINE</b></div>
+      <div><span>EWC Memory Lock</span><b id="m_st">100.00%</b></div>
+      <div><span>Topology Flow</span><b id="m_en">0.0000 r/s</b></div>
+      <div><span>Graph Scale</span><b id="m_sz">500 NODES</b></div>
+      <div><span>Neural Mesh Sync</span><b id="m_sy">OFFLINE</b></div>
     </div>
     <div id="q"></div>
 </div>
 <script>
-const FH="masterpassword_v4_chronos_production",D=document,G="getElementById",qEl=D[G]("q"),sEl=D[G]("gs"),bEl=D[G]("b");
-["HYDRO_MATRIX","XD_OBFUSCATION"].forEach((n,i)=>qEl.innerHTML+=`<div class="p" id="q${i}"><div class="ph"><span>QTR_${i+1} // ${n}</span><span class="ps" id="s${i}">[STREAM ENCRYPTED]</span></div><div class="o" id="o${i}"></div></div>`);
+const FH="masterpassword_v4_chronos_production",D=document,G="getElementById",qEl=D[G]("q"),sEl=D[G]("gs"),bEl=D[G]("b"),hToB=h=>new Uint8Array(h.match(/.{1,2}/g).map(b=>parseInt(b,16)));
+["HYDRO_MATRIX","XD_OBFUSCATION"].forEach((n,i)=>qEl.innerHTML+=`<div class="p" id="q${i}"><div class="ph"><span>QTR_${i+1} // ${n}</span><span class="ps" id="s${i}">[ENCRYPTED]</span></div><div class="o" id="o${i}"></div></div>`);
 
-// Initialize the isolated Web Worker thread allocation node
+// Initialize specialized background worker thread node
 const worker = new Worker("worker.js");
 
 async function auth(){
-    const inp=D[G]("gk").value.toLowerCase().trim();sEl.innerText="[COMPUTING] Routing token sequence...";sEl.className="ps";
+    const inp=D[G]("gk").value.toLowerCase().trim();sEl.innerText="[COMPUTING] Routing token...";sEl.className="ps";
+    await new Promise(r=>setTimeout(r,50));
     if(inp===FH){
        bEl.innerText="HONEYPOT_TRAP";bEl.style.borderColor="#F05";D[G]("q0").className="p";D[G]("s0").innerText="[TRAP]";
-       D[G]("o0").innerText=`⚠️ HONEYPOT ENTRAPMENT LOGGED. Local matrix trace generated.`;D[G]("o0").style.display="block";
+       D[G]("o0").innerText=`⚠️ HONEYPOT ENTRAPMENT LOGGED. Decoy payload active.`;D[G]("o0").style.display="block";
        return;
     }
-    // Route credentials away from the browser context to the background socket thread worker
     worker.postMessage({type:"AUTH_TRY",key:inp});
 }
 
-const cv=D[G]("canvas"),cx=cv.getContext("2d"),wrap=D[G]("wrapper"),qcBox=D[G]("qc"),stEl=D[G]("m_st"),enEl=D[G]("m_en"),syEl=D[G]("m_sy"),pts=[],M=Math,S=M.sin,C=M.cos,A=M.abs;
+const cv=D[G]("canvas"),cx=cv.getContext("2d"),wrap=D[G]("wrapper"),qcBox=D[G]("qc"),stEl=D[G]("m_st"),enEl=D[G]("m_en"),syEl=D[G]("m_sy"),szEl=D[G]("m_sz"),pts=[],M=Math,S=M.sin,C=M.cos,A=M.abs;
 let w,h,rx=0,ry=0,drag=!1,sx,sy,pTime=0,mx=0,my=0,qE=0,qP=0,aiA=!1,rdX=0,rdY=0;
 
-worker.onmessage = (e) => {
-    const d = e.data;
+// Dynamic configuration tracker for infinite open-world scaling
+let activeEdges = [];
+
+worker.onmessage=(e)=>{
+    const d=e.data;
     if(d.type==="WS_STATUS"){
         syEl.innerText=d.status;syEl.style.color=d.status==="CONNECTED"?"#0F6":"#F05";
     }
@@ -75,17 +78,29 @@ worker.onmessage = (e) => {
            bEl.innerText="ENC_UNLOCKED";bEl.className="b u";sEl.innerText="[SUCCESS] Verified.";sEl.className="ps v";
            ["q0","q1"].forEach((id,i)=>{D[G](id).className="p a";D[G](`s${i}`).innerText="[DECRYPTED]";D[G](`s${i}`).className="ps v";const el=D[G](`o${i}`);el.innerText=d.payload;el.style.display="block";});
         }else{
-           sEl.innerText="[FAILED] Cryptographic signature rejected.";sEl.className="ps";D[G]("gk").value="";
+           sEl.innerText="[FAILED] Rejection.";sEl.className="ps";D[G]("gk").value="";
         }
     }
-    if(d.type==="PREDICTION" && d.coords.length===2e3){
-        aiA=!0;for(let i=0;i<500;i++){pts[i].x=d.coords[i*4];pts[i].y=d.coords[i*4+1];pts[i].z=d.coords[i*4+2];pts[i].w=d.coords[i*4+3];}
+    if(d.type==="PREDICTION"){
+        aiA=!0;
+        // Dynamically re-allocate coordinate buffers based on Graph array changes
+        const numNodes = d.coords.length / 4;
+        if(pts.length !== numNodes){
+            pts.length = 0;
+            for(let i=0;i<numNodes;i++) pts.push({x:0,y:0,z:0,w:0});
+            szEl.innerText = `${numNodes} NODES`;
+        }
+        for(let i=0;i<numNodes;i++){
+            pts[i].x=d.coords[i*4];pts[i].y=d.coords[i*4+1];pts[i].z=d.coords[i*4+2];pts[i].w=d.coords[i*4+3];
+        }
+        activeEdges = d.edges || [];
     }
 };
 
 function resize(){const dpr=window.devicePixelRatio||1;w=wrap.clientWidth;h=wrap.clientHeight;cv.width=w*dpr;cv.height=h*dpr;cx.scale(dpr,dpr);}
 window.addEventListener("resize",resize);resize();
 
+// Initial Graph Construction Array Map (Safe default 500 topology layer)
 for(let i=0;i<500;i++){
     let phi=M.acos(-1+2*(i+0.5)/500),th=M.PI*(1+M.sqrt(5))*i;
     pts.push({x:S(phi)*C(th)*3.5,y:S(phi)*S(th)*3.5,z:C(phi)*3.5,w:S(th*2.5)*1.6});
@@ -102,11 +117,12 @@ function line(p1,p2,cR,cG,cB,bA,wA){cx.strokeStyle=`rgba(${cR},${cG},${cB},${bA+
 function frame(){
     cx.clearRect(0,0,w,h);let mX=w/2,mY=h/2;if(!drag){ry+=.002;rx+=.001;rdX*=0.9;rdY*=0.9;}pTime+=0.025;qE*=0.94;qP+=0.005+(qE*0.02);
     
-    // Asynchronously pipe network sync states entirely through the background worker node
-    const flatState=[];pts.forEach(p=>flatState.push(p.x,p.y,p.z,p.w));
-    worker.postMessage({type:"SYNC",state:flatState,action:[rdX,rdY]});
+    // Asynchronously ship dynamic topology graph data payloads across worker pipeline
+    const f=[];pts.forEach(p=>f.push(p.x,p.y,p.z,p.w));
+    worker.postMessage({type:"SYNC",state:f,action:[rdX,rdY]});
     
     let cx1=C(rx+(S(qP)*qE*0.15)),sx1=S(rx+(S(qP)*qE*0.15)),cy1=C(ry+(C(qP)*qE*0.15)),sy1=S(ry+(C(qP)*qE*0.15)),br=w*0.5*(1+S(pTime)*0.03+(qE*0.05)),cH=C(pTime*0.3+qP*0.1),sH=S(pTime*0.3+qP*0.1),proj=[];
+    
     pts.forEach((p,idx)=>{
         let cX,cY,cZ,wf=p.w,jit=!aiA?(M.random()-0.5)*qE*0.03:0;
         if(!aiA){
@@ -115,18 +131,31 @@ function frame(){
         }else{cX=p.x*br;cY=p.y*br;cZ=p.z*br;}
         proj.push({x:mX+(cX*cy1+(cY*sx1+cZ*cx1)*sy1)/(4.8-(wf*0.18))*(100/(100+(-cX*sy1+(cY*sx1+cZ*cx1)*cy1))),y:mY+(cY*cx1-cZ*sx1)*100/(100+(-cX*sy1+(cY*sx1+cZ*cx1)*cy1)),z:-cX*sy1+(cY*sx1+cZ*cx1)*cy1,w:wf,t:idx%2});
     });
-    let fc=0;cx.lineWidth=0.45;
-    for(let i=0;i<proj.length&&fc<1200;i++){
-        for(let j=i+1;j<proj.length&&fc<1200;j++){
-            if(M.hypot(proj[i].x-proj[j].x,proj[i].y-proj[j].y)<60){
-                proj[i].t===0?line(proj[i],proj[j],0,204,255,0.16,0.12):line(proj[i],proj[j],255,0,85,0.12,0.08);fc++;
+    
+    cx.lineWidth=0.45;
+    if(aiA && activeEdges.length > 0){
+        // GRAPH-BASED MESSAGE PASSING RASTERIZATION: Use server-assigned edge lists
+        activeEdges.forEach(([u, v])=>{
+            if(proj[u] && proj[v]){
+                proj[u].t===0?line(proj[u],proj[v],0,204,255,0.18,0.12):line(proj[u],proj[v],255,0,85,0.14,0.08);
+            }
+        });
+    }else{
+        // Standard geometric fallback algorithm when server pipeline initializes
+        let fc=0;
+        for(let i=0;i<proj.length&&fc<1200;i++){
+            for(let j=i+1;j<proj.length&&fc<1200;j++){
+                if(M.hypot(proj[i].x-proj[j].x,proj[i].y-proj[j].y)<60){
+                    proj[i].t===0?line(proj[i],proj[j],0,204,255,0.16,0.12):line(proj[i],proj[j],255,0,85,0.12,0.08);fc++;
+                }
             }
         }
     }
+    
     proj.forEach(p=>{cx.beginPath();cx.fillStyle=p.z>0?"#00CCFF":"#ff0055";cx.arc(p.x,p.y,p.z>0?2.2:1.2,0,2*M.PI);cx.fill();});
     let dCoh=(M.max(0.01,1.0-(qE*0.012))*99.45).toFixed(2);
     if(stEl)stEl.innerText=dCoh+"%";if(enEl)enEl.innerText=(0.004+(qE*0.14)).toFixed(4)+" r/s";
-    if(qcBox)qcBox.innerText=aiA?`Ψ(t) ATTENTION HYPER-SPACE MANIFOLD PIPED VIA ACTIVE WEB WORKER THREAD` : `Ψ(t) = √(${dCoh}%)|0⟩ // ΔE: ${(qE*6.626).toFixed(3)} eV`;
+    if(qcBox)qcBox.innerText=aiA?`Ψ(t) GRAPH NEURAL NETWORK MESSAGE-PASSING ACTIVE // SCALE FREE TOPOLOGY` : `Ψ(t) = √(${dCoh}%)|0⟩ // ΔE: ${(qE*6.626).toFixed(3)} eV`;
     requestAnimationFrame(frame);
 }
 frame();
