@@ -3,22 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sebra82 // Quantum Mini-Console</title>
+    <title>Sebra82 // Micro-Console</title>
     <style>
         :root {
-            --bg-color: #030507;
-            --neon-cyan: #00f3ff;
-            --neon-green: #00ff66;
-            --panel-bg: rgba(8, 12, 18, 0.95);
-            --border-color: rgba(0, 243, 255, 0.12);
+            --bg: #020305;
+            --cyan: #00f3ff;
+            --green: #00ff66;
+            --panel: rgba(6, 9, 14, 0.98);
+            --border: rgba(0, 243, 255, 0.1);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', monospace; }
 
         body {
-            background-color: var(--bg-color);
-            color: #94a3b8;
-            font-family: 'Courier New', Courier, monospace;
+            background: var(--bg);
+            color: #74808e;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -29,52 +28,45 @@
 
         .console-container {
             width: 100%;
-            max-width: 380px;
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 3px;
-            padding: 12px;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.05);
+            max-width: 290px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 8px;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.04);
         }
 
         header {
-            border-bottom: 1px dashed var(--border-color);
-            padding-bottom: 6px;
-            margin-bottom: 10px;
+            border-bottom: 1px dashed var(--border);
+            padding-bottom: 4px;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
+        .title-group { overflow: hidden; width: 85%; }
+
         .core-title {
-            font-size: 1.05rem;
+            font-size: 0.9rem;
             font-weight: bold;
-            color: #ffffff;
-            letter-spacing: 0.5px;
+            color: #fff;
             cursor: pointer;
         }
 
         .core-spec {
-            font-size: 0.72rem;
-            color: #475569;
-            margin-top: 1px;
+            font-size: 0.62rem;
+            color: #334155;
             cursor: pointer;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .engine-status {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 6px;
-            font-size: 0.72rem;
-            color: var(--neon-cyan);
-            cursor: pointer;
-        }
-
         .pulse-dot {
-            width: 5px;
-            height: 5px;
-            background-color: var(--neon-green);
+            width: 4px;
+            height: 4px;
+            background: var(--green);
             border-radius: 50%;
             animation: pulse 1.5s infinite ease-in-out;
         }
@@ -83,69 +75,63 @@
 
         #waveCanvas {
             width: 100%;
-            height: 35px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(0, 243, 255, 0.03);
-            margin-bottom: 10px;
+            height: 24px;
+            background: rgba(0, 0, 0, 0.6);
+            margin-bottom: 6px;
         }
 
         .telemetry-grid {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 4px;
         }
 
         .metric-card {
-            background: rgba(0, 0, 0, 0.2);
-            border-left: 2px solid var(--neon-cyan);
-            padding: 6px 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 1.5px solid var(--cyan);
+            padding: 4px 6px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            font-size: 0.75rem;
+            font-size: 0.68rem;
         }
 
-        .metric-card:hover {
-            background: rgba(0, 243, 255, 0.02);
-            border-left-color: var(--neon-green);
-        }
-
+        .metric-card:hover { border-left-color: var(--green); }
         .metric-value { font-weight: bold; font-variant-numeric: tabular-nums; }
-        .highlight-blue { color: var(--neon-cyan); }
-        .highlight-green { color: var(--neon-green); }
+        .hl-blue { color: var(--cyan); }
+        .hl-green { color: var(--green); }
     </style>
 </head>
 <body>
 
     <div class="console-container">
         <header>
-            <div class="core-title" data-value="M4 Ultra" onclick="scrambleText(this)">M4 Ultra</div>
-            <div class="core-spec" data-value="M4P // GPU_RENDER_CORE // DTSA_18_USC_1836" onclick="scrambleText(this)">M4P // GPU_RENDER_CORE // DTSA_18_USC_1836</div>
-            <div class="engine-status">
-                <div class="pulse-dot"></div>
-                <span data-value="Ψ(t) PARALLEL GPU SHADER ENGINE ONLINE" onclick="scrambleText(this)">Ψ(t) PARALLEL GPU SHADER ENGINE ONLINE</span>
+            <div class="title-group" data-value="Ψ(t) M4P // DTSA_18_USC_1836" onclick="scrambleText(this)">
+                <div class="core-title">M4 Ultra</div>
+                <div class="core-spec">M4P // RENDER // 1836</div>
             </div>
+            <div class="pulse-dot"></div>
         </header>
 
         <canvas id="waveCanvas"></canvas>
 
         <main class="telemetry-grid">
             <div class="metric-card" onclick="manipulateNumbers('entropyVal', 0, 0, 4, ' S_vN')">
-                <span>1. Entanglement Entropy</span>
-                <span class="metric-value highlight-green" id="entropyVal">0.0000 S_vN</span>
+                <span>Entropy</span>
+                <span class="metric-value hl-green" id="entropyVal">0.0000 S_vN</span>
             </div>
             <div class="metric-card" onclick="manipulateNumbers('phaseVal', 0.0010, 0.0090, 4, ' r/s')">
-                <span>2. Phase Propagation</span>
-                <span class="metric-value highlight-blue" id="phaseVal">0.0040 r/s</span>
+                <span>Phase</span>
+                <span class="metric-value hl-blue" id="phaseVal">0.0040 r/s</span>
             </div>
             <div class="metric-card" onclick="scrambleSubspace()">
-                <span>3. Hilbert Subspace</span>
-                <span class="metric-value" id="subspaceVal">2⁹⁹ VIRTUAL STATES</span>
+                <span>Hilbert</span>
+                <span class="metric-value" id="subspaceVal">2⁹⁹ VIRTUAL</span>
             </div>
             <div class="metric-card" id="nnCard">
-                <span>4. EWC Neural Link</span>
-                <span class="metric-value highlight-green" id="ewcVal" data-value="EMBEDDED">EMBEDDED</span>
+                <span>Neural</span>
+                <span class="metric-value hl-green" id="ewcVal" data-value="EMBEDDED">EMBEDDED</span>
             </div>
         </main>
     </div>
@@ -154,14 +140,14 @@
         const SYSTEM_STATE = Object.freeze({
             entropyVal: '0.0000 S_vN',
             phaseVal: '0.0040 r/s',
-            subspaceVal: '2⁹⁹ VIRTUAL STATES',
-            matrixChars: "ΨΩαβγδεζηθικλμνξοπρστυφχψωX0123456789%//_[]"
+            subspaceVal: '2⁹⁹ VIRTUAL',
+            matrixChars: "ΨΩαβγδεζηX012345%"
         });
 
         const activeLoops = { text: new Map(), num: new Map(), subspace: null };
         const canvas = document.getElementById('waveCanvas');
         const ctx = canvas?.getContext('2d');
-        let increment = 0;
+        let angleX = 0, angleY = 0;
 
         function resizeCanvas() {
             if (!canvas) return;
@@ -171,98 +157,90 @@
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
-        function animateWave() {
+        const vertices3D = [
+            {x: -1, y: -1, z: -1}, {x: 1, y: -1, z: -1}, {x: 1, y: 1, z: -1}, {x: -1, y: 1, z: -1},
+            {x: -1, y: -1, z: 1}, {x: 1, y: -1, z: 1}, {x: 1, y: 1, z: 1}, {x: -1, y: 1, z: 1}
+        ];
+        const edges3D =;
+
+        function animate3D() {
             if (!ctx || !canvas) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.beginPath();
-            ctx.strokeStyle = 'rgba(0, 243, 255, 0.75)';
-            ctx.lineWidth = 1;
-            
-            const halfHeight = canvas.height / 2;
-            for (let x = 0; x < canvas.width; x++) {
-                const y = halfHeight + 
-                          Math.sin(x * 0.04 + increment) * 5 * Math.sin(increment * 0.3) +
-                          Math.cos(x * 0.03 - increment) * 2;
-                if (x === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
-            }
-            ctx.stroke();
-            increment += 0.04;
-            requestAnimationFrame(animateWave);
+            try {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const cx = canvas.width / 2, cy = canvas.height / 2, projected2D = [];
+
+                vertices3D.forEach(v => {
+                    let x1 = v.x * Math.cos(angleY) - v.z * Math.sin(angleY);
+                    let z1 = v.x * Math.sin(angleY) + v.z * Math.cos(angleY);
+                    let y2 = v.y * Math.cos(angleX) - z1 * Math.sin(angleX);
+                    let z2 = v.y * Math.sin(angleX) + z1 * Math.cos(angleX);
+
+                    const factor = 1 / (3.0 - z2);
+                    projected2D.push({ x: cx + x1 * factor * 35, y: cy + y2 * factor * 20 });
+                });
+
+                ctx.beginPath();
+                ctx.strokeStyle = 'rgba(0, 243, 255, 0.8)';
+                ctx.lineWidth = 1;
+                edges3D.forEach((e, idx) => {
+                    if (idx % 2 === 0) ctx.moveTo(projected2D[e].x, projected2D[e].y);
+                    else ctx.lineTo(projected2D[e].x, projected2D[e].y);
+                });
+                ctx.stroke();
+                angleX += 0.012; angleY += 0.018;
+            } catch (e) {}
+            requestAnimationFrame(animate3D);
         }
-        animateWave();
+        animate3D();
 
         function scrambleText(element) {
-            if (!element) return;
-            const original = element.getAttribute("data-value");
-            if (!original) return;
-
-            if (activeLoops.text.has(element)) clearInterval(activeLoops.text.get(element));
-            
-            let iterations = 0;
+            const original = "M4P // RENDER // 1836";
+            const subEl = element.querySelector('.core-spec') || element;
+            if (activeLoops.text.has(subEl)) clearInterval(activeLoops.text.get(subEl));
+            let iter = 0;
             const interval = setInterval(() => {
-                element.innerText = original.split("").map((char, index) => {
-                    if (index < iterations) return original[index];
-                    if (char === " ") return " ";
-                    return SYSTEM_STATE.matrixChars[Math.floor(Math.random() * SYSTEM_STATE.matrixChars.length)];
-                }).join("");
-                
-                if (iterations >= original.length) {
-                    clearInterval(interval);
-                    activeLoops.text.delete(element);
-                    element.innerText = original;
-                }
-                iterations += 1;
+                subEl.innerText = original.split("").map((c, i) => i < iter ? original[i] : (c === " " ? " " : SYSTEM_STATE.matrixChars[Math.floor(Math.random() * SYSTEM_STATE.matrixChars.length)])).join("");
+                if (iter >= original.length) { clearInterval(interval); subEl.innerText = original; }
+                iter += 2;
             }, 20);
-            
-            activeLoops.text.set(element, interval);
+            activeLoops.text.set(subEl, interval);
         }
 
         function manipulateNumbers(elementId, min, max, decimals, suffix) {
             const el = document.getElementById(elementId);
             if (!el) return;
-
             if (activeLoops.num.has(elementId)) clearInterval(activeLoops.num.get(elementId));
-
-            let duration = 0;
+            let d = 0;
             const interval = setInterval(() => {
                 el.innerText = (Math.random() * (max - min) + min).toFixed(decimals) + suffix;
-                duration += 50;
-                if (duration > 600) {
-                    clearInterval(interval);
-                    activeLoops.num.delete(elementId);
-                    el.innerText = SYSTEM_STATE[elementId];
-                }
+                d += 50;
+                if (d > 500) { clearInterval(interval); el.innerText = SYSTEM_STATE[elementId]; }
             }, 50);
-
             activeLoops.num.set(elementId, interval);
         }
 
         function scrambleSubspace() {
             const el = document.getElementById('subspaceVal');
-            if (!el) return;
-
-            if (activeLoops.subspace) clearInterval(activeLoops.subspace);
-
-            let counter = 0;
+            if (!el || activeLoops.subspace) return;
+            let c = 0;
             activeLoops.subspace = setInterval(() => {
-                el.innerHTML = `2<sup>${Math.floor(Math.random() * 99) + 10}</sup> FLUX...`;
-                counter++;
-                if (counter > 10) {
-                    clearInterval(activeLoops.subspace);
-                    activeLoops.subspace = null;
-                    el.innerHTML = SYSTEM_STATE.subspaceVal;
-                }
+                el.innerText = `2¹${Math.floor(Math.random() * 9)} FLUX`;
+                if (++c > 8) { clearInterval(activeLoops.subspace); activeLoops.subspace = null; el.innerText = SYSTEM_STATE.subspaceVal; }
             }, 50);
         }
 
-        const nnCard = document.getElementById('nnCard');
-        if (nnCard) {
-            nnCard.addEventListener('mouseenter', () => {
-                const target = document.getElementById('ewcVal');
-                if (target) scrambleText(target);
-            });
-        }
+        document.getElementById('nnCard')?.addEventListener('mouseenter', () => {
+            const target = document.getElementById('ewcVal');
+            if (target && !activeLoops.text.has(target)) {
+                let orig = "EMBEDDED", iter = 0;
+                const interval = setInterval(() => {
+                    target.innerText = orig.split("").map((c, i) => i < iter ? orig[i] : SYSTEM_STATE.matrixChars[Math.floor(Math.random() * SYSTEM_STATE.matrixChars.length)]).join("");
+                    if (iter >= orig.length) { clearInterval(interval); activeLoops.text.delete(target); target.innerText = orig; }
+                    iter++;
+                }, 30);
+                activeLoops.text.set(target, interval);
+            }
+        });
     </script>
 </body>
 </html>
