@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <!-- Hardened CSP Barrier: Restricts execution explicitly to self-contained inline blocks and Blob workers -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:;">
   <title>M4 Ultra</title>
   <style>
@@ -34,10 +35,19 @@
 </div>
 <script>
 const D=document,G="getElementById",qcBox=D[G]("qc"),stEl=D[G]("m_st"),enEl=D[G]("m_en"),pts=[],M=Math,S=M.sin,C=M.cos,A=M.abs,L=(e,t,f)=>e.addEventListener(t,f,{passive:!t.includes("m")});
-let w,h,rx=0,ry=0,drag=!1,sx=0,sy=0,pTime=0,mx=0,my=0,qE=0,qP=0,rdX=0,rdY=0,stateBuffer=new Float32Array(2000),jitMod=1,lineMod=45,cohMod=99.45;
+let w,h,rx=0,ry=0,drag=!1,sx=0,sy=0,pTime=0,mx=0,my=0,qE=0,qP=0,rdX=0,rdY=0,jitMod=1,lineMod=45,cohMod=99.45;
+
+// Main CPU thread persistent matrix layout container
+const liveDisplayBuffer = new Float32Array(2000);
 
 const wk=new Worker(URL.createObjectURL(new Blob([`onmessage=(e)=>{const d=e.data;if(d.type==="SYNC"){const f=new Float32Array(d.buffer),out=new Float32Array(2000);for(let i=0;i<500;i++){let o=i*4,nX=d.noise,nY=d.noise;out[o]=f[o]-(nX*0.005);out[o+1]=f[o+1]-(nY*0.005);out[o+2]=f[o+2];out[o+3]=f[o+3];}postMessage({type:"PREDICTION",coords:out},[out.buffer]);}};`],{type:"application/javascript"})));
-wk.onmessage=(e)=>{const c=e.data.coords;for(let i=0;i<500;i++){let o=i*4;pts[i]={x:c[o],y:c[o+1],z:c[o+2],w:c[o+3]};}};
+
+wk.onmessage=(e)=>{
+    const c=e.data.coords;
+    // Safely copy worker metrics straight into our active hardware rendering pool
+    liveDisplayBuffer.set(c);
+    for(let i=0;i<500;i++){let o=i*4;pts[i]={x:c[o],y:c[o+1],z:c[o+2],w:c[o+3]};}
+};
 
 const cv=D[G]("canvas"),gl=cv.getContext("webgl2"),wrap=D[G]("wrapper");
 if(!gl){alert("WebGL2 not supported on this device.");}
@@ -70,7 +80,14 @@ function resize(){
 }
 window.addEventListener("resize",resize);resize();
 
-for(let i=0;i<500;i++){let phi=M.acos(-1+2*(i+0.5)/500),th=M.PI*(1+M.sqrt(5))*i;pts.push({x:S(phi)*C(th)*3.5,y:S(phi)*S(th)*3.5,z:C(phi)*3.5,w:S(th*2.5)*1.6});}
+// Initial mathematical state coordinates layout generation
+for(let i=0;i<500;i++){
+    let phi=M.acos(-1+2*(i+0.5)/500),th=M.PI*(1+M.sqrt(5))*i;
+    let x=S(phi)*C(th)*3.5, y=S(phi)*S(th)*3.5, z=C(phi)*3.5, wVal=S(th*2.5)*1.6;
+    pts.push({x:x,y:y,z:z,w:wVal});
+    let o=i*4;liveDisplayBuffer[o]=x;liveDisplayBuffer[o+1]=y;liveDisplayBuffer[o+2]=z;liveDisplayBuffer[o+3]=wVal;
+}
+
 const ptr=e=>e.touches?e.touches:e,st=(e)=>{drag=!0;const p=ptr(e);sx=p.clientX;sy=p.clientY;},mv=(e)=>{
     const p=ptr(e),r=cv.getBoundingClientRect();mx=(p.clientX-r.left)-(w/2);my=(p.clientY-r.top)-(h/2);
     if(!drag)return;rdX=p.clientX-sx;rdY=p.clientY-sy;ry+=rdX*0.008;rx+=rdY*0.008;qE+=M.min(M.sqrt(rdX*rdX+rdY*rdY)*0.03,10);sx=p.clientX;sy=p.clientY;
@@ -93,11 +110,22 @@ const elementBuffer=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,elem
 function frame(){
     gl.clearColor(0.035,0.05,0.086,1.0);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
     if(!drag){ry+=.002;rx+=.001;rdX*=0.9;rdY*=0.9;}pTime+=0.025;qE*=0.94;qP+=0.005+(qE*0.02);
-    for(let i=0;i<500;i++){let p=pts[i],o=i*4;let jit=(M.random()-0.5)*qE*0.03*jitMod;stateBuffer[o]=p.x+jit;stateBuffer[o+1]=p.y+jit;stateBuffer[o+2]=p.z;stateBuffer[o+3]=p.w;}
-    let nX=(M.random()-0.5)*4.5,nY=(M.random()-0.5)*4.5;
-    wk.postMessage({type:"SYNC",buffer:stateBuffer.buffer,noise:[nX,nY]},[stateBuffer.buffer]);stateBuffer=new Float32Array(2000);
     
-    gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,stateBuffer,gl.DYNAMIC_DRAW);
+    // Create an independent transient chunk to transfer data down the pipeline safely
+    const transferBuffer = new Float32Array(2000);
+    for(let i=0;i<500;i++){
+        let p=pts[i],o=i*4;
+        let jit=(M.random()-0.5)*qE*0.03*jitMod;
+        transferBuffer[o]=p.x+jit;transferBuffer[o+1]=p.y+jit;transferBuffer[o+2]=p.z;transferBuffer[o+3]=p.w;
+    }
+    let nX=(M.random()-0.5)*4.5,nY=(M.random()-0.5)*4.5;
+    
+    // Ship our transient chunk over the worker thread link, completely freeing up the main thread
+    wk.postMessage({type:"SYNC",buffer:transferBuffer.buffer,noise:[nX,nY]},[transferBuffer.buffer]);
+    
+    // WebGL2 reads coordinates directly from our persistent displays array, keeping the grid on-screen
+    gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,liveDisplayBuffer,gl.DYNAMIC_DRAW);
+    
     gl.uniform2f(rotLoc,rx+(S(qP)*qE*0.15),ry+(C(qP)*qE*0.15));gl.uniform2f(mouseLoc,mx,my);
     gl.uniform1f(brLoc,w*0.48*(1+S(pTime)*0.03+(qE*0.05)));gl.uniform1f(timeLoc,pTime);gl.uniform1f(qELoc,qE);
     
