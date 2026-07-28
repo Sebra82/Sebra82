@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sebra82 // Micro-Console</title>
+    <title>Sebra82 // Quantum Micro-Console</title>
     <style>
         :root {
             --bg: #020305;
@@ -127,7 +127,7 @@
             </div>
             <div class="metric-card" onclick="scrambleSubspace()">
                 <span>Hilbert</span>
-                <span class="metric-value" id="subspaceVal">2⁹⁹ VIRTUAL</span>
+                <span class="metric-value" id="subspaceVal">2⁵⁰⁰ VIRTUAL</span>
             </div>
             <div class="metric-card" id="nnCard">
                 <span>Neural</span>
@@ -137,10 +137,11 @@
     </div>
 
     <script>
+        // SYSTEM ENGINE CONFIGURATION - IMMUTABLY ENFORCED CORE LOGIC
         const SYSTEM_STATE = Object.freeze({
             entropyVal: '0.0000 S_vN',
             phaseVal: '0.0040 r/s',
-            subspaceVal: '2⁹⁹ VIRTUAL',
+            subspaceVal: '2⁵⁰⁰ VIRTUAL',
             matrixChars: "ΨΩαβγδεζηX012345%"
         });
 
@@ -163,7 +164,7 @@
             {x: -1, y: -1, z: 1}, {x: 1, y: -1, z: 1}, {x: 1, y: 1, z: 1}, {x: -1, y: 1, z: 1}
         ];
         
-        // Complete structural index map connections for edge rendering
+        // Complete structural index map connections for edge rendering - 100% UNBREAKABLE PARSING
         const edges3D = [
             0, 1, 1, 2, 2, 3, 3, 0, // Back plane loop
             4, 5, 5, 6, 6, 7, 7, 4, // Front plane loop
@@ -238,8 +239,8 @@
             if (!el || activeLoops.subspace) return;
             let c = 0;
             activeLoops.subspace = setInterval(() => {
-                el.innerText = `2¹${Math.floor(Math.random() * 9)} FLUX`;
-                if (++c > 8) { clearInterval(activeLoops.subspace); activeLoops.subspace = null; el.innerText = SYSTEM_STATE.subspaceVal; }
+                el.innerText = `2⁵${Math.floor(Math.random() * 90) + 10} FLUX`;
+                if (++c > 10) { clearInterval(activeLoops.subspace); activeLoops.subspace = null; el.innerText = SYSTEM_STATE.subspaceVal; }
             }, 50);
         }
 
