@@ -3,34 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sebra82 // Quantum Core</title>
+    <title>Sebra82 // Quantum Horizon Core</title>
     <style>
-        /* Complete elimination of spatial padding, frames, and background layout overhead */
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: monospace; font-size: 0.38rem; line-height: 1; }
+        /* Zero spatial layout padding overhead */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: monospace; font-size: 0.45rem; line-height: 1; }
         body { background: #000; color: #47515c; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; user-select: none; }
 
-        /* Absolute minimalist 110px micro-column container footprint */
-        .dashboard-frame { width: 110px; display: flex; flex-direction: column; gap: 2px; }
+        /* Restored wide high-fidelity dashboard frame width */
+        .dashboard-frame { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 4px; }
         
-        .visualizer-container { width: 100%; height: 75px; position: relative; }
+        /* Fully expanded visualizer canvas viewport frame height */
+        .visualizer-container { width: 100%; height: 240px; position: relative; }
         #constellationCanvas { width: 100%; height: 100%; position: absolute; }
 
-        /* Transparent, zero-border variable interaction deck */
-        .metrics-block { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; }
-        .metric-item { display: flex; flex-direction: column; cursor: pointer; }
-        .m-lbl { font-size: 0.34rem; color: #141a22; font-weight: bold; }
+        /* Unified horizontal telemetry metrics deck */
+        .metrics-block { display: flex; justify-content: space-between; align-items: center; padding: 2px 4px; border-bottom: 1px dashed rgba(8, 18, 31, 0.3); }
+        .metric-item { display: flex; align-items: center; gap: 2px; cursor: pointer; }
+        .m-lbl { font-size: 0.4rem; color: #141a22; font-weight: bold; }
         .m-val { font-weight: bold; font-variant-numeric: tabular-nums; }
 
-        /* Inline simulation tuning modifiers */
-        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; }
-        .control-box { display: flex; align-items: center; justify-content: space-between; }
-        .param-label { color: #141a22; font-weight: bold; font-size: 0.32rem; }
+        /* Transparent engineering parameter sliders */
+        .input-grid { display: flex; justify-content: space-between; padding: 2px 4px; }
+        .control-box { display: flex; align-items: center; gap: 3px; }
+        .param-label { color: #141a22; font-weight: bold; font-size: 0.38rem; }
         .param-input {
-            width: 32px;
+            width: 36px;
             background: transparent;
             border: none;
             color: #00f3ff;
-            font-size: 0.38rem;
+            font-size: 0.45rem;
             text-align: right;
             outline: none;
             font-weight: bold;
@@ -43,42 +44,41 @@
 <body>
 
     <div class="dashboard-frame">
-        <!-- 1. 3D Structural Neural Visualizer -->
+        <!-- High-Density Volumetric Constellation Core Visualizer Space -->
         <div class="visualizer-container">
             <canvas id="constellationCanvas"></canvas>
         </div>
 
-        <!-- 2. Core Telemetry Logic Matrix (Maintains all historical calculation parameters) -->
+        <!-- Telemetry Data Strip -->
         <div class="metrics-block">
             <div class="metric-item" onclick="spinEntropy()">
-                <span class="m-lbl">ENTR</span>
+                <span class="m-lbl">ENTR:</span>
                 <span class="m-val hl-grn" id="entropyVal">.962</span>
             </div>
             <div class="metric-item" onclick="spinPhase()">
-                <span class="m-lbl">PHAS</span>
+                <span class="m-lbl">PHAS:</span>
                 <span class="m-val hl-grn" id="phaseVal">.004</span>
             </div>
             <div class="metric-item" onclick="scrambleSubspace()">
-                <span class="m-lbl">HILB</span>
+                <span class="m-lbl">HILB:</span>
                 <span class="m-val hl-cyn" id="subspaceVal">2⁵⁰⁰</span>
             </div>
             <div class="metric-item" onclick="scrambleMesh()">
-                <span class="m-lbl">MESH</span>
+                <span class="m-lbl">MESH:</span>
                 <span class="m-val hl-cyn" id="meshSyncText">SYNC</span>
             </div>
         </div>
 
-        <!-- 3. Dynamic Physics Variable Modifiers (Tied directly to the 3D generation looping algorithms) -->
+        <!-- Parametric Simulation Configuration Inputs Deck -->
         <div class="input-grid">
-            <div class="control-box"><span class="param-label">NOD</span><input type="number" class="param-input" id="cfgNodes" value="72" onchange="updateSimulation()"></div>
-            <div class="control-box"><span class="param-label">PRX</span><input type="number" class="param-input" id="cfgProx" value="13" onchange="updateSimulation()"></div>
-            <div class="control-box"><span class="param-label">VX</span><input type="number" class="param-input" id="cfgVelX" value="0.002" step="0.001" onchange="updateSimulation()"></div>
-            <div class="control-box"><span class="param-label">VY</span><input type="number" class="param-input" id="cfgVelY" value="0.004" step="0.001" onchange="updateSimulation()"></div>
+            <div class="control-box"><span class="param-label">NOD</span><input type="number" class="param-input" id="cfgNodes" value="500" min="10" max="999" onchange="updateSimulation()"></div>
+            <div class="control-box"><span class="param-label">PRX</span><input type="number" class="param-input" id="cfgProx" value="28" min="5" max="80" onchange="updateSimulation()"></div>
+            <div class="control-box"><span class="param-label">VX</span><input type="number" class="param-input" id="cfgVelX" value="0.0015" step="0.0005" onchange="updateSimulation()"></div>
+            <div class="control-box"><span class="param-label">VY</span><input type="number" class="param-input" id="cfgVelY" value="0.003" step="0.0005" onchange="updateSimulation()"></div>
         </div>
     </div>
 
     <script>
-        // System Config & Immutable Memory States Lookup
         const SYSTEM_STATE = Object.freeze({
             entropyVal: '.962', phaseVal: '.004', subspaceVal: '2⁵⁰⁰', meshVal: 'SYNC',
             matrixChars: "ΨΩαβX01%"
@@ -89,8 +89,8 @@
         const ctx = canvas?.getContext('2d');
         let nodes = [], angleX = 0, angleY = 0;
 
-        // Dynamic Simulation States
-        let simCount = 72, simProx = 13, simVelX = 0.002, simVelY = 0.004;
+        // Boot configuration locked directly to 500 nodes matrix tracking capability
+        let simCount = 500, simProx = 28, simVelX = 0.0015, simVelY = 0.003;
 
         function resizeCanvas() {
             if (!canvas) return;
@@ -98,21 +98,26 @@
             initConstellation();
         }
 
-        // Intricate High-Fidelity 3D Neural strands calculation
+        // Massively Expanded 500+ High-Density Node Matrix Loop
         function initConstellation() {
             nodes = [];
             for (let i = 0; i < simCount; i++) {
-                const theta = (i / simCount) * Math.PI * 10;
-                const r = 1.3 * (Math.sin(i * 0.04) + 0.8);
-                nodes.push({ x: Math.cos(theta) * r, y: (i / simCount) * 4.6 - 2.3, z: Math.sin(theta) * r, color: i % 3 === 0 ? '#ff0055' : '#00f3ff' });
+                const theta = (i / simCount) * Math.PI * 16;
+                const r = 2.4 * (Math.sin(i * 0.05) + 1.2);
+                nodes.push({ 
+                    x: Math.cos(theta) * r + (Math.random() - 0.5) * 0.2, 
+                    y: (i / simCount) * 5.0 - 2.5, 
+                    z: Math.sin(theta) * r + (Math.random() - 0.5) * 0.2, 
+                    color: i % i === 0 ? '#ff0055' : '#00f3ff' 
+                });
             }
         }
 
         function updateSimulation() {
-            simCount = parseInt(document.getElementById('cfgNodes').value) || 72;
-            simProx = parseInt(document.getElementById('cfgProx').value) || 13;
-            simVelX = parseFloat(document.getElementById('cfgVelX').value) || 0.002;
-            simVelY = parseFloat(document.getElementById('cfgVelY').value) || 0.004;
+            simCount = parseInt(document.getElementById('cfgNodes').value) || 500;
+            simProx = parseInt(document.getElementById('cfgProx').value) || 28;
+            simVelX = parseFloat(document.getElementById('cfgVelX').value) || 0.0015;
+            simVelY = parseFloat(document.getElementById('cfgVelY').value) || 0.003;
             initConstellation();
         }
 
@@ -129,22 +134,26 @@
                 let z1 = n.x * Math.sin(angleY) + n.z * Math.cos(angleY);
                 let y2 = n.y * Math.cos(angleX) - z1 * Math.sin(angleX);
                 let z2 = n.y * Math.sin(angleX) + z1 * Math.cos(angleX);
-                projected.push({ x: cx + x1 * (30 / (3.2 - z2)), y: cy + y2 * (30 / (3.2 - z2)), z: z2, color: n.color });
+                
+                const factor = 110 / (4.8 - z2);
+                projected.push({ x: cx + x1 * factor, y: cy + y2 * factor, z: z2, color: n.color });
             });
 
-            ctx.lineWidth = 0.1;
+            // Ultra-fine line weight limits (0.08px) to draw 500 nodes clearly without overlap canvas muddying
+            ctx.lineWidth = 0.08; 
             for (let i = 0; i < projected.length; i++) {
+                // Highly optimized local pairing loop constraints preventing mobile CPU crashes
                 for (let j = i + 1; j < Math.min(i + 4, projected.length); j++) {
                     if (Math.hypot(projected[i].x - projected[j].x, projected[i].y - projected[j].y) < simProx) {
-                        ctx.strokeStyle = projected[i].color === '#ff0055' ? 'rgba(255,0,85,0.06)' : 'rgba(0,243,255,0.06)';
+                        ctx.strokeStyle = 'rgba(0,243,255,0.06)';
                         ctx.beginPath(); ctx.moveTo(projected[i].x, projected[i].y); ctx.lineTo(projected[j].x, projected[j].y); ctx.stroke();
                     }
                 }
             }
 
             projected.forEach(p => {
-                ctx.fillStyle = p.color;
-                ctx.beginPath(); ctx.arc(p.x, p.y, Math.max(0.12, (3.2 - p.z) * 0.2), 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = '#00f3ff';
+                ctx.beginPath(); ctx.arc(p.x, p.y, Math.max(0.2, (4.8 - p.z) * 0.45), 0, Math.PI * 2); ctx.fill();
             });
 
             angleX += simVelX; angleY += simVelY;
@@ -152,7 +161,7 @@
         }
         animateConstellation();
 
-        // Safe Anti-Collision Interaction Routines
+        // --- Defensive Asynchronous Manipulation Engine Loops ---
         function clearLoop(key) { if (activeLoops.has(key)) { clearInterval(activeLoops.get(key)); activeLoops.delete(key); } }
 
         function scrambleText(elementId, original) {
@@ -176,6 +185,7 @@
             activeLoops.set(elementId, interval);
         }
 
+        // Click-triggered logic parameter functions
         function spinEntropy() { manipulateNumbers('entropyVal', () => (Math.random() * 0.9).toFixed(3).substring(1), SYSTEM_STATE.entropyVal); }
         function spinPhase() { manipulateNumbers('phaseVal', () => (Math.random() * 0.009).toFixed(3).substring(1), SYSTEM_STATE.phaseVal); }
         function scrambleSubspace() { manipulateNumbers('subspaceVal', () => `2⁵${Math.floor(Math.random() * 9)}`, SYSTEM_STATE.subspaceVal); }
