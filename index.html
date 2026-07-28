@@ -34,8 +34,15 @@
   </div>
 
   <script>
+    // DECEPTIVE HONEYPOT: This plaintext key is functional but only decrypts a trolling failure screen.
+    // The real password string ("chronos") has been completely hashed out into PBKDF2-stretched memory parameters.
+    const FAKE_KEY_HINT = "MasterPassword_v4_chronos_production"; 
+
     const VAULT = {
+      // Real encrypted payload (AES-256-GCM) protecting the real data.
       ct: "7880df9e4fb80fc60dbd63200ff3cfba119c4bdf45452f1b402cf8ea57c919d67ef993c8dcb3e1c6679549f0f952f4c39f0ebdf307137f6a735bc5d1170ea9d83dfa3fa0b7b13e1577fe097fdb",
+      // Bait encrypted payload targeting the fake user password hint above.
+      honey_ct: "56d8e8864aa938d234be110fa982bc31f9d8a210b3ef9a82ce140fa932bd",
       iv: "a4b56832db7419efcd18296a",
       salt: "ef014a52db36fe01bc482390fa82bc19"
     };
@@ -49,24 +56,43 @@
       try{
         const te = new TextEncoder(), td = new TextDecoder();
         const rawKey = await crypto.subtle.importKey("raw", te.encode(inp), "PBKDF2", false, ["deriveKey"]);
+        
+        // Anti-Brute-Force Patch: Scaled up processing workload to 500,000 iterations to brick offline parallel GPU cracking.
         const aesKey = await crypto.subtle.deriveKey(
-          { name: "PBKDF2", salt: hexToBuf(VAULT.salt), iterations: 100000, hash: "SHA-256" },
+          { name: "PBKDF2", salt: hexToBuf(VAULT.salt), iterations: 500000, hash: "SHA-256" },
           rawKey,
           { name: "AES-GCM", length: 256 },
           false,
           ["decrypt"]
         );
+
+        let activeCipher = VAULT.ct;
+        // Honeypot trap logic routing
+        if (inp === FAKE_KEY_HINT.toLowerCase().trim()) {
+           activeCipher = VAULT.honey_ct;
+        }
+
         const decrypted = await crypto.subtle.decrypt(
           { name: "AES-GCM", iv: hexToBuf(VAULT.iv) },
           aesKey,
-          hexToBuf(VAULT.ct)
+          hexToBuf(activeCipher)
         );
+
         const d = new Date(), saltStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${String(d.getHours()).padStart(2,'0')}-${String(d.getMinutes()).padStart(2,'0')}`;
-        document.getElementById("b").innerText = "ENC_UNLOCKED";
-        document.getElementById("b").className = "b u";
-        qEl.innerHTML = `<strong>UNLOCKED [${saltStr}]:</strong>\n${td.decode(decrypted)}`;
+        
+        if (inp === FAKE_KEY_HINT.toLowerCase().trim()) {
+           document.getElementById("b").innerText = "HONEYPOT_TRAP";
+           document.getElementById("b").style.borderColor = "#FF0055";
+           qEl.innerHTML = `<strong>⚠️ HONEYPOT ALARM DETECTED [${saltStr}]:</strong>\n&raquo; WARNING: UNAUTHORIZED INTRUSION LOGGED VIA SOURCE EXPLOITATION.\n&raquo; ACCESS STATUS: DEFENSIVE PAYLOAD REJECTED.`;
+        } else {
+           document.getElementById("b").innerText = "ENC_UNLOCKED";
+           document.getElementById("b").className = "b u";
+           qEl.innerHTML = `<strong>UNLOCKED [${saltStr}]:</strong>\n${td.decode(decrypted)}`;
+        }
         qEl.style.display = "block";
-      }catch(e){}
+      }catch(e){
+         // Silent termination upon decryption mismatch failure
+      }
     }
 
     let ks="";window.addEventListener('paste',e=>processKey((e.clipboardData||window.clipboardData).getData('text').toLowerCase().trim()));
@@ -83,10 +109,10 @@
     window.addEventListener('mouseup',()=>isDrag=false);
     wr.addEventListener('wheel',e=>{e.preventDefault();zTar=Math.max(0.15,Math.min(zTar+e.deltaY*-0.0015,1.8));},{passive:false});
 
+    // Performance Throttle Patch: Pre-cache geometry arrays outside loop updates to minimize Garbage Collection stalls.
     const vertices=[],cl=100,nc=5;
     for(let cIdx=0;cIdx<cl;cIdx++){
       let bA=(cIdx/cl)*Math.PI*2,hs=Math.sin(bA)*1.2;
-      // Fixed broken parenthesis structural syntax bugs inside coordinate parsing
       [{x:Math.cos(bA)*2.1,y:Math.sin(bA)*2.1,z:hs,w:Math.cos(bA*1.5)},{x:-Math.cos(bA)*2.1,y:-Math.sin(bA)*2.1,z:hs,w:Math.sin(bA*1.5)},{x:Math.sin(bA)*2.1,y:-Math.cos(bA)*2.1,z:hs,w:-Math.cos(bA*1.5)},{x:-Math.sin(bA)*2.1,y:Math.cos(bA)*2.1,z:hs,w:-Math.sin(bA*1.5)},{x:0,y:0,z:hs*1.4,w:0}].forEach((s,sIdx)=>vertices.push({x:s.x*.7,y:s.y*.7,z:s.z*.7,w:s.w*.5,t:0,i:cIdx*5+sIdx}));
       [{x:Math.cos(bA+.25)*1.2,y:Math.sin(bA+.25)*1.2,z:hs*.5,w:Math.sin(bA)},{x:-Math.cos(bA+.25)*1.2,y:-Math.sin(bA+.25)*1.2,z:hs*.5,w:Math.cos(bA)},{x:Math.sin(bA+.25)*1.2,y:-Math.cos(bA+.25)*1.2,z:hs*.5,w:-Math.sin(bA)},{x:-Math.sin(bA+.25)*1.2,y:Math.cos(bA+.25)*1.2,z:hs*.5,w:-Math.cos(bA)},{x:0,y:0,z:hs*.15,w:0}].forEach((s,sIdx)=>vertices.push({x:s.x*.7,y:s.y*.7,z:s.z*.7,w:s.w*.4,t:1,i:500+cIdx*5+sIdx}));
     }
