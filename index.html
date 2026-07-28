@@ -34,19 +34,48 @@
   </div>
 
   <script>
-    const TARGET="e929eb14dda6dc481466fec08eda49836c0982a939b7e44a2fc5665013c5627a",NM=["HYDRO_MATRIX","XD_OBFUSCATION","DYNAMIC_CANVAS","SECURITY_SEAL"],qEl=document.getElementById("q");
+    // AES-GCM Encrypted payload block (Data does not exist in plain-text inside DOM)
+    const VAULT = {
+      ct: "7880df9e4fb80fc60dbd63200ff3cfba119c4bdf45452f1b402cf8ea57c919d67ef993c8dcb3e1c6679549f0f952f4c39f0ebdf307137f6a735bc5d1170ea9d83dfa3fa0b7b13e1577fe097fdb",
+      iv: "a4b56832db7419efcd18296a",
+      salt: "ef014a52db36fe01bc482390fa82bc19"
+    };
+
+    const NM=["HYDRO_MATRIX","XD_OBFUSCATION","DYNAMIC_CANVAS","SECURITY_SEAL"],qEl=document.getElementById("q");
     NM.forEach((n,i)=>qEl.innerHTML+=`<div class="p" id="q${i}"><span>REG_${i+1} // ${n}</span><div id="o${i}"></div></div>`);
+
+    // Helper utilities to parse hexadecimal blocks into standard typed arrays
+    const hexToBuf = hex => new Uint8Array(hex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
 
     async function processKey(inp){
       try{
-        const te=new TextEncoder(),d=new Date(),salt=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${String(d.getHours()).padStart(2,'0')}-${String(d.getMinutes()).padStart(2,'0')}`;
-        let cb=te.encode(inp);for(let i=0;i<1000;i++)cb=new Uint8Array(await crypto.subtle.digest('SHA-256',cb));
-        const fh=await crypto.subtle.digest('SHA-256',te.encode(inp)),hex=Array.from(new Uint8Array(fh)).map(b=>b.toString(16).padStart(2,'0')).join('');
-        if(hex===TARGET){
-          document.getElementById("b").innerText="ENC_UNLOCKED";document.getElementById("b").className="b u";
-          qEl.innerHTML=`<strong>UNLOCKED [${salt}]:</strong>\n&raquo; COHERENT ACTIVE MANIFOLD\n&raquo; PROTECTION CORES ONLINE`;qEl.style.display="block";
-        }
-      }catch(e){}
+        const te = new TextEncoder(), td = new TextDecoder();
+        const rawKey = await crypto.subtle.importKey("raw", te.encode(inp), "PBKDF2", false, ["deriveKey"]);
+        
+        // Derive cryptographic key from password using PBKDF2 with 100,000 iterations
+        const aesKey = await crypto.subtle.deriveKey(
+          { name: "PBKDF2", salt: hexToBuf(VAULT.salt), iterations: 100000, hash: "SHA-256" },
+          rawKey,
+          { name: "AES-GCM", length: 256 },
+          false,
+          ["decrypt"]
+        );
+
+        // Attempt decryption. Failing here halts script and drops block execution cleanly.
+        const decrypted = await crypto.subtle.decrypt(
+          { name: "AES-GCM", iv: hexToBuf(VAULT.iv) },
+          aesKey,
+          hexToBuf(VAULT.ct)
+        );
+
+        const d = new Date(), saltStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${String(d.getHours()).padStart(2,'0')}-${String(d.getMinutes()).padStart(2,'0')}`;
+        document.getElementById("b").innerText = "ENC_UNLOCKED";
+        document.getElementById("b").className = "b u";
+        qEl.innerHTML = `<strong>UNLOCKED [${saltStr}]:</strong>\n${td.decode(decrypted)}`;
+        qEl.style.display = "block";
+      }catch(e){
+        // Incorrect password will fail to decrypt, throwing an error silently here with no leak
+      }
     }
 
     let ks="";window.addEventListener('paste',e=>processKey((e.clipboardData||window.clipboardData).getData('text').toLowerCase().trim()));
@@ -66,7 +95,7 @@
     const vertices=[],cl=100,nc=5;
     for(let cIdx=0;cIdx<cl;cIdx++){
       let bA=(cIdx/cl)*Math.PI*2,hs=Math.sin(bA)*1.2;
-      [{x:Math.cos(bA)*2.1,y:Math.sin(bA)*2.1,z:hs,w:Math.cos(bA*1.5)},{x:-Math.cos(bA)*2.1,y:-Math.sin(bA)*2.1,z:hs,w:Math.sin(bA*1.5)},{x:Math.sin(bA)*2.1,y:-Math.cos(bA)*2.1,z:hs,w:-Math.cos(bA*1.5)},{x:-Math.sin(bA)*2.1,y:Math.cos(bA)*2.1,z:hs,w:-Math.sin(bA*1.5)},{x:0,y:0,z:hs*1.4,w:0}].forEach((s,sIdx)=>vertices.push({x:s.x*.7,y:s.y*.7,z:s.z*.7,w:s.w*.5,t:0,i:cIdx*5+sIdx}));
+      [{x:Math.cos(bA)*2.1,y:Math.sin(bA)*2.1,z:hs,w:Math.cos(bA*1.5)},{x:-Math.cos(bA)*2.1,y:-Math.sin(bA)*2.1,z:hs,w:Math.sin(bA*1.5)},{x:Math.sin(bA)*2.1,y:-Math.cos(bA)*2.1,z:hs,w:-Math.cos(bA*1.5)},{x:-Math.sin(bA)*2.1,y:Math.cos(bA*2.1,z:hs,w:-Math.sin(bA*1.5)},{x:0,y:0,z:hs*1.4,w:0}].forEach((s,sIdx)=>vertices.push({x:s.x*.7,y:s.y*.7,z:s.z*.7,w:s.w*.5,t:0,i:cIdx*5+sIdx}));
       [{x:Math.cos(bA+.25)*1.2,y:Math.sin(bA+.25)*1.2,z:hs*.5,w:Math.sin(bA)},{x:-Math.cos(bA+.25)*1.2,y:-Math.sin(bA+.25)*1.2,z:hs*.5,w:Math.cos(bA)},{x:Math.sin(bA+.25)*1.2,y:-Math.cos(bA+.25)*1.2,z:hs*.5,w:-Math.sin(bA)},{x:-Math.sin(bA+.25)*1.2,y:Math.cos(bA+.25)*1.2,z:hs*.5,w:-Math.cos(bA)},{x:0,y:0,z:hs*.15,w:0}].forEach((s,sIdx)=>vertices.push({x:s.x*.7,y:s.y*.7,z:s.z*.7,w:s.w*.4,t:1,i:500+cIdx*5+sIdx}));
     }
 
