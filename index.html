@@ -1,144 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-  <!-- Hardened CSP Barrier: Restricts execution explicitly to self-contained inline blocks and Blob workers -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:;">
-  <title>M4 Ultra</title>
-  <style>
-    :root{--n:#00CCFF;--a:#FF0055;--b:#090D16;}
-    *{box-sizing:border-box;margin:0;padding:0;user-select:none;-webkit-user-select:none;touch-action:none;font-family:monospace;font-size:10px;}
-    body{background:var(--b);color:var(--n);padding:env(safe-area-inset-top) 8px env(safe-area-inset-bottom) 8px;display:flex;justify-content:center;align-items:center;min-height:100vh;}
-    .c{width:100%;max-width:420px;display:flex;flex-direction:column;gap:6px;}
-    .h{display:flex;justify-content:space-between;align-items:center;padding:2px 4px;}
-    .w{width:100%;height:320px;background:#000;border:1px solid #1a2333;border-radius:6px;cursor:grab;position:relative;overflow:hidden;}
-    canvas{width:100%;height:100%;display:block;}
-    .db{border:1px solid #1a2333;border-radius:6px;padding:6px;background:rgba(16,27,43,.1);display:grid;grid-template-columns:repeat(2,1fr);gap:6px;}
-    .db div{border-left:2px solid #1A2B42;padding-left:6px;cursor:pointer;}
-    .db div:hover{background:rgba(0,204,255,0.05);}
-    .db div span{color:#526E85;text-transform:uppercase;font-size:8px;display:block;margin-bottom:1px;}
-    .db div b{color:#0F6;font-size:10px;}
-    .qc{position:absolute;bottom:6px;left:6px;right:6px;background:rgba(5,7,11,0.9);border:1px solid #1a2333;padding:4px 6px;border-radius:4px;color:var(--n);pointer-events:none;font-size:8px;text-align:center;}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sebra82 // Quantum Mini-Console</title>
+    <style>
+        :root {
+            --bg-color: #030507;
+            --neon-cyan: #00f3ff;
+            --neon-green: #00ff66;
+            --panel-bg: rgba(8, 12, 18, 0.95);
+            --border-color: rgba(0, 243, 255, 0.12);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-color);
+            color: #94a3b8;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .console-container {
+            width: 100%;
+            max-width: 380px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            padding: 12px;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.05);
+        }
+
+        header {
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+        }
+
+        .core-title {
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+        }
+
+        .core-spec {
+            font-size: 0.72rem;
+            color: #475569;
+            margin-top: 1px;
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .engine-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 6px;
+            font-size: 0.72rem;
+            color: var(--neon-cyan);
+            cursor: pointer;
+        }
+
+        .pulse-dot {
+            width: 5px;
+            height: 5px;
+            background-color: var(--neon-green);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+        #waveCanvas {
+            width: 100%;
+            height: 35px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 243, 255, 0.03);
+            margin-bottom: 10px;
+        }
+
+        .telemetry-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .metric-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-left: 2px solid var(--neon-cyan);
+            padding: 6px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+
+        .metric-card:hover {
+            background: rgba(0, 243, 255, 0.02);
+            border-left-color: var(--neon-green);
+        }
+
+        .metric-value { font-weight: bold; font-variant-numeric: tabular-nums; }
+        .highlight-blue { color: var(--neon-cyan); }
+        .highlight-green { color: var(--neon-green); }
+    </style>
 </head>
 <body>
-<div class="c">
-    <div class="h"><div>M4P // GPU_RENDER_CORE // DTSA_18_USC_1836</div></div>
-    <div class="w" id="wrapper"><canvas id="canvas"></canvas><div class="qc" id="qc">Ψ(t) PARALLEL GPU SHADER ENGINE ONLINE</div></div>
-    <div class="db">
-      <div onclick="trigTest(0)"><span>1. Entanglement Entropy</span><b id="m_st">0.0000 S_vN</b></div>
-      <div onclick="trigTest(1)"><span>2. Phase Propagation</span><b id="m_en">0.0040 r/s</b></div>
-      <div onclick="trigTest(2)"><span>3. Hilbert Subspace</span><b>2⁵⁰⁰ VIRTUAL STATES</b></div>
-      <div onclick="trigTest(3)"><span>4. EWC Neural Link</span><b id="m_sy" style="color:#0F6">EMBEDDED</b></div>
+
+    <div class="console-container">
+        <header>
+            <div class="core-title" data-value="M4 Ultra" onclick="scrambleText(this)">M4 Ultra</div>
+            <div class="core-spec" data-value="M4P // GPU_RENDER_CORE // DTSA_18_USC_1836" onclick="scrambleText(this)">M4P // GPU_RENDER_CORE // DTSA_18_USC_1836</div>
+            <div class="engine-status">
+                <div class="pulse-dot"></div>
+                <span data-value="Ψ(t) PARALLEL GPU SHADER ENGINE ONLINE" onclick="scrambleText(this)">Ψ(t) PARALLEL GPU SHADER ENGINE ONLINE</span>
+            </div>
+        </header>
+
+        <canvas id="waveCanvas"></canvas>
+
+        <main class="telemetry-grid">
+            <div class="metric-card" onclick="manipulateNumbers('entropyVal', 0, 0, 4, ' S_vN')">
+                <span>1. Entanglement Entropy</span>
+                <span class="metric-value highlight-green" id="entropyVal">0.0000 S_vN</span>
+            </div>
+            <div class="metric-card" onclick="manipulateNumbers('phaseVal', 0.0010, 0.0090, 4, ' r/s')">
+                <span>2. Phase Propagation</span>
+                <span class="metric-value highlight-blue" id="phaseVal">0.0040 r/s</span>
+            </div>
+            <div class="metric-card" onclick="scrambleSubspace()">
+                <span>3. Hilbert Subspace</span>
+                <span class="metric-value" id="subspaceVal">2⁹⁹ VIRTUAL STATES</span>
+            </div>
+            <div class="metric-card" id="nnCard">
+                <span>4. EWC Neural Link</span>
+                <span class="metric-value highlight-green" id="ewcVal" data-value="EMBEDDED">EMBEDDED</span>
+            </div>
+        </main>
     </div>
-</div>
-<script>
-const D=document,G="getElementById",qcBox=D[G]("qc"),stEl=D[G]("m_st"),enEl=D[G]("m_en"),pts=[],M=Math,S=M.sin,C=M.cos,A=M.abs,L=(e,t,f)=>e.addEventListener(t,f,{passive:!t.includes("m")});
-let w,h,rx=0,ry=0,drag=!1,sx=0,sy=0,pTime=0,mx=0,my=0,qE=0,qP=0,rdX=0,rdY=0,jitMod=1,lineMod=45,cohMod=99.45;
 
-// Main CPU thread persistent matrix layout container
-const liveDisplayBuffer = new Float32Array(2000);
+    <script>
+        const SYSTEM_STATE = Object.freeze({
+            entropyVal: '0.0000 S_vN',
+            phaseVal: '0.0040 r/s',
+            subspaceVal: '2⁹⁹ VIRTUAL STATES',
+            matrixChars: "ΨΩαβγδεζηθικλμνξοπρστυφχψωX0123456789%//_[]"
+        });
 
-const wk=new Worker(URL.createObjectURL(new Blob([`onmessage=(e)=>{const d=e.data;if(d.type==="SYNC"){const f=new Float32Array(d.buffer),out=new Float32Array(2000);for(let i=0;i<500;i++){let o=i*4,nX=d.noise,nY=d.noise;out[o]=f[o]-(nX*0.005);out[o+1]=f[o+1]-(nY*0.005);out[o+2]=f[o+2];out[o+3]=f[o+3];}postMessage({type:"PREDICTION",coords:out},[out.buffer]);}};`],{type:"application/javascript"})));
+        const activeLoops = { text: new Map(), num: new Map(), subspace: null };
+        const canvas = document.getElementById('waveCanvas');
+        const ctx = canvas?.getContext('2d');
+        let increment = 0;
 
-wk.onmessage=(e)=>{
-    const c=e.data.coords;
-    // Safely copy worker metrics straight into our active hardware rendering pool
-    liveDisplayBuffer.set(c);
-    for(let i=0;i<500;i++){let o=i*4;pts[i]={x:c[o],y:c[o+1],z:c[o+2],w:c[o+3]};}
-};
+        function resizeCanvas() {
+            if (!canvas) return;
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
 
-const cv=D[G]("canvas"),gl=cv.getContext("webgl2"),wrap=D[G]("wrapper");
-if(!gl){alert("WebGL2 not supported on this device.");}
+        function animateWave() {
+            if (!ctx || !canvas) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(0, 243, 255, 0.75)';
+            ctx.lineWidth = 1;
+            
+            const halfHeight = canvas.height / 2;
+            for (let x = 0; x < canvas.width; x++) {
+                const y = halfHeight + 
+                          Math.sin(x * 0.04 + increment) * 5 * Math.sin(increment * 0.3) +
+                          Math.cos(x * 0.03 - increment) * 2;
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            increment += 0.04;
+            requestAnimationFrame(animateWave);
+        }
+        animateWave();
 
-const vsSource = `#version 300 es
-in vec4 a_pos; out float v_w; uniform vec2 u_rot; uniform vec2 u_mouse; uniform float u_br; uniform float u_time; uniform float u_qE;
-void main() {
-    float cx1=cos(u_rot.x), sx1=sin(u_rot.x), cy1=cos(u_rot.y), sy1=sin(u_rot.y);
-    float wf=a_pos.w; float cX=a_pos.x*u_br, cY=a_pos.y*u_br, cZ=a_pos.z*u_br;
-    float dX=cX-u_mouse.x, dY=cY-u_mouse.y, mD=hypot(dX,dY);
-    if(mD<120.0){float psh=(1.0-(mD/120.0))*(6.0+u_qE);cX+=dX/mD*psh;cY+=dY/mD*psh;}
-    float rX=cX*cy1+(cY*sx1+cZ*cx1)*sy1; float rY=cY*cx1-cZ*sx1; float rZ=-cX*sy1+(cY*sx1+cZ*cx1)*cy1;
-    float wDiv=4.8-(wf*0.18); float dFactor=100.0/(100.0+rZ);
-    gl_Position=vec4((rX/wDiv)*dFactor/u_br*0.35, (rY)*dFactor/u_br*0.35, rZ/1000.0, 1.0);
-    gl_PointSize=(rZ>0.0)?4.0:2.0; v_w=wf;
-}`;
-const fsSource = `#version 300 es
-precision highp float; in float v_w; out vec4 outColor; uniform vec4 u_color;
-void main() { outColor=u_color+vec4(abs(v_w)*0.1, 0.0, 0.0, 0.0); }`;
+        function scrambleText(element) {
+            if (!element) return;
+            const original = element.getAttribute("data-value");
+            if (!original) return;
 
-function compileShader(src,type){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;}
-const program=gl.createProgram();gl.attachShader(program,compileShader(vsSource,gl.VERTEX_SHADER));gl.attachShader(program,compileShader(fsSource,gl.FRAGMENT_SHADER));gl.linkProgram(program);gl.useProgram(program);
+            if (activeLoops.text.has(element)) clearInterval(activeLoops.text.get(element));
+            
+            let iterations = 0;
+            const interval = setInterval(() => {
+                element.innerText = original.split("").map((char, index) => {
+                    if (index < iterations) return original[index];
+                    if (char === " ") return " ";
+                    return SYSTEM_STATE.matrixChars[Math.floor(Math.random() * SYSTEM_STATE.matrixChars.length)];
+                }).join("");
+                
+                if (iterations >= original.length) {
+                    clearInterval(interval);
+                    activeLoops.text.delete(element);
+                    element.innerText = original;
+                }
+                iterations += 1;
+            }, 20);
+            
+            activeLoops.text.set(element, interval);
+        }
 
-const posLoc=gl.getAttribLocation(program,"a_pos"),rotLoc=gl.getUniformLocation(program,"u_rot"),mouseLoc=gl.getUniformLocation(program,"u_mouse"),brLoc=gl.getUniformLocation(program,"u_br"),timeLoc=gl.getUniformLocation(program,"u_time"),qELoc=gl.getUniformLocation(program,"u_qE"),colLoc=gl.getUniformLocation(program,"u_color");
-const buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.enableVertexAttribArray(posLoc);gl.vertexAttribPointer(posLoc,4,gl.FLOAT,!1,0,0);
+        function manipulateNumbers(elementId, min, max, decimals, suffix) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
 
-function resize(){
-    const dpr=M.min(window.devicePixelRatio||1,2);w=wrap.clientWidth;h=wrap.clientHeight;
-    cv.width=w*dpr;cv.height=h*dpr;gl.viewport(0,0,cv.width,cv.height);
-}
-window.addEventListener("resize",resize);resize();
+            if (activeLoops.num.has(elementId)) clearInterval(activeLoops.num.get(elementId));
 
-// Initial mathematical state coordinates layout generation
-for(let i=0;i<500;i++){
-    let phi=M.acos(-1+2*(i+0.5)/500),th=M.PI*(1+M.sqrt(5))*i;
-    let x=S(phi)*C(th)*3.5, y=S(phi)*S(th)*3.5, z=C(phi)*3.5, wVal=S(th*2.5)*1.6;
-    pts.push({x:x,y:y,z:z,w:wVal});
-    let o=i*4;liveDisplayBuffer[o]=x;liveDisplayBuffer[o+1]=y;liveDisplayBuffer[o+2]=z;liveDisplayBuffer[o+3]=wVal;
-}
+            let duration = 0;
+            const interval = setInterval(() => {
+                el.innerText = (Math.random() * (max - min) + min).toFixed(decimals) + suffix;
+                duration += 50;
+                if (duration > 600) {
+                    clearInterval(interval);
+                    activeLoops.num.delete(elementId);
+                    el.innerText = SYSTEM_STATE[elementId];
+                }
+            }, 50);
 
-const ptr=e=>e.touches?e.touches:e,st=(e)=>{drag=!0;const p=ptr(e);sx=p.clientX;sy=p.clientY;},mv=(e)=>{
-    const p=ptr(e),r=cv.getBoundingClientRect();mx=(p.clientX-r.left)-(w/2);my=(p.clientY-r.top)-(h/2);
-    if(!drag)return;rdX=p.clientX-sx;rdY=p.clientY-sy;ry+=rdX*0.008;rx+=rdY*0.008;qE+=M.min(M.sqrt(rdX*rdX+rdY*rdY)*0.03,10);sx=p.clientX;sy=p.clientY;
-},sp=()=>drag=!1;
-L(wrap,"mousedown",st);L(window,"mousemove",mv);L(window,"mouseup",sp);L(wrap,"touchstart",st);L(wrap,"touchmove",mv);L(window,"touchend",sp);
+            activeLoops.num.set(elementId, interval);
+        }
 
-function trigTest(tier) {
-    if(tier===0){jitMod=jitMod===1?8:1;qcBox.innerText="🧪 TEST 1 ACTIVE: HARDWARE ACCELERATED INTERFERENCE MAXIMUM STRESS";}
-    if(tier===1){qE=M.min(qE+15,35);qcBox.innerText="🧪 TEST 2 ACTIVE: GPU KINETIC MOMENTUM SURGE INJECTED";}
-    if(tier===2){lineMod=lineMod===45?60:45;qcBox.innerText="🧪 TEST 3 ACTIVE: PARALLEL ELEMENT CONSTRAINTS OVERDRIVEN";}
-    if(tier===3){cohMod=cohMod===99.45?25.10:99.45;qcBox.innerText="🧪 TEST 4 ACTIVE: MATRIX ENTROPY RATIO MANIFOLD SHIFTED";}
-    setTimeout(()=>{qcBox.innerText="Ψ(t) HARDENED TELEMETRY VECTOR MATRIX";},3000);
-}
+        function scrambleSubspace() {
+            const el = document.getElementById('subspaceVal');
+            if (!el) return;
 
-const lineIndices=[];
-for(let i=0;i<500;i++)for(let j=i+1;j<500;j++)if((j-i)<3)lineIndices.push(i,j);
-const indexUint16=new Uint16Array(lineIndices);
-const elementBuffer=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,elementBuffer);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,indexUint16,gl.STATIC_DRAW);
+            if (activeLoops.subspace) clearInterval(activeLoops.subspace);
 
-function frame(){
-    gl.clearColor(0.035,0.05,0.086,1.0);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
-    if(!drag){ry+=.002;rx+=.001;rdX*=0.9;rdY*=0.9;}pTime+=0.025;qE*=0.94;qP+=0.005+(qE*0.02);
-    
-    // Create an independent transient chunk to transfer data down the pipeline safely
-    const transferBuffer = new Float32Array(2000);
-    for(let i=0;i<500;i++){
-        let p=pts[i],o=i*4;
-        let jit=(M.random()-0.5)*qE*0.03*jitMod;
-        transferBuffer[o]=p.x+jit;transferBuffer[o+1]=p.y+jit;transferBuffer[o+2]=p.z;transferBuffer[o+3]=p.w;
-    }
-    let nX=(M.random()-0.5)*4.5,nY=(M.random()-0.5)*4.5;
-    
-    // Ship our transient chunk over the worker thread link, completely freeing up the main thread
-    wk.postMessage({type:"SYNC",buffer:transferBuffer.buffer,noise:[nX,nY]},[transferBuffer.buffer]);
-    
-    // WebGL2 reads coordinates directly from our persistent displays array, keeping the grid on-screen
-    gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,liveDisplayBuffer,gl.DYNAMIC_DRAW);
-    
-    gl.uniform2f(rotLoc,rx+(S(qP)*qE*0.15),ry+(C(qP)*qE*0.15));gl.uniform2f(mouseLoc,mx,my);
-    gl.uniform1f(brLoc,w*0.48*(1+S(pTime)*0.03+(qE*0.05)));gl.uniform1f(timeLoc,pTime);gl.uniform1f(qELoc,qE);
-    
-    gl.uniform4f(colLoc,0.0,0.8,1.0,0.18);gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,elementBuffer);
-    gl.drawElements(gl.LINES,indexUint16.length,gl.UNSIGNED_SHORT,0);
-    
-    gl.uniform4f(colLoc,1.0,0.0,0.33,0.85);gl.drawArrays(gl.POINTS,0,500);
-    
-    let dCoh=(M.max(0.01,1.0-(qE*0.012))*cohMod).toFixed(2);
-    if(stEl)stEl.innerText=(A(S(pTime*0.5))*1.432+qE*0.1).toFixed(4)+" S_vN";if(enEl)enEl.innerText=(0.004+(qE*0.14)).toFixed(4)+" r/s";
-    requestAnimationFrame(frame);
-}
-frame();
-</script>
+            let counter = 0;
+            activeLoops.subspace = setInterval(() => {
+                el.innerHTML = `2<sup>${Math.floor(Math.random() * 99) + 10}</sup> FLUX...`;
+                counter++;
+                if (counter > 10) {
+                    clearInterval(activeLoops.subspace);
+                    activeLoops.subspace = null;
+                    el.innerHTML = SYSTEM_STATE.subspaceVal;
+                }
+            }, 50);
+        }
+
+        const nnCard = document.getElementById('nnCard');
+        if (nnCard) {
+            nnCard.addEventListener('mouseenter', () => {
+                const target = document.getElementById('ewcVal');
+                if (target) scrambleText(target);
+            });
+        }
+    </script>
 </body>
 </html>
