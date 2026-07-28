@@ -5,32 +5,32 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
   <title>M4</title>
   <style>
-    :root { --neon: #00CCFF; --alert: #FF0055; --bg: #090D16; }
+    :root { --n: #00CCFF; --a: #FF0055; --b: #090D16; }
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: none; font-family: monospace; font-size: 10px; }
-    body { background: var(--bg); color: var(--neon); padding: env(safe-area-inset-top) 8px env(safe-area-inset-bottom) 8px; display: flex; justify-content:center; align-items: center; min-height: 100vh; }
+    body { background: var(--b); color: var(--n); padding: env(safe-area-inset-top) 8px env(safe-area-inset-bottom) 8px; display: flex; justify-content:center; align-items: center; min-height: 100vh; }
     .c { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 6px; }
     .h { display: flex; justify-content: space-between; align-items: center; padding: 2px 4px; }
-    .b { font-weight: bold; padding: 3px 8px; border: 1px solid var(--alert); color: var(--alert); background: rgba(255,0,85,.05); border-radius: 4px; font-size: 10px; letter-spacing: 0.5px; }
+    .b { font-weight: bold; padding: 3px 8px; border: 1px solid var(--a); color: var(--a); background: rgba(255,0,85,.05); border-radius: 4px; font-size: 10px; letter-spacing: 0.5px; }
     .b.u { border-color: #0F6; color: #0F6; background: rgba(0,255,102,.05); }
     .w { width: 100%; height: 320px; background: #000; border: 1px solid #1a2333; border-radius: 6px; cursor: grab; position: relative; overflow: hidden; }
     canvas { width: 100%; height: 100%; display: block; }
     .p { border: 1px solid #1a2333; border-radius: 6px; padding: 8px; background: rgba(9,13,22,.85); backdrop-filter: blur(4px); }
     .ph { display: flex; justify-content: space-between; margin-bottom: 4px; color: #8ab4f8; font-size: 9px; }
-    .ps { color: var(--alert); }.ps.v { color: #0F6; }
+    .ps { color: var(--a); }.ps.v { color: #0F6; }
     .g { display: flex; gap: 6px; }
-    input { background: #000; border: 1px solid var(--neon); color: #0F6; padding: 8px; flex-grow: 1; border-radius: 4px; outline: none; font-size: 12px; -webkit-appearance: none; }
-    button { background: rgba(0,204,255,.1); border: 1px solid var(--neon); color: var(--neon); padding: 8px 14px; cursor: pointer; border-radius: 4px; font-weight: bold; }
+    input { background: #000; border: 1px solid var(--n); color: #0F6; padding: 8px; flex-grow: 1; border-radius: 4px; outline: none; font-size: 12px; -webkit-appearance: none; }
+    button { background: rgba(0,204,255,.1); border: 1px solid var(--n); color: var(--n); padding: 8px 14px; cursor: pointer; border-radius: 4px; font-weight: bold; }
     .db { border: 1px solid #1a2333; border-radius: 6px; padding: 6px; background: rgba(16,27,43,.1); display: grid; grid-template-columns: repeat(2,1fr); gap: 6px; }
     .db div { border-left: 2px solid #1A2B42; padding-left: 6px; }
     .db div span { color: #526E85; text-transform: uppercase; font-size: 8px; display: block; margin-bottom: 1px; }
     .db div b { color: #0F6; font-size: 10px; }
-    .qc { position: absolute; bottom: 6px; left: 6px; right: 6px; background: rgba(5,7,11,0.9); border: 1px solid #1a2333; padding: 4px 6px; border-radius: 4px; color: var(--neon); pointer-events: none; font-size: 8px; text-align: center; }
+    .qc { position: absolute; bottom: 6px; left: 6px; right: 6px; background: rgba(5,7,11,0.9); border: 1px solid #1a2333; padding: 4px 6px; border-radius: 4px; color: var(--n); pointer-events: none; font-size: 8px; text-align: center; }
   </style>
 </head>
 <body>
 <div class="c">
-    <div class="h"><div>M4P-V6.99 // PROPRIETARY_MANIFOLD // DTSA_18_USC_1836_SECURE_REGIME</div><div class="b" id="b">ENC_LOCKED</div></div>
-    <div class="w" id="wrapper"><canvas id="canvas"></canvas><div class="qc" id="qc">Ψ(t) ACTIVE // RUNNING THREAD CHANNELS</div></div>
+    <div class="h"><div>M4P // BINARY_FLOW // DTSA_18_USC_1836</div><div class="b" id="b">ENC_LOCKED</div></div>
+    <div class="w" id="wrapper"><canvas id="canvas"></canvas><div class="qc" id="qc">Ψ(t) ZERO-COPY BINARY TRANSPORT INITIALISED</div></div>
     <div class="p">
         <div class="ph"><span>SYS_VAULT_GATEWAY</span><span class="ps" id="gs">Locked. Enter key.</span></div>
         <div class="g"><input type="password" id="gk" autocomplete="off"><button onclick="auth()">ENTER</button></div>
@@ -40,93 +40,67 @@
       <div><span>Entanglement Entropy</span><b id="m_st">0.0000 S_vN</b></div>
       <div><span>Phase Propagation</span><b id="m_en">0.0040 r/s</b></div>
       <div><span>Hilbert Subspace</span><b>2⁵⁰⁰ VIRTUAL STATES</b></div>
-      <div><span>Tensor Mesh Sync</span><b id="m_sy">OFFLINE</b></div>
+      <div><span>Array Link Throughput</span><b id="m_sy">OFFLINE</b></div>
     </div>
 </div>
 <script>
-const FH="masterpassword_v4_chronos_production",D=document,G="getElementById",qEl=D[G]("q"),sEl=D[G]("gs"),bEl=D[G]("b");
-const worker = new Worker("worker.js");
-
+const FH="masterpassword_v4_chronos_production",D=document,G="getElementById",qEl=D[G]("q"),sEl=D[G]("gs"),bEl=D[G]("b"),wk=new Worker("worker.js");
 ["HYDRO_MATRIX","XD_OBFUSCATION"].forEach((n,i)=>qEl.innerHTML+=`<div class="p" id="q${i}" style="display:none; margin-top:4px;"><div class="ph"><span>QTR_${i+1} // ${n}</span><span class="ps" id="s${i}">[STREAM LOCKED]</span></div><div class="o" id="o${i}" style="color:#0F6; font-size:9px; white-space:pre-wrap; max-height:120px; overflow-y:auto; margin-top:4px;"></div></div>`);
-
 async function auth(){
-    const inp=D[G]("gk").value.toLowerCase().trim();sEl.innerText="[COMPUTING] Checking token paths...";sEl.className="ps";
-    D[G]("gk").blur();
+    const inp=D[G]("gk").value.toLowerCase().trim();sEl.innerText="[COMPUTING] Checking token paths...";sEl.className="ps";D[G]("gk").blur();
     if(inp===FH){
-       bEl.innerText="HONEYPOT_TRAP";bEl.style.borderColor="#F05";
-       sEl.innerText="[LOCKDOWN] Threat signature identified.";
+       bEl.innerText="HONEYPOT_TRAP";bEl.style.borderColor="#F05";sEl.innerText="[LOCKDOWN] Threat identified.";
        D[G]("q0").style.display="block";D[G]("s0").innerText="[TRAP ACTIVATED]";
-       D[G]("o0").innerText=`⚠️ HONEYPOT ENTRAPMENT INITIATED.\nLocal tracking arrays deployed. Incident logged.`;
-       return;
+       D[G]("o0").innerText=`⚠️ HONEYPOT ENTRAPMENT INITIATED.\nIncident logged.`;return;
     }
-    worker.postMessage({type:"AUTH_TRY",key:inp});
+    wk.postMessage({type:"AUTH_TRY",key:inp});
 }
-
 const cv=D[G]("canvas"),cx=cv.getContext("2d"),wrap=D[G]("wrapper"),qcBox=D[G]("qc"),stEl=D[G]("m_st"),enEl=D[G]("m_en"),syEl=D[G]("m_sy"),pts=[],M=Math,S=M.sin,C=M.cos,A=M.abs;
-let w,h,rx=0,ry=0,drag=!1,sx,sy,pTime=0,mx=0,my=0,qE=0,qP=0,aiA=!1,rdX=0,rdY=0,activeEdges=[];
-
-worker.onmessage=(e)=>{
+let w,h,rx=0,ry=0,drag=!1,sx,sy,pTime=0,mx=0,my=0,qE=0,qP=0,aiA=!1,rdX=0,rdY=0,activeEdges=[],stateBuffer=new Float32Array(2000);
+wk.onmessage=(e)=>{
     const d=e.data;
     if(d.type==="WS_STATUS"){syEl.innerText=d.status;syEl.style.color=d.status==="CONNECTED"?"#0F6":"#F05";}
     if(d.type==="AUTH_RES"){
         if(d.success){
            bEl.innerText="ENC_UNLOCKED";bEl.className="b u";sEl.innerText="[SUCCESS] Verified.";sEl.className="ps v";
-           ["q0","q1"].forEach((id,i)=>{
-               D[G](id).style.display="block";D[G](id).className="p a";D[G](`s${i}`).innerText="[DECRYPTED]";D[G](`s${i}`).className="ps v";
-               D[G](`o${i}`).innerText=d.payload;
-           });
-        }else{sEl.innerText=d.reason||"[FAILED] Signature mismatch.";sEl.className="ps";D[G]("gk").value="";}
+           ["q0","q1"].forEach((id,i)=>{D[G](id).style.display="block";D[G](id).className="p a";D[G](`s${i}`).innerText="[DECRYPTED]";D[G](`s${i}`).className="ps v";D[G](`o${i}`).innerText=d.payload;});
+        }else{sEl.innerText=d.reason||"[FAILED] Mismatch.";sEl.className="ps";D[G]("gk").value="";}
     }
-    if(d.type==="PREDICTION"&&d.coords.length===2e3){
-        aiA=!0;for(let i=0;i<500;i++){pts[i].x=d.coords[i*4];pts[i].y=d.coords[i*4+1];pts[i].z=d.coords[i*4+2];pts[i].w=d.coords[i*4+3];}
+    if(d.type==="PREDICTION"){
+        aiA=!0;const c=d.coords;
+        for(let i=0;i<500;i++){let o=i*4;pts[i]={x:c[o],y:c[o+1],z:c[o+2],w:c[o+3]};}
         activeEdges=d.edges||[];
     }
 };
-
-function initWS(){worker.postMessage({type:"INIT"});}setTimeout(initWS,1000);
-function resize(){
-    const dpr=M.min(window.devicePixelRatio||1,2);
-    w=wrap.clientWidth;h=wrap.clientHeight;cv.width=w*dpr;cv.height=h*dpr;cx.scale(dpr,dpr);
-}
+function initWS(){wk.postMessage({type:"INIT"});}setTimeout(initWS,1000);
+function resize(){const dpr=M.min(window.devicePixelRatio||1,2);w=wrap.clientWidth;h=wrap.clientHeight;cv.width=w*dpr;cv.height=h*dpr;cx.scale(dpr,dpr);}
 window.addEventListener("resize",resize);resize();
-
-for(let i=0;i<500;i++){
-    let phi=M.acos(-1+2*(i+0.5)/500),th=M.PI*(1+M.sqrt(5))*i;
-    pts.push({x:S(phi)*C(th)*3.5,y:S(phi)*S(th)*3.5,z:C(phi)*3.5,w:S(th*2.5)*1.6});
-}
+for(let i=0;i<500;i++){let phi=M.acos(-1+2*(i+0.5)/500),th=M.PI*(1+M.sqrt(5))*i;pts.push({x:S(phi)*C(th)*3.5,y:S(phi)*S(th)*3.5,z:C(phi)*3.5,w:S(th*2.5)*1.6});}
 const ptr=e=>e.touches?e.touches:e,st=(e)=>{drag=!0;const p=ptr(e);sx=p.clientX;sy=p.clientY;},mv=(e)=>{
     const p=ptr(e),r=cv.getBoundingClientRect();mx=(p.clientX-r.left)-(w/2);my=(p.clientY-r.top)-(h/2);
     if(!drag)return;rdX=p.clientX-sx;rdY=p.clientY-sy;ry+=rdX*0.008;rx+=rdY*0.008;qE+=M.sqrt(rdX*rdX+rdY*rdY)*0.03;sx=p.clientX;sy=p.clientY;
 },sp=()=>drag=!1;
 wrap.addEventListener("mousedown",st);window.addEventListener("mousemove",mv);window.addEventListener("mouseup",sp);
 wrap.addEventListener("touchstart",st,{passive:!0});window.addEventListener("touchmove",mv,{passive:!0});window.addEventListener("touchend",sp);
-
 function line(p1,p2,cR,cG,cB,bA,wA){cx.strokeStyle=`rgba(${cR},${cG},${cB},${bA+A(p1.w)*wA})`;cx.beginPath();cx.moveTo(p1.x,p1.y);cx.lineTo(p2.x,p2.y);cx.stroke();}
-
 function frame(){
     cx.clearRect(0,0,w,h);let mX=w/2,mY=h/2;if(!drag){ry+=.002;rx+=.001;rdX*=0.9;rdY*=0.9;}pTime+=0.025;qE*=0.94;qP+=0.005+(qE*0.02);
-    const f=[];pts.forEach(p=>f.push(p.x,p.y,p.z,p.w));
-    let noiseX=(M.random()-0.5)*4.5,noiseY=(M.random()-0.5)*4.5;
-    worker.postMessage({type:"SYNC",state:f,action:[rdX+noiseX,rdY+noiseY],noise:[noiseX,noiseY]});
+    for(let i=0;i<500;i++){let p=pts[i],o=i*4;stateBuffer[o]=p.x;stateBuffer[o+1]=p.y;stateBuffer[o+2]=p.z;stateBuffer[o+3]=p.w;}
+    let nX=(M.random()-0.5)*4.5,nY=(M.random()-0.5)*4.5;
+    wk.postMessage({type:"SYNC",buffer:stateBuffer.buffer,action:[rdX+nX,rdY+nY],noise:[nX,nY]},[stateBuffer.buffer]);stateBuffer=new Float32Array(2000);
     let cx1=C(rx+(S(qP)*qE*0.15)),sx1=S(rx+(S(qP)*qE*0.15)),cy1=C(ry+(C(qP)*qE*0.15)),sy1=S(ry+(C(qP)*qE*0.15)),br=w*0.48*(1+S(pTime)*0.03+(qE*0.05)),cH=C(pTime*0.3+qP*0.1),sH=S(pTime*0.3+qP*0.1),proj=[];
     pts.forEach((p,idx)=>{
         let cX,cY,cZ,wf=p.w,jit=!aiA?(M.random()-0.5)*qE*0.03:0;
-        if(!aiA){
-            let xr=(p.x+jit)*cH-p.w*sH;wf=(p.x+jit)*sH+p.w*cH;cX=xr*br;cY=(p.y+jit)*br;cZ=(p.z+jit)*br;
-            let dX=cX-mx,dY=cY-my,mD=M.hypot(dX,dY);if(mD<80){let psh=(1-(mD/80))*(5+qE);cX+=dX/mD*psh;cY+=dY/mD*psh;}
-        }else{cX=p.x*br;cY=p.y*br;cZ=p.z*br;}
+        if(!aiA){let xr=(p.x+jit)*cH-p.w*sH;wf=(p.x+jit)*sH+p.w*cH;cX=xr*br;cY=(p.y+jit)*br;cZ=(p.z+jit)*br;let dX=cX-mx,dY=cY-my,mD=M.hypot(dX,dY);if(mD<80){let psh=(1-(mD/80))*(5+qE);cX+=dX/mD*psh;cY+=dY/mD*psh;}}else{cX=p.x*br;cY=p.y*br;cZ=p.z*br;}
         proj.push({x:mX+(cX*cy1+(cY*sx1+cZ*cx1)*sy1)/(4.8-(wf*0.18))*(100/(100+(-cX*sy1+(cY*sx1+cZ*cx1)*cy1))),y:mY+(cY*cx1-cZ*sx1)*100/(100+(-cX*sy1+(cY*sx1+cZ*cx1)*cy1)),z:-cX*sy1+(cY*sx1+cZ*cx1)*cy1,w:wf,t:idx%2});
     });
     cx.lineWidth=0.45;
-    if(aiA&&activeEdges.length>0){
-        activeEdges.forEach(([u,v])=>{if(proj[u]&&proj[v])proj[u].t===0?line(proj[u],proj[v],0,204,255,0.15,0.1):line(proj[u],proj[v],255,0,85,0.12,0.06);});
-    }else{
-        let fc=0;for(let i=0;i<proj.length&&fc<600;i++)for(let j=i+1;j<proj.length&&fc<600;j++)if(M.hypot(proj[i].x-proj[j].x,proj[i].y-proj[j].y)<45){proj[i].t===0?line(proj[i],proj[j],0,204,255,0.14,0.1):line(proj[i],proj[j],255,0,85,0.1,0.06);fc++;}
-    }
+    if(aiA&&activeEdges.length>0){activeEdges.forEach(([u,v])=>{if(proj[u]&&proj[v])proj[u].t===0?line(proj[u],proj[v],0,204,255,0.15,0.1):line(proj[u],proj[v],255,0,85,0.12,0.06);});}
+    else{let fc=0;for(let i=0;i<proj.length&&fc<600;i++)for(let j=i+1;j<proj.length&&fc<600;j++)if(M.hypot(proj[i].x-proj[j].x,proj[i].y-proj[j].y)<45){proj[i].t===0?line(proj[i],proj[j],0,204,255,0.14,0.1):line(proj[i],proj[j],255,0,85,0.1,0.06);fc++;}}
     proj.forEach(p=>{cx.beginPath();cx.fillStyle=p.z>0?"#00CCFF":"#ff0055";cx.arc(p.x,p.y,p.z>0?1.8:0.9,0,2*M.PI);cx.fill();});
     let dCoh=(M.max(0.01,1.0-(qE*0.012))*99.45).toFixed(2);
     if(stEl)stEl.innerText=(A(S(pTime*0.5))*1.432+qE*0.1).toFixed(4)+" S_vN";if(enEl)enEl.innerText=(0.004+(qE*0.14)).toFixed(4)+" r/s";
-    if(qcBox)qcBox.innerText=aiA?`Ψ(t) NASA-TIER TRANSFORMER CANCELLING NOISE IN REAL-TIME` : `Ψ(t) = √(${dCoh}%)|0⟩ // ΔE: ${(qE*6.626).toFixed(2)} eV`;
+    if(qcBox)qcBox.innerText=aiA?`Ψ(t) ZERO-COPY INTENSITY // SUB-NANOSECOND ARRAY PAYLOADS MATCHED SUCCESSFULLY` : `Ψ(t) = √(${dCoh}%)|0⟩ // ΔE: ${(qE*6.626).toFixed(2)} eV`;
     requestAnimationFrame(frame);
 }
 frame();
