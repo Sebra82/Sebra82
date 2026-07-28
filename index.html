@@ -3,267 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sebra82 // Quantum Nano-Console</title>
+    <title>Sebra82 // Quantum Atto-Console</title>
     <style>
         :root {
-            --bg: #010203;
-            --cyan: #00f3ff;
-            --green: #00ff66;
-            --panel: rgba(4, 6, 10, 0.99);
-            --border: rgba(0, 243, 255, 0.08);
+            --bg: #000;
+            --pnl: rgba(2,4,6,0.99);
+            --brd: #020508;
+            --cyn: #00f3ff;
+            --grn: #00ff66;
+            --mtd: #141a22;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', monospace; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: monospace; line-height: 1; font-size: 0.38rem; }
 
         body {
             background: var(--bg);
-            color: #64748b;
+            color: #38414a;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
             user-select: none;
+            padding: 1px;
         }
 
-        .console-container {
+        .dashboard-frame {
             width: 100%;
-            max-width: 240px;
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 2px;
-            padding: 5px 7px;
-            box-shadow: 0 0 8px rgba(0, 243, 255, 0.03);
+            max-width: 110px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5px;
         }
 
-        header {
-            border-bottom: 1px dashed var(--border);
-            padding-bottom: 3px;
-            margin-bottom: 4px;
+        .sys-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        .title-group { overflow: hidden; width: 90%; }
-
-        .core-title {
-            font-size: 0.82rem;
             font-weight: bold;
-            color: #fff;
-            cursor: pointer;
-            line-height: 1;
         }
-
-        .core-spec {
-            font-size: 0.58rem;
-            color: #1e293b;
-            cursor: pointer;
+        .header-tag { 
+            color: var(--cyn); 
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            margin-top: 1px;
+            width: 80%;
         }
 
-        .pulse-dot {
-            width: 3px;
-            height: 3px;
-            background: var(--green);
-            border-radius: 50%;
-            animation: pulse 1.5s infinite ease-in-out;
-        }
-
-        @keyframes pulse { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
-
-        #waveCanvas {
+        .visualizer-container {
             width: 100%;
-            height: 18px;
-            background: rgba(0, 0, 0, 0.7);
-            margin-bottom: 4px;
+            height: 25px;
+            background: #000;
+            border: 1px solid var(--brd);
+            position: relative;
+        }
+        #constellationCanvas {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0; left: 0;
         }
 
-        .telemetry-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
+        .metrics-block {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--pnl);
+            border: 1px solid var(--brd);
+            padding: 1px;
         }
+        .metric-item { display: flex; flex-direction: column; cursor: pointer; }
+        .m-lbl { font-size: 0.34rem; color: var(--mtd); font-weight: bold; letter-spacing: -0.2px; }
+        .m-val { font-weight: bold; font-variant-numeric: tabular-nums; }
 
-        .metric-card {
-            background: rgba(0, 0, 0, 0.4);
-            border-left: 1px solid var(--cyan);
-            padding: 3px 5px;
+        .pipeline-card {
+            background: var(--pnl);
+            border: 1px solid var(--brd);
+            padding: 1px 1.5px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            font-size: 0.64rem;
-            line-height: 1;
         }
 
-        .metric-card:hover { border-left-color: var(--green); background: rgba(0, 243, 255, 0.01); }
-        .metric-value { font-weight: bold; font-variant-numeric: tabular-nums; }
-        .hl-blue { color: var(--cyan); }
-        .hl-green { color: var(--green); }
+        .hl-cyn { color: var(--cyn); }
+        .hl-grn { color: var(--grn); }
     </style>
 </head>
 <body>
 
-    <div class="console-container">
-        <header>
-            <div class="title-group" onclick="scrambleHeader()">
-                <div class="core-title" id="mainTitle">M4 Ultra</div>
-                <div class="core-spec" id="subSpec">M4P // RENDER // 1836</div>
-            </div>
-            <div class="pulse-dot"></div>
-        </header>
+    <div class="dashboard-frame">
+        <div class="sys-header">
+            <span class="header-tag" id="mainHeader" onclick="scrambleHeader()">M4P//6.99</span>
+            <span class="hl-grn">ON</span>
+        </div>
 
-        <canvas id="waveCanvas"></canvas>
+        <div class="visualizer-container">
+            <canvas id="constellationCanvas"></canvas>
+        </div>
 
-        <main class="telemetry-grid">
-            <div class="metric-card" onclick="manipulateNumbers('entropyVal', 0, 0, 4, ' S_vN')">
-                <span>Entropy</span>
-                <span class="metric-value hl-green" id="entropyVal">0.0000 S_vN</span>
+        <div class="metrics-block">
+            <div class="metric-item" onclick="spinEntropy()">
+                <span class="m-lbl">ENTR</span>
+                <span class="m-val hl-grn" id="entropyVal">.962</span>
             </div>
-            <div class="metric-card" onclick="manipulateNumbers('phaseVal', 0.0010, 0.0090, 4, ' r/s')">
-                <span>Phase</span>
-                <span class="metric-value hl-blue" id="phaseVal">0.0040 r/s</span>
+            <div class="metric-item" onclick="spinPhase()">
+                <span class="m-lbl">PHAS</span>
+                <span class="m-val hl-grn" id="phaseVal">.004</span>
             </div>
-            <div class="metric-card" onclick="scrambleSubspace()">
-                <span>Hilbert</span>
-                <span class="metric-value" id="subspaceVal">2⁵⁰⁰ VIRTUAL</span>
+            <div class="metric-item" onclick="scrambleSubspace()">
+                <span class="m-lbl">HILB</span>
+                <span class="m-val hl-cyn" id="subspaceVal">2⁵⁰⁰</span>
             </div>
-            <div class="metric-card" id="nnCard">
-                <span>Neural</span>
-                <span class="metric-value hl-green" id="ewcVal">EMBEDDED</span>
+            <div class="metric-item" onclick="scrambleMesh()">
+                <span class="m-lbl">MESH</span>
+                <span class="m-val hl-cyn" id="meshSyncText">SYNC</span>
             </div>
-        </main>
+        </div>
+
+        <div class="pipeline-card" onclick="scramblePipe(1)">
+            <span class="hl-cyn" id="pipeLabel1">Q1//HYD</span>
+            <span class="hl-grn" id="pipeStatus1">OK</span>
+        </div>
+        <div class="pipeline-card" onclick="scramblePipe(2)">
+            <span class="hl-cyn" id="pipeLabel2">Q2//XD</span>
+            <span class="hl-grn" id="pipeStatus2">OK</span>
+        </div>
     </div>
 
     <script>
         const SYSTEM_STATE = Object.freeze({
-            entropyVal: '0.0000 S_vN',
-            phaseVal: '0.0040 r/s',
-            subspaceVal: '2⁵⁰⁰ VIRTUAL',
-            matrixChars: "ΨΩαβγδεζηX012345%"
+            headerVal: 'M4P//6.99', entropyVal: '.962', phaseVal: '.004',
+            subspaceVal: '2⁵⁰⁰', meshVal: 'SYNC', pipe1Val: 'Q1//HYD', pipe2Val: 'Q2//XD',
+            matrixChars: "ΨΩαβX01%"
         });
 
-        const activeLoops = { text: new Map(), num: new Map(), subspace: null };
-        const canvas = document.getElementById('waveCanvas');
+        const activeLoops = new Map();
+        const canvas = document.getElementById('constellationCanvas');
         const ctx = canvas?.getContext('2d');
-        
-        let angleX = 0, angleY = 0;
-        const rotateSpeedX = 0.010;
-        const rotateSpeedY = 0.015;
+        let nodes = [], angleX = 0, angleY = 0;
 
         function resizeCanvas() {
             if (!canvas) return;
-            canvas.width = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        const vertices3D = [
-            {x: -1, y: -1, z: -1}, {x: 1, y: -1, z: -1}, {x: 1, y: 1, z: -1}, {x: -1, y: 1, z: -1},
-            {x: -1, y: -1, z: 1},  {x: 1, y: -1, z: 1},  {x: 1, y: 1, z: 1},   {x: -1, y: 1, z: 1}
-        ];
-        
-        const edges3D = [
-            0, 1, 1, 2, 2, 3, 3, 0,
-            4, 5, 5, 6, 6, 7, 7, 4,
-            0, 4, 1, 5, 2, 6, 3, 7
-        ];
-
-        function animate3D() {
-            if (!ctx || !canvas) return;
-            try {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                const cx = canvas.width / 2;
-                const cy = canvas.height / 2;
-                const projected2D = [];
-
-                vertices3D.forEach(v => {
-                    let x1 = v.x * Math.cos(angleY) - v.z * Math.sin(angleY);
-                    let z1 = v.x * Math.sin(angleY) + v.z * Math.cos(angleY);
-                    let y2 = v.y * Math.cos(angleX) - z1 * Math.sin(angleX);
-                    let z2 = v.y * Math.sin(angleX) + z1 * Math.cos(angleX);
-
-                    const factor = 1 / (3.0 - z2);
-                    
-                    // Retained high-fidelity 13:30 multipliers (60 horizontal / 45 vertical ratio)
-                    // Scaled down natively to fit clean inside ultra-shrunk 18px boundary space
-                    let screenX = cx + x1 * factor * 52; 
-                    let screenY = cy + y2 * factor * 11.5;
-
-                    projected2D.push({ x: screenX, y: screenY });
-                });
-
-                ctx.beginPath();
-                ctx.strokeStyle = 'rgba(0, 243, 255, 0.85)';
-                ctx.lineWidth = 1;
-                
-                for (let i = 0; i < edges3D.length; i += 2) {
-                    ctx.moveTo(projected2D[edges3D[i]].x, projected2D[edges3D[i]].y);
-                    ctx.lineTo(projected2D[edges3D[i+1]].x, projected2D[edges3D[i+1]].y);
-                }
-                ctx.stroke();
-                
-                angleX += rotateSpeedX; 
-                angleY += rotateSpeedY;
-            } catch (e) {}
-            requestAnimationFrame(animate3D);
-        }
-        animate3D();
-
-        function scrambleHeader() {
-            const specEl = document.getElementById('subSpec');
-            if (!specEl) return;
-            const original = "M4P // RENDER // 1836";
-            if (activeLoops.text.has(specEl)) clearInterval(activeLoops.text.get(specEl));
-            let iter = 0;
-            const interval = setInterval(() => {
-                specEl.innerText = original.split("").map((c, i) => i < iter ? original[i] : (c === " " ? " " : SYSTEM_STATE.matrixChars[Math.floor(Math.random() * SYSTEM_STATE.matrixChars.length)])).join("");
-                if (iter >= original.length) { clearInterval(interval); specEl.innerText = original; }
-                iter += 2;
-            }, 20);
-            activeLoops.text.set(specEl, interval);
+            canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+            initConstellation();
         }
 
-        function manipulateNumbers(elementId, min, max, decimals, suffix) {
-            const el = document.getElementById(elementId);
-            if (!el) return;
-            if (activeLoops.num.has(elementId)) clearInterval(activeLoops.num.get(elementId));
-            let d = 0;
-            const interval = setInterval(() => {
-                el.innerText = (Math.random() * (max - min) + min).toFixed(decimals) + suffix;
-                d += 50;
-                if (d > 500) { clearInterval(interval); el.innerText = SYSTEM_STATE[elementId]; }
-            }, 50);
-            activeLoops.num.set(elementId, interval);
-        }
-
-        function scrambleSubspace() {
-            const el = document.getElementById('subspaceVal');
-            if (!el || activeLoops.subspace) return;
-            let c = 0;
-            activeLoops.subspace = setInterval(() => {
-                el.innerText = `2⁵${Math.floor(Math.random() * 90) + 10} FLUX`;
-                if (++c > 10) { clearInterval(activeLoops.subspace); activeLoops.subspace = null; el.innerText = SYSTEM_STATE.subspaceVal; }
-            }, 50);
-        }
-
-        document.getElementById('nnCard')?.addEventListener('mouseenter', () => {
-            const target = document.getElementById('ewcVal');
-            if (target && !activeLoops.text.has(target)) {
-                let orig = "EMBEDDED", iter = 0;
-                const interval = setInterval(() => {
-                    target.innerText = orig.split("").map((c, i) => i < iter ? orig[i] : SYSTEM_STATE.matrixChars[Math.floor(Math.random() * SYSTEM_STATE.matrixChars.length)]).join("");
-                    if (iter >= orig.length) { clearInterval(interval); activeLoops.text.delete(target); target.innerText = orig; }
-                    iter++;
-                }, 30);
-                activeLoops.text.set(target, interval);
+        function initConstellation() {
+            nodes = [];
+            const count = 18; 
+            for (let i = 0; i < count; i++) {
+                const theta = (i / count) * Math.PI * 4;
+                const r = 0.6 * (Math.sin(i * 0.05) + 0.6);
+                nodes.push({ x: Math.cos(theta) * r, y: (i / count) * 1.6 - 0.8, z: Math.sin(theta) * r, color: i % 2 === 0 ? '#ff0055' : '#00f3ff' });
             }
-        });
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function animateConstellation() {
+            if (!ctx || !canvas) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const cx = canvas.width / 2, cy = canvas.height / 2, projected = [];
+
+            nodes.forEach(n => {
+                let x1 = n.x * Math.cos(angleY) - n.z * Math.sin(angleY);
+                let z1 = n.x * Math.sin(angleY) + n.z * Math.cos(angleY);
+                let y2 = n.y * Math.cos(angleX) - z1 * Math.sin(angleX);
+                let z2 = n.y * Math.sin(angleX) + z1 * Math.cos(angleX);
+                projected.push({ x: cx + x1 * (22 / (2.2 - z2)), y: cy + y2 * (22 / (2.2 - z2)), z: z2, color: n.color });
+            });
+
+            ctx.lineWidth = 0.15;
+            for (let i = 0; i < projected.length; i++) {
+                for (let j = i + 1; j < Math.min(i + 2, projected.length); j++) {
+                    if (Math.hypot(projected[i].x - projected[j].x, projected[i].y - projected[j].y) < 7) {
+                        ctx.strokeStyle = projected[i].color === '#ff0055' ? 'rgba(255,0,85,0.04)' : 'rgba(0,243,255,0.04)';
+                        ctx.beginPath(); ctx.moveTo(projected[i].x, projected[i].y); ctx.lineTo(projected[j].x, projected[j].y); ctx.stroke();
+                    }
+                }
+            }
+
+            projected.forEach(p => {
+                ctx.fillStyle = p.color;
+                ctx.beginPath(); ctx.arc(p.x, p.y, Math.max(0.2, (2.2 - p.z) * 0.2), 0, Math.PI * 2); ctx.fill();
+            });
+
+            angleX += 0.002; angleY += 0.004;
+            requestAnimationFrame(animateConstellation);
+        }
+        animateConstellation();
+
+        function clearLoop(key) { if (activeLoops.has(key)) { clearInterval(activeLoops.get(key)); activeLoops.delete(key); } }
+
+        function scrambleText(elementId, original) {
+            const el = document.getElementById(elementId); if (!el) return;
+            clearLoop(elementId);
+            let steps = 0, maxSteps = 6;
+            const interval = setInterval(() => {
+                el.innerText = original.split("").map((c, i) => (i < (steps / maxSteps) * original.length || c === "/") ? c : SYSTEM_STATE.matrixChars[Math.floor(Math.random() * SYSTEM_STATE.matrixChars.length)]).join("");
+                if (++steps >= maxSteps) { clearInterval(interval); activeLoops.delete(elementId); el.innerText = original; }
+            }, 40);
+            activeLoops.set(elementId, interval);
+        }
+
+        function scrambleHeader() { scrambleText('mainHeader', SYSTEM_STATE.headerVal); }
+        function scrambleMesh() { scrambleText('meshSyncText', SYSTEM_STATE.meshVal); }
+        function scramblePipe(id) { 
+            scrambleText(`pipeLabel${id}`, SYSTEM_STATE[`pipe${id}Val`]);
+            const s = document.getElementById(`pipeStatus${id}`); if(!s) return;
+            s.innerText = "FX"; s.className = "hl-cyn";
+            setTimeout(() => { s.innerText = "OK"; s.className = "hl-grn"; }, 240);
+        }
+
+        function manipulateNumbers(elementId, generateFunc, finalVal) {
+            const el = document.getElementById(elementId); if (!el) return;
+            clearLoop(elementId);
+            let d = 0;
+            const interval = setInterval(() => { el.innerText = generateFunc(); if ((d += 40) > 240) { clearInterval(interval); activeLoops.delete(elementId); el.innerText = finalVal; } }, 40);
+            activeLoops.set(elementId, interval);
+        }
+
+        function spinEntropy() { manipulateNumbers('entropyVal', () => (Math.random() * 0.9).toFixed(3).substring(1), SYSTEM_STATE.entropyVal); }
+        function spinPhase() { manipulateNumbers('phaseVal', () => (Math.random() * 0.009).toFixed(3).substring(1), SYSTEM_STATE.phaseVal); }
+        function scrambleSubspace() { manipulateNumbers('subspaceVal', () => `2⁵${Math.floor(Math.random() * 9)}`, SYSTEM_STATE.subspaceVal); }
     </script>
 </body>
 </html>
