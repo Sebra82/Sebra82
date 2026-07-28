@@ -1,13 +1,91 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,target-densitydpi=device-dpi"><title>M4</title><style>*{box-sizing:border-box;margin:0;padding:0;user-select:none;-webkit-user-select:none;touch-action:none;font-family:monospace;font-size:9px;}body{background:#05070B;color:#00FFCC;padding:12px;display:flex;justify-content:center;overflow:hidden;}.c{width:1024px;display:flex;flex-direction:column;gap:6px;}.h{display:flex;justify-content:space-between;border-bottom:1px solid #141e30;padding-bottom:3px;}.b{font-weight:bold;padding:1px 6px;border:1px solid #F05;color:#F05;background:rgba(255,0,85,.03);border-radius:2px;}.b.u{border-color:#0F6;color:#0F6;background:rgba(0,255,102,.03);}.w{width:100%;height:440px;background:#000;border:1px solid #141e30;border-radius:4px;cursor:grab;}canvas{width:100%;height:100%;display:block;}.db{border:1px solid #141e30;border-radius:4px;padding:8px;background:rgba(16,27,43,.1);display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}.db div{border-left:2px solid #1A2B42;padding-left:6px;}.db div span{color:#526E85;text-transform:uppercase;font-size:8px;display:block;}.db div b{color:#0F6;font-size:11px;font-family:monospace;}.p{border:1px solid #101B2B;border-radius:4px;padding:6px;background:rgba(4,6,10,.95);display:none;color:#0F6;white-space:pre-wrap;line-height:1.3;margin-top:4px;}</style></head><body><div class="c"><div class="h"><div>QUANTUM_HILBERT_MESH // STABLE_4D_ENGINE</div><div class="b" id="b">SECURE_LOCK</div></div><div class="w" id="wr"><canvas id="cv"></canvas></div><div class="db"><div><span>Entropy Coherence</span><b id="m_st">0.00%</b></div><div><span>Phase Velocity</span><b id="m_en">0.0000 rad/s</b></div><div><span>Hilbert Space States</span><b>500 STATES</b></div><div><span>Expectation Channels</span><b>1000 TIER</b></div></div><div id="q" class="p"></div></div><script>
-const _X={'A':"-",'B':"--",'C':"---",'E':"-----",'J':"----------",'X':"------------------------------",'Y':"------------------------------------------------------------",'Z':"---------------------------------------------------------------- // MODEL_CORE"};
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,target-densitydpi=device-dpi"><title>M4</title><style>*{box-sizing:border-box;margin:0;padding:0;user-select:none;-webkit-user-select:none;touch-action:none;font-family:monospace;font-size:9px;}body{background:#05070B;color:#00FFCC;padding:12px;display:flex;justify-content:center;overflow:hidden;}.c{width:1024px;display:flex;flex-direction:column;gap:6px;}.h{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #141e30;padding-bottom:3px;}.b{font-weight:bold;padding:1px 6px;border:1px solid #FF0055;color:#FF0055;background:rgba(255,0,85,.03);border-radius:2px;letter-spacing:0.5px;}.b.u{border-color:#00FF66;color:#00FF66;background:rgba(0,255,102,.03);}.w{width:100%;height:440px;background:#000;border:1px solid #141e30;border-radius:4px;cursor:grab;}canvas{width:100%;height:100%;display:block;}.db{border:1px solid #141e30;border-radius:4px;padding:8px;background:rgba(16,27,43,.1);display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}.db div{border-left:2px solid #1A2B42;padding-left:6px;}.db div span{color:#526E85;text-transform:uppercase;font-size:8px;display:block;}.db div b{color:#0F6;font-size:11px;font-family:monospace;}.p{border:1px solid #141E30;border-radius:4px;padding:6px;background:rgba(5,7,11,.9);display:none;color:#0F6;white-space:pre-wrap;line-height:1.3;margin-top:4px;}</style></head><body><div class="c"><div class="h"><div>M4P-V6.99_ACTIVE_LINE_MATRIX</div><div class="b" id="b">ENC_LOCKED</div></div><div class="w" id="wr"><canvas id="cv"></canvas></div><div class="db"><div><span>Entropy Coherence</span><b id="m_st">0.00%</b></div><div><span>Phase Velocity</span><b id="m_en">0.0000 rad/s</b></div><div><span>Hilbert Space States</span><b>500 ACTIVE STATES</b></div><div><span>Bra-Ket Channels</span><b>1000 TIER TENSOR MESH</b></div></div><div id="q" class="p"></div></div><script>
+const _X={'A':"-",'B':"--",'C':"---",'E':"-----",'J':"----------",'X':"------------------------------",'Y':"------------------------------------------------------------",'Z':"---------------------------------------------------------------- // FULL_QUANTUM_MODEL"};
 const _L1=_X['A'].length,_L2=_X['B'].length,_L3=_X['C'].length,_L5=_X['E'].length,_L10=_X['J'].length,_L30=_X['X'].length,_L100=100;
-const M=[],TARGET="e929eb14dda6dc481466fec08eda49836c0982a939b7e44a2fc5665013c5627a";
-async function processKey(nInp){try{const te=new TextEncoder(),d=new Date();const salt=d.getFullYear()+_X['A']+(String(d.getMonth()+_L1).padStart(_L2,'0'))+_X['A']+(String(d.getDate()).padStart(_L2,'0'))+_X['A']+(String(d.getHours()).padStart(_L2,'0'))+_X['A']+(String(d.getMinutes()).padStart(_L2,'0'));let cb=te.encode(nInp),lim=_L100*_L10;for(let i=0;i<lim;i++)cb=new Uint8Array(await crypto.subtle.digest('SHA-256',cb));const fh=await crypto.subtle.digest('SHA-256',te.encode(nInp)),hex=Array.from(new Uint8Array(fh)).map(b=>b.toString(_L10+_L3+_L3).padStart(_L2,'0')).join('');if(hex===TARGET){document.getElementById("b").innerText="DECRYPTED";document.getElementById("b").className="b u";const el=document.getElementById("q");el.innerHTML=`<strong>QUANTUM INTERLOCK RE-CONSTRUCTION SUCCESSFUL [${salt}]:</strong>\n&raquo; COHERENT EXPECTATION HYPER-SPATIAL TRACK CHANNELS SECURE\n&raquo; REGIME REGULATION COMPLIANCE : 100% DTSA INDEFINITE PROTECTION ACTIVE`;el.style.display="block";}}catch(e){}}
+const M=[],TARGET="e929eb14dda6dc481466fec08eda49836c0982a939b7e44a2fc5665013c5627a",NM=["HYDRO_MATRIX","XD_OBFUSCATION","DYNAMIC_CANVAS","SECURITY_SEAL"];
+NM.forEach((n,i)=>{document.getElementById("q").innerHTML+=`<div class="p" id="q${i}"><div class="ph"><span>QUANTUM_VAULT_REG_${i+_L1} // ${n}</span></div><div class="o" id="o${i}"></div></div>`;});
+
+async function processKey(nInp){try{const te=new TextEncoder(),d=new Date();const salt=d.getFullYear()+_X['A']+(String(d.getMonth()+_L1).padStart(_L2,'0'))+_X['A']+(String(d.getDate()).padStart(_L2,'0'))+_X['A']+(String(d.getHours()).padStart(_L2,'0'))+_X['A']+(String(d.getMinutes()).padStart(_L2,'0'));let cb=te.encode(nInp),lim=_L100*_L10;for(let i=0;i<lim;i++)cb=new Uint8Array(await crypto.subtle.digest('SHA-256',cb));const fh=await crypto.subtle.digest('SHA-256',te.encode(nInp)),hex=Array.from(new Uint8Array(fh)).map(b=>b.toString(_L10+_L3+_L3).padStart(_L2,'0')).join('');if(hex===TARGET){document.getElementById("b").innerText="ENC_UNLOCKED";document.getElementById("b").className="b u";const el=document.getElementById("q");el.innerHTML=`<strong>QUANTUM TENSOR CORE UNLOCKED [${salt}]:</strong>\n&raquo; COHERENT EXPECTATION HYPER-SPATIAL MANIFOLD INTERLOCK ACTIVE\n&raquo; REGIME PROTECTION LEGAL STATUS: 100% DTSA INDEFINITE PROTECTION RECOGNIZED`;el.style.display="block";}}catch(e){}}
 let ks="";window.addEventListener('paste',e=>processKey((e.clipboardData||window.clipboardData).getData('text').toLowerCase().trim()));window.addEventListener('keydown',e=>{if(e.key.length===_L1){ks+=e.key.toLowerCase();if(ks.includes("chronos")){processKey("chronos");ks="";}}else if(e.key==="Escape")ks="";});
 const c=document.getElementById("cv"),cx=c.getContext("2d"),wr=document.getElementById("wr");let w,h,rx=0,ry=0,drag=!1,sx,sy,pTime=0,activeTouches=[],initialPinchDist=0,baseScaleModifier=_L1;
 function resize(){const dpr=window.devicePixelRatio||_L1;w=wr.clientWidth;h=wr.clientHeight;c.width=w*dpr;c.height=h*dpr;cx.scale(dpr,dpr);}window.addEventListener("resize",resize);resize();
+
+// 📐 HILBERT DENSITY MATRIX NETWORK GENERATION: 100 QUQUINTS × 5 BASIS STATES (500 TOTAL COMPONENT CHANNELS)
 const vertices=[],cl=_L100,nc=_L5;
-for(let cIdx=0;cIdx<cl;cIdx++){let ba=(cIdx/cl)*Math.PI*_L2,ra=1.4,pp=ba*1.5;[{x:1,y:1,z:1,w:-0.44},{x:-1,y:-1,z:1,w:-0.44},{x:-1,y:1,z:-1,w:-0.44},{x:1,y:-1,z:-1,w:-0.44},{x:0,y:0,z:0,w:1.78}].forEach(s=>{vertices.push({x:(s.x*.4)+Math.cos(ba)*ra,y:(s.y*.4)+Math.sin(ba)*ra,z:(s.z*.4)+Math.sin(pp)*.8,w:(s.w*.4)+Math.cos(pp)*.8,cId:cIdx});});}
-function tick(){pTime+=0.01;cx.fillStyle="#05070B";cx.fillRect(0,0,w,h);let cx1=Math.cos(rx),sx1=Math.sin(rx),cy1=Math.cos(ry),sy1=Math.sin(ry),ox=w/_L2,oy=h/_L2,br=baseScaleModifier*(_L1+Math.sin(pTime)*.06)*_L10,cH=Math.cos(pTime),sH=Math.sin(pTime),projected=[];vertices.forEach((v,idx)=>{let x=v.x,y=v.y,z=v.z,w4=v.w;if(idx%_L2===0){x*=.999;y*=.999;}let xr=x*cH-w4*sH,we=x*sH+w4*cH,zr=z*cH-we*sH,wf=z*sH+we*cH;activeTouches.forEach(t=>{let dx=(xr*br+ox)-t.x,dy=(y*br+oy)-t.y,di=Math.sqrt(dx*dx+dy*dy);if(di<_L100){let fo=(_L100-di)/_L100*_L10;xr+=Math.sin(pTime*5)*(fo/_X['X'].length);y+=Math.cos(pTime*5)*(fo/_X['X'].length);}});let d4=4.2,f3=1/(d4-wf),x3=xr*f3*br,y3=y*f3*br,z3=zr*f3*br,x1=x3*cy1-z3*sy1,z1=x3*sy1+z3*cy1,y2=y3*cx1-z1*sx1,z2=y3*sx1+z1*cx1,sz=_L100/(_L100+z2),px=ox+x1*sz*_L3,py=oy+y2*sz*_L3;projected.push({x:px,y:py,vis:(px>=0&&px<=w&&py>=0&&py<=h),w:wf});});cx.lineWidth=0.4;for(let cIdx=0;cIdx<cl;cIdx++){let st=cIdx*nc;for(let i=0;i<nc;i++){for(let j=i+_L1;j<nc;j++){let p1=projected[st+i],p2=projected[st+j];if(p1.vis&&p2.vis){cx.strokeStyle=`rgba(${Math.floor(100+p1.w*40)},255,${Math.floor(200+p2.w*40)},${0.14+Math.abs(p1.w)*.1})`;cx.beginPath();cx.moveTo(p1.x,p1.y);cx.lineTo(p2.x,p2.y);cx.stroke();}}}if(cIdx<cl-_L1){let n1=projected[st],n2=projected[st+nc];if(n1.vis&&n2.vis){cx.strokeStyle="rgba(0,168,255,0.06)";cx.beginPath();cx.moveTo(n1.x,n1.y);cx.lineTo(n2.x,n2.y);cx.stroke();}}}projected.forEach((p,idx)=>{if(!p.vis)return;cx.fillStyle=idx%nc===0?"#F05":"#0FC";cx.fillRect(p.x-1,p.y-1,2,2);});let as=Math.min(Math.abs(Math.sin(pTime)*(_L10*_L5)+(Math.abs(rx)+Math.abs(ry))*_L5),99.45);document.getElementById("m_st").innerText=as.toFixed(2)+"%";document.getElementById("m_en").innerText=Math.abs(Math.sin(pTime)).toFixed(4)+" rad/s";requestAnimationFrame(tick);}
-function gtp(e){let r=c.getBoundingClientRect();return Array.from(e.touches).map(t=>({x:t.clientX-r.left,y:t.clientY-r.top}));}wr.addEventListener("touchstart",e=>{e.preventDefault();activeTouches=gtp(e);drag=!0;if(e.touches.length===_L1){sx=e.touches.clientX;sy=e.touches.clientY;}else if(e.touches.length===_L2){let dx=e.touches.clientX-e.touches.clientX,dy=e.touches.clientY-e.touches.clientY;initialPinchDist=Math.sqrt(dx*dx+dy*dy);}},{passive:false});wr.addEventListener("touchmove",e=>{e.preventDefault();activeTouches=gtp(e);if(!drag)return;if(e.touches.length===_L1){rx+=(e.touches.clientY-sy)*.008;ry+=(e.touches.clientX-sx)*0.008;sx=e.touches.clientX;sy=e.touches.clientY;}else if(e.touches.length===_L2){let dx=e.touches.clientX-e.touches.clientX,dy=e.touches.clientY-e.touches.clientY,d=Math.sqrt(dx*dx+dy*dy);if(initialPinchDist>0){baseScaleModifier=Math.max(0.3,Math.min((d/initialPinchDist)*baseScaleModifier,3.0));initialPinchDist=d;}}},{passive:false});wr.addEventListener("touchend",e=>{e.preventDefault();activeTouches=gtp(e);if(e.touches.length===0){drag=!1;initialPinchDist=0;}},{passive:false});wr.addEventListener("mousedown",e=>{drag=!0;sx=e.clientX;sy=e.clientY;activeTouches=[{x:e.clientX-c.getBoundingClientRect().left,y:e.clientY-c.getBoundingClientRect().top}];});window.addEventListener("mouseup",()=>{drag=!1;activeTouches=[];});window.addEventListener("mousemove",e=>{let r=c.getBoundingClientRect();if(!drag){activeTouches=[];return;}activeTouches=[{x:e.clientX-r.left,y:e.clientY-r.top}];rx+=(e.clientY-sy)*0.008;ry+=(e.clientX-sx)*0.008;sx=e.clientX;sy=e.clientY;});tick();
+for(let cIdx=0;cIdx<cl;cIdx++){
+    let basisAngle=(cIdx/cl)*Math.PI*_L2;
+    let r_amp=1.3,phi_phase=basisAngle*1.5;
+    
+    // Asymmetric projection coordinates converting flat physical vectors to probability amplitude fields matching your layout picture
+    let h_scale=Math.sin(basisAngle)*1.2;
+    let baseStates=[
+        {x:Math.cos(basisAngle)*r_amp,y:Math.sin(basisAngle)*r_amp,z:h_scale,w:Math.cos(basisAngle*1.5)},
+        {x:-Math.cos(basisAngle)*r_amp,y:-Math.sin(basisAngle)*r_amp,z:h_scale,w:Math.sin(basisAngle*1.5)},
+        {x:Math.sin(basisAngle)*r_amp,y:-Math.cos(basisAngle)*r_amp,z:h_scale,w:-Math.cos(basisAngle*1.5)},
+        {x:-Math.sin(basisAngle)*r_amp,y:Math.cos(basisAngle)*r_amp,z:h_scale,w:-Math.sin(basisAngle*1.5)},
+        {x:0,y:0,z:h_scale*1.4,w:0}
+    ];
+    baseStates.forEach((s,sIdx)=>{vertices.push({x:s.x*0.7,y:s.y*0.7,z:s.z*0.7,w:s.w*0.5,idx:(cIdx*nc+sIdx)});});
+}
+
+function tick(){
+    pTime+=0.01;cx.fillStyle="#05070B";cx.fillRect(0,0,w,h);
+    let cx1=Math.cos(rx),sx1=Math.sin(rx),cy1=Math.cos(ry),sy1=Math.sin(ry),ox=w/_L2,oy=h/_L2,br=baseScaleModifier*(_L1+Math.sin(pTime)*.04)*_L10*1.5,cH=Math.cos(pTime*0.3),sH=Math.sin(pTime*0.3),projected=[];
+    
+    vertices.forEach((v)=>{
+        let x=v.x,y=v.y,z=v.z,w4=v.w;
+        if(v.idx%_L2===0){x*=.999;y*=.999;} // Environmental decoherence math collapse
+        
+        // Unitary transformation phase shifts in Hilbert space
+        let xr=x*cH-w4*sH,we=x*sH+w4*cH,zr=z*cH-we*sH,wf=z*sH+we*cH;
+        activeTouches.forEach(t=>{let dx=(xr*br+ox)-t.x,dy=(y*br+oy)-t.y,di=Math.sqrt(dx*dx+dy*dy);if(di<_L100){let fo=(_L100-di)/_L100*_L10;xr+=Math.sin(pTime*5)*(fo/30);y+=Math.cos(pTime*5)*(fo/30);}});
+        let d4=4.5,f3=1/(d4-wf),x3=xr*f3*br,y3=y*f3*br,z3=zr*f3*br,x1=x3*cy1-z3*sy1,z1=x3*sy1+z3*cy1,y2=y3*cx1-z1*sx1,z2=y3*sx1+z1*cx1,sz=_L100/(_L100+z2),px=ox+x1*sz*_L3,py=oy+y2*sz*_L3;
+        projected.push({x:px,y:py,vis:(px>=0&&px<=w&&py>=0&&py<=h),w:wf,idx:v.idx});
+    });
+
+    cx.lineWidth=0.4;
+    for(let cIdx=0;cIdx<cl;cIdx++){
+        let st=cIdx*nc;
+        for(let i=0;i<nc;i++){
+            for(let j=i+_L1;j<nc;j++){
+                let p1=projected[st+i],p2=projected[st+j];
+                if(p1.vis&&p2.vis){
+                    // High-contrast clean blue connection filaments matching your image view
+                    cx.strokeStyle=`rgba(0, 204, 255, ${0.16 + Math.abs(p1.w) * 0.12})`;
+                    cx.beginPath();cx.moveTo(p1.x,p1.y);cx.lineTo(p2.x,p2.y);cx.stroke();
+                }
+            }
+            // Bra-Ket probability transition expectation channels linking consecutive subspaces
+            if(cIdx<cl-_L1){
+                let p1=projected[st+i],p2=projected[st+nc+i];
+                if(p1.vis&&p2.vis){
+                    cx.strokeStyle=`rgba(0, 204, 255, ${0.10 + Math.abs(p1.w) * 0.08})`;
+                    cx.beginPath();cx.moveTo(p1.x,p1.y);cx.lineTo(p2.x,p2.y);cx.stroke();
+                }
+            }
+        }
+    }
+    
+    // Render dual-layer superposition nodes overlay matching the image layout precisely
+    projected.forEach(p=>{
+        if(!p.vis)return;
+        if(p.idx%_L2===0){
+            cx.fillStyle="#00CCFF"; // Vivid Cyan Coherent State Coordinates
+            cx.fillRect(p.x-1.5,p.y-1.5,3,3);
+        }else if(p.idx%_L3===0){
+            cx.fillStyle="#FF0055"; // Background Intersecting Phase-Decay Dust Nodes
+            cx.fillRect(p.x-1,p.y-1,2,2);
+        }
+    });
+    
+    let as=Math.min(Math.abs(Math.sin(pTime)*(_L10*_L5)+(Math.abs(rx)+Math.abs(ry))*_L5),99.45);
+    document.getElementById("m_st").innerText=as.toFixed(2)+"%";
+    document.getElementById("m_en").innerText=Math.abs(Math.sin(pTime)).toFixed(4)+" rad/s";
+    requestAnimationFrame(tick);
+}
+
+function gtp(e){let r=c.getBoundingClientRect();return Array.from(e.touches).map(t=>({x:t.clientX-r.left,y:t.clientY-r.top}));}
+wr.addEventListener("touchstart",e=>{e.preventDefault();activeTouches=gtp(e);drag=!0;if(e.touches.length===_L1){sx=e.touches.clientX;sy=e.touches.clientY;}else if(e.touches.length===_L2){let dx=e.touches.clientX-e.touches.clientX,dy=e.touches.clientY-e.touches.clientY;initialPinchDist=Math.sqrt(dx*dx+dy*dy);}},{passive:false});
+wr.addEventListener("touchmove",e=>{e.preventDefault();activeTouches=gtp(e);if(!drag)return;if(e.touches.length===_L1){rx+=(e.touches.clientY-sy)*.008;ry+=(e.clientX-sx)*0.008;sx=e.clientX;sy=e.clientY;}else if(e.touches.length===_L2){let dx=e.touches.clientX-e.touches.clientX,dy=e.touches.clientY-e.touches.clientY,d=Math.sqrt(dx*dx+dy*dy);if(initialPinchDist>0){baseScaleModifier=Math.max(0.3,Math.min((d/initialPinchDist)*baseScaleModifier,3.0));initialPinchDist=d;}}},{passive:false});
+wr.addEventListener("touchend",e=>{e.preventDefault();activeTouches=gtp(e);if(e.touches.length===0){drag=!1;initialPinchDist=0;}},{passive:false});
+wr.addEventListener("mousedown",e=>{drag=!0;sx=e.clientX;sy=e.clientY;activeTouches=[{x:e.clientX-c.getBoundingClientRect().left,y:e.clientY-c.getBoundingClientRect().top}];});window.addEventListener("mouseup",()=>{drag=!1;activeTouches=[];});window.addEventListener("mousemove",e=>{let r=c.getBoundingClientRect();if(!drag){activeTouches=[];return;}activeTouches=[{x:e.clientX-r.left,y:e.clientY-r.top}];rx+=(e.clientY-sy)*0.008;ry+=(e.clientX-sx)*0.008;sx=e.clientX;sy=e.clientY;});tick();
 </script></body></html>
