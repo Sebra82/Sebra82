@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-  <!-- Hardened CSP Barrier: Restricts execution explicitly to self-contained inline blocks and Blob workers -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:;">
   <title>M4 Ultra</title>
   <style>
@@ -34,7 +33,7 @@
     </div>
 </div>
 <script>
-const FH="masterpassword_v4_chronos_production",D=document,G="getElementById",qcBox=D[G]("qc"),stEl=D[G]("m_st"),enEl=D[G]("m_en"),pts=[],M=Math,S=M.sin,C=M.cos,A=M.abs,L=(e,t,f)=>e.addEventListener(t,f,{passive:!t.includes("m")});
+const D=document,G="getElementById",qcBox=D[G]("qc"),stEl=D[G]("m_st"),enEl=D[G]("m_en"),pts=[],M=Math,S=M.sin,C=M.cos,A=M.abs,L=(e,t,f)=>e.addEventListener(t,f,{passive:!t.includes("m")});
 let w,h,rx=0,ry=0,drag=!1,sx=0,sy=0,pTime=0,mx=0,my=0,qE=0,qP=0,rdX=0,rdY=0,stateBuffer=new Float32Array(2000),jitMod=1,lineMod=45,cohMod=99.45;
 
 const wk=new Worker(URL.createObjectURL(new Blob([`onmessage=(e)=>{const d=e.data;if(d.type==="SYNC"){const f=new Float32Array(d.buffer),out=new Float32Array(2000);for(let i=0;i<500;i++){let o=i*4,nX=d.noise,nY=d.noise;out[o]=f[o]-(nX*0.005);out[o+1]=f[o+1]-(nY*0.005);out[o+2]=f[o+2];out[o+3]=f[o+3];}postMessage({type:"PREDICTION",coords:out},[out.buffer]);}};`],{type:"application/javascript"})));
@@ -52,7 +51,7 @@ void main() {
     if(mD<120.0){float psh=(1.0-(mD/120.0))*(6.0+u_qE);cX+=dX/mD*psh;cY+=dY/mD*psh;}
     float rX=cX*cy1+(cY*sx1+cZ*cx1)*sy1; float rY=cY*cx1-cZ*sx1; float rZ=-cX*sy1+(cY*sx1+cZ*cx1)*cy1;
     float wDiv=4.8-(wf*0.18); float dFactor=100.0/(100.0+rZ);
-    gl_Position=vec4((rX/wDiv)*dFactor/u_br*0.015, (rY)*dFactor/u_br*0.015, rZ/1000.0, 1.0);
+    gl_Position=vec4((rX/wDiv)*dFactor/u_br*0.35, (rY)*dFactor/u_br*0.35, rZ/1000.0, 1.0);
     gl_PointSize=(rZ>0.0)?4.0:2.0; v_w=wf;
 }`;
 const fsSource = `#version 300 es
