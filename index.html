@@ -30,42 +30,69 @@
 </head>
 <body>
 <div class="c">
-    <div class="h"><div>M4P-V6.99_ACTIVE_LINE_MATRIX</div><div class="b" id="b">ENC_LOCKED</div></div>
-    <div class="w" id="wrapper"><canvas id="canvas"></canvas><div class="qc" id="qc">Ψ(t) OFFLINE // AUTH REQ</div></div>
+    <div class="h"><div>M4P-V6.99_LEARNING_MATRIX_SHELL</div><div class="b" id="b">ENC_LOCKED</div></div>
+    <div class="w" id="wrapper"><canvas id="canvas"></canvas><div class="qc" id="qc">Ψ(t) WAITING FOR BACKEND AI...</div></div>
     <div class="p a">
         <div class="ph"><span>SYS_VAULT_GATEWAY</span><span class="ps" id="gs">Locked. Enter key.</span></div>
         <div class="g"><input type="password" id="gk"><button onclick="auth()">ENTER</button></div>
     </div>
     <div class="db">
-      <div><span>Coherence</span><b id="m_st">100.00%</b></div>
-      <div><span>Velocity</span><b id="m_en">0.0040 r/s</b></div>
-      <div><span>Hilbert Space</span><b>1000 STATES</b></div>
-      <div><span>Interference</span><b>2000 MESH</b></div>
+      <div><span>Coherence Layer</span><b id="m_st">100.00%</b></div>
+      <div><span>AI Stream Velocity</span><b id="m_en">0.0000 r/s</b></div>
+      <div><span>Latent Dimensions</span><b>2000 SPACE</b></div>
+      <div><span>Neural Mesh Sync</span><b id="m_sy">OFFLINE</b></div>
     </div>
     <div id="q"></div>
 </div>
 <script>
-const FH="masterpassword_v4_chronos_production",D=document,G="getElementById",qEl=D[G]("q"),sEl=D[G]("gs"),bEl=D[G]("b"),V={"ct":"98aa088c86b43f87ce99b66d651a22811825cc3df3d80d4067ab5c1e72a7567d8c42d16d1a34c7f820b15803515aa87e8e3ec32a46f7b02d2645f9e1cf2164b896b2906463d0ee8a207d7a70d8044ef88e7703c073cf6d84001d5498ac0eedfce84c0edfd5fc0c783e06fbbd3c1ee1a15e77ed7b299d5c8cc70ef83ca914b9c5a8d58fef3f372b774e81f7a2eed2089ffafb2a15f0806ea39e507d452344dca39a972a83d4000fec7c53e0b00f80c53d78a7600efb369da5510ff30435d74e739488f0d5f8c0d535c5c824f69e4ae07a7a895ace1658f0c248f96a462822420a07ea6acfafdc2bd2a9997adf0d7aa4059d9857968461cb58c1926a212bb9dde280b9f981cafbb0a1519ca97b33b4d0024f60017172ade0f9eabc6cfc9749bbc8c2084ef77aabd3568e37037eea3683ac7b745d9b0411ecd765644011aae08cf4532d7e586fcc3d779ed13ad8dfd2e5e8a22b92cced5574d597956914af8462ed1a73e191d16769f9214f1270a62a907766a87664fcf2430a5d94910b50bf360f1cdeeff8d5855d0415617dcf8426b84ffd52f80b42c15c8a1998302bbbbef99e9a0f0fdf92f03e26537eb0cb2101cbcc1b6234a0f27a2e2b13ce6b4e2ed1ea7c6fbf2139c397a1b42e929418a90c2a8e66fa383800b8cf42fb6d4e717ce09c34c99a7f6a07f9242c1e18202dfc2aed95e9cedd28203e59838268c26529cde14eeb5a6b9a52d4ac746c3847b9e0f0725192454912f00901872a237465dc646abc53d02f9def295515c5b0d4523066c23fde2fda2e1a335a674a6b51f742f22bf2579816f072d977cd5c63e37b877963803aaaa08ae30b5bc0188ef995644f88c649fc0f2160bc6b565e82bffa693aa8bc605c428571ca5eb104b22875a0b482396511f3a0c2c6a411d3b94d5fcf0b3bc5cdaa79b14065fa20695bf3c850e0d2648dfd722a12ed3d912f60bd4fc05bc4036c4bbc23972258ba4f62c76b34a0b27219d4478546e494848e98c51f8d3fa39f35f42c99589bf9b892480ea2c2193f2dbe2e2afb63fd1e61e90bfe7ef4e9ef075a358464a8aab1517e7bedaedd13d6faf335fd04d9460f4c0c60dfa42abc08ed42468e8a7b362088344d6e8ad2d183c3443e44376e501a162f744b249c2b1fc61c69a10d7faa1108ed088754682e55f47836f417f260ee1f529f64713c03f659d698e878b8709a6debf03fada4040f6f777a379c64cb87c605d111ff1dc2571231bfd23a03d6b380bfc9adb27da2d15a8b5310","honey_ct":"56d8e8864aa938d234be110fa982bc31f9d8a210b3ef9a82ce140fa932bd","iv":"1f87f3ac0e60b605a4b58d7c","salt":"b74a0e09d860268c56328fd87444bcac"};
-["HYDRO_MATRIX","XD_OBFUSCATION"].forEach((n,i)=>qEl.innerHTML+=`<div class="p" id="q${i}"><div class="ph"><span>QTR_${i+1} // ${n}</span><span class="ps" id="s${i}">[ENCRYPTED]</span></div><div class="o" id="o${i}"></div></div><div style="height:6px"></div>`);
-const hToB=h=>new Uint8Array(h.match(/.{1,2}/g).map(b=>parseInt(b,16)));
+const FH="masterpassword_v4_chronos_production",D=document,G="getElementById",qEl=D[G]("q"),sEl=D[G]("gs"),bEl=D[G]("b");
+["HYDRO_MATRIX","XD_OBFUSCATION"].forEach((n,i)=>qEl.innerHTML+=`<div class="p" id="q${i}"><div class="ph"><span>QTR_${i+1} // ${n}</span><span class="ps" id="s${i}">[STREAM ENCRYPTED]</span></div><div class="o" id="o${i}"></div></div>`);
+
 async function auth(){
-    const inp=D[G]("gk").value.toLowerCase().trim();sEl.innerText="[COMPUTING] PBKDF2 stretching...";sEl.className="ps";
+    const inp=D[G]("gk").value.toLowerCase().trim();sEl.innerText="[COMPUTING] Token verification...";sEl.className="ps";
     await new Promise(r=>setTimeout(r,50));
-    try{
-        const te=new TextEncoder(),td=new TextDecoder(),rK=await crypto.subtle.importKey("raw",te.encode(inp),"PBKDF2",false,["deriveKey"]);
-        const aK=await crypto.subtle.deriveKey({name:"PBKDF2",salt:hToB(V.salt),iterations:500000,hash:"SHA-256"},rK,{name:"AES-GCM",length:256},false,["decrypt"]);
-        const dec=await crypto.subtle.decrypt({name:"AES-GCM",iv:hToB(V.iv)},aK,hToB(inp===FH?V.honey_ct:V.ct)),res=td.decode(dec),d=new Date(),sStr=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${String(d.getHours()).padStart(2,'0')}-${String(d.getMinutes()).padStart(2,'0')}`;
-        if(inp===FH){
-           bEl.innerText="HONEYPOT_TRAP";bEl.style.borderColor="#F05";D[G]("q0").className="p";D[G]("s0").innerText="[TRAP]";
-           D[G]("o0").innerText=`⚠️ HONEYPOT ENTRAPMENT LOGGED [${sStr}]. Decoy: ${res}`;D[G]("o0").style.display="block";
-        }else{
-           bEl.innerText="ENC_UNLOCKED";bEl.className="b u";sEl.innerText="[SUCCESS] Verified.";sEl.className="ps v";
-           ["HYDRO_MATRIX","XD_OBFUSCATION"].forEach((_,i)=>{D[G](`q${i}`).className="p a";D[G](`s${i}`).innerText="[DECRYPTED]";D[G](`s${i}`).className="ps v";const el=D[G](`o${i}`);el.innerText=res;el.style.display="block";});
-        }
-    }catch(e){sEl.innerText="[FAILED] Rejection.";sEl.className="ps";D[G]("gk").value="";}
+    
+    // Honeypot bait handling still evaluated natively
+    if(inp===FH){
+       bEl.innerText="HONEYPOT_TRAP";bEl.style.borderColor="#F05";D[G]("q0").className="p";D[G]("s0").innerText="[TRAP]";
+       D[G]("o0").innerText=`⚠️ HONEYPOT ENTRAPMENT LOGGED. Decoy routing activated.`;D[G]("o0").style.display="block";
+       return;
+    }
+    
+    // If a local WebSocket connection is alive, delegate credential routing to the backend
+    if(ws&&ws.readyState===1){
+        ws.send(JSON.stringify({type:"AUTH_TRY",key:inp}));
+    }else{
+        sEl.innerText="[FAILED] Backend AI connection required for authentication.";
+    }
 }
-const cv=D[G]("canvas"),cx=cv.getContext("2d"),wrap=D[G]("wrapper"),qcBox=D[G]("qc"),stEl=D[G]("m_st"),enEl=D[G]("m_en");
-let w,h,pts=[],rx=0,ry=0,drag=!1,sx,sy,pTime=0,mx=0,my=0,qE=0,qP=0,M=Math,S=M.sin,C=M.cos,A=M.abs;
+
+const cv=D[G]("canvas"),cx=cv.getContext("2d"),wrap=D[G]("wrapper"),qcBox=D[G]("qc"),stEl=D[G]("m_st"),enEl=D[G]("m_en"),syEl=D[G]("m_sy"),pts=[],M=Math,S=M.sin,C=M.cos,A=M.abs;
+let w,h,rx=0,ry=0,drag=!1,sx,sy,pTime=0,mx=0,my=0,qE=0,qP=0,ws=null,aiA=!1,rdX=0,rdY=0;
+
+function initWS(){
+    ws=new WebSocket("ws://localhost:8765");
+    if(syEl){ws.onopen=()=>{syEl.innerText="CONNECTED";syEl.style.color="#0F6";};ws.onclose=()=>{syEl.innerText="OFFLINE";syEl.style.color="#F05";setTimeout(initWS,2000);};}
+    ws.onmessage=(e)=>{
+        const d=JSON.parse(e.data);
+        
+        // Handle secure server-side decryption pipeline delivery
+        if(d.type==="AUTH_RES"){
+            if(d.success){
+               bEl.innerText="ENC_UNLOCKED";bEl.className="b u";sEl.innerText="[SUCCESS] Verified.";sEl.className="ps v";
+               ["q0","q1"].forEach((id,i)=>{D[G](id).className="p a";D[G](`s${i}`).innerText="[DECRYPTED]";D[G](`s${i}`).className="ps v";const el=D[G](`o${i}`);el.innerText=d.payload;el.style.display="block";});
+            }else{
+               sEl.innerText="[FAILED] Cryptographic match rejected.";sEl.className="ps";D[G]("gk").value="";
+            }
+        }
+        
+        // Stream spatial geometry modifications from PyTorch memory mappings
+        if(d.predicted_coords&&d.predicted_coords.length===2e3){
+            aiA=!0;for(let i=0;i<500;i++){pts[i].x=d.predicted_coords[i*4];pts[i].y=d.predicted_coords[i*4+1];pts[i].z=d.predicted_coords[i*4+2];pts[i].w=d.predicted_coords[i*4+3];}
+        }
+    };
+}
+setTimeout(initWS,1000);
 function resize(){const dpr=window.devicePixelRatio||1;w=wrap.clientWidth;h=wrap.clientHeight;cv.width=w*dpr;cv.height=h*dpr;cx.scale(dpr,dpr);}
 window.addEventListener("resize",resize);resize();
 for(let i=0;i<500;i++){
@@ -74,32 +101,33 @@ for(let i=0;i<500;i++){
 }
 const ptr=e=>e.touches?e.touches:e,st=(e)=>{drag=!0;const p=ptr(e);sx=p.clientX;sy=p.clientY;},mv=(e)=>{
     const p=ptr(e),r=cv.getBoundingClientRect();mx=(p.clientX-r.left)-(w/2);my=(p.clientY-r.top)-(h/2);
-    if(!drag)return;let dx=p.clientX-sx,dy=p.clientY-sy;ry+=dx*0.006;rx+=dy*0.006;qE+=M.sqrt(dx*dx+dy*dy)*0.025;sx=p.clientX;sy=p.clientY;
-};
-wrap.addEventListener("mousedown",st);window.addEventListener("mousemove",mv);window.addEventListener("mouseup",()=>drag=!1);
-wrap.addEventListener("touchstart",st,{passive:!0});window.addEventListener("touchmove",mv,{passive:!0});window.addEventListener("touchend",()=>drag=!1);
-function line(p1,p2,cR,cG,cB,bA,wA){cx.strokeStyle=`rgba(${cR},${cG},${cB},${bA+A(p1.w)*wA})`;cx.beginPath();cx.moveTo(p1.x,p1.y);cx.lineTo(p2.x,p2.y);cx.stroke();}
+    if(!drag)return;rdX=p.clientX-sx;rdY=p.clientY-sy;ry+=rdX*0.006;rx+=rdY*0.006;qE+=M.sqrt(rdX*rdX+rdY*rdY)*0.025;sx=p.clientX;sy=p.clientY;
+},sp=()=>drag=!1;
+[["mousedown",st],["mousemove",mv],["mouseup",sp],["touchstart",st],["touchmove",mv],["touchend",sp]].forEach(([e,f])=>window.addEventListener(e,f,{passive:!e.includes("m")}));
 function frame(){
-    cx.clearRect(0,0,w,h);let mX=w/2,mY=h/2;if(!drag){ry+=.002;rx+=.001;}pTime+=0.025;qE*=0.94;qP+=0.005+(qE*0.02);
-    let cx1=C(rx+(S(qP)*qE*0.15)),sx1=S(rx+(S(qP)*qE*0.15)),cy1=C(ry+(C(qP)*qE*0.15)),sy1=S(ry+(C(qP)*qE*0.15));
-    let br=w*0.5*(1+S(pTime)*0.03+(qE*0.05)),cH=C(pTime*0.3+qP*0.1),sH=S(pTime*0.3+qP*0.1),proj=[];
+    cx.clearRect(0,0,w,h);let mX=w/2,mY=h/2;if(!drag){ry+=.002;rx+=.001;rdX*=0.9;rdY*=0.9;}pTime+=0.025;qE*=0.94;qP+=0.005+(qE*0.02);
+    if(ws&&ws.readyState===1){const f=[];pts.forEach(p=>f.push(p.x,p.y,p.z,p.w));ws.send(JSON.stringify({type:"TELEMETRY",state:f,action:[rdX,rdY]}));}
+    let cx1=C(rx+(S(qP)*qE*0.15)),sx1=S(rx+(S(qP)*qE*0.15)),cy1=C(ry+(C(qP)*qE*0.15)),sy1=S(ry+(C(qP)*qE*0.15)),br=w*0.5*(1+S(pTime)*0.03+(qE*0.05)),cH=C(pTime*0.3+qP*0.1),sH=S(pTime*0.3+qP*0.1),proj=[];
     pts.forEach((p,idx)=>{
-        let jit=(M.random()-0.5)*qE*0.03,xr=(p.x+jit)*cH-p.w*sH,wf=(p.x+jit)*sH+p.w*cH,cX=xr*br,cY=(p.y+jit)*br,cZ=(p.z+jit)*br,dX=cX-mx,dY=cY-my,mD=M.hypot(dX,dY);
-        if(mD<120){let psh=(1-(mD/120))*(6+qE);cX+=dX/mD*psh;cY+=dY/mD*psh;}
-        let y1=cY*cx1-cZ*sx1,z1=cY*sx1+cZ*cx1,x2=cX*cy1+z1*sy1,z2=-cX*sy1+z1*cy1,f3=1/(4.8-(wf*0.18)),sz=100/(100+z2);
-        proj.push({x:mX+x2*f3*sz,y:mY+y1*f3*sz,z:z2,w:wf,t:idx%2});
+        let cX,cY,cZ,wf=p.w,jit=!aiA?(M.random()-0.5)*qE*0.03:0;
+        if(!aiA){
+            let xr=(p.x+jit)*cH-p.w*sH;wf=(p.x+jit)*sH+p.w*cH;cX=xr*br;cY=(p.y+jit)*br;cZ=(p.z+jit)*br;
+            let dX=cX-mx,dY=cY-my,mD=M.hypot(dX,dY);if(mD<120){let psh=(1-(mD/120))*(6+qE);cX+=dX/mD*psh;cY+=dY/mD*psh;}
+        }else{cX=p.x*br;cY=p.y*br;cZ=p.z*br;}
+        proj.push({x:mX+(cX*cy1+(cY*sx1+cZ*cx1)*sy1)/(4.8-(wf*0.18))*(100/(100+(-cX*sy1+(cY*sx1+cZ*cx1)*cy1))),y:mY+(cY*cx1-cZ*sx1)*100/(100+(-cX*sy1+(cY*sx1+cZ*cx1)*cy1)),z:-cX*sy1+(cY*sx1+cZ*cx1)*cy1,w:wf,t:idx%2});
     });
     let fc=0;cx.lineWidth=0.45;
     for(let i=0;i<proj.length&&fc<1200;i++){
         for(let j=i+1;j<proj.length&&fc<1200;j++){
-            let d=M.hypot(proj[i].x-proj[j].x,proj[i].y-proj[j].y);
-            if(d>10&&d<60){proj[i].t===0?line(proj[i],proj[j],0,204,255,0.16,0.12):line(proj[i],proj[j],255,0,85,0.12,0.08);fc++;}
+            if(M.hypot(proj[i].x-proj[j].x,proj[i].y-proj[j].y)<60){
+                cx.strokeStyle=`rgba(${proj[i].t===0?'0,204,255':'255,0,85'},${(proj[i].t===0?0.16:0.12)+A(proj[i].w)*(proj[i].t===0?0.12:0.08)})`;cx.beginPath();cx.moveTo(proj[i].x,proj[i].y);cx.lineTo(proj[j].x,proj[j].y);cx.stroke();fc++;
+            }
         }
     }
-    proj.forEach(p=>{cx.fillStyle=p.z>0?"#00CCFF":"#ff0055";cx.beginPath();cx.arc(p.x,p.y,p.z>0?2.2:1.2,0,2*M.PI);cx.fill();});
+    proj.forEach(p=>{cx.beginPath();cx.fillStyle=p.z>0?"#00CCFF":"#ff0055";cx.arc(p.x,p.y,p.z>0?2.2:1.2,0,2*M.PI);cx.fill();});
     let dCoh=(M.max(0.01,1.0-(qE*0.012))*99.45).toFixed(2);
     if(stEl)stEl.innerText=dCoh+"%";if(enEl)enEl.innerText=(0.004+(qE*0.14)).toFixed(4)+" r/s";
-    if(M.random()<0.15&&qcBox)qcBox.innerText=`Ψ(t) = √(${dCoh}%)|0⟩ + √(${(100-dCoh).toFixed(2)}%)|1⟩ // ΔE: ${(qE*6.626).toFixed(3)} eV`;
+    if(qcBox)qcBox.innerText=aiA?`Ψ(t) SYSTEM CONTROLLED BY PYTORCH IMAGINATION` : `Ψ(t) = √(${dCoh}%)|0⟩ // ΔE: ${(qE*6.626).toFixed(3)} eV`;
     requestAnimationFrame(frame);
 }
 frame();
