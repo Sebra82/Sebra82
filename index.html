@@ -3,145 +3,116 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-  <title>M4 Interactive</title>
+  <!-- Hardened CSP Barrier: Restricts execution explicitly to self-contained inline blocks and Blob workers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:;">
+  <title>M4 Ultra</title>
   <style>
-    :root { --n: #00CCFF; --a: #FF0055; --b: #090D16; }
-    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: none; font-family: monospace; font-size: 10px; }
-    body { background: var(--b); color: var(--n); padding: env(safe-area-inset-top) 8px env(safe-area-inset-bottom) 8px; display: flex; justify-content:center; align-items: center; min-height: 100vh; }
-    .c { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 6px; }
-    .h { display: flex; justify-content: space-between; align-items: center; padding: 2px 4px; }
-    .b { font-weight: bold; padding: 3px 8px; border: 1px solid var(--a); color: var(--a); background: rgba(255,0,85,.05); border-radius: 4px; font-size: 10px; letter-spacing: 0.5px; }
-    .b.u { border-color: #0F6; color: #0F6; background: rgba(0,255,102,.05); }
-    .w { width: 100%; height: 320px; background: #000; border: 1px solid #1a2333; border-radius: 6px; cursor: grab; position: relative; overflow: hidden; }
-    .w:active { cursor: grabbing; }
-    canvas { width: 100%; height: 100%; display: block; }
-    .p { border: 1px solid #1a2333; border-radius: 6px; padding: 8px; background: rgba(9,13,22,.85); backdrop-filter: blur(4px); }
-    .ph { display: flex; justify-content: space-between; margin-bottom: 4px; color: #8ab4f8; font-size: 9px; }
-    .ps { color: var(--a); }.ps.v { color: #0F6; }
-    .g { display: flex; gap: 6px; }
-    input { background: #000; border: 1px solid var(--n); color: #0F6; padding: 8px; flex-grow: 1; border-radius: 4px; outline: none; font-size: 12px; -webkit-appearance: none; }
-    button { background: rgba(0,204,255,.1); border: 1px solid var(--n); color: var(--n); padding: 8px 14px; cursor: pointer; border-radius: 4px; font-weight: bold; }
-    .db { border: 1px solid #1a2333; border-radius: 6px; padding: 6px; background: rgba(16,27,43,.1); display: grid; grid-template-columns: repeat(2,1fr); gap: 6px; }
-    .db div { border-left: 2px solid #1A2B42; padding-left: 6px; }
-    .db div span { color: #526E85; text-transform: uppercase; font-size: 8px; display: block; margin-bottom: 1px; }
-    .db div b { color: #0F6; font-size: 10px; }
-    .qc { position: absolute; bottom: 6px; left: 6px; right: 6px; background: rgba(5,7,11,0.9); border: 1px solid #1a2333; padding: 4px 6px; border-radius: 4px; color: var(--n); pointer-events: none; font-size: 8px; text-align: center; }
+    :root{--n:#00CCFF;--a:#FF0055;--b:#090D16;}
+    *{box-sizing:border-box;margin:0;padding:0;user-select:none;-webkit-user-select:none;touch-action:none;font-family:monospace;font-size:10px;}
+    body{background:var(--b);color:var(--n);padding:env(safe-area-inset-top) 8px env(safe-area-inset-bottom) 8px;display:flex;justify-content:center;align-items:center;min-height:100vh;}
+    .c{width:100%;max-width:420px;display:flex;flex-direction:column;gap:6px;}
+    .h{display:flex;justify-content:space-between;align-items:center;padding:2px 4px;}
+    .w{width:100%;height:320px;background:#000;border:1px solid #1a2333;border-radius:6px;cursor:grab;position:relative;overflow:hidden;}
+    canvas{width:100%;height:100%;display:block;}
+    .db{border:1px solid #1a2333;border-radius:6px;padding:6px;background:rgba(16,27,43,.1);display:grid;grid-template-columns:repeat(2,1fr);gap:6px;}
+    .db div{border-left:2px solid #1A2B42;padding-left:6px;cursor:pointer;}
+    .db div:hover{background:rgba(0,204,255,0.05);}
+    .db div span{color:#526E85;text-transform:uppercase;font-size:8px;display:block;margin-bottom:1px;}
+    .db div b{color:#0F6;font-size:10px;}
+    .qc{position:absolute;bottom:6px;left:6px;right:6px;background:rgba(5,7,11,0.9);border:1px solid #1a2333;padding:4px 6px;border-radius:4px;color:var(--n);pointer-events:none;font-size:8px;text-align:center;}
   </style>
 </head>
 <body>
 <div class="c">
-    <div class="h"><div>M4P // ACTIVE_INTERACTION_MATRIX // DTSA_18_USC_1836</div><div class="b" id="b">ENC_LOCKED</div></div>
-    <div class="w" id="wrapper"><canvas id="canvas"></canvas><div class="qc" id="qc">Ψ(t) VIEWPORT STANDBY // DRAG CANVAS TO WARP MATRIX</div></div>
-    <div class="p">
-        <div class="ph"><span>SYS_VAULT_GATEWAY</span><span class="ps" id="gs">Locked. Enter key.</span></div>
-        <div class="g"><input type="password" id="gk" autocomplete="off"><button onclick="auth()">ENTER</button></div>
-        <div id="q"></div>
-    </div>
+    <div class="h"><div>M4P // GPU_ACCELERATED_CORE // DTSA_18_USC_1836</div></div>
+    <div class="w" id="wrapper"><canvas id="canvas"></canvas><div class="qc" id="qc">Ψ(t) PARALLEL GPU SHADER ENGINE ONLINE</div></div>
     <div class="db">
-      <div><span>Entanglement Entropy</span><b id="m_st">0.0000 S_vN</b></div>
-      <div><span>Phase Propagation</span><b id="m_en">0.0040 r/s</b></div>
-      <div><span>Hilbert Subspace</span><b>2⁵⁰⁰ VIRTUAL STATES</b></div>
-      <div><span>Array Link Throughput</span><b id="m_sy">OFFLINE</b></div>
+      <div onclick="trigTest(0)"><span>1. Entanglement Entropy</span><b id="m_st">0.0000 S_vN</b></div>
+      <div onclick="trigTest(1)"><span>2. Phase Propagation</span><b id="m_en">0.0040 r/s</b></div>
+      <div onclick="trigTest(2)"><span>3. Hilbert Subspace</span><b>2⁵⁰⁰ VIRTUAL STATES</b></div>
+      <div onclick="trigTest(3)"><span>4. EWC Neural Link</span><b id="m_sy" style="color:#0F6">EMBEDDED</b></div>
     </div>
 </div>
 <script>
-const FH="masterpassword_v4_chronos_production",D=document,G="getElementById",qEl=D[G]("q"),sEl=D[G]("gs"),bEl=D[G]("b"),wk=new Worker("worker.js");
-["HYDRO_MATRIX","XD_OBFUSCATION"].forEach((n,i)=>qEl.innerHTML+=`<div class="p" id="q${i}" style="display:none; margin-top:4px;"><div class="ph"><span>QTR_${i+1} // ${n}</span><span class="ps" id="s${i}">[STREAM LOCKED]</span></div><div class="o" id="o${i}" style="color:#0F6; font-size:9px; white-space:pre-wrap; max-height:120px; overflow-y:auto; margin-top:4px;"></div></div>`);
+const D=document,G="getElementById",qcBox=D[G]("qc"),stEl=D[G]("m_st"),enEl=D[G]("m_en"),pts=[],M=Math,S=M.sin,C=M.cos,A=M.abs,L=(e,t,f)=>e.addEventListener(t,f,{passive:!t.includes("m")});
+let w,h,rx=0,ry=0,drag=!1,sx=0,sy=0,pTime=0,mx=0,my=0,qE=0,qP=0,rdX=0,rdY=0,stateBuffer=new Float32Array(2000),jitMod=1,lineMod=45,cohMod=99.45;
 
-async function auth(){
-    const inp=D[G]("gk").value.toLowerCase().trim();sEl.innerText="[COMPUTING] Checking token paths...";sEl.className="ps";D[G]("gk").blur();
-    if(inp===FH){
-       bEl.innerText="HONEYPOT_TRAP";bEl.style.borderColor="#F05";sEl.innerText="[LOCKDOWN] Threat identified.";
-       D[G]("q0").style.display="block";D[G]("s0").innerText="[TRAP ACTIVATED]";
-       D[G]("o0").innerText=`⚠️ HONEYPOT ENTRAPMENT INITIATED.`;return;
-    }
-    wk.postMessage({type:"AUTH_TRY",key:inp});
-}
+// Initialize dynamic multi-threaded background processing engine inline via Blob
+const wk=new Worker(URL.createObjectURL(new Blob([`onmessage=(e)=>{const d=e.data;if(d.type==="SYNC"){const f=new Float32Array(d.buffer),out=new Float32Array(2000);for(let i=0;i<500;i++){let o=i*4,nX=d.noise,nY=d.noise;out[o]=f[o]-(nX*0.005);out[o+1]=f[o+1]-(nY*0.005);out[o+2]=f[o+2];out[o+3]=f[o+3];}postMessage({type:"PREDICTION",coords:out},[out.buffer]);}};`],{type:"application/javascript"})));
+wk.onmessage=(e)=>{const c=e.data.coords;for(let i=0;i<500;i++){let o=i*4;pts[i]={x:c[o],y:c[o+1],z:c[o+2],w:c[o+3]};}};
 
-const cv=D[G]("canvas"),cx=cv.getContext("2d"),wrap=D[G]("wrapper"),qcBox=D[G]("qc"),stEl=D[G]("m_st"),enEl=D[G]("m_en"),syEl=D[G]("m_sy"),pts=[],M=Math,S=M.sin,C=M.cos,A=M.abs;
-let w,h,rx=0,ry=0,drag=!1,sx=0,sy=0,pTime=0,mx=0,my=0,qE=0,qP=0,aiA=!1,rdX=0,rdY=0,activeEdges=[],stateBuffer=new Float32Array(2000);
+const cv=D[G]("canvas"),gl=cv.getContext("webgl2"),wrap=D[G]("wrapper");
+if(!gl){alert("WebGL2 not supported on this device ecosystem.");}
 
-wk.onmessage=(e)=>{
-    const d=e.data;
-    if(d.type==="WS_STATUS"){syEl.innerText=d.status;syEl.style.color=d.status==="CONNECTED"?"#0F6":"#F05";}
-    if(d.type==="AUTH_RES"){
-        if(d.success){
-           bEl.innerText="ENC_UNLOCKED";bEl.className="b u";sEl.innerText="[SUCCESS] Verified.";sEl.className="ps v";
-           ["q0","q1"].forEach((id,i)=>{D[G](id).style.display="block";D[G](id).className="p a";D[G](`s${i}`).innerText="[DECRYPTED]";D[G](`s${i}`).className="ps v";D[G](`o${i}`).innerText=d.payload;});
-        }else{sEl.innerText=d.reason||"[FAILED] Mismatch.";sEl.className="ps";D[G]("gk").value="";}
-    }
-    if(d.type==="PREDICTION"){
-        aiA=!0;const c=d.coords;
-        for(let i=0;i<500;i++){let o=i*4;pts[i].x=c[o];pts[i].y=c[o+1];pts[i].z=c[o+2];pts[i].w=c[o+3];}
-        // SAFELY FALLBACK if edges array is missing over binary serialization channel
-        activeEdges=d.edges||[];
-    }
-};
+// --- 🛰️ PARALLEL WEBGL2 KERNEL SHADER CODE CORES ---
+const vsSource = `#version 300 es
+in vec4 a_pos; out float v_w; uniform vec2 u_rot; uniform vec2 u_mouse; uniform float u_br; uniform float u_time; uniform float u_qE;
+void main() {
+    float cx1=cos(u_rot.x), sx1=sin(u_rot.x), cy1=cos(u_rot.y), sy1=sin(u_rot.y);
+    float wf=a_pos.w; float cX=a_pos.x*u_br, cY=a_pos.y*u_br, cZ=a_pos.z*u_br;
+    float dX=cX-u_mouse.x, dY=cY-u_mouse.y, mD=hypot(dX,dY);
+    if(mD<120.0){float psh=(1.0-(mD/120.0))*(6.0+u_qE);cX+=dX/mD*psh;cY+=dY/mD*psh;}
+    float rX=cX*cy1+(cY*sx1+cZ*cx1)*sy1; float rY=cY*cx1-cZ*sx1; float rZ=-cX*sy1+(cY*sx1+cZ*cx1)*cy1;
+    float wDiv=4.8-(wf*0.18); float dFactor=100.0/(100.0+rZ);
+    gl_Position=vec4((rX/wDiv)*dFactor/u_br*2.0, (rY)*dFactor/u_br*2.0, rZ/100.0, 1.0);
+    gl_PointSize=(rZ>0.0)?3.6:1.8; v_w=wf;
+}`;
+const fsSource = `#version 300 es
+precision highp float; in float v_w; out vec4 outColor; uniform vec4 u_color;
+void main() { outColor=u_color+vec4(abs(v_w)*0.1, 0.0, 0.0, 0.0); }`;
 
-function initWS(){wk.postMessage({type:"INIT"});}setTimeout(initWS,1000);
+function compileShader(src,type){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;}
+const program=gl.createProgram();gl.attachShader(program,compileShader(vsSource,gl.VERTEX_SHADER));gl.attachShader(program,compileShader(fsSource,gl.FRAGMENT_SHADER));gl.linkProgram(program);gl.useProgram(program);
+
+const posLoc=gl.getAttribLocation(program,"a_pos"),rotLoc=gl.getUniformLocation(program,"u_rot"),mouseLoc=gl.getUniformLocation(program,"u_mouse"),brLoc=gl.getUniformLocation(program,"u_br"),timeLoc=gl.getUniformLocation(program,"u_time"),qELoc=gl.getUniformLocation(program,"u_qE"),colLoc=gl.getUniformLocation(program,"u_color");
+const buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.enableVertexAttribArray(posLoc);gl.vertexAttribPointer(posLoc,4,gl.FLOAT,!1,0,0);
+
 function resize(){
     const dpr=M.min(window.devicePixelRatio||1,2);w=wrap.clientWidth;h=wrap.clientHeight;
-    cv.width=w*dpr;cv.height=h*dpr;cx.scale(dpr,dpr);
+    cv.width=w*dpr;cv.height=h*dpr;gl.viewport(0,0,cv.width,cv.height);
 }
 window.addEventListener("resize",resize);resize();
 
-// Generate coordinates safely inside viewport layout bounds
-for(let i=0;i<500;i++){
-    let phi=M.acos(-1+2*(i+0.5)/500),th=M.PI*(1+M.sqrt(5))*i;
-    pts.push({x:S(phi)*C(th)*3.5,y:S(phi)*S(th)*3.5,z:C(phi)*3.5,w:S(th*2.5)*1.6});
+for(let i=0;i<500;i++){let phi=M.acos(-1+2*(i+0.5)/500),th=M.PI*(1+M.sqrt(5))*i;pts.push({x:S(phi)*C(th)*3.5,y:S(phi)*S(th)*3.5,z:C(phi)*3.5,w:S(th*2.5)*1.6});}
+const ptr=e=>e.touches?e.touches:e,st=(e)=>{drag=!0;const p=ptr(e);sx=p.clientX;sy=p.clientY;},mv=(e)=>{
+    const p=ptr(e),r=cv.getBoundingClientRect();mx=(p.clientX-r.left)-(w/2);my=(p.clientY-r.top)-(h/2);
+    if(!drag)return;rdX=p.clientX-sx;rdY=p.clientY-sy;ry+=rdX*0.008;rx+=rdY*0.008;qE+=M.min(M.sqrt(rdX*rdX+rdY*rdY)*0.03,10);sx=p.clientX;sy=p.clientY;
+},sp=()=>drag=!1;
+L(wrap,"mousedown",st);L(window,"mousemove",mv);L(window,"mouseup",sp);L(wrap,"touchstart",st);L(wrap,"touchmove",mv);L(window,"touchend",sp);
+
+function trigTest(tier) {
+    if(tier===0){jitMod=jitMod===1?8:1;qcBox.innerText="🧪 TEST 1 ACTIVE: HARDWARE ACCELERATED INTERFERENCE MAXIMUM STRESS";}
+    if(tier===1){qE=M.min(qE+15,35);qcBox.innerText="🧪 TEST 2 ACTIVE: GPU KINETIC MOMENTUM SURGE INJECTED";}
+    if(tier===2){lineMod=lineMod===45?60:45;qcBox.innerText="🧪 TEST 3 ACTIVE: PARALLEL ELEMENT CONSTRAINTS OVERDRIVEN";}
+    if(tier===3){cohMod=cohMod===99.45?25.10:99.45;qcBox.innerText="🧪 TEST 4 ACTIVE: MATRIX ENTROPY RATIO MANIFOLD SHIFTED";}
+    setTimeout(()=>{qcBox.innerText="Ψ(t) HARDENED TELEMETRY VECTOR MATRIX";},3000);
 }
 
-const ptr=e=>e.touches?e.touches[0]:e;
-const st=(e)=>{
-    drag=!100;const p=ptr(e);sx=p.clientX;sy=p.clientY;
-    drag=!0; // Hard lock interaction parameters on mouse clicks
-};
-const mv=(e)=>{
-    const p=ptr(e),rect=cv.getBoundingClientRect();
-    mx=(p.clientX-rect.left)-(w/2);my=(p.clientY-rect.top)-(h/2);
-    if(!drag)return;
-    rdX=p.clientX-sx;rdY=p.clientY-sy;
-    ry+=rdX*0.008;rx+=rdY*0.008;
-    qE+=M.sqrt(rdX*rdX+rdY*rdY)*0.03;
-    sx=p.clientX;sy=p.clientY;
-};
-const sp=()=>drag=!1;
-
-// ATTACH GESTURE TRACKERS directly to canvas element boundaries for continuous responsiveness
-wrap.addEventListener("mousedown",st);window.addEventListener("mousemove",mv);window.addEventListener("mouseup",sp);
-wrap.addEventListener("touchstart",st,{passive:!0});wrap.addEventListener("touchmove",mv,{passive:!0});window.addEventListener("touchend",sp);
-
-function line(p1,p2,cR,cG,cB,bA,wA){cx.strokeStyle=`rgba(${cR},${cG},${cB},${bA+A(p1.w)*wA})`;cx.beginPath();cx.moveTo(p1.x,p1.y);cx.lineTo(p2.x,p2.y);cx.stroke();}
+const lineIndices=[]; // Static hardware index allocation matrix
+for(let i=0;i<500;i++)for(let j=i+1;j<500;j++)if((j-i)<3)lineIndices.push(i,j);
+const indexUint16=new Uint16Array(lineIndices);
+const elementBuffer=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,elementBuffer);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,indexUint16,gl.STATIC_DRAW);
 
 function frame(){
-    cx.clearRect(0,0,w,h);let mX=w/2,mY=h/2;if(!drag){ry+=.002;rx+=.001;rdX*=0.9;rdY*=0.9;}pTime+=0.025;qE*=0.94;qP+=0.005+(qE*0.02);
-    for(let i=0;i<500;i++){let p=pts[i],o=i*4;stateBuffer[o]=p.x;stateBuffer[o+1]=p.y;stateBuffer[o+2]=p.z;stateBuffer[o+3]=p.w;}
+    gl.clearColor(0.035,0.05,0.086,1.0);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+    if(!drag){ry+=.002;rx+=.001;rdX*=0.9;rdY*=0.9;}pTime+=0.025;qE*=0.94;qP+=0.005+(qE*0.02);
+    for(let i=0;i<500;i++){let p=pts[i],o=i*4;let jit=(M.random()-0.5)*qE*0.03*jitMod;stateBuffer[o]=p.x+jit;stateBuffer[o+1]=p.y+jit;stateBuffer[o+2]=p.z;stateBuffer[o+3]=p.w;}
     let nX=(M.random()-0.5)*4.5,nY=(M.random()-0.5)*4.5;
+    wk.postMessage({type:"SYNC",buffer:stateBuffer.buffer,noise:[nX,nY]},[stateBuffer.buffer]);stateBuffer=new Float32Array(2000);
     
-    if(syEl.innerText==="CONNECTED"){
-        wk.postMessage({type:"SYNC",buffer:stateBuffer.buffer,action:[rdX+nX,rdY+nY],noise:[nX,nY]},[stateBuffer.buffer]);
-        stateBuffer=new Float32Array(2000);
-    }
+    gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,stateBuffer,gl.DYNAMIC_DRAW);
+    gl.uniform2f(rotLoc,rx+(S(qP)*qE*0.15),ry+(C(qP)*qE*0.15));gl.uniform2f(mouseLoc,mx,my);
+    gl.uniform1f(brLoc,w*0.48*(1+S(pTime)*0.03+(qE*0.05)));gl.uniform1f(timeLoc,pTime);gl.uniform1f(qELoc,qE);
     
-    let cx1=C(rx+(S(qP)*qE*0.15)),sx1=S(rx+(S(qP)*qE*0.15)),cy1=C(ry+(C(qP)*qE*0.15)),sy1=S(ry+(C(qP)*qE*0.15)),br=w*0.48*(1+S(pTime)*0.03+(qE*0.05)),cH=C(pTime*0.3+qP*0.1),sH=S(pTime*0.3+qP*0.1),proj=[];
-    pts.forEach((p,idx)=>{
-        let cX,cY,cZ,wf=p.w,jit=!aiA?(M.random()-0.5)*qE*0.03:0;
-        if(!aiA){
-            let xr=(p.x+jit)*cH-p.w*sH;wf=(p.x+jit)*sH+p.w*cH;cX=xr*br;cY=(p.y+jit)*br;cZ=(p.z+jit)*br;
-            let dX=cX-mx,dY=cY-my,mD=M.hypot(dX,dY);if(mD<120){let psh=(1-(mD/120))*(6+qE);cX+=dX/mD*psh;cY+=dY/mD*psh;}
-        }else{cX=p.x*br;cY=p.y*br;cZ=p.z*br;}
-        proj.push({x:mX+(cX*cy1+(cY*sx1+cZ*cx1)*sy1)/(4.8-(wf*0.18))*(100/(100+(-cX*sy1+(cY*sx1+cZ*cx1)*cy1))),y:mY+(cY*cx1-cZ*sx1)*100/(100+(-cX*sy1+(cY*sx1+cZ*cx1)*cy1)),z:-cX*sy1+(cY*sx1+cZ*cx1)*cy1,w:wf,t:idx%2});
-    });
-    cx.lineWidth=0.45;
-    if(aiA&&activeEdges.length>0){
-        activeEdges.forEach(([u,v])=>{if(proj[u]&&proj[v])proj[u].t===0?line(proj[u],proj[v],0,204,255,0.15,0.1):line(proj[u],proj[v],255,0,85,0.12,0.06);});
-    }else{
-        let fc=0;for(let i=0;i<proj.length&&fc<600;i++)for(let j=i+1;j<proj.length&&fc<600;j++)if(M.hypot(proj[i].x-proj[j].x,proj[i].y-proj[j].y)<45){proj[i].t===0?line(proj[i],proj[j],0,204,255,0.14,0.1):line(proj[i],proj[j],255,0,85,0.1,0.06);fc++;}
-    }
-    proj.forEach(p=>{cx.beginPath();cx.fillStyle=p.z>0?"#00CCFF":"#ff0055";cx.arc(p.x,p.y,p.z>0?1.8:0.9,0,2*M.PI);cx.fill();});
-    let dCoh=(M.max(0.01,1.0-(qE*0.012))*99.45).toFixed(2);
-    if(stEl)stEl.innerText=(A(S(pTime*0.5))*1.432+qE*0.1).toFixed(4)+" S_vN";if(enEl)enEl.innerText=(0.004+(qE*0.14)).toFixed(4)+" r/s";
-    if(qcBox)qcBox.innerText=aiA?`Ψ(t) TENSOR MATRIX CONTROLLED BY PYTORCH BACKEND` : `Ψ(t) = √(${dCoh}%)|0⟩ // ΔE: ${(qE*6.626).toFixed(2)} eV`;
+    // NATIVE PARALLEL LINE MESH RASTERIZATION VIA GPU GRAPHICS INNER CORE
+    gl.uniform4f(colLoc,0.0,0.8,1.0,0.18);gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,elementBuffer);
+    gl.drawElements(gl.LINES,indexUint16.length,gl.UNSIGNED_SHORT,0);
+    
+    // NATIVE GPU RASTERIZATION OF STATE VERTICES
+    gl.uniform4f(colLoc,1.0,0.0,0.33,0.85);gl.drawArrays(gl.POINTS,0,500);
+    
+    let dCoh=(M.max(0.01,1.0-(qE*0.012))*cohMod).toFixed(2);
+    stEl.innerText=(A(S(pTime*0.5))*1.432+qE*0.1).toFixed(4)+" S_vN";enEl.innerText=(0.004+(qE*0.14)).toFixed(4)+" r/s";
     requestAnimationFrame(frame);
 }
 frame();
