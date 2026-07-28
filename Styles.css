@@ -1,0 +1,160 @@
+:root {
+    --bg: #030508;
+    --panel: rgba(7, 11, 19, 0.85);
+    --border: #0e1d2f;
+    --cyan: #00f3ff;
+    --green: #00ff66;
+    --red: #ff0055;
+    --muted: #4a5b6c;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', monospace; }
+
+body {
+    background: var(--bg);
+    color: #b0c4de;
+    padding: 6px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    user-select: none;
+}
+
+/* Enforces the tight, mobile-safe compact width framework layout */
+.dashboard-frame {
+    width: 100%;
+    max-width: 260px;
+    background: rgba(4, 6, 10, 0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sys-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.54rem;
+    font-weight: bold;
+}
+
+.header-tag { 
+    color: var(--cyan); 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    width: 70%; 
+}
+
+.lock-badge {
+    background: rgba(255, 0, 85, 0.1);
+    color: var(--red);
+    border: 1px solid var(--red);
+    padding: 1px 3px;
+    border-radius: 1px;
+    font-size: 0.48rem;
+}
+
+/* Vertical amplitude constraint to securely block rendering overlaps */
+.visualizer-container {
+    width: 100%;
+    height: 175px;
+    background: #000000;
+    border: 1px solid var(--border);
+    position: relative;
+    border-radius: 2px;
+}
+
+#constellationCanvas {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0; left: 0;
+}
+
+.wave-equation-bar {
+    position: absolute;
+    bottom: 4px; left: 4px; right: 4px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(14, 29, 47, 0.5);
+    padding: 2px 4px;
+    font-size: 0.5rem;
+    color: #5f758c;
+    border-radius: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vault-gateway-panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 4px;
+    border-radius: 2px;
+}
+
+.gateway-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.54rem;
+    margin-bottom: 3px;
+    font-weight: bold;
+}
+
+.gateway-status { color: var(--red); }
+.terminal-row { display: flex; gap: 4px; }
+
+.terminal-input {
+    flex-grow: 1;
+    background: #000;
+    border: 1px solid var(--border);
+    color: var(--cyan);
+    font-size: 0.65rem;
+    padding: 2px 4px;
+    outline: none;
+    width: 60%;
+}
+
+.terminal-btn {
+    background: transparent;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    font-size: 0.54rem;
+    padding: 0 8px;
+    cursor: pointer;
+    border-radius: 1px;
+    font-weight: bold;
+}
+
+.metrics-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 6px;
+    border-radius: 2px;
+}
+
+.metric-item { display: flex; flex-direction: column; gap: 1px; cursor: pointer; }
+.m-label { font-size: 0.46rem; color: var(--muted); font-weight: bold; white-space: nowrap; }
+.m-val { font-size: 0.68rem; font-weight: bold; font-variant-numeric: tabular-nums; }
+
+.pipeline-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 4px 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.58rem;
+    font-weight: bold;
+    border-radius: 1px;
+}
+
+.pipe-status { color: var(--red); font-size: 0.52rem; }
+.hl-cyan { color: var(--cyan); }
+.hl-green { color: var(--green); }
+.hl-red { color: var(--red); }
