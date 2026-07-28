@@ -5,131 +5,104 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>M4</title>
   <style>
-    *{box-sizing:border-box;margin:0;padding:0;user-select:none;-webkit-user-select:none;touch-action:none;font-family:monospace;font-size:9px;}
-    body{background:#05070B;color:#00FFCC;padding:12px;display:flex;justify-content:center;overflow:hidden;}
-    .c{width:400px;display:flex;flex-direction:column;gap:6px;}
-    .h{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #141e30;padding-bottom:3px;}
-    .b{font-weight:bold;padding:1px 6px;border:1px solid #FF0055;color:#FF0055;background:rgba(255,0,85,.03);border-radius:2px;letter-spacing:0.5px;}
-    .b.u{border-color:#00FF66;color:#00FF66;background:rgba(0,255,102,.03);}
-    .w{width:100%;height:400px;background:#000;border:1px solid #141e30;border-radius:4px;cursor:grab;position:relative;}
+    *{box-sizing:border-box;margin:0;padding:0;user-select:none;-webkit-user-select:none;touch-action:none;font-family:monospace;font-size:10px;}
+    body{background:#090D16;color:#00CCFF;padding:12px;display:flex;justify-content:center;}
+    .c{width:100%;max-width:980px;display:flex;flex-direction:column;gap:8px;}
+    .h{display:flex;justify-content:space-between;align-items:center;}
+    .b{font-weight:bold;padding:2px 6px;border:1px solid #F05;color:#F05;background:rgba(255,0,85,.05);border-radius:4px;}
+    .b.u{border-color:#0F6;color:#0F6;background:rgba(0,255,102,.05);}
+    .w{width:100%;height:450px;background:#000;border:1px solid #1a2333;border-radius:4px;cursor:grab;position:relative;}
     canvas{width:100%;height:100%;display:block;}
+    .p{border:1px solid #1a2333;border-radius:4px;padding:6px;background:rgba(9,13,22,.6);}
+    .p.a{border-color:#00CCFF;background:rgba(0,204,255,.02);}
+    .ph{display:flex;justify-content:space-between;margin-bottom:2px;color:#8ab4f8;}
+    .ps{color:#F05;}.ps.v{color:#0F6;}
+    .g{display:flex;gap:6px;margin-top:2px;}
+    input{background:#000;border:1px solid #00CCFF;color:#0F6;padding:5px;flex-grow:1;border-radius:3px;outline:none;}
+    button{background:rgba(0,204,255,.1);border:1px solid #00CCFF;color:#00CCFF;padding:5px 12px;cursor:pointer;border-radius:3px;}
+    .o{margin-top:4px;color:#0F6;white-space:pre-wrap;display:none;}
+    .qc{position:absolute;bottom:8px;left:8px;right:8px;background:rgba(5,7,11,0.85);border:1px solid #141e30;padding:4px 6px;border-radius:2px;color:#00CCFF;pointer-events:none;font-size:8px;}
     .db{border:1px solid #141e30;border-radius:4px;padding:8px;background:rgba(16,27,43,.1);display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
     .db div{border-left:2px solid #1A2B42;padding-left:6px;}
     .db div span{color:#526E85;text-transform:uppercase;font-size:8px;display:block;}
-    .db div b{color:#0F6;font-size:11px;font-family:monospace;}
-    .p{border:1px solid #141E30;border-radius:4px;padding:6px;background:rgba(5,7,11,.9);display:none;color:#0F6;white-space:pre-wrap;line-height:1.3;margin-top:4px;}
-    .qc{position:absolute;bottom:8px;left:8px;right:8px;background:rgba(5,7,11,0.85);border:1px solid #141e30;padding:4px 6px;border-radius:2px;color:#00CCFF;pointer-events:none;font-size:8px;}
+    .db div b{color:#0F6;font-size:11px;}
   </style>
 </head>
 <body>
-  <div class="c">
-    <div class="h"><div>QUANTUM_CALCULUS_ENGINE</div><div class="b" id="b">ENC_LOCKED</div></div>
-    <div class="w" id="wr">
-      <canvas id="cv"></canvas>
-      <div class="qc" id="qc_stream">CALC // Ψ(t) INIT</div>
+<div class="c">
+    <div class="h"><div>M4P-V6.99_ACTIVE_LINE_MATRIX</div><div class="b" id="b">ENC_LOCKED</div></div>
+    <div class="w" id="wrapper"><canvas id="canvas"></canvas><div class="qc" id="qc">Ψ(t) OFFLINE // AUTH REQ</div></div>
+    <div class="p a">
+        <div class="ph"><span>SYS_VAULT_GATEWAY</span><span class="ps" id="gs">Locked. Enter key.</span></div>
+        <div class="g"><input type="password" id="gk"><button onclick="auth()">ENTER</button></div>
     </div>
     <div class="db">
-      <div><span>Von Neumann Coherence</span><b id="m_st">0.00%</b></div>
-      <div><span>Phase Velocity</span><b id="m_en">0.0000 rad/s</b></div>
-      <div><span>Saturated space</span><b>1000 TOTAL</b></div>
-      <div><span>Interference Lines</span><b>2000 MESH GRID</b></div>
+      <div><span>Coherence</span><b id="m_st">100.00%</b></div>
+      <div><span>Velocity</span><b id="m_en">0.0040 r/s</b></div>
+      <div><span>Hilbert Space</span><b>1000 STATES</b></div>
+      <div><span>Interference</span><b>2000 MESH</b></div>
     </div>
-    <div id="q" class="p"></div>
-  </div>
-
-  <script>
-    const VAULT = {
-      ct: "7880df9e4fb80fc60dbd63200ff3cfba119c4bdf45452f1b402cf8ea57c919d67ef993c8dcb3e1c6679549f0f952f4c39f0ebdf307137f6a735bc5d1170ea9d83dfa3fa0b7b13e1577fe097fdb",
-      honey_ct: "56d8e8864aa938d234be110fa982bc31f9d8a210b3ef9a82ce140fa932bd",
-      iv: "a4b56832db7419efcd18296a",
-      salt: "ef014a52db36fe01bc482390fa82bc19"
-    }, qEl=document.getElementById("q");
-    ["HYDRO_MATRIX","XD_OBFUSCATION","DYNAMIC_CANVAS","SECURITY_SEAL"].forEach((n,i)=>qEl.innerHTML+=`<div class="p" id="q${i}"><span>REG_${i+1} // ${n}</span><div id="o${i}"></div></div>`);
-
-    const hexToBuf = hex => new Uint8Array(hex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
-
-    async function processKey(inp){
-      try{
-        const te = new TextEncoder(), td = new TextDecoder();
-        const rawKey = await crypto.subtle.importKey("raw", te.encode(inp), "PBKDF2", false, ["deriveKey"]);
-        const aesKey = await crypto.subtle.deriveKey(
-          { name: "PBKDF2", salt: hexToBuf(VAULT.salt), iterations: 500000, hash: "SHA-256" },
-          rawKey, { name: "AES-GCM", length: 256 }, false, ["decrypt"]
-        );
-        let aCipher = (inp === "masterpassword_v4_chronos_production") ? VAULT.honey_ct : VAULT.ct;
-        const decrypted = await crypto.subtle.decrypt({ name: "AES-GCM", iv: hexToBuf(VAULT.iv) }, aesKey, hexToBuf(aCipher));
-        const d = new Date(), saltStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${String(d.getHours()).padStart(2,'0')}-${String(d.getMinutes()).padStart(2,'0')}`;
-        
-        if (inp === "masterpassword_v4_chronos_production") {
-           document.getElementById("b").innerText = "HONEYPOT_TRAP";
-           qEl.innerHTML = `<strong>⚠️ HONEYPOT ALARM [${saltStr}]:</strong>\nDEFENSIVE PAYLOAD LOCKED.`;
-        } else {
-           document.getElementById("b").innerText = "ENC_UNLOCKED";
-           document.getElementById("b").className = "b u";
-           qEl.innerHTML = `<strong>UNLOCKED [${saltStr}]:</strong>\n${td.decode(decrypted)}`;
+    <div id="q"></div>
+</div>
+<script>
+const FH="masterpassword_v4_chronos_production",D=document,G="getElementById",qEl=D[G]("q"),sEl=D[G]("gs"),bEl=D[G]("b"),V={"ct":"98aa088c86b43f87ce99b66d651a22811825cc3df3d80d4067ab5c1e72a7567d8c42d16d1a34c7f820b15803515aa87e8e3ec32a46f7b02d2645f9e1cf2164b896b2906463d0ee8a207d7a70d8044ef88e7703c073cf6d84001d5498ac0eedfce84c0edfd5fc0c783e06fbbd3c1ee1a15e77ed7b299d5c8cc70ef83ca914b9c5a8d58fef3f372b774e81f7a2eed2089ffafb2a15f0806ea39e507d452344dca39a972a83d4000fec7c53e0b00f80c53d78a7600efb369da5510ff30435d74e739488f0d5f8c0d535c5c824f69e4ae07a7a895ace1658f0c248f96a462822420a07ea6acfafdc2bd2a9997adf0d7aa4059d9857968461cb58c1926a212bb9dde280b9f981cafbb0a1519ca97b33b4d0024f60017172ade0f9eabc6cfc9749bbc8c2084ef77aabd3568e37037eea3683ac7b745d9b0411ecd765644011aae08cf4532d7e586fcc3d779ed13ad8dfd2e5e8a22b92cced5574d597956914af8462ed1a73e191d16769f9214f1270a62a907766a87664fcf2430a5d94910b50bf360f1cdeeff8d5855d0415617dcf8426b84ffd52f80b42c15c8a1998302bbbbef99e9a0f0fdf92f03e26537eb0cb2101cbcc1b6234a0f27a2e2b13ce6b4e2ed1ea7c6fbf2139c397a1b42e929418a90c2a8e66fa383800b8cf42fb6d4e717ce09c34c99a7f6a07f9242c1e18202dfc2aed95e9cedd28203e59838268c26529cde14eeb5a6b9a52d4ac746c3847b9e0f0725192454912f00901872a237465dc646abc53d02f9def295515c5b0d4523066c23fde2fda2e1a335a674a6b51f742f22bf2579816f072d977cd5c63e37b877963803aaaa08ae30b5bc0188ef995644f88c649fc0f2160bc6b565e82bffa693aa8bc605c428571ca5eb104b22875a0b482396511f3a0c2c6a411d3b94d5fcf0b3bc5cdaa79b14065fa20695bf3c850e0d2648dfd722a12ed3d912f60bd4fc05bc4036c4bbc23972258ba4f62c76b34a0b27219d4478546e494848e98c51f8d3fa39f35f42c99589bf9b892480ea2c2193f2dbe2e2afb63fd1e61e90bfe7ef4e9ef075a358464a8aab1517e7bedaedd13d6faf335fd04d9460f4c0c60dfa42abc08ed42468e8a7b362088344d6e8ad2d183c3443e44376e501a162f744b249c2b1fc61c69a10d7faa1108ed088754682e55f47836f417f260ee1f529f64713c03f659d698e878b8709a6debf03fada4040f6f777a379c64cb87c605d111ff1dc2571231bfd23a03d6b380bfc9adb27da2d15a8b5310","honey_ct":"56d8e8864aa938d234be110fa982bc31f9d8a210b3ef9a82ce140fa932bd","iv":"1f87f3ac0e60b605a4b58d7c","salt":"b74a0e09d860268c56328fd87444bcac"};
+["HYDRO_MATRIX","XD_OBFUSCATION"].forEach((n,i)=>qEl.innerHTML+=`<div class="p" id="q${i}"><div class="ph"><span>QTR_${i+1} // ${n}</span><span class="ps" id="s${i}">[ENCRYPTED]</span></div><div class="o" id="o${i}"></div></div><div style="height:6px"></div>`);
+const hToB=h=>new Uint8Array(h.match(/.{1,2}/g).map(b=>parseInt(b,16)));
+async function auth(){
+    const inp=D[G]("gk").value.toLowerCase().trim();sEl.innerText="[COMPUTING] PBKDF2 stretching...";sEl.className="ps";
+    await new Promise(r=>setTimeout(r,50));
+    try{
+        const te=new TextEncoder(),td=new TextDecoder(),rK=await crypto.subtle.importKey("raw",te.encode(inp),"PBKDF2",false,["deriveKey"]);
+        const aK=await crypto.subtle.deriveKey({name:"PBKDF2",salt:hToB(V.salt),iterations:500000,hash:"SHA-256"},rK,{name:"AES-GCM",length:256},false,["decrypt"]);
+        const dec=await crypto.subtle.decrypt({name:"AES-GCM",iv:hToB(V.iv)},aK,hToB(inp===FH?V.honey_ct:V.ct)),res=td.decode(dec),d=new Date(),sStr=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${String(d.getHours()).padStart(2,'0')}-${String(d.getMinutes()).padStart(2,'0')}`;
+        if(inp===FH){
+           bEl.innerText="HONEYPOT_TRAP";bEl.style.borderColor="#F05";D[G]("q0").className="p";D[G]("s0").innerText="[TRAP]";
+           D[G]("o0").innerText=`⚠️ HONEYPOT ENTRAPMENT LOGGED [${sStr}]. Decoy: ${res}`;D[G]("o0").style.display="block";
+        }else{
+           bEl.innerText="ENC_UNLOCKED";bEl.className="b u";sEl.innerText="[SUCCESS] Verified.";sEl.className="ps v";
+           ["HYDRO_MATRIX","XD_OBFUSCATION"].forEach((_,i)=>{D[G](`q${i}`).className="p a";D[G](`s${i}`).innerText="[DECRYPTED]";D[G](`s${i}`).className="ps v";const el=D[G](`o${i}`);el.innerText=res;el.style.display="block";});
         }
-        qEl.style.display = "block";
-      }catch(e){}
-    }
-
-    let ks="";window.addEventListener('paste',e=>processKey((e.clipboardData||window.clipboardData).getData('text').toLowerCase().trim()));
-    window.addEventListener('keydown',e=>{if(e.key.length===1){ks+=e.key.toLowerCase();if(ks.includes("chronos")){processKey("chronos");ks="";}}else if(e.key==="Escape")ks="";});
-
-    const c=document.getElementById("cv"),cx=c.getContext("2d"),wr=document.getElementById("wr"),qcBox=document.getElementById("qc_stream"),stEl=document.getElementById("m_st"),enEl=document.getElementById("m_en");
-    let w,h,rx=0,ry=0,pTime=0,zCur=0.5,zTar=0.5,isDrag=false,px=0,py=0,qEnergy=0,qPhase=0;
-    
-    function resize(){const dpr=window.devicePixelRatio||1;w=wr.clientWidth;h=wr.clientHeight;c.width=w*dpr;c.height=h*dpr;cx.scale(dpr,dpr);}
-    window.addEventListener("resize",resize);resize();
-
-    wr.addEventListener('mousedown',e=>{isDrag=true;px=e.clientX;py=e.clientY;});
-    window.addEventListener('mousemove',e=>{
-      if(!isDrag)return;
-      let dx = e.clientX - px, dy = e.clientY - py;
-      ry += dx * 0.006; rx += dy * 0.006; qEnergy += Math.sqrt(dx*dx + dy*dy) * 0.015; px = e.clientX; py = e.clientY;
+    }catch(e){sEl.innerText="[FAILED] Rejection.";sEl.className="ps";D[G]("gk").value="";}
+}
+const cv=D[G]("canvas"),cx=cv.getContext("2d"),wrap=D[G]("wrapper"),qcBox=D[G]("qc"),stEl=D[G]("m_st"),enEl=D[G]("m_en");
+let w,h,pts=[],rx=0,ry=0,drag=!1,sx,sy,pTime=0,mx=0,my=0,qE=0,qP=0,M=Math,S=M.sin,C=M.cos,A=M.abs;
+function resize(){const dpr=window.devicePixelRatio||1;w=wrap.clientWidth;h=wrap.clientHeight;cv.width=w*dpr;cv.height=h*dpr;cx.scale(dpr,dpr);}
+window.addEventListener("resize",resize);resize();
+for(let i=0;i<500;i++){
+    let phi=M.acos(-1+2*(i+0.5)/500),th=M.PI*(1+M.sqrt(5))*i;
+    pts.push({x:S(phi)*C(th)*3.5,y:S(phi)*S(th)*3.5,z:C(phi)*3.5,w:S(th*2.5)*1.6});
+}
+const ptr=e=>e.touches?e.touches:e,st=(e)=>{drag=!0;const p=ptr(e);sx=p.clientX;sy=p.clientY;},mv=(e)=>{
+    const p=ptr(e),r=cv.getBoundingClientRect();mx=(p.clientX-r.left)-(w/2);my=(p.clientY-r.top)-(h/2);
+    if(!drag)return;let dx=p.clientX-sx,dy=p.clientY-sy;ry+=dx*0.006;rx+=dy*0.006;qE+=M.sqrt(dx*dx+dy*dy)*0.025;sx=p.clientX;sy=p.clientY;
+};
+wrap.addEventListener("mousedown",st);window.addEventListener("mousemove",mv);window.addEventListener("mouseup",()=>drag=!1);
+wrap.addEventListener("touchstart",st,{passive:!0});window.addEventListener("touchmove",mv,{passive:!0});window.addEventListener("touchend",()=>drag=!1);
+function line(p1,p2,cR,cG,cB,bA,wA){cx.strokeStyle=`rgba(${cR},${cG},${cB},${bA+A(p1.w)*wA})`;cx.beginPath();cx.moveTo(p1.x,p1.y);cx.lineTo(p2.x,p2.y);cx.stroke();}
+function frame(){
+    cx.clearRect(0,0,w,h);let mX=w/2,mY=h/2;if(!drag){ry+=.002;rx+=.001;}pTime+=0.025;qE*=0.94;qP+=0.005+(qE*0.02);
+    let cx1=C(rx+(S(qP)*qE*0.15)),sx1=S(rx+(S(qP)*qE*0.15)),cy1=C(ry+(C(qP)*qE*0.15)),sy1=S(ry+(C(qP)*qE*0.15));
+    let br=w*0.5*(1+S(pTime)*0.03+(qE*0.05)),cH=C(pTime*0.3+qP*0.1),sH=S(pTime*0.3+qP*0.1),proj=[];
+    pts.forEach((p,idx)=>{
+        let jit=(M.random()-0.5)*qE*0.03,xr=(p.x+jit)*cH-p.w*sH,wf=(p.x+jit)*sH+p.w*cH,cX=xr*br,cY=(p.y+jit)*br,cZ=(p.z+jit)*br,dX=cX-mx,dY=cY-my,mD=M.hypot(dX,dY);
+        if(mD<120){let psh=(1-(mD/120))*(6+qE);cX+=dX/mD*psh;cY+=dY/mD*psh;}
+        let y1=cY*cx1-cZ*sx1,z1=cY*sx1+cZ*cx1,x2=cX*cy1+z1*sy1,z2=-cX*sy1+z1*cy1,f3=1/(4.8-(wf*0.18)),sz=100/(100+z2);
+        proj.push({x:mX+x2*f3*sz,y:mY+y1*f3*sz,z:z2,w:wf,t:idx%2});
     });
-    window.addEventListener('mouseup',()=>isDrag=false);
-    wr.addEventListener('wheel',e=>{e.preventDefault();zTar=Math.max(0.15,Math.min(zTar+e.deltaY*-0.0015,1.8));},{passive:false});
-
-    const vertices=[],cl=100;
-    for(let cIdx=0;cIdx<cl;cIdx++){
-      let bA=(cIdx/cl)*Math.PI*2,hs=Math.sin(bA)*1.2;
-      [{x:Math.cos(bA)*2.1,y:Math.sin(bA)*2.1,z:hs,w:Math.cos(bA*1.5)},{x:-Math.cos(bA)*2.1,y:-Math.sin(bA)*2.1,z:hs,w:Math.sin(bA*1.5)},{x:Math.sin(bA)*2.1,y:-Math.cos(bA)*2.1,z:hs,w:-Math.cos(bA*1.5)},{x:-Math.sin(bA)*2.1,y:Math.cos(bA)*2.1,z:hs,w:-Math.sin(bA*1.5)},{x:0,y:0,z:hs*1.4,w:0}].forEach((s,sIdx)=>vertices.push({x:s.x*.7,y:s.y*.7,z:s.z*.7,w:s.w*.5,t:0,i:cIdx*5+sIdx}));
-      [{x:Math.cos(bA+.25)*1.2,y:Math.sin(bA+.25)*1.2,z:hs*.5,w:Math.sin(bA)},{x:-Math.cos(bA+.25)*1.2,y:-Math.sin(bA+.25)*1.2,z:hs*.5,w:Math.cos(bA)},{x:Math.sin(bA+.25)*1.2,y:-Math.cos(bA+.25)*1.2,z:hs*.5,w:-Math.sin(bA)},{x:-Math.sin(bA+.25)*1.2,y:Math.cos(bA+.25)*1.2,z:hs*.5,w:-Math.cos(bA)},{x:0,y:0,z:hs*.15,w:0}].forEach((s,sIdx)=>vertices.push({x:s.x*.7,y:s.y*.7,z:s.z*.7,w:s.w*.4,t:1,i:500+cIdx*5+sIdx}));
-    }
-
-    function line(p1,p2,cR,cG,cB,baseA,wA){if(p1.v&&p2.v){cx.strokeStyle=`rgba(${cR},${cG},${cB},${baseA+Math.abs(p1.w)*wA})`;cx.beginPath();cx.moveTo(p1.x,p1.y);cx.lineTo(p2.x,p2.y);cx.stroke();}}
-
-    function tick(){
-      pTime+=0.006;cx.fillStyle="#05070B";cx.fillRect(0,0,w,h);zCur+=(zTar-zCur)*0.12;
-      qEnergy *= 0.94; qPhase += 0.005 + (qEnergy * 0.02);
-      let aRx = rx + (Math.sin(qPhase) * qEnergy * 0.2), aRy = ry + (Math.cos(qPhase) * qEnergy * 0.2);
-      let cx1=Math.cos(aRx),sx1=Math.sin(aRx),cy1=Math.cos(aRy),sy1=Math.sin(aRy),ox=w/2,oy=h/2;
-      let br=w*zCur*(1 + Math.sin(pTime)*.03 + (qEnergy * 0.04)),cH=Math.cos(pTime*0.3+qPhase*0.1),sH=Math.sin(pTime*0.3+qPhase*0.1),projected=[],d4=2.2+zCur*1.5;
-      
-      vertices.forEach(v=>{
-        let jit = (Math.random() - 0.5) * qEnergy * 0.04;
-        let x=(v.x+jit)*(v.i%2===0?.999:1),y=(v.y+jit)*(v.i%2===0?.999:1),xr=x*cH-v.w*sH,we=x*sH+v.w*cH,zr=v.z*cH-we*sH,wf=v.z*sH+we*cH;
-        let f3=1/(d4-wf),x3=xr*f3*br,y3=y*f3*br,z3=zr*f3*br,x1=x3*cy1-z3*sy1,z1=x3*sy1+z3*cy1,y2=y3*cx1-z1*sx1,z2=y3*sx1+z1*cx1,sz=100/(100+z2);
-        projected.push({x:ox+x1*sz*3,y:oy+y2*sz*3,v:(ox+x1*sz*3>=-150&&ox+x1*sz*3<=w+150&&oy+y2*sz*3>=-150&&oy+y2*sz*3<=h+150),w:wf,t:v.t});
-      });
-
-      cx.lineWidth=0.45;
-      for(let cIdx=0;cIdx<cl;cIdx++){
-        let st=cIdx*5,cSt=500+st;
-        for(let i=0;i<5;i++){
-          for(let j=i+1;j<5;j++){line(projected[st+i],projected[st+j],0,204,255,0.22,0.16);line(projected[cSt+i],projected[cSt+j],255,0,85,0.15,0.10);}
-          if(cIdx<99)line(projected[st+i],projected[st+5+i],0,204,255,0.14,0.12);
+    let fc=0;cx.lineWidth=0.45;
+    for(let i=0;i<proj.length&&fc<1200;i++){
+        for(let j=i+1;j<proj.length&&fc<1200;j++){
+            let d=M.hypot(proj[i].x-proj[j].x,proj[i].y-proj[j].y);
+            if(d>10&&d<60){proj[i].t===0?line(proj[i],proj[j],0,204,255,0.16,0.12):line(proj[i],proj[j],255,0,85,0.12,0.08);fc++;}
         }
-      }
-      
-      projected.forEach(p=>{if(!p.v)return;let nS=p.t===0?(1.8+zCur*1.2):(1+zCur*0.8);cx.fillStyle=p.t===0?"#00CCFF":"#FF0055";cx.fillRect(p.x-nS/2,p.y-nS/2,nS,nS);});
-      
-      let dCoh = (Math.max(0.1, 1.0 - (qEnergy * 0.008)) * 99.45).toFixed(2);
-      stEl.innerText=dCoh+"%"; enEl.innerText=(0.004 + (qEnergy * 0.15)).toFixed(4)+" rad/s";
-      if (Math.random() < 0.15) qcBox.innerText = `Ψ(t) = √(${dCoh}%)|0⟩ + √(${(100-dCoh).toFixed(2)}%)|1⟩ // ΔE: ${(qEnergy*6.626).toFixed(3)} eV`;
-      requestAnimationFrame(tick);
     }
-    requestAnimationFrame(tick);
-  </script>
+    proj.forEach(p=>{cx.fillStyle=p.z>0?"#00CCFF":"#ff0055";cx.beginPath();cx.arc(p.x,p.y,p.z>0?2.2:1.2,0,2*M.PI);cx.fill();});
+    let dCoh=(M.max(0.01,1.0-(qE*0.012))*99.45).toFixed(2);
+    if(stEl)stEl.innerText=dCoh+"%";if(enEl)enEl.innerText=(0.004+(qE*0.14)).toFixed(4)+" r/s";
+    if(M.random()<0.15&&qcBox)qcBox.innerText=`Ψ(t) = √(${dCoh}%)|0⟩ + √(${(100-dCoh).toFixed(2)}%)|1⟩ // ΔE: ${(qE*6.626).toFixed(3)} eV`;
+    requestAnimationFrame(frame);
+}
+frame();
+</script>
 </body>
 </html>
