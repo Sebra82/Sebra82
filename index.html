@@ -22,16 +22,14 @@
     body {
       background-color: #030611;
       color: #f1f5f9;
-      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
   </style>
 </head>
 <body class="min-h-screen antialiased select-none">
 
-  <!-- React Root -->
   <div id="root"></div>
 
-  <!-- Application Logic -->
   <script type="text/babel">
     const { useState, useEffect } = React;
 
@@ -43,14 +41,12 @@
       const [activeStep, setActiveStep] = useState(0);
       const [activeTab, setActiveTab] = useState('sandbox');
 
-      // Safeguard Lucide Icon rendering
       useEffect(() => {
         if (window.lucide) {
           window.lucide.createIcons();
         }
       }, [activeStep, activeTab, isRunning]);
 
-      // State derivations
       const totalStates = Math.pow(2, qubits);
       const formattedStates = totalStates > 1e12 
         ? (totalStates / 1e18).toFixed(1) + ' Quintillion' 
@@ -60,7 +56,6 @@
       const c01 = Math.sin(theta / 2).toFixed(2);
       const phaseExp = phi.toFixed(2);
 
-      // Probability density calculation
       const p00 = Math.round(Math.pow(Math.cos(theta / 2), 2) * 100);
       const p01 = Math.round(Math.pow(Math.sin(theta / 2), 2) * 100);
 
@@ -80,10 +75,23 @@
         setTimeout(() => setIsRunning(false), 1000);
       };
 
+      const codeExample = `import quantengine as qe
+
+client = qe.Client(api_key="qe_uk_live_0034", region="uk-central")
+
+matrix_spec = {
+    "qubits": ${qubits},
+    "polar_angle": ${theta},
+    "azimuthal_angle": ${phi},
+    "error_mitigation": True
+}
+
+result = client.solve_state(matrix_spec)
+print(f"Solved State: {result.state_vector}")
+print(f"Latency: {result.execution_ms}ms")`;
+
       return (
         <div className="w-full min-h-screen p-4 md:p-6 max-w-7xl mx-auto space-y-6">
-          
-          {/* Header Bar */}
           <header className="flex flex-col md:flex-row items-center justify-between gap-4 bg-slate-900/80 backdrop-blur-md border border-slate-800 p-4 rounded-xl">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
@@ -128,7 +136,6 @@
             </div>
           </header>
 
-          {/* Preset Shortcuts */}
           <section className="flex flex-wrap items-center gap-2 text-xs">
             <span className="text-slate-400 font-semibold uppercase text-[10px] tracking-wider mr-2">Workload Presets:</span>
             <button 
@@ -151,11 +158,10 @@
             </button>
           </section>
 
-          {/* Interactive Quantum Circuit Gate Diagram */}
           <section className="bg-slate-900/40 border border-slate-800 rounded-xl p-4">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                <i data-lucide="activity" className="w-4 h-4 text-purple-400"></i> Interactive Quantum Circuit Gate Sequence
+                <i data-lucide="activity" className="w-4 h-4 text-purple-400"></i> Quantum Circuit Gate Sequence
               </h2>
               <span className="text-xs font-mono text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/20">
                 Coherence Fidelity: 99.98%
@@ -164,7 +170,7 @@
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
               {[
-                { id: 1, gate: '|0⟩^{\\otimes N}', name: 'State Prep', desc: 'Sparse Initialization' },
+                { id: 1, gate: '|0⟩^N', name: 'State Prep', desc: 'Sparse Initialization' },
                 { id: 2, gate: 'Ry(θ) Rz(ϕ)', name: 'Phase U-Gate', desc: 'Custom Transformation' },
                 { id: 3, gate: 'ZNE Guard', name: 'Noise Mitigation', desc: 'Error Cancellation' },
                 { id: 4, gate: 'Measure', name: 'Wave Collapse', desc: 'Sub-35ms Solve' }
@@ -190,11 +196,8 @@
             </div>
           </section>
 
-          {/* Main Execution Comparison */}
           {activeTab === 'sandbox' ? (
             <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              
-              {/* Classical CPU Panel */}
               <div className="bg-gradient-to-b from-rose-950/20 to-slate-900/60 border border-rose-900/40 rounded-xl p-5 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between mb-4">
@@ -210,7 +213,7 @@
                   <div className="space-y-4 text-xs">
                     <div className="p-3 bg-slate-950/80 rounded-lg border border-rose-900/30 font-mono">
                       <div className="text-slate-400 mb-1">Execution Architecture:</div>
-                      <div className="text-rose-400 font-bold">Serial $O(2^N)$ Matrix Inversion Loop</div>
+                      <div className="text-rose-400 font-bold">Serial O(2^N) Matrix Inversion Loop</div>
                       <div className="text-slate-500 text-[10px] mt-1">Iteration: 1,000,000 / {formattedStates}</div>
                     </div>
 
@@ -237,7 +240,6 @@
                 </div>
               </div>
 
-              {/* Proprietary Quantum Backend Panel */}
               <div className="bg-gradient-to-b from-cyan-950/20 to-slate-900/60 border border-cyan-500/40 rounded-xl p-5 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between mb-4">
@@ -251,24 +253,22 @@
                   </div>
 
                   <div className="space-y-4 text-xs">
-                    {/* Live Math Inspector */}
                     <div className="p-3 bg-slate-950/80 rounded-lg border border-cyan-500/30 font-mono">
-                      <div className="text-slate-400 mb-1">Solved Output State Vector $|\Psi_{\text{final}}\rangle$:</div>
+                      <div className="text-slate-400 mb-1">Solved Output State Vector |Ψ⟩:</div>
                       <div className="text-amber-300 font-bold text-sm tracking-wide">
                         {c00}|00⟩ + {c01}|01⟩ + e^(i{phaseExp})0.11|10⟩
                       </div>
                       <div className="text-slate-400 text-[10px] mt-2 flex justify-between">
-                        <span>$c_{00} = \cos(\theta/2) = {c00}$</span>
-                        <span>$c_{01} = \sin(\theta/2) = {c01}$</span>
+                        <span>c00 = cos(θ/2) = {c00}</span>
+                        <span>c01 = sin(θ/2) = {c01}</span>
                       </div>
                     </div>
 
-                    {/* Live State Probability Density Bars */}
                     <div className="space-y-2 p-3 bg-slate-950/60 rounded-lg border border-slate-800">
                       <div className="text-[11px] text-slate-400 font-semibold mb-1">State Probability Amplitudes:</div>
                       <div>
                         <div className="flex justify-between text-[10px] text-slate-400 mb-0.5">
-                          <span>$|00\rangle$ Ground State</span>
+                          <span>|00⟩ Ground State</span>
                           <span className="font-mono text-cyan-400">{p00}%</span>
                         </div>
                         <div className="w-full bg-slate-900 rounded-full h-1.5 overflow-hidden">
@@ -277,7 +277,7 @@
                       </div>
                       <div>
                         <div className="flex justify-between text-[10px] text-slate-400 mb-0.5">
-                          <span>$|01\rangle$ Excited State</span>
+                          <span>|01⟩ Excited State</span>
                           <span className="font-mono text-purple-400">{p01}%</span>
                         </div>
                         <div className="w-full bg-slate-900 rounded-full h-1.5 overflow-hidden">
@@ -304,10 +304,8 @@
                   <span className="text-emerald-400 font-mono font-bold">Speedup: 422,580,645x</span>
                 </div>
               </div>
-
             </section>
           ) : (
-            /* API Integration Code Block */
             <section className="bg-slate-900/60 border border-slate-800 rounded-xl p-5">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-semibold text-purple-300 flex items-center gap-2">
@@ -316,30 +314,12 @@
                 <span className="text-xs text-slate-400">Endpoint: https://api.quantengine.uk/v4/solve</span>
               </div>
               <pre className="p-4 bg-slate-950 rounded-lg border border-slate-800 font-mono text-xs text-cyan-300 overflow-x-auto">
-{`import quantengine as qe
-
-# Initialize UK Production Client
-client = qe.Client(api_key="qe_uk_live_0034", region="uk-central")
-
-# Configure Matrix Execution Parameters
-matrix_spec = {
-    "qubits": ${qubits},
-    "polar_angle": ${theta},
-    "azimuthal_angle": ${phi},
-    "error_mitigation": True
-}
-
-# Execute Sub-35ms Quantum State Solve
-result = client.solve_state(matrix_spec)
-print(f"Solved State: {result.state_vector}")
-print(f"Latency: {result.execution_ms}ms")`}
+{codeExample}
               </pre>
             </section>
           )}
 
-          {/* Parameter Controls Dock */}
           <footer className="bg-slate-900/80 border border-slate-800 p-5 rounded-xl flex flex-col md:flex-row items-center justify-between gap-6">
-            
             <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <div className="flex justify-between text-xs text-slate-400 mb-1">
@@ -404,12 +384,10 @@ print(f"Latency: {result.execution_ms}ms")`}
               </button>
             </div>
           </footer>
-
         </div>
       );
     }
 
-    // Render React App safely
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<QuantEnginePortal />);
   </script>
