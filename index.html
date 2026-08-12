@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QuantEngine SaaS — Quantum Model Studio</title>
+  <title>QuantEngine SaaS — Interactive Quantum Model Studio</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -38,6 +38,36 @@
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
 
+    // 1. Live Bloch Vector Sphere Visualizer
+    function BlochSphereVisualizer({ theta, phi }) {
+      const radius = 28;
+      const cx = 35;
+      const cy = 35;
+
+      // Project spherical coordinates to 2D plane
+      const vx = cx + radius * Math.sin(theta) * Math.cos(phi);
+      const vy = cy - radius * Math.cos(theta);
+
+      return (
+        <div className="relative flex items-center justify-center bg-slate-950/90 border border-slate-800 rounded p-1 h-full">
+          <svg width="70" height="70" viewBox="0 0 70 70" className="overflow-visible">
+            {/* Outer Sphere Sphere Wireframe */}
+            <circle cx={cx} cy={cy} r={radius} fill="none" stroke="#1e293b" strokeWidth="1.5" />
+            <ellipse cx={cx} cy={cy} rx={radius} ry={radius * 0.35} fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="2,2" />
+            
+            {/* Z Axis Pole Markers */}
+            <text x={cx - 3} y={cy - radius - 3} fill="#00F2FE" fontSize="8" className="font-mono">|0⟩</text>
+            <text x={cx - 3} y={cy + radius + 8} fill="#A855F7" fontSize="8" className="font-mono">|1⟩</text>
+
+            {/* State Vector Line */}
+            <line x1={cx} y1={cy} x2={vx} y2={vy} stroke="#00F2FE" strokeWidth="2.5" strokeLinecap="round" />
+            <circle cx={vx} cy={vy} r="3" fill="#A855F7" className="animate-pulse" />
+          </svg>
+        </div>
+      );
+    }
+
+    // 2. Dynamic Quantum Wave Canvas Animation
     function QuantumCanvas({ theta, phi, isRunning }) {
       const canvasRef = useRef(null);
 
@@ -56,12 +86,12 @@
           const height = canvas.height;
           const centerY = height / 2;
 
-          // Primary Wave (|00> State Amplitude)
+          // Ground State Wave
           ctx.beginPath();
           ctx.lineWidth = 2;
           ctx.strokeStyle = '#00F2FE';
           for (let x = 0; x < width; x++) {
-            const amplitude = Math.sin(theta) * 16 + 6;
+            const amplitude = Math.sin(theta) * 14 + 5;
             const frequency = 0.035 + phi * 0.008;
             const y = centerY + Math.sin(x * frequency + t) * amplitude * Math.cos(x * 0.012 + t * 0.6);
             if (x === 0) ctx.moveTo(x, y);
@@ -69,12 +99,12 @@
           }
           ctx.stroke();
 
-          // Secondary Wave (|01> State Phase Shift)
+          // Phase State Wave
           ctx.beginPath();
           ctx.lineWidth = 1.5;
           ctx.strokeStyle = '#A855F7';
           for (let x = 0; x < width; x++) {
-            const amplitude = Math.cos(theta) * 14 + 5;
+            const amplitude = Math.cos(theta) * 12 + 4;
             const frequency = 0.028;
             const y = centerY + Math.cos(x * frequency - t * 1.3) * amplitude;
             if (x === 0) ctx.moveTo(x, y);
@@ -90,7 +120,47 @@
         return () => cancelAnimationFrame(animationFrameId);
       }, [theta, phi, isRunning]);
 
-      return <canvas ref={canvasRef} width={600} height={60} className="w-full h-full rounded bg-slate-950/90 border border-slate-800" />;
+      return <canvas ref={canvasRef} width={400} height={50} className="w-full h-full rounded bg-slate-950/90 border border-slate-800" />;
+    }
+
+    // 3. Execution Latency Scaling Benchmark Graph (SVG)
+    function LatencyBenchmarkGraph({ qubits }) {
+      return (
+        <div className="bg-slate-950/80 border border-slate-800 rounded p-2 h-full flex flex-col justify-between">
+          <div className="flex justify-between items-center text-[10px] font-mono mb-1">
+            <span className="text-slate-400">Scaling Benchmark (O(2^N) vs 31ms)</span>
+            <span className="text-cyan-400">{qubits} Qubits</span>
+          </div>
+
+          <svg width="100%" height="45" viewBox="0 0 200 45" className="overflow-visible">
+            {/* Gridlines */}
+            <line x1="0" y1="40" x2="200" y2="40" stroke="#1e293b" strokeWidth="1" />
+            <line x1="0" y1="20" x2="200" y2="20" stroke="#1e293b" strokeWidth="1" strokeDasharray="2,2" />
+
+            {/* Classical CPU Exponential Curve (Red) */}
+            <path d="M 0 38 Q 100 37 140 25 T 190 2" fill="none" stroke="#EF4444" strokeWidth="2" />
+            
+            {/* Quantum Model Constant Latency Line (Emerald) */}
+            <line x1="0" y1="36" x2="200" y2="36" stroke="#10B981" strokeWidth="2" strokeDasharray="3,3" />
+
+            {/* Current Qubit Scale Marker */}
+            {(() => {
+              const cx = ((qubits - 16) / (64 - 16)) * 180 + 10;
+              return (
+                <g>
+                  <line x1={cx} y1="0" x2={cx} y2="40" stroke="#00F2FE" strokeWidth="1" strokeDasharray="2,2" />
+                  <circle cx={cx} cy="36" r="3" fill="#10B981" />
+                </g>
+              );
+            })()}
+          </svg>
+
+          <div className="flex justify-between text-[9px] font-mono text-slate-500 mt-1">
+            <span className="text-rose-400">■ Classical CPU: Exponential</span>
+            <span className="text-emerald-400">■ Quantum: Constant (31ms)</span>
+          </div>
+        </div>
+      );
     }
 
     function QuantEnginePortal() {
@@ -123,6 +193,8 @@
 
       const p00 = Math.round(Math.pow(Math.cos(theta / 2), 2) * 100);
       const p01 = Math.round(Math.pow(Math.sin(theta / 2), 2) * 100);
+      const p10 = Math.round((100 - p00 - p01) * 0.7);
+      const p11 = Math.max(0, 100 - p00 - p01 - p10);
 
       const applyPreset = (q, t, p) => {
         setQubits(q);
@@ -154,19 +226,45 @@
               </span>
             </div>
 
-            <div className="flex items-center gap-3 text-[11px] font-mono text-slate-400">
-              <span>Presets:</span>
-              <button onClick={() => applyPreset(64, 0.41, 0.85)} className="px-2 py-0.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded text-slate-300">
+            <div className="flex items-center gap-2 text-[11px] font-mono text-slate-400">
+              <span className="text-slate-500 text-[10px]">PRESETS:</span>
+              <button onClick={() => applyPreset(64, 0.41, 0.85)} className="px-2 py-0.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded text-slate-300 transition-all">
                 📈 Portfolio
               </button>
-              <button onClick={() => applyPreset(32, 1.12, 1.57)} className="px-2 py-0.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded text-slate-300">
+              <button onClick={() => applyPreset(32, 1.12, 1.57)} className="px-2 py-0.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded text-slate-300 transition-all">
                 🧬 Molecular
               </button>
-              <button onClick={() => applyPreset(48, 0.78, 2.30)} className="px-2 py-0.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded text-slate-300">
+              <button onClick={() => applyPreset(48, 0.78, 2.30)} className="px-2 py-0.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded text-slate-300 transition-all">
                 🚚 Logistics
               </button>
             </div>
           </header>
+
+          {/* Top Interactive Visualization Row */}
+          <div className="grid grid-cols-12 gap-2 h-20 shrink-0">
+            {/* Bloch Sphere */}
+            <div className="col-span-3">
+              <BlochSphereVisualizer theta={theta} phi={phi} />
+            </div>
+
+            {/* Wave Canvas */}
+            <div className="col-span-5 bg-slate-900/40 border border-slate-800 rounded p-1.5 flex flex-col justify-between">
+              <div className="flex justify-between items-center text-[10px] font-mono mb-0.5">
+                <span className="text-slate-400 flex items-center gap-1">
+                  <i data-lucide="activity" className="w-3 h-3 text-cyan-400"></i> Superposition State Wave
+                </span>
+                <span className="text-cyan-400">e^(i{dynamicPhaseShift})</span>
+              </div>
+              <div className="flex-1 min-h-0">
+                <QuantumCanvas theta={theta} phi={phi} isRunning={isRunning} />
+              </div>
+            </div>
+
+            {/* Benchmark Graph */}
+            <div className="col-span-4">
+              <LatencyBenchmarkGraph qubits={qubits} />
+            </div>
+          </div>
 
           {/* Circuit Pipeline Sequence */}
           <div className="grid grid-cols-4 gap-2 text-[11px] shrink-0">
@@ -193,20 +291,7 @@
             ))}
           </div>
 
-          {/* Animated Quantum Wave Visualizer */}
-          <div className="bg-slate-900/40 border border-slate-800 rounded-lg p-1.5 flex flex-col justify-between h-20 shrink-0">
-            <div className="flex justify-between items-center text-[10px] font-mono mb-1">
-              <span className="text-slate-400 flex items-center gap-1">
-                <i data-lucide="activity" className="w-3 h-3 text-cyan-400"></i> Live Amplitude Wave Superposition
-              </span>
-              <span className="text-cyan-400">e^(i{dynamicPhaseShift}) Phase Shift</span>
-            </div>
-            <div className="flex-1 min-h-0">
-              <QuantumCanvas theta={theta} phi={phi} isRunning={isRunning} />
-            </div>
-          </div>
-
-          {/* Main Side-by-Side Dual Engine Comparison */}
+          {/* Main Dual Engine Comparison */}
           <div className="grid grid-cols-2 gap-2 flex-1 min-h-0">
             
             {/* Classical CPU */}
@@ -244,7 +329,7 @@
             {/* Quantum Model Engine */}
             <div className="bg-cyan-950/20 border border-cyan-500/40 rounded-lg p-2.5 flex flex-col justify-between">
               <div>
-                <div className="flex justify-between items-center mb-2">
+                <div className="flex justify-between items-center mb-1.5">
                   <span className="font-bold text-cyan-200 text-xs flex items-center gap-1">
                     <i data-lucide="zap" className="w-3.5 h-3.5 text-cyan-400"></i> Proprietary Quantum Model
                   </span>
@@ -253,36 +338,31 @@
                   </span>
                 </div>
 
-                <div className="space-y-2">
-                  <div className="p-2 bg-slate-950/90 rounded border border-cyan-500/30 font-mono text-[11px]">
+                <div className="space-y-1.5">
+                  <div className="p-1.5 bg-slate-950/90 rounded border border-cyan-500/30 font-mono text-[11px]">
                     <div className="text-slate-400 text-[10px]">Solved Wave State |Ψ⟩:</div>
                     <div className="text-amber-300 font-bold text-xs truncate">
                       {c00}|00⟩ + {c01}|01⟩ + e^(i{dynamicPhaseShift})0.11|10⟩
                     </div>
-                    <div className="text-slate-400 text-[10px] mt-1 flex justify-between border-t border-slate-800 pt-1">
-                      <span>c00 = {c00}</span>
-                      <span>c01 = {c01}</span>
-                    </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono">
-                    <div className="p-1.5 bg-slate-950/60 rounded border border-slate-800">
-                      <div className="flex justify-between text-slate-400 mb-0.5">
-                        <span>|00⟩ Ground</span>
-                        <span className="text-cyan-400">{p00}%</span>
-                      </div>
-                      <div className="w-full bg-slate-900 h-1 rounded overflow-hidden">
-                        <div className="bg-cyan-400 h-full transition-all duration-150" style={{ width: `${p00}%` }}></div>
-                      </div>
-                    </div>
-                    <div className="p-1.5 bg-slate-950/60 rounded border border-slate-800">
-                      <div className="flex justify-between text-slate-400 mb-0.5">
-                        <span>|01⟩ Excited</span>
-                        <span className="text-purple-400">{p01}%</span>
-                      </div>
-                      <div className="w-full bg-slate-900 h-1 rounded overflow-hidden">
-                        <div className="bg-purple-400 h-full transition-all duration-150" style={{ width: `${p01}%` }}></div>
-                      </div>
+                  {/* Interactive Probability Distribution Histogram */}
+                  <div className="p-1.5 bg-slate-950/60 rounded border border-slate-800">
+                    <div className="text-slate-400 text-[10px] font-mono mb-1">Live State Probabilities:</div>
+                    <div className="grid grid-cols-4 gap-1">
+                      {[
+                        { state: '|00⟩', val: p00, color: 'bg-cyan-400' },
+                        { state: '|01⟩', val: p01, color: 'bg-purple-400' },
+                        { state: '|10⟩', val: p10, color: 'bg-emerald-400' },
+                        { state: '|11⟩', val: p11, color: 'bg-amber-400' }
+                      ].map((item, idx) => (
+                        <div key={idx} className="flex flex-col items-center">
+                          <div className="w-full bg-slate-900 h-8 rounded relative flex items-end p-0.5">
+                            <div className={`w-full ${item.color} rounded-sm transition-all duration-150`} style={{ height: `${item.val}%` }}></div>
+                          </div>
+                          <span className="text-[9px] font-mono text-slate-400 mt-0.5">{item.state} ({item.val}%)</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -297,7 +377,7 @@
           </div>
 
           {/* Bottom Control Dock */}
-          <footer className="bg-slate-900/90 border border-slate-800 p-2.5 rounded-lg flex items-center justify-between gap-3 shrink-0">
+          <footer className="bg-slate-900/90 border border-slate-800 p-2 rounded-lg flex items-center justify-between gap-3 shrink-0">
             <div className="grid grid-cols-3 gap-3 flex-1 text-xs">
               <div>
                 <div className="flex justify-between text-slate-400 text-[10px] mb-0.5 font-mono">
