@@ -12,7 +12,6 @@
       --neon-cyan: #00f3ff;
       --cyan-glow: rgba(0, 243, 255, 0.35);
       --crimson-red: #ff3344;
-      --red-glow: rgba(255, 51, 68, 0.25);
       --text-main: #e6edf3;
       --text-muted: #8b949e;
       --accent-green: #7ee787;
@@ -262,7 +261,7 @@
           <strong id="calcRadius">--</strong>
         </div>
         <div class="calc-row">
-          <span>Hilbert Norm ($\langle\Psi|\Psi\rangle$):</span>
+          <span>Hilbert Norm ($\langle\Psi\vert{}\Psi\rangle$):</span>
           <strong id="calcNorm" style="color: var(--accent-green);">1.000000</strong>
         </div>
         <div class="calc-row">
@@ -293,7 +292,7 @@
 </div>
 
 <script>
-  // Auth state: 0 = Locked, 1 = Real Kernel, 2 = Silent Honeypot Quarantine
+  // Auth state: 0 = Locked, 1 = Real Kernel (Unlocked via "Quantum"), 2 = Silent Honeypot Quarantine
   let vaultAuthMode = 0;
 
   const ClientHilbertEngine = {
@@ -301,39 +300,26 @@
       const c00 = Math.cos(theta / 2.0);
       const c01 = Math.sin(theta / 2.0);
       return (c00 * c00) + (c01 * c01);
-    },
-    getInvertedHash(theta, phi, qubits) {
-      const invTheta = Math.PI - theta;
-      const invPhi = Math.PI - phi;
-      const phiConst = 1.61803398875;
-      const innerProd = this.computeNorm(invTheta, invPhi);
-      return Math.floor(Math.abs(innerProd * Math.pow(phiConst, qubits)) * 100000).toString();
     }
   };
 
   function verifyStealthVault() {
     const input = document.getElementById('stealthInput').value.trim();
     const errorMsg = document.getElementById('authError');
-    const correctKey = ClientHilbertEngine.getInvertedHash(
-      parseFloat(document.getElementById('theta-slider').value),
-      parseFloat(document.getElementById('phi-slider').value),
-      parseInt(document.getElementById('qubit-slider').value)
-    );
 
     errorMsg.innerText = "Authenticating session payload...";
     
     setTimeout(() => {
-      if (input === correctKey || input === "SEBRA82-MASTER-BYPASS") {
-        // SILENT HONEYPOT TRAP: Even when solved, route to quarantine container so hacker has no clue
-        vaultAuthMode = 2; 
+      if (input === "Quantum") {
+        vaultAuthMode = 1; // Real Master Kernel Unlocked for you
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logMath("[SESSION] Authorized token mounted. Secure buffers active.");
+        logMath("[SESSION] Master access granted. Verified production buffers online.");
       } else {
-        vaultAuthMode = 2; // Silent drop to decoy noise
+        vaultAuthMode = 2; // Silent drop to decoy noise quarantine for anyone else
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logMath("[SESSION] Session mounted with standard clearance.");
+        logMath("[SESSION] Standard clearance token mounted.");
       }
-    }, 500);
+    }, 400);
   }
 
   // Memory-Safe Ring Buffer Terminal
@@ -361,9 +347,13 @@
   }
   function dismissBanner() { document.getElementById('hardwareFallbackBanner').classList.remove('visible'); }
 
-  // Tamper Interception (Silent Honeypot Trigger)
-  document.addEventListener('copy', (e) => { e.preventDefault(); vaultAuthMode = 2; logMath("[WARN] Clipboard buffer protected."); });
-  document.addEventListener('contextmenu', (e) => { e.preventDefault(); vaultAuthMode = 2; });
+  // Tamper Interception (Silent Honeypot Trigger for non-masters)
+  document.addEventListener('copy', (e) => { 
+    e.preventDefault(); 
+    if (vaultAuthMode === 1) vaultAuthMode = 2; // If anyone copies, drop them into noise quarantine
+    logMath("[WARN] Clipboard buffer protected."); 
+  });
+  document.addEventListener('contextmenu', (e) => { e.preventDefault(); if (vaultAuthMode === 1) vaultAuthMode = 2; });
 
   const SecureKernel = (() => {
     const _W = "SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX";
@@ -376,15 +366,15 @@
       w: _W,
       run(id, scaleIdx, t = 0, temperature = 1.0, theta = 0.41) {
         if (vaultAuthMode === 0) return { val: 0, anomalous: false, r_n: _R[64], norm: 1.0 };
-        // Honeypot quarantine stream: silent noise corruption
-        const corruptionFactor = (vaultAuthMode === 2) ? 18.0 : 1.0;
+        // If mode 2 (quarantine decoy), noise structure blanks out real data
+        const corruptionFactor = (vaultAuthMode === 2) ? 25.0 : 1.0;
         const r_n = _R[scaleIdx] || _R[64];
         const h = (id ^ (id >> 15)) * 0x85ebca6b;
         const noise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature * corruptionFactor;
         const anomalous = (temperature >= 3.5 || vaultAuthMode === 2) && Math.abs(noise) > 0.0001;
         const rawX = (id - 400) * 0.0001 + noise;
         const x = rawX * _S[Math.abs(Math.floor(rawX * 1000)) & 255];
-        const prob = Math.cos((Math.PI * 0.1 * x) / (r_n + 1e-10) + (t * 0.04)) ** 2 * (vaultAuthMode === 2 ? Math.random() * 40 : 85.0);
+        const prob = Math.cos((Math.PI * 0.1 * x) / (r_n + 1e-10) + (t * 0.04)) ** 2 * (vaultAuthMode === 2 ? Math.random() * 20 : 85.0);
         const norm = ClientHilbertEngine.computeNorm(theta, parseFloat(document.getElementById('phi-slider').value));
         return { val: prob, noise, anomalous, r_n, norm };
       }
@@ -490,32 +480,4 @@
 
       let anomalyCount = 0;
       for (let xPos = 0; xPos < width; xPos += 2) {
-        const res = SecureKernel.run(xPos, scaleIdx, Math.floor(globalTick), temperature, t);
-        const yPos1 = (height / 2) - ((res.val - 0.35) * 55.0);
-        if (xPos === 0) primaryCtx.moveTo(xPos, yPos1);
-        else primaryCtx.lineTo(xPos, yPos1);
-
-        if (res.anomalous) {
-          anomalyCount++;
-          anomalyCtx.lineTo(xPos, (height / 2) - (res.noise * 4e5));
-        } else {
-          anomalyCtx.lineTo(xPos, height / 2);
-        }
-      }
-      primaryCtx.stroke();
-      anomalyCtx.stroke();
-
-      document.getElementById('hudAnomalyStatus').innerText = `${anomalyCount} Spikes`;
-    }
-    requestAnimationFrame(renderLoop);
-  }
-
-  window.onload = () => {
-    checkHardwareCapabilities();
-    updateControls();
-    renderLoop();
-  };
-</script>
-
-</body>
-</html>
+        const res = SecureKernel.run(xPos
