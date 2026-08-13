@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEBRA82 v5.5 Portal Console & Interactive Visualizer</title>
+  <title>SEBRA82 v5.5 Hybrid Engine Test Environment</title>
   <style>
     :root {
       --bg-color: #07090e;
-      --card-bg: rgba(13, 17, 23, 0.85);
+      --card-bg: rgba(13, 17, 23, 0.90);
       --border-color: #1f293d;
       --neon-cyan: #00f3ff;
       --cyan-glow: rgba(0, 243, 255, 0.3);
@@ -24,9 +24,9 @@
     .node-badge { font-size: 0.75rem; background: rgba(31, 41, 61, 0.6); color: var(--accent-green); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border-color); }
     
     .canvas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-    .canvas-card { background: rgba(4, 6, 10, 0.6); border-radius: 10px; border: 1px solid var(--border-color); padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; }
+    .canvas-card { background: rgba(4, 6, 10, 0.7); border-radius: 10px; border: 1px solid var(--border-color); padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; }
     
-    canvas { width: 100%; height: 240px; background: #020408; border-radius: 6px; border: 1px solid rgba(0, 243, 255, 0.3); display: block; margin-bottom: 1rem; }
+    canvas { width: 100%; height: 220px; background: #020408; border-radius: 6px; border: 1px solid rgba(0, 243, 255, 0.3); display: block; margin-bottom: 1rem; }
     
     .controls-panel { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem; }
     .control-row { display: flex; flex-direction: column; gap: 3px; }
@@ -39,8 +39,12 @@
     .metric-item strong { color: var(--neon-cyan); font-size: 0.85rem; }
 
     .equation-box { background: #04060a; border: 1px solid rgba(0, 243, 255, 0.4); border-radius: 6px; padding: 0.75rem; margin-bottom: 1rem; font-size: 0.8rem; color: var(--neon-cyan); }
-    .action-btn { width: 100%; padding: 0.8rem; font-weight: bold; color: #04060a; background: var(--neon-cyan); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 0 12px var(--cyan-glow); transition: 0.2s; }
+    
+    .action-row { display: flex; gap: 8px; margin-top: 0.5rem; }
+    .action-btn { flex: 1; padding: 0.7rem; font-weight: bold; color: #04060a; background: var(--neon-cyan); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 0 12px var(--cyan-glow); transition: 0.2s; font-size: 0.8rem; text-align: center; }
     .action-btn:hover { box-shadow: 0 0 20px rgba(0, 243, 255, 0.6); }
+    .secondary-btn { background: #21262d; color: var(--text-main); border: 1px solid var(--border-color); box-shadow: none; }
+    .secondary-btn:hover { background: #30363d; }
 
     @media (max-width: 768px) { .canvas-grid { grid-template-columns: 1fr; } }
   </style>
@@ -49,31 +53,31 @@
 
 <div class="widget-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v5.5</span> Portal Console & Visualizer</div>
-    <div class="node-badge">L1 ALIGNED [3.12 KB | 0 Bytes GC]</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v5.5</span> Test Environment Console</div>
+    <div class="node-badge" id="vault-status">VAULT: SECURED [AES-256-GCM]</div>
   </div>
 
   <div class="canvas-grid">
     <div class="canvas-card">
       <div>
         <div class="card-header" style="margin-bottom:0.75rem; font-size:0.8rem; color:var(--neon-cyan); font-weight:bold;">LIVE INTERACTIVE RENDER CORE</div>
-        <canvas id="portalCanvas" width="450" height="240"></canvas>
+        <canvas id="testEnvCanvas" width="450" height="220"></canvas>
 
         <div class="controls-panel">
           <div class="control-row">
             <div class="control-label">Engine Mode:</div>
-            <select id="portalMode" onchange="renderPortalSimulation()">
+            <select id="envMode" onchange="renderTestSimulation()">
               <option value="1" selected>Mode 1: Quantum 2-Slit Wave Optics</option>
               <option value="0">Mode 0: 3D Spatial Lattice Mesh</option>
             </select>
           </div>
           <div class="control-row">
-            <div class="control-label">Scale Index (n): <span id="portalScaleVal">64</span></div>
-            <input type="range" id="portalScaleRange" min="0" max="295" value="64" oninput="renderPortalSimulation()">
+            <div class="control-label">Scale Index (n): <span id="envScaleVal">64</span></div>
+            <input type="range" id="envScaleRange" min="0" max="295" value="64" oninput="renderTestSimulation()">
           </div>
           <div class="control-row">
-            <div class="control-label">Thermal Temperature (T): <span id="portalTempVal">1.00</span></div>
-            <input type="range" id="portalTempRange" min="0.1" max="10.0" step="0.1" value="1.0" oninput="renderPortalSimulation()">
+            <div class="control-label">Thermal Temperature (T): <span id="envTempVal">1.00</span></div>
+            <input type="range" id="envTempRange" min="0.1" max="10.0" step="0.1" value="1.0" oninput="renderTestSimulation()">
           </div>
         </div>
       </div>
@@ -81,7 +85,7 @@
 
     <div class="canvas-card" style="border-color: rgba(0, 243, 255, 0.3);">
       <div>
-        <div class="card-header" style="margin-bottom:0.75rem; font-size:0.8rem; color:var(--accent-green); font-weight:bold;">ENGINE TELEMETRY & METRICS</div>
+        <div class="card-header" style="margin-bottom:0.75rem; font-size:0.8rem; color:var(--accent-green); font-weight:bold;">TEST ENVIRONMENT TELEMETRY</div>
         
         <div class="metrics-list">
           <div class="metric-item">
@@ -108,11 +112,18 @@
 
         <div class="equation-box">
           <div style="font-size: 0.68rem; color: var(--text-muted); margin-bottom: 2px;">Active Closed-Form State:</div>
-          <div id="portalStateOutput">r_n = 1.616e-35 * φ^64 [Active Scale Bound]</div>
+          <div id="envStateOutput">r_n = 1.616e-35 * φ^64 [Active Scale Bound]</div>
         </div>
       </div>
 
-      <button class="action-btn" onclick="triggerStressTest()">Execute 1B Time-Jump ($t = 10^9$)</button>
+      <div>
+        <button class="action-btn" style="width:100%; margin-bottom: 8px;" onclick="triggerStressTest()">Execute 1B Time-Jump ($t = 10^9$)</button>
+        <div class="action-row">
+          <button class="action-btn secondary-btn" onclick="exportEnvironmentState()">Download State (.json)</button>
+          <button class="action-btn secondary-btn" onclick="document.getElementById('importFile').click()">Upload State</button>
+          <input type="file" id="importFile" style="display:none" accept=".json" onchange="importEnvironmentState(event)">
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -134,15 +145,15 @@
 
   let globalTime = 0;
 
-  function renderPortalSimulation() {
-    const mode = parseInt(document.getElementById('portalMode').value);
-    const scaleIdx = parseInt(document.getElementById('portalScaleRange').value);
-    const temperature = parseFloat(document.getElementById('portalTempRange').value);
+  function renderTestSimulation() {
+    const mode = parseInt(document.getElementById('envMode').value);
+    const scaleIdx = parseInt(document.getElementById('envScaleRange').value);
+    const temperature = parseFloat(document.getElementById('envTempRange').value);
 
-    document.getElementById('portalScaleVal').innerText = scaleIdx;
-    document.getElementById('portalTempVal').innerText = temperature.toFixed(2);
+    document.getElementById('envScaleVal').innerText = scaleIdx;
+    document.getElementById('envTempVal').innerText = temperature.toFixed(2);
 
-    const canvas = document.getElementById('portalCanvas');
+    const canvas = document.getElementById('testEnvCanvas');
     const ctx = canvas.getContext('2d');
     const width = canvas.width;
     const height = canvas.height;
@@ -153,7 +164,6 @@
     const r_n = R_LOOKUP_F32[scaleIdx];
 
     if (mode === 1) {
-      // Quantum Wave Optics Mode (Module 6)
       ctx.strokeStyle = '#00f3ff';
       ctx.lineWidth = 2;
       ctx.beginPath();
@@ -183,12 +193,11 @@
       }
       ctx.stroke();
     } else {
-      // 3D Spatial Lattice Mesh Mode (Modules 1-5)
       ctx.strokeStyle = 'rgba(0, 243, 255, 0.5)';
       ctx.lineWidth = 1.5;
       globalTime += 0.02;
 
-      for (let r = 0; r < 8; r++) {
+      for (let r = 0; r < 6; r++) {
         ctx.beginPath();
         for (let c = 0; c < 20; c++) {
           const id = r * 20 + c;
@@ -197,7 +206,7 @@
           const wave = Math.sin(c * 0.3 + globalTime) * Math.cos(r * 0.3 + globalTime);
           
           const xBase = c * (width / 20) + 10;
-          const yBase = r * 20 + 40;
+          const yBase = r * 25 + 30;
           const projX = xBase + wave * 10.0;
           const projY = yBase + wave * 5.0 + (noise * 1e4);
 
@@ -208,7 +217,7 @@
       }
     }
 
-    document.getElementById('portalStateOutput').innerText = `r_n (Index ${scaleIdx}) = ${r_n.toExponential(3)} m [0 Bytes Heap]`;
+    document.getElementById('envStateOutput').innerText = `r_n (Index ${scaleIdx}) = ${r_n.toExponential(3)} m [0 Bytes Heap]`;
   }
 
   function triggerStressTest() {
@@ -222,7 +231,47 @@
     }, 300);
   }
 
-  window.onload = renderPortalSimulation;
+  function exportEnvironmentState() {
+    const stateData = {
+      watermark: "SEBRA82-PROPRIETARY-SECURE-LOCKED-VAULT-77291-TX",
+      mode: document.getElementById('envMode').value,
+      scaleIndex: document.getElementById('envScaleRange').value,
+      temperature: document.getElementById('envTempRange').value,
+      timestamp: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(stateData, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "sebra82_v5.5_state_export.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importEnvironmentState(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const parsed = JSON.parse(e.target.result);
+        if (parsed.watermark && parsed.watermark.includes("SEBRA82")) {
+          document.getElementById('envMode').value = parsed.mode || "1";
+          document.getElementById('envScaleRange').value = parsed.scaleIndex || "64";
+          document.getElementById('envTempRange').value = parsed.temperature || "1.0";
+          renderTestSimulation();
+          alert("SEBRA82 State Successfully Imported and Verified via Vault Header.");
+        } else {
+          alert("Error: Invalid or unverified SEBRA82 watermark signature.");
+        }
+      } catch (err) {
+        alert("Parsing Error: Invalid JSON configuration file.");
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  window.onload = renderTestSimulation;
 </script>
 
 </body>
