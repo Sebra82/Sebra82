@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine v10.0 - Institutional Quantum Edition</title>
+  <title>QuantEngine v10.5 - Institutional Enterprise Edition</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -159,7 +159,7 @@
   <div id="vaultLockoutOverlay">
     <div class="lockout-title">🔐 Institutional Authentication Gateway</div>
     <div class="lockout-msg">
-      Enter master enterprise authorization key (`Quantum`) to mount QuantEngine v10.0 secure buffers.<br>
+      Enter master enterprise authorization key (`Quantum`) to mount QuantEngine v10.5 secure buffers.<br>
       <i>Node: UK-CENTRAL-01 | SOC2 Type II Local Encrypted Environment</i>
     </div>
     <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Access Key (Quantum)..." onkeydown="if(event.key==='Enter')verifyMasterVault()">
@@ -168,7 +168,7 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v10.0</span> Institutional Platform</div>
+    <div class="brand-title">⚡ <span>QuantEngine v10.5</span> Institutional Platform</div>
     <div class="status-badges">
       <div class="compliance-badge">SOC2 TYPE II LOCAL</div>
       <div class="security-badge">HASH: 8f4c...39a1</div>
@@ -236,7 +236,7 @@
           </div>
         </div>
         <div class="calc-row">
-          <span>Lorentz Factor ($\gamma$):</span>
+          <span>Lorentz Factor (&gamma;):</span>
           <strong id="calcLorentz" style="color:var(--accent-purple);">1.048</strong>
         </div>
       </div>
@@ -315,7 +315,7 @@
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">Ring Buffer Terminal Logs</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] QuantEngine v10.0 Institutional active. SOC2 integrity verified...<br>
+          [INIT] QuantEngine v10.5 Institutional active. SOC2 integrity verified...<br>
         </div>
       </div>
     </div>
@@ -475,7 +475,7 @@
     logPlatform("[VAULT] Packaging telemetry data into secure .enc container...");
 
     const packageData = {
-      version: "QuantEngine v10.0 Institutional",
+      version: "QuantEngine v10.5 Institutional",
       timestamp: new Date().toISOString(),
       watermark: "SOC2-COMPLIANT-SECURE-VAULT-77291-TX",
       telemetry: telemetryHistory,
@@ -742,7 +742,7 @@
   }
 
   function exportPlatformState() {
-    const state = { platform: "QuantEngine v10.0", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
+    const state = { platform: "QuantEngine v10.5", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a'); a.href = url; a.download = "platform_state.json"; a.click();
