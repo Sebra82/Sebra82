@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine WebGPU v5.6 Hybrid Architecture Console</title>
+  <title>QuantEngine v5.6 - Hilbert-Embedded Dual Password Vault</title>
   <style>
     :root {
       --bg-color: #07090e;
@@ -12,7 +12,7 @@
       --neon-cyan: #00f3ff;
       --cyan-glow: rgba(0, 243, 255, 0.35);
       --crimson-red: #ff3344;
-      --red-glow: rgba(255, 51, 68, 0.2);
+      --red-glow: rgba(255, 51, 68, 0.25);
       --text-main: #e6edf3;
       --text-muted: #8b949e;
       --accent-green: #7ee787;
@@ -31,6 +31,8 @@
       height: 100vh;
       width: 100vw;
       overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .widget-container {
@@ -47,7 +49,35 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      position: relative;
     }
+
+    /* Hilbert State Challenge Vault Overlay */
+    #vaultLockoutOverlay {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(7, 9, 14, 0.98);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      border-radius: 14px;
+      border: 2px solid var(--accent-purple);
+      box-shadow: 0 0 40px rgba(192, 132, 252, 0.2);
+      padding: 2rem;
+      text-align: center;
+    }
+    #vaultLockoutOverlay.hidden { display: none; }
+
+    .lockout-title { font-size: 1.35rem; font-weight: bold; color: var(--accent-purple); letter-spacing: 1px; }
+    .lockout-msg { font-size: 0.8rem; color: var(--text-muted); max-width: 600px; line-height: 1.5; background: #04060a; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); }
+    .hilbert-matrix { color: var(--neon-cyan); font-family: monospace; font-size: 0.85rem; margin: 5px 0; }
+    .unlock-input { background: #04060a; border: 1px solid var(--border-color); color: var(--neon-cyan); padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.85rem; width: 320px; text-align: center; }
+    .unlock-btn { background: var(--accent-purple); color: #04060a; border: none; padding: 0.6rem 1.4rem; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 0 12px rgba(192, 132, 252, 0.4); }
+    .unlock-btn:hover { background: #d8b4fe; }
+    .decoy-warning { font-size: 0.72rem; color: var(--crimson-red); min-height: 18px; }
 
     /* Header */
     .widget-header {
@@ -58,16 +88,7 @@
       margin-bottom: 0.75rem;
       border-bottom: 1px solid var(--border-color);
     }
-
-    .brand-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #fff;
-    }
-
+    .brand-title { display: flex; align-items: center; gap: 8px; font-size: 1.15rem; font-weight: 700; color: #fff; }
     .brand-title span { color: var(--neon-cyan); }
 
     .status-badges { display: flex; gap: 8px; align-items: center; }
@@ -75,38 +96,14 @@
     .node-badge { font-size: 0.72rem; background: rgba(31, 41, 61, 0.6); color: var(--accent-green); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border-color); }
 
     /* Pipeline Grid */
-    .pipeline-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.5rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .pipeline-step {
-      background: rgba(4, 6, 10, 0.8);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 0.5rem;
-      text-align: center;
-    }
-
-    .pipeline-step.active {
-      border-color: var(--neon-cyan);
-      box-shadow: 0 0 10px var(--cyan-glow);
-    }
-
+    .pipeline-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 0.75rem; }
+    .pipeline-step { background: rgba(4, 6, 10, 0.8); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem; text-align: center; }
+    .pipeline-step.active { border-color: var(--neon-cyan); box-shadow: 0 0 10px var(--cyan-glow); }
     .step-title { font-size: 0.78rem; font-weight: 700; color: var(--text-main); }
-    .pipeline-step.active .step-title { color: var(--neon-cyan); }
     .step-sub { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; }
 
     /* Main Grid Layout */
-    .main-grid {
-      display: grid;
-      grid-template-columns: 2.1fr 1fr;
-      gap: 1rem;
-      flex: 1;
-      overflow: hidden;
-    }
+    .main-grid { display: grid; grid-template-columns: 2.1fr 1fr; gap: 1rem; flex: 1; overflow: hidden; }
 
     .graphs-column { display: flex; flex-direction: column; gap: 0.6rem; overflow-y: auto; padding-right: 4px; }
     .graph-card { background: rgba(2, 6, 23, 0.9); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.5rem; display: flex; flex-direction: column; gap: 0.3rem; }
@@ -125,7 +122,6 @@
     .control-label span { color: var(--text-main); font-weight: 600; }
     input[type="range"] { width: 100%; accent-color: var(--neon-cyan); background: #1f293d; height: 3px; border-radius: 2px; }
 
-    /* Inspector Panel */
     .inspector-panel { background: rgba(2, 6, 23, 0.9); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.75rem; display: flex; flex-direction: column; justify-content: space-between; gap: 0.5rem; overflow-y: auto; }
     
     .calc-box { display: flex; flex-direction: column; gap: 5px; }
@@ -148,13 +144,25 @@
 <body>
 
 <div class="widget-container">
+  <div id="vaultLockoutOverlay">
+    <div class="lockout-title">⚛️ HILBERT SPACE QUANTUM AUTHENTICATION GATE</div>
+    <div class="lockout-msg">
+      To unlock the trade secret kernel, solve the Hilbert State Inner Product Matrix below:<br>
+      <div class="hilbert-matrix" id="hilbertPrompt">|ψ₁⟩ = 0.6|0⟩ + 0.8|1⟩ | |ψ₂⟩ = 0.8|0⟩ - 0.6|1⟩</div>
+      <i>Evaluate scalar inner product $\langle\psi_1|\psi_2\rangle$ or enter authorization passphrase. (Standard passwords route to simulated decoy noise).</i>
+    </div>
+    <input type="password" id="passwordInput" class="unlock-input" placeholder="Enter Hilbert Scalar or Passkey...">
+    <button class="unlock-btn" onclick="verifyHilbertVault()">Authenticate Vault State</button>
+    <div class="decoy-warning" id="decoyWarning"></div>
+  </div>
+
   <div class="widget-header">
     <div class="brand-title">
-      ⚡ <span>QuantEngine</span> WebGPU v5.6 Hybrid Compute Console
+      ⚡ <span>QuantEngine</span> WebGPU v5.6 Hilbert Vault
     </div>
     <div class="status-badges">
       <div class="security-badge">SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX</div>
-      <div class="node-badge">UK-CENTRAL-01 | v5.6-WEBGPU</div>
+      <div class="node-badge" id="authModeBadge">UK-CENTRAL-01 | LOCKED</div>
     </div>
   </div>
 
@@ -183,7 +191,7 @@
         <div style="font-size: 0.68rem; color: var(--neon-cyan); font-weight: 700;">GRAPH 1: WEBGPU QUANTUM COMPUTE WAVEFORM I(x)</div>
         <div class="canvas-container">
           <canvas id="primaryCanvas" width="800" height="135"></canvas>
-          <div class="graph-hud">Status: <span>Active GPU Compute</span> | Tick: <span id="hudTick">0</span></div>
+          <div class="graph-hud">Status: <span id="hudTickStatus">Secured Mode</span> | Tick: <span id="hudTick">0</span></div>
         </div>
       </div>
 
@@ -191,7 +199,7 @@
         <div style="font-size: 0.68rem; color: var(--crimson-red); font-weight: 700;">GRAPH 2: ISOLATED THERMAL NOISE & ANOMALY EXTRACTION MAPPING</div>
         <div class="canvas-container anomaly-container">
           <canvas id="anomalyCanvas" width="800" height="135"></canvas>
-          <div class="graph-hud anomaly-hud">Isolation Status: <span id="hudAnomalyStatus">Stable (0 Spikes)</span></div>
+          <div class="graph-hud anomaly-hud">Isolation Status: <span id="hudAnomalyStatus">Secure (0 Spikes)</span></div>
         </div>
       </div>
 
@@ -250,8 +258,7 @@
 
         <div style="font-size: 0.68rem; color: var(--accent-purple); font-weight: 700; margin-top: 3px; margin-bottom: 2px;">SECURE TRADE SECRET BUFFER</div>
         <div class="math-screen" id="mathTerminal">
-          [SECURE] Watermark verified: SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX<br>
-          [READY] WebGPU parallel compute buffers mapped...<br>
+          [LOCKED] Awaiting Hilbert inner product evaluation...<br>
         </div>
       </div>
 
@@ -268,67 +275,77 @@
 </div>
 
 <script>
-  /**
-   * SECURE ENCAPSULATED SEBRA82 V5.6 WEBGPU KERNEL & ZNE ENGINE
-   */
+  // Auth states: 0 = Locked, 1 = Real Key Unlocked, 2 = Fake Decoy Mode Active
+  let vaultAuthMode = 0;
+
+  // Hilbert inner product calculation: (0.6 * 0.8) + (0.8 * -0.6) = 0.48 - 0.48 = 0.0
+  const realHilbertSolution = "0.0"; 
+
+  function verifyHilbertVault() {
+    const input = document.getElementById('passwordInput').value.trim();
+    const warning = document.getElementById('decoyWarning');
+
+    if (input === realHilbertSolution || input === "SEBRA82-REAL-MASTER-KEY") {
+      vaultAuthMode = 1; // Real Engine Unlocked
+      document.getElementById('vaultLockoutOverlay').classList.add('hidden');
+      document.getElementById('authModeBadge').innerText = "UK-CENTRAL-01 | VERIFIED REAL";
+      document.getElementById('authModeBadge').style.color = "var(--accent-green)";
+      logMath("[SUCCESS] Hilbert state calculation verified. Real trade secret kernel loaded.");
+    } else if (input === "admin" || input === "password123" || input === "test" || input.length > 0) {
+      vaultAuthMode = 2; // Decoy / Fake Mode Active
+      document.getElementById('vaultLockoutOverlay').classList.add('hidden');
+      document.getElementById('authModeBadge').innerText = "UK-CENTRAL-01 | DECOY MODE";
+      document.getElementById('authModeBadge').style.color = "var(--crimson-red)";
+      warning.innerText = "⚠️ Decoy credentials accepted. Simulated corrupt noise feed active.";
+      logMath("[WARNING] Fake password supplied. Routing through decoy noise channel.");
+    } else {
+      warning.innerText = "Invalid Hilbert scalar inner product or passkey.";
+    }
+  }
+
+  // Anti-Copy & Anti-Tamper Lockdown
+  document.addEventListener('copy', (e) => { e.preventDefault(); triggerLockout("Copy Attempt"); });
+  document.addEventListener('contextmenu', (e) => { e.preventDefault(); triggerLockout("Inspection Attempt"); });
+
+  function triggerLockout(reason) {
+    if (vaultAuthMode === 0) return;
+    vaultAuthMode = 0;
+    document.getElementById('vaultLockoutOverlay').classList.remove('hidden');
+    document.getElementById('decoyWarning').innerHTML = `<span style="color:var(--crimson-red)">Lockout triggered due to ${reason}. Re-verify Hilbert space.</span>`;
+  }
+
   const SecureSebraKernel = (() => {
     const PROPRIETARY_WATERMARK = "SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX";
     const _R = new Float32Array(296);
     const _S = new Float32Array(256);
-    const _U = new Float32Array(256);
     
     const _PLANCK_L = 1.616255e-35;
     const _PHI = 1.61803398875;
 
-    for (let n = 0; n < 296; n++) {
-      _R[n] = _PLANCK_L * Math.pow(_PHI, n);
-    }
-    for (let i = 0; i < 256; i++) {
-      _S[i] = Math.sin((i / 256) * Math.PI * 2);
-      _U[i] = Math.cos((i / 256) * Math.PI) * 0.5;
-    }
+    for (let n = 0; n < 296; n++) { _R[n] = _PLANCK_L * Math.pow(_PHI, n); }
+    for (let i = 0; i < 256; i++) { _S[i] = Math.sin((i / 256) * Math.PI * 2); }
 
     return {
       watermark: PROPRIETARY_WATERMARK,
-      evaluate(id, scaleIdx, mode = 1, t = 0, temperature = 1.0, slit = 0.10) {
+      evaluate(id, scaleIdx, t = 0, temperature = 1.0, mode = 1) {
+        if (vaultAuthMode === 0) return { val: 0, anomalous: false, r_n: _R[64] };
+        
+        // If Decoy Mode (2), corrupt noise and calculations with random garbage spikes
+        const decoyMultiplier = (vaultAuthMode === 2) ? 14.5 : 1.0;
+        
         const r_n = _R[scaleIdx] || _R[64];
         const h = (id ^ (id >> 15)) * 0x85ebca6b;
         
-        const weyl = (((id * 0.61803398875) % 1.0) - 0.5) * 0.000002;
-        const primaryNoise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature;
-        const baseNoise = weyl + primaryNoise;
-        
-        const isAnomalous = temperature >= 3.5 && Math.abs(baseNoise) > 0.00012;
-        const thermalNoise = baseNoise * (isAnomalous ? 4.5 : 1.0);
-        
-        const driftIdx = (id + t) & 255;
-        const drift = _S[driftIdx] * 0.0001;
+        const thermalNoise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature * decoyMultiplier;
+        const isAnomalous = (temperature >= 3.5 || vaultAuthMode === 2) && Math.abs(thermalNoise) > 0.0001;
 
         const rawX = (id - 400) * 0.0001 + thermalNoise;
         const x = rawX * _S[Math.abs(Math.floor(rawX * 1000)) & 255];
-        const thetaDrift = _S[driftIdx] * 0.05;
+        
+        const interfer = Math.cos((Math.PI * 0.1 * x) / (r_n + 1e-10) + (t * 0.04)) ** 2;
+        const prob = interfer * (vaultAuthMode === 2 ? Math.random() * 50 : 85.0);
 
-        const d = slit * 1e-3;
-        const a = 2e-5;
-        const L = 1.0;
-
-        const denom = (r_n + 1e-10);
-        const phaseInterf = (Math.PI * d * x) / denom + thetaDrift;
-        const phaseDiffract = (Math.PI * a * x) / denom;
-
-        let psi_path = 0.0;
-        const weights = [0.6, 0.3, 0.1];
-        for (let k = 1; k <= 3; k++) {
-          let d_path = d * (1.0 + (k - 1) * 0.1);
-          let p_interf = ((Math.PI * d_path * x) / denom) + thetaDrift + (t * 0.02);
-          psi_path += weights[k - 1] * Math.cos(p_interf) * Math.exp(-0.1 * (k * k));
-        }
-
-        const interfer = psi_path * psi_path;
-        const diffract = phaseDiffract === 0 ? 1.0 : (Math.sin(phaseDiffract) / phaseDiffract) ** 2;
-        const prob = interfer * diffract * 85.0;
-
-        return { x: id, y: prob, val: prob, noise: thermalNoise, anomalous: isAnomalous, r_n };
+        return { val: prob, noise: thermalNoise, anomalous: isAnomalous, r_n };
       }
     };
   })();
@@ -351,15 +368,8 @@
     document.getElementById('valSlit').innerText = `${parseFloat(document.getElementById('sliderSlit').value).toFixed(2)} mm`;
     document.getElementById('valSpeed').innerText = `${parseFloat(document.getElementById('sliderSpeed').value).toFixed(1)}x`;
 
-    const scaleIndex = parseInt(q);
-    const kernelRes = SecureSebraKernel.evaluate(42, scaleIndex, 1, 0, 1.0, 0.10);
-
-    const c00 = Math.cos(t / 2.0).toFixed(2);
-    const c01 = Math.sin(t / 2.0).toFixed(2);
-    
+    const kernelRes = SecureSebraKernel.evaluate(42, parseInt(q), 0, 1.0, 1.0);
     document.getElementById('calcRadius').innerText = `${kernelRes.r_n.toExponential(3)} m`;
-    document.getElementById('quantum-state-output').innerText = 
-      `|Ψ_final⟩ = ${c00}|00⟩ + ${c01}|01⟩ + e^(i*${p.toFixed(2)})0.11|10⟩ (Scale Index: ${scaleIndex})`;
   }
 
   function logMath(text) {
@@ -369,11 +379,12 @@
   }
 
   function executePipeline() {
+    if (vaultAuthMode === 0) { alert("Vault locked!"); return; }
     const btn = event.target;
     btn.disabled = true;
     let step = 1;
     setStep(step);
-    logMath("[WEBGPU] Dispatching compute workgroups...");
+    logMath(`[COMPUTE] Running pipeline in Mode: ${vaultAuthMode === 2 ? 'DECOY CORRUPTED' : 'VERIFIED REAL'}`);
 
     const interval = setInterval(() => {
       step++;
@@ -384,7 +395,6 @@
         clearInterval(interval);
         btn.disabled = false;
         btn.innerText = 'Run WebGPU Compute Pipeline';
-        logMath("[SUCCESS] WebGPU compute shader dispatch completed in 0.038 ms.");
       }
     }, 300);
   }
@@ -399,131 +409,64 @@
   }
 
   function exportStateConfig() {
-    const stateData = {
-      watermark: SecureSebraKernel.watermark,
-      qubits: document.getElementById('qubit-slider').value,
-      theta: document.getElementById('theta-slider').value,
-      phi: document.getElementById('phi-slider').value,
-      temperature: document.getElementById('sliderTemp').value,
-      slit: document.getElementById('sliderSlit').value,
-      timestamp: new Date().toISOString()
-    };
+    if (vaultAuthMode === 0) return;
+    const stateData = { watermark: SecureSebraKernel.watermark, mode: vaultAuthMode, time: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(stateData, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = "quantengine_v5.6_state.json";
-    a.click();
+    const a = document.createElement('a'); a.href = url; a.download = "state.json"; a.click();
     URL.revokeObjectURL(url);
-    logMath("[EXPORT] State configuration successfully downloaded.");
   }
 
-  function importStateConfig(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(evt) {
-      try {
-        const parsed = JSON.parse(evt.target.result);
-        if (parsed.watermark && parsed.watermark === SecureSebraKernel.watermark) {
-          document.getElementById('qubit-slider').value = parsed.qubits || "64";
-          document.getElementById('theta-slider').value = parsed.theta || "0.41";
-          document.getElementById('phi-slider').value = parsed.phi || "0.85";
-          document.getElementById('sliderTemp').value = parsed.temperature || "1.0";
-          document.getElementById('sliderSlit').value = parsed.slit || "0.10";
-          updateControls();
-          logMath("[IMPORT] Vault Watermark verified successfully.");
-        } else {
-          alert("Security Violation: Invalid or unverified watermark signature.");
-        }
-      } catch (err) {
-        logMath("[ERROR] Failed to parse state configuration file.");
-      }
-    };
-    reader.readAsText(file);
-  }
+  function importStateConfig(e) { if (vaultAuthMode === 0) return; }
 
   function renderLoop() {
-    const speed = parseFloat(document.getElementById('sliderSpeed').value);
-    globalTick += speed;
-    document.getElementById('hudTick').innerText = Math.floor(globalTick);
+    if (vaultAuthMode > 0) {
+      globalTick += parseFloat(document.getElementById('sliderSpeed').value);
+      document.getElementById('hudTick').innerText = Math.floor(globalTick);
 
-    const scaleIdx = parseInt(document.getElementById('qubit-slider').value);
-    const temperature = parseFloat(document.getElementById('sliderTemp').value);
-    const slitParam = parseFloat(document.getElementById('sliderSlit').value);
+      const scaleIdx = parseInt(document.getElementById('qubit-slider').value);
+      const temperature = parseFloat(document.getElementById('sliderTemp').value);
 
-    updateControls();
+      updateControls();
 
-    const width = primaryCanvas.width;
-    const height = primaryCanvas.height;
+      const width = primaryCanvas.width;
+      const height = primaryCanvas.height;
 
-    primaryCtx.fillStyle = 'rgba(2, 6, 23, 0.35)';
-    primaryCtx.fillRect(0, 0, width, height);
-    primaryCtx.strokeStyle = 'rgba(30, 41, 59, 0.6)';
-    primaryCtx.lineWidth = 1;
-    primaryCtx.beginPath();
-    primaryCtx.moveTo(0, height / 2); primaryCtx.lineTo(width, height / 2);
-    primaryCtx.stroke();
+      primaryCtx.fillStyle = 'rgba(2, 6, 23, 0.35)';
+      primaryCtx.fillRect(0, 0, width, height);
+      primaryCtx.strokeStyle = vaultAuthMode === 2 ? '#ff3344' : '#00f3ff';
+      primaryCtx.lineWidth = 2.5;
+      primaryCtx.beginPath();
 
-    primaryCtx.strokeStyle = '#00f3ff';
-    primaryCtx.lineWidth = 2.5;
-    primaryCtx.beginPath();
+      anomalyCtx.fillStyle = 'rgba(2, 6, 23, 0.35)';
+      anomalyCtx.fillRect(0, 0, width, height);
+      anomalyCtx.strokeStyle = '#ff3344';
+      anomalyCtx.lineWidth = 2.5;
+      anomalyCtx.beginPath();
 
-    anomalyCtx.fillStyle = 'rgba(2, 6, 23, 0.35)';
-    anomalyCtx.fillRect(0, 0, width, height);
-    anomalyCtx.strokeStyle = 'rgba(30, 41, 59, 0.6)';
-    anomalyCtx.lineWidth = 1;
-    anomalyCtx.beginPath();
-    anomalyCtx.moveTo(0, height / 2); anomalyCtx.lineTo(width, height / 2);
-    anomalyCtx.stroke();
+      let anomalyCount = 0;
+      for (let xPos = 0; xPos < width; xPos += 2) {
+        const res = SecureSebraKernel.evaluate(xPos, scaleIdx, Math.floor(globalTick), temperature);
+        const yPos1 = (height / 2) - ((res.val - 0.35) * 55.0);
+        if (xPos === 0) primaryCtx.moveTo(xPos, yPos1);
+        else primaryCtx.lineTo(xPos, yPos1);
 
-    anomalyCtx.strokeStyle = '#ff3344';
-    anomalyCtx.lineWidth = 2.5;
-    anomalyCtx.beginPath();
-
-    let anomalyCount = 0;
-
-    for (let xPos = 0; xPos < width; xPos += 2) {
-      const res = SecureSebraKernel.evaluate(xPos, scaleIdx, 1, Math.floor(globalTick), temperature, slitParam);
-      
-      const yPos1 = (height / 2) - ((res.val - 0.35) * 55.0);
-      if (xPos === 0) primaryCtx.moveTo(xPos, yPos1);
-      else primaryCtx.lineTo(xPos, yPos1);
-
-      if (res.anomalous) {
-        anomalyCount++;
-        const yPos2 = (height / 2) - (res.noise * 4e5);
-        anomalyCtx.lineTo(xPos, yPos2);
-      } else {
-        anomalyCtx.lineTo(xPos, height / 2);
+        if (res.anomalous) {
+          anomalyCount++;
+          anomalyCtx.lineTo(xPos, (height / 2) - (res.noise * 4e5));
+        } else {
+          anomalyCtx.lineTo(xPos, height / 2);
+        }
       }
-    }
-    primaryCtx.stroke();
-    anomalyCtx.stroke();
+      primaryCtx.stroke();
+      anomalyCtx.stroke();
 
-    const hudStatus = document.getElementById('hudAnomalyStatus');
-    const inspectorStatus = document.getElementById('inspectorAnomaly');
-    if (temperature >= 3.5 && anomalyCount > 0) {
-      hudStatus.innerText = `ANOMALOUS (${anomalyCount} Spikes)`;
-      inspectorStatus.innerText = `ANOMALY ISOLATED (${anomalyCount} Spikes)`;
-      inspectorStatus.style.color = "var(--crimson-red)";
-    } else {
-      hudStatus.innerText = "Stable (0 Spikes)";
-      inspectorStatus.innerText = "STABLE (Normal)";
-      inspectorStatus.style.color = "var(--accent-green)";
+      document.getElementById('hudAnomalyStatus').innerText = vaultAuthMode === 2 ? "DECOY CORRUPTION ACTIVE" : `${anomalyCount} Spikes`;
     }
-
-    if (Math.floor(globalTick) % 150 === 0) {
-      logMath(`[WEBGPU COMPUTE] Frame t=${Math.floor(globalTick)} | Temp=${temperature.toFixed(1)}K | Anomalies: ${anomalyCount}`);
-    }
-
     requestAnimationFrame(renderLoop);
   }
 
-  window.onload = () => {
-    updateControls();
-    renderLoop();
-  };
+  window.onload = () => { updateControls(); renderLoop(); };
 </script>
 
 </body>
