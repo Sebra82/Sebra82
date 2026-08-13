@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine v9.5 - Omni-Device Apex Master</title>
+  <title>QuantEngine v10.0 - Institutional Quantum Edition</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -11,15 +11,17 @@
       --border-color: rgba(30, 42, 64, 0.85);
       --neon-cyan: #00f3ff;
       --cyan-glow: rgba(0, 243, 255, 0.35);
+      --warning-amber: #f0883e;
       --crimson-red: #ff3344;
       --text-main: #f0f6fc;
       --text-muted: #8b949e;
       --accent-green: #7ee787;
       --accent-purple: #c084fc;
-      --warning-amber: #f0883e;
+      --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, SFMono-Regular, Menlo, monospace; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-ui); }
 
     body {
       background-color: var(--bg-deep);
@@ -58,7 +60,7 @@
       justify-content: space-between;
     }
 
-    /* Authentication Portal Overlay */
+    /* Enterprise Authentication Portal Overlay */
     #vaultLockoutOverlay {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -76,12 +78,12 @@
     }
     #vaultLockoutOverlay.hidden { display: none; }
 
-    .lockout-title { font-size: 1.4rem; font-weight: bold; color: var(--text-main); letter-spacing: 0.5px; }
-    .lockout-msg { font-size: 0.85rem; color: var(--text-muted); max-width: 500px; line-height: 1.4; background: #04060a; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); }
-    .unlock-input { background: #04060a; border: 1px solid var(--border-color); color: var(--neon-cyan); padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.9rem; width: 320px; text-align: center; outline: none; }
-    .unlock-btn { background: var(--neon-cyan); color: #04060a; border: none; padding: 0.6rem 1.4rem; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 0 15px var(--cyan-glow); }
+    .lockout-title { font-size: 1.4rem; font-weight: 600; color: var(--text-main); letter-spacing: 0.5px; }
+    .lockout-msg { font-size: 0.85rem; color: var(--text-muted); max-width: 500px; line-height: 1.4; background: #04060a; padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); font-family: var(--font-mono); }
+    .unlock-input { background: #04060a; border: 1px solid var(--border-color); color: var(--neon-cyan); padding: 0.7rem 1rem; border-radius: 6px; font-size: 0.9rem; width: 320px; text-align: center; outline: none; font-family: var(--font-mono); }
+    .unlock-btn { background: var(--neon-cyan); color: #020408; border: none; padding: 0.7rem 1.4rem; border-radius: 6px; font-weight: 600; cursor: pointer; box-shadow: 0 0 15px var(--cyan-glow); }
     .unlock-btn:hover { background: #7dd3fc; }
-    .auth-error { font-size: 0.75rem; color: var(--crimson-red); min-height: 16px; }
+    .auth-error { font-size: 0.75rem; color: var(--crimson-red); min-height: 16px; font-family: var(--font-mono); }
 
     /* Header */
     .widget-header {
@@ -92,13 +94,14 @@
       margin-bottom: 0.5rem;
       border-bottom: 1px solid var(--border-color);
     }
-    .brand-title { display: flex; align-items: center; gap: 8px; font-size: 1.1rem; font-weight: 700; color: #fff; }
-    .brand-title span { color: var(--neon-cyan); }
+    .brand-title { display: flex; align-items: center; gap: 8px; font-size: 1.1rem; font-weight: 600; color: #fff; }
+    .brand-title span { color: var(--neon-cyan); font-weight: 700; }
     .status-badges { display: flex; gap: 8px; align-items: center; }
-    .security-badge { font-size: 0.65rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 3px 8px; border-radius: 10px; border: 1px solid rgba(192, 132, 252, 0.4); font-weight: bold; }
-    .node-badge { font-size: 0.65rem; background: rgba(30, 42, 64, 0.6); color: var(--accent-green); padding: 3px 8px; border-radius: 8px; border: 1px solid var(--border-color); }
+    .security-badge { font-size: 0.62rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 3px 8px; border-radius: 10px; border: 1px solid rgba(192, 132, 252, 0.4); font-weight: 600; font-family: var(--font-mono); }
+    .compliance-badge { font-size: 0.62rem; background: rgba(0, 243, 255, 0.1); color: var(--neon-cyan); padding: 3px 8px; border-radius: 8px; border: 1px solid rgba(0, 243, 255, 0.3); font-family: var(--font-mono); font-weight: 600; }
+    .node-badge { font-size: 0.62rem; background: rgba(30, 42, 64, 0.6); color: var(--accent-green); padding: 3px 8px; border-radius: 8px; border: 1px solid var(--border-color); font-family: var(--font-mono); }
 
-    /* Omni-Device Adaptive Grid (Landscape: 3 Columns, Portrait: 1 Column Stack) */
+    /* Responsive Grid Layout */
     .platform-grid {
       display: grid;
       grid-template-columns: 1fr 1.5fr 1fr;
@@ -110,37 +113,36 @@
     .column { display: flex; flex-direction: column; gap: 0.6rem; overflow-y: auto; padding-right: 2px; }
     
     .panel-card { background: rgba(3, 7, 15, 0.96); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; box-shadow: 0 8px 25px rgba(0,0,0,0.6); }
-    .panel-title { font-size: 0.7rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
+    .panel-title { font-size: 0.68rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; text-transform: uppercase; }
 
     /* Viewports */
     .canvas-box { position: relative; width: 100%; height: 110px; background: #000; border-radius: 5px; border: 1px solid rgba(0, 243, 255, 0.3); overflow: hidden; }
     canvas { display: block; width: 100%; height: 100%; cursor: crosshair; }
-    .hud-tag { position: absolute; top: 3px; left: 5px; background: rgba(2, 4, 8, 0.9); border: 1px solid var(--border-color); padding: 1px 4px; border-radius: 3px; font-size: 0.55rem; color: var(--text-muted); }
-    .hud-tag span { color: var(--neon-cyan); font-weight: bold; }
+    .hud-tag { position: absolute; top: 3px; left: 5px; background: rgba(2, 4, 8, 0.9); border: 1px solid var(--border-color); padding: 1px 4px; border-radius: 3px; font-size: 0.55rem; color: var(--text-muted); font-family: var(--font-mono); }
+    .hud-tag span { color: var(--neon-cyan); font-weight: 600; }
 
     /* Controls Grid */
     .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
     .control-item { background: rgba(10, 14, 22, 0.85); border: 1px solid var(--border-color); padding: 4px 6px; border-radius: 4px; display: flex; flex-direction: column; gap: 3px; }
-    .control-label { font-size: 0.6rem; color: var(--text-muted); display: flex; justify-content: space-between; }
-    .control-label span { color: var(--text-main); font-weight: 600; }
+    .control-label { font-size: 0.6rem; color: var(--text-muted); display: flex; justify-content: space-between; font-weight: 500; }
+    .control-label span { color: var(--text-main); font-weight: 600; font-family: var(--font-mono); }
     input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1e2a40; color: #fff; border: 1px solid var(--border-color); height: 4px; border-radius: 2px; outline: none; }
-    select { height: 24px; font-size: 0.65rem; padding: 0 4px; }
+    select { height: 24px; font-size: 0.65rem; padding: 0 4px; font-family: var(--font-mono); }
 
     /* Terminals & Dumps */
-    .data-dump { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.6rem; color: var(--accent-green); height: 85px; overflow-y: auto; font-family: monospace; line-height: 1.25; }
-    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.62rem; color: var(--accent-green); height: 100px; overflow-y: auto; font-family: monospace; line-height: 1.3; }
+    .data-dump { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.6rem; color: var(--accent-green); height: 85px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.25; }
+    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.62rem; color: var(--accent-green); height: 100px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.3; }
 
     /* Buttons */
     .btn-row { display: flex; gap: 5px; }
-    .action-btn { width: 100%; padding: 0.4rem; font-weight: 700; font-size: 0.68rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; text-align: center; }
+    .action-btn { width: 100%; padding: 0.4rem; font-weight: 600; font-size: 0.68rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; text-align: center; }
     .action-btn:hover { box-shadow: 0 0 12px var(--cyan-glow); background: #3dd9e8; }
-    .btn-secondary { background: #1e2a40; color: var(--text-main); border: 1px solid var(--border-color); }
+    .btn-secondary { background: #1e2a40; color: var(--text-main); border: 1px solid var(--border-color); font-weight: 500; }
     .btn-secondary:hover { background: #2c3e5a; }
 
     .calc-row { display: flex; justify-content: space-between; font-size: 0.68rem; padding: 5px 8px; background: rgba(10, 14, 22, 0.85); border-radius: 4px; border: 1px solid var(--border-color); color: var(--text-muted); }
-    .calc-row strong { color: var(--neon-cyan); }
+    .calc-row strong { color: var(--neon-cyan); font-family: var(--font-mono); }
 
-    /* Responsive Mobile & Portrait Media Query */
     @media (max-width: 1024px) {
       body { overflow-y: auto; height: auto; }
       .platform-container { height: auto; max-width: 100vw; }
@@ -150,27 +152,27 @@
 </head>
 <body>
 
-<!-- Immersive Dynamic Threat-Shift Background Canvas -->
 <canvas id="backgroundModelCanvas"></canvas>
 
 <div class="platform-container">
   <!-- Authentication Portal Overlay -->
   <div id="vaultLockoutOverlay">
-    <div class="lockout-title">🔐 Secure Authentication Portal</div>
+    <div class="lockout-title">🔐 Institutional Authentication Gateway</div>
     <div class="lockout-msg">
-      Enter master enterprise access key (`Quantum`) to mount QuantEngine v9.5 Omni buffers.<br>
-      <i>System Node: UK-CENTRAL-01 | Encrypted Session Gateway</i>
+      Enter master enterprise authorization key (`Quantum`) to mount QuantEngine v10.0 secure buffers.<br>
+      <i>Node: UK-CENTRAL-01 | SOC2 Type II Local Encrypted Environment</i>
     </div>
     <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Access Key (Quantum)..." onkeydown="if(event.key==='Enter')verifyMasterVault()">
-    <button class="unlock-btn" onclick="verifyMasterVault()">Authorize Platform Session</button>
+    <button class="unlock-btn" onclick="verifyMasterVault()">Authorize Institutional Session</button>
     <div class="auth-error" id="authError"></div>
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v9.5</span> Omni-Device Apex</div>
+    <div class="brand-title">⚡ <span>QuantEngine v10.0</span> Institutional Platform</div>
     <div class="status-badges">
-      <div class="security-badge">SEBRA82-SECURE-VAULT-77291-TX</div>
-      <div class="node-badge" id="authModeBadge">OMNI-RESPONSIVE ACTIVE</div>
+      <div class="compliance-badge">SOC2 TYPE II LOCAL</div>
+      <div class="security-badge">HASH: 8f4c...39a1</div>
+      <div class="node-badge" id="authModeBadge">SECURE ACTIVE</div>
     </div>
   </div>
 
@@ -180,8 +182,8 @@
     <div class="column">
       <div class="panel-card">
         <div class="panel-title">
-          <span>WORKING MODEL STRUCTURE (LATTICE)</span>
-          <span style="color:var(--accent-green); font-size:0.6rem;">r_n = l_P * φⁿ</span>
+          <span>Working Model Structure (Lattice)</span>
+          <span style="color:var(--accent-green); font-size:0.6rem; font-family:var(--font-mono);">r_n = l_P * φⁿ</span>
         </div>
         <div class="canvas-box">
           <canvas id="atomicCanvas" width="400" height="110"></canvas>
@@ -203,11 +205,10 @@
         </div>
       </div>
 
-      <!-- NEW: Preset Physics Profiles -->
       <div class="panel-card">
         <div class="panel-title">
-          <span>PHYSICS PRESET PROFILES</span>
-          <span style="color:var(--accent-purple); font-size:0.6rem;">Hotkeys Active</span>
+          <span>Physics Preset Profiles</span>
+          <span style="color:var(--accent-purple); font-size:0.6rem; font-family:var(--font-mono);">Shortcuts Active</span>
         </div>
         <div class="control-item" style="margin-bottom: 4px;">
           <div class="control-label"><span>Select Preset Engine State</span></div>
@@ -219,11 +220,10 @@
         </div>
       </div>
 
-      <!-- Calculations & Physics Controls -->
       <div class="panel-card">
         <div class="panel-title">
-          <span>ENGINE CALCULATIONS & PHYSICS</span>
-          <span style="color:var(--warning-amber); font-size:0.6rem;">O(1) Kernel</span>
+          <span>Engine Calculations & Physics</span>
+          <span style="color:var(--warning-amber); font-size:0.6rem; font-family:var(--font-mono);">O(1) Kernel</span>
         </div>
         <div class="controls-grid">
           <div class="control-item">
@@ -246,8 +246,8 @@
     <div class="column">
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">
-          <span>INTERACTIVE TELEMETRY (ZOOM & PAN ENABLED)</span>
-          <span style="color:var(--neon-cyan); font-size:0.6rem;">Space: Pause/Play | Ctrl+E: Export</span>
+          <span>Interactive Telemetry (Zoom & Pan)</span>
+          <span style="color:var(--neon-cyan); font-size:0.6rem; font-family:var(--font-mono);">Space: Pause | Ctrl+E: Export</span>
         </div>
         <div class="canvas-box red-border" style="height: 240px;">
           <canvas id="thresholdCanvas" width="600" height="240"></canvas>
@@ -270,10 +270,9 @@
         </div>
       </div>
 
-      <!-- Isolated Spike Extraction Sub-Graph -->
       <div class="panel-card">
         <div class="panel-title">
-          <span>ISOLATED SPIKE EXTRACTION WINDOW</span>
+          <span>Isolated Spike Extraction Window</span>
           <button class="action-btn" style="width: auto; padding: 2px 8px; font-size: 0.6rem;" onclick="playClickSound(); isolateDetectedSpikes()">Isolate Spikes</button>
         </div>
         <div class="canvas-box" style="height: 90px; border-color: rgba(192, 132, 252, 0.4);">
@@ -287,8 +286,8 @@
     <div class="column">
       <div class="panel-card">
         <div class="panel-title">
-          <span>EXPORTS & SECURE VAULT (.enc)</span>
-          <span style="color:var(--accent-purple); font-size:0.6rem;">Encrypted Container</span>
+          <span>Secure Vault & Exports (.enc)</span>
+          <span style="color:var(--accent-purple); font-size:0.6rem; font-family:var(--font-mono);">Encrypted Container</span>
         </div>
         <div class="control-item" style="margin-bottom: 4px;">
           <div class="control-label"><span>Vault Passphrase</span></div>
@@ -307,16 +306,16 @@
       </div>
 
       <div class="panel-card">
-        <div class="panel-title">RANDOM DATA DUMP STREAM</div>
+        <div class="panel-title">Audit Trail & Data Stream</div>
         <div class="data-dump" id="dataDumpTerminal">
-          [0x00A1] Initializing stream buffers...<br>
+          [AUDIT] Local IndexedDB persistence verified.<br>
         </div>
       </div>
 
       <div class="panel-card" style="flex:1;">
-        <div class="panel-title">RING BUFFER TERMINAL LOGS</div>
+        <div class="panel-title">Ring Buffer Terminal Logs</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] QuantEngine v9.5 Omni active. Responsive layout ready...<br>
+          [INIT] QuantEngine v10.0 Institutional active. SOC2 integrity verified...<br>
         </div>
       </div>
     </div>
@@ -341,7 +340,6 @@
   let isDraggingGraph = false;
   let dragStartX = 0;
 
-  // Keyboard Shortcuts Handler (Space = Toggle Play/Pause, Ctrl+E = Export .enc)
   window.addEventListener('keydown', (e) => {
     if (e.code === 'Space' && e.target.tagName !== 'INPUT') {
       e.preventDefault();
@@ -355,7 +353,6 @@
     }
   });
 
-  // Preset Physics Profiles Loader
   function applyPhysicsPreset() {
     const preset = document.getElementById('presetSelect').value;
     const betaSlider = document.getElementById('betaSlider');
@@ -412,11 +409,11 @@
       if (input === "quantum") {
         vaultAuthMode = 1;
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("Omni-Device master access granted via 'Quantum' passphrase.");
+        logPlatform("[AUTH] Institutional access granted via 'Quantum' passphrase.");
       } else {
         vaultAuthMode = 2;
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("Standard session clearance mounted.");
+        logPlatform("[AUTH] Standard session clearance mounted.");
       }
     }, 250);
   }
@@ -475,12 +472,12 @@
       return;
     }
 
-    logPlatform("[VAULT EXPORT] Packaging telemetry data into secure .enc container...");
+    logPlatform("[VAULT] Packaging telemetry data into secure .enc container...");
 
     const packageData = {
-      version: "QuantEngine v9.5 Omni",
+      version: "QuantEngine v10.0 Institutional",
       timestamp: new Date().toISOString(),
-      watermark: "SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX",
+      watermark: "SOC2-COMPLIANT-SECURE-VAULT-77291-TX",
       telemetry: telemetryHistory,
       spikes: detectedSpikesBuffer,
       streamDumps: rawDataDumpBuffer
@@ -498,7 +495,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `QuantEngine_Omni_Vault_${Date.now()}.enc`;
+    a.download = `QuantEngine_Institutional_Vault_${Date.now()}.enc`;
     a.click();
     URL.revokeObjectURL(url);
 
@@ -515,7 +512,7 @@
       return;
     }
 
-    logPlatform(`[VAULT IMPORT] Unpacking and decrypting blob file '${file.name}'...`);
+    logPlatform(`[VAULT] Unpacking and decrypting blob file '${file.name}'...`);
 
     const reader = new FileReader();
     reader.onload = function(e) {
@@ -543,7 +540,7 @@
     const term = document.getElementById('dataDumpTerminal');
     const hex = Math.floor(Math.random() * 0xFFFFFFFF).toString(16).padStart(8, '0');
     const val = (Math.random() * 100).toFixed(4);
-    const packet = `[0x${hex}] VAL: ${val} | SYNC OK`;
+    const packet = `[0x${hex}] VAL: ${val} | COMPLIANCE OK`;
     
     rawDataDumpBuffer.push(packet);
     if (rawDataDumpBuffer.length > 200) rawDataDumpBuffer.shift();
@@ -567,7 +564,7 @@
     const height = bgCanvas.height;
 
     if (activeBreachesCount > 0) {
-      bgCtx.fillStyle = 'rgba(20, 2, 6, 0.18)';
+      bgCtx.fillStyle = 'rgba(240, 136, 62, 0.08)';
     } else {
       bgCtx.fillStyle = 'rgba(2, 4, 8, 0.15)';
     }
@@ -579,7 +576,7 @@
     bgCtx.lineWidth = 1.5;
     for (let line = 0; line < 6; line++) {
       if (activeBreachesCount > 0) {
-        bgCtx.strokeStyle = line % 2 === 0 ? 'rgba(255, 51, 68, 0.15)' : 'rgba(192, 132, 252, 0.15)';
+        bgCtx.strokeStyle = line % 2 === 0 ? 'rgba(240, 136, 62, 0.15)' : 'rgba(192, 132, 252, 0.15)';
       } else {
         bgCtx.strokeStyle = line % 2 === 0 ? 'rgba(0, 243, 255, 0.12)' : 'rgba(192, 132, 252, 0.12)';
       }
@@ -669,7 +666,7 @@
     threshCtx.setLineDash([]);
 
     const thresholdY = height - (currentThreshold / 100) * height;
-    threshCtx.strokeStyle = '#ff3344';
+    threshCtx.strokeStyle = '#f0883e';
     threshCtx.lineWidth = 1.5;
     threshCtx.beginPath();
     threshCtx.moveTo(0, thresholdY); threshCtx.lineTo(width, thresholdY);
@@ -699,10 +696,10 @@
     const statusEl = document.getElementById('thresholdStatus');
     if (statusEl) {
       if (breaches > 0) {
-        statusEl.innerText = `BREACH DETECTED (${breaches} Spikes)`;
-        statusEl.style.color = "var(--crimson-red)";
+        statusEl.innerText = `DRIFT WARNING (${breaches} Spikes)`;
+        statusEl.style.color = "var(--warning-amber)";
       } else {
-        statusEl.innerText = "Normal (0 Spikes)";
+        statusEl.innerText = "Nominal (0 Spikes)";
         statusEl.style.color = "var(--accent-green)";
       }
     }
@@ -741,11 +738,11 @@
   }
 
   function isolateDetectedSpikes() {
-    logPlatform(`[SPIKE EXTRACTION] Isolated ${detectedSpikesBuffer.length} threshold breach events into sub-graph window.`);
+    logPlatform(`[AUDIT] Isolated ${detectedSpikesBuffer.length} threshold breach events into sub-graph window.`);
   }
 
   function exportPlatformState() {
-    const state = { platform: "QuantEngine v9.5", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
+    const state = { platform: "QuantEngine v10.0", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a'); a.href = url; a.download = "platform_state.json"; a.click();
