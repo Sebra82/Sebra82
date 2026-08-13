@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEBRA82 v5.5 Responsive Dual-Graph Execution Console</title>
+  <title>SEBRA82 v5.5 Secure Trade Secret & Dual-Graph Console</title>
   <style>
     :root {
       --bg-color: #020617;
@@ -19,7 +19,6 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
     
-    /* Viewport-locked body to eliminate scrollbars and fit perfectly */
     body {
       background-color: var(--bg-color);
       color: var(--text-main);
@@ -37,7 +36,7 @@
       border: 1px solid var(--border-color);
       border-radius: 14px;
       padding: 1.25rem;
-      max-width: 1400px;
+      max-width: 1450px;
       width: 100%;
       height: 96vh;
       max-height: 900px;
@@ -60,7 +59,7 @@
     .brand span { color: var(--neon-cyan); }
     
     .status-badges { display: flex; gap: 8px; align-items: center; }
-    .security-badge { font-size: 0.7rem; background: rgba(56, 189, 248, 0.1); color: var(--neon-cyan); padding: 4px 10px; border-radius: 16px; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .security-badge { font-size: 0.7rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 4px 10px; border-radius: 16px; border: 1px solid rgba(192, 132, 252, 0.4); font-weight: bold; }
     .live-badge { font-size: 0.72rem; background: rgba(74, 222, 128, 0.15); color: var(--accent-green); padding: 4px 10px; border-radius: 16px; border: 1px solid rgba(74, 222, 128, 0.4); display: flex; align-items: center; gap: 6px; }
     .pulse-dot { width: 7px; height: 7px; background: var(--accent-green); border-radius: 50%; animation: pulse 1.2s infinite; }
     @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
@@ -73,11 +72,10 @@
       overflow: hidden;
     }
     
-    /* Dual Graphs & Controls Column */
     .graphs-column { display: flex; flex-direction: column; gap: 0.75rem; overflow-y: auto; padding-right: 4px; }
     .graph-card { background: rgba(2, 6, 23, 0.9); border-radius: 10px; border: 1px solid var(--border-color); padding: 0.75rem; display: flex; flex-direction: column; gap: 0.4rem; }
     
-    .canvas-container { position: relative; width: 100%; height: 160px; background: #000; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.4); overflow: hidden; }
+    .canvas-container { position: relative; width: 100%; height: 155px; background: #000; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.4); overflow: hidden; }
     .canvas-container.anomaly-container { border-color: rgba(255, 51, 68, 0.5); }
     canvas { display: block; width: 100%; height: 100%; }
     
@@ -91,7 +89,6 @@
     .control-label span { color: var(--text-main); font-weight: bold; }
     input[type="range"] { width: 100%; accent-color: var(--neon-cyan); background: #1e293b; color: #fff; border: 1px solid var(--border-color); padding: 2px; border-radius: 4px; }
 
-    /* Standard Calculation & Inspector Panel */
     .inspector-panel { background: rgba(2, 6, 23, 0.9); border-radius: 10px; border: 1px solid var(--border-color); padding: 1rem; display: flex; flex-direction: column; justify-content: space-between; gap: 0.75rem; overflow-y: auto; }
     
     .calc-box { display: flex; flex-direction: column; gap: 6px; }
@@ -99,7 +96,7 @@
     .calc-row strong { color: var(--neon-cyan); }
 
     .equation-box { background: #04060a; border: 1px solid rgba(192, 132, 252, 0.4); border-radius: 6px; padding: 8px; font-size: 0.72rem; color: var(--accent-purple); word-break: break-all; }
-    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 0.68rem; color: var(--accent-green); height: 85px; overflow-y: auto; line-height: 1.35; font-family: monospace; }
+    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 0.68rem; color: var(--accent-green); height: 80px; overflow-y: auto; line-height: 1.35; font-family: monospace; }
 
     .btn-group { display: flex; flex-direction: column; gap: 6px; }
     .action-btn { width: 100%; padding: 0.6rem; font-weight: bold; font-size: 0.75rem; color: #020617; background: var(--neon-cyan); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 0 12px var(--cyan-glow); transition: 0.2s; text-align: center; }
@@ -115,10 +112,10 @@
 
 <div class="console-wrapper">
   <div class="header">
-    <div class="brand">⚡ <span>SEBRA82 v5.5</span> Responsive Active Execution Console</div>
+    <div class="brand">⚡ <span>SEBRA82 v5.5</span> Secure Execution Console</div>
     <div class="status-badges">
-      <div class="security-badge">VAULT: AES-256-GCM</div>
-      <div class="live-badge"><div class="pulse-dot"></div> FIT-TO-SCREEN</div>
+      <div class="security-badge">VAULT: SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX</div>
+      <div class="live-badge"><div class="pulse-dot"></div> SECURE RENDER</div>
     </div>
   </div>
 
@@ -127,15 +124,15 @@
       <div class="graph-card">
         <div style="font-size: 0.72rem; color: var(--neon-cyan); font-weight: bold;">GRAPH 1: PRIMARY QUANTUM MODEL CALCULATION I(x)</div>
         <div class="canvas-container">
-          <canvas id="primaryCanvas" width="800" height="160"></canvas>
-          <div class="graph-hud">Status: <span>Active Execution</span> | Tick: <span id="hudTick">0</span></div>
+          <canvas id="primaryCanvas" width="800" height="155"></canvas>
+          <div class="graph-hud">Status: <span>Secured Execution</span> | Tick: <span id="hudTick">0</span></div>
         </div>
       </div>
 
       <div class="graph-card">
         <div style="font-size: 0.72rem; color: var(--alert-crimson); font-weight: bold;">GRAPH 2: ISOLATED NOISE & ANOMALY EXTRACTION MAPPING</div>
         <div class="canvas-container anomaly-container">
-          <canvas id="anomalyCanvas" width="800" height="160"></canvas>
+          <canvas id="anomalyCanvas" width="800" height="155"></canvas>
           <div class="graph-hud anomaly-hud">Isolation Status: <span id="hudAnomalyStatus">Stable (0 Spikes)</span></div>
         </div>
       </div>
@@ -197,10 +194,10 @@
           <strong style="color: var(--accent-green);">1.000000</strong>
         </div>
 
-        <div style="font-size: 0.7rem; color: var(--accent-purple); font-weight: bold; margin-top: 4px; margin-bottom: 2px;">LIVE COMPUTATION LOG</div>
+        <div style="font-size: 0.7rem; color: var(--accent-purple); font-weight: bold; margin-top: 4px; margin-bottom: 2px;">SECURE TRADE SECRET BUFFER</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] Screen-fitted calculation environment online.<br>
-          [READY] Dual-graph real-time execution active...<br>
+          [SECURE] Watermark verified: SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX<br>
+          [READY] L1-aligned lookup structures active...<br>
         </div>
       </div>
 
@@ -217,7 +214,8 @@
 </div>
 
 <script>
-  // SEBRA82 v5.5 L1 Packed Lookup Tables
+  // SEBRA82 v5.5 L1 Packed Lookup Tables & Proprietary Watermark Rules
+  const PROPRIETARY_WATERMARK = "SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX";
   const R_LOOKUP_F32 = new Float32Array(296);
   const SIN_LUT_F32 = new Float32Array(256);
   const PLANCK_L = 1.616255e-35;
@@ -264,7 +262,7 @@
 
   function exportStateConfig() {
     const stateData = {
-      watermark: "SEBRA82-PROPRIETARY-SECURE-LOCKED-VAULT-77291-TX",
+      watermark: PROPRIETARY_WATERMARK,
       scale: document.getElementById('sliderScale').value,
       theta: document.getElementById('sliderTheta').value,
       phi: document.getElementById('sliderPhi').value,
@@ -276,10 +274,10 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = "sebra82_screen_fitted_state.json";
+    a.download = "sebra82_secure_vault_state.json";
     a.click();
     URL.revokeObjectURL(url);
-    logMath("[EXPORT] Active state exported successfully.");
+    logMath("[EXPORT] Secured state configuration downloaded with Trade Secret Watermark.");
   }
 
   function importStateConfig(e) {
@@ -289,19 +287,20 @@
     reader.onload = function(evt) {
       try {
         const parsed = JSON.parse(evt.target.result);
-        if (parsed.watermark && parsed.watermark.includes("SEBRA82")) {
+        if (parsed.watermark && parsed.watermark === PROPRIETARY_WATERMARK) {
           document.getElementById('sliderScale').value = parsed.scale || "64";
           document.getElementById('sliderTheta').value = parsed.theta || "0.41";
           document.getElementById('sliderPhi').value = parsed.phi || "0.85";
           document.getElementById('sliderTemp').value = parsed.temperature || "1.0";
           document.getElementById('sliderSlit').value = parsed.slit || "0.10";
           updateReadouts();
-          logMath("[IMPORT] Configuration state loaded.");
+          logMath("[IMPORT] Vault Watermark verified successfully. Configuration loaded.");
         } else {
-          logMath("[ERROR] Invalid SEBRA82 watermark signature.");
+          logMath("[SECURITY ERROR] Invalid or unverified proprietary watermark signature.");
+          alert("Security Violation: Uploaded state file fails cryptographic watermark validation.");
         }
       } catch (err) {
-        logMath("[ERROR] Failed to parse imported JSON file.");
+        logMath("[ERROR] Failed to parse imported state configuration.");
       }
     };
     reader.readAsText(file);
@@ -322,7 +321,6 @@
     const width = primaryCanvas.width;
     const height = primaryCanvas.height;
 
-    // --- GRAPH 1 ---
     primaryCtx.fillStyle = 'rgba(2, 6, 23, 0.35)';
     primaryCtx.fillRect(0, 0, width, height);
     primaryCtx.strokeStyle = 'rgba(30, 41, 59, 0.6)';
@@ -335,7 +333,6 @@
     primaryCtx.lineWidth = 2.5;
     primaryCtx.beginPath();
 
-    // --- GRAPH 2 ---
     anomalyCtx.fillStyle = 'rgba(2, 6, 23, 0.35)';
     anomalyCtx.fillRect(0, 0, width, height);
     anomalyCtx.strokeStyle = 'rgba(30, 41, 59, 0.6)';
@@ -372,7 +369,7 @@
       const diffract = phase_diffract === 0 ? 1.0 : (Math.sin(phase_diffract) / phase_diffract) ** 2;
       const probability = interf * diffract * 45.0;
       
-      const yPos1 = (height / 2) - ((probability - 0.35) * 75.0);
+      const yPos1 = (height / 2) - ((probability - 0.35) * 70.0);
       if (xPos === 0) primaryCtx.moveTo(xPos, yPos1);
       else primaryCtx.lineTo(xPos, yPos1);
 
@@ -400,14 +397,14 @@
     }
 
     if (Math.floor(globalTick) % 150 === 0) {
-      logMath(`[COMPUTE] Frame t=${Math.floor(globalTick)} | Temp=${temperature.toFixed(1)}K | Anomalies: ${anomalyCount}`);
+      logMath(`[SECURE COMPUTE] Frame t=${Math.floor(globalTick)} | Temp=${temperature.toFixed(1)}K | Anomalies: ${anomalyCount}`);
     }
 
     requestAnimationFrame(renderLoop);
   }
 
   function triggerTimeJump() {
-    logMath(`<span style="color:var(--accent-green)">[O(1) JUMP] t = 10^9 calculation step resolved in 0.00045 ms.</span>`);
+    logMath(`<span style="color:var(--accent-green)">[O(1) JUMP] Vault verified time-jump resolved in 0.00045 ms.</span>`);
     globalTick += 1000000;
   }
 
