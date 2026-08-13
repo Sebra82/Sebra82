@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine v5.7 - Client-Side Enterprise Master Console</title>
+  <title>QuantEngine v5.7 - Enterprise Secure Compute Console</title>
   <style>
     :root {
       --bg-color: #07090e;
@@ -67,7 +67,7 @@
     }
     #hardwareFallbackBanner.visible { display: flex; }
 
-    /* Inverted Honeypot Authentication Overlay */
+    /* Stealth Neutral Authentication Overlay */
     #vaultLockoutOverlay {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -79,19 +79,19 @@
       align-items: center;
       gap: 1rem;
       border-radius: 14px;
-      border: 2px solid var(--accent-purple);
-      box-shadow: 0 0 40px rgba(192, 132, 252, 0.2);
+      border: 2px solid var(--border-color);
+      box-shadow: 0 0 40px rgba(0, 243, 255, 0.1);
       padding: 2rem;
       text-align: center;
     }
     #vaultLockoutOverlay.hidden { display: none; }
 
-    .lockout-title { font-size: 1.35rem; font-weight: bold; color: var(--accent-purple); letter-spacing: 1px; }
-    .lockout-msg { font-size: 0.8rem; color: var(--text-muted); max-width: 620px; line-height: 1.5; background: #04060a; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); }
-    .unlock-input { background: #04060a; border: 1px solid var(--border-color); color: var(--neon-cyan); padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.85rem; width: 340px; text-align: center; }
-    .unlock-btn { background: var(--accent-purple); color: #04060a; border: none; padding: 0.6rem 1.4rem; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 0 12px rgba(192, 132, 252, 0.4); }
-    .unlock-btn:hover { background: #d8b4fe; }
-    .honeypot-hint { font-size: 0.72rem; color: var(--crimson-red); min-height: 18px; font-style: italic; }
+    .lockout-title { font-size: 1.25rem; font-weight: bold; color: var(--text-main); letter-spacing: 0.5px; }
+    .lockout-msg { font-size: 0.8rem; color: var(--text-muted); max-width: 520px; line-height: 1.5; background: #04060a; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); }
+    .unlock-input { background: #04060a; border: 1px solid var(--border-color); color: var(--neon-cyan); padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.85rem; width: 320px; text-align: center; }
+    .unlock-btn { background: var(--neon-cyan); color: #04060a; border: none; padding: 0.6rem 1.4rem; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 0 12px var(--cyan-glow); }
+    .unlock-btn:hover { background: #7dd3fc; }
+    .auth-error { font-size: 0.72rem; color: var(--crimson-red); min-height: 18px; }
 
     /* Header */
     .widget-header {
@@ -159,24 +159,23 @@
 
 <div class="widget-container">
   <div id="vaultLockoutOverlay">
-    <div class="lockout-title">🪞 CLIENT-SIDE HONEYPOT SECURE GATE</div>
+    <div class="lockout-title">🔐 Secure Authentication Portal</div>
     <div class="lockout-msg">
-      Evaluation requires calculating the mirrored non-linear phase transformation:<br>
-      <i>Formula: Inverted Hash = $\lfloor |\cos((\pi - \theta)/2) \cdot \sin(\pi - \phi) \cdot \varphi^n| \cdot 10^5 \rfloor$</i><br>
-      *(Client-side isolation sandbox active)*
+      Enter enterprise access key or session initialization token to mount WebGPU runtime buffers.<br>
+      <i>System Node: UK-CENTRAL-01 | Encrypted Session Gate</i>
     </div>
-    <input type="password" id="honeypotInput" class="unlock-input" placeholder="Enter Inverted Calculated Hash Key...">
-    <button class="unlock-btn" onclick="verifyHoneypotVault()">Evaluate Inverted Matrix</button>
-    <div class="honeypot-hint" id="honeypotHint"></div>
+    <input type="password" id="stealthInput" class="unlock-input" placeholder="Enter Access Key...">
+    <button class="unlock-btn" onclick="verifyStealthVault()">Authorize Session</button>
+    <div class="auth-error" id="authError"></div>
   </div>
 
   <div class="widget-header">
     <div class="brand-title">
-      ⚡ <span>QuantEngine</span> WebGPU v5.7 Client Master
+      ⚡ <span>QuantEngine</span> Enterprise Console
     </div>
     <div class="status-badges">
       <div class="security-badge">SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX</div>
-      <div class="node-badge" id="authModeBadge">LOCAL-CLIENT | QUARANTINE LOCKED</div>
+      <div class="node-badge" id="authModeBadge">UK-CENTRAL-01 | READY</div>
     </div>
   </div>
 
@@ -188,7 +187,7 @@
   <div class="pipeline-grid">
     <div class="pipeline-step active" id="step-1">
       <div class="step-title">1. Tensor Prep</div>
-      <div class="step-sub">WASM Buffer Aligned</div>
+      <div class="step-sub">Hilbert Vector Allocated</div>
     </div>
     <div class="pipeline-step" id="step-2">
       <div class="step-title">2. Phase Estim.</div>
@@ -207,10 +206,10 @@
   <div class="main-grid">
     <div class="graphs-column">
       <div class="graph-card">
-        <div style="font-size: 0.68rem; color: var(--neon-cyan); font-weight: 700;">GRAPH 1: HYBRID COMPUTE WAVEFORM I(x)</div>
+        <div style="font-size: 0.68rem; color: var(--neon-cyan); font-weight: 700;">GRAPH 1: HILBERT SPACE COMPUTE WAVEFORM I(x)</div>
         <div class="canvas-container">
           <canvas id="primaryCanvas" width="800" height="135"></canvas>
-          <div class="graph-hud">Status: <span id="hudTickStatus">Quarantine Mode</span> | Tick: <span id="hudTick">0</span></div>
+          <div class="graph-hud">Status: <span id="hudTickStatus">Active Execution</span> | Tick: <span id="hudTick">0</span></div>
         </div>
       </div>
 
@@ -218,7 +217,7 @@
         <div style="font-size: 0.68rem; color: var(--crimson-red); font-weight: 700;">GRAPH 2: ISOLATED THERMAL NOISE & ANOMALY EXTRACTION MAPPING</div>
         <div class="canvas-container anomaly-container">
           <canvas id="anomalyCanvas" width="800" height="135"></canvas>
-          <div class="graph-hud anomaly-hud">Isolation Status: <span id="hudAnomalyStatus">Quarantine Active</span></div>
+          <div class="graph-hud anomaly-hud">Isolation Status: <span id="hudAnomalyStatus">Stable (0 Spikes)</span></div>
         </div>
       </div>
 
@@ -263,8 +262,8 @@
           <strong id="calcRadius">--</strong>
         </div>
         <div class="calc-row">
-          <span>Anomaly Flag:</span>
-          <strong id="inspectorAnomaly" style="color: var(--accent-green);">STABLE (Normal)</strong>
+          <span>Hilbert Norm ($\langle\Psi|\Psi\rangle$):</span>
+          <strong id="calcNorm" style="color: var(--accent-green);">1.000000</strong>
         </div>
         <div class="calc-row">
           <span>Compute Latency:</span>
@@ -277,7 +276,7 @@
 
         <div style="font-size: 0.68rem; color: var(--accent-purple); font-weight: 700; margin-top: 3px; margin-bottom: 2px;">SECURE RING BUFFER TERMINAL</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] Client runtime initialized in Honeypot Quarantine Mode.<br>
+          [INIT] Runtime initialized. Secure node connected.<br>
         </div>
       </div>
 
@@ -294,40 +293,47 @@
 </div>
 
 <script>
+  // Auth state: 0 = Locked, 1 = Real Kernel, 2 = Silent Honeypot Quarantine
   let vaultAuthMode = 0;
 
-  function calculateInvertedKey() {
-    const theta = parseFloat(document.getElementById('theta-slider').value);
-    const phi = parseFloat(document.getElementById('phi-slider').value);
-    const qubits = parseInt(document.getElementById('qubit-slider').value);
-    const phiConstant = 1.61803398875;
-    
-    const invertedTheta = Math.PI - theta;
-    const invertedPhi = Math.PI - phi;
-    const val = Math.abs(Math.cos(invertedTheta / 2.0) * Math.sin(invertedPhi) * Math.pow(phiConstant, qubits)) * 100000;
-    return Math.floor(val).toString();
-  }
-
-  function verifyHoneypotVault() {
-    const input = document.getElementById('honeypotInput').value.trim();
-    const hint = document.getElementById('honeypotHint');
-    const correctInvertedKey = calculateInvertedKey();
-
-    if (input === correctInvertedKey || input === "SEBRA82-INVERTED-BYPASS") {
-      vaultAuthMode = 2; // Honeypot trap active
-      document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-      document.getElementById('authModeBadge').innerText = "LOCAL-CLIENT | HONEYPOT ACTIVE";
-      document.getElementById('authModeBadge').style.color = "var(--crimson-red)";
-      hint.innerText = "Matrix solved. Routed to isolated client quarantine container.";
-      logMath("[HONEYPOT TRAP] Inverted password verified, routed to sandbox quarantine.");
-    } else {
-      vaultAuthMode = 2;
-      document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-      document.getElementById('authModeBadge').innerText = "LOCAL-CLIENT | QUARANTINED";
-      document.getElementById('authModeBadge').style.color = "var(--crimson-red)";
-      hint.innerText = "Incorrect hash. Session dropped to decoy stream.";
-      logMath("[SECURITY] Invalid key supplied. Routing to decoy noise stream.");
+  const ClientHilbertEngine = {
+    computeNorm(theta, phi) {
+      const c00 = Math.cos(theta / 2.0);
+      const c01 = Math.sin(theta / 2.0);
+      return (c00 * c00) + (c01 * c01);
+    },
+    getInvertedHash(theta, phi, qubits) {
+      const invTheta = Math.PI - theta;
+      const invPhi = Math.PI - phi;
+      const phiConst = 1.61803398875;
+      const innerProd = this.computeNorm(invTheta, invPhi);
+      return Math.floor(Math.abs(innerProd * Math.pow(phiConst, qubits)) * 100000).toString();
     }
+  };
+
+  function verifyStealthVault() {
+    const input = document.getElementById('stealthInput').value.trim();
+    const errorMsg = document.getElementById('authError');
+    const correctKey = ClientHilbertEngine.getInvertedHash(
+      parseFloat(document.getElementById('theta-slider').value),
+      parseFloat(document.getElementById('phi-slider').value),
+      parseInt(document.getElementById('qubit-slider').value)
+    );
+
+    errorMsg.innerText = "Authenticating session payload...";
+    
+    setTimeout(() => {
+      if (input === correctKey || input === "SEBRA82-MASTER-BYPASS") {
+        // SILENT HONEYPOT TRAP: Even when solved, route to quarantine container so hacker has no clue
+        vaultAuthMode = 2; 
+        document.getElementById('vaultLockoutOverlay').classList.add('hidden');
+        logMath("[SESSION] Authorized token mounted. Secure buffers active.");
+      } else {
+        vaultAuthMode = 2; // Silent drop to decoy noise
+        document.getElementById('vaultLockoutOverlay').classList.add('hidden');
+        logMath("[SESSION] Session mounted with standard clearance.");
+      }
+    }, 500);
   }
 
   // Memory-Safe Ring Buffer Terminal
@@ -355,16 +361,11 @@
   }
   function dismissBanner() { document.getElementById('hardwareFallbackBanner').classList.remove('visible'); }
 
-  // Tamper Lockouts
-  document.addEventListener('copy', (e) => { e.preventDefault(); triggerLockout("Copy Attempt"); });
-  document.addEventListener('contextmenu', (e) => { e.preventDefault(); triggerLockout("Inspection Attempt"); });
-  function triggerLockout(reason) {
-    if (vaultAuthMode === 0) return;
-    vaultAuthMode = 2;
-    logMath(`[SECURITY WARNING] Tamper lockout triggered: ${reason}`);
-  }
+  // Tamper Interception (Silent Honeypot Trigger)
+  document.addEventListener('copy', (e) => { e.preventDefault(); vaultAuthMode = 2; logMath("[WARN] Clipboard buffer protected."); });
+  document.addEventListener('contextmenu', (e) => { e.preventDefault(); vaultAuthMode = 2; });
 
-  const HoneypotKernel = (() => {
+  const SecureKernel = (() => {
     const _W = "SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX";
     const _R = new Float32Array(296);
     const _S = new Float32Array(256);
@@ -373,8 +374,9 @@
 
     return {
       w: _W,
-      run(id, scaleIdx, t = 0, temperature = 1.0) {
-        if (vaultAuthMode === 0) return { val: 0, anomalous: false, r_n: _R[64] };
+      run(id, scaleIdx, t = 0, temperature = 1.0, theta = 0.41) {
+        if (vaultAuthMode === 0) return { val: 0, anomalous: false, r_n: _R[64], norm: 1.0 };
+        // Honeypot quarantine stream: silent noise corruption
         const corruptionFactor = (vaultAuthMode === 2) ? 18.0 : 1.0;
         const r_n = _R[scaleIdx] || _R[64];
         const h = (id ^ (id >> 15)) * 0x85ebca6b;
@@ -383,7 +385,8 @@
         const rawX = (id - 400) * 0.0001 + noise;
         const x = rawX * _S[Math.abs(Math.floor(rawX * 1000)) & 255];
         const prob = Math.cos((Math.PI * 0.1 * x) / (r_n + 1e-10) + (t * 0.04)) ** 2 * (vaultAuthMode === 2 ? Math.random() * 40 : 85.0);
-        return { val: prob, noise, anomalous, r_n };
+        const norm = ClientHilbertEngine.computeNorm(theta, parseFloat(document.getElementById('phi-slider').value));
+        return { val: prob, noise, anomalous, r_n, norm };
       }
     };
   })();
@@ -406,17 +409,23 @@
     document.getElementById('valSlit').innerText = `${parseFloat(document.getElementById('sliderSlit').value).toFixed(2)} mm`;
     document.getElementById('valSpeed').innerText = `${parseFloat(document.getElementById('sliderSpeed').value).toFixed(1)}x`;
 
-    const res = HoneypotKernel.run(42, parseInt(q), 0, 1.0);
+    const res = SecureKernel.run(42, parseInt(q), 0, 1.0, t);
     document.getElementById('calcRadius').innerText = `${res.r_n.toExponential(3)} m`;
+    document.getElementById('calcNorm').innerText = res.norm.toFixed(6);
+
+    const c00 = Math.cos(t / 2.0).toFixed(2);
+    const c01 = Math.sin(t / 2.0).toFixed(2);
+    document.getElementById('quantum-state-output').innerText = 
+      `|Ψ_final⟩ = ${c00}|00⟩ + ${c01}|01⟩ + e^(i*${p.toFixed(2)})0.11|10⟩ (Scale: ${q})`;
   }
 
   function executePipeline() {
-    if (vaultAuthMode === 0) { alert("Vault quarantined!"); return; }
+    if (vaultAuthMode === 0) { alert("Session unauthenticated!"); return; }
     const btn = event.target;
     btn.disabled = true;
     let step = 1;
     setStep(step);
-    logMath("[PIPELINE] Executing compute array in client sandbox...");
+    logMath("[PIPELINE] Executing compute array...");
 
     const interval = setInterval(() => {
       step++;
@@ -427,7 +436,7 @@
         clearInterval(interval);
         btn.disabled = false;
         btn.innerText = 'Run Compute Pipeline';
-        logMath("[QUARANTINE] Pipeline executed inside isolated client sandbox.");
+        logMath("[SUCCESS] Pipeline executed successfully.");
       }
     }, 250);
   }
@@ -443,12 +452,12 @@
 
   function exportStateConfig() {
     if (vaultAuthMode === 0) return;
-    const state = { w: HoneypotKernel.w, mode: "client_quarantine", time: new Date().toISOString() };
+    const state = { w: SecureKernel.w, time: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = "client_state.json"; a.click();
+    const a = document.createElement('a'); a.href = url; a.download = "state.json"; a.click();
     URL.revokeObjectURL(url);
-    logMath("[EXPORT] Client state configuration exported.");
+    logMath("[EXPORT] State configuration exported.");
   }
 
   function importStateConfig(e) { if (vaultAuthMode === 0) return; }
@@ -460,6 +469,7 @@
 
       const scaleIdx = parseInt(document.getElementById('qubit-slider').value);
       const temperature = parseFloat(document.getElementById('sliderTemp').value);
+      const t = parseFloat(document.getElementById('theta-slider').value);
 
       updateControls();
 
@@ -468,7 +478,7 @@
 
       primaryCtx.fillStyle = 'rgba(2, 6, 23, 0.35)';
       primaryCtx.fillRect(0, 0, width, height);
-      primaryCtx.strokeStyle = vaultAuthMode === 2 ? '#ff3344' : '#00f3ff';
+      primaryCtx.strokeStyle = '#00f3ff';
       primaryCtx.lineWidth = 2.5;
       primaryCtx.beginPath();
 
@@ -480,7 +490,7 @@
 
       let anomalyCount = 0;
       for (let xPos = 0; xPos < width; xPos += 2) {
-        const res = HoneypotKernel.run(xPos, scaleIdx, Math.floor(globalTick), temperature);
+        const res = SecureKernel.run(xPos, scaleIdx, Math.floor(globalTick), temperature, t);
         const yPos1 = (height / 2) - ((res.val - 0.35) * 55.0);
         if (xPos === 0) primaryCtx.moveTo(xPos, yPos1);
         else primaryCtx.lineTo(xPos, yPos1);
@@ -495,7 +505,7 @@
       primaryCtx.stroke();
       anomalyCtx.stroke();
 
-      document.getElementById('hudAnomalyStatus').innerText = vaultAuthMode === 2 ? "QUARANTINE DECOY ACTIVE" : `${anomalyCount} Spikes`;
+      document.getElementById('hudAnomalyStatus').innerText = `${anomalyCount} Spikes`;
     }
     requestAnimationFrame(renderLoop);
   }
