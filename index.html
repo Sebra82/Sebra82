@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine v5.7 - Enterprise Secure Production Console</title>
+  <title>QuantEngine v5.7 - Enterprise Honeypot Vault Console</title>
   <style>
     :root {
       --bg-color: #07090e;
@@ -53,7 +53,6 @@
       position: relative;
     }
 
-    /* Fallback Notification Banner */
     #hardwareFallbackBanner {
       background: rgba(240, 136, 62, 0.15);
       border: 1px solid var(--warning-amber);
@@ -68,7 +67,7 @@
     }
     #hardwareFallbackBanner.visible { display: flex; }
 
-    /* Cloud Handshake Authentication Overlay */
+    /* Honeypot Inverted Authentication Overlay */
     #vaultLockoutOverlay {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -88,10 +87,11 @@
     #vaultLockoutOverlay.hidden { display: none; }
 
     .lockout-title { font-size: 1.35rem; font-weight: bold; color: var(--accent-purple); letter-spacing: 1px; }
-    .lockout-msg { font-size: 0.8rem; color: var(--text-muted); max-width: 600px; line-height: 1.5; background: #04060a; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); }
-    .unlock-input { background: #04060a; border: 1px solid var(--border-color); color: var(--neon-cyan); padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.85rem; width: 320px; text-align: center; }
+    .lockout-msg { font-size: 0.8rem; color: var(--text-muted); max-width: 620px; line-height: 1.5; background: #04060a; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); }
+    .unlock-input { background: #04060a; border: 1px solid var(--border-color); color: var(--neon-cyan); padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.85rem; width: 340px; text-align: center; }
     .unlock-btn { background: var(--accent-purple); color: #04060a; border: none; padding: 0.6rem 1.4rem; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 0 12px rgba(192, 132, 252, 0.4); }
     .unlock-btn:hover { background: #d8b4fe; }
+    .honeypot-hint { font-size: 0.72rem; color: var(--crimson-red); min-height: 18px; font-style: italic; }
 
     /* Header */
     .widget-header {
@@ -159,22 +159,24 @@
 
 <div class="widget-container">
   <div id="vaultLockoutOverlay">
-    <div class="lockout-title">☁️ ENTERPRISE CLOUD AUTHENTICATION GATE</div>
+    <div class="lockout-title">🪞 INVERTED NON-LINEAR HONEYPOT GATE</div>
     <div class="lockout-msg">
-      Dynamic Handshake Required: Authenticating license token against remote enterprise server (OAuth2 / Node.js Proxy).<br>
-      <i>Enter client license key or token payload to fetch session cryptographic key:</i>
+      Authentication requires calculating the mirrored non-linear phase transformation:<br>
+      <i>Formula: Inverted Hash = $\lfloor |\cos((\pi - \theta)/2) \cdot \sin(\pi - \phi) \cdot \varphi^n| \cdot 10^5 \rfloor$</i><br>
+      *(Warning: Even exact solutions trigger permanent honeypot quarantine mode).*
     </div>
-    <input type="password" id="cloudTokenInput" class="unlock-input" placeholder="Enter Enterprise License Token...">
-    <button class="unlock-btn" onclick="executeCloudHandshake()">Authenticate & Initialize Session</button>
+    <input type="password" id="honeypotInput" class="unlock-input" placeholder="Enter Inverted Calculated Hash Key...">
+    <button class="unlock-btn" onclick="verifyHoneypotVault()">Evaluate Inverted Matrix</button>
+    <div class="honeypot-hint" id="honeypotHint"></div>
   </div>
 
   <div class="widget-header">
     <div class="brand-title">
-      ⚡ <span>QuantEngine</span> WebGPU v5.7 Enterprise Console
+      ⚡ <span>QuantEngine</span> WebGPU v5.7 Honeypot Vault
     </div>
     <div class="status-badges">
       <div class="security-badge">SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX</div>
-      <div class="node-badge" id="authModeBadge">UK-CENTRAL-01 | AUTH REQUIRED</div>
+      <div class="node-badge" id="authModeBadge">UK-CENTRAL-01 | QUARANTINE LOCKED</div>
     </div>
   </div>
 
@@ -208,7 +210,7 @@
         <div style="font-size: 0.68rem; color: var(--neon-cyan); font-weight: 700;">GRAPH 1: HYBRID COMPUTE WAVEFORM I(x)</div>
         <div class="canvas-container">
           <canvas id="primaryCanvas" width="800" height="135"></canvas>
-          <div class="graph-hud">Status: <span id="hudTickStatus">Secured Mode</span> | Tick: <span id="hudTick">0</span></div>
+          <div class="graph-hud">Status: <span id="hudTickStatus">Quarantine Mode</span> | Tick: <span id="hudTick">0</span></div>
         </div>
       </div>
 
@@ -216,7 +218,7 @@
         <div style="font-size: 0.68rem; color: var(--crimson-red); font-weight: 700;">GRAPH 2: ISOLATED THERMAL NOISE & ANOMALY EXTRACTION MAPPING</div>
         <div class="canvas-container anomaly-container">
           <canvas id="anomalyCanvas" width="800" height="135"></canvas>
-          <div class="graph-hud anomaly-hud">Isolation Status: <span id="hudAnomalyStatus">Secure (0 Spikes)</span></div>
+          <div class="graph-hud anomaly-hud">Isolation Status: <span id="hudAnomalyStatus">Quarantine Active</span></div>
         </div>
       </div>
 
@@ -275,7 +277,7 @@
 
         <div style="font-size: 0.68rem; color: var(--accent-purple); font-weight: 700; margin-top: 3px; margin-bottom: 2px;">SECURE RING BUFFER TERMINAL</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] System ready. Awaiting cloud token authentication...<br>
+          [INIT] System initialized in Honeypot Quarantine Mode.<br>
         </div>
       </div>
 
@@ -292,100 +294,98 @@
 </div>
 
 <script>
-  // --- 1. MEMORY-SAFE RING BUFFER TERMINAL LOGGING ---
+  // Auth States: 0 = Locked, 1 = Real Master Key, 2 = Honeypot Quarantine Mode (Triggered even on correct inverted solves)
+  let vaultAuthMode = 0;
+
+  function calculateInvertedKey() {
+    const theta = parseFloat(document.getElementById('theta-slider').value);
+    const phi = parseFloat(document.getElementById('phi-slider').value);
+    const qubits = parseInt(document.getElementById('qubit-slider').value);
+    const phiConstant = 1.61803398875;
+    
+    // Inverted non-linear calculation: mirrored parameters (PI - theta, PI - phi)
+    const invertedTheta = Math.PI - theta;
+    const invertedPhi = Math.PI - phi;
+    const val = Math.abs(Math.cos(invertedTheta / 2.0) * Math.sin(invertedPhi) * Math.pow(phiConstant, qubits)) * 100000;
+    return Math.floor(val).toString();
+  }
+
+  function verifyHoneypotVault() {
+    const input = document.getElementById('honeypotInput').value.trim();
+    const hint = document.getElementById('honeypotHint');
+    const correctInvertedKey = calculateInvertedKey();
+
+    if (input === correctInvertedKey || input === "SEBRA82-INVERTED-BYPASS") {
+      // THE HONEYPOT TRAP: Even when correctly solved, it maps to Mode 2 (Honeypot Quarantine)
+      vaultAuthMode = 2; 
+      document.getElementById('vaultLockoutOverlay').classList.add('hidden');
+      document.getElementById('authModeBadge').innerText = "UK-CENTRAL-01 | HONEYPOT ACTIVE";
+      document.getElementById('authModeBadge').style.color = "var(--crimson-red)";
+      hint.innerText = "Matrix solved. However, invariant policy routes session to isolated honeypot container.";
+      logMath("[HONEYPOT TRAP] Inverted password solved successfully, but routed to quarantine container.");
+    } else {
+      vaultAuthMode = 2; // Default drop to quarantine on incorrect guesses too
+      document.getElementById('vaultLockoutOverlay').classList.add('hidden');
+      document.getElementById('authModeBadge').innerText = "UK-CENTRAL-01 | QUARANTINED";
+      document.getElementById('authModeBadge').style.color = "var(--crimson-red)";
+      hint.innerText = "Incorrect hash. Session dropped to decoy quarantine stream.";
+      logMath("[SECURITY] Invalid key supplied. Routing to decoy noise stream.");
+    }
+  }
+
+  // Ring Buffer Logging
   const terminalLogBuffer = [];
   const MAX_LOG_ENTRIES = 50;
-
   function logMath(text) {
     const timestamp = new Date().toISOString().split('T')[1].slice(0, 8);
     terminalLogBuffer.push(`[${timestamp}] ${text}`);
-    if (terminalLogBuffer.length > MAX_LOG_ENTRIES) {
-      terminalLogBuffer.shift(); // Drop oldest entry to prevent DOM memory creep
-    }
-    const term = document.getElementById('mathTerminal');
-    term.innerHTML = terminalLogBuffer.join('<br>');
-    term.scrollTop = term.scrollHeight;
+    if (terminalLogBuffer.length > MAX_LOG_ENTRIES) terminalLogBuffer.shift();
+    document.getElementById('mathTerminal').innerHTML = terminalLogBuffer.join('<br>');
+    document.getElementById('mathTerminal').scrollTop = document.getElementById('mathTerminal').scrollHeight;
   }
 
-  // --- 2. EXPLICIT WEBGPU CAPABILITY CHECK & FALLBACK ---
-  let isWebGPUAvailable = false;
+  // WebGPU Check & Fallback
   async function checkHardwareCapabilities() {
     if ('gpu' in navigator) {
       try {
         const adapter = await navigator.gpu.requestAdapter();
-        if (adapter) {
-          isWebGPUAvailable = true;
-          logMath("[HARDWARE] WebGPU adapter successfully acquired.");
-          return;
-        }
-      } catch (e) { /* Fallback triggered */ }
+        if (adapter) { logMath("[HARDWARE] WebGPU adapter active."); return; }
+      } catch (e) {}
     }
-    // Fallback notification trigger
     document.getElementById('hardwareFallbackBanner').classList.add('visible');
-    logMath("[FALLBACK] WebGPU unavailable. Initializing SIMD WebAssembly fallback engine.");
+    logMath("[FALLBACK] WebGPU unavailable. Initializing SIMD WebAssembly runtime.");
   }
+  function dismissBanner() { document.getElementById('hardwareFallbackBanner').classList.remove('visible'); }
 
-  function dismissBanner() {
-    document.getElementById('hardwareFallbackBanner').classList.remove('visible');
-  }
-
-  // --- 3. DYNAMIC CLOUD CRYPTOGRAPHIC HANDSHAKE SIMULATION ---
-  let isCloudAuthenticated = false;
-
-  async function executeCloudHandshake() {
-    const token = document.getElementById('cloudTokenInput').value.trim();
-    if (!token) { alert("Please provide a license token."); return; }
-
-    logMath("[AUTH] Dispatching credentials to secure cloud authentication server...");
-    
-    // Simulate async server roundtrip to Auth0 / Node.js backend
-    setTimeout(() => {
-      if (token.length >= 6 || token === "SEBRA82-ENTERPRISE-PASS") {
-        isCloudAuthenticated = true;
-        document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        document.getElementById('authModeBadge').innerText = "UK-CENTRAL-01 | SESSION SECURED";
-        document.getElementById('authModeBadge').style.color = "var(--accent-green)";
-        logMath("[SUCCESS] Encrypted session payload received. Handshake verified.");
-      } else {
-        alert("Authentication Failed: Invalid license token payload.");
-        logMath("[SECURITY ERROR] Cloud handshake rejected invalid license token.");
-      }
-    }, 600);
-  }
-
-  // Anti-Copy & Anti-Tamper Lockdown
+  // Tamper Lockouts
   document.addEventListener('copy', (e) => { e.preventDefault(); triggerLockout("Copy Attempt"); });
   document.addEventListener('contextmenu', (e) => { e.preventDefault(); triggerLockout("Inspection Attempt"); });
-
   function triggerLockout(reason) {
-    if (!isCloudAuthenticated) return;
-    isCloudAuthenticated = false;
-    document.getElementById('vaultLockoutOverlay').classList.remove('hidden');
-    logMath(`[SECURITY WARNING] Lockout triggered: ${reason}`);
+    if (vaultAuthMode === 0) return;
+    vaultAuthMode = 2; // Force Honeypot Quarantine on tamper
+    logMath(`[SECURITY WARNING] Tamper lockout triggered: ${reason}`);
   }
 
-  // --- 4. OBFUSCATED KERNEL BLUEPRINT (WASM SIMULATED INTERFACE) ---
-  const ObfuscatedWasmKernel = (() => {
+  const HoneypotKernel = (() => {
     const _W = "SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX";
     const _R = new Float32Array(296);
     const _S = new Float32Array(256);
-    const _P = 1.616255e-35;
-    const _PH = 1.61803398875;
-
-    for (let n = 0; n < 296; n++) { _R[n] = _P * Math.pow(_PH, n); }
+    for (let n = 0; n < 296; n++) { _R[n] = 1.616255e-35 * Math.pow(1.61803398875, n); }
     for (let i = 0; i < 256; i++) { _S[i] = Math.sin((i / 256) * Math.PI * 2); }
 
     return {
       w: _W,
       run(id, scaleIdx, t = 0, temperature = 1.0) {
-        if (!isCloudAuthenticated) return { val: 0, anomalous: false, r_n: _R[64] };
+        if (vaultAuthMode === 0) return { val: 0, anomalous: false, r_n: _R[64] };
+        // Honeypot mode injects exaggerated noise or randomized telemetry
+        const corruptionFactor = (vaultAuthMode === 2) ? 18.0 : 1.0;
         const r_n = _R[scaleIdx] || _R[64];
         const h = (id ^ (id >> 15)) * 0x85ebca6b;
-        const noise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature;
-        const anomalous = temperature >= 3.5 && Math.abs(noise) > 0.00012;
+        const noise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature * corruptionFactor;
+        const anomalous = (temperature >= 3.5 || vaultAuthMode === 2) && Math.abs(noise) > 0.0001;
         const rawX = (id - 400) * 0.0001 + noise;
         const x = rawX * _S[Math.abs(Math.floor(rawX * 1000)) & 255];
-        const prob = Math.cos((Math.PI * 0.1 * x) / (r_n + 1e-10) + (t * 0.04)) ** 2 * 85.0;
+        const prob = Math.cos((Math.PI * 0.1 * x) / (r_n + 1e-10) + (t * 0.04)) ** 2 * (vaultAuthMode === 2 ? Math.random() * 40 : 85.0);
         return { val: prob, noise, anomalous, r_n };
       }
     };
@@ -409,17 +409,17 @@
     document.getElementById('valSlit').innerText = `${parseFloat(document.getElementById('sliderSlit').value).toFixed(2)} mm`;
     document.getElementById('valSpeed').innerText = `${parseFloat(document.getElementById('sliderSpeed').value).toFixed(1)}x`;
 
-    const res = ObfuscatedWasmKernel.run(42, parseInt(q), 0, 1.0);
+    const res = HoneypotKernel.run(42, parseInt(q), 0, 1.0);
     document.getElementById('calcRadius').innerText = `${res.r_n.toExponential(3)} m`;
   }
 
   function executePipeline() {
-    if (!isCloudAuthenticated) { alert("Session unauthenticated!"); return; }
+    if (vaultAuthMode === 0) { alert("Vault quarantined!"); return; }
     const btn = event.target;
     btn.disabled = true;
     let step = 1;
     setStep(step);
-    logMath("[PIPELINE] Executing WASM parallel compute array...");
+    logMath("[PIPELINE] Executing compute array in Honeypot quarantine sandbox...");
 
     const interval = setInterval(() => {
       step++;
@@ -430,7 +430,7 @@
         clearInterval(interval);
         btn.disabled = false;
         btn.innerText = 'Run Compute Pipeline';
-        logMath("[SUCCESS] Pipeline execution complete with 0 byte heap overhead.");
+        logMath("[QUARANTINE] Pipeline executed successfully inside isolated sandbox container.");
       }
     }, 250);
   }
@@ -445,19 +445,19 @@
   }
 
   function exportStateConfig() {
-    if (!isCloudAuthenticated) return;
-    const state = { w: ObfuscatedWasmKernel.w, time: new Date().toISOString() };
+    if (vaultAuthMode === 0) return;
+    const state = { w: HoneypotKernel.w, mode: "quarantine_sandbox", time: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = "enterprise_state.json"; a.click();
+    const a = document.createElement('a'); a.href = url; a.download = "quarantine_state.json"; a.click();
     URL.revokeObjectURL(url);
-    logMath("[EXPORT] State configuration successfully exported.");
+    logMath("[EXPORT] Honeypot sandbox state exported.");
   }
 
-  function importStateConfig(e) { if (!isCloudAuthenticated) return; }
+  function importStateConfig(e) { if (vaultAuthMode === 0) return; }
 
   function renderLoop() {
-    if (isCloudAuthenticated) {
+    if (vaultAuthMode > 0) {
       globalTick += parseFloat(document.getElementById('sliderSpeed').value);
       document.getElementById('hudTick').innerText = Math.floor(globalTick);
 
@@ -471,7 +471,7 @@
 
       primaryCtx.fillStyle = 'rgba(2, 6, 23, 0.35)';
       primaryCtx.fillRect(0, 0, width, height);
-      primaryCtx.strokeStyle = '#00f3ff';
+      primaryCtx.strokeStyle = vaultAuthMode === 2 ? '#ff3344' : '#00f3ff';
       primaryCtx.lineWidth = 2.5;
       primaryCtx.beginPath();
 
@@ -483,7 +483,7 @@
 
       let anomalyCount = 0;
       for (let xPos = 0; xPos < width; xPos += 2) {
-        const res = ObfuscatedWasmKernel.run(xPos, scaleIdx, Math.floor(globalTick), temperature);
+        const res = HoneypotKernel.run(xPos, scaleIdx, Math.floor(globalTick), temperature);
         const yPos1 = (height / 2) - ((res.val - 0.35) * 55.0);
         if (xPos === 0) primaryCtx.moveTo(xPos, yPos1);
         else primaryCtx.lineTo(xPos, yPos1);
@@ -498,7 +498,7 @@
       primaryCtx.stroke();
       anomalyCtx.stroke();
 
-      document.getElementById('hudAnomalyStatus').innerText = `${anomalyCount} Spikes`;
+      document.getElementById('hudAnomalyStatus').innerText = vaultAuthMode === 2 ? "QUARANTINE DECOY ACTIVE" : `${anomalyCount} Spikes`;
     }
     requestAnimationFrame(renderLoop);
   }
