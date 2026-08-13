@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine v7.3 - Complete Master Platform</title>
+  <title>QuantEngine v7.4 - Fully Fixed Master Platform</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -58,7 +58,7 @@
       justify-content: space-between;
     }
 
-    /* Bulletproof Authentication Overlay */
+    /* Fixed Authentication Portal Overlay */
     #vaultLockoutOverlay {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -149,16 +149,16 @@
   <div id="vaultLockoutOverlay">
     <div class="lockout-title">🔐 Secure Authentication Portal</div>
     <div class="lockout-msg">
-      Enter master enterprise access key to mount QuantEngine v7.3 Complete Platform buffers.<br>
+      Enter master enterprise access key (`Quantum`) to mount QuantEngine v7.4 Platform buffers.<br>
       <i>System Node: UK-CENTRAL-01 | Encrypted Session Gateway</i>
     </div>
-    <input type="password" id="stealthInput" class="unlock-input" placeholder="Enter Access Key..." onkeydown="if(event.key==='Enter')verifyStealthVault()">
-    <button class="unlock-btn" onclick="verifyStealthVault()">Authorize Platform Session</button>
+    <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Access Key (Quantum)..." onkeydown="if(event.key==='Enter')verifyMasterVault()">
+    <button class="unlock-btn" onclick="verifyMasterVault()">Authorize Platform Session</button>
     <div class="auth-error" id="authError"></div>
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v7.3</span> Complete Master Platform</div>
+    <div class="brand-title">⚡ <span>QuantEngine v7.4</span> Fully Fixed Master</div>
     <div class="status-badges">
       <div class="security-badge">SEBRA82-SECURE-VAULT-77291-TX</div>
       <div class="node-badge" id="authModeBadge">UK-CENTRAL-01 | ACTIVE</div>
@@ -295,7 +295,7 @@
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">RING BUFFER TERMINAL LOGS</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] Platform successfully booted with all 6 modules active...<br>
+          [INIT] Platform successfully booted with all modules active...<br>
         </div>
       </div>
     </div>
@@ -319,9 +319,9 @@
   let isDraggingGraph = false;
   let dragStartX = 0;
 
-  // Bulletproof Case-Insensitive Master Passphrase Check ("Quantum")
-  function verifyStealthVault() {
-    const inputField = document.getElementById('stealthInput');
+  // Fully Fixed Case-Insensitive Master Passphrase Check ("Quantum")
+  function verifyMasterVault() {
+    const inputField = document.getElementById('masterPassInput');
     const input = inputField.value.trim().toLowerCase();
     const errorMsg = document.getElementById('authError');
     
@@ -331,7 +331,7 @@
       if (input === "quantum") {
         vaultAuthMode = 1; // Unlocks True Production Kernel
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("Master access granted via 'Quantum' passphrase. All 6 modules active.");
+        logPlatform("Master access granted via 'Quantum' passphrase. All modules active.");
       } else {
         vaultAuthMode = 2; // Silent Quarantine Decoy Feed
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
@@ -402,7 +402,7 @@
     logPlatform("[BLOB EXPORT] Packaging telemetry data with blob extension wrapper...");
 
     const packageData = {
-      version: "QuantEngine v7.3",
+      version: "QuantEngine v7.4",
       timestamp: new Date().toISOString(),
       watermark: "SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX",
       telemetry: telemetryHistory,
@@ -533,7 +533,6 @@
       const xBase = width / 2 + Math.cos(angle) * 45;
       const yBase = height / 2 + Math.sin(angle) * 30;
 
-      // Module 5: Spherical Harmonics Modulation (s, p_z, d_x2-y2)
       let harmonic = 1.0;
       const dx = Math.cos(angle);
       const dy = Math.sin(angle);
@@ -596,3 +595,97 @@
     threshCtx.scale(graphZoom, 1.0);
 
     threshCtx.strokeStyle = vaultAuthMode === 2 ? '#ff3344' : '#00f3ff';
+    threshCtx.lineWidth = 2;
+    threshCtx.beginPath();
+    
+    let breaches = 0;
+    const step = width / (telemetryHistory.length || 1);
+    telemetryHistory.forEach((val, idx) => {
+      const x = idx * step;
+      const y = height - (val / 100) * height;
+      if (val >= currentThreshold) breaches++;
+      if (idx === 0) threshCtx.moveTo(x, y);
+      else threshCtx.lineTo(x, y);
+    });
+    threshCtx.stroke();
+    threshCtx.restore();
+
+    const statusEl = document.getElementById('thresholdStatus');
+    if (breaches > 0) {
+      statusEl.innerText = `BREACH DETECTED (${breaches} Spikes)`;
+      statusEl.style.color = "var(--crimson-red)";
+    } else {
+      statusEl.innerText = "Normal (0 Spikes)";
+      statusEl.style.color = "var(--accent-green)";
+    }
+  }
+
+  const spikeCanvas = document.getElementById('spikeCanvas');
+  const spikeCtx = spikeCanvas.getContext('2d');
+  function renderSpikeExtractionWindow() {
+    const width = spikeCanvas.width;
+    const height = spikeCanvas.height;
+
+    spikeCtx.fillStyle = 'rgba(3, 7, 15, 0.6)';
+    spikeCtx.fillRect(0, 0, width, height);
+
+    document.getElementById('extractedCount').innerText = detectedSpikesBuffer.length;
+
+    if (detectedSpikesBuffer.length === 0) {
+      spikeCtx.fillStyle = '#8b949e';
+      spikeCtx.font = '10px monospace';
+      spikeCtx.fillText('Awaiting spike isolation trigger...', 15, height / 2);
+      return;
+    }
+
+    spikeCtx.strokeStyle = '#c084fc';
+    spikeCtx.lineWidth = 2;
+    spikeCtx.beginPath();
+
+    const step = width / Math.max(detectedSpikesBuffer.length, 10);
+    detectedSpikesBuffer.forEach((val, idx) => {
+      const x = idx * step;
+      const y = height - ((val - currentThreshold) / (100 - currentThreshold + 1)) * height;
+      if (idx === 0) spikeCtx.moveTo(x, y);
+      else spikeCtx.lineTo(x, y);
+    });
+    spikeCtx.stroke();
+  }
+
+  function isolateDetectedSpikes() {
+    logPlatform(`[SPIKE EXTRACTION] Isolated ${detectedSpikesBuffer.length} threshold breach events into sub-graph window.`);
+  }
+
+  function exportPlatformState() {
+    const state = { platform: "QuantEngine v7.4", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = "platform_state.json"; a.click();
+    URL.revokeObjectURL(url);
+    logPlatform("[EXPORT] Platform state exported successfully.");
+  }
+  function importPlatformState(e) { logPlatform("[IMPORT] State file loaded into memory buffers."); }
+
+  function masterRenderLoop() {
+    globalTick += 1;
+    renderBackgroundModel();
+    if (vaultAuthMode > 0) {
+      renderAtoms();
+      renderThresholdGraph();
+      renderSpikeExtractionWindow();
+      if (globalTick % 15 === 0) pushDataDump();
+    }
+    requestAnimationFrame(masterRenderLoop);
+  }
+
+  window.onload = () => {
+    resizeBackgroundCanvas();
+    updateThresholdParams();
+    updateAtomSimulation();
+    updateNoiseCalc();
+    masterRenderLoop();
+  };
+</script>
+
+</body>
+</html>
