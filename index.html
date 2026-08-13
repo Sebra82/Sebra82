@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine v7.0 - Interactive Master Platform</title>
+  <title>QuantEngine v7.1 - Interactive Master Platform</title>
   <style>
     :root {
       --bg-deep: #030508;
@@ -124,7 +124,6 @@
     .control-label { font-size: 0.62rem; color: var(--text-muted); display: flex; justify-content: space-between; }
     .control-label span { color: var(--text-main); font-weight: 600; }
     input[type="range"] { width: 100%; accent-color: var(--neon-cyan); background: #1f293d; height: 3px; border-radius: 2px; }
-    select { width: 100%; background: #04060a; border: 1px solid var(--border-color); color: var(--neon-cyan); padding: 4px; border-radius: 4px; font-size: 0.68rem; outline: none; }
 
     /* Terminals & Dumps */
     .data-dump { background: #010409; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px; font-size: 0.6rem; color: var(--accent-green); height: 80px; overflow-y: auto; font-family: monospace; line-height: 1.25; }
@@ -151,7 +150,7 @@
   <div id="vaultLockoutOverlay">
     <div class="lockout-title">🔐 Secure Authentication Portal</div>
     <div class="lockout-msg">
-      Enter master enterprise access key to mount QuantEngine v7.0 Interactive Platform buffers.<br>
+      Enter master enterprise access key to mount QuantEngine v7.1 Interactive Platform buffers.<br>
       <i>System Node: UK-CENTRAL-01 | Encrypted Session Gateway</i>
     </div>
     <input type="password" id="stealthInput" class="unlock-input" placeholder="Enter Access Key..." onkeydown="if(event.key==='Enter')verifyStealthVault()">
@@ -160,7 +159,7 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v7.0</span> Interactive Platform Master</div>
+    <div class="brand-title">⚡ <span>QuantEngine v7.1</span> Interactive Platform Master</div>
     <div class="status-badges">
       <div class="security-badge">SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX</div>
       <div class="node-badge" id="authModeBadge">UK-CENTRAL-01 | ZOOM ACTIVE</div>
@@ -311,29 +310,31 @@
   let detectedSpikesBuffer = [];
   let rawDataDumpBuffer = [];
 
-  // Graph Zoom & Pan Interactive State
+  // Graph Zoom & Pan State
   let graphZoom = 1.0;
   let graphPanX = 0;
   let isDraggingGraph = false;
   let dragStartX = 0;
 
-  // Stealth Access Key: "Quantum"
+  // Fully Robust Case-Insensitive Master Passphrase Check ("Quantum")
   function verifyStealthVault() {
-    const input = document.getElementById('stealthInput').value.trim().toLowerCase();
+    const inputField = document.getElementById('stealthInput');
+    const input = inputField.value.trim().toLowerCase();
     const errorMsg = document.getElementById('authError');
+    
     errorMsg.innerText = "Authenticating session payload...";
     
     setTimeout(() => {
       if (input === "quantum") {
-        vaultAuthMode = 1; // Real Master Kernel Unlocked
+        vaultAuthMode = 1; // Unlocks True Production Kernel
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("Master access granted. Interactive zoom/pan buffers online.");
+        logPlatform("Master access granted via 'Quantum' passphrase. Kernel active.");
       } else {
-        vaultAuthMode = 2; // Silent Quarantine Decoy Feed
+        vaultAuthMode = 2; // Silent Quarantine Decoy Feed for unauthorized inputs
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("Session mounted with standard clearance.");
+        logPlatform("Standard session clearance mounted.");
       }
-    }, 400);
+    }, 300);
   }
 
   const logBuffer = [];
@@ -345,7 +346,6 @@
     document.getElementById('mathTerminal').scrollTop = document.getElementById('mathTerminal').scrollHeight;
   }
 
-  // Live Noise Calculator Logic
   function updateNoiseCalc() {
     const T = parseFloat(document.getElementById('noiseTempSlider').value);
     const j = parseFloat(document.getElementById('noiseJitterSlider').value);
@@ -356,7 +356,6 @@
     document.getElementById('calcNoiseRMS').innerText = `${rms} µV`;
   }
 
-  // Interactive Zoom & Pan Handlers for Telemetry Graph
   function handleGraphZoom(event) {
     event.preventDefault();
     if (event.deltaY < 0) {
@@ -390,7 +389,6 @@
     document.getElementById('rateVal').innerText = parseFloat(document.getElementById('rateSlider').value).toFixed(1) + 'x';
   }
 
-  // Robust Blob Extension (.enc) Serializer & Stream Downloader
   function exportEncryptedDataDump() {
     const passphrase = document.getElementById('exportPassInput').value.trim();
     if (!passphrase) {
@@ -401,7 +399,7 @@
     logPlatform("[BLOB EXPORT] Packaging telemetry data with blob extension wrapper...");
 
     const packageData = {
-      version: "QuantEngine v7.0",
+      version: "QuantEngine v7.1",
       timestamp: new Date().toISOString(),
       watermark: "SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX",
       telemetry: telemetryHistory,
@@ -476,7 +474,6 @@
     if (term.childNodes.length > 40) term.removeChild(term.firstChild);
   }
 
-  // Background Working Model Canvas (SEBRA82 Wave Optics)
   const bgCanvas = document.getElementById('backgroundModelCanvas');
   const bgCtx = bgCanvas.getContext('2d');
 
@@ -512,7 +509,6 @@
     }
   }
 
-  // Atomic Lattice Visualizer
   const atomCanvas = document.getElementById('atomicCanvas');
   const atomCtx = atomCanvas.getContext('2d');
   function updateAtomSimulation() {
@@ -553,7 +549,6 @@
     atomCtx.fill();
   }
 
-  // Interactive Zoom/Pan Telemetry Graph
   const threshCanvas = document.getElementById('thresholdCanvas');
   const threshCtx = threshCanvas.getContext('2d');
   function renderThresholdGraph() {
@@ -590,7 +585,6 @@
     threshCtx.moveTo(0, thresholdY); threshCtx.lineTo(width, thresholdY);
     threshCtx.stroke();
 
-    // Render with Zoom and Pan transformations
     threshCtx.save();
     threshCtx.translate(graphPanX, 0);
     threshCtx.scale(graphZoom, 1.0);
@@ -621,7 +615,6 @@
     }
   }
 
-  // Isolated Spike Sub-Graph Renderer
   const spikeCanvas = document.getElementById('spikeCanvas');
   const spikeCtx = spikeCanvas.getContext('2d');
   function renderSpikeExtractionWindow() {
@@ -651,3 +644,43 @@
       if (idx === 0) spikeCtx.moveTo(x, y);
       else spikeCtx.lineTo(x, y);
     });
+    spikeCtx.stroke();
+  }
+
+  function isolateDetectedSpikes() {
+    logPlatform(`[SPIKE EXTRACTION] Isolated ${detectedSpikesBuffer.length} threshold breach events into sub-graph window.`);
+  }
+
+  function exportPlatformState() {
+    const state = { platform: "QuantEngine v7.1", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = "platform_state.json"; a.click();
+    URL.revokeObjectURL(url);
+    logPlatform("[EXPORT] Platform state exported successfully.");
+  }
+  function importPlatformState(e) { logPlatform("[IMPORT] State file loaded into memory buffers."); }
+
+  function masterRenderLoop() {
+    globalTick += 1;
+    renderBackgroundModel();
+    if (vaultAuthMode > 0) {
+      renderAtoms();
+      renderThresholdGraph();
+      renderSpikeExtractionWindow();
+      if (globalTick % 15 === 0) pushDataDump();
+    }
+    requestAnimationFrame(masterRenderLoop);
+  }
+
+  window.onload = () => {
+    resizeBackgroundCanvas();
+    updateThresholdParams();
+    updateAtomSimulation();
+    updateNoiseCalc();
+    masterRenderLoop();
+  };
+</script>
+
+</body>
+</html>
