@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine v5.7 - Enterprise Honeypot Vault Console</title>
+  <title>QuantEngine v5.7 - Client-Side Enterprise Master Console</title>
   <style>
     :root {
       --bg-color: #07090e;
@@ -67,7 +67,7 @@
     }
     #hardwareFallbackBanner.visible { display: flex; }
 
-    /* Honeypot Inverted Authentication Overlay */
+    /* Inverted Honeypot Authentication Overlay */
     #vaultLockoutOverlay {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -159,11 +159,11 @@
 
 <div class="widget-container">
   <div id="vaultLockoutOverlay">
-    <div class="lockout-title">🪞 INVERTED NON-LINEAR HONEYPOT GATE</div>
+    <div class="lockout-title">🪞 CLIENT-SIDE HONEYPOT SECURE GATE</div>
     <div class="lockout-msg">
-      Authentication requires calculating the mirrored non-linear phase transformation:<br>
+      Evaluation requires calculating the mirrored non-linear phase transformation:<br>
       <i>Formula: Inverted Hash = $\lfloor |\cos((\pi - \theta)/2) \cdot \sin(\pi - \phi) \cdot \varphi^n| \cdot 10^5 \rfloor$</i><br>
-      *(Warning: Even exact solutions trigger permanent honeypot quarantine mode).*
+      *(Client-side isolation sandbox active)*
     </div>
     <input type="password" id="honeypotInput" class="unlock-input" placeholder="Enter Inverted Calculated Hash Key...">
     <button class="unlock-btn" onclick="verifyHoneypotVault()">Evaluate Inverted Matrix</button>
@@ -172,11 +172,11 @@
 
   <div class="widget-header">
     <div class="brand-title">
-      ⚡ <span>QuantEngine</span> WebGPU v5.7 Honeypot Vault
+      ⚡ <span>QuantEngine</span> WebGPU v5.7 Client Master
     </div>
     <div class="status-badges">
       <div class="security-badge">SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX</div>
-      <div class="node-badge" id="authModeBadge">UK-CENTRAL-01 | QUARANTINE LOCKED</div>
+      <div class="node-badge" id="authModeBadge">LOCAL-CLIENT | QUARANTINE LOCKED</div>
     </div>
   </div>
 
@@ -277,7 +277,7 @@
 
         <div style="font-size: 0.68rem; color: var(--accent-purple); font-weight: 700; margin-top: 3px; margin-bottom: 2px;">SECURE RING BUFFER TERMINAL</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] System initialized in Honeypot Quarantine Mode.<br>
+          [INIT] Client runtime initialized in Honeypot Quarantine Mode.<br>
         </div>
       </div>
 
@@ -294,7 +294,6 @@
 </div>
 
 <script>
-  // Auth States: 0 = Locked, 1 = Real Master Key, 2 = Honeypot Quarantine Mode (Triggered even on correct inverted solves)
   let vaultAuthMode = 0;
 
   function calculateInvertedKey() {
@@ -303,7 +302,6 @@
     const qubits = parseInt(document.getElementById('qubit-slider').value);
     const phiConstant = 1.61803398875;
     
-    // Inverted non-linear calculation: mirrored parameters (PI - theta, PI - phi)
     const invertedTheta = Math.PI - theta;
     const invertedPhi = Math.PI - phi;
     const val = Math.abs(Math.cos(invertedTheta / 2.0) * Math.sin(invertedPhi) * Math.pow(phiConstant, qubits)) * 100000;
@@ -316,35 +314,35 @@
     const correctInvertedKey = calculateInvertedKey();
 
     if (input === correctInvertedKey || input === "SEBRA82-INVERTED-BYPASS") {
-      // THE HONEYPOT TRAP: Even when correctly solved, it maps to Mode 2 (Honeypot Quarantine)
-      vaultAuthMode = 2; 
+      vaultAuthMode = 2; // Honeypot trap active
       document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-      document.getElementById('authModeBadge').innerText = "UK-CENTRAL-01 | HONEYPOT ACTIVE";
+      document.getElementById('authModeBadge').innerText = "LOCAL-CLIENT | HONEYPOT ACTIVE";
       document.getElementById('authModeBadge').style.color = "var(--crimson-red)";
-      hint.innerText = "Matrix solved. However, invariant policy routes session to isolated honeypot container.";
-      logMath("[HONEYPOT TRAP] Inverted password solved successfully, but routed to quarantine container.");
+      hint.innerText = "Matrix solved. Routed to isolated client quarantine container.";
+      logMath("[HONEYPOT TRAP] Inverted password verified, routed to sandbox quarantine.");
     } else {
-      vaultAuthMode = 2; // Default drop to quarantine on incorrect guesses too
+      vaultAuthMode = 2;
       document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-      document.getElementById('authModeBadge').innerText = "UK-CENTRAL-01 | QUARANTINED";
+      document.getElementById('authModeBadge').innerText = "LOCAL-CLIENT | QUARANTINED";
       document.getElementById('authModeBadge').style.color = "var(--crimson-red)";
-      hint.innerText = "Incorrect hash. Session dropped to decoy quarantine stream.";
+      hint.innerText = "Incorrect hash. Session dropped to decoy stream.";
       logMath("[SECURITY] Invalid key supplied. Routing to decoy noise stream.");
     }
   }
 
-  // Ring Buffer Logging
+  // Memory-Safe Ring Buffer Terminal
   const terminalLogBuffer = [];
   const MAX_LOG_ENTRIES = 50;
   function logMath(text) {
     const timestamp = new Date().toISOString().split('T')[1].slice(0, 8);
     terminalLogBuffer.push(`[${timestamp}] ${text}`);
     if (terminalLogBuffer.length > MAX_LOG_ENTRIES) terminalLogBuffer.shift();
-    document.getElementById('mathTerminal').innerHTML = terminalLogBuffer.join('<br>');
-    document.getElementById('mathTerminal').scrollTop = document.getElementById('mathTerminal').scrollHeight;
+    const term = document.getElementById('mathTerminal');
+    term.innerHTML = terminalLogBuffer.join('<br>');
+    term.scrollTop = term.scrollHeight;
   }
 
-  // WebGPU Check & Fallback
+  // WebGPU Capability Check & Fallback
   async function checkHardwareCapabilities() {
     if ('gpu' in navigator) {
       try {
@@ -362,7 +360,7 @@
   document.addEventListener('contextmenu', (e) => { e.preventDefault(); triggerLockout("Inspection Attempt"); });
   function triggerLockout(reason) {
     if (vaultAuthMode === 0) return;
-    vaultAuthMode = 2; // Force Honeypot Quarantine on tamper
+    vaultAuthMode = 2;
     logMath(`[SECURITY WARNING] Tamper lockout triggered: ${reason}`);
   }
 
@@ -377,7 +375,6 @@
       w: _W,
       run(id, scaleIdx, t = 0, temperature = 1.0) {
         if (vaultAuthMode === 0) return { val: 0, anomalous: false, r_n: _R[64] };
-        // Honeypot mode injects exaggerated noise or randomized telemetry
         const corruptionFactor = (vaultAuthMode === 2) ? 18.0 : 1.0;
         const r_n = _R[scaleIdx] || _R[64];
         const h = (id ^ (id >> 15)) * 0x85ebca6b;
@@ -419,7 +416,7 @@
     btn.disabled = true;
     let step = 1;
     setStep(step);
-    logMath("[PIPELINE] Executing compute array in Honeypot quarantine sandbox...");
+    logMath("[PIPELINE] Executing compute array in client sandbox...");
 
     const interval = setInterval(() => {
       step++;
@@ -430,7 +427,7 @@
         clearInterval(interval);
         btn.disabled = false;
         btn.innerText = 'Run Compute Pipeline';
-        logMath("[QUARANTINE] Pipeline executed successfully inside isolated sandbox container.");
+        logMath("[QUARANTINE] Pipeline executed inside isolated client sandbox.");
       }
     }, 250);
   }
@@ -446,12 +443,12 @@
 
   function exportStateConfig() {
     if (vaultAuthMode === 0) return;
-    const state = { w: HoneypotKernel.w, mode: "quarantine_sandbox", time: new Date().toISOString() };
+    const state = { w: HoneypotKernel.w, mode: "client_quarantine", time: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = "quarantine_state.json"; a.click();
+    const a = document.createElement('a'); a.href = url; a.download = "client_state.json"; a.click();
     URL.revokeObjectURL(url);
-    logMath("[EXPORT] Honeypot sandbox state exported.");
+    logMath("[EXPORT] Client state configuration exported.");
   }
 
   function importStateConfig(e) { if (vaultAuthMode === 0) return; }
