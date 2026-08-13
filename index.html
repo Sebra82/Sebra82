@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine v6.4 - Consolidated Master Platform Console</title>
+  <title>QuantEngine v6.6 - Blob Extensions Master Console</title>
   <style>
     :root {
       --bg-deep: #030508;
@@ -151,7 +151,7 @@
   <div id="vaultLockoutOverlay">
     <div class="lockout-title">🔐 Secure Authentication Portal</div>
     <div class="lockout-msg">
-      Enter master enterprise access key to mount QuantEngine v6.4 WebGPU platform buffers.<br>
+      Enter master enterprise access key to mount QuantEngine v6.6 WebGPU platform buffers.<br>
       <i>System Node: UK-CENTRAL-01 | Encrypted Session Gateway</i>
     </div>
     <input type="password" id="stealthInput" class="unlock-input" placeholder="Enter Access Key..." onkeydown="if(event.key==='Enter')verifyStealthVault()">
@@ -160,10 +160,10 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v6.4</span> Master Platform Console</div>
+    <div class="brand-title">⚡ <span>QuantEngine v6.6</span> Blob Extension Console</div>
     <div class="status-badges">
       <div class="security-badge">SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX</div>
-      <div class="node-badge" id="authModeBadge">UK-CENTRAL-01 | MODEL ACTIVE</div>
+      <div class="node-badge" id="authModeBadge">UK-CENTRAL-01 | BLOB EXT ACTIVE</div>
     </div>
   </div>
 
@@ -193,8 +193,8 @@
 
       <div class="panel-card">
         <div class="panel-title">
-          <span>SECURE DATA RETENTION POLICY</span>
-          <span style="color:var(--accent-purple); font-size:0.6rem;">Auto-Pruned</span>
+          <span>BLOB EXTENSION & RETENTION VAULT</span>
+          <span style="color:var(--accent-purple); font-size:0.6rem;">Multi-MIME Support</span>
         </div>
         <div class="control-item" style="margin-bottom: 4px;">
           <div class="control-label"><span>Archival Window Quota</span></div>
@@ -204,11 +204,13 @@
           </select>
         </div>
         <div class="control-item" style="margin-bottom: 4px;">
-          <div class="control-label"><span>Encryption Passphrase</span></div>
+          <div class="control-label"><span>Vault Passphrase</span></div>
           <input type="password" id="exportPassInput" class="unlock-input" style="width: 100%; font-size: 0.75rem; padding: 0.35rem;" placeholder="Enter Passphrase...">
         </div>
         <div class="btn-row">
-          <button class="action-btn" onclick="exportEncryptedDataDump()">Export & Encrypt Data Dump</button>
+          <button class="action-btn" onclick="exportEncryptedDataDump()">Export .enc Blob</button>
+          <button class="action-btn btn-secondary" onclick="document.getElementById('importEncFile').click()">Import .enc Blob</button>
+          <input type="file" id="importEncFile" style="display:none" accept=".enc,.json,.dat" onchange="importEncryptedDataDump(event)">
         </div>
       </div>
 
@@ -309,7 +311,7 @@
       if (input === "quantum") {
         vaultAuthMode = 1; // Real Master Kernel Unlocked
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("Master access granted. Verified production buffers online.");
+        logPlatform("Master access granted. Blob extension buffers online.");
       } else {
         vaultAuthMode = 2; // Silent Quarantine Decoy Feed
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
@@ -334,16 +336,18 @@
     logPlatform(`[RETENTION] Archival window updated to ${retentionMonths}-month sliding window.`);
   }
 
+  // Robust Blob Extension (.enc) Serializer & Stream Downloader
   function exportEncryptedDataDump() {
     const passphrase = document.getElementById('exportPassInput').value.trim();
     if (!passphrase) {
-      alert("Please enter an encryption passphrase to secure the export package.");
+      alert("Please enter a passphrase to secure the .enc blob package.");
       return;
     }
 
-    logPlatform(`[EXPORT] Compiling ${retentionMonths}-month telemetry logs for encryption...`);
+    logPlatform(`[BLOB EXPORT] Packaging ${retentionMonths}-month telemetry data with blob extension wrapper...`);
 
     const packageData = {
+      version: "QuantEngine v6.6",
       timestamp: new Date().toISOString(),
       retentionPolicy: `${retentionMonths} Months`,
       watermark: "SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX",
@@ -354,17 +358,57 @@
 
     const jsonStr = JSON.stringify(packageData);
     const encryptedHex = btoa(jsonStr).split('').map(c => String.fromCharCode(c.charCodeAt(0) ^ passphrase.charCodeAt(0 % passphrase.length))).join('');
-    const finalPayload = btoa(encryptedHex);
+    
+    const container = {
+      type: "SEBRA82-BLOB-ENCRYPTED-CONTAINER",
+      payload: btoa(encryptedHex)
+    };
 
-    const blob = new Blob([finalPayload], { type: "application/octet-stream" });
+    // Force strict binary application/octet-stream blob type for universal recognition
+    const blob = new Blob([JSON.stringify(container, null, 2)], { type: "application/octet-stream" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `QuantEngine_${retentionMonths}M_Secure_Dump_${Date.now()}.enc`;
+    a.download = `QuantEngine_${retentionMonths}M_Vault_${Date.now()}.enc`;
     a.click();
     URL.revokeObjectURL(url);
 
-    logPlatform("[SUCCESS] Data dump encrypted and exported securely.");
+    logPlatform("[SUCCESS] .enc blob container successfully compiled and downloaded.");
+  }
+
+  // Universal Blob Extension Importer & Decryptor
+  function importEncryptedDataDump(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const passphrase = document.getElementById('exportPassInput').value.trim();
+    if (!passphrase) {
+      alert("Please enter the correct decryption passphrase in the vault box before importing.");
+      return;
+    }
+
+    logPlatform(`[BLOB IMPORT] Unpacking and decrypting blob file '${file.name}'...`);
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const container = JSON.parse(e.target.result);
+        if (container.type !== "SEBRA82-BLOB-ENCRYPTED-CONTAINER") {
+          throw new Error("Invalid blob container header.");
+        }
+
+        const decodedBase64 = atob(container.payload);
+        const decryptedJsonStr = decodedBase64.split('').map(c => String.fromCharCode(c.charCodeAt(0) ^ passphrase.charCodeAt(0 % passphrase.length))).join('');
+        const data = JSON.parse(atob(decryptedJsonStr));
+
+        logPlatform(`[SUCCESS] Blob vault unlocked! Loaded ${data.telemetry.length} telemetry records (${data.retentionPolicy} policy).`);
+        alert(`Blob Vault Unlocked Successfully!\nWatermark: ${data.watermark}\nRecords Loaded: ${data.telemetry.length}`);
+      } catch (err) {
+        logPlatform("[ERROR] Blob decryption failed. Incorrect passphrase or unrecognized format.");
+        alert("Decryption Failed: Incorrect passphrase or unrecognized blob container structure.");
+      }
+    };
+    reader.readAsText(file);
   }
 
   function updateThresholdParams() {
@@ -565,7 +609,7 @@
   }
 
   function exportPlatformState() {
-    const state = { platform: "QuantEngine v6.4", retention: `${retentionMonths} Months`, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
+    const state = { platform: "QuantEngine v6.6", retention: `${retentionMonths} Months`, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a'); a.href = url; a.download = "platform_state.json"; a.click();
