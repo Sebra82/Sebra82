@@ -261,7 +261,7 @@
           <strong id="calcRadius">--</strong>
         </div>
         <div class="calc-row">
-          <span>Hilbert Norm ($\langle\Psi\vert{}\Psi\rangle$):</span>
+          <span>Hilbert Norm ($\langle\Psi|\Psi\rangle$):</span>
           <strong id="calcNorm" style="color: var(--accent-green);">1.000000</strong>
         </div>
         <div class="calc-row">
@@ -292,6 +292,7 @@
 </div>
 
 <script>
+  // Auth state: 0 = Locked, 1 = Real Kernel (Unlocked via "Quantum"), 2 = Silent Honeypot Quarantine
   let vaultAuthMode = 0;
 
   const ClientHilbertEngine = {
@@ -303,13 +304,14 @@
   };
 
   function verifyStealthVault() {
-    const input = document.getElementById('stealthInput').value.trim();
+    // Trim whitespaces and make comparison case-insensitive
+    const input = document.getElementById('stealthInput').value.trim().toLowerCase();
     const errorMsg = document.getElementById('authError');
 
     errorMsg.innerText = "Authenticating session payload...";
     
     setTimeout(() => {
-      if (input === "Quantum") {
+      if (input === "quantum") {
         vaultAuthMode = 1; // Real Master Kernel Unlocked for you
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
         logMath("[SESSION] Master access granted. Verified production buffers online.");
@@ -440,4 +442,70 @@
 
   function exportStateConfig() {
     if (vaultAuthMode === 0) return;
-    const state =
+    const state = { w: SecureKernel.w, time: new Date().toISOString() };
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = "state.json"; a.click();
+    URL.revokeObjectURL(url);
+    logMath("[EXPORT] State configuration exported.");
+  }
+
+  function importStateConfig(e) { if (vaultAuthMode === 0) return; }
+
+  function renderLoop() {
+    if (vaultAuthMode > 0) {
+      globalTick += parseFloat(document.getElementById('sliderSpeed').value);
+      document.getElementById('hudTick').innerText = Math.floor(globalTick);
+
+      const scaleIdx = parseInt(document.getElementById('qubit-slider').value);
+      const temperature = parseFloat(document.getElementById('sliderTemp').value);
+      const t = parseFloat(document.getElementById('theta-slider').value);
+
+      updateControls();
+
+      const width = primaryCanvas.width;
+      const height = primaryCanvas.height;
+
+      primaryCtx.fillStyle = 'rgba(2, 6, 23, 0.35)';
+      primaryCtx.fillRect(0, 0, width, height);
+      primaryCtx.strokeStyle = '#00f3ff';
+      primaryCtx.lineWidth = 2.5;
+      primaryCtx.beginPath();
+
+      anomalyCtx.fillStyle = 'rgba(2, 6, 23, 0.35)';
+      anomalyCtx.fillRect(0, 0, width, height);
+      anomalyCtx.strokeStyle = '#ff3344';
+      anomalyCtx.lineWidth = 2.5;
+      anomalyCtx.beginPath();
+
+      let anomalyCount = 0;
+      for (let xPos = 0; xPos < width; xPos += 2) {
+        const res = SecureKernel.run(xPos, scaleIdx, Math.floor(globalTick), temperature, t);
+        const yPos1 = (height / 2) - ((res.val - 0.35) * 55.0);
+        if (xPos === 0) primaryCtx.moveTo(xPos, yPos1);
+        else primaryCtx.lineTo(xPos, yPos1);
+
+        if (res.anomalous) {
+          anomalyCount++;
+          anomalyCtx.lineTo(xPos, (height / 2) - (res.noise * 4e5));
+        } else {
+          anomalyCtx.lineTo(xPos, height / 2);
+        }
+      }
+      primaryCtx.stroke();
+      anomalyCtx.stroke();
+
+      document.getElementById('hudAnomalyStatus').innerText = vaultAuthMode === 2 ? "QUARANTINE DECOY ACTIVE" : `${anomalyCount} Spikes`;
+    }
+    requestAnimationFrame(renderLoop);
+  }
+
+  window.onload = () => {
+    checkHardwareCapabilities();
+    updateControls();
+    renderLoop();
+  };
+</script>
+
+</body>
+</html>
