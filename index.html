@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEBRA82 v5.5 Hybrid Engine Test Environment</title>
+  <title>SEBRA82 v5.5 Interactive Zoom & Pan Model Console</title>
   <style>
     :root {
       --bg-color: #07090e;
-      --card-bg: rgba(13, 17, 23, 0.90);
+      --card-bg: rgba(13, 17, 23, 0.92);
       --border-color: #1f293d;
       --neon-cyan: #00f3ff;
       --cyan-glow: rgba(0, 243, 255, 0.3);
@@ -16,76 +16,84 @@
       --accent-green: #7ee787;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: monospace; }
-    body { background-color: var(--bg-color); color: var(--text-main); padding: 1.5rem; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-    .widget-container { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 1.5rem; max-width: 1050px; width: 100%; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8); }
+    body { background-color: var(--bg-color); color: var(--text-main); padding: 1.5rem; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+    .widget-container { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 1.5rem; max-width: 1100px; width: 100%; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9); }
     .widget-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); }
     .brand-title { font-size: 1.1rem; font-weight: bold; color: #fff; }
     .brand-title span { color: var(--neon-cyan); }
     .node-badge { font-size: 0.75rem; background: rgba(31, 41, 61, 0.6); color: var(--accent-green); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border-color); }
     
-    .canvas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-    .canvas-card { background: rgba(4, 6, 10, 0.7); border-radius: 10px; border: 1px solid var(--border-color); padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; }
+    .layout-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; }
+    .viewport-card { background: rgba(4, 6, 10, 0.8); border-radius: 10px; border: 1px solid var(--border-color); padding: 1rem; display: flex; flex-direction: column; position: relative; }
     
-    canvas { width: 100%; height: 220px; background: #020408; border-radius: 6px; border: 1px solid rgba(0, 243, 255, 0.3); display: block; margin-bottom: 1rem; }
-    
-    .controls-panel { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem; }
+    .canvas-wrapper { position: relative; width: 100%; height: 380px; background: #020408; border-radius: 6px; border: 1px solid rgba(0, 243, 255, 0.3); overflow: hidden; cursor: grab; }
+    .canvas-wrapper:active { cursor: grabbing; }
+    canvas { display: block; width: 100%; height: 100%; }
+
+    .viewport-overlay { position: absolute; top: 15px; left: 15px; background: rgba(7, 9, 14, 0.85); border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 6px; font-size: 0.72rem; color: var(--text-muted); pointer-events: none; }
+    .viewport-overlay span { color: var(--neon-cyan); font-weight: bold; }
+
+    .controls-panel { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem; background: rgba(13, 17, 23, 0.6); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); }
     .control-row { display: flex; flex-direction: column; gap: 3px; }
-    .control-label { font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between; }
+    .control-label { font-size: 0.78rem; color: var(--text-muted); display: flex; justify-content: space-between; }
     .control-label span { color: var(--text-main); font-weight: bold; }
     input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1f293d; color: #fff; border: 1px solid var(--border-color); padding: 5px; border-radius: 4px; }
     
+    .sidebar-card { background: rgba(4, 6, 10, 0.8); border-radius: 10px; border: 1px solid var(--border-color); padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; }
     .metrics-list { margin-bottom: 1rem; }
     .metric-item { display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.5rem; color: var(--text-muted); }
     .metric-item strong { color: var(--neon-cyan); font-size: 0.85rem; }
 
-    .equation-box { background: #04060a; border: 1px solid rgba(0, 243, 255, 0.4); border-radius: 6px; padding: 0.75rem; margin-bottom: 1rem; font-size: 0.8rem; color: var(--neon-cyan); }
-    
-    .action-row { display: flex; gap: 8px; margin-top: 0.5rem; }
-    .action-btn { flex: 1; padding: 0.7rem; font-weight: bold; color: #04060a; background: var(--neon-cyan); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 0 12px var(--cyan-glow); transition: 0.2s; font-size: 0.8rem; text-align: center; }
+    .equation-box { background: #04060a; border: 1px solid rgba(0, 243, 255, 0.4); border-radius: 6px; padding: 0.75rem; margin-bottom: 1rem; font-size: 0.78rem; color: var(--neon-cyan); }
+    .action-btn { width: 100%; padding: 0.75rem; font-weight: bold; color: #04060a; background: var(--neon-cyan); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 0 12px var(--cyan-glow); transition: 0.2s; font-size: 0.82rem; margin-bottom: 8px; text-align: center; }
     .action-btn:hover { box-shadow: 0 0 20px rgba(0, 243, 255, 0.6); }
     .secondary-btn { background: #21262d; color: var(--text-main); border: 1px solid var(--border-color); box-shadow: none; }
     .secondary-btn:hover { background: #30363d; }
 
-    @media (max-width: 768px) { .canvas-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .layout-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
 <div class="widget-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v5.5</span> Test Environment Console</div>
-    <div class="node-badge" id="vault-status">VAULT: SECURED [AES-256-GCM]</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v5.5</span> Interactive Core Model Visualizer</div>
+    <div class="node-badge">L1 ALIGNED [3.12 KB | 0 Bytes GC]</div>
   </div>
 
-  <div class="canvas-grid">
-    <div class="canvas-card">
-      <div>
-        <div class="card-header" style="margin-bottom:0.75rem; font-size:0.8rem; color:var(--neon-cyan); font-weight:bold;">LIVE INTERACTIVE RENDER CORE</div>
-        <canvas id="testEnvCanvas" width="450" height="220"></canvas>
+  <div class="layout-grid">
+    <div class="viewport-card">
+      <div style="font-size:0.8rem; color:var(--neon-cyan); font-weight:bold; margin-bottom: 8px;">LIVE MODEL VIEWPORT (Scroll to Zoom | Drag to Pan)</div>
+      
+      <div class="canvas-wrapper" id="canvasWrapper">
+        <canvas id="modelCanvas" width="650" height="380"></canvas>
+        <div class="viewport-overlay">
+          Zoom: <span id="zoomDisplay">1.00x</span> | Pan X: <span id="panXDisplay">0</span>px
+        </div>
+      </div>
 
-        <div class="controls-panel">
-          <div class="control-row">
-            <div class="control-label">Engine Mode:</div>
-            <select id="envMode" onchange="renderTestSimulation()">
-              <option value="1" selected>Mode 1: Quantum 2-Slit Wave Optics</option>
-              <option value="0">Mode 0: 3D Spatial Lattice Mesh</option>
-            </select>
-          </div>
-          <div class="control-row">
-            <div class="control-label">Scale Index (n): <span id="envScaleVal">64</span></div>
-            <input type="range" id="envScaleRange" min="0" max="295" value="64" oninput="renderTestSimulation()">
-          </div>
-          <div class="control-row">
-            <div class="control-label">Thermal Temperature (T): <span id="envTempVal">1.00</span></div>
-            <input type="range" id="envTempRange" min="0.1" max="10.0" step="0.1" value="1.0" oninput="renderTestSimulation()">
-          </div>
+      <div class="controls-panel">
+        <div class="control-row">
+          <div class="control-label">Engine Core Mode:</div>
+          <select id="modelMode" onchange="requestRender()">
+            <option value="1" selected>Mode 1: Quantum 2-Slit Wave Optics</option>
+            <option value="0">Mode 0: 3D Spatial Lattice Mesh</option>
+          </select>
+        </div>
+        <div class="control-row">
+          <div class="control-label">Scale Index (n): <span id="modelScaleVal">64</span></div>
+          <input type="range" id="modelScaleRange" min="0" max="295" value="64" oninput="requestRender()">
+        </div>
+        <div class="control-row">
+          <div class="control-label">Thermal Temperature (T): <span id="modelTempVal">1.00</span></div>
+          <input type="range" id="modelTempRange" min="0.1" max="10.0" step="0.1" value="1.0" oninput="requestRender()">
         </div>
       </div>
     </div>
 
-    <div class="canvas-card" style="border-color: rgba(0, 243, 255, 0.3);">
+    <div class="sidebar-card">
       <div>
-        <div class="card-header" style="margin-bottom:0.75rem; font-size:0.8rem; color:var(--accent-green); font-weight:bold;">TEST ENVIRONMENT TELEMETRY</div>
+        <div style="font-size:0.8rem; color:var(--accent-green); font-weight:bold; margin-bottom: 1rem;">MODEL TELEMETRY & STATUS</div>
         
         <div class="metrics-list">
           <div class="metric-item">
@@ -98,7 +106,7 @@
           </div>
           <div class="metric-item">
             <span>Working Memory:</span>
-            <strong>3.12 KB (L1 Packed LUT)</strong>
+            <strong>3.12 KB (L1 LUT)</strong>
           </div>
           <div class="metric-item">
             <span>Heap Allocation:</span>
@@ -112,17 +120,13 @@
 
         <div class="equation-box">
           <div style="font-size: 0.68rem; color: var(--text-muted); margin-bottom: 2px;">Active Closed-Form State:</div>
-          <div id="envStateOutput">r_n = 1.616e-35 * φ^64 [Active Scale Bound]</div>
+          <div id="modelStateOutput">r_n = 1.616e-35 * φ^64 [Active Scale Bound]</div>
         </div>
       </div>
 
       <div>
-        <button class="action-btn" style="width:100%; margin-bottom: 8px;" onclick="triggerStressTest()">Execute 1B Time-Jump ($t = 10^9$)</button>
-        <div class="action-row">
-          <button class="action-btn secondary-btn" onclick="exportEnvironmentState()">Download State (.json)</button>
-          <button class="action-btn secondary-btn" onclick="document.getElementById('importFile').click()">Upload State</button>
-          <input type="file" id="importFile" style="display:none" accept=".json" onchange="importEnvironmentState(event)">
-        </div>
+        <button class="action-btn" onclick="resetViewport()">Reset Zoom & View</button>
+        <button class="action-btn secondary-btn" onclick="triggerStressTest()">Execute 1B Time-Jump ($t = 10^9$)</button>
       </div>
     </div>
   </div>
@@ -144,16 +148,68 @@
   }
 
   let globalTime = 0;
+  let zoom = 1.0;
+  let panX = 0;
+  let panY = 0;
+  let isDragging = false;
+  let startX = 0;
+  let startY = 0;
 
-  function renderTestSimulation() {
-    const mode = parseInt(document.getElementById('envMode').value);
-    const scaleIdx = parseInt(document.getElementById('envScaleRange').value);
-    const temperature = parseFloat(document.getElementById('envTempRange').value);
+  const wrapper = document.getElementById('canvasWrapper');
+  const canvas = document.getElementById('modelCanvas');
 
-    document.getElementById('envScaleVal').innerText = scaleIdx;
-    document.getElementById('envTempVal').innerText = temperature.toFixed(2);
+  // Mouse Drag Panning Handlers
+  wrapper.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.clientX - panX;
+    startY = e.clientY - panY;
+  });
 
-    const canvas = document.getElementById('testEnvCanvas');
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    panX = e.clientX - startX;
+    panY = e.clientY - startY;
+    document.getElementById('panXDisplay').innerText = Math.round(panX);
+    requestRender();
+  });
+
+  window.addEventListener('mouseup', () => { isDragging = false; });
+
+  // Scroll to Zoom Handlers (Pinch & Wheel)
+  wrapper.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const zoomIntensity = 0.1;
+    if (e.deltaY < 0) {
+      zoom *= (1 + zoomIntensity);
+    } else {
+      zoom /= (1 + zoomIntensity);
+    }
+    zoom = Math.max(0.2, Math.min(zoom, 10.0)); // Boundary limits
+    document.getElementById('zoomDisplay').innerText = zoom.toFixed(2) + 'x';
+    requestRender();
+  }, { passive: false });
+
+  function resetViewport() {
+    zoom = 1.0;
+    panX = 0;
+    panY = 0;
+    document.getElementById('zoomDisplay').innerText = "1.00x";
+    document.getElementById('panXDisplay').innerText = "0";
+    requestRender();
+  }
+
+  function requestRender() {
+    window.requestAnimationFrame(renderModelSimulation);
+  }
+
+  function renderModelSimulation() {
+    const mode = parseInt(document.getElementById('modelMode').value);
+    const scaleIdx = parseInt(document.getElementById('modelScaleRange').value);
+    const temperature = parseFloat(document.getElementById('modelTempRange').value);
+
+    document.getElementById('modelScaleVal').innerText = scaleIdx;
+    document.getElementById('modelTempVal').innerText = temperature.toFixed(2);
+
     const ctx = canvas.getContext('2d');
     const width = canvas.width;
     const height = canvas.height;
@@ -161,18 +217,25 @@
     ctx.fillStyle = '#020408';
     ctx.fillRect(0, 0, width, height);
 
+    ctx.save();
+    // Apply Viewport Transformations (Pan & Zoom)
+    ctx.translate(width / 2 + panX, height / 2 + panY);
+    ctx.scale(zoom, zoom);
+    ctx.translate(-width / 2, -height / 2);
+
     const r_n = R_LOOKUP_F32[scaleIdx];
 
     if (mode === 1) {
+      // Quantum Wave Optics Mode (Module 6)
       ctx.strokeStyle = '#00f3ff';
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 2 / zoom;
       ctx.beginPath();
 
       const d = 1e-4;
       const a = 2e-5;
       const L = 1.0;
 
-      for (let xPos = 0; xPos < width; xPos++) {
+      for (let xPos = 0; xPos < width; xPos += 2) {
         const raw_x = (xPos - width / 2) * 0.0001;
         const h = (xPos ^ (xPos >> 15)) * 0x85ebca6b;
         const noise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature;
@@ -186,29 +249,31 @@
         const interf = Math.cos(phase_interf) ** 2;
         const diffract = phase_diffract === 0 ? 1.0 : (Math.sin(phase_diffract) / phase_diffract) ** 2;
         const probability = interf * diffract * 50.0;
-        const yPos = height - (probability * (height / 70));
+        const yPos = height - 60 - (probability * 80.0);
 
         if (xPos === 0) ctx.moveTo(xPos, yPos);
         else ctx.lineTo(xPos, yPos);
       }
       ctx.stroke();
-    } else {
-      ctx.strokeStyle = 'rgba(0, 243, 255, 0.5)';
-      ctx.lineWidth = 1.5;
-      globalTime += 0.02;
 
-      for (let r = 0; r < 6; r++) {
+    } else {
+      // 3D Spatial Lattice Mesh Mode (Modules 1-5)
+      ctx.strokeStyle = 'rgba(0, 243, 255, 0.6)';
+      ctx.lineWidth = 1.5 / zoom;
+      globalTime += 0.01;
+
+      for (let r = 0; r < 10; r++) {
         ctx.beginPath();
-        for (let c = 0; c < 20; c++) {
-          const id = r * 20 + c;
+        for (let c = 0; c < 25; c++) {
+          const id = r * 25 + c;
           const h = (id ^ (id >> 15)) * 0x85ebca6b;
           const noise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature;
           const wave = Math.sin(c * 0.3 + globalTime) * Math.cos(r * 0.3 + globalTime);
           
-          const xBase = c * (width / 20) + 10;
-          const yBase = r * 25 + 30;
-          const projX = xBase + wave * 10.0;
-          const projY = yBase + wave * 5.0 + (noise * 1e4);
+          const xBase = c * (width / 25) + 15;
+          const yBase = r * 25 + 60;
+          const projX = xBase + wave * 12.0;
+          const projY = yBase + wave * 6.0 + (noise * 1e4);
 
           if (c === 0) ctx.moveTo(projX, projY);
           else ctx.lineTo(projX, projY);
@@ -217,7 +282,17 @@
       }
     }
 
-    document.getElementById('envStateOutput').innerText = `r_n (Index ${scaleIdx}) = ${r_n.toExponential(3)} m [0 Bytes Heap]`;
+    ctx.restore();
+
+    // Render Center Reticle / Axis Reference
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(width / 2, 0); ctx.lineTo(width / 2, height);
+    ctx.moveTo(0, height / 2); ctx.lineTo(width, height / 2);
+    ctx.stroke();
+
+    document.getElementById('modelStateOutput').innerText = `r_n (Index ${scaleIdx}) = ${r_n.toExponential(3)} m [Zoom: ${zoom.toFixed(1)}x]`;
   }
 
   function triggerStressTest() {
@@ -231,47 +306,8 @@
     }, 300);
   }
 
-  function exportEnvironmentState() {
-    const stateData = {
-      watermark: "SEBRA82-PROPRIETARY-SECURE-LOCKED-VAULT-77291-TX",
-      mode: document.getElementById('envMode').value,
-      scaleIndex: document.getElementById('envScaleRange').value,
-      temperature: document.getElementById('envTempRange').value,
-      timestamp: new Date().toISOString()
-    };
-    const blob = new Blob([JSON.stringify(stateData, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = "sebra82_v5.5_state_export.json";
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-
-  function importEnvironmentState(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      try {
-        const parsed = JSON.parse(e.target.result);
-        if (parsed.watermark && parsed.watermark.includes("SEBRA82")) {
-          document.getElementById('envMode').value = parsed.mode || "1";
-          document.getElementById('envScaleRange').value = parsed.scaleIndex || "64";
-          document.getElementById('envTempRange').value = parsed.temperature || "1.0";
-          renderTestSimulation();
-          alert("SEBRA82 State Successfully Imported and Verified via Vault Header.");
-        } else {
-          alert("Error: Invalid or unverified SEBRA82 watermark signature.");
-        }
-      } catch (err) {
-        alert("Parsing Error: Invalid JSON configuration file.");
-      }
-    };
-    reader.readAsText(file);
-  }
-
-  window.onload = renderTestSimulation;
+  // Initial render trigger
+  window.onload = requestRender;
 </script>
 
 </body>
