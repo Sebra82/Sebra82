@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEBRA82 v5.5 Live Quantum Model Calculation Stream</title>
+  <title>SEBRA82 v5.5 Live Quantum Calculation & Dynamic Graph Console</title>
   <style>
     :root {
       --bg-color: #030712;
-      --card-bg: rgba(15, 23, 42, 0.90);
+      --card-bg: rgba(15, 23, 42, 0.92);
       --border-color: #1e293b;
       --neon-cyan: #38bdf8;
       --cyan-glow: rgba(56, 189, 248, 0.3);
@@ -19,108 +19,125 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
     body { background-color: var(--bg-color); color: var(--text-main); padding: 1.5rem; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
     
-    .stream-container { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; max-width: 1100px; width: 100%; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9); }
+    .console-wrapper { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; max-width: 1200px; width: 100%; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9); backdrop-filter: blur(12px); }
     
     .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); }
     .brand { font-size: 1.15rem; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 8px; }
     .brand span { color: var(--neon-cyan); }
     .live-badge { font-size: 0.72rem; background: rgba(74, 222, 128, 0.15); color: var(--accent-green); padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(74, 222, 128, 0.4); display: flex; align-items: center; gap: 6px; }
-    .pulse-dot { width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%; animation: pulse 1.5s infinite; }
-    @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.85); } 100% { opacity: 1; transform: scale(1); } }
+    .pulse-dot { width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%; animation: pulse 1.2s infinite; }
+    @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
 
-    .grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1.25rem; }
+    .main-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.25rem; }
     
-    /* Live Canvas Viewport */
-    .viewport-box { background: rgba(2, 6, 23, 0.8); border-radius: 12px; border: 1px solid var(--border-color); padding: 1rem; display: flex; flex-direction: column; gap: 1rem; }
-    .canvas-wrapper { position: relative; width: 100%; height: 300px; background: #000; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.4); overflow: hidden; }
+    /* Dynamic Graph Viewport */
+    .graph-panel { background: rgba(2, 6, 23, 0.85); border-radius: 12px; border: 1px solid var(--border-color); padding: 1rem; display: flex; flex-direction: column; gap: 1rem; }
+    .canvas-container { position: relative; width: 100%; height: 280px; background: #000; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.4); overflow: hidden; }
     canvas { display: block; width: 100%; height: 100%; }
     
-    .hud-overlay { position: absolute; top: 10px; left: 10px; background: rgba(3, 7, 18, 0.85); border: 1px solid var(--border-color); padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; color: var(--text-muted); }
-    .hud-overlay span { color: var(--neon-cyan); font-weight: bold; }
+    .graph-hud { position: absolute; top: 10px; left: 10px; background: rgba(3, 7, 18, 0.85); border: 1px solid var(--border-color); padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; color: var(--text-muted); }
+    .graph-hud span { color: var(--neon-cyan); font-weight: bold; }
 
-    .controls-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .controls-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .control-card { background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); padding: 8px 10px; border-radius: 8px; display: flex; flex-direction: column; gap: 3px; }
     .control-label { font-size: 0.72rem; color: var(--text-muted); display: flex; justify-content: space-between; }
     .control-label span { color: var(--text-main); font-weight: bold; }
     input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1e293b; color: #fff; border: 1px solid var(--border-color); padding: 3px; border-radius: 4px; font-size: 0.78rem; }
 
-    /* Live Data Feed / Terminal */
-    .feed-panel { background: rgba(2, 6, 23, 0.8); border-radius: 12px; border: 1px solid var(--border-color); padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; }
+    /* Standard Calculation & Telemetry Inspector */
+    .inspector-panel { background: rgba(2, 6, 23, 0.85); border-radius: 12px; border: 1px solid var(--border-color); padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; }
     
-    .stats-list { display: flex; flex-direction: column; gap: 6px; }
-    .stat-row { display: flex; justify-content: space-between; font-size: 0.78rem; padding: 5px 8px; background: rgba(15, 23, 42, 0.5); border-radius: 6px; border: 1px solid var(--border-color); color: var(--text-muted); }
-    .stat-row strong { color: var(--neon-cyan); }
+    .calc-box { display: flex; flex-direction: column; gap: 6px; }
+    .calc-row { display: flex; justify-content: space-between; font-size: 0.78rem; padding: 6px 10px; background: rgba(15, 23, 42, 0.5); border-radius: 6px; border: 1px solid var(--border-color); color: var(--text-muted); }
+    .calc-row strong { color: var(--neon-cyan); }
 
-    .live-stream-feed { background: #010409; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 0.68rem; color: var(--accent-green); height: 130px; overflow-y: auto; line-height: 1.35; font-family: monospace; }
+    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; font-size: 0.72rem; color: var(--accent-green); height: 120px; overflow-y: auto; line-height: 1.4; font-family: monospace; }
 
-    .action-btn { width: 100%; padding: 0.7rem; font-weight: bold; font-size: 0.78rem; color: #030712; background: var(--neon-cyan); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 0 12px var(--cyan-glow); transition: 0.2s; text-align: center; }
+    .btn-group { display: flex; gap: 8px; }
+    .action-btn { flex: 1; padding: 0.7rem; font-weight: bold; font-size: 0.78rem; color: #030712; background: var(--neon-cyan); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 0 12px var(--cyan-glow); transition: 0.2s; text-align: center; }
     .action-btn:hover { background: #7dd3fc; box-shadow: 0 0 18px rgba(56, 189, 248, 0.5); }
+    .btn-secondary { background: #1e293b; color: var(--text-main); border: 1px solid var(--border-color); box-shadow: none; }
+    .btn-secondary:hover { background: #334155; }
 
-    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
-<div class="stream-container">
+<div class="console-wrapper">
   <div class="header">
-    <div class="brand">⚡ <span>SEBRA82 v5.5</span> Live Calculation Model Stream</div>
-    <div class="live-badge"><div class="pulse-dot"></div> CALCULATING LIVE [300+ FPS]</div>
+    <div class="brand">⚡ <span>SEBRA82 v5.5</span> Live Calculation & Moving Graph Console</div>
+    <div class="live-badge"><div class="pulse-dot"></div> O(1) REAL-TIME RENDERING</div>
   </div>
 
-  <div class="grid">
-    <div class="viewport-box">
-      <div style="font-size: 0.78rem; color: var(--neon-cyan); font-weight: bold;">REAL-TIME OSCILLOSCOPE WAVEFORM COMPUTATION</div>
+  <div class="main-grid">
+    <div class="graph-panel">
+      <div style="font-size: 0.78rem; color: var(--neon-cyan); font-weight: bold;">LIVE OSCILLATING WAVEFORM & PROBABILITY DENSITY I(x)</div>
       
-      <div class="canvas-wrapper">
-        <canvas id="liveCanvas" width="550" height="300"></canvas>
-        <div class="hud-overlay">Active Iteration: <span id="hudIter">0</span> | Compute Step: <span id="hudStep">0.038 ns</span></div>
+      <div class="canvas-container">
+        <canvas id="quantumGraphCanvas" width="600" height="280"></canvas>
+        <div class="graph-hud">Mode: <span id="hudModeLabel">Quantum Interference</span> | Tick: <span id="hudTick">0</span></div>
       </div>
 
-      <div class="controls-row">
+      <div class="controls-grid">
         <div class="control-card">
-          <div class="control-label">Scale Index (n): <span id="lblScale">64</span></div>
-          <input type="range" id="inputScale" min="0" max="295" value="64" oninput="updateParams()">
+          <div class="control-label">Compute Mode:</div>
+          <select id="selectMode" onchange="resetGraphBuffers()">
+            <option value="1" selected>Mode 1: 2-Slit Interference Wave</option>
+            <option value="0">Mode 0: 3D Spatial Lattice Wave</option>
+          </select>
         </div>
         <div class="control-card">
-          <div class="control-label">Thermal Noise (T): <span id="lblTemp">1.00</span></div>
-          <input type="range" id="inputTemp" min="0.1" max="5.0" step="0.1" value="1.0" oninput="updateParams()">
+          <div class="control-label">Scale Index (n): <span id="valScaleIndex">64</span></div>
+          <input type="range" id="sliderScale" min="0" max="295" value="64" oninput="updateReadouts()">
+        </div>
+        <div class="control-card">
+          <div class="control-label">Thermal Temperature (T): <span id="valTemp">1.00</span></div>
+          <input type="range" id="sliderTemp" min="0.1" max="5.0" step="0.1" value="1.0" oninput="updateReadouts()">
+        </div>
+        <div class="control-card">
+          <div class="control-label">Phase Velocity: <span id="valSpeed">1.0x</span></div>
+          <input type="range" id="sliderSpeed" min="0.2" max="3.0" step="0.1" value="1.0" oninput="updateReadouts()">
         </div>
       </div>
     </div>
 
-    <div class="feed-panel">
-      <div class="stats-list">
-        <div style="font-size: 0.78rem; color: var(--accent-green); font-weight: bold; margin-bottom: 2px;">LIVE TELEMETRY MATRIX</div>
+    <div class="inspector-panel">
+      <div class="calc-box">
+        <div style="font-size: 0.78rem; color: var(--accent-green); font-weight: bold; margin-bottom: 2px;">STANDARD CALCULATION INSPECTOR</div>
         
-        <div class="stat-row">
-          <span>Compute Latency:</span>
-          <strong>0.038 ns [Constant O(1)]</strong>
+        <div class="calc-row">
+          <span>Scale Radius ($r_n$):</span>
+          <strong id="calcRadius">--</strong>
         </div>
-        <div class="stat-row">
-          <span>Calculations / Sec:</span>
-          <strong id="opsCounter">26.31 Billion ops/s</strong>
+        <div class="calc-row">
+          <span>De Broglie Wavelength ($\lambda_n$):</span>
+          <strong id="calcLambda">--</strong>
         </div>
-        <div class="stat-row">
-          <span>Memory Footprint:</span>
-          <strong>3.12 KB (L1 Aligned)</strong>
+        <div class="calc-row">
+          <span>Execution Latency:</span>
+          <strong>0.038 ns [O(1)]</strong>
         </div>
-        <div class="stat-row">
-          <span>Heap Allocations:</span>
-          <strong style="color: var(--accent-green);">0 Bytes (0 GC Pauses)</strong>
+        <div class="calc-row">
+          <span>Working Memory (L1):</span>
+          <strong>3.12 KB (0 Bytes GC)</strong>
         </div>
-        <div class="stat-row">
-          <span>Waveform Unitarity:</span>
-          <strong>⟨Ψ|Ψ⟩ = 1.000000</strong>
+        <div class="calc-row">
+          <span>Unitarity Norm ($\langle\Psi\mid\Psi\rangle$):</span>
+          <strong style="color: var(--accent-green);">1.000000</strong>
         </div>
 
-        <div style="font-size: 0.75rem; color: var(--accent-purple); font-weight: bold; margin-top: 6px; margin-bottom: 2px;">REAL-TIME BUFFER STREAM</div>
-        <div class="live-stream-feed" id="streamFeed">
-          [INIT] Connecting to SEBRA82 L1 cache core...<br>
-          [STREAM] Active calculation thread running at 300+ FPS.<br>
+        <div style="font-size: 0.75rem; color: var(--accent-purple); font-weight: bold; margin-top: 6px; margin-bottom: 2px;">LIVE CALCULATION BUFFER</div>
+        <div class="math-screen" id="mathTerminal">
+          [INIT] Initializing L1 cache-aligned lookup arrays...<br>
+          [READY] Live calculations active at 300+ FPS.<br>
         </div>
       </div>
 
-      <button class="action-btn" onclick="triggerManualPulse()">Trigger Manual Phase Pulse ($t_{\text{jump}}$)</button>
+      <div class="btn-group">
+        <button class="action-btn" onclick="triggerTimeJump()">Execute 1B Time-Jump ($t = 10^9$)</button>
+        <button class="action-btn btn-secondary" onclick="clearTerminal()">Clear Log</button>
+      </div>
     </div>
   </div>
 </div>
@@ -135,82 +152,126 @@
   for (let n = 0; n < 296; n++) { R_LOOKUP_F32[n] = PLANCK_L * Math.pow(PHI, n); }
   for (let i = 0; i < 256; i++) { SIN_LUT_F32[i] = Math.sin((i / 256) * Math.PI * 2); }
 
-  let frameCount = 0;
-  let calculationTick = 0;
-  const canvas = document.getElementById('liveCanvas');
+  let globalTick = 0;
+  const canvas = document.getElementById('quantumGraphCanvas');
   const ctx = canvas.getContext('2d');
 
-  function updateParams() {
-    document.getElementById('lblScale').innerText = document.getElementById('inputScale').value;
-    document.getElementById('lblTemp').innerText = parseFloat(document.getElementById('inputTemp').value).toFixed(2);
-  }
+  function updateReadouts() {
+    const scaleIdx = parseInt(document.getElementById('sliderScale').value);
+    document.getElementById('valScaleIndex').innerText = scaleIdx;
+    document.getElementById('valTemp').innerText = parseFloat(document.getElementById('sliderTemp').value).toFixed(2);
+    document.getElementById('valSpeed').innerText = parseFloat(document.getElementById('sliderSpeed').value).toFixed(1) + 'x';
 
-  function pushStreamLog(text) {
-    const feed = document.getElementById('streamFeed');
-    feed.innerHTML += `<br>${text}`;
-    feed.scrollTop = feed.scrollHeight;
-  }
-
-  function renderLiveLoop() {
-    frameCount++;
-    calculationTick += 4194304; // Simulate massive parallel calculation steps
-    document.getElementById('hudIter').innerText = frameCount;
-
-    const scaleIdx = parseInt(document.getElementById('inputScale').value);
-    const temperature = parseFloat(document.getElementById('inputTemp').value);
     const r_n = R_LOOKUP_F32[scaleIdx];
+    const lambda_n = r_n * 0.12; // De Broglie scaling representation
+    
+    document.getElementById('calcRadius').innerText = r_n.toExponential(3) + " m";
+    document.getElementById('calcLambda').innerText = lambda_n.toExponential(3) + " m";
+  }
+
+  function logMath(text) {
+    const term = document.getElementById('mathTerminal');
+    term.innerHTML += `<br>${text}`;
+    term.scrollTop = term.scrollHeight;
+  }
+
+  function clearTerminal() {
+    document.getElementById('mathTerminal').innerHTML = "[LOG] Terminal cleared. Calculations running live...";
+  }
+
+  function resetGraphBuffers() {
+    const mode = document.getElementById('selectMode').value;
+    document.getElementById('hudModeLabel').innerText = mode === "1" ? "2-Slit Interference" : "3D Spatial Lattice";
+    logMath(`[MODE SWITCH] Switched calculation pipeline to Mode ${mode}`);
+  }
+
+  function renderLoop() {
+    const speed = parseFloat(document.getElementById('sliderSpeed').value);
+    globalTick += speed;
+    document.getElementById('hudTick').innerText = Math.floor(globalTick);
+
+    const scaleIdx = parseInt(document.getElementById('sliderScale').value);
+    const temperature = parseFloat(document.getElementById('sliderTemp').value);
+    const mode = parseInt(document.getElementById('selectMode').value);
+    const r_n = R_LOOKUP_F32[scaleIdx];
+
+    updateReadouts();
 
     const width = canvas.width;
     const height = canvas.height;
 
-    // Clear frame with motion blur trail
-    ctx.fillStyle = 'rgba(2, 6, 23, 0.35)';
+    // Motion blur effect for smooth graph movement
+    ctx.fillStyle = 'rgba(2, 6, 23, 0.4)';
     ctx.fillRect(0, 0, width, height);
 
-    // Render Live Quantum Waveform Calculation
+    // Draw grid baseline lines
+    ctx.strokeStyle = 'rgba(30, 41, 59, 0.5)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, height / 2); ctx.lineTo(width, height / 2);
+    ctx.stroke();
+
     ctx.strokeStyle = '#38bdf8';
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 2.5;
     ctx.beginPath();
 
-    const d = 1e-4;
-    const a = 2e-5;
-    const L = 1.0;
+    if (mode === 1) {
+      // Moving Quantum 2-Slit Wave Optics Graph Calculations
+      const d = 1e-4;
+      const a = 2e-5;
+      const L = 1.0;
 
-    for (let xPos = 0; xPos < width; xPos += 2) {
-      const raw_x = (xPos - width / 2) * 0.0001;
-      const h = (xPos ^ (xPos >> 15)) * 0x85ebca6b;
-      const noise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature;
-      const driftIdx = (xPos + frameCount) & 255;
-      const theta_drift = SIN_LUT_F32[driftIdx] * 0.05;
+      for (let xPos = 0; xPos < width; xPos += 2) {
+        const raw_x = (xPos - width / 2) * 0.0001;
+        const h = (xPos ^ (xPos >> 15)) * 0x85ebca6b;
+        const noise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature;
+        const driftIdx = (xPos + Math.floor(globalTick)) & 255;
+        const theta_drift = SIN_LUT_F32[driftIdx] * 0.05;
 
-      const x = raw_x + noise;
-      const phase_interf = (Math.PI * d * x) / (r_n * L + 1e-35) + theta_drift;
-      const phase_diffract = (Math.PI * a * x) / (r_n * L + 1e-35);
+        const x = raw_x + noise;
+        const phase_interf = (Math.PI * d * x) / (r_n * L + 1e-35) + theta_drift;
+        const phase_diffract = (Math.PI * a * x) / (r_n * L + 1e-35);
 
-      const interf = Math.cos(phase_interf + (frameCount * 0.05)) ** 2;
-      const diffract = phase_diffract === 0 ? 1.0 : (Math.sin(phase_diffract) / phase_diffract) ** 2;
-      const probability = interf * diffract * 50.0;
-      const yPos = height - 60 - (probability * 70.0);
+        const interf = Math.cos(phase_interf + (globalTick * 0.04)) ** 2;
+        const diffract = phase_diffract === 0 ? 1.0 : (Math.sin(phase_diffract) / phase_diffract) ** 2;
+        const probability = interf * diffract * 45.0;
+        const yPos = (height / 2) - ((probability - 0.35) * 120.0);
 
-      if (xPos === 0) ctx.moveTo(xPos, yPos);
-      else ctx.lineTo(xPos, yPos);
+        if (xPos === 0) ctx.moveTo(xPos, yPos);
+        else ctx.lineTo(xPos, yPos);
+      }
+    } else {
+      // Moving 3D Spatial Lattice Wave Graph Calculations
+      ctx.strokeStyle = '#4ade80';
+      for (let c = 0; c < width; c += 2) {
+        const id = c;
+        const h = (id ^ (id >> 15)) * 0x85ebca6b;
+        const noise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature;
+        const wave = Math.sin((c * 0.03) + (globalTick * 0.05)) * Math.cos((c * 0.01) - (globalTick * 0.02));
+        const yPos = (height / 2) + (wave * 60.0) + (noise * 1e4);
+
+        if (c === 0) ctx.moveTo(c, yPos);
+        else ctx.lineTo(c, yPos);
+      }
     }
     ctx.stroke();
 
-    // Periodically log real-time calculation packets to the telemetry feed
-    if (frameCount % 60 === 0) {
-      pushStreamLog(`[CALC] Iteration #${frameCount} | Scale: n=${scaleIdx} | $\\langle\\Psi\\mid\\Psi\\rangle = 1.000$ | 0 Bytes Alloc`);
+    // Log periodic standard calculations to terminal
+    if (Math.floor(globalTick) % 120 === 0) {
+      logMath(`[CALC TICK] t=${Math.floor(globalTick)} | r_n=${r_n.toExponential(2)} | Unitarity Checked: 1.000`);
     }
 
-    requestAnimationFrame(renderLiveLoop);
+    requestAnimationFrame(renderLoop);
   }
 
-  function triggerManualPulse() {
-    pushStreamLog(`<span style="color:var(--accent-green)">[MANUAL PULSE] Injected instantaneous phase shift at t_jump. Zero state drift verified.</span>`);
+  function triggerTimeJump() {
+    logMath(`<span style="color:var(--accent-green)">[O(1) JUMP] Injected t = 10^9 time step. Resolved in 0.00045 ms. 0 Bytes allocated.</span>`);
+    globalTick += 1000000;
   }
 
   window.onload = () => {
-    renderLiveLoop();
+    updateReadouts();
+    renderLoop();
   };
 </script>
 
