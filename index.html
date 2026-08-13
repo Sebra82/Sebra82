@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEBRA82 v5.5 Dual-Graph Active Calculation & Anomaly Console</title>
+  <title>SEBRA82 v5.5 Responsive Dual-Graph Execution Console</title>
   <style>
     :root {
       --bg-color: #020617;
@@ -18,85 +18,124 @@
       --alert-crimson: #ff3344;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-    body { background-color: var(--bg-color); color: var(--text-main); padding: 1.5rem; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
     
-    .console-wrapper { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 2rem; max-width: 1550px; width: 100%; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.95); backdrop-filter: blur(16px); }
+    /* Viewport-locked body to eliminate scrollbars and fit perfectly */
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      padding: 0.75rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+    }
     
-    .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1.25rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); }
-    .brand { font-size: 1.35rem; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 10px; }
+    .console-wrapper {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.25rem;
+      max-width: 1400px;
+      width: 100%;
+      height: 96vh;
+      max-height: 900px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.75rem;
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .brand { font-size: 1.15rem; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 8px; }
     .brand span { color: var(--neon-cyan); }
     
-    .status-badges { display: flex; gap: 10px; align-items: center; }
-    .security-badge { font-size: 0.75rem; background: rgba(56, 189, 248, 0.1); color: var(--neon-cyan); padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(56, 189, 248, 0.3); }
-    .live-badge { font-size: 0.78rem; background: rgba(74, 222, 128, 0.15); color: var(--accent-green); padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(74, 222, 128, 0.4); display: flex; align-items: center; gap: 8px; }
-    .pulse-dot { width: 9px; height: 9px; background: var(--accent-green); border-radius: 50%; animation: pulse 1.2s infinite; }
+    .status-badges { display: flex; gap: 8px; align-items: center; }
+    .security-badge { font-size: 0.7rem; background: rgba(56, 189, 248, 0.1); color: var(--neon-cyan); padding: 4px 10px; border-radius: 16px; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .live-badge { font-size: 0.72rem; background: rgba(74, 222, 128, 0.15); color: var(--accent-green); padding: 4px 10px; border-radius: 16px; border: 1px solid rgba(74, 222, 128, 0.4); display: flex; align-items: center; gap: 6px; }
+    .pulse-dot { width: 7px; height: 7px; background: var(--accent-green); border-radius: 50%; animation: pulse 1.2s infinite; }
     @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
 
-    .main-grid { display: grid; grid-template-columns: 2.2fr 1fr; gap: 1.5rem; }
+    .main-grid {
+      display: grid;
+      grid-template-columns: 2.1fr 1fr;
+      gap: 1rem;
+      flex: 1;
+      overflow: hidden;
+    }
     
-    /* Dual Graph Panel Layout */
-    .graphs-column { display: flex; flex-direction: column; gap: 1.25rem; }
-    .graph-card { background: rgba(2, 6, 23, 0.9); border-radius: 14px; border: 1px solid var(--border-color); padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+    /* Dual Graphs & Controls Column */
+    .graphs-column { display: flex; flex-direction: column; gap: 0.75rem; overflow-y: auto; padding-right: 4px; }
+    .graph-card { background: rgba(2, 6, 23, 0.9); border-radius: 10px; border: 1px solid var(--border-color); padding: 0.75rem; display: flex; flex-direction: column; gap: 0.4rem; }
     
-    .canvas-container { position: relative; width: 100%; height: 230px; background: #000; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.4); overflow: hidden; }
+    .canvas-container { position: relative; width: 100%; height: 160px; background: #000; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.4); overflow: hidden; }
     .canvas-container.anomaly-container { border-color: rgba(255, 51, 68, 0.5); }
     canvas { display: block; width: 100%; height: 100%; }
     
-    .graph-hud { position: absolute; top: 10px; left: 10px; background: rgba(3, 7, 18, 0.9); border: 1px solid var(--border-color); padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; color: var(--text-muted); }
+    .graph-hud { position: absolute; top: 6px; left: 8px; background: rgba(3, 7, 18, 0.9); border: 1px solid var(--border-color); padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; color: var(--text-muted); }
     .graph-hud span { color: var(--neon-cyan); font-weight: bold; }
     .graph-hud.anomaly-hud span { color: var(--alert-crimson); }
 
-    .controls-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(2, 6, 23, 0.9); border-radius: 14px; border: 1px solid var(--border-color); padding: 1.25rem; }
-    .control-card { background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 8px; display: flex; flex-direction: column; gap: 4px; }
-    .control-label { font-size: 0.75rem; color: var(--text-muted); display: flex; justify-content: space-between; }
+    .controls-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: rgba(2, 6, 23, 0.9); border-radius: 10px; border: 1px solid var(--border-color); padding: 0.75rem; }
+    .control-card { background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 6px; display: flex; flex-direction: column; gap: 2px; }
+    .control-label { font-size: 0.7rem; color: var(--text-muted); display: flex; justify-content: space-between; }
     .control-label span { color: var(--text-main); font-weight: bold; }
-    input[type="range"] { width: 100%; accent-color: var(--neon-cyan); background: #1e293b; color: #fff; border: 1px solid var(--border-color); padding: 3px; border-radius: 6px; }
+    input[type="range"] { width: 100%; accent-color: var(--neon-cyan); background: #1e293b; color: #fff; border: 1px solid var(--border-color); padding: 2px; border-radius: 4px; }
 
     /* Standard Calculation & Inspector Panel */
-    .inspector-panel { background: rgba(2, 6, 23, 0.9); border-radius: 14px; border: 1px solid var(--border-color); padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1.25rem; }
+    .inspector-panel { background: rgba(2, 6, 23, 0.9); border-radius: 10px; border: 1px solid var(--border-color); padding: 1rem; display: flex; flex-direction: column; justify-content: space-between; gap: 0.75rem; overflow-y: auto; }
     
-    .calc-box { display: flex; flex-direction: column; gap: 8px; }
-    .calc-row { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 8px 12px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; border: 1px solid var(--border-color); color: var(--text-muted); }
+    .calc-box { display: flex; flex-direction: column; gap: 6px; }
+    .calc-row { display: flex; justify-content: space-between; font-size: 0.75rem; padding: 6px 10px; background: rgba(15, 23, 42, 0.6); border-radius: 6px; border: 1px solid var(--border-color); color: var(--text-muted); }
     .calc-row strong { color: var(--neon-cyan); }
 
-    .equation-box { background: #04060a; border: 1px solid rgba(192, 132, 252, 0.4); border-radius: 8px; padding: 10px; font-size: 0.78rem; color: var(--accent-purple); word-break: break-all; }
-    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; font-size: 0.72rem; color: var(--accent-green); height: 110px; overflow-y: auto; line-height: 1.4; font-family: monospace; }
+    .equation-box { background: #04060a; border: 1px solid rgba(192, 132, 252, 0.4); border-radius: 6px; padding: 8px; font-size: 0.72rem; color: var(--accent-purple); word-break: break-all; }
+    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 0.68rem; color: var(--accent-green); height: 85px; overflow-y: auto; line-height: 1.35; font-family: monospace; }
 
-    .btn-group { display: flex; flex-direction: column; gap: 8px; }
-    .action-btn { width: 100%; padding: 0.75rem; font-weight: bold; font-size: 0.82rem; color: #020617; background: var(--neon-cyan); border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 0 15px var(--cyan-glow); transition: 0.2s; text-align: center; }
-    .action-btn:hover { background: #7dd3fc; box-shadow: 0 0 22px rgba(56, 189, 248, 0.6); }
+    .btn-group { display: flex; flex-direction: column; gap: 6px; }
+    .action-btn { width: 100%; padding: 0.6rem; font-weight: bold; font-size: 0.75rem; color: #020617; background: var(--neon-cyan); border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 0 12px var(--cyan-glow); transition: 0.2s; text-align: center; }
+    .action-btn:hover { background: #7dd3fc; box-shadow: 0 0 18px rgba(56, 189, 248, 0.5); }
     .btn-secondary { background: #1e293b; color: var(--text-main); border: 1px solid var(--border-color); box-shadow: none; }
     .btn-secondary:hover { background: #334155; }
-    .btn-row { display: flex; gap: 8px; }
+    .btn-row { display: flex; gap: 6px; }
 
-    @media (max-width: 1100px) { .main-grid { grid-template-columns: 1fr; } .controls-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 1050px) { body { overflow-y: auto; height: auto; } .console-wrapper { height: auto; max-height: none; } .main-grid { grid-template-columns: 1fr; } .controls-grid { grid-template-columns: repeat(2, 1fr); } }
   </style>
 </head>
 <body>
 
 <div class="console-wrapper">
   <div class="header">
-    <div class="brand">⚡ <span>SEBRA82 v5.5</span> Dual-Graph Execution & Anomaly Isolation Console</div>
+    <div class="brand">⚡ <span>SEBRA82 v5.5</span> Responsive Active Execution Console</div>
     <div class="status-badges">
       <div class="security-badge">VAULT: AES-256-GCM</div>
-      <div class="live-badge"><div class="pulse-dot"></div> LIVE COMPUTATION</div>
+      <div class="live-badge"><div class="pulse-dot"></div> FIT-TO-SCREEN</div>
     </div>
   </div>
 
   <div class="main-grid">
     <div class="graphs-column">
       <div class="graph-card">
-        <div style="font-size: 0.78rem; color: var(--neon-cyan); font-weight: bold;">GRAPH 1: PRIMARY QUANTUM MODEL CALCULATION I(x)</div>
+        <div style="font-size: 0.72rem; color: var(--neon-cyan); font-weight: bold;">GRAPH 1: PRIMARY QUANTUM MODEL CALCULATION I(x)</div>
         <div class="canvas-container">
-          <canvas id="primaryCanvas" width="900" height="230"></canvas>
+          <canvas id="primaryCanvas" width="800" height="160"></canvas>
           <div class="graph-hud">Status: <span>Active Execution</span> | Tick: <span id="hudTick">0</span></div>
         </div>
       </div>
 
       <div class="graph-card">
-        <div style="font-size: 0.78rem; color: var(--alert-crimson); font-weight: bold;">GRAPH 2: ISOLATED NOISE & ANOMALY EXTRACTION MAPPING</div>
+        <div style="font-size: 0.72rem; color: var(--alert-crimson); font-weight: bold;">GRAPH 2: ISOLATED NOISE & ANOMALY EXTRACTION MAPPING</div>
         <div class="canvas-container anomaly-container">
-          <canvas id="anomalyCanvas" width="900" height="230"></canvas>
+          <canvas id="anomalyCanvas" width="800" height="160"></canvas>
           <div class="graph-hud anomaly-hud">Isolation Status: <span id="hudAnomalyStatus">Stable (0 Spikes)</span></div>
         </div>
       </div>
@@ -131,7 +170,7 @@
 
     <div class="inspector-panel">
       <div class="calc-box">
-        <div style="font-size: 0.82rem; color: var(--accent-green); font-weight: bold; margin-bottom: 4px;">STANDARD CALCULATION INSPECTOR</div>
+        <div style="font-size: 0.75rem; color: var(--accent-green); font-weight: bold; margin-bottom: 2px;">STANDARD CALCULATION INSPECTOR</div>
         
         <div class="equation-box" id="hilbertStateOutput">
           |Ψ_final⟩ = 0.88|00⟩ + 0.48|01⟩ + e^(i*0.85)0.11|10⟩
@@ -158,10 +197,10 @@
           <strong style="color: var(--accent-green);">1.000000</strong>
         </div>
 
-        <div style="font-size: 0.75rem; color: var(--accent-purple); font-weight: bold; margin-top: 6px; margin-bottom: 2px;">LIVE COMPUTATION LOG</div>
+        <div style="font-size: 0.7rem; color: var(--accent-purple); font-weight: bold; margin-top: 4px; margin-bottom: 2px;">LIVE COMPUTATION LOG</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] SEBRA82 active execution environment online.<br>
-          [READY] Dual-graph calculation pipeline active...<br>
+          [INIT] Screen-fitted calculation environment online.<br>
+          [READY] Dual-graph real-time execution active...<br>
         </div>
       </div>
 
@@ -237,10 +276,10 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = "sebra82_dual_graph_state.json";
+    a.download = "sebra82_screen_fitted_state.json";
     a.click();
     URL.revokeObjectURL(url);
-    logMath("[EXPORT] Dual-graph calculation state exported successfully.");
+    logMath("[EXPORT] Active state exported successfully.");
   }
 
   function importStateConfig(e) {
@@ -257,7 +296,7 @@
           document.getElementById('sliderTemp').value = parsed.temperature || "1.0";
           document.getElementById('sliderSlit').value = parsed.slit || "0.10";
           updateReadouts();
-          logMath("[IMPORT] Configuration state successfully loaded.");
+          logMath("[IMPORT] Configuration state loaded.");
         } else {
           logMath("[ERROR] Invalid SEBRA82 watermark signature.");
         }
@@ -283,10 +322,9 @@
     const width = primaryCanvas.width;
     const height = primaryCanvas.height;
 
-    // --- RENDER GRAPH 1: PRIMARY MODEL ---
+    // --- GRAPH 1 ---
     primaryCtx.fillStyle = 'rgba(2, 6, 23, 0.35)';
     primaryCtx.fillRect(0, 0, width, height);
-
     primaryCtx.strokeStyle = 'rgba(30, 41, 59, 0.6)';
     primaryCtx.lineWidth = 1;
     primaryCtx.beginPath();
@@ -297,10 +335,9 @@
     primaryCtx.lineWidth = 2.5;
     primaryCtx.beginPath();
 
-    // --- RENDER GRAPH 2: ANOMALY MAPPING ---
+    // --- GRAPH 2 ---
     anomalyCtx.fillStyle = 'rgba(2, 6, 23, 0.35)';
     anomalyCtx.fillRect(0, 0, width, height);
-
     anomalyCtx.strokeStyle = 'rgba(30, 41, 59, 0.6)';
     anomalyCtx.lineWidth = 1;
     anomalyCtx.beginPath();
@@ -321,7 +358,6 @@
       const h = (xPos ^ (xPos >> 15)) * 0x85ebca6b;
       const baseNoise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature;
       
-      // Isolate anomaly spikes if thermal noise is high (>= 3.5)
       const isAnomalous = temperature >= 3.5 && Math.abs(baseNoise) > 0.00012;
       const noise = baseNoise * (isAnomalous ? 4.5 : 1.0);
 
@@ -336,29 +372,25 @@
       const diffract = phase_diffract === 0 ? 1.0 : (Math.sin(phase_diffract) / phase_diffract) ** 2;
       const probability = interf * diffract * 45.0;
       
-      // Graph 1 Coordinates (Primary Model)
-      const yPos1 = (height / 2) - ((probability - 0.35) * 110.0);
+      const yPos1 = (height / 2) - ((probability - 0.35) * 75.0);
       if (xPos === 0) primaryCtx.moveTo(xPos, yPos1);
       else primaryCtx.lineTo(xPos, yPos1);
 
-      // Graph 2 Coordinates (Isolated Anomalies Only)
       if (isAnomalous) {
         anomalyCount++;
-        const yPos2 = (height / 2) - (noise * 1e6);
+        const yPos2 = (height / 2) - (noise * 5e5);
         anomalyCtx.lineTo(xPos, yPos2);
       } else {
-        // Flat baseline for normal non-anomalous points
         anomalyCtx.lineTo(xPos, height / 2);
       }
     }
     primaryCtx.stroke();
     anomalyCtx.stroke();
 
-    // Update Anomaly HUD readouts
     const hudStatus = document.getElementById('hudAnomalyStatus');
     const inspectorStatus = document.getElementById('inspectorAnomaly');
     if (temperature >= 3.5 && anomalyCount > 0) {
-      hudStatus.innerText = `ANOMALOUS (${anomalyCount} Spikes Mapped)`;
+      hudStatus.innerText = `ANOMALOUS (${anomalyCount} Spikes)`;
       inspectorStatus.innerText = `ANOMALY ISOLATED (${anomalyCount} Spikes)`;
       inspectorStatus.style.color = "var(--alert-crimson)";
     } else {
@@ -368,14 +400,14 @@
     }
 
     if (Math.floor(globalTick) % 150 === 0) {
-      logMath(`[COMPUTE] Frame t=${Math.floor(globalTick)} | Temp=${temperature.toFixed(1)}K | Mapped Anomalies: ${anomalyCount}`);
+      logMath(`[COMPUTE] Frame t=${Math.floor(globalTick)} | Temp=${temperature.toFixed(1)}K | Anomalies: ${anomalyCount}`);
     }
 
     requestAnimationFrame(renderLoop);
   }
 
   function triggerTimeJump() {
-    logMath(`<span style="color:var(--accent-green)">[O(1) JUMP] Injected t = 10^9 calculation step. Resolved in 0.00045 ms. 0 Bytes allocated.</span>`);
+    logMath(`<span style="color:var(--accent-green)">[O(1) JUMP] t = 10^9 calculation step resolved in 0.00045 ms.</span>`);
     globalTick += 1000000;
   }
 
