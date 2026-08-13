@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine v9.0 - Apex Master Platform</title>
+  <title>QuantEngine v9.5 - Omni-Device Apex Master</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -48,8 +48,8 @@
       border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 0.8rem;
-      max-width: 1820px;
-      width: 99vw;
+      max-width: 1850px;
+      width: 98vw;
       height: 98vh;
       box-shadow: 0 45px 110px rgba(0, 0, 0, 0.99);
       backdrop-filter: blur(22px);
@@ -98,7 +98,7 @@
     .security-badge { font-size: 0.65rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 3px 8px; border-radius: 10px; border: 1px solid rgba(192, 132, 252, 0.4); font-weight: bold; }
     .node-badge { font-size: 0.65rem; background: rgba(30, 42, 64, 0.6); color: var(--accent-green); padding: 3px 8px; border-radius: 8px; border: 1px solid var(--border-color); }
 
-    /* Reorganized 3-Column Layout */
+    /* Omni-Device Adaptive Grid (Landscape: 3 Columns, Portrait: 1 Column Stack) */
     .platform-grid {
       display: grid;
       grid-template-columns: 1fr 1.5fr 1fr;
@@ -139,6 +139,13 @@
 
     .calc-row { display: flex; justify-content: space-between; font-size: 0.68rem; padding: 5px 8px; background: rgba(10, 14, 22, 0.85); border-radius: 4px; border: 1px solid var(--border-color); color: var(--text-muted); }
     .calc-row strong { color: var(--neon-cyan); }
+
+    /* Responsive Mobile & Portrait Media Query */
+    @media (max-width: 1024px) {
+      body { overflow-y: auto; height: auto; }
+      .platform-container { height: auto; max-width: 100vw; }
+      .platform-grid { grid-template-columns: 1fr; overflow-y: visible; }
+    }
   </style>
 </head>
 <body>
@@ -151,7 +158,7 @@
   <div id="vaultLockoutOverlay">
     <div class="lockout-title">🔐 Secure Authentication Portal</div>
     <div class="lockout-msg">
-      Enter master enterprise access key (`Quantum`) to mount QuantEngine v9.0 Apex platform buffers.<br>
+      Enter master enterprise access key (`Quantum`) to mount QuantEngine v9.5 Omni buffers.<br>
       <i>System Node: UK-CENTRAL-01 | Encrypted Session Gateway</i>
     </div>
     <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Access Key (Quantum)..." onkeydown="if(event.key==='Enter')verifyMasterVault()">
@@ -160,16 +167,16 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v9.0</span> Apex Master Platform</div>
+    <div class="brand-title">⚡ <span>QuantEngine v9.5</span> Omni-Device Apex</div>
     <div class="status-badges">
       <div class="security-badge">SEBRA82-SECURE-VAULT-77291-TX</div>
-      <div class="node-badge" id="authModeBadge">UK-CENTRAL-01 | APEX ACTIVE</div>
+      <div class="node-badge" id="authModeBadge">OMNI-RESPONSIVE ACTIVE</div>
     </div>
   </div>
 
   <div class="platform-grid">
     
-    <!-- COLUMN 1: WORKING MODEL STRUCTURE & CALCULATIONS -->
+    <!-- COLUMN 1: WORKING MODEL STRUCTURE & PRESETS -->
     <div class="column">
       <div class="panel-card">
         <div class="panel-title">
@@ -196,6 +203,22 @@
         </div>
       </div>
 
+      <!-- NEW: Preset Physics Profiles -->
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>PHYSICS PRESET PROFILES</span>
+          <span style="color:var(--accent-purple); font-size:0.6rem;">Hotkeys Active</span>
+        </div>
+        <div class="control-item" style="margin-bottom: 4px;">
+          <div class="control-label"><span>Select Preset Engine State</span></div>
+          <select id="presetSelect" onchange="playClickSound(); applyPhysicsPreset()">
+            <option value="planck">Planck Scale Equilibrium</option>
+            <option value="relativistic" selected>Relativistic Stress Test</option>
+            <option value="superposition">Quantum Superposition</option>
+          </select>
+        </div>
+      </div>
+
       <!-- Calculations & Physics Controls -->
       <div class="panel-card">
         <div class="panel-title">
@@ -216,10 +239,6 @@
           <span>Lorentz Factor ($\gamma$):</span>
           <strong id="calcLorentz" style="color:var(--accent-purple);">1.048</strong>
         </div>
-        <div class="calc-row">
-          <span>Kernel Latency:</span>
-          <strong>0.038 ns [O(1)]</strong>
-        </div>
       </div>
     </div>
 
@@ -228,11 +247,11 @@
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">
           <span>INTERACTIVE TELEMETRY (ZOOM & PAN ENABLED)</span>
-          <span style="color:var(--neon-cyan); font-size:0.6rem;">Scroll to Zoom | Drag to Pan</span>
+          <span style="color:var(--neon-cyan); font-size:0.6rem;">Space: Pause/Play | Ctrl+E: Export</span>
         </div>
         <div class="canvas-box red-border" style="height: 240px;">
           <canvas id="thresholdCanvas" width="600" height="240"></canvas>
-          <div class="hud-tag">Zoom Scale: <span id="zoomLevel">1.0x</span> | Offset: <span id="panOffset">0</span></div>
+          <div class="hud-tag">Zoom Scale: <span id="zoomLevel">1.0x</span> | State: <span id="runState">RUNNING</span></div>
         </div>
         
         <div class="controls-grid" style="grid-template-columns: 1fr 1fr 1fr;">
@@ -297,7 +316,7 @@
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">RING BUFFER TERMINAL LOGS</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] QuantEngine v9.0 Apex active. Micro-feedback enabled...<br>
+          [INIT] QuantEngine v9.5 Omni active. Responsive layout ready...<br>
         </div>
       </div>
     </div>
@@ -309,6 +328,7 @@
   let vaultAuthMode = 0;
   let globalTick = 0;
   let activeBreachesCount = 0;
+  let isRunning = true;
   
   let currentThreshold = 75.0;
   let currentBaseline = 40.0;
@@ -316,13 +336,52 @@
   let detectedSpikesBuffer = [];
   let rawDataDumpBuffer = [];
 
-  // Graph Zoom & Pan State
   let graphZoom = 1.0;
   let graphPanX = 0;
   let isDraggingGraph = false;
   let dragStartX = 0;
 
-  // Tactile Web Audio Synthesis for Micro-Feedback Clicks
+  // Keyboard Shortcuts Handler (Space = Toggle Play/Pause, Ctrl+E = Export .enc)
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && e.target.tagName !== 'INPUT') {
+      e.preventDefault();
+      isRunning = !isRunning;
+      document.getElementById('runState').innerText = isRunning ? "RUNNING" : "PAUSED";
+      logPlatform(`[SYSTEM] Telemetry simulation ${isRunning ? 'resumed' : 'paused'}.`);
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'e') {
+      e.preventDefault();
+      exportEncryptedDataDump();
+    }
+  });
+
+  // Preset Physics Profiles Loader
+  function applyPhysicsPreset() {
+    const preset = document.getElementById('presetSelect').value;
+    const betaSlider = document.getElementById('betaSlider');
+    const kappaSlider = document.getElementById('kappaSlider');
+    const threshSlider = document.getElementById('threshSlider');
+
+    if (preset === 'planck') {
+      betaSlider.value = 0.05;
+      kappaSlider.value = 0.5;
+      threshSlider.value = 85;
+      logPlatform("[PRESET] Loaded 'Planck Scale Equilibrium' profile.");
+    } else if (preset === 'relativistic') {
+      betaSlider.value = 0.85;
+      kappaSlider.value = 3.2;
+      threshSlider.value = 65;
+      logPlatform("[PRESET] Loaded 'Relativistic Stress Test' profile.");
+    } else if (preset === 'superposition') {
+      betaSlider.value = 0.45;
+      kappaSlider.value = 4.8;
+      threshSlider.value = 75;
+      logPlatform("[PRESET] Loaded 'Quantum Superposition' profile.");
+    }
+    updateNoiseCalc();
+    updateThresholdParams();
+  }
+
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   function playClickSound() {
     try {
@@ -353,7 +412,7 @@
       if (input === "quantum") {
         vaultAuthMode = 1;
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("Apex master access granted via 'Quantum' passphrase.");
+        logPlatform("Omni-Device master access granted via 'Quantum' passphrase.");
       } else {
         vaultAuthMode = 2;
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
@@ -397,7 +456,6 @@
   window.addEventListener('mousemove', (e) => {
     if (!isDraggingGraph) return;
     graphPanX = e.clientX - dragStartX;
-    document.getElementById('panOffset').innerText = Math.floor(graphPanX);
   });
 
   window.addEventListener('mouseup', () => { isDraggingGraph = false; });
@@ -420,7 +478,7 @@
     logPlatform("[VAULT EXPORT] Packaging telemetry data into secure .enc container...");
 
     const packageData = {
-      version: "QuantEngine v9.0 Apex",
+      version: "QuantEngine v9.5 Omni",
       timestamp: new Date().toISOString(),
       watermark: "SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX",
       telemetry: telemetryHistory,
@@ -440,7 +498,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `QuantEngine_Apex_Vault_${Date.now()}.enc`;
+    a.download = `QuantEngine_Omni_Vault_${Date.now()}.enc`;
     a.click();
     URL.revokeObjectURL(url);
 
@@ -504,12 +562,10 @@
   }
   window.onresize = resizeBackgroundCanvas;
 
-  // Dynamic Threat-Shift Background Rendering
   function renderBackgroundModel() {
     const width = bgCanvas.width;
     const height = bgCanvas.height;
 
-    // Shift background tint to faint crimson if breaches occur
     if (activeBreachesCount > 0) {
       bgCtx.fillStyle = 'rgba(20, 2, 6, 0.18)';
     } else {
@@ -589,16 +645,18 @@
     threshCtx.fillStyle = 'rgba(3, 7, 15, 0.45)';
     threshCtx.fillRect(0, 0, width, height);
 
-    const beta = parseFloat(document.getElementById('betaSlider').value);
-    const gamma = 1.0 / Math.sqrt(1.0 - beta * beta);
-    const noise = (Math.random() - 0.5) * (vaultAuthMode === 2 ? 35 : (10 * gamma));
-    const nextVal = currentBaseline + Math.sin(globalTick * 0.1) * 20 + noise;
-    telemetryHistory.push(nextVal);
-    if (telemetryHistory.length > 250) telemetryHistory.shift();
+    if (isRunning) {
+      const beta = parseFloat(document.getElementById('betaSlider').value);
+      const gamma = 1.0 / Math.sqrt(1.0 - beta * beta);
+      const noise = (Math.random() - 0.5) * (vaultAuthMode === 2 ? 35 : (10 * gamma));
+      const nextVal = currentBaseline + Math.sin(globalTick * 0.1) * 20 + noise;
+      telemetryHistory.push(nextVal);
+      if (telemetryHistory.length > 250) telemetryHistory.shift();
 
-    if (nextVal >= currentThreshold) {
-      detectedSpikesBuffer.push(nextVal);
-      if (detectedSpikesBuffer.length > 50) detectedSpikesBuffer.shift();
+      if (nextVal >= currentThreshold) {
+        detectedSpikesBuffer.push(nextVal);
+        if (detectedSpikesBuffer.length > 50) detectedSpikesBuffer.shift();
+      }
     }
 
     const baselineY = height - (currentBaseline / 100) * height;
@@ -687,7 +745,7 @@
   }
 
   function exportPlatformState() {
-    const state = { platform: "QuantEngine v9.0 Apex", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
+    const state = { platform: "QuantEngine v9.5", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a'); a.href = url; a.download = "platform_state.json"; a.click();
@@ -703,7 +761,7 @@
       renderAtoms();
       renderThresholdGraph();
       renderSpikeExtractionWindow();
-      if (globalTick % 15 === 0) pushDataDump();
+      if (globalTick % 15 === 0 && isRunning) pushDataDump();
     }
     requestAnimationFrame(masterRenderLoop);
   }
