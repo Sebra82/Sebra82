@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine v6.3 - Retention-Capped Vault Console</title>
+  <title>QuantEngine v6.4 - Consolidated Master Platform Console</title>
   <style>
     :root {
       --bg-deep: #030508;
@@ -151,7 +151,7 @@
   <div id="vaultLockoutOverlay">
     <div class="lockout-title">🔐 Secure Authentication Portal</div>
     <div class="lockout-msg">
-      Enter master enterprise access key to mount QuantEngine v6.3 WebGPU platform buffers.<br>
+      Enter master enterprise access key to mount QuantEngine v6.4 WebGPU platform buffers.<br>
       <i>System Node: UK-CENTRAL-01 | Encrypted Session Gateway</i>
     </div>
     <input type="password" id="stealthInput" class="unlock-input" placeholder="Enter Access Key..." onkeydown="if(event.key==='Enter')verifyStealthVault()">
@@ -160,10 +160,10 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v6.3</span> Retention-Capped Console</div>
+    <div class="brand-title">⚡ <span>QuantEngine v6.4</span> Master Platform Console</div>
     <div class="status-badges">
       <div class="security-badge">SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX</div>
-      <div class="node-badge" id="authModeBadge">UK-CENTRAL-01 | RETENTION ACTIVE</div>
+      <div class="node-badge" id="authModeBadge">UK-CENTRAL-01 | MODEL ACTIVE</div>
     </div>
   </div>
 
@@ -307,9 +307,9 @@
     
     setTimeout(() => {
       if (input === "quantum") {
-        vaultAuthMode = 1; // Real Master Kernel
+        vaultAuthMode = 1; // Real Master Kernel Unlocked
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("Master access granted. Retention-capped vault online.");
+        logPlatform("Master access granted. Verified production buffers online.");
       } else {
         vaultAuthMode = 2; // Silent Quarantine Decoy Feed
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
@@ -389,7 +389,7 @@
     if (term.childNodes.length > 40) term.removeChild(term.firstChild);
   }
 
-  // Background Working Model Canvas
+  // Background Working Model Canvas (SEBRA82 Wave Optics)
   const bgCanvas = document.getElementById('backgroundModelCanvas');
   const bgCtx = bgCanvas.getContext('2d');
 
@@ -565,7 +565,7 @@
   }
 
   function exportPlatformState() {
-    const state = { platform: "QuantEngine v6.3", retention: `${retentionMonths} Months`, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
+    const state = { platform: "QuantEngine v6.4", retention: `${retentionMonths} Months`, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a'); a.href = url; a.download = "platform_state.json"; a.click();
