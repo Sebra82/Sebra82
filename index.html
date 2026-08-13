@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine v8.0 - Fully Interactive Master Platform</title>
+  <title>QuantEngine v9.0 - Apex Master Platform</title>
   <style>
     :root {
       --bg-deep: #020408;
-      --card-bg: rgba(8, 12, 20, 0.96);
+      --card-bg: rgba(7, 11, 19, 0.96);
       --border-color: rgba(30, 42, 64, 0.85);
       --neon-cyan: #00f3ff;
       --cyan-glow: rgba(0, 243, 255, 0.35);
@@ -48,17 +48,17 @@
       border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 0.8rem;
-      max-width: 1800px;
+      max-width: 1820px;
       width: 99vw;
       height: 98vh;
-      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.99);
-      backdrop-filter: blur(20px);
+      box-shadow: 0 45px 110px rgba(0, 0, 0, 0.99);
+      backdrop-filter: blur(22px);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
 
-    /* Bulletproof Authentication Overlay */
+    /* Authentication Portal Overlay */
     #vaultLockoutOverlay {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -109,7 +109,7 @@
 
     .column { display: flex; flex-direction: column; gap: 0.6rem; overflow-y: auto; padding-right: 2px; }
     
-    .panel-card { background: rgba(3, 7, 15, 0.95); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; box-shadow: 0 8px 25px rgba(0,0,0,0.6); }
+    .panel-card { background: rgba(3, 7, 15, 0.96); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; box-shadow: 0 8px 25px rgba(0,0,0,0.6); }
     .panel-title { font-size: 0.7rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
 
     /* Viewports */
@@ -133,7 +133,7 @@
     /* Buttons */
     .btn-row { display: flex; gap: 5px; }
     .action-btn { width: 100%; padding: 0.4rem; font-weight: 700; font-size: 0.68rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; text-align: center; }
-    .action-btn:hover { box-shadow: 0 0 10px var(--cyan-glow); background: #3dd9e8; }
+    .action-btn:hover { box-shadow: 0 0 12px var(--cyan-glow); background: #3dd9e8; }
     .btn-secondary { background: #1e2a40; color: var(--text-main); border: 1px solid var(--border-color); }
     .btn-secondary:hover { background: #2c3e5a; }
 
@@ -143,13 +143,15 @@
 </head>
 <body>
 
+<!-- Immersive Dynamic Threat-Shift Background Canvas -->
 <canvas id="backgroundModelCanvas"></canvas>
 
 <div class="platform-container">
+  <!-- Authentication Portal Overlay -->
   <div id="vaultLockoutOverlay">
     <div class="lockout-title">🔐 Secure Authentication Portal</div>
     <div class="lockout-msg">
-      Enter master enterprise access key (`Quantum`) to mount QuantEngine v8.0 platform buffers.<br>
+      Enter master enterprise access key (`Quantum`) to mount QuantEngine v9.0 Apex platform buffers.<br>
       <i>System Node: UK-CENTRAL-01 | Encrypted Session Gateway</i>
     </div>
     <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Access Key (Quantum)..." onkeydown="if(event.key==='Enter')verifyMasterVault()">
@@ -158,15 +160,16 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v8.0</span> Interactive Master Platform</div>
+    <div class="brand-title">⚡ <span>QuantEngine v9.0</span> Apex Master Platform</div>
     <div class="status-badges">
       <div class="security-badge">SEBRA82-SECURE-VAULT-77291-TX</div>
-      <div class="node-badge" id="authModeBadge">UK-CENTRAL-01 | ACTIVE</div>
+      <div class="node-badge" id="authModeBadge">UK-CENTRAL-01 | APEX ACTIVE</div>
     </div>
   </div>
 
   <div class="platform-grid">
     
+    <!-- COLUMN 1: WORKING MODEL STRUCTURE & CALCULATIONS -->
     <div class="column">
       <div class="panel-card">
         <div class="panel-title">
@@ -180,11 +183,11 @@
         <div class="controls-grid">
           <div class="control-item">
             <div class="control-label">Scale Index (n): <span id="atomScaleVal">64</span></div>
-            <input type="range" id="atomScaleSlider" min="10" max="250" value="64" oninput="updateAtomSimulation()">
+            <input type="range" id="atomScaleSlider" min="10" max="250" value="64" oninput="playClickSound(); updateAtomSimulation()">
           </div>
           <div class="control-item">
             <div class="control-label">Orbital Mode:</div>
-            <select id="orbitalModeSelect" onchange="updateAtomSimulation()">
+            <select id="orbitalModeSelect" onchange="playClickSound(); updateAtomSimulation()">
               <option value="0">s-Shell Orbital</option>
               <option value="1" selected>p_z Dumbbell</option>
               <option value="2">d_x2-y2 Cloverleaf</option>
@@ -193,6 +196,7 @@
         </div>
       </div>
 
+      <!-- Calculations & Physics Controls -->
       <div class="panel-card">
         <div class="panel-title">
           <span>ENGINE CALCULATIONS & PHYSICS</span>
@@ -201,11 +205,11 @@
         <div class="controls-grid">
           <div class="control-item">
             <div class="control-label">Relativistic (β): <span id="betaVal">0.30</span></div>
-            <input type="range" id="betaSlider" min="0.0" max="0.95" step="0.05" value="0.3" oninput="updateNoiseCalc()">
+            <input type="range" id="betaSlider" min="0.0" max="0.95" step="0.05" value="0.3" oninput="playClickSound(); updateNoiseCalc()">
           </div>
           <div class="control-item">
             <div class="control-label">Tunneling (κ): <span id="kappaVal">1.50</span></div>
-            <input type="range" id="kappaSlider" min="0.1" max="5.0" step="0.1" value="1.5" oninput="updateNoiseCalc()">
+            <input type="range" id="kappaSlider" min="0.1" max="5.0" step="0.1" value="1.5" oninput="playClickSound(); updateNoiseCalc()">
           </div>
         </div>
         <div class="calc-row">
@@ -219,6 +223,7 @@
       </div>
     </div>
 
+    <!-- COLUMN 2: GRAPHS & VISUALIZERS -->
     <div class="column">
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">
@@ -233,23 +238,24 @@
         <div class="controls-grid" style="grid-template-columns: 1fr 1fr 1fr;">
           <div class="control-item">
             <div class="control-label">Threshold: <span id="threshVal">75.0</span></div>
-            <input type="range" id="threshSlider" min="20" max="95" value="75" oninput="updateThresholdParams()">
+            <input type="range" id="threshSlider" min="20" max="95" value="75" oninput="playClickSound(); updateThresholdParams()">
           </div>
           <div class="control-item">
             <div class="control-label">Baseline: <span id="baseVal">40.0</span></div>
-            <input type="range" id="baseSlider" min="10" max="70" value="40" oninput="updateThresholdParams()">
+            <input type="range" id="baseSlider" min="10" max="70" value="40" oninput="playClickSound(); updateThresholdParams()">
           </div>
           <div class="control-item">
             <div class="control-label">Sample Rate: <span id="rateVal">1.0x</span></div>
-            <input type="range" id="rateSlider" min="0.2" max="3.0" step="0.1" value="1.0" oninput="updateThresholdParams()">
+            <input type="range" id="rateSlider" min="0.2" max="3.0" step="0.1" value="1.0" oninput="playClickSound(); updateThresholdParams()">
           </div>
         </div>
       </div>
 
+      <!-- Isolated Spike Extraction Sub-Graph -->
       <div class="panel-card">
         <div class="panel-title">
           <span>ISOLATED SPIKE EXTRACTION WINDOW</span>
-          <button class="action-btn" style="width: auto; padding: 2px 8px; font-size: 0.6rem;" onclick="isolateDetectedSpikes()">Isolate Spikes</button>
+          <button class="action-btn" style="width: auto; padding: 2px 8px; font-size: 0.6rem;" onclick="playClickSound(); isolateDetectedSpikes()">Isolate Spikes</button>
         </div>
         <div class="canvas-box" style="height: 90px; border-color: rgba(192, 132, 252, 0.4);">
           <canvas id="spikeCanvas" width="600" height="90"></canvas>
@@ -258,6 +264,7 @@
       </div>
     </div>
 
+    <!-- COLUMN 3: ALL EXPORTS, VAULTS & TERMINALS -->
     <div class="column">
       <div class="panel-card">
         <div class="panel-title">
@@ -269,13 +276,13 @@
           <input type="password" id="exportPassInput" class="unlock-input" style="width: 100%; font-size: 0.75rem; padding: 0.35rem;" placeholder="Enter Passphrase...">
         </div>
         <div class="btn-row">
-          <button class="action-btn" onclick="exportEncryptedDataDump()">Export .enc Blob</button>
-          <button class="action-btn btn-secondary" onclick="document.getElementById('importEncFile').click()">Import .enc</button>
+          <button class="action-btn" onclick="playClickSound(); exportEncryptedDataDump()">Export .enc Blob</button>
+          <button class="action-btn btn-secondary" onclick="playClickSound(); document.getElementById('importEncFile').click()">Import .enc</button>
           <input type="file" id="importEncFile" style="display:none" accept=".enc,.json,.dat" onchange="importEncryptedDataDump(event)">
         </div>
         <div class="btn-row" style="margin-top: 5px;">
-          <button class="action-btn btn-secondary" onclick="exportPlatformState()">Export State (.json)</button>
-          <button class="action-btn btn-secondary" onclick="document.getElementById('importFile').click()">Import State</button>
+          <button class="action-btn btn-secondary" onclick="playClickSound(); exportPlatformState()">Export State (.json)</button>
+          <button class="action-btn btn-secondary" onclick="playClickSound(); document.getElementById('importFile').click()">Import State</button>
           <input type="file" id="importFile" style="display:none" accept=".json" onchange="importPlatformState(event)">
         </div>
       </div>
@@ -290,7 +297,7 @@
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">RING BUFFER TERMINAL LOGS</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] Platform successfully booted and fully interactive...<br>
+          [INIT] QuantEngine v9.0 Apex active. Micro-feedback enabled...<br>
         </div>
       </div>
     </div>
@@ -301,6 +308,7 @@
 <script>
   let vaultAuthMode = 0;
   let globalTick = 0;
+  let activeBreachesCount = 0;
   
   let currentThreshold = 75.0;
   let currentBaseline = 40.0;
@@ -308,13 +316,33 @@
   let detectedSpikesBuffer = [];
   let rawDataDumpBuffer = [];
 
-  // Graph Zoom & Pan State with Robust Event Listeners
+  // Graph Zoom & Pan State
   let graphZoom = 1.0;
   let graphPanX = 0;
   let isDraggingGraph = false;
   let dragStartX = 0;
 
+  // Tactile Web Audio Synthesis for Micro-Feedback Clicks
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  function playClickSound() {
+    try {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.04);
+      gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.04);
+    } catch (e) {}
+  }
+
   function verifyMasterVault() {
+    playClickSound();
     const inputField = document.getElementById('masterPassInput');
     const input = inputField.value.trim().toLowerCase();
     const errorMsg = document.getElementById('authError');
@@ -325,7 +353,7 @@
       if (input === "quantum") {
         vaultAuthMode = 1;
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("Master access granted via 'Quantum' passphrase. All panels interactive.");
+        logPlatform("Apex master access granted via 'Quantum' passphrase.");
       } else {
         vaultAuthMode = 2;
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
@@ -353,7 +381,6 @@
     document.getElementById('calcLorentz').innerText = gamma.toFixed(3);
   }
 
-  // Robust Graph Interaction Listeners
   const threshCanvas = document.getElementById('thresholdCanvas');
   threshCanvas.addEventListener('wheel', (e) => {
     e.preventDefault();
@@ -373,9 +400,7 @@
     document.getElementById('panOffset').innerText = Math.floor(graphPanX);
   });
 
-  window.addEventListener('mouseup', () => {
-    isDraggingGraph = false;
-  });
+  window.addEventListener('mouseup', () => { isDraggingGraph = false; });
 
   function updateThresholdParams() {
     currentThreshold = parseFloat(document.getElementById('threshSlider').value);
@@ -395,7 +420,7 @@
     logPlatform("[VAULT EXPORT] Packaging telemetry data into secure .enc container...");
 
     const packageData = {
-      version: "QuantEngine v8.0",
+      version: "QuantEngine v9.0 Apex",
       timestamp: new Date().toISOString(),
       watermark: "SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX",
       telemetry: telemetryHistory,
@@ -415,7 +440,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `QuantEngine_Master_Vault_${Date.now()}.enc`;
+    a.download = `QuantEngine_Apex_Vault_${Date.now()}.enc`;
     a.click();
     URL.revokeObjectURL(url);
 
@@ -479,11 +504,17 @@
   }
   window.onresize = resizeBackgroundCanvas;
 
+  // Dynamic Threat-Shift Background Rendering
   function renderBackgroundModel() {
     const width = bgCanvas.width;
     const height = bgCanvas.height;
 
-    bgCtx.fillStyle = 'rgba(2, 4, 8, 0.15)';
+    // Shift background tint to faint crimson if breaches occur
+    if (activeBreachesCount > 0) {
+      bgCtx.fillStyle = 'rgba(20, 2, 6, 0.18)';
+    } else {
+      bgCtx.fillStyle = 'rgba(2, 4, 8, 0.15)';
+    }
     bgCtx.fillRect(0, 0, width, height);
 
     const corruptionFactor = (vaultAuthMode === 2) ? 12.0 : 1.0;
@@ -491,7 +522,11 @@
 
     bgCtx.lineWidth = 1.5;
     for (let line = 0; line < 6; line++) {
-      bgCtx.strokeStyle = line % 2 === 0 ? 'rgba(0, 243, 255, 0.12)' : 'rgba(192, 132, 252, 0.12)';
+      if (activeBreachesCount > 0) {
+        bgCtx.strokeStyle = line % 2 === 0 ? 'rgba(255, 51, 68, 0.15)' : 'rgba(192, 132, 252, 0.15)';
+      } else {
+        bgCtx.strokeStyle = line % 2 === 0 ? 'rgba(0, 243, 255, 0.12)' : 'rgba(192, 132, 252, 0.12)';
+      }
       bgCtx.beginPath();
       
       for (let x = 0; x < width; x += 15) {
@@ -602,6 +637,7 @@
     threshCtx.stroke();
     threshCtx.restore();
 
+    activeBreachesCount = breaches;
     const statusEl = document.getElementById('thresholdStatus');
     if (statusEl) {
       if (breaches > 0) {
@@ -651,7 +687,7 @@
   }
 
   function exportPlatformState() {
-    const state = { platform: "QuantEngine v8.0", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
+    const state = { platform: "QuantEngine v9.0 Apex", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a'); a.href = url; a.download = "platform_state.json"; a.click();
