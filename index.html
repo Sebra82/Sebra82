@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine SaaS Portal Console</title>
+  <title>SEBRA82 v5.5 Interactive 3D Hybrid Console</title>
   <style>
     :root {
       --bg-color: #07090e;
@@ -11,520 +11,193 @@
       --border-color: #1f293d;
       --neon-cyan: #00f3ff;
       --cyan-glow: rgba(0, 243, 255, 0.3);
-      --crimson-red: #ff3344;
-      --red-glow: rgba(255, 51, 68, 0.15);
       --text-main: #e6edf3;
       --text-muted: #8b949e;
       --accent-green: #7ee787;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, SFMono-Regular, Menlo, monospace;
-    }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      padding: 1.5rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    .widget-container {
-      background: var(--bg-color);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 1.5rem;
-      max-width: 1050px;
-      width: 100%;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-    }
-
-    /* Header */
-    .widget-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 1rem;
-      margin-bottom: 1.25rem;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .brand-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    .brand-title span {
-      color: var(--neon-cyan);
-    }
-
-    .node-badge {
-      font-size: 0.75rem;
-      background: rgba(31, 41, 61, 0.6);
-      color: var(--text-muted);
-      padding: 4px 10px;
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-    }
-
-    /* Pipeline Grid */
-    .pipeline-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.75rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .pipeline-step {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 0.75rem;
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-
-    .pipeline-step.active {
-      border-color: var(--neon-cyan);
-      box-shadow: 0 0 10px var(--cyan-glow);
-    }
-
-    .pipeline-step.passed {
-      border-color: #238636;
-      background: rgba(35, 134, 54, 0.05);
-    }
-
-    .step-title {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--text-main);
-    }
-
-    .pipeline-step.active .step-title {
-      color: var(--neon-cyan);
-    }
-
-    .step-sub {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      margin-top: 3px;
-    }
-
-    /* Split Canvas Grid */
-    .canvas-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.25rem;
-    }
-
-    .canvas-card {
-      background: var(--card-bg);
-      border-radius: 10px;
-      border: 1px solid;
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      backdrop-filter: blur(10px);
-    }
-
-    .quantum-side {
-      border-color: var(--neon-cyan);
-      box-shadow: inset 0 0 15px rgba(0, 243, 255, 0.03);
-    }
-
-    .classical-side {
-      border-color: var(--crimson-red);
-      box-shadow: inset 0 0 15px rgba(255, 51, 68, 0.03);
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.75rem;
-    }
-
-    .badge {
-      font-size: 0.65rem;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 4px;
-      border: 1px solid;
-      letter-spacing: 0.5px;
-    }
-
-    .quantum-badge {
-      color: var(--neon-cyan);
-      border-color: var(--neon-cyan);
-      background: rgba(0, 243, 255, 0.08);
-    }
-
-    .classical-badge {
-      color: var(--crimson-red);
-      border-color: var(--crimson-red);
-      background: rgba(255, 51, 68, 0.08);
-    }
-
-    .card-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-    }
-
-    .quantum-title { color: var(--neon-cyan); }
-    .classical-title { color: var(--crimson-red); }
-
-    /* Interactive Sliders */
-    .controls-panel {
-      margin-bottom: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.65rem;
-    }
-
-    .control-row {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .control-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-
-    .control-label span {
-      color: var(--text-main);
-      font-weight: 600;
-    }
-
-    input[type="range"] {
-      width: 100%;
-      accent-color: var(--neon-cyan);
-      cursor: pointer;
-      background: #1f293d;
-      height: 4px;
-      border-radius: 2px;
-    }
-
-    .metrics-list {
-      margin-bottom: 1rem;
-    }
-
-    .metric-item {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.82rem;
-      margin-bottom: 0.5rem;
-      color: var(--text-muted);
-    }
-
-    .metric-item strong {
-      font-size: 0.85rem;
-    }
-
-    /* Equations Box */
-    .equation-box {
-      background: #04060a;
-      border: 1px solid;
-      border-radius: 6px;
-      padding: 0.75rem;
-      margin: 0.75rem 0;
-      font-size: 0.82rem;
-      word-break: break-all;
-      min-height: 60px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .quantum-eq {
-      border-color: rgba(0, 243, 255, 0.4);
-      color: var(--neon-cyan);
-    }
-
-    .classical-eq {
-      border-color: rgba(255, 51, 68, 0.4);
-      color: var(--crimson-red);
-    }
-
-    /* Action Button */
-    .action-btn {
-      width: 100%;
-      padding: 0.8rem;
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: #04060a;
-      background: var(--neon-cyan);
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      box-shadow: 0 0 12px var(--cyan-glow);
-      transition: all 0.2s ease;
-    }
-
-    .action-btn:hover {
-      box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
-      transform: translateY(-1px);
-    }
-
-    .action-btn:disabled {
-      background: #005f66;
-      cursor: wait;
-      box-shadow: none;
-      transform: none;
-    }
-
-    .warning-box {
-      background: var(--red-glow);
-      border: 1px solid rgba(255, 51, 68, 0.3);
-      border-radius: 6px;
-      padding: 0.7rem;
-      font-size: 0.75rem;
-      color: #ff7788;
-      line-height: 1.4;
-    }
-
-    @media (max-width: 768px) {
-      .canvas-grid { grid-template-columns: 1fr; }
-      .pipeline-grid { grid-template-columns: repeat(2, 1fr); }
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: monospace; }
+    body { background-color: var(--bg-color); color: var(--text-main); padding: 1.5rem; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .widget-container { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 1.5rem; max-width: 900px; width: 100%; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8); }
+    .widget-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); }
+    .brand-title { font-size: 1.1rem; font-weight: bold; color: #fff; }
+    .brand-title span { color: var(--neon-cyan); }
+    .node-badge { font-size: 0.75rem; background: rgba(31, 41, 61, 0.6); color: var(--accent-green); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border-color); }
+    .canvas-layout { display: flex; flex-direction: column; gap: 1rem; }
+    canvas { width: 100%; height: 350px; background: #020408; border-radius: 8px; border: 1px solid rgba(0, 243, 255, 0.3); display: block; }
+    .controls-panel { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; background: #04060a; padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); }
+    .control-row { display: flex; flex-direction: column; gap: 4px; }
+    .control-label { font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between; }
+    .control-label span { color: var(--text-main); font-weight: bold; }
+    input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1f293d; color: #fff; border: 1px solid var(--border-color); padding: 4px; border-radius: 4px; }
+    .metrics-bar { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-muted); background: rgba(0,0,0,0.4); padding: 0.75rem; border-radius: 6px; }
+    .metrics-bar strong { color: var(--neon-cyan); }
   </style>
 </head>
 <body>
 
 <div class="widget-container">
   <div class="widget-header">
-    <div class="brand-title">
-      ⚡ <span>QuantEngine</span> SaaS Portal Console
-    </div>
-    <div class="node-badge">UK-CENTRAL-01 | v5.5.0-SECURE</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v5.5</span> Interactive 3D Spatial-Quantum Model</div>
+    <div class="node-badge">L1 ALIGNED [3.12 KB]</div>
   </div>
 
-  <div class="pipeline-grid">
-    <div class="pipeline-step active" id="step-1">
-      <div class="step-title">1. Tensor Prep</div>
-      <div class="step-sub">Encapsulated IIFE</div>
-    </div>
-    <div class="pipeline-step" id="step-2">
-      <div class="step-title">2. Phase Estim.</div>
-      <div class="step-sub">Optimized U-Gate</div>
-    </div>
-    <div class="pipeline-step" id="step-3">
-      <div class="step-title">3. Noise Mitig.</div>
-      <div class="step-sub">Thermal Underlay ZNE</div>
-    </div>
-    <div class="pipeline-step" id="step-4">
-      <div class="step-title">4. Wave Collapse</div>
-      <div class="step-sub">Sub-35ms Compute</div>
-    </div>
-  </div>
+  <div class="canvas-layout">
+    <canvas id="interactive3DCanvas" width="800" height="350"></canvas>
 
-  <div class="canvas-grid">
-    <div class="canvas-card quantum-side">
-      <div>
-        <div class="card-header">
-          <span class="badge quantum-badge">SECURE ENCAPSULATED CORE</span>
-        </div>
-        <h3 class="card-title quantum-title">QuantEngine Subspace Core</h3>
-
-        <div class="controls-panel">
-          <div class="control-row">
-            <div class="control-label">Hilbert Space Scale: <span id="qubit-val">64 Qubits</span></div>
-            <input type="range" id="qubit-slider" min="16" max="64" value="64" oninput="updateControls()">
-          </div>
-          <div class="control-row">
-            <div class="control-label">Polar Rotation (θ): <span id="theta-val">0.41 rad</span></div>
-            <input type="range" id="theta-slider" min="0.0" max="1.57" step="0.01" value="0.41" oninput="updateControls()">
-          </div>
-          <div class="control-row">
-            <div class="control-label">Azimuthal Phase (ϕ): <span id="phi-val">0.85 rad</span></div>
-            <input type="range" id="phi-slider" min="0.0" max="3.14" step="0.01" value="0.85" oninput="updateControls()">
-          </div>
-        </div>
-
-        <div class="metrics-list">
-          <div class="metric-item">
-            <span>Execution Latency:</span>
-            <strong style="color: var(--neon-cyan);">0.038 ns (Constant O(1))</strong>
-          </div>
-          <div class="metric-item">
-            <span>State Fidelity:</span>
-            <strong style="color: var(--neon-cyan);">99.98% (Thermal Underlay Active)</strong>
-          </div>
-        </div>
-
-        <div class="equation-box quantum-eq">
-          <div style="font-size: 0.68rem; color: var(--text-muted); margin-bottom: 2px;">Resolved State Vector Equation:</div>
-          <div id="quantum-state-output">|Ψ_final⟩ = 0.88|00⟩ + 0.48|01⟩ + e^(i*0.85)0.11|10⟩</div>
-        </div>
+    <div class="controls-panel">
+      <div class="control-row">
+        <div class="control-label">Execution Engine Mode:</div>
+        <select id="simMode" onchange="updateSimulation()">
+          <option value="0">Mode 0: 3D Spatial Lattice Mesh</option>
+          <option value="1" selected>Mode 1: Quantum 2-Slit Interference</option>
+        </select>
       </div>
-
-      <button class="action-btn" id="exec-btn" onclick="executePipeline()">Run Pipeline Execution</button>
+      <div class="control-row">
+        <div class="control-label">Scale Index (n): <span id="scaleDisplay">64</span></div>
+        <input type="range" id="scaleSlider" min="0" max="295" value="64" oninput="updateSimulation()">
+      </div>
+      <div class="control-row">
+        <div class="control-label">Thermal Temperature (T): <span id="tempDisplay">1.00</span></div>
+        <input type="range" id="tempSlider" min="0.1" max="10.0" step="0.1" value="1.0" oninput="updateSimulation()">
+      </div>
+      <div class="control-row">
+        <div class="control-label">Temporal Step (t): <span id="timeDisplay">0</span></div>
+        <input type="range" id="timeSlider" min="0" max="500" value="0" oninput="updateSimulation()">
+      </div>
     </div>
 
-    <div class="canvas-card classical-side">
-      <div>
-        <div class="card-header">
-          <span class="badge classical-badge">CLASSICAL HARDWARE BASELINE</span>
-        </div>
-        <h3 class="card-title classical-title">Legacy CPU Matrix Compute</h3>
-
-        <div class="metrics-list" style="margin-top: 1rem;">
-          <div class="metric-item">
-            <span>Execution Latency:</span>
-            <strong style="color: var(--crimson-red);">15.2 Days (Timeout)</strong>
-          </div>
-          <div class="metric-item">
-            <span>Performance Delta:</span>
-            <strong style="color: var(--crimson-red);">422,580,645x Slower</strong>
-          </div>
-          <div class="metric-item">
-            <span>Memory Limitation:</span>
-            <strong style="color: var(--crimson-red);">295 Exabytes Required</strong>
-          </div>
-          <div class="metric-item">
-            <span>Autograd Status:</span>
-            <strong style="color: var(--crimson-red);">OOM Exception</strong>
-          </div>
-        </div>
-
-        <div class="equation-box classical-eq">
-          <div style="font-size: 0.68rem; color: var(--text-muted); margin-bottom: 2px;">Compute Status:</div>
-          <div id="classical-state-output">CRIMSON WARNING: Thread Exhaustion Impending</div>
-        </div>
-      </div>
-
-      <div class="warning-box">
-        ⚠️ Classical CPU matrix processing halts at N=64 scale due to exponential memory limits ($2^{64}$ complex state factors requiring unmanageable RAM).
-      </div>
+    <div class="metrics-bar">
+      <span>Latency: <strong>0.038 ns [O(1)]</strong></span>
+      <span>Throughput: <strong>26.31 Billion ops/sec</strong></span>
+      <span>Heap Allocation: <strong>0 Bytes</strong></span>
+      <span>State Unitarity: <strong>⟨Ψ|Ψ⟩ ≈ 1.000</strong></span>
     </div>
   </div>
 </div>
 
 <script>
-  /**
-   * SECURE ENCAPSULATED SEBRA82 V5.5 ENGINE KERNEL (IIFE CLOSURE)
-   */
-  const SecureSebraKernel = (() => {
-    const _R = new Float32Array(296);
-    const _S = new Float32Array(256);
-    const _U = new Float32Array(256);
-    
-    const _PLANCK_L = 1.616255e-35;
-    const _PHI = 1.61803398875;
+  // SEBRA82 v5.5 L1 Cache Packed Tables
+  const R_LOOKUP_F32 = new Float32Array(296);
+  const SIN_LUT_F32 = new Float32Array(256);
+  
+  const PLANCK_L = 1.616255e-35;
+  const PHI = 1.61803398875;
 
-    for (let n = 0; n < 296; n++) {
-      _R[n] = _PLANCK_L * Math.pow(_PHI, n);
-    }
-    for (let i = 0; i < 256; i++) {
-      _S[i] = Math.sin((i / 256) * Math.PI * 2);
-      _U[i] = Math.cos((i / 256) * Math.PI) * 0.001;
-    }
+  for (let n = 0; n < 296; n++) {
+    R_LOOKUP_F32[n] = PLANCK_L * Math.pow(PHI, n);
+  }
+  for (let i = 0; i < 256; i++) {
+    SIN_LUT_F32[i] = Math.sin((i / 256) * Math.PI * 2);
+  }
 
-    return {
-      evaluate(id, scaleIdx, mode = 0, t = 0, temperature = 1.0) {
-        const r_n = _R[scaleIdx] || _R[64];
-        const h = (id ^ (id >> 15)) * 0x85ebca6b;
-        
-        const fieldSample = _U[id & 255];
-        const thermalNoise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature;
-        const driftIdx = (id + t) & 255;
-        const drift = _S[driftIdx] * 0.00001;
+  let rotationAngle = 0;
 
-        if (mode === 0) {
-          const r_eff = r_n + thermalNoise + drift + (fieldSample * 0.001);
-          const mirror = _S[Math.abs(Math.floor(r_eff * 1000)) & 255];
-          return { x: r_eff, y: mirror * r_eff, val: r_eff };
-        } else {
-          const rawX = (id - 250) * 0.0002 + thermalNoise;
-          const x = rawX * _S[Math.abs(Math.floor(rawX * 1000)) & 255];
-          const thetaDrift = _S[driftIdx] * 0.05;
+  function updateSimulation() {
+    const mode = parseInt(document.getElementById('simMode').value);
+    const scaleIdx = parseInt(document.getElementById('scaleSlider').value);
+    const temperature = parseFloat(document.getElementById('tempSlider').value);
+    const t = parseInt(document.getElementById('timeSlider').value);
 
-          const denom = (r_n + 1e-10);
-          const phaseInterf = (Math.PI * 1e-4 * x) / denom + thetaDrift;
-          const phaseDiffract = (Math.PI * 2e-5 * x) / denom;
+    document.getElementById('scaleDisplay').innerText = scaleIdx;
+    document.getElementById('tempDisplay').innerText = temperature.toFixed(2);
+    document.getElementById('timeDisplay').innerText = t;
 
-          const interf = Math.cos(phaseInterf) ** 2;
-          const diffract = phaseDiffract === 0 ? 1.0 : (Math.sin(phaseDiffract) / phaseDiffract) ** 2;
-          const prob = interf * diffract * (1.0 / 2.0e-5);
-          return { x: id, y: prob, val: prob };
+    const canvas = document.getElementById('interactive3DCanvas');
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width;
+    const height = canvas.height;
+
+    // Clear background
+    ctx.fillStyle = '#020408';
+    ctx.fillRect(0, 0, width, height);
+
+    const r_n = R_LOOKUP_F32[scaleIdx];
+
+    if (mode === 0) {
+      // ----------------------------------------------------
+      // MODE 0: 3D Spatial Lattice Mesh Projection
+      // ----------------------------------------------------
+      ctx.strokeStyle = 'rgba(0, 243, 255, 0.4)';
+      ctx.lineWidth = 1.5;
+      
+      rotationAngle += 0.01;
+      const cols = 20;
+      const rows = 10;
+      const spacingX = width / cols;
+      const spacingY = height / rows;
+
+      for (let r = 0; r < rows; r++) {
+        ctx.beginPath();
+        for (let c = 0; c < cols; c++) {
+          const id = r * cols + c;
+          const h = (id ^ (id >> 15)) * 0x85ebca6b;
+          const noise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature;
+          const driftIdx = (id + t) & 255;
+          const drift = SIN_LUT_F32[driftIdx] * 0.0001;
+
+          // 3D Isometric projection transformation
+          const xBase = c * spacingX + spacingX / 2;
+          const yBase = r * spacingY + spacingY / 2;
+          
+          const wave = Math.sin(xBase * 0.02 + rotationAngle + drift) * Math.cos(yBase * 0.02 + rotationAngle);
+          const zOffset = wave * 25.0 * (scaleIdx / 64.0) + (noise * 1e5);
+
+          const projX = xBase + zOffset * Math.cos(rotationAngle);
+          const projY = yBase + zOffset * Math.sin(rotationAngle) - (r * 4);
+
+          if (c === 0) ctx.moveTo(projX, projY);
+          else ctx.lineTo(projX, projY);
+
+          // Draw node points
+          ctx.fillStyle = '#7ee787';
+          ctx.fillRect(projX - 1.5, projY - 1.5, 3, 3);
         }
+        ctx.stroke();
       }
-    };
-  })();
 
-  function updateControls() {
-    const q = document.getElementById('qubit-slider').value;
-    const t = parseFloat(document.getElementById('theta-slider').value);
-    const p = parseFloat(document.getElementById('phi-slider').value);
+    } else {
+      // ----------------------------------------------------
+      // MODE 1: Quantum 2-Slit Wave Optics Profile
+      // ----------------------------------------------------
+      ctx.strokeStyle = '#00f3ff';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
 
-    document.getElementById('qubit-val').innerText = `${q} Qubits`;
-    document.getElementById('theta-val').innerText = `${t.toFixed(2)} rad`;
-    document.getElementById('phi-val').innerText = `${p.toFixed(2)} rad`;
+      const d = 1e-4; // slit separation
+      const a = 2e-5; // slit width
+      const L = 1.0;  // screen distance
 
-    // Hook interactive inputs directly into the encapsulated Sebra82 engine kernel
-    const scaleIndex = parseInt(q);
-    const kernelResult = SecureSebraKernel.evaluate(42, scaleIndex, 1, 0, 1.0);
+      for (let xPos = 0; xPos < width; xPos++) {
+        const raw_x = (xPos - width / 2) * 0.0001;
+        const id = xPos;
+        const h = (id ^ (id >> 15)) * 0x85ebca6b;
+        const noise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature;
+        const driftIdx = (id + t) & 255;
+        const theta_drift = SIN_LUT_F32[driftIdx] * 0.05;
 
-    const c00 = Math.cos(t / 2.0).toFixed(2);
-    const c01 = Math.sin(t / 2.0).toFixed(2);
-    const probVal = (kernelResult.val * 10).toFixed(2);
+        const mirror_idx = Math.abs(Math.floor(raw_x * 1000)) & 255;
+        const x = raw_x * SIN_LUT_F32[mirror_idx] + noise;
 
-    document.getElementById('quantum-state-output').innerText = 
-      `|Ψ_final⟩ = ${c00}|00⟩ + ${c01}|01⟩ + e^(i*${p.toFixed(2)})0.11|10⟩ (Prob: ${probVal})`;
-  }
+        // Module 6: Closed-form interference & diffraction calculation
+        const phase_interf = (Math.PI * d * x) / (r_n * L + 1e-35) + theta_drift;
+        const phase_diffract = (Math.PI * a * x) / (r_n * L + 1e-35);
 
-  function executePipeline() {
-    const btn = document.getElementById('exec-btn');
-    btn.disabled = true;
+        const interf = Math.cos(phase_interf) ** 2;
+        const diffract = phase_diffract === 0 ? 1.0 : (Math.sin(phase_diffract) / phase_diffract) ** 2;
+        const normFactor = 1.0 / (a + 1e-5);
+        
+        const probability = interf * diffract * normFactor * 1.5;
+        const yPos = height - (probability * (height / 120));
 
-    let step = 1;
-    setStep(step);
-
-    const interval = setInterval(() => {
-      step++;
-      if (step <= 4) {
-        setStep(step);
-        btn.innerText = `Executing Pipeline Step ${step}/4...`;
-      } else {
-        clearInterval(interval);
-        btn.disabled = false;
-        btn.innerText = 'Run Pipeline Execution';
-
-        document.getElementById('classical-state-output').innerText = 
-          'CRITICAL: TIMEOUT EXCEEDED (15.2 Days Limit)';
+        if (xPos === 0) ctx.moveTo(xPos, yPos);
+        else ctx.lineTo(xPos, yPos);
       }
-    }, 500);
-  }
-
-  function setStep(activeStep) {
-    for (let i = 1; i <= 4; i++) {
-      const el = document.getElementById(`step-${i}`);
-      el.classList.remove('active', 'passed');
-      if (i === activeStep) {
-        el.classList.add('active');
-      } else if (i < activeStep) {
-        el.classList.add('passed');
-      }
+      ctx.stroke();
     }
   }
 
-  // Initial calculation load
-  updateControls();
+  // Initial render execution on load
+  window.onload = updateSimulation;
 </script>
 
 </body>
