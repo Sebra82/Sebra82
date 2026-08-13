@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine v7.6 - Structured Master Platform</title>
+  <title>QuantEngine v8.0 - Fully Interactive Master Platform</title>
   <style>
     :root {
       --bg-deep: #020408;
-      --card-bg: rgba(8, 12, 20, 0.95);
-      --border-color: rgba(30, 42, 64, 0.8);
+      --card-bg: rgba(8, 12, 20, 0.96);
+      --border-color: rgba(30, 42, 64, 0.85);
       --neon-cyan: #00f3ff;
       --cyan-glow: rgba(0, 243, 255, 0.35);
       --crimson-red: #ff3344;
@@ -47,8 +47,8 @@
       background: var(--card-bg);
       border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 0.75rem;
-      max-width: 1780px;
+      padding: 0.8rem;
+      max-width: 1800px;
       width: 99vw;
       height: 98vh;
       box-shadow: 0 40px 100px rgba(0, 0, 0, 0.99);
@@ -58,7 +58,7 @@
       justify-content: space-between;
     }
 
-    /* Authentication Portal Overlay */
+    /* Bulletproof Authentication Overlay */
     #vaultLockoutOverlay {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -102,15 +102,15 @@
     .platform-grid {
       display: grid;
       grid-template-columns: 1fr 1.5fr 1fr;
-      gap: 0.5rem;
+      gap: 0.6rem;
       flex: 1;
       overflow: hidden;
     }
 
-    .column { display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; padding-right: 2px; }
+    .column { display: flex; flex-direction: column; gap: 0.6rem; overflow-y: auto; padding-right: 2px; }
     
-    .panel-card { background: rgba(3, 7, 15, 0.94); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.5rem; display: flex; flex-direction: column; gap: 0.35rem; box-shadow: 0 8px 25px rgba(0,0,0,0.6); }
-    .panel-title { font-size: 0.68rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
+    .panel-card { background: rgba(3, 7, 15, 0.95); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; box-shadow: 0 8px 25px rgba(0,0,0,0.6); }
+    .panel-title { font-size: 0.7rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
 
     /* Viewports */
     .canvas-box { position: relative; width: 100%; height: 110px; background: #000; border-radius: 5px; border: 1px solid rgba(0, 243, 255, 0.3); overflow: hidden; }
@@ -119,25 +119,25 @@
     .hud-tag span { color: var(--neon-cyan); font-weight: bold; }
 
     /* Controls Grid */
-    .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
-    .control-item { background: rgba(10, 14, 22, 0.85); border: 1px solid var(--border-color); padding: 3px 5px; border-radius: 4px; display: flex; flex-direction: column; gap: 2px; }
-    .control-label { font-size: 0.58rem; color: var(--text-muted); display: flex; justify-content: space-between; }
+    .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+    .control-item { background: rgba(10, 14, 22, 0.85); border: 1px solid var(--border-color); padding: 4px 6px; border-radius: 4px; display: flex; flex-direction: column; gap: 3px; }
+    .control-label { font-size: 0.6rem; color: var(--text-muted); display: flex; justify-content: space-between; }
     .control-label span { color: var(--text-main); font-weight: 600; }
     input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1e2a40; color: #fff; border: 1px solid var(--border-color); height: 4px; border-radius: 2px; outline: none; }
-    select { height: 22px; font-size: 0.6rem; padding: 0 4px; }
+    select { height: 24px; font-size: 0.65rem; padding: 0 4px; }
 
     /* Terminals & Dumps */
-    .data-dump { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 5px; font-size: 0.58rem; color: var(--accent-green); height: 80px; overflow-y: auto; font-family: monospace; line-height: 1.2; }
-    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 5px; font-size: 0.6rem; color: var(--accent-green); height: 95px; overflow-y: auto; font-family: monospace; line-height: 1.25; }
+    .data-dump { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.6rem; color: var(--accent-green); height: 85px; overflow-y: auto; font-family: monospace; line-height: 1.25; }
+    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.62rem; color: var(--accent-green); height: 100px; overflow-y: auto; font-family: monospace; line-height: 1.3; }
 
     /* Buttons */
-    .btn-row { display: flex; gap: 4px; }
-    .action-btn { width: 100%; padding: 0.35rem; font-weight: 700; font-size: 0.65rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; text-align: center; }
-    .action-btn:hover { box-shadow: 0 0 10px var(--cyan-glow); }
+    .btn-row { display: flex; gap: 5px; }
+    .action-btn { width: 100%; padding: 0.4rem; font-weight: 700; font-size: 0.68rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; text-align: center; }
+    .action-btn:hover { box-shadow: 0 0 10px var(--cyan-glow); background: #3dd9e8; }
     .btn-secondary { background: #1e2a40; color: var(--text-main); border: 1px solid var(--border-color); }
     .btn-secondary:hover { background: #2c3e5a; }
 
-    .calc-row { display: flex; justify-content: space-between; font-size: 0.65rem; padding: 4px 6px; background: rgba(10, 14, 22, 0.85); border-radius: 4px; border: 1px solid var(--border-color); color: var(--text-muted); }
+    .calc-row { display: flex; justify-content: space-between; font-size: 0.68rem; padding: 5px 8px; background: rgba(10, 14, 22, 0.85); border-radius: 4px; border: 1px solid var(--border-color); color: var(--text-muted); }
     .calc-row strong { color: var(--neon-cyan); }
   </style>
 </head>
@@ -149,7 +149,7 @@
   <div id="vaultLockoutOverlay">
     <div class="lockout-title">🔐 Secure Authentication Portal</div>
     <div class="lockout-msg">
-      Enter master enterprise access key (`Quantum`) to mount QuantEngine v7.6 platform buffers.<br>
+      Enter master enterprise access key (`Quantum`) to mount QuantEngine v8.0 platform buffers.<br>
       <i>System Node: UK-CENTRAL-01 | Encrypted Session Gateway</i>
     </div>
     <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Access Key (Quantum)..." onkeydown="if(event.key==='Enter')verifyMasterVault()">
@@ -158,7 +158,7 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v7.6</span> Structured Master</div>
+    <div class="brand-title">⚡ <span>QuantEngine v8.0</span> Interactive Master Platform</div>
     <div class="status-badges">
       <div class="security-badge">SEBRA82-SECURE-VAULT-77291-TX</div>
       <div class="node-badge" id="authModeBadge">UK-CENTRAL-01 | ACTIVE</div>
@@ -171,7 +171,7 @@
       <div class="panel-card">
         <div class="panel-title">
           <span>WORKING MODEL STRUCTURE (LATTICE)</span>
-          <span style="color:var(--accent-green); font-size:0.58rem;">r_n = l_P * φⁿ</span>
+          <span style="color:var(--accent-green); font-size:0.6rem;">r_n = l_P * φⁿ</span>
         </div>
         <div class="canvas-box">
           <canvas id="atomicCanvas" width="400" height="110"></canvas>
@@ -196,7 +196,7 @@
       <div class="panel-card">
         <div class="panel-title">
           <span>ENGINE CALCULATIONS & PHYSICS</span>
-          <span style="color:var(--warning-amber); font-size:0.58rem;">O(1) Kernel</span>
+          <span style="color:var(--warning-amber); font-size:0.6rem;">O(1) Kernel</span>
         </div>
         <div class="controls-grid">
           <div class="control-item">
@@ -223,10 +223,10 @@
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">
           <span>INTERACTIVE TELEMETRY (ZOOM & PAN ENABLED)</span>
-          <span style="color:var(--neon-cyan); font-size:0.58rem;">Scroll to Zoom | Drag to Pan</span>
+          <span style="color:var(--neon-cyan); font-size:0.6rem;">Scroll to Zoom | Drag to Pan</span>
         </div>
-        <div class="canvas-box red-border" style="height: 230px;">
-          <canvas id="thresholdCanvas" width="600" height="230" onwheel="handleGraphZoom(event)" onmousedown="startGraphDrag(event)" onmousemove="dragGraph(event)" onmouseup="endGraphDrag()" onmouseleave="endGraphDrag()"></canvas>
+        <div class="canvas-box red-border" style="height: 240px;">
+          <canvas id="thresholdCanvas" width="600" height="240"></canvas>
           <div class="hud-tag">Zoom Scale: <span id="zoomLevel">1.0x</span> | Offset: <span id="panOffset">0</span></div>
         </div>
         
@@ -249,10 +249,10 @@
       <div class="panel-card">
         <div class="panel-title">
           <span>ISOLATED SPIKE EXTRACTION WINDOW</span>
-          <button class="action-btn" style="width: auto; padding: 2px 6px; font-size: 0.55rem;" onclick="isolateDetectedSpikes()">Isolate Spikes</button>
+          <button class="action-btn" style="width: auto; padding: 2px 8px; font-size: 0.6rem;" onclick="isolateDetectedSpikes()">Isolate Spikes</button>
         </div>
-        <div class="canvas-box" style="height: 85px; border-color: rgba(192, 132, 252, 0.4);">
-          <canvas id="spikeCanvas" width="600" height="85"></canvas>
+        <div class="canvas-box" style="height: 90px; border-color: rgba(192, 132, 252, 0.4);">
+          <canvas id="spikeCanvas" width="600" height="90"></canvas>
           <div class="hud-tag" style="color:var(--accent-purple);">Extracted Spikes: <span id="extractedCount">0</span></div>
         </div>
       </div>
@@ -262,18 +262,18 @@
       <div class="panel-card">
         <div class="panel-title">
           <span>EXPORTS & SECURE VAULT (.enc)</span>
-          <span style="color:var(--accent-purple); font-size:0.58rem;">Encrypted Container</span>
+          <span style="color:var(--accent-purple); font-size:0.6rem;">Encrypted Container</span>
         </div>
-        <div class="control-item" style="margin-bottom: 3px;">
+        <div class="control-item" style="margin-bottom: 4px;">
           <div class="control-label"><span>Vault Passphrase</span></div>
-          <input type="password" id="exportPassInput" class="unlock-input" style="width: 100%; font-size: 0.7rem; padding: 0.3rem;" placeholder="Enter Passphrase...">
+          <input type="password" id="exportPassInput" class="unlock-input" style="width: 100%; font-size: 0.75rem; padding: 0.35rem;" placeholder="Enter Passphrase...">
         </div>
         <div class="btn-row">
           <button class="action-btn" onclick="exportEncryptedDataDump()">Export .enc Blob</button>
           <button class="action-btn btn-secondary" onclick="document.getElementById('importEncFile').click()">Import .enc</button>
           <input type="file" id="importEncFile" style="display:none" accept=".enc,.json,.dat" onchange="importEncryptedDataDump(event)">
         </div>
-        <div class="btn-row" style="margin-top: 4px;">
+        <div class="btn-row" style="margin-top: 5px;">
           <button class="action-btn btn-secondary" onclick="exportPlatformState()">Export State (.json)</button>
           <button class="action-btn btn-secondary" onclick="document.getElementById('importFile').click()">Import State</button>
           <input type="file" id="importFile" style="display:none" accept=".json" onchange="importPlatformState(event)">
@@ -290,7 +290,7 @@
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">RING BUFFER TERMINAL LOGS</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] Platform successfully booted with structured layout...<br>
+          [INIT] Platform successfully booted and fully interactive...<br>
         </div>
       </div>
     </div>
@@ -308,7 +308,7 @@
   let detectedSpikesBuffer = [];
   let rawDataDumpBuffer = [];
 
-  // Graph Zoom & Pan State
+  // Graph Zoom & Pan State with Robust Event Listeners
   let graphZoom = 1.0;
   let graphPanX = 0;
   let isDraggingGraph = false;
@@ -325,7 +325,7 @@
       if (input === "quantum") {
         vaultAuthMode = 1;
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("Master access granted via 'Quantum' passphrase. All structured panels active.");
+        logPlatform("Master access granted via 'Quantum' passphrase. All panels interactive.");
       } else {
         vaultAuthMode = 2;
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
@@ -353,30 +353,29 @@
     document.getElementById('calcLorentz').innerText = gamma.toFixed(3);
   }
 
-  function handleGraphZoom(event) {
-    event.preventDefault();
-    if (event.deltaY < 0) {
-      graphZoom = Math.min(graphZoom * 1.15, 4.0);
-    } else {
-      graphZoom = Math.max(graphZoom / 1.15, 0.5);
-    }
+  // Robust Graph Interaction Listeners
+  const threshCanvas = document.getElementById('thresholdCanvas');
+  threshCanvas.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    if (e.deltaY < 0) graphZoom = Math.min(graphZoom * 1.15, 4.0);
+    else graphZoom = Math.max(graphZoom / 1.15, 0.5);
     document.getElementById('zoomLevel').innerText = `${graphZoom.toFixed(2)}x`;
-  }
+  }, { passive: false });
 
-  function startGraphDrag(event) {
+  threshCanvas.addEventListener('mousedown', (e) => {
     isDraggingGraph = true;
-    dragStartX = event.clientX - graphPanX;
-  }
+    dragStartX = e.clientX - graphPanX;
+  });
 
-  function dragGraph(event) {
+  window.addEventListener('mousemove', (e) => {
     if (!isDraggingGraph) return;
-    graphPanX = event.clientX - dragStartX;
+    graphPanX = e.clientX - dragStartX;
     document.getElementById('panOffset').innerText = Math.floor(graphPanX);
-  }
+  });
 
-  function endGraphDrag() {
+  window.addEventListener('mouseup', () => {
     isDraggingGraph = false;
-  }
+  });
 
   function updateThresholdParams() {
     currentThreshold = parseFloat(document.getElementById('threshSlider').value);
@@ -396,7 +395,7 @@
     logPlatform("[VAULT EXPORT] Packaging telemetry data into secure .enc container...");
 
     const packageData = {
-      version: "QuantEngine v7.6",
+      version: "QuantEngine v8.0",
       timestamp: new Date().toISOString(),
       watermark: "SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX",
       telemetry: telemetryHistory,
@@ -416,11 +415,11 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `QuantEngine_Structured_Vault_${Date.now()}.enc`;
+    a.download = `QuantEngine_Master_Vault_${Date.now()}.enc`;
     a.click();
     URL.revokeObjectURL(url);
 
-    logPlatform("[SUCCESS] .enc vault container successfully exported from export panel.");
+    logPlatform("[SUCCESS] .enc vault container successfully exported.");
   }
 
   function importEncryptedDataDump(event) {
@@ -547,7 +546,6 @@
     atomCtx.fill();
   }
 
-  const threshCanvas = document.getElementById('thresholdCanvas');
   const threshCtx = threshCanvas.getContext('2d');
   function renderThresholdGraph() {
     const width = threshCanvas.width;
@@ -605,12 +603,14 @@
     threshCtx.restore();
 
     const statusEl = document.getElementById('thresholdStatus');
-    if (breaches > 0) {
-      statusEl.innerText = `BREACH DETECTED (${breaches} Spikes)`;
-      statusEl.style.color = "var(--crimson-red)";
-    } else {
-      statusEl.innerText = "Normal (0 Spikes)";
-      statusEl.style.color = "var(--accent-green)";
+    if (statusEl) {
+      if (breaches > 0) {
+        statusEl.innerText = `BREACH DETECTED (${breaches} Spikes)`;
+        statusEl.style.color = "var(--crimson-red)";
+      } else {
+        statusEl.innerText = "Normal (0 Spikes)";
+        statusEl.style.color = "var(--accent-green)";
+      }
     }
   }
 
@@ -651,7 +651,7 @@
   }
 
   function exportPlatformState() {
-    const state = { platform: "QuantEngine v7.6", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
+    const state = { platform: "QuantEngine v8.0", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a'); a.href = url; a.download = "platform_state.json"; a.click();
