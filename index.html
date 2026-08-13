@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine v7.1 - Interactive Master Platform</title>
+  <title>QuantEngine v7.3 - Complete Master Platform</title>
   <style>
     :root {
-      --bg-deep: #030508;
-      --card-bg: rgba(9, 14, 23, 0.92);
-      --border-color: rgba(31, 41, 61, 0.75);
+      --bg-deep: #020408;
+      --card-bg: rgba(8, 12, 20, 0.95);
+      --border-color: rgba(30, 42, 64, 0.8);
       --neon-cyan: #00f3ff;
-      --cyan-glow: rgba(0, 243, 255, 0.3);
+      --cyan-glow: rgba(0, 243, 255, 0.35);
       --crimson-red: #ff3344;
-      --text-main: #e6edf3;
+      --text-main: #f0f6fc;
       --text-muted: #8b949e;
       --accent-green: #7ee787;
       --accent-purple: #c084fc;
@@ -46,100 +46,99 @@
       z-index: 10;
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 1rem;
-      max-width: 1650px;
-      width: 98vw;
-      height: 97vh;
-      box-shadow: 0 35px 90px rgba(0, 0, 0, 0.98);
-      backdrop-filter: blur(18px);
+      border-radius: 12px;
+      padding: 0.75rem;
+      max-width: 1780px;
+      width: 99vw;
+      height: 98vh;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.99);
+      backdrop-filter: blur(20px);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
 
-    /* Stealth Authentication Portal */
+    /* Bulletproof Authentication Overlay */
     #vaultLockoutOverlay {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(3, 5, 8, 0.98);
+      background: rgba(2, 4, 8, 0.99);
       z-index: 9999;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 1.2rem;
-      border-radius: 16px;
+      gap: 1rem;
+      border-radius: 12px;
       border: 2px solid var(--border-color);
       padding: 2rem;
       text-align: center;
     }
     #vaultLockoutOverlay.hidden { display: none; }
 
-    .lockout-title { font-size: 1.35rem; font-weight: bold; color: var(--text-main); letter-spacing: 0.5px; }
-    .lockout-msg { font-size: 0.82rem; color: var(--text-muted); max-width: 540px; line-height: 1.5; background: #04060a; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); }
-    .unlock-input { background: #04060a; border: 1px solid var(--border-color); color: var(--neon-cyan); padding: 0.7rem 1.2rem; border-radius: 8px; font-size: 0.9rem; width: 340px; text-align: center; outline: none; }
-    .unlock-btn { background: var(--neon-cyan); color: #04060a; border: none; padding: 0.7rem 1.6rem; border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 0 15px var(--cyan-glow); }
+    .lockout-title { font-size: 1.4rem; font-weight: bold; color: var(--text-main); letter-spacing: 0.5px; }
+    .lockout-msg { font-size: 0.85rem; color: var(--text-muted); max-width: 500px; line-height: 1.4; background: #04060a; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); }
+    .unlock-input { background: #04060a; border: 1px solid var(--border-color); color: var(--neon-cyan); padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.9rem; width: 320px; text-align: center; outline: none; }
+    .unlock-btn { background: var(--neon-cyan); color: #04060a; border: none; padding: 0.6rem 1.4rem; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 0 15px var(--cyan-glow); }
     .unlock-btn:hover { background: #7dd3fc; }
-    .auth-error { font-size: 0.75rem; color: var(--crimson-red); min-height: 18px; }
+    .auth-error { font-size: 0.75rem; color: var(--crimson-red); min-height: 16px; }
 
     /* Header */
     .widget-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 0.6rem;
-      margin-bottom: 0.6rem;
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.5rem;
       border-bottom: 1px solid var(--border-color);
     }
-    .brand-title { display: flex; align-items: center; gap: 10px; font-size: 1.15rem; font-weight: 700; color: #fff; }
+    .brand-title { display: flex; align-items: center; gap: 8px; font-size: 1.1rem; font-weight: 700; color: #fff; }
     .brand-title span { color: var(--neon-cyan); }
-    .status-badges { display: flex; gap: 10px; align-items: center; }
-    .security-badge { font-size: 0.68rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(192, 132, 252, 0.4); font-weight: bold; }
-    .node-badge { font-size: 0.68rem; background: rgba(31, 41, 61, 0.6); color: var(--accent-green); padding: 3px 8px; border-radius: 10px; border: 1px solid var(--border-color); }
+    .status-badges { display: flex; gap: 8px; align-items: center; }
+    .security-badge { font-size: 0.65rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 3px 8px; border-radius: 10px; border: 1px solid rgba(192, 132, 252, 0.4); font-weight: bold; }
+    .node-badge { font-size: 0.65rem; background: rgba(30, 42, 64, 0.6); color: var(--accent-green); padding: 3px 8px; border-radius: 8px; border: 1px solid var(--border-color); }
 
-    /* Main Grid Layout */
+    /* Optimized 3-Column Layout */
     .platform-grid {
       display: grid;
-      grid-template-columns: 1.1fr 1.6fr 1.1fr;
-      gap: 0.75rem;
+      grid-template-columns: 1fr 1.6fr 1fr;
+      gap: 0.5rem;
       flex: 1;
       overflow: hidden;
     }
 
-    .column { display: flex; flex-direction: column; gap: 0.6rem; overflow-y: auto; padding-right: 4px; }
+    .column { display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; padding-right: 2px; }
     
-    .panel-card { background: rgba(4, 9, 18, 0.9); border-radius: 10px; border: 1px solid var(--border-color); padding: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-    .panel-title { font-size: 0.72rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
+    .panel-card { background: rgba(3, 7, 15, 0.94); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.5rem; display: flex; flex-direction: column; gap: 0.35rem; box-shadow: 0 8px 25px rgba(0,0,0,0.6); }
+    .panel-title { font-size: 0.68rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
 
     /* Viewports */
-    .canvas-box { position: relative; width: 100%; height: 110px; background: #000; border-radius: 6px; border: 1px solid rgba(0, 243, 255, 0.3); overflow: hidden; }
+    .canvas-box { position: relative; width: 100%; height: 95px; background: #000; border-radius: 5px; border: 1px solid rgba(0, 243, 255, 0.3); overflow: hidden; }
     canvas { display: block; width: 100%; height: 100%; cursor: crosshair; }
-    .hud-tag { position: absolute; top: 4px; left: 6px; background: rgba(3, 7, 18, 0.85); border: 1px solid var(--border-color); padding: 2px 5px; border-radius: 4px; font-size: 0.58rem; color: var(--text-muted); }
+    .hud-tag { position: absolute; top: 3px; left: 5px; background: rgba(2, 4, 8, 0.9); border: 1px solid var(--border-color); padding: 1px 4px; border-radius: 3px; font-size: 0.55rem; color: var(--text-muted); }
     .hud-tag span { color: var(--neon-cyan); font-weight: bold; }
 
-    /* Controls */
-    .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
-    .control-item { background: rgba(13, 17, 23, 0.8); border: 1px solid var(--border-color); padding: 4px 6px; border-radius: 5px; display: flex; flex-direction: column; gap: 2px; }
-    .control-label { font-size: 0.62rem; color: var(--text-muted); display: flex; justify-content: space-between; }
+    /* Controls Grid */
+    .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+    .control-item { background: rgba(10, 14, 22, 0.85); border: 1px solid var(--border-color); padding: 3px 5px; border-radius: 4px; display: flex; flex-direction: column; gap: 2px; }
+    .control-label { font-size: 0.58rem; color: var(--text-muted); display: flex; justify-content: space-between; }
     .control-label span { color: var(--text-main); font-weight: 600; }
-    input[type="range"] { width: 100%; accent-color: var(--neon-cyan); background: #1f293d; height: 3px; border-radius: 2px; }
+    input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1e2a40; color: #fff; border: 1px solid var(--border-color); height: 4px; border-radius: 2px; outline: none; }
+    select { height: 22px; font-size: 0.6rem; padding: 0 4px; }
 
     /* Terminals & Dumps */
-    .data-dump { background: #010409; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px; font-size: 0.6rem; color: var(--accent-green); height: 80px; overflow-y: auto; font-family: monospace; line-height: 1.25; }
-    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px; font-size: 0.62rem; color: var(--accent-green); height: 95px; overflow-y: auto; font-family: monospace; line-height: 1.3; }
+    .data-dump { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 5px; font-size: 0.58rem; color: var(--accent-green); height: 70px; overflow-y: auto; font-family: monospace; line-height: 1.2; }
+    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 5px; font-size: 0.6rem; color: var(--accent-green); height: 85px; overflow-y: auto; font-family: monospace; line-height: 1.25; }
 
     /* Buttons */
-    .btn-row { display: flex; gap: 5px; }
-    .action-btn { width: 100%; padding: 0.45rem; font-weight: 700; font-size: 0.68rem; color: #04060a; background: var(--neon-cyan); border: none; border-radius: 5px; cursor: pointer; transition: 0.2s; text-align: center; }
-    .action-btn:hover { box-shadow: 0 0 12px var(--cyan-glow); }
-    .btn-secondary { background: #1f293d; color: var(--text-main); border: 1px solid var(--border-color); }
-    .btn-secondary:hover { background: #30363d; }
+    .btn-row { display: flex; gap: 4px; }
+    .action-btn { width: 100%; padding: 0.35rem; font-weight: 700; font-size: 0.65rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; text-align: center; }
+    .action-btn:hover { box-shadow: 0 0 10px var(--cyan-glow); }
+    .btn-secondary { background: #1e2a40; color: var(--text-main); border: 1px solid var(--border-color); }
+    .btn-secondary:hover { background: #2c3e5a; }
 
-    .calc-row { display: flex; justify-content: space-between; font-size: 0.7rem; padding: 5px 8px; background: rgba(13, 17, 23, 0.7); border-radius: 5px; border: 1px solid var(--border-color); color: var(--text-muted); }
+    .calc-row { display: flex; justify-content: space-between; font-size: 0.65rem; padding: 4px 6px; background: rgba(10, 14, 22, 0.85); border-radius: 4px; border: 1px solid var(--border-color); color: var(--text-muted); }
     .calc-row strong { color: var(--neon-cyan); }
-
-    @media (max-width: 1200px) { body { overflow-y: auto; height: auto; } .platform-container { height: auto; } .platform-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -150,7 +149,7 @@
   <div id="vaultLockoutOverlay">
     <div class="lockout-title">🔐 Secure Authentication Portal</div>
     <div class="lockout-msg">
-      Enter master enterprise access key to mount QuantEngine v7.1 Interactive Platform buffers.<br>
+      Enter master enterprise access key to mount QuantEngine v7.3 Complete Platform buffers.<br>
       <i>System Node: UK-CENTRAL-01 | Encrypted Session Gateway</i>
     </div>
     <input type="password" id="stealthInput" class="unlock-input" placeholder="Enter Access Key..." onkeydown="if(event.key==='Enter')verifyStealthVault()">
@@ -159,10 +158,10 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v7.1</span> Interactive Platform Master</div>
+    <div class="brand-title">⚡ <span>QuantEngine v7.3</span> Complete Master Platform</div>
     <div class="status-badges">
-      <div class="security-badge">SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX</div>
-      <div class="node-badge" id="authModeBadge">UK-CENTRAL-01 | ZOOM ACTIVE</div>
+      <div class="security-badge">SEBRA82-SECURE-VAULT-77291-TX</div>
+      <div class="node-badge" id="authModeBadge">UK-CENTRAL-01 | ACTIVE</div>
     </div>
   </div>
 
@@ -172,10 +171,10 @@
       <div class="panel-card">
         <div class="panel-title">
           <span>ATOMIC MODEL STRUCTURE (LATTICE)</span>
-          <span style="color:var(--accent-green); font-size:0.6rem;">r_n = l_P * φⁿ</span>
+          <span style="color:var(--accent-green); font-size:0.58rem;">r_n = l_P * φⁿ</span>
         </div>
         <div class="canvas-box">
-          <canvas id="atomicCanvas" width="400" height="110"></canvas>
+          <canvas id="atomicCanvas" width="400" height="95"></canvas>
           <div class="hud-tag">Active Nodes: <span id="atomCount">64</span></div>
         </div>
         <div class="controls-grid">
@@ -184,41 +183,45 @@
             <input type="range" id="atomScaleSlider" min="10" max="250" value="64" oninput="updateAtomSimulation()">
           </div>
           <div class="control-item">
-            <div class="control-label">Spin Coupling: <span id="spinVal">1.25 rad</span></div>
-            <input type="range" id="spinSlider" min="0.1" max="3.14" step="0.05" value="1.25" oninput="updateAtomSimulation()">
+            <div class="control-label">Orbital Mode:</div>
+            <select id="orbitalModeSelect" onchange="updateAtomSimulation()">
+              <option value="0">s-Shell Orbital</option>
+              <option value="1" selected>p_z Dumbbell</option>
+              <option value="2">d_x2-y2 Cloverleaf</option>
+            </select>
           </div>
         </div>
       </div>
 
       <div class="panel-card">
         <div class="panel-title">
-          <span>LIVE NOISE CALCULATOR & THERMAL DRIFT</span>
-          <span style="color:var(--warning-amber); font-size:0.6rem;">O(1) Kernel</span>
+          <span>MODULES 1-6 PHYSICS CONTROLS</span>
+          <span style="color:var(--warning-amber); font-size:0.58rem;">O(1) Kernel</span>
         </div>
         <div class="controls-grid">
           <div class="control-item">
-            <div class="control-label">Thermal (T): <span id="noiseTempVal">1.00</span></div>
-            <input type="range" id="noiseTempSlider" min="0.1" max="5.0" step="0.1" value="1.0" oninput="updateNoiseCalc()">
+            <div class="control-label">Relativistic (β): <span id="betaVal">0.30</span></div>
+            <input type="range" id="betaSlider" min="0.0" max="0.95" step="0.05" value="0.3" oninput="updateNoiseCalc()">
           </div>
           <div class="control-item">
-            <div class="control-label">Jitter Factor: <span id="noiseJitterVal">0.05</span></div>
-            <input type="range" id="noiseJitterSlider" min="0.01" max="0.5" step="0.01" value="0.05" oninput="updateNoiseCalc()">
+            <div class="control-label">Tunneling (κ): <span id="kappaVal">1.50</span></div>
+            <input type="range" id="kappaSlider" min="0.1" max="5.0" step="0.1" value="1.5" oninput="updateNoiseCalc()">
           </div>
         </div>
         <div class="calc-row">
-          <span>Evaluated Noise RMS ($\sigma$):</span>
-          <strong id="calcNoiseRMS" style="color:var(--crimson-red);">0.0000 µV</strong>
+          <span>Lorentz Factor ($\gamma$):</span>
+          <strong id="calcLorentz" style="color:var(--accent-purple);">1.048</strong>
         </div>
       </div>
 
       <div class="panel-card">
-        <div class="panel-title">BLOB EXTENSION VAULT</div>
-        <div class="control-item" style="margin-bottom: 4px;">
+        <div class="panel-title">BLOB EXTENSION VAULT (.enc)</div>
+        <div class="control-item" style="margin-bottom: 3px;">
           <div class="control-label"><span>Vault Passphrase</span></div>
-          <input type="password" id="exportPassInput" class="unlock-input" style="width: 100%; font-size: 0.75rem; padding: 0.35rem;" placeholder="Enter Passphrase...">
+          <input type="password" id="exportPassInput" class="unlock-input" style="width: 100%; font-size: 0.7rem; padding: 0.3rem;" placeholder="Enter Passphrase...">
         </div>
         <div class="btn-row">
-          <button class="action-btn" onclick="exportEncryptedDataDump()">Export .enc Blob</button>
+          <button class="action-btn" onclick="exportEncryptedDataDump()">Export .enc</button>
           <button class="action-btn btn-secondary" onclick="document.getElementById('importEncFile').click()">Import .enc</button>
           <input type="file" id="importEncFile" style="display:none" accept=".enc,.json,.dat" onchange="importEncryptedDataDump(event)">
         </div>
@@ -229,10 +232,10 @@
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">
           <span>INTERACTIVE TELEMETRY (ZOOM & PAN ENABLED)</span>
-          <span style="color:var(--neon-cyan); font-size:0.6rem;">Scroll to Zoom | Drag to Pan</span>
+          <span style="color:var(--neon-cyan); font-size:0.58rem;">Scroll to Zoom | Drag to Pan</span>
         </div>
-        <div class="canvas-box red-border" style="height: 235px;">
-          <canvas id="thresholdCanvas" width="600" height="235" onwheel="handleGraphZoom(event)" onmousedown="startGraphDrag(event)" onmousemove="dragGraph(event)" onmouseup="endGraphDrag()" onmouseleave="endGraphDrag()"></canvas>
+        <div class="canvas-box red-border" style="height: 215px;">
+          <canvas id="thresholdCanvas" width="600" height="215" onwheel="handleGraphZoom(event)" onmousedown="startGraphDrag(event)" onmousemove="dragGraph(event)" onmouseup="endGraphDrag()" onmouseleave="endGraphDrag()"></canvas>
           <div class="hud-tag">Zoom Scale: <span id="zoomLevel">1.0x</span> | Offset: <span id="panOffset">0</span></div>
         </div>
         
@@ -255,10 +258,10 @@
       <div class="panel-card">
         <div class="panel-title">
           <span>ISOLATED SPIKE EXTRACTION WINDOW</span>
-          <button class="action-btn" style="width: auto; padding: 2px 8px; font-size: 0.58rem;" onclick="isolateDetectedSpikes()">Isolate Spikes</button>
+          <button class="action-btn" style="width: auto; padding: 2px 6px; font-size: 0.55rem;" onclick="isolateDetectedSpikes()">Isolate Spikes</button>
         </div>
-        <div class="canvas-box" style="height: 90px; border-color: rgba(192, 132, 252, 0.4);">
-          <canvas id="spikeCanvas" width="600" height="90"></canvas>
+        <div class="canvas-box" style="height: 75px; border-color: rgba(192, 132, 252, 0.4);">
+          <canvas id="spikeCanvas" width="600" height="75"></canvas>
           <div class="hud-tag" style="color:var(--accent-purple);">Extracted Spikes: <span id="extractedCount">0</span></div>
         </div>
       </div>
@@ -292,7 +295,7 @@
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">RING BUFFER TERMINAL LOGS</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] Platform successfully booted...<br>
+          [INIT] Platform successfully booted with all 6 modules active...<br>
         </div>
       </div>
     </div>
@@ -316,7 +319,7 @@
   let isDraggingGraph = false;
   let dragStartX = 0;
 
-  // Fully Robust Case-Insensitive Master Passphrase Check ("Quantum")
+  // Bulletproof Case-Insensitive Master Passphrase Check ("Quantum")
   function verifyStealthVault() {
     const inputField = document.getElementById('stealthInput');
     const input = inputField.value.trim().toLowerCase();
@@ -328,13 +331,13 @@
       if (input === "quantum") {
         vaultAuthMode = 1; // Unlocks True Production Kernel
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("Master access granted via 'Quantum' passphrase. Kernel active.");
+        logPlatform("Master access granted via 'Quantum' passphrase. All 6 modules active.");
       } else {
-        vaultAuthMode = 2; // Silent Quarantine Decoy Feed for unauthorized inputs
+        vaultAuthMode = 2; // Silent Quarantine Decoy Feed
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
         logPlatform("Standard session clearance mounted.");
       }
-    }, 300);
+    }, 250);
   }
 
   const logBuffer = [];
@@ -347,13 +350,13 @@
   }
 
   function updateNoiseCalc() {
-    const T = parseFloat(document.getElementById('noiseTempSlider').value);
-    const j = parseFloat(document.getElementById('noiseJitterSlider').value);
-    document.getElementById('noiseTempVal').innerText = T.toFixed(2);
-    document.getElementById('noiseJitterVal').innerText = j.toFixed(2);
+    const beta = parseFloat(document.getElementById('betaSlider').value);
+    const kappa = parseFloat(document.getElementById('kappaSlider').value);
+    document.getElementById('betaVal').innerText = beta.toFixed(2);
+    document.getElementById('kappaVal').innerText = kappa.toFixed(2);
 
-    const rms = (T * j * 1.414 * 12.5).toFixed(4);
-    document.getElementById('calcNoiseRMS').innerText = `${rms} µV`;
+    const gamma = 1.0 / Math.sqrt(1.0 - beta * beta);
+    document.getElementById('calcLorentz').innerText = gamma.toFixed(3);
   }
 
   function handleGraphZoom(event) {
@@ -399,7 +402,7 @@
     logPlatform("[BLOB EXPORT] Packaging telemetry data with blob extension wrapper...");
 
     const packageData = {
-      version: "QuantEngine v7.1",
+      version: "QuantEngine v7.3",
       timestamp: new Date().toISOString(),
       watermark: "SEBRA82-PROPRIETARY-SECURE-VAULT-77291-TX",
       telemetry: telemetryHistory,
@@ -487,7 +490,7 @@
     const width = bgCanvas.width;
     const height = bgCanvas.height;
 
-    bgCtx.fillStyle = 'rgba(3, 5, 8, 0.15)';
+    bgCtx.fillStyle = 'rgba(2, 4, 8, 0.15)';
     bgCtx.fillRect(0, 0, width, height);
 
     const corruptionFactor = (vaultAuthMode === 2) ? 12.0 : 1.0;
@@ -513,7 +516,6 @@
   const atomCtx = atomCanvas.getContext('2d');
   function updateAtomSimulation() {
     document.getElementById('atomScaleVal').innerText = document.getElementById('atomScaleSlider').value;
-    document.getElementById('spinVal').innerText = parseFloat(document.getElementById('spinSlider').value).toFixed(2) + " rad";
   }
 
   function renderAtoms() {
@@ -522,30 +524,33 @@
     atomCtx.fillStyle = '#000';
     atomCtx.fillRect(0, 0, width, height);
 
-    const spin = parseFloat(document.getElementById('spinSlider').value) + (globalTick * 0.02);
-    const atomCount = 18;
+    const orbitalMode = parseInt(document.getElementById('orbitalModeSelect').value);
+    const spin = globalTick * 0.02;
+    const atomCount = 20;
 
     for (let i = 0; i < atomCount; i++) {
       const angle = (i / atomCount) * Math.PI * 2 + spin;
-      const radius = 35 + Math.sin(i + globalTick * 0.05) * 15;
-      const x = width / 2 + Math.cos(angle) * (radius * 1.5);
-      const y = height / 2 + Math.sin(angle) * radius;
+      const xBase = width / 2 + Math.cos(angle) * 45;
+      const yBase = height / 2 + Math.sin(angle) * 30;
 
-      atomCtx.strokeStyle = 'rgba(0, 243, 255, 0.2)';
-      atomCtx.lineWidth = 1;
-      atomCtx.beginPath();
-      atomCtx.moveTo(width / 2, height / 2);
-      atomCtx.lineTo(x, y);
-      atomCtx.stroke();
+      // Module 5: Spherical Harmonics Modulation (s, p_z, d_x2-y2)
+      let harmonic = 1.0;
+      const dx = Math.cos(angle);
+      const dy = Math.sin(angle);
+      if (orbitalMode === 1) harmonic = 2.5 * dy * dy;
+      else if (orbitalMode === 2) { const c = dx*dx - dy*dy; harmonic = Math.abs(3.2 * c * c); }
+
+      const x = width / 2 + (xBase - width / 2) * harmonic;
+      const y = height / 2 + (yBase - height / 2) * harmonic;
 
       atomCtx.fillStyle = i % 2 === 0 ? '#00f3ff' : '#c084fc';
       atomCtx.beginPath();
-      atomCtx.arc(x, y, 4, 0, Math.PI * 2);
+      atomCtx.arc(x, y, 3.5, 0, Math.PI * 2);
       atomCtx.fill();
     }
     atomCtx.fillStyle = '#7ee787';
     atomCtx.beginPath();
-    atomCtx.arc(width / 2, height / 2, 7, 0, Math.PI * 2);
+    atomCtx.arc(width / 2, height / 2, 5.5, 0, Math.PI * 2);
     atomCtx.fill();
   }
 
@@ -555,11 +560,12 @@
     const width = threshCanvas.width;
     const height = threshCanvas.height;
 
-    threshCtx.fillStyle = 'rgba(4, 9, 18, 0.45)';
+    threshCtx.fillStyle = 'rgba(3, 7, 15, 0.45)';
     threshCtx.fillRect(0, 0, width, height);
 
-    const T = parseFloat(document.getElementById('noiseTempSlider').value);
-    const noise = (Math.random() - 0.5) * (vaultAuthMode === 2 ? 35 : (12 * T));
+    const beta = parseFloat(document.getElementById('betaSlider').value);
+    const gamma = 1.0 / Math.sqrt(1.0 - beta * beta);
+    const noise = (Math.random() - 0.5) * (vaultAuthMode === 2 ? 35 : (10 * gamma));
     const nextVal = currentBaseline + Math.sin(globalTick * 0.1) * 20 + noise;
     telemetryHistory.push(nextVal);
     if (telemetryHistory.length > 250) telemetryHistory.shift();
@@ -590,97 +596,3 @@
     threshCtx.scale(graphZoom, 1.0);
 
     threshCtx.strokeStyle = vaultAuthMode === 2 ? '#ff3344' : '#00f3ff';
-    threshCtx.lineWidth = 2;
-    threshCtx.beginPath();
-    
-    let breaches = 0;
-    const step = width / (telemetryHistory.length || 1);
-    telemetryHistory.forEach((val, idx) => {
-      const x = idx * step;
-      const y = height - (val / 100) * height;
-      if (val >= currentThreshold) breaches++;
-      if (idx === 0) threshCtx.moveTo(x, y);
-      else threshCtx.lineTo(x, y);
-    });
-    threshCtx.stroke();
-    threshCtx.restore();
-
-    const statusEl = document.getElementById('thresholdStatus');
-    if (breaches > 0) {
-      statusEl.innerText = `BREACH DETECTED (${breaches} Spikes)`;
-      statusEl.style.color = "var(--crimson-red)";
-    } else {
-      statusEl.innerText = "Normal (0 Spikes)";
-      statusEl.style.color = "var(--accent-green)";
-    }
-  }
-
-  const spikeCanvas = document.getElementById('spikeCanvas');
-  const spikeCtx = spikeCanvas.getContext('2d');
-  function renderSpikeExtractionWindow() {
-    const width = spikeCanvas.width;
-    const height = spikeCanvas.height;
-
-    spikeCtx.fillStyle = 'rgba(4, 9, 18, 0.6)';
-    spikeCtx.fillRect(0, 0, width, height);
-
-    document.getElementById('extractedCount').innerText = detectedSpikesBuffer.length;
-
-    if (detectedSpikesBuffer.length === 0) {
-      spikeCtx.fillStyle = '#8b949e';
-      spikeCtx.font = '10px monospace';
-      spikeCtx.fillText('Awaiting spike isolation trigger...', 15, height / 2);
-      return;
-    }
-
-    spikeCtx.strokeStyle = '#c084fc';
-    spikeCtx.lineWidth = 2;
-    spikeCtx.beginPath();
-
-    const step = width / Math.max(detectedSpikesBuffer.length, 10);
-    detectedSpikesBuffer.forEach((val, idx) => {
-      const x = idx * step;
-      const y = height - ((val - currentThreshold) / (100 - currentThreshold + 1)) * height;
-      if (idx === 0) spikeCtx.moveTo(x, y);
-      else spikeCtx.lineTo(x, y);
-    });
-    spikeCtx.stroke();
-  }
-
-  function isolateDetectedSpikes() {
-    logPlatform(`[SPIKE EXTRACTION] Isolated ${detectedSpikesBuffer.length} threshold breach events into sub-graph window.`);
-  }
-
-  function exportPlatformState() {
-    const state = { platform: "QuantEngine v7.1", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
-    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = "platform_state.json"; a.click();
-    URL.revokeObjectURL(url);
-    logPlatform("[EXPORT] Platform state exported successfully.");
-  }
-  function importPlatformState(e) { logPlatform("[IMPORT] State file loaded into memory buffers."); }
-
-  function masterRenderLoop() {
-    globalTick += 1;
-    renderBackgroundModel();
-    if (vaultAuthMode > 0) {
-      renderAtoms();
-      renderThresholdGraph();
-      renderSpikeExtractionWindow();
-      if (globalTick % 15 === 0) pushDataDump();
-    }
-    requestAnimationFrame(masterRenderLoop);
-  }
-
-  window.onload = () => {
-    resizeBackgroundCanvas();
-    updateThresholdParams();
-    updateAtomSimulation();
-    updateNoiseCalc();
-    masterRenderLoop();
-  };
-</script>
-
-</body>
-</html>
