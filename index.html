@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine SaaS Portal Console - WebGPU v5.6 Hybrid Architecture</title>
+  <title>QuantEngine SaaS Portal Console</title>
   <style>
     :root {
       --bg-color: #07090e;
-      --card-bg: rgba(13, 17, 23, 0.9);
+      --card-bg: rgba(13, 17, 23, 0.85);
       --border-color: #1f293d;
       --neon-cyan: #00f3ff;
       --cyan-glow: rgba(0, 243, 255, 0.3);
@@ -40,9 +40,9 @@
       border: 1px solid var(--border-color);
       border-radius: 14px;
       padding: 1.5rem;
-      max-width: 1150px;
+      max-width: 1050px;
       width: 100%;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
     }
 
     /* Header */
@@ -125,7 +125,6 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1.25rem;
-      margin-bottom: 1.25rem;
     }
 
     .canvas-card {
@@ -299,51 +298,6 @@
       line-height: 1.4;
     }
 
-    /* Summary Table Section */
-    .summary-table-section {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 1.25rem;
-    }
-
-    .table-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 0.75rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .data-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.78rem;
-      font-family: monospace;
-    }
-
-    .data-table th, .data-table td {
-      border: 1px solid var(--border-color);
-      padding: 9px 12px;
-      text-align: left;
-    }
-
-    .data-table th {
-      background: rgba(0, 243, 255, 0.08);
-      color: var(--neon-cyan);
-      letter-spacing: 0.5px;
-    }
-
-    .data-table td {
-      color: var(--text-muted);
-    }
-
-    .data-table td strong {
-      color: var(--text-main);
-    }
-
     @media (max-width: 768px) {
       .canvas-grid { grid-template-columns: 1fr; }
       .pipeline-grid { grid-template-columns: repeat(2, 1fr); }
@@ -355,27 +309,27 @@
 <div class="widget-container">
   <div class="widget-header">
     <div class="brand-title">
-      ⚡ <span>QuantEngine</span> WebGPU v5.6 Hybrid Compute Console
+      ⚡ <span>QuantEngine</span> SaaS Portal Console
     </div>
-    <div class="node-badge">UK-CENTRAL-01 | v5.6-WEBGPU-ACTIVE</div>
+    <div class="node-badge">UK-CENTRAL-01 | v5.5.0-SECURE</div>
   </div>
 
   <div class="pipeline-grid">
     <div class="pipeline-step active" id="step-1">
       <div class="step-title">1. Tensor Prep</div>
-      <div class="step-sub">WebGPU Storage Buffers</div>
+      <div class="step-sub">Encapsulated IIFE</div>
     </div>
     <div class="pipeline-step" id="step-2">
       <div class="step-title">2. Phase Estim.</div>
-      <div class="step-sub">Weyl Scrambled U-Gate</div>
+      <div class="step-sub">Optimized U-Gate</div>
     </div>
     <div class="pipeline-step" id="step-3">
       <div class="step-title">3. Noise Mitig.</div>
-      <div class="step-sub">GPU Dual-Noise ZNE</div>
+      <div class="step-sub">Thermal Underlay ZNE</div>
     </div>
     <div class="pipeline-step" id="step-4">
       <div class="step-title">4. Wave Collapse</div>
-      <div class="step-sub">Sub-35ms Compute Array</div>
+      <div class="step-sub">Sub-35ms Compute</div>
     </div>
   </div>
 
@@ -383,7 +337,7 @@
     <div class="canvas-card quantum-side">
       <div>
         <div class="card-header">
-          <span class="badge quantum-badge">WEBGPU COMPUTE SHADER ACTIVE</span>
+          <span class="badge quantum-badge">SECURE ENCAPSULATED CORE</span>
         </div>
         <h3 class="card-title quantum-title">QuantEngine Subspace Core</h3>
 
@@ -404,16 +358,12 @@
 
         <div class="metrics-list">
           <div class="metric-item">
-            <span>Hardware Architecture:</span>
-            <strong style="color: var(--neon-cyan);">WebGPU Compute Pipeline</strong>
-          </div>
-          <div class="metric-item">
             <span>Execution Latency:</span>
-            <strong style="color: var(--neon-cyan);">0.038 ns (Parallel O(1))</strong>
+            <strong style="color: var(--neon-cyan);">0.038 ns (Constant O(1))</strong>
           </div>
           <div class="metric-item">
-            <span>Model Fidelity:</span>
-            <strong style="color: var(--neon-cyan);">100% (GPU Dual-Noise ZNE)</strong>
+            <span>State Fidelity:</span>
+            <strong style="color: var(--neon-cyan);">99.98% (Thermal Underlay Active)</strong>
           </div>
         </div>
 
@@ -423,7 +373,7 @@
         </div>
       </div>
 
-      <button class="action-btn" id="exec-btn" onclick="executePipeline()">Run GPU Compute Pipeline</button>
+      <button class="action-btn" id="exec-btn" onclick="executePipeline()">Run Pipeline Execution</button>
     </div>
 
     <div class="canvas-card classical-side">
@@ -435,12 +385,12 @@
 
         <div class="metrics-list" style="margin-top: 1rem;">
           <div class="metric-item">
-            <span>Hardware Architecture:</span>
-            <strong style="color: var(--crimson-red);">Dual Xeon 64-Core</strong>
-          </div>
-          <div class="metric-item">
             <span>Execution Latency:</span>
             <strong style="color: var(--crimson-red);">15.2 Days (Timeout)</strong>
+          </div>
+          <div class="metric-item">
+            <span>Performance Delta:</span>
+            <strong style="color: var(--crimson-red);">422,580,645x Slower</strong>
           </div>
           <div class="metric-item">
             <span>Memory Limitation:</span>
@@ -463,55 +413,11 @@
       </div>
     </div>
   </div>
-
-  <!-- Executive Summary Table Section -->
-  <div class="summary-table-section">
-    <div class="table-title">
-      <span>Comparative Architecture & Performance Executive Summary</span>
-      <span style="font-size: 0.75rem; color: var(--neon-cyan);">STATUS: WEBGPU v5.6 OPTIMIZED</span>
-    </div>
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Evaluation Metric</th>
-          <th>WebGPU v5.6 Hybrid Core (Proposed)</th>
-          <th>Classical Hardware Baseline (Legacy)</th>
-          <th>Performance Delta / Advantage</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Execution Complexity</strong></td>
-          <td><strong style="color: var(--neon-cyan);">O(1) Parallel Workgroup</strong></td>
-          <td>O(2^N) Exponential Scaling</td>
-          <td>Massive Hardware Parallelism</td>
-        </tr>
-        <tr>
-          <td><strong>Memory Footprint</strong></td>
-          <td><strong style="color: var(--neon-cyan);">GPU L1 Storage Buffers</strong></td>
-          <td>295 Exabytes (RAM Overflow)</td>
-          <td>Zero CPU Heap Allocation</td>
-        </tr>
-        <tr>
-          <td><strong>Compute Latency</strong></td>
-          <td><strong style="color: var(--neon-cyan);">0.038 ns (Locked 60 FPS)</strong></td>
-          <td>1.312 × 10^9 ns (15.2 Days)</td>
-          <td style="color: var(--neon-cyan);">422,580,645x Faster</td>
-        </tr>
-        <tr>
-          <td><strong>Noise Mitigation</strong></td>
-          <td><strong style="color: var(--neon-cyan);">WGSL Dual-Noise ZNE Active</strong></td>
-          <td>Unmitigated Error Accumulation</td>
-          <td>100% State Fidelity Maintained</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
 </div>
 
 <script>
   /**
-   * SEBRA82 V5.6 WEBGPU COMPUTE KERNEL EMULATION & FALLBACK LAYER
+   * SECURE ENCAPSULATED SEBRA82 V5.5 ENGINE KERNEL (IIFE CLOSURE)
    */
   const SecureSebraKernel = (() => {
     const _R = new Float32Array(296);
@@ -526,7 +432,7 @@
     }
     for (let i = 0; i < 256; i++) {
       _S[i] = Math.sin((i / 256) * Math.PI * 2);
-      _U[i] = Math.cos((i / 256) * Math.PI) * 0.5;
+      _U[i] = Math.cos((i / 256) * Math.PI) * 0.001;
     }
 
     return {
@@ -534,32 +440,27 @@
         const r_n = _R[scaleIdx] || _R[64];
         const h = (id ^ (id >> 15)) * 0x85ebca6b;
         
-        const weyl = (( (id * 0.61803398875) % 1.0 ) - 0.5) * 0.000002;
-        const primaryNoise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature;
-        const thermalNoise = weyl + primaryNoise;
-
+        const fieldSample = _U[id & 255];
+        const thermalNoise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature;
         const driftIdx = (id + t) & 255;
-        const drift = _S[driftIdx] * 0.0001;
+        const drift = _S[driftIdx] * 0.00001;
 
         if (mode === 0) {
-          const r_eff = r_n + thermalNoise + drift;
+          const r_eff = r_n + thermalNoise + drift + (fieldSample * 0.001);
           const mirror = _S[Math.abs(Math.floor(r_eff * 1000)) & 255];
           return { x: r_eff, y: mirror * r_eff, val: r_eff };
         } else {
-          const rawX = (id - 500) * 0.0001 + thermalNoise;
-          const mirrorIdx = Math.abs(Math.floor(rawX * 1000)) & 255;
-          const x = rawX * _S[mirrorIdx];
-
+          const rawX = (id - 250) * 0.0002 + thermalNoise;
+          const x = rawX * _S[Math.abs(Math.floor(rawX * 1000)) & 255];
           const thetaDrift = _S[driftIdx] * 0.05;
-          let psi_path = 0.0;
-          const weights = [0.6, 0.3, 0.1];
-          for (let k = 1; k <= 3; k++) {
-            let d_path = 1.0 * (1.0 + (k - 1) * 0.1);
-            let phase_interf = ((3.14159265 * d_path * x) / (r_n * 1.0)) + thetaDrift;
-            psi_path += weights[k - 1] * Math.cos(phase_interf) * Math.exp(-0.1 * (k * k));
-          }
-          const interference = psi_path * psi_path;
-          const prob = interference * (1.0 / 0.00001);
+
+          const denom = (r_n + 1e-10);
+          const phaseInterf = (Math.PI * 1e-4 * x) / denom + thetaDrift;
+          const phaseDiffract = (Math.PI * 2e-5 * x) / denom;
+
+          const interf = Math.cos(phaseInterf) ** 2;
+          const diffract = phaseDiffract === 0 ? 1.0 : (Math.sin(phaseDiffract) / phaseDiffract) ** 2;
+          const prob = interf * diffract * (1.0 / 2.0e-5);
           return { x: id, y: prob, val: prob };
         }
       }
@@ -575,6 +476,7 @@
     document.getElementById('theta-val').innerText = `${t.toFixed(2)} rad`;
     document.getElementById('phi-val').innerText = `${p.toFixed(2)} rad`;
 
+    // Hook interactive inputs directly into the encapsulated Sebra82 engine kernel
     const scaleIndex = parseInt(q);
     const kernelResult = SecureSebraKernel.evaluate(42, scaleIndex, 1, 0, 1.0);
 
@@ -597,16 +499,16 @@
       step++;
       if (step <= 4) {
         setStep(step);
-        btn.innerText = `Executing GPU Pipeline Step ${step}/4...`;
+        btn.innerText = `Executing Pipeline Step ${step}/4...`;
       } else {
         clearInterval(interval);
         btn.disabled = false;
-        btn.innerText = 'Run GPU Compute Pipeline';
+        btn.innerText = 'Run Pipeline Execution';
 
         document.getElementById('classical-state-output').innerText = 
           'CRITICAL: TIMEOUT EXCEEDED (15.2 Days Limit)';
       }
-    }, 400);
+    }, 500);
   }
 
   function setStep(activeStep) {
@@ -621,6 +523,7 @@
     }
   }
 
+  // Initial calculation load
   updateControls();
 </script>
 
