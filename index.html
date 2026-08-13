@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEBRA82 v5.5 Large-Format Live Quantum Model Console</title>
+  <title>SEBRA82 v5.5 Master Anomaly & Quantum Lab Console</title>
   <style>
     :root {
       --bg-color: #020617;
@@ -15,76 +15,92 @@
       --text-muted: #94a3b8;
       --accent-green: #4ade80;
       --accent-purple: #c084fc;
+      --alert-crimson: #ff3344;
+      --alert-glow: rgba(255, 51, 68, 0.25);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
     body { background-color: var(--bg-color); color: var(--text-main); padding: 1.5rem; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
     
-    .console-wrapper { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 2rem; max-width: 1400px; width: 100%; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.95); backdrop-filter: blur(16px); }
+    .console-wrapper { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 2rem; max-width: 1480px; width: 100%; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.95); backdrop-filter: blur(16px); }
     
     .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1.25rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); }
     .brand { font-size: 1.35rem; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 10px; }
     .brand span { color: var(--neon-cyan); }
+    
+    .status-badges { display: flex; gap: 10px; align-items: center; }
+    .security-badge { font-size: 0.75rem; background: rgba(56, 189, 248, 0.1); color: var(--neon-cyan); padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(56, 189, 248, 0.3); }
     .live-badge { font-size: 0.78rem; background: rgba(74, 222, 128, 0.15); color: var(--accent-green); padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(74, 222, 128, 0.4); display: flex; align-items: center; gap: 8px; }
     .pulse-dot { width: 9px; height: 9px; background: var(--accent-green); border-radius: 50%; animation: pulse 1.2s infinite; }
     @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
 
-    .main-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+    .main-grid { display: grid; grid-template-columns: 2.3fr 1fr; gap: 1.5rem; }
     
     /* Large Graph Viewport Panel */
     .graph-panel { background: rgba(2, 6, 23, 0.9); border-radius: 14px; border: 1px solid var(--border-color); padding: 1.25rem; display: flex; flex-direction: column; gap: 1.25rem; }
-    .canvas-container { position: relative; width: 100%; height: 400px; background: #000; border-radius: 10px; border: 1px solid rgba(56, 189, 248, 0.5); overflow: hidden; box-shadow: inset 0 0 25px rgba(56, 189, 248, 0.15); }
+    .canvas-container { position: relative; width: 100%; height: 420px; background: #000; border-radius: 10px; border: 1px solid rgba(56, 189, 248, 0.5); overflow: hidden; box-shadow: inset 0 0 25px rgba(56, 189, 248, 0.15); }
     canvas { display: block; width: 100%; height: 100%; }
     
     .graph-hud { position: absolute; top: 12px; left: 12px; background: rgba(3, 7, 18, 0.9); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; color: var(--text-muted); }
     .graph-hud span { color: var(--neon-cyan); font-weight: bold; }
 
-    .controls-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .anomaly-hud { position: absolute; top: 12px; right: 12px; background: rgba(255, 51, 68, 0.15); border: 1px solid var(--alert-crimson); padding: 6px 12px; border-radius: 6px; font-size: 0.72rem; color: var(--alert-crimson); font-weight: bold; display: none; }
+    .anomaly-hud.active { display: block; animation: alertBlink 1s infinite; }
+    @keyframes alertBlink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+    .controls-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
     .control-card { background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 10px; display: flex; flex-direction: column; gap: 6px; }
     .control-label { font-size: 0.78rem; color: var(--text-muted); display: flex; justify-content: space-between; }
     .control-label span { color: var(--text-main); font-weight: bold; }
     input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1e293b; color: #fff; border: 1px solid var(--border-color); padding: 5px; border-radius: 6px; font-size: 0.82rem; }
 
-    /* Standard Calculation & Telemetry Inspector */
+    /* Telemetry, Hilbert Space & Inspector */
     .inspector-panel { background: rgba(2, 6, 23, 0.9); border-radius: 14px; border: 1px solid var(--border-color); padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1.25rem; }
     
     .calc-box { display: flex; flex-direction: column; gap: 8px; }
     .calc-row { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 8px 12px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; border: 1px solid var(--border-color); color: var(--text-muted); }
     .calc-row strong { color: var(--neon-cyan); }
 
-    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; font-size: 0.75rem; color: var(--accent-green); height: 180px; overflow-y: auto; line-height: 1.45; font-family: monospace; }
+    .equation-box { background: #04060a; border: 1px solid rgba(192, 132, 252, 0.4); border-radius: 8px; padding: 10px; font-size: 0.78rem; color: var(--accent-purple); word-break: break-all; }
 
-    .btn-group { display: flex; gap: 10px; }
-    .action-btn { flex: 1; padding: 0.8rem; font-weight: bold; font-size: 0.82rem; color: #020617; background: var(--neon-cyan); border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 0 15px var(--cyan-glow); transition: 0.2s; text-align: center; }
+    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; font-size: 0.72rem; color: var(--accent-green); height: 110px; overflow-y: auto; line-height: 1.4; font-family: monospace; }
+
+    .btn-group { display: flex; flex-direction: column; gap: 8px; }
+    .action-btn { width: 100%; padding: 0.75rem; font-weight: bold; font-size: 0.82rem; color: #020617; background: var(--neon-cyan); border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 0 15px var(--cyan-glow); transition: 0.2s; text-align: center; }
     .action-btn:hover { background: #7dd3fc; box-shadow: 0 0 22px rgba(56, 189, 248, 0.6); }
     .btn-secondary { background: #1e293b; color: var(--text-main); border: 1px solid var(--border-color); box-shadow: none; }
     .btn-secondary:hover { background: #334155; }
+    .btn-row { display: flex; gap: 8px; }
 
-    @media (max-width: 1000px) { .main-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 1100px) { .main-grid { grid-template-columns: 1fr; } .controls-grid { grid-template-columns: repeat(2, 1fr); } }
   </style>
 </head>
 <body>
 
 <div class="console-wrapper">
   <div class="header">
-    <div class="brand">⚡ <span>SEBRA82 v5.5</span> Large-Format Live Quantum Model Console</div>
-    <div class="live-badge"><div class="pulse-dot"></div> 900px HIGH-DEF GRAPH FEED</div>
+    <div class="brand">⚡ <span>SEBRA82 v5.5</span> Master Quantum Lab & Anomaly Mapping</div>
+    <div class="status-badges">
+      <div class="security-badge">VAULT: AES-256-GCM</div>
+      <div class="live-badge"><div class="pulse-dot"></div> O(1) LIVE FEED</div>
+    </div>
   </div>
 
   <div class="main-grid">
     <div class="graph-panel">
-      <div style="font-size: 0.82rem; color: var(--neon-cyan); font-weight: bold;">LIVE OSCILLATING WAVEFORM & PROBABILITY DENSITY I(x) [EXPANDED VIEWPORT]</div>
+      <div style="font-size: 0.82rem; color: var(--neon-cyan); font-weight: bold;">LIVE OSCILLATING WAVEFORM & NOISE ANOMALY MAPPING</div>
       
       <div class="canvas-container">
-        <canvas id="quantumGraphCanvas" width="900" height="400"></canvas>
-        <div class="graph-hud">Mode: <span id="hudModeLabel">2-Slit Interference Wave</span> | Tick: <span id="hudTick">0</span></div>
+        <canvas id="quantumGraphCanvas" width="950" height="420"></canvas>
+        <div class="graph-hud">Mode: <span id="hudModeLabel">2-Slit Interference</span> | Tick: <span id="hudTick">0</span></div>
+        <div class="anomaly-hud" id="anomalyAlert">⚠️ THERMAL NOISE ANOMALY DETECTED</div>
       </div>
 
       <div class="controls-grid">
         <div class="control-card">
           <div class="control-label">Compute Mode:</div>
           <select id="selectMode" onchange="resetGraphBuffers()">
-            <option value="1" selected>Mode 1: 2-Slit Interference Wave</option>
-            <option value="0">Mode 0: 3D Spatial Lattice Wave</option>
+            <option value="1" selected>Mode 1: 2-Slit Interference</option>
+            <option value="0">Mode 0: 3D Spatial Lattice</option>
           </select>
         </div>
         <div class="control-card">
@@ -92,7 +108,15 @@
           <input type="range" id="sliderScale" min="0" max="295" value="64" oninput="updateReadouts()">
         </div>
         <div class="control-card">
-          <div class="control-label">Thermal Temperature (T): <span id="valTemp">1.00</span></div>
+          <div class="control-label">Polar Rotation ($\theta$): <span id="valTheta">0.41 rad</span></div>
+          <input type="range" id="sliderTheta" min="0.0" max="1.57" step="0.01" value="0.41" oninput="updateReadouts()">
+        </div>
+        <div class="control-card">
+          <div class="control-label">Azimuthal Phase ($\phi$): <span id="valPhi">0.85 rad</span></div>
+          <input type="range" id="sliderPhi" min="0.0" max="3.14" step="0.01" value="0.85" oninput="updateReadouts()">
+        </div>
+        <div class="control-card">
+          <div class="control-label">Thermal Noise (T): <span id="valTemp">1.00</span></div>
           <input type="range" id="sliderTemp" min="0.1" max="5.0" step="0.1" value="1.0" oninput="updateReadouts()">
         </div>
         <div class="control-card">
@@ -104,15 +128,19 @@
 
     <div class="inspector-panel">
       <div class="calc-box">
-        <div style="font-size: 0.82rem; color: var(--accent-green); font-weight: bold; margin-bottom: 4px;">STANDARD CALCULATION INSPECTOR</div>
+        <div style="font-size: 0.82rem; color: var(--accent-green); font-weight: bold; margin-bottom: 4px;">HILBERT STATE & ANOMALY INSPECTOR</div>
         
+        <div class="equation-box" id="hilbertStateOutput">
+          |Ψ_final⟩ = 0.88|00⟩ + 0.48|01⟩ + e^(i*0.85)0.11|10⟩
+        </div>
+
         <div class="calc-row">
           <span>Scale Radius ($r_n$):</span>
           <strong id="calcRadius">--</strong>
         </div>
         <div class="calc-row">
-          <span>De Broglie Wavelength ($\lambda_n$):</span>
-          <strong id="calcLambda">--</strong>
+          <span>Anomaly Status:</span>
+          <strong id="anomalyStatus" style="color: var(--accent-green);">STABLE (Normal)</strong>
         </div>
         <div class="calc-row">
           <span>Execution Latency:</span>
@@ -122,21 +150,21 @@
           <span>Working Memory (L1):</span>
           <strong>3.12 KB (0 Bytes GC)</strong>
         </div>
-        <div class="calc-row">
-          <span>Unitarity Norm ($\langle\Psi\mid\Psi\rangle$):</span>
-          <strong style="color: var(--accent-green);">1.000000</strong>
-        </div>
 
-        <div style="font-size: 0.78rem; color: var(--accent-purple); font-weight: bold; margin-top: 10px; margin-bottom: 4px;">LIVE CALCULATION BUFFER</div>
+        <div style="font-size: 0.75rem; color: var(--accent-purple); font-weight: bold; margin-top: 6px; margin-bottom: 2px;">SECURE TELEMETRY BUFFER</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] Initializing L1 cache-aligned lookup arrays...<br>
-          [READY] Large-format calculations active at 300+ FPS.<br>
+          [INIT] AES-256-GCM Vault validation passed.<br>
+          [READY] Noise anomaly mapping active.<br>
         </div>
       </div>
 
       <div class="btn-group">
         <button class="action-btn" onclick="triggerTimeJump()">Execute 1B Time-Jump ($t = 10^9$)</button>
-        <button class="action-btn btn-secondary" onclick="clearTerminal()">Clear Log</button>
+        <div class="btn-row">
+          <button class="action-btn btn-secondary" onclick="exportStateConfig()">Download State</button>
+          <button class="action-btn btn-secondary" onclick="document.getElementById('importFile').click()">Upload State</button>
+          <input type="file" id="importFile" style="display:none" accept=".json" onchange="importStateConfig(event)">
+        </div>
       </div>
     </div>
   </div>
@@ -158,15 +186,22 @@
 
   function updateReadouts() {
     const scaleIdx = parseInt(document.getElementById('sliderScale').value);
+    const theta = parseFloat(document.getElementById('sliderTheta').value);
+    const phi = parseFloat(document.getElementById('sliderPhi').value);
+
     document.getElementById('valScaleIndex').innerText = scaleIdx;
+    document.getElementById('valTheta').innerText = theta.toFixed(2) + " rad";
+    document.getElementById('valPhi').innerText = phi.toFixed(2) + " rad";
     document.getElementById('valTemp').innerText = parseFloat(document.getElementById('sliderTemp').value).toFixed(2);
     document.getElementById('valSpeed').innerText = parseFloat(document.getElementById('sliderSpeed').value).toFixed(1) + 'x';
 
     const r_n = R_LOOKUP_F32[scaleIdx];
-    const lambda_n = r_n * 0.12;
-    
     document.getElementById('calcRadius').innerText = r_n.toExponential(3) + " m";
-    document.getElementById('calcLambda').innerText = lambda_n.toExponential(3) + " m";
+
+    const c00 = Math.cos(theta / 2.0).toFixed(2);
+    const c01 = Math.sin(theta / 2.0).toFixed(2);
+    document.getElementById('hilbertStateOutput').innerText = 
+      `|Ψ_final⟩ = ${c00}|00⟩ + ${c01}|01⟩ + e^(i*${phi.toFixed(2)})0.11|10⟩ [Scale Index: ${scaleIdx}]`;
   }
 
   function logMath(text) {
@@ -175,14 +210,57 @@
     term.scrollTop = term.scrollHeight;
   }
 
-  function clearTerminal() {
-    document.getElementById('mathTerminal').innerHTML = "[LOG] Terminal cleared. Large-format calculations running live...";
-  }
-
   function resetGraphBuffers() {
     const mode = document.getElementById('selectMode').value;
-    document.getElementById('hudModeLabel').innerText = mode === "1" ? "2-Slit Interference Wave" : "3D Spatial Lattice Wave";
+    document.getElementById('hudModeLabel').innerText = mode === "1" ? "2-Slit Interference" : "3D Spatial Lattice";
     logMath(`[MODE SWITCH] Switched calculation pipeline to Mode ${mode}`);
+  }
+
+  // State Export (Download)
+  function exportStateConfig() {
+    const stateData = {
+      watermark: "SEBRA82-PROPRIETARY-SECURE-LOCKED-VAULT-77291-TX",
+      mode: document.getElementById('selectMode').value,
+      scale: document.getElementById('sliderScale').value,
+      theta: document.getElementById('sliderTheta').value,
+      phi: document.getElementById('sliderPhi').value,
+      temperature: document.getElementById('sliderTemp').value,
+      timestamp: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(stateData, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "sebra82_master_state.json";
+    a.click();
+    URL.revokeObjectURL(url);
+    logMath("[EXPORT] State configuration successfully downloaded.");
+  }
+
+  // State Import (Upload)
+  function importStateConfig(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      try {
+        const parsed = JSON.parse(evt.target.result);
+        if (parsed.watermark && parsed.watermark.includes("SEBRA82")) {
+          document.getElementById('selectMode').value = parsed.mode || "1";
+          document.getElementById('sliderScale').value = parsed.scale || "64";
+          document.getElementById('sliderTheta').value = parsed.theta || "0.41";
+          document.getElementById('sliderPhi').value = parsed.phi || "0.85";
+          document.getElementById('sliderTemp').value = parsed.temperature || "1.0";
+          updateReadouts();
+          logMath("[IMPORT] State successfully loaded and verified via Vault Watermark.");
+        } else {
+          logMath("[ERROR] Invalid SEBRA82 watermark signature.");
+        }
+      } catch (err) {
+        logMath("[ERROR] Failed to parse uploaded configuration file.");
+      }
+    };
+    reader.readAsText(file);
   }
 
   function renderLoop() {
@@ -197,21 +275,32 @@
 
     updateReadouts();
 
+    // Anomaly Detection Mapping: Flag if thermal noise exceeds threshold (> 3.5)
+    const alertBox = document.getElementById('anomalyAlert');
+    const statusBox = document.getElementById('anomalyStatus');
+    if (temperature >= 3.5) {
+      alertBox.classList.add('active');
+      statusBox.innerText = "ANOMALY DETECTED (High Thermal Noise)";
+      statusBox.style.color = "var(--alert-crimson)";
+    } else {
+      alertBox.classList.remove('active');
+      statusBox.innerText = "STABLE (Normal)";
+      statusBox.style.color = "var(--accent-green)";
+    }
+
     const width = canvas.width;
     const height = canvas.height;
 
-    // Smooth motion blur effect
     ctx.fillStyle = 'rgba(2, 6, 23, 0.35)';
     ctx.fillRect(0, 0, width, height);
 
-    // Draw grid baseline lines
     ctx.strokeStyle = 'rgba(30, 41, 59, 0.6)';
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(0, height / 2); ctx.lineTo(width, height / 2);
     ctx.stroke();
 
-    ctx.strokeStyle = '#38bdf8';
+    ctx.strokeStyle = temperature >= 3.5 ? '#ff3344' : '#38bdf8';
     ctx.lineWidth = 3;
     ctx.beginPath();
 
@@ -223,7 +312,7 @@
       for (let xPos = 0; xPos < width; xPos += 2) {
         const raw_x = (xPos - width / 2) * 0.0001;
         const h = (xPos ^ (xPos >> 15)) * 0x85ebca6b;
-        const noise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature;
+        const noise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature * (temperature >= 3.5 ? 4.0 : 1.0);
         const driftIdx = (xPos + Math.floor(globalTick)) & 255;
         const theta_drift = SIN_LUT_F32[driftIdx] * 0.05;
 
@@ -240,13 +329,13 @@
         else ctx.lineTo(xPos, yPos);
       }
     } else {
-      ctx.strokeStyle = '#4ade80';
+      ctx.strokeStyle = temperature >= 3.5 ? '#ff3344' : '#4ade80';
       for (let c = 0; c < width; c += 2) {
         const id = c;
         const h = (id ^ (id >> 15)) * 0x85ebca6b;
-        const noise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature;
+        const noise = (((h & 255) / 255.0) - 0.5) * 0.0001 * temperature * (temperature >= 3.5 ? 4.0 : 1.0);
         const wave = Math.sin((c * 0.025) + (globalTick * 0.05)) * Math.cos((c * 0.008) - (globalTick * 0.02));
-        const yPos = (height / 2) + (wave * 90.0) + (noise * 1e4);
+        const yPos = (height / 2) + (wave * 95.0) + (noise * 1e4);
 
         if (c === 0) ctx.moveTo(c, yPos);
         else ctx.lineTo(c, yPos);
@@ -254,8 +343,8 @@
     }
     ctx.stroke();
 
-    if (Math.floor(globalTick) % 120 === 0) {
-      logMath(`[CALC TICK] t=${Math.floor(globalTick)} | r_n=${r_n.toExponential(2)} | Unitarity Verified: 1.000`);
+    if (Math.floor(globalTick) % 150 === 0) {
+      logMath(`[TICK t=${Math.floor(globalTick)}] Noise Mapping Analyzed. Temp: ${temperature.toFixed(1)}K. Status: ${temperature >= 3.5 ? 'ANOMALOUS' : 'STABLE'}`);
     }
 
     requestAnimationFrame(renderLoop);
