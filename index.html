@@ -163,7 +163,7 @@
       Enter enterprise access key or session initialization token to mount WebGPU runtime buffers.<br>
       <i>System Node: UK-CENTRAL-01 | Encrypted Session Gate</i>
     </div>
-    <input type="password" id="stealthInput" class="unlock-input" placeholder="Enter Access Key...">
+    <input type="password" id="stealthInput" class="unlock-input" placeholder="Enter Access Key..." onkeydown="if(event.key==='Enter')verifyStealthVault()">
     <button class="unlock-btn" onclick="verifyStealthVault()">Authorize Session</button>
     <div class="auth-error" id="authError"></div>
   </div>
@@ -292,7 +292,6 @@
 </div>
 
 <script>
-  // Auth state: 0 = Locked, 1 = Real Kernel (Unlocked via "Quantum"), 2 = Silent Honeypot Quarantine
   let vaultAuthMode = 0;
 
   const ClientHilbertEngine = {
@@ -317,7 +316,7 @@
       } else {
         vaultAuthMode = 2; // Silent drop to decoy noise quarantine for anyone else
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logMath("[SESSION] Standard clearance token mounted.");
+        logMath("[SESSION] Session mounted with standard clearance.");
       }
     }, 400);
   }
@@ -350,7 +349,7 @@
   // Tamper Interception (Silent Honeypot Trigger for non-masters)
   document.addEventListener('copy', (e) => { 
     e.preventDefault(); 
-    if (vaultAuthMode === 1) vaultAuthMode = 2; // If anyone copies, drop them into noise quarantine
+    if (vaultAuthMode === 1) vaultAuthMode = 2; 
     logMath("[WARN] Clipboard buffer protected."); 
   });
   document.addEventListener('contextmenu', (e) => { e.preventDefault(); if (vaultAuthMode === 1) vaultAuthMode = 2; });
@@ -366,7 +365,6 @@
       w: _W,
       run(id, scaleIdx, t = 0, temperature = 1.0, theta = 0.41) {
         if (vaultAuthMode === 0) return { val: 0, anomalous: false, r_n: _R[64], norm: 1.0 };
-        // If mode 2 (quarantine decoy), noise structure blanks out real data
         const corruptionFactor = (vaultAuthMode === 2) ? 25.0 : 1.0;
         const r_n = _R[scaleIdx] || _R[64];
         const h = (id ^ (id >> 15)) * 0x85ebca6b;
@@ -442,42 +440,4 @@
 
   function exportStateConfig() {
     if (vaultAuthMode === 0) return;
-    const state = { w: SecureKernel.w, time: new Date().toISOString() };
-    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = "state.json"; a.click();
-    URL.revokeObjectURL(url);
-    logMath("[EXPORT] State configuration exported.");
-  }
-
-  function importStateConfig(e) { if (vaultAuthMode === 0) return; }
-
-  function renderLoop() {
-    if (vaultAuthMode > 0) {
-      globalTick += parseFloat(document.getElementById('sliderSpeed').value);
-      document.getElementById('hudTick').innerText = Math.floor(globalTick);
-
-      const scaleIdx = parseInt(document.getElementById('qubit-slider').value);
-      const temperature = parseFloat(document.getElementById('sliderTemp').value);
-      const t = parseFloat(document.getElementById('theta-slider').value);
-
-      updateControls();
-
-      const width = primaryCanvas.width;
-      const height = primaryCanvas.height;
-
-      primaryCtx.fillStyle = 'rgba(2, 6, 23, 0.35)';
-      primaryCtx.fillRect(0, 0, width, height);
-      primaryCtx.strokeStyle = '#00f3ff';
-      primaryCtx.lineWidth = 2.5;
-      primaryCtx.beginPath();
-
-      anomalyCtx.fillStyle = 'rgba(2, 6, 23, 0.35)';
-      anomalyCtx.fillRect(0, 0, width, height);
-      anomalyCtx.strokeStyle = '#ff3344';
-      anomalyCtx.lineWidth = 2.5;
-      anomalyCtx.beginPath();
-
-      let anomalyCount = 0;
-      for (let xPos = 0; xPos < width; xPos += 2) {
-        const res = SecureKernel.run(xPos
+    const state =
