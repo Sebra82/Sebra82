@@ -2,22 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine v14.0 - Global Command Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>QuantEngine v14.5 - Mobile Quantum Grid</title>
   <style>
     :root {
-      --bg-deep: #050814;
-      --card-bg: rgba(11, 16, 28, 0.85);
-      --border-color: rgba(43, 62, 98, 0.4);
+      --bg-deep: #020408;
+      --card-bg: rgba(7, 11, 19, 0.96);
+      --border-color: rgba(30, 42, 64, 0.85);
       --neon-cyan: #00f3ff;
-      --neon-purple: #c084fc;
-      --cyan-glow: rgba(0, 243, 255, 0.25);
-      --purple-glow: rgba(192, 132, 252, 0.25);
+      --cyan-glow: rgba(0, 243, 255, 0.35);
+      --warning-amber: #f0883e;
+      --crimson-red: #ff3344;
       --text-main: #f0f6fc;
       --text-muted: #8b949e;
       --accent-green: #7ee787;
-      --warning-amber: #f0883e;
-      --crimson-red: #ff3344;
+      --accent-purple: #c084fc;
       --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
@@ -25,7 +24,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-ui); }
 
     body {
-      background: radial-gradient(circle at 70% 40%, #151030 0%, var(--bg-deep) 70%);
+      background-color: var(--bg-deep);
       color: var(--text-main);
       height: 100vh;
       width: 100vw;
@@ -35,446 +34,146 @@
       align-items: center;
       user-select: none;
       -webkit-user-select: none;
+      position: fixed; /* Prevents iOS body scroll */
     }
 
-    #globeBackgroundCanvas {
+    /* Background Planet Model Canvas */
+    #backgroundModelCanvas {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
       z-index: 1;
       pointer-events: none;
     }
 
-    /* Main Dashboard Layout mimicking inspiration */
-    .dashboard-container {
+    .platform-container {
       position: relative;
       z-index: 10;
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 16px;
+      border-radius: 12px;
+      padding: 0.8rem;
+      max-width: 1850px;
+      width: 98vw;
+      height: 98vh;
+      box-shadow: 0 45px 110px rgba(0, 0, 0, 0.99);
+      backdrop-filter: blur(22px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden; /* Contain children */
+    }
+
+    /* Authentication Portal Overlay */
+    #vaultLockoutOverlay {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(2, 4, 8, 0.99);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      border-radius: 12px;
+      border: 2px solid var(--border-color);
       padding: 1.5rem;
-      max-width: 1450px;
-      width: 96vw;
-      height: 90vh;
-      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.85), inset 0 0 40px rgba(0, 243, 255, 0.05);
-      backdrop-filter: blur(25px);
-      display: flex;
-      gap: 1.2rem;
-    }
-
-    /* Left Sidebar - Navigation Icons */
-    .sidebar-nav {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.2rem;
-      padding-right: 1rem;
-      border-right: 1px solid var(--border-color);
-    }
-    .nav-icon {
-      width: 36px; height: 36px;
-      border-radius: 10px;
-      background: rgba(30, 42, 64, 0.4);
-      border: 1px solid var(--border-color);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .nav-icon:hover, .nav-icon.active {
-      background: rgba(0, 243, 255, 0.15);
-      color: var(--neon-cyan);
-      border-color: var(--neon-cyan);
-      box-shadow: 0 0 10px var(--cyan-glow);
-    }
-
-    /* Core Content Grid Area */
-    .main-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      overflow: hidden;
-    }
-
-    /* Header Section */
-    .header-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-    }
-    .title-group h1 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: 0.3px;
-    }
-    .title-group p {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .stat-pill {
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid var(--border-color);
-      padding: 0.6rem 1rem;
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .stat-pill .label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .stat-pill .value { font-size: 1.5rem; font-weight: 700; color: var(--neon-cyan); font-family: var(--font-mono); }
-
-    /* Dashboard Grid Layout (Center Globe & Side Cards) */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 1.1fr 1.6fr 1.1fr;
-      gap: 1rem;
-      flex: 1;
-      overflow: hidden;
-    }
-
-    .panel {
-      background: rgba(8, 13, 24, 0.8);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-      box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
-    }
-    .panel-title {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    /* Country Activity List */
-    .country-list { display: flex; flex-direction: column; gap: 0.6rem; }
-    .country-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; }
-    .country-name { color: var(--text-main); font-weight: 500; }
-    .country-val { font-family: var(--font-mono); color: var(--neon-cyan); }
-    .progress-bar-bg { width: 100px; height: 4px; background: #151d2a; border-radius: 2px; overflow: hidden; }
-    .progress-bar-fill { height: 100%; background: var(--neon-cyan); box-shadow: 0 0 8px var(--cyan-glow); }
-
-    /* Center Globe Area */
-    .globe-stage {
-      position: relative;
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(circle, rgba(0,243,255,0.05) 0%, transparent 70%);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    #globeCanvas { width: 100%; height: 100%; }
-
-    /* Right Side Metrics */
-    .metric-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
-    .metric-box {
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid var(--border-color);
-      padding: 0.6rem;
-      border-radius: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .metric-box .m-label { font-size: 0.62rem; color: var(--text-muted); }
-    .metric-box .m-val { font-size: 1rem; font-weight: 700; color: #fff; font-family: var(--font-mono); }
-    .metric-box .m-trend { font-size: 0.6rem; color: var(--accent-green); }
-
-    /* Interactive Mini Chart Box */
-    .mini-chart-box {
-      height: 90px;
-      background: rgba(15, 23, 42, 0.4);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      position: relative;
-      overflow: hidden;
-    }
-    canvas.sparkline { width: 100%; height: 100%; display: block; }
-
-    /* Control triggers */
-    .action-btn {
-      width: 100%;
-      padding: 0.5rem;
-      background: var(--neon-cyan);
-      color: #050814;
-      font-weight: 700;
-      font-size: 0.75rem;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: 0.2s;
-      box-shadow: 0 0 12px var(--cyan-glow);
       text-align: center;
     }
-    .action-btn:hover { background: #7dd3fc; }
-  </style>
-</head>
-<body>
+    #vaultLockoutOverlay.hidden { display: none; }
 
-<!-- Ambient background glow -->
-<canvas id="globeBackgroundCanvas"></canvas>
+    .lockout-title { font-size: 1.2rem; font-weight: 600; color: var(--text-main); letter-spacing: 0.5px; }
+    .lockout-msg { font-size: 0.8rem; color: var(--text-muted); max-width: 500px; line-height: 1.4; background: #04060a; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); font-family: var(--font-mono); }
+    .unlock-input { background: #04060a; border: 1px solid var(--border-color); color: var(--neon-cyan); padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.9rem; width: 90%; max-width: 320px; text-align: center; outline: none; font-family: var(--font-mono); }
+    .unlock-btn { background: var(--neon-cyan); color: #020408; border: none; padding: 0.7rem 1.4rem; border-radius: 6px; font-weight: 600; cursor: pointer; box-shadow: 0 0 15px var(--cyan-glow); font-size: 0.9rem; }
+    .unlock-btn:hover { background: #7dd3fc; }
+    .auth-error { font-size: 0.75rem; color: var(--crimson-red); min-height: 16px; font-family: var(--font-mono); }
 
-<div class="dashboard-container">
-  
-  <!-- Left Navigation Bar -->
-  <div class="sidebar-nav">
-    <div class="nav-icon active" title="Global Dashboard">🌐</div>
-    <div class="nav-icon" title="Analytics">📊</div>
-    <div class="nav-icon" title="Globe Nodes">📍</div>
-    <div class="nav-icon" title="Financial Vault">💳</div>
-    <div class="nav-icon" title="System Settings">⚙️</div>
-  </div>
+    /* Header */
+    .widget-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.4rem;
+      margin-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+    .brand-title { display: flex; align-items: center; gap: 8px; font-size: 1.0rem; font-weight: 600; color: #fff; }
+    .brand-title span { color: var(--neon-cyan); font-weight: 700; }
+    .status-badges { display: flex; gap: 6px; align-items: center; }
+    .compliance-badge { font-size: 0.6rem; background: rgba(0, 243, 255, 0.1); color: var(--neon-cyan); padding: 2px 6px; border-radius: 8px; border: 1px solid rgba(0, 243, 255, 0.3); font-family: var(--font-mono); font-weight: 600; }
+    .security-badge { font-size: 0.6rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 2px 6px; border-radius: 10px; border: 1px solid rgba(192, 132, 252, 0.4); font-weight: 600; font-family: var(--font-mono); }
+    .node-badge { font-size: 0.6rem; background: rgba(30, 42, 64, 0.6); color: var(--accent-green); padding: 2px 6px; border-radius: 8px; border: 1px solid var(--border-color); font-family: var(--font-mono); }
 
-  <!-- Main Content Layout -->
-  <div class="main-content">
+    /* Responsive Grid Layout */
+    .platform-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: 0.6rem;
+      flex: 1;
+      overflow: hidden;
+      padding-bottom: 0.4rem;
+    }
+
+    .column { display: flex; flex-direction: column; gap: 0.6rem; overflow-y: auto; padding-right: 2px; }
     
-    <!-- Top Header -->
-    <div class="header-section">
-      <div class="title-group">
-        <h1>General statistics</h1>
-        <p>Global node traffic, real-time telemetry, and predictive modeling.</p>
-      </div>
-      <div class="stat-pill">
-        <span class="label">Total Active Nodes / Users</span>
-        <span class="value" id="totalUsersCount">7,541,390</span>
-      </div>
-    </div>
+    .panel-card { background: rgba(3, 7, 15, 0.96); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; box-shadow: 0 8px 25px rgba(0,0,0,0.6); flex-shrink: 0; }
+    .panel-title { font-size: 0.65rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; text-transform: uppercase; }
 
-    <!-- Center Grid System -->
-    <div class="dashboard-grid">
+    /* Viewports */
+    .canvas-box { position: relative; width: 100%; height: 110px; background: #000; border-radius: 5px; border: 1px solid rgba(0, 243, 255, 0.3); overflow: hidden; flex-shrink: 0; }
+    canvas { display: block; width: 100%; height: 100%; cursor: crosshair; }
+    .hud-tag { position: absolute; top: 3px; left: 5px; background: rgba(2, 4, 8, 0.9); border: 1px solid var(--border-color); padding: 1px 4px; border-radius: 3px; font-size: 0.55rem; color: var(--text-muted); font-family: var(--font-mono); z-index: 2; pointer-events: none; }
+    .hud-tag span { color: var(--neon-cyan); font-weight: 600; }
+
+    /* Center Quantum Model Viewport (Overlays Planet Background) */
+    .quantum-viewport-box { position: relative; width: 100%; height: 100%; background: transparent; border-radius: 8px; overflow: hidden; grid-column: 1 / -1; grid-row: 1 / 2; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); }
+    #quantumModelCanvas { z-index: 5; cursor: grab; }
+    #quantumModelCanvas:active { cursor: grabbing; }
+
+    /* Controls Grid */
+    .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+    .control-item { background: rgba(10, 14, 22, 0.85); border: 1px solid var(--border-color); padding: 3px 5px; border-radius: 4px; display: flex; flex-direction: column; gap: 2px; }
+    .control-label { font-size: 0.58rem; color: var(--text-muted); display: flex; justify-content: space-between; font-weight: 500; }
+    .control-label span { color: var(--text-main); font-weight: 600; font-family: var(--font-mono); }
+    input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1e2a40; color: #fff; border: 1px solid var(--border-color); height: 4px; border-radius: 2px; outline: none; }
+    select { height: 22px; font-size: 0.6rem; padding: 0 4px; font-family: var(--font-mono); }
+
+    /* Terminals & Dumps */
+    .data-dump { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 5px; font-size: 0.58rem; color: var(--accent-green); height: 65px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.2; }
+    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 5px; font-size: 0.6rem; color: var(--accent-green); height: 75px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.25; }
+
+    /* Buttons */
+    .btn-row { display: flex; gap: 4px; }
+    .action-btn { width: 100%; padding: 0.35rem; font-weight: 600; font-size: 0.65rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; text-align: center; }
+    .action-btn:hover { box-shadow: 0 0 12px var(--cyan-glow); background: #3dd9e8; }
+    .btn-secondary { background: #1e2a40; color: var(--text-main); border: 1px solid var(--border-color); font-weight: 500; }
+    .btn-secondary:hover { background: #2c3e5a; }
+
+    .calc-row { display: flex; justify-content: space-between; font-size: 0.65rem; padding: 4px 6px; background: rgba(10, 14, 22, 0.85); border-radius: 4px; border: 1px solid var(--border-color); color: var(--text-muted); }
+    .calc-row strong { color: var(--neon-cyan); font-family: var(--font-mono); }
+
+    /* --- MEDIA QUERIES FOR MOBILE ADAPTIVE GRID --- */
+
+    /* LAPTOP LANDSCAPE (Default Grid) */
+    @media (min-width: 1280px) {
+      .platform-grid { grid-template-columns: 1fr 2.5fr 1fr; }
+      .quantum-viewport-box { grid-column: 2 / 3; grid-row: 1 / -1; }
+      .column { grid-row: 1 / -1; } /* Keep columns spanning */
+    }
+
+    /* TABLET / MOBILE LANDSCAPE (Compress columns) */
+    @media (max-width: 1279px) and (min-width: 768px) {
+      .platform-grid { grid-template-columns: 1fr 1.5fr 1fr; }
+      .column { display: flex; flex-direction: column; gap: 0.5rem; }
+      .quantum-viewport-box { grid-column: 2 / 3; grid-row: 1 / -1; height: 100%; }
+    }
+
+    /* MOBILE PORTRAIT (Vertical Stack) */
+    @media (max-width: 767px) {
+      body { overflow-y: auto; } /* Allow body to scroll if content exceeds height */
+      .platform-container { height: auto; min-height: 98vh; overflow: visible; }
+      .widget-header { flex-wrap: wrap; gap: 5px; }
+      .platform-grid { grid-template-columns: 1fr; overflow-y: visible; gap: 0.5rem; }
       
-      <!-- LEFT COLUMN: Activity Breakdown & Distribution -->
-      <div class="column" style="display:flex; flex-direction:column; gap:1rem;">
-        <div class="panel" style="flex:1;">
-          <div class="panel-title">
-            <span>Current Activity</span>
-            <span style="color:var(--neon-cyan)">LIVE</span>
-          </div>
-          <div class="country-list" style="margin-top: 0.4rem;">
-            <div class="country-row">
-              <span class="country-name">United States</span>
-              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 55%;"></div></div>
-              <span class="country-val">4,504,210</span>
-            </div>
-            <div class="country-row">
-              <span class="country-name">France</span>
-              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 35%;"></div></div>
-              <span class="country-val">2,100,950</span>
-            </div>
-            <div class="country-row">
-              <span class="country-name">China</span>
-              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 25%;"></div></div>
-              <span class="country-val">1,380,240</span>
-            </div>
-            <div class="country-row">
-              <span class="country-name">Brazil</span>
-              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 15%;"></div></div>
-              <span class="country-val">804,210</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-title">Total Earning</div>
-          <div style="font-size: 1.3rem; font-weight: 700; color: #fff; font-family: var(--font-mono);">$12,875 <span style="font-size:0.7rem; color:var(--accent-green);">+12%</span></div>
-          <div class="mini-chart-box">
-            <canvas class="sparkline" id="sparkline1" width="200" height="90"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <!-- CENTER COLUMN: Interactive 3D Wireframe Globe & Trends -->
-      <div class="panel" style="justify-content: space-between; position:relative;">
-        <div class="panel-title">
-          <span>Global Telemetry Matrix</span>
-          <span style="color:var(--neon-purple);">Orbit Mode Active</span>
-        </div>
-        
-        <div class="globe-stage">
-          <canvas id="globeCanvas" width="500" height="260"></canvas>
-        </div>
-
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
-          <div style="background:rgba(15,23,42,0.5); padding:8px; border-radius:8px; border:1px solid var(--border-color);">
-            <div style="font-size:0.65rem; color:var(--text-muted);">Active Coverage</div>
-            <div style="font-size:1.1rem; font-weight:700; color:var(--neon-purple); font-family:var(--font-mono);" id="coverageVal">53,430,001</div>
-          </div>
-          <div style="background:rgba(15,23,42,0.5); padding:8px; border-radius:8px; border:1px solid var(--border-color);">
-            <div style="font-size:0.65rem; color:var(--text-muted);">Trend Variance</div>
-            <div style="font-size:1.1rem; font-weight:700; color:var(--neon-cyan); font-family:var(--font-mono);">92,980</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- RIGHT COLUMN: Engagement & Forecast Metrics -->
-      <div class="column" style="display:flex; flex-direction:column; gap:1rem;">
-        <div class="panel">
-          <div class="panel-title">Most Engaged</div>
-          <div style="display:flex; flex-direction:column; gap:0.6rem;">
-            <div style="display:flex; align-items:center; justify-content:space-between; font-size:0.75rem;">
-              <span style="color:var(--text-muted)">👥 All users</span>
-              <span style="font-family:var(--font-mono); color:var(--text-main)">2,340 <span style="color:var(--accent-green)">+5%</span></span>
-            </div>
-            <div style="display:flex; align-items:center; justify-content:space-between; font-size:0.75rem;">
-              <span style="color:var(--text-muted)">🛡️ Unique users</span>
-              <span style="font-family:var(--font-mono); color:var(--text-main)">1,204,540</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-title">Forecast Overview</div>
-          <div class="metric-card-grid">
-            <div class="metric-box">
-              <span class="m-label">Monthly</span>
-              <span class="m-val">32,540</span>
-              <span class="m-trend">+4.2%</span>
-            </div>
-            <div class="metric-box">
-              <span class="m-label">Yearly</span>
-              <span class="m-val">1,387,075</span>
-              <span class="m-trend">+12.1%</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel" style="flex:1;">
-          <div class="panel-title">Time Statistic</div>
-          <div style="font-size: 1.2rem; font-weight: 700; color: #fff; font-family: var(--font-mono);">16,875 <span style="font-size:0.65rem; color:var(--accent-green);">+1.4%</span></div>
-          <button class="action-btn" onclick="triggerDeepSync()">Execute Sync Node</button>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-</div>
-
-<script>
-  let tick = 0;
-
-  // Render 3D Wireframe Globe on Canvas
-  const globeCanvas = document.getElementById('globeCanvas');
-  const globeCtx = globeCanvas.getContext('2d');
-
-  function renderGlobe() {
-    const width = globeCanvas.width;
-    const height = globeCanvas.height;
-    globeCtx.clearRect(0, 0, width, height);
-
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const radius = 95;
-
-    // Outer atmosphere glow
-    const gradient = globeCtx.createRadialGradient(centerX, centerY, radius * 0.5, centerX, centerY, radius * 1.4);
-    gradient.addColorStop(0, 'rgba(192, 132, 252, 0.15)');
-    gradient.addColorStop(1, 'transparent');
-    globeCtx.fillStyle = gradient;
-    globeCtx.beginPath();
-    globeCtx.arc(centerX, centerY, radius * 1.4, 0, Math.PI * 2);
-    globeCtx.fill();
-
-    // Wireframe Latitudes & Longitudes
-    globeCtx.strokeStyle = 'rgba(0, 243, 255, 0.25)';
-    globeCtx.lineWidth = 1;
-
-    // Draw Globe base circle
-    globeCtx.beginPath();
-    globeCtx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-    globeCtx.stroke();
-
-    const rotation = tick * 0.015;
-
-    // Latitude lines
-    for (let lat = -2; lat <= 2; lat++) {
-      let yOffset = lat * 30;
-      let rCurrent = Math.sqrt(Math.max(0, radius * radius - yOffset * yOffset));
-      globeCtx.beginPath();
-      globeCtx.ellipse(centerX, centerY + yOffset, rCurrent, rCurrent * 0.3, 0, 0, Math.PI * 2);
-      globeCtx.stroke();
-    }
-
-    // Longitude lines rotating
-    for (let lon = 0; lon < 6; lon++) {
-      let angle = rotation + (lon * Math.PI / 3);
-      globeCtx.beginPath();
-      globeCtx.ellipse(centerX, centerY, radius * Math.cos(angle), radius, 0, 0, Math.PI * 2);
-      globeCtx.stroke();
-    }
-
-    // Glowing Node Points on Globe surface
-    for (let i = 0; i < 8; i++) {
-      let nodeAngle = rotation + (i * 0.8);
-      let nx = centerX + Math.cos(nodeAngle) * (radius * 0.7);
-      let ny = centerY + Math.sin(nodeAngle * 0.7) * (radius * 0.6);
-      
-      globeCtx.fillStyle = i % 2 === 0 ? '#00f3ff' : '#c084fc';
-      globeCtx.beginPath();
-      globeCtx.arc(nx, ny, 3, 0, Math.PI * 2);
-      globeCtx.fill();
-
-      // Halo ring
-      globeCtx.strokeStyle = i % 2 === 0 ? 'rgba(0,243,255,0.5)' : 'rgba(192,132,252,0.5)';
-      globeCtx.beginPath();
-      globeCtx.arc(nx, ny, 6, 0, Math.PI * 2);
-      globeCtx.stroke();
-    }
-  }
-
-  // Mini Sparkline Render
-  const sparkCanvas = document.getElementById('sparkline1');
-  const sparkCtx = sparkCanvas.getContext('2d');
-  const sparkData = [30, 45, 42, 60, 55, 75, 70, 85, 90, 88, 95];
-
-  function renderSparkline() {
-    const w = sparkCanvas.width;
-    const h = sparkCanvas.height;
-    sparkCtx.clearRect(0,0,w,h);
-
-    sparkCtx.strokeStyle = '#00f3ff';
-    sparkCtx.lineWidth = 2;
-    sparkCtx.beginPath();
-
-    const step = w / (sparkData.length - 1);
-    sparkData.forEach((val, idx) => {
-      let x = idx * step;
-      let y = h - (val / 100) * h;
-      if (idx === 0) sparkCtx.moveTo(x, y);
-      else sparkCtx.lineTo(x, y);
-    });
-    sparkCtx.stroke();
-  }
-
-  function triggerDeepSync() {
-    alert("Global telemetry matrix synced successfully across all edge nodes.");
-  }
-
-  function animationLoop() {
-    tick++;
-    renderGlobe();
-    renderSparkline();
-    requestAnimationFrame(animationLoop);
-  }
-
-  window.onload = () => {
-    animationLoop();
-  };
-</script>
-
-</body>
-</html>
+      .
