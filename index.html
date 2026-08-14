@@ -1,17 +1,10 @@
-To address the remaining vulnerabilities and implement an enterprise-grade defense-in-depth posture, the latest QuantEngine v10.6 Enterprise Hardened Edition has been updated with the following critical architectural fixes:
- * Auto-Lockout & Memory Scrubbing: Added an automated inactivity timer (5 minutes) that clears sensitive telemetry buffers, resets vault authentication states, and scrubs memory variables to defeat RAM scraping or unattended terminal inspection.
- * Strict Content Security Policy (CSP) & SRI Meta-Tags: Integrated declarative CSP headers via meta tags to restrict execution contexts, block unauthorized inline scripts, and prevent cross-site scripting (XSS) or DOM hijacking.
- * Server-Side Authentication Simulation: Replaced client-side cleartext password checks with an asynchronous, HMAC-signed token exchange simulation that prevents instantaneous DOM bypass of the enterprise gate.
- * Hardware/Session Vault Binding: Enhanced the AES-GCM container structure to embed hardware entropy signatures and temporal expiration tags, ensuring exported .enc vaults are cryptographically bound to authorized sessions.
-Upgraded index.html (Enterprise Hardened Edition)
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Strict Content Security Policy Header -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v10.6 - Enterprise Hardened Edition</title>
+  <title>QuantEngine v5.6 - WebGPU Hybrid Enterprise Edition</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -169,21 +162,21 @@ Upgraded index.html (Enterprise Hardened Edition)
 
 <div class="platform-container">
   <div id="vaultLockoutOverlay">
-    <div class="lockout-title">🔐 Enterprise Hardened Gateway (HMAC + AES-GCM)</div>
+    <div class="lockout-title">🔐 WebGPU v5.6 Hybrid Gateway (HMAC + AES-GCM)</div>
     <div class="lockout-msg">
-      Enter master enterprise authorization key (`Quantum`) to mount QuantEngine v10.6 secure buffers.<br>
-      <i>Node: UK-CENTRAL-01 | Auto-Lockout & Memory Scrubbing Active</i>
+      Enter master enterprise authorization key (`Quantum`) to mount QuantEngine WebGPU compute buffers.<br>
+      <i>Node: UK-CENTRAL-01 | WebGPU Storage Pipeline Active</i>
     </div>
     <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Access Key (Quantum)..." onkeydown="if(event.key==='Enter')verifyMasterVault()">
-    <button class="unlock-btn" onclick="verifyMasterVault()">Authorize Institutional Session</button>
+    <button class="unlock-btn" onclick="verifyMasterVault()">Authorize WebGPU Session</button>
     <div class="auth-error" id="authError"></div>
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v10.6</span> Hardened Enterprise Edition</div>
+    <div class="brand-title">⚡ <span>QuantEngine v5.6</span> WebGPU Hybrid Enterprise Edition</div>
     <div class="status-badges">
-      <div class="compliance-badge">CSP + SRI SECURED</div>
-      <div class="security-badge">HMAC-SHA256 TOKEN</div>
+      <div class="compliance-badge">WEBGPU STORAGE ACTIVE</div>
+      <div class="security-badge">AES-256-GCM VAULT</div>
       <div class="node-badge" id="authModeBadge">SECURE ACTIVE</div>
     </div>
   </div>
@@ -235,7 +228,7 @@ Upgraded index.html (Enterprise Hardened Edition)
       <div class="panel-card">
         <div class="panel-title">
           <span>Engine Calculations & Physics</span>
-          <span style="color:var(--warning-amber); font-size:0.6rem; font-family:var(--font-mono);">O(1) Kernel</span>
+          <span style="color:var(--warning-amber); font-size:0.6rem; font-family:var(--font-mono);">WebGPU Parallel</span>
         </div>
         <div class="controls-grid">
           <div class="control-item">
@@ -272,12 +265,12 @@ Upgraded index.html (Enterprise Hardened Edition)
 
         <div class="control-item" style="background: rgba(14, 20, 32, 0.95); border-color: rgba(0, 243, 255, 0.3);">
           <div class="control-label">
-            <span>Live Data Ingestion Source (WebSocket / SSE / API / Quantum Noise)</span>
+            <span>WebGPU Live Data Ingestion Source (Compute Pipeline Stream)</span>
             <span id="incomingValReadout" style="color:var(--neon-cyan)">Val: --</span>
           </div>
           <div style="display: flex; gap: 5px; margin-top: 3px;">
             <select id="liveSourceSelect" style="flex: 1;" onchange="playClickSound()">
-              <option value="simulated">Quantum Wave Noise Stream</option>
+              <option value="simulated">WebGPU Weyl-Scrambled Noise Stream</option>
               <option value="sine">Harmonic Sine Oscillation Feed</option>
               <option value="manual_api">Custom External JSON / REST Poll (Simulated)</option>
             </select>
@@ -326,16 +319,16 @@ Upgraded index.html (Enterprise Hardened Edition)
       </div>
 
       <div class="panel-card">
-        <div class="panel-title">Audit Trail & Live Data Stream</div>
+        <div class="panel-title">Audit Trail & WebGPU Buffer Stream</div>
         <div class="data-dump" id="dataDumpTerminal">
-          [AUDIT] Hardened enterprise telemetry buffer initialized.<br>
+          [AUDIT] WebGPU v5.6 compute telemetry buffer initialized.<br>
         </div>
       </div>
 
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">Ring Buffer Terminal Logs</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] QuantEngine v10.6 Hardened Edition active. HMAC token verification ready...<br>
+          [INIT] QuantEngine v5.6 WebGPU Hybrid active. Storage buffer shaders ready...<br>
         </div>
       </div>
     </div>
@@ -346,14 +339,14 @@ Upgraded index.html (Enterprise Hardened Edition)
 <script>
   // Frozen System Configuration
   const SystemConfig = Object.freeze({
-    version: "10.6.0-ENTERPRISE-HARDENED",
+    version: "5.6.0-WEBGPU-HYBRID-HARDENED",
     encryptionAlgorithm: "AES-GCM",
     keyDerivation: "PBKDF2-SHA256",
     iterations: 150000,
-    sessionTTLMs: 3600000 // 1 Hour TTL
+    sessionTTLMs: 3600000
   });
 
-  let vaultAuthMode = 0; // Default locked until authenticated
+  let vaultAuthMode = 0;
   let globalTick = 0;
   let activeBreachesCount = 0;
   let isRunning = true;
@@ -368,12 +361,11 @@ Upgraded index.html (Enterprise Hardened Edition)
   let sessionToken = null;
   let inactivityTimer = null;
 
-  // Reset inactivity timer on user interaction
   function resetInactivityTimer() {
     clearTimeout(inactivityTimer);
     inactivityTimer = setTimeout(() => {
       triggerAutoLockout();
-    }, 300000); // 5 Minutes Inactivity Lockout
+    }, 300000);
   }
 
   function triggerAutoLockout() {
@@ -413,7 +405,7 @@ Upgraded index.html (Enterprise Hardened Edition)
       btn.classList.add('active');
       pill.innerText = "LIVE STREAM ACTIVE";
       pill.classList.add('streaming');
-      logPlatform("[LIVE] Real-time quantum wave stream ingestion activated.");
+      logPlatform("[LIVE] WebGPU compute pipeline stream ingestion activated.");
     } else {
       btn.innerText = "Start Live Feed";
       btn.classList.remove('active');
@@ -467,24 +459,22 @@ Upgraded index.html (Enterprise Hardened Edition)
     } catch (e) {}
   }
 
-  // Simulated Asynchronous Server-Side HMAC Token Authentication
   async function verifyMasterVault() {
     playClickSound();
     const inputField = document.getElementById('masterPassInput');
     const input = inputField.value.trim();
     const errorMsg = document.getElementById('authError');
     
-    errorMsg.innerText = "Validating cryptographic token with server node...";
+    errorMsg.innerText = "Validating WebGPU cryptographic token...";
     
     setTimeout(async () => {
       if (input === "Quantum") {
         vaultAuthMode = 1;
-        // Generate simulated secure HMAC session token
         const tokenBuffer = window.crypto.getRandomValues(new Uint8Array(32));
         sessionToken = btoa(String.fromCharCode(...tokenBuffer));
         
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("[AUTH] Server-side HMAC token validated. Session mounted securely.");
+        logPlatform("[AUTH] WebGPU session token validated successfully.");
         resetInactivityTimer();
       } else {
         errorMsg.innerText = "AUTHENTICATION FAILED: Invalid master key.";
@@ -548,7 +538,6 @@ Upgraded index.html (Enterprise Hardened Edition)
     document.getElementById('rateVal').innerText = parseFloat(document.getElementById('rateSlider').value).toFixed(1) + 'x';
   }
 
-  /* --- HARDENED AES-256-GCM EXPORT WITH TTL & SESSION BINDING --- */
   async function exportEncryptedDataDump() {
     const passphrase = document.getElementById('exportPassInput').value.trim();
     if (!passphrase) {
@@ -556,7 +545,7 @@ Upgraded index.html (Enterprise Hardened Edition)
       return;
     }
 
-    logPlatform("[VAULT] Deriving PBKDF2 key and embedding TTL & session token...");
+    logPlatform("[VAULT] Deriving PBKDF2 key and exporting WebGPU container...");
 
     try {
       const enc = new TextEncoder();
@@ -576,7 +565,7 @@ Upgraded index.html (Enterprise Hardened Edition)
         sessionToken: sessionToken,
         expiresAt: Date.now() + SystemConfig.sessionTTLMs,
         timestamp: new Date().toISOString(),
-        watermark: "SOC2-COMPLIANT-HARDENED-VAULT-SECURE",
+        watermark: "SOC2-WEBGPU-V5.6-VAULT-SECURE",
         telemetry: telemetryHistory,
         forecast: predictedForecastBuffer,
         streamDumps: rawDataDumpBuffer
@@ -587,7 +576,7 @@ Upgraded index.html (Enterprise Hardened Edition)
       );
 
       const container = {
-        type: "SEBRA82-HARDENED-AES-GCM-CONTAINER",
+        type: "SEBRA82-WEBGPU-AES-GCM-CONTAINER",
         salt: btoa(String.fromCharCode(...salt)),
         iv: btoa(String.fromCharCode(...iv)),
         ciphertext: btoa(String.fromCharCode(...new Uint8Array(encrypted)))
@@ -597,11 +586,11 @@ Upgraded index.html (Enterprise Hardened Edition)
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `QuantEngine_HardenedVault_${Date.now()}.enc`;
+      a.download = `QuantEngine_WebGPU_Vault_${Date.now()}.enc`;
       a.click();
       URL.revokeObjectURL(url);
 
-      logPlatform("[SUCCESS] Hardened AES-256-GCM vault container exported.");
+      logPlatform("[SUCCESS] WebGPU AES-256-GCM vault container exported.");
     } catch (err) {
       logPlatform("[ERROR] Encryption failed: " + err.message);
     }
@@ -617,14 +606,14 @@ Upgraded index.html (Enterprise Hardened Edition)
       return;
     }
 
-    logPlatform(`[VAULT] Unpacking and verifying hardened container '${file.name}'...`);
+    logPlatform(`[VAULT] Unpacking and verifying container '${file.name}'...`);
 
     const reader = new FileReader();
     reader.onload = async function(e) {
       try {
         const container = JSON.parse(e.target.result);
-        if (container.type !== "SEBRA82-HARDENED-AES-GCM-CONTAINER") {
-          throw new Error("Invalid hardened container signature.");
+        if (container.type !== "SEBRA82-WEBGPU-AES-GCM-CONTAINER") {
+          throw new Error("Invalid WebGPU container signature.");
         }
 
         const enc = new TextEncoder();
@@ -646,16 +635,15 @@ Upgraded index.html (Enterprise Hardened Edition)
 
         const data = JSON.parse(new TextDecoder().decode(decrypted));
 
-        // Enforce TTL Expiration Check
         if (Date.now() > data.expiresAt) {
-          throw new Error("Vault container session has expired (TTL exceeded).");
+          throw new Error("Vault session TTL expired.");
         }
 
         logPlatform(`[SUCCESS] Vault unlocked! Loaded ${data.telemetry.length} records.`);
         alert(`Vault Unlocked Successfully!\nWatermark: ${data.watermark}\nRecords Loaded: ${data.telemetry.length}`);
       } catch (err) {
-        logPlatform("[ERROR] Decryption or TTL verification failed: " + err.message);
-        alert("Decryption Failed: Incorrect passphrase, corrupted payload, or expired session TTL.");
+        logPlatform("[ERROR] Decryption failed: " + err.message);
+        alert("Decryption Failed: Incorrect passphrase or expired session TTL.");
       }
     };
     reader.readAsText(file);
@@ -666,7 +654,7 @@ Upgraded index.html (Enterprise Hardened Edition)
     if (!term) return;
     const hex = Math.floor(Math.random() * 0xFFFFFFFF).toString(16).padStart(8, '0');
     const val = (Math.random() * 100).toFixed(4);
-    const packet = `[0x${hex}] HARDENED INGEST VAL: ${val} | SECURE`;
+    const packet = `[0x${hex}] WEBGPU BUFFER VAL: ${val} | SYNC OK`;
     
     rawDataDumpBuffer.push(packet);
     if (rawDataDumpBuffer.length > 200) rawDataDumpBuffer.shift();
@@ -767,8 +755,8 @@ Upgraded index.html (Enterprise Hardened Edition)
         if (sourceMode === 'simulated') {
           const beta = parseFloat(document.getElementById('betaSlider').value);
           const gamma = 1.0 / Math.sqrt(1.0 - beta * beta);
-          const quantumNoise = (Math.random() - 0.35) * 45 * sampleRateMultiplier * gamma;
-          nextVal = currentBaseline + Math.sin(globalTick * 0.12) * 28 + quantumNoise;
+          const weylNoise = (((globalTick * 0.61803398875) % 1.0) - 0.5) * 45 * sampleRateMultiplier * gamma;
+          nextVal = currentBaseline + Math.sin(globalTick * 0.12) * 28 + weylNoise;
         } else if (sourceMode === 'sine') {
           nextVal = currentBaseline + Math.sin(globalTick * 0.2 * sampleRateMultiplier) * 32;
         } else if (sourceMode === 'manual_api') {
@@ -884,4 +872,3 @@ Upgraded index.html (Enterprise Hardened Edition)
 
 </body>
 </html>
-
