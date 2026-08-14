@@ -3,20 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine v13.0 - Enterprise Elite Edition</title>
+  <title>QuantEngine v14.0 - Global Command Dashboard</title>
   <style>
     :root {
-      --bg-deep: #020408;
-      --card-bg: rgba(7, 11, 19, 0.96);
-      --border-color: rgba(30, 42, 64, 0.85);
+      --bg-deep: #050814;
+      --card-bg: rgba(11, 16, 28, 0.85);
+      --border-color: rgba(43, 62, 98, 0.4);
       --neon-cyan: #00f3ff;
-      --cyan-glow: rgba(0, 243, 255, 0.35);
-      --warning-amber: #f0883e;
-      --crimson-red: #ff3344;
+      --neon-purple: #c084fc;
+      --cyan-glow: rgba(0, 243, 255, 0.25);
+      --purple-glow: rgba(192, 132, 252, 0.25);
       --text-main: #f0f6fc;
       --text-muted: #8b949e;
       --accent-green: #7ee787;
-      --accent-purple: #c084fc;
+      --warning-amber: #f0883e;
+      --crimson-red: #ff3344;
       --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
@@ -24,7 +25,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-ui); }
 
     body {
-      background-color: var(--bg-deep);
+      background: radial-gradient(circle at 70% 40%, #151030 0%, var(--bg-deep) 70%);
       color: var(--text-main);
       height: 100vh;
       width: 100vw;
@@ -36,756 +37,442 @@
       -webkit-user-select: none;
     }
 
-    #backgroundModelCanvas {
+    #globeBackgroundCanvas {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
       z-index: 1;
       pointer-events: none;
     }
 
-    .platform-container {
+    /* Main Dashboard Layout mimicking inspiration */
+    .dashboard-container {
       position: relative;
       z-index: 10;
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 0.8rem;
-      max-width: 1850px;
-      width: 98vw;
-      height: 98vh;
-      box-shadow: 0 45px 110px rgba(0, 0, 0, 0.99);
-      backdrop-filter: blur(22px);
+      border-radius: 16px;
+      padding: 1.5rem;
+      max-width: 1450px;
+      width: 96vw;
+      height: 90vh;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.85), inset 0 0 40px rgba(0, 243, 255, 0.05);
+      backdrop-filter: blur(25px);
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      gap: 1.2rem;
     }
 
-    /* Enterprise Authentication Portal Overlay */
-    #vaultLockoutOverlay {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(2, 4, 8, 0.99);
-      z-index: 9999;
+    /* Left Sidebar - Navigation Icons */
+    .sidebar-nav {
       display: flex;
       flex-direction: column;
+      align-items: center;
+      gap: 1.2rem;
+      padding-right: 1rem;
+      border-right: 1px solid var(--border-color);
+    }
+    .nav-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: rgba(30, 42, 64, 0.4);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
       justify-content: center;
-      align-items: center;
-      gap: 1rem;
-      border-radius: 12px;
-      border: 2px solid var(--border-color);
-      padding: 2rem;
-      text-align: center;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: 0.2s;
     }
-    #vaultLockoutOverlay.hidden { display: none; }
+    .nav-icon:hover, .nav-icon.active {
+      background: rgba(0, 243, 255, 0.15);
+      color: var(--neon-cyan);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 10px var(--cyan-glow);
+    }
 
-    .lockout-title { font-size: 1.4rem; font-weight: 600; color: var(--text-main); letter-spacing: 0.5px; }
-    .lockout-msg { font-size: 0.85rem; color: var(--text-muted); max-width: 500px; line-height: 1.4; background: #04060a; padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); font-family: var(--font-mono); }
-    .unlock-input { background: #04060a; border: 1px solid var(--border-color); color: var(--neon-cyan); padding: 0.7rem 1rem; border-radius: 6px; font-size: 0.9rem; width: 320px; text-align: center; outline: none; font-family: var(--font-mono); }
-    .unlock-btn { background: var(--neon-cyan); color: #020408; border: none; padding: 0.7rem 1.4rem; border-radius: 6px; font-weight: 600; cursor: pointer; box-shadow: 0 0 15px var(--cyan-glow); }
-    .unlock-btn:hover { background: #7dd3fc; }
-    .auth-error { font-size: 0.75rem; color: var(--crimson-red); min-height: 16px; font-family: var(--font-mono); }
+    /* Core Content Grid Area */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      overflow: hidden;
+    }
 
-    /* Header */
-    .widget-header {
+    /* Header Section */
+    .header-section {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      padding-bottom: 0.5rem;
-      margin-bottom: 0.5rem;
-      border-bottom: 1px solid var(--border-color);
+      align-items: flex-start;
     }
-    .brand-title { display: flex; align-items: center; gap: 8px; font-size: 1.1rem; font-weight: 600; color: #fff; }
-    .brand-title span { color: var(--neon-cyan); font-weight: 700; }
-    .status-badges { display: flex; gap: 8px; align-items: center; }
-    .security-badge { font-size: 0.62rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 3px 8px; border-radius: 10px; border: 1px solid rgba(192, 132, 252, 0.4); font-weight: 600; font-family: var(--font-mono); }
-    .compliance-badge { font-size: 0.62rem; background: rgba(0, 243, 255, 0.1); color: var(--neon-cyan); padding: 3px 8px; border-radius: 8px; border: 1px solid rgba(0, 243, 255, 0.3); font-family: var(--font-mono); font-weight: 600; }
-    .node-badge { font-size: 0.62rem; background: rgba(30, 42, 64, 0.6); color: var(--accent-green); padding: 3px 8px; border-radius: 8px; border: 1px solid var(--border-color); font-family: var(--font-mono); }
+    .title-group h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.3px;
+    }
+    .title-group p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
 
-    /* Responsive Grid Layout */
-    .platform-grid {
+    .stat-pill {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-color);
+      padding: 0.6rem 1rem;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .stat-pill .label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-pill .value { font-size: 1.5rem; font-weight: 700; color: var(--neon-cyan); font-family: var(--font-mono); }
+
+    /* Dashboard Grid Layout (Center Globe & Side Cards) */
+    .dashboard-grid {
       display: grid;
-      grid-template-columns: 1fr 1.5fr 1fr;
-      gap: 0.6rem;
+      grid-template-columns: 1.1fr 1.6fr 1.1fr;
+      gap: 1rem;
       flex: 1;
       overflow: hidden;
     }
 
-    .column { display: flex; flex-direction: column; gap: 0.6rem; overflow-y: auto; padding-right: 2px; }
-    
-    .panel-card { background: rgba(3, 7, 15, 0.96); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; box-shadow: 0 8px 25px rgba(0,0,0,0.6); }
-    .panel-title { font-size: 0.68rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; text-transform: uppercase; }
-
-    /* Viewports */
-    .canvas-box { position: relative; width: 100%; height: 110px; background: #000; border-radius: 5px; border: 1px solid rgba(0, 243, 255, 0.3); overflow: hidden; }
-    canvas { display: block; width: 100%; height: 100%; cursor: crosshair; }
-    .hud-tag { position: absolute; top: 3px; left: 5px; background: rgba(2, 4, 8, 0.9); border: 1px solid var(--border-color); padding: 1px 4px; border-radius: 3px; font-size: 0.55rem; color: var(--text-muted); font-family: var(--font-mono); }
-    .hud-tag span { color: var(--neon-cyan); font-weight: 600; }
-
-    /* Controls Grid */
-    .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
-    .control-item { background: rgba(10, 14, 22, 0.85); border: 1px solid var(--border-color); padding: 4px 6px; border-radius: 4px; display: flex; flex-direction: column; gap: 3px; }
-    .control-label { font-size: 0.6rem; color: var(--text-muted); display: flex; justify-content: space-between; font-weight: 500; }
-    .control-label span { color: var(--text-main); font-weight: 600; font-family: var(--font-mono); }
-    input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1e2a40; color: #fff; border: 1px solid var(--border-color); height: 4px; border-radius: 2px; outline: none; }
-    select { height: 24px; font-size: 0.65rem; padding: 0 4px; font-family: var(--font-mono); }
-
-    /* Terminals & Dumps */
-    .data-dump { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.6rem; color: var(--accent-green); height: 65px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.25; }
-    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.62rem; color: var(--accent-green); height: 75px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.3; }
-
-    /* Buttons */
-    .btn-row { display: flex; gap: 4px; }
-    .action-btn { width: 100%; padding: 0.35rem; font-weight: 600; font-size: 0.65rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; text-align: center; }
-    .action-btn:hover { box-shadow: 0 0 12px var(--cyan-glow); background: #3dd9e8; }
-    .btn-secondary { background: #1e2a40; color: var(--text-main); border: 1px solid var(--border-color); font-weight: 500; }
-    .btn-secondary:hover { background: #2c3e5a; }
-
-    .calc-row { display: flex; justify-content: space-between; font-size: 0.68rem; padding: 5px 8px; background: rgba(10, 14, 22, 0.85); border-radius: 4px; border: 1px solid var(--border-color); color: var(--text-muted); }
-    .calc-row strong { color: var(--neon-cyan); font-family: var(--font-mono); }
-
-    @media (max-width: 1024px) {
-      body { overflow-y: auto; height: auto; }
-      .platform-container { height: auto; max-width: 100vw; }
-      .platform-grid { grid-template-columns: 1fr; overflow-y: visible; }
+    .panel {
+      background: rgba(8, 13, 24, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
     }
+    .panel-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Country Activity List */
+    .country-list { display: flex; flex-direction: column; gap: 0.6rem; }
+    .country-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; }
+    .country-name { color: var(--text-main); font-weight: 500; }
+    .country-val { font-family: var(--font-mono); color: var(--neon-cyan); }
+    .progress-bar-bg { width: 100px; height: 4px; background: #151d2a; border-radius: 2px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: var(--neon-cyan); box-shadow: 0 0 8px var(--cyan-glow); }
+
+    /* Center Globe Area */
+    .globe-stage {
+      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle, rgba(0,243,255,0.05) 0%, transparent 70%);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    #globeCanvas { width: 100%; height: 100%; }
+
+    /* Right Side Metrics */
+    .metric-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+    .metric-box {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      padding: 0.6rem;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .metric-box .m-label { font-size: 0.62rem; color: var(--text-muted); }
+    .metric-box .m-val { font-size: 1rem; font-weight: 700; color: #fff; font-family: var(--font-mono); }
+    .metric-box .m-trend { font-size: 0.6rem; color: var(--accent-green); }
+
+    /* Interactive Mini Chart Box */
+    .mini-chart-box {
+      height: 90px;
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    canvas.sparkline { width: 100%; height: 100%; display: block; }
+
+    /* Control triggers */
+    .action-btn {
+      width: 100%;
+      padding: 0.5rem;
+      background: var(--neon-cyan);
+      color: #050814;
+      font-weight: 700;
+      font-size: 0.75rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 0 12px var(--cyan-glow);
+      text-align: center;
+    }
+    .action-btn:hover { background: #7dd3fc; }
   </style>
 </head>
 <body>
 
-<canvas id="backgroundModelCanvas"></canvas>
+<!-- Ambient background glow -->
+<canvas id="globeBackgroundCanvas"></canvas>
 
-<div class="platform-container">
-  <!-- Authentication Portal Overlay -->
-  <div id="vaultLockoutOverlay">
-    <div class="lockout-title">🔐 Enterprise Elite Gateway</div>
-    <div class="lockout-msg">
-      Enter master enterprise authorization key (`Quantum`) to mount QuantEngine v13.0 buffers.<br>
-      <i>Node: UK-CENTRAL-01 | Snowflake, CSV, & SOC2 Compliance Active</i>
-    </div>
-    <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Access Key (Quantum)..." onkeydown="if(event.key==='Enter')verifyMasterVault()">
-    <button class="unlock-btn" onclick="verifyMasterVault()">Authorize Elite Session</button>
-    <div class="auth-error" id="authError"></div>
+<div class="dashboard-container">
+  
+  <!-- Left Navigation Bar -->
+  <div class="sidebar-nav">
+    <div class="nav-icon active" title="Global Dashboard">🌐</div>
+    <div class="nav-icon" title="Analytics">📊</div>
+    <div class="nav-icon" title="Globe Nodes">📍</div>
+    <div class="nav-icon" title="Financial Vault">💳</div>
+    <div class="nav-icon" title="System Settings">⚙️</div>
   </div>
 
-  <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v13.0</span> Enterprise Elite</div>
-    <div class="status-badges">
-      <div class="compliance-badge">SNOWFLAKE STAGE READY</div>
-      <div class="security-badge">HASH: 8f4c...39a1</div>
-      <div class="node-badge" id="authModeBadge">ELITE ACTIVE</div>
-    </div>
-  </div>
-
-  <div class="platform-grid">
+  <!-- Main Content Layout -->
+  <div class="main-content">
     
-    <!-- COLUMN 1: WORKING MODEL STRUCTURE & PRESETS -->
-    <div class="column">
-      <div class="panel-card">
-        <div class="panel-title">
-          <span>Working Model Structure (Lattice)</span>
-          <span style="color:var(--accent-green); font-size:0.6rem; font-family:var(--font-mono);">r_n = l_P * φⁿ</span>
-        </div>
-        <div class="canvas-box">
-          <canvas id="atomicCanvas" width="400" height="110"></canvas>
-          <div class="hud-tag">Active Nodes: <span id="atomCount">64</span></div>
-        </div>
-        <div class="controls-grid">
-          <div class="control-item">
-            <div class="control-label">Scale Index (n): <span id="atomScaleVal">64</span></div>
-            <input type="range" id="atomScaleSlider" min="10" max="250" value="64" oninput="playClickSound(); updateAtomSimulation()">
-          </div>
-          <div class="control-item">
-            <div class="control-label">Orbital Mode:</div>
-            <select id="orbitalModeSelect" onchange="playClickSound(); updateAtomSimulation()">
-              <option value="0">s-Shell Orbital</option>
-              <option value="1" selected>p_z Dumbbell</option>
-              <option value="2">d_x2-y2 Cloverleaf</option>
-            </select>
-          </div>
-        </div>
+    <!-- Top Header -->
+    <div class="header-section">
+      <div class="title-group">
+        <h1>General statistics</h1>
+        <p>Global node traffic, real-time telemetry, and predictive modeling.</p>
       </div>
-
-      <div class="panel-card">
-        <div class="panel-title">
-          <span>Physics Preset Profiles</span>
-          <span style="color:var(--accent-purple); font-size:0.6rem; font-family:var(--font-mono);">Shortcuts Active</span>
-        </div>
-        <div class="control-item" style="margin-bottom: 4px;">
-          <div class="control-label"><span>Select Preset Engine State</span></div>
-          <select id="presetSelect" onchange="playClickSound(); applyPhysicsPreset()">
-            <option value="planck">Planck Scale Equilibrium</option>
-            <option value="relativistic" selected>Relativistic Stress Test</option>
-            <option value="superposition">Quantum Superposition</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="panel-card">
-        <div class="panel-title">
-          <span>Engine Calculations & Physics</span>
-          <span style="color:var(--warning-amber); font-size:0.6rem; font-family:var(--font-mono);">O(1) Kernel</span>
-        </div>
-        <div class="controls-grid">
-          <div class="control-item">
-            <div class="control-label">Relativistic (β): <span id="betaVal">0.30</span></div>
-            <input type="range" id="betaSlider" min="0.0" max="0.95" step="0.05" value="0.3" oninput="playClickSound(); updateNoiseCalc()">
-          </div>
-          <div class="control-item">
-            <div class="control-label">Tunneling (κ): <span id="kappaVal">1.50</span></div>
-            <input type="range" id="kappaSlider" min="0.1" max="5.0" step="0.1" value="1.5" oninput="playClickSound(); updateNoiseCalc()">
-          </div>
-        </div>
-        <div class="calc-row">
-          <span>Lorentz Factor (&gamma;):</span>
-          <strong id="calcLorentz" style="color:var(--accent-purple);">1.048</strong>
-        </div>
+      <div class="stat-pill">
+        <span class="label">Total Active Nodes / Users</span>
+        <span class="value" id="totalUsersCount">7,541,390</span>
       </div>
     </div>
 
-    <!-- COLUMN 2: GRAPHS & VISUALIZERS -->
-    <div class="column">
-      <div class="panel-card" style="flex:1;">
-        <div class="panel-title">
-          <span>Interactive Telemetry (Zoom & Pan)</span>
-          <span style="color:var(--neon-cyan); font-size:0.6rem; font-family:var(--font-mono);">Space: Pause | Ctrl+E: Export</span>
+    <!-- Center Grid System -->
+    <div class="dashboard-grid">
+      
+      <!-- LEFT COLUMN: Activity Breakdown & Distribution -->
+      <div class="column" style="display:flex; flex-direction:column; gap:1rem;">
+        <div class="panel" style="flex:1;">
+          <div class="panel-title">
+            <span>Current Activity</span>
+            <span style="color:var(--neon-cyan)">LIVE</span>
+          </div>
+          <div class="country-list" style="margin-top: 0.4rem;">
+            <div class="country-row">
+              <span class="country-name">United States</span>
+              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 55%;"></div></div>
+              <span class="country-val">4,504,210</span>
+            </div>
+            <div class="country-row">
+              <span class="country-name">France</span>
+              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 35%;"></div></div>
+              <span class="country-val">2,100,950</span>
+            </div>
+            <div class="country-row">
+              <span class="country-name">China</span>
+              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 25%;"></div></div>
+              <span class="country-val">1,380,240</span>
+            </div>
+            <div class="country-row">
+              <span class="country-name">Brazil</span>
+              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 15%;"></div></div>
+              <span class="country-val">804,210</span>
+            </div>
+          </div>
         </div>
-        <div class="canvas-box red-border" style="height: 240px;">
-          <canvas id="thresholdCanvas" width="600" height="240"></canvas>
-          <div class="hud-tag">Zoom Scale: <span id="zoomLevel">1.0x</span> | State: <span id="runState">RUNNING</span></div>
+
+        <div class="panel">
+          <div class="panel-title">Total Earning</div>
+          <div style="font-size: 1.3rem; font-weight: 700; color: #fff; font-family: var(--font-mono);">$12,875 <span style="font-size:0.7rem; color:var(--accent-green);">+12%</span></div>
+          <div class="mini-chart-box">
+            <canvas class="sparkline" id="sparkline1" width="200" height="90"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- CENTER COLUMN: Interactive 3D Wireframe Globe & Trends -->
+      <div class="panel" style="justify-content: space-between; position:relative;">
+        <div class="panel-title">
+          <span>Global Telemetry Matrix</span>
+          <span style="color:var(--neon-purple);">Orbit Mode Active</span>
         </div>
         
-        <div class="controls-grid" style="grid-template-columns: 1fr 1fr 1fr;">
-          <div class="control-item">
-            <div class="control-label">Threshold: <span id="threshVal">75.0</span></div>
-            <input type="range" id="threshSlider" min="20" max="95" value="75" oninput="playClickSound(); updateThresholdParams()">
+        <div class="globe-stage">
+          <canvas id="globeCanvas" width="500" height="260"></canvas>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+          <div style="background:rgba(15,23,42,0.5); padding:8px; border-radius:8px; border:1px solid var(--border-color);">
+            <div style="font-size:0.65rem; color:var(--text-muted);">Active Coverage</div>
+            <div style="font-size:1.1rem; font-weight:700; color:var(--neon-purple); font-family:var(--font-mono);" id="coverageVal">53,430,001</div>
           </div>
-          <div class="control-item">
-            <div class="control-label">Baseline: <span id="baseVal">40.0</span></div>
-            <input type="range" id="baseSlider" min="10" max="70" value="40" oninput="playClickSound(); updateThresholdParams()">
-          </div>
-          <div class="control-item">
-            <div class="control-label">Sample Rate: <span id="rateVal">1.0x</span></div>
-            <input type="range" id="rateSlider" min="0.2" max="3.0" step="0.1" value="1.0" oninput="playClickSound(); updateThresholdParams()">
+          <div style="background:rgba(15,23,42,0.5); padding:8px; border-radius:8px; border:1px solid var(--border-color);">
+            <div style="font-size:0.65rem; color:var(--text-muted);">Trend Variance</div>
+            <div style="font-size:1.1rem; font-weight:700; color:var(--neon-cyan); font-family:var(--font-mono);">92,980</div>
           </div>
         </div>
       </div>
 
-      <div class="panel-card">
-        <div class="panel-title">
-          <span>Isolated Spike Extraction Window</span>
-          <button class="action-btn" style="width: auto; padding: 2px 8px; font-size: 0.6rem;" onclick="playClickSound(); isolateDetectedSpikes()">Isolate Spikes</button>
+      <!-- RIGHT COLUMN: Engagement & Forecast Metrics -->
+      <div class="column" style="display:flex; flex-direction:column; gap:1rem;">
+        <div class="panel">
+          <div class="panel-title">Most Engaged</div>
+          <div style="display:flex; flex-direction:column; gap:0.6rem;">
+            <div style="display:flex; align-items:center; justify-content:space-between; font-size:0.75rem;">
+              <span style="color:var(--text-muted)">👥 All users</span>
+              <span style="font-family:var(--font-mono); color:var(--text-main)">2,340 <span style="color:var(--accent-green)">+5%</span></span>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; font-size:0.75rem;">
+              <span style="color:var(--text-muted)">🛡️ Unique users</span>
+              <span style="font-family:var(--font-mono); color:var(--text-main)">1,204,540</span>
+            </div>
+          </div>
         </div>
-        <div class="canvas-box" style="height: 90px; border-color: rgba(192, 132, 252, 0.4);">
-          <canvas id="spikeCanvas" width="600" height="90"></canvas>
-          <div class="hud-tag" style="color:var(--accent-purple);">Extracted Spikes: <span id="extractedCount">0</span></div>
-        </div>
-      </div>
-    </div>
 
-    <!-- COLUMN 3: ALL EXPORTS, SNOWFLAKE, CSV & TERMINALS -->
-    <div class="column">
-      <div class="panel-card">
-        <div class="panel-title">
-          <span>Enterprise Vault & Cloud Exports</span>
-          <span style="color:var(--accent-purple); font-size:0.6rem; font-family:var(--font-mono);">Multi-Format</span>
+        <div class="panel">
+          <div class="panel-title">Forecast Overview</div>
+          <div class="metric-card-grid">
+            <div class="metric-box">
+              <span class="m-label">Monthly</span>
+              <span class="m-val">32,540</span>
+              <span class="m-trend">+4.2%</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-label">Yearly</span>
+              <span class="m-val">1,387,075</span>
+              <span class="m-trend">+12.1%</span>
+            </div>
+          </div>
         </div>
-        <div class="control-item" style="margin-bottom: 3px;">
-          <div class="control-label"><span>Vault Passphrase</span></div>
-          <input type="password" id="exportPassInput" class="unlock-input" style="width: 100%; font-size: 0.7rem; padding: 0.3rem;" placeholder="Enter Passphrase...">
-        </div>
-        <div class="btn-row">
-          <button class="action-btn" onclick="playClickSound(); exportEncryptedDataDump()">Export .enc Blob</button>
-          <button class="action-btn btn-secondary" onclick="playClickSound(); exportSnowflakeJSON()">Snowflake JSON</button>
-        </div>
-        <div class="btn-row" style="margin-top: 3px;">
-          <button class="action-btn btn-secondary" onclick="playClickSound(); exportCSVReport()">Export CSV Data</button>
-          <button class="action-btn btn-secondary" onclick="playClickSound(); exportComplianceReport()">Audit Report</button>
-        </div>
-        <div class="btn-row" style="margin-top: 3px;">
-          <button class="action-btn btn-secondary" onclick="playClickSound(); exportPlatformState()">State (.json)</button>
-          <button class="action-btn btn-secondary" onclick="playClickSound(); document.getElementById('importFile').click()">Import</button>
-          <input type="file" id="importFile" style="display:none" accept=".json" onchange="importPlatformState(event)">
-        </div>
-      </div>
 
-      <div class="panel-card">
-        <div class="panel-title">Audit Trail & Data Stream</div>
-        <div class="data-dump" id="dataDumpTerminal">
-          [AUDIT] Snowflake & CSV pipeline staging ready.<br>
+        <div class="panel" style="flex:1;">
+          <div class="panel-title">Time Statistic</div>
+          <div style="font-size: 1.2rem; font-weight: 700; color: #fff; font-family: var(--font-mono);">16,875 <span style="font-size:0.65rem; color:var(--accent-green);">+1.4%</span></div>
+          <button class="action-btn" onclick="triggerDeepSync()">Execute Sync Node</button>
         </div>
       </div>
 
-      <div class="panel-card" style="flex:1;">
-        <div class="panel-title">Ring Buffer Terminal Logs</div>
-        <div class="math-screen" id="mathTerminal">
-          [INIT] QuantEngine v13.0 Elite active. All pipelines online...<br>
-        </div>
-      </div>
     </div>
 
   </div>
 </div>
 
 <script>
-  let vaultAuthMode = 0;
-  let globalTick = 0;
-  let activeBreachesCount = 0;
-  let isRunning = true;
-  
-  let currentThreshold = 75.0;
-  let currentBaseline = 40.0;
-  let telemetryHistory = new Array(120).fill(50);
-  let detectedSpikesBuffer = [];
-  let rawDataDumpBuffer = [];
+  let tick = 0;
 
-  let graphZoom = 1.0;
-  let graphPanX = 0;
-  let isDraggingGraph = false;
-  let dragStartX = 0;
+  // Render 3D Wireframe Globe on Canvas
+  const globeCanvas = document.getElementById('globeCanvas');
+  const globeCtx = globeCanvas.getContext('2d');
 
-  window.addEventListener('keydown', (e) => {
-    if (e.code === 'Space' && e.target.tagName !== 'INPUT') {
-      e.preventDefault();
-      isRunning = !isRunning;
-      document.getElementById('runState').innerText = isRunning ? "RUNNING" : "PAUSED";
-      logPlatform(`[SYSTEM] Telemetry simulation ${isRunning ? 'resumed' : 'paused'}.`);
-    }
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'e') {
-      e.preventDefault();
-      exportEncryptedDataDump();
-    }
-  });
+  function renderGlobe() {
+    const width = globeCanvas.width;
+    const height = globeCanvas.height;
+    globeCtx.clearRect(0, 0, width, height);
 
-  function applyPhysicsPreset() {
-    const preset = document.getElementById('presetSelect').value;
-    const betaSlider = document.getElementById('betaSlider');
-    const kappaSlider = document.getElementById('kappaSlider');
-    const threshSlider = document.getElementById('threshSlider');
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const radius = 95;
 
-    if (preset === 'planck') {
-      betaSlider.value = 0.05;
-      kappaSlider.value = 0.5;
-      threshSlider.value = 85;
-      logPlatform("[PRESET] Loaded 'Planck Scale Equilibrium' profile.");
-    } else if (preset === 'relativistic') {
-      betaSlider.value = 0.85;
-      kappaSlider.value = 3.2;
-      threshSlider.value = 65;
-      logPlatform("[PRESET] Loaded 'Relativistic Stress Test' profile.");
-    } else if (preset === 'superposition') {
-      betaSlider.value = 0.45;
-      kappaSlider.value = 4.8;
-      threshSlider.value = 75;
-      logPlatform("[PRESET] Loaded 'Quantum Superposition' profile.");
-    }
-    updateNoiseCalc();
-    updateThresholdParams();
-  }
+    // Outer atmosphere glow
+    const gradient = globeCtx.createRadialGradient(centerX, centerY, radius * 0.5, centerX, centerY, radius * 1.4);
+    gradient.addColorStop(0, 'rgba(192, 132, 252, 0.15)');
+    gradient.addColorStop(1, 'transparent');
+    globeCtx.fillStyle = gradient;
+    globeCtx.beginPath();
+    globeCtx.arc(centerX, centerY, radius * 1.4, 0, Math.PI * 2);
+    globeCtx.fill();
 
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  function playClickSound() {
-    try {
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.04);
-      gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.04);
-    } catch (e) {}
-  }
+    // Wireframe Latitudes & Longitudes
+    globeCtx.strokeStyle = 'rgba(0, 243, 255, 0.25)';
+    globeCtx.lineWidth = 1;
 
-  function verifyMasterVault() {
-    playClickSound();
-    const inputField = document.getElementById('masterPassInput');
-    const input = inputField.value.trim().toLowerCase();
-    const errorMsg = document.getElementById('authError');
-    
-    errorMsg.innerText = "Authenticating session payload...";
-    
-    setTimeout(() => {
-      if (input === "quantum") {
-        vaultAuthMode = 1;
-        document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("[AUTH] Elite access granted via 'Quantum' passphrase.");
-      } else {
-        vaultAuthMode = 2;
-        document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("[AUTH] Standard session clearance mounted.");
-      }
-    }, 250);
-  }
+    // Draw Globe base circle
+    globeCtx.beginPath();
+    globeCtx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+    globeCtx.stroke();
 
-  const logBuffer = [];
-  function logPlatform(text) {
-    const time = new Date().toISOString().split('T')[1].slice(0, 8);
-    logBuffer.push(`[${time}] ${text}`);
-    if (logBuffer.length > 50) logBuffer.shift();
-    document.getElementById('mathTerminal').innerHTML = logBuffer.join('<br>');
-    document.getElementById('mathTerminal').scrollTop = document.getElementById('mathTerminal').scrollHeight;
-  }
+    const rotation = tick * 0.015;
 
-  function updateNoiseCalc() {
-    const beta = parseFloat(document.getElementById('betaSlider').value);
-    const kappa = parseFloat(document.getElementById('kappaSlider').value);
-    document.getElementById('betaVal').innerText = beta.toFixed(2);
-    document.getElementById('kappaVal').innerText = kappa.toFixed(2);
-
-    const gamma = 1.0 / Math.sqrt(1.0 - beta * beta);
-    document.getElementById('calcLorentz').innerText = gamma.toFixed(3);
-  }
-
-  const threshCanvas = document.getElementById('thresholdCanvas');
-  threshCanvas.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    if (e.deltaY < 0) graphZoom = Math.min(graphZoom * 1.15, 4.0);
-    else graphZoom = Math.max(graphZoom / 1.15, 0.5);
-    document.getElementById('zoomLevel').innerText = `${graphZoom.toFixed(2)}x`;
-  }, { passive: false });
-
-  threshCanvas.addEventListener('mousedown', (e) => {
-    isDraggingGraph = true;
-    dragStartX = e.clientX - graphPanX;
-  });
-
-  window.addEventListener('mousemove', (e) => {
-    if (!isDraggingGraph) return;
-    graphPanX = e.clientX - dragStartX;
-  });
-
-  window.addEventListener('mouseup', () => { isDraggingGraph = false; });
-
-  function updateThresholdParams() {
-    currentThreshold = parseFloat(document.getElementById('threshSlider').value);
-    currentBaseline = parseFloat(document.getElementById('baseSlider').value);
-    document.getElementById('threshVal').innerText = currentThreshold.toFixed(1);
-    document.getElementById('baseVal').innerText = currentBaseline.toFixed(1);
-    document.getElementById('rateVal').innerText = parseFloat(document.getElementById('rateSlider').value).toFixed(1) + 'x';
-  }
-
-  function exportEncryptedDataDump() {
-    const passphrase = document.getElementById('exportPassInput').value.trim();
-    if (!passphrase) {
-      alert("Please enter a passphrase to secure the .enc blob package.");
-      return;
+    // Latitude lines
+    for (let lat = -2; lat <= 2; lat++) {
+      let yOffset = lat * 30;
+      let rCurrent = Math.sqrt(Math.max(0, radius * radius - yOffset * yOffset));
+      globeCtx.beginPath();
+      globeCtx.ellipse(centerX, centerY + yOffset, rCurrent, rCurrent * 0.3, 0, 0, Math.PI * 2);
+      globeCtx.stroke();
     }
 
-    logPlatform("[VAULT] Packaging telemetry data into secure .enc container...");
-
-    const packageData = {
-      version: "QuantEngine v13.0 Elite",
-      timestamp: new Date().toISOString(),
-      watermark: "SOC2-COMPLIANT-SECURE-VAULT-77291-TX",
-      telemetry: telemetryHistory,
-      spikes: detectedSpikesBuffer,
-      streamDumps: rawDataDumpBuffer
-    };
-
-    const jsonStr = JSON.stringify(packageData);
-    const encryptedHex = btoa(jsonStr).split('').map(c => String.fromCharCode(c.charCodeAt(0) ^ passphrase.charCodeAt(0 % passphrase.length))).join('');
-    
-    const container = {
-      type: "SEBRA82-BLOB-ENCRYPTED-CONTAINER",
-      payload: btoa(encryptedHex)
-    };
-
-    const blob = new Blob([JSON.stringify(container, null, 2)], { type: "application/octet-stream" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `QuantEngine_Elite_Vault_${Date.now()}.enc`;
-    a.click();
-    URL.revokeObjectURL(url);
-
-    logPlatform("[SUCCESS] .enc vault container successfully exported.");
-  }
-
-  function exportSnowflakeJSON() {
-    logPlatform("[SNOWFLAKE] Compiling flattened schema for Snowflake micro-partition stage...");
-
-    const snowflakePayload = telemetryHistory.map((val, idx) => ({
-      RECORD_ID: idx,
-      TIMESTAMP: new Date(Date.now() - (telemetryHistory.length - idx) * 1000).toISOString(),
-      TELEMETRY_VALUE: val,
-      THRESHOLD: currentThreshold,
-      BASELINE: currentBaseline,
-      BREACH_STATUS: val >= currentThreshold ? 'BREACH' : 'NOMINAL',
-      WATERMARK: "SEBRA82-SNOWFLAKE-STAGE-77291"
-    }));
-
-    const blob = new Blob([JSON.stringify(snowflakePayload, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `QuantEngine_Snowflake_Stage_${Date.now()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-
-    logPlatform("[SUCCESS] Snowflake-ready schema exported.");
-  }
-
-  function exportCSVReport() {
-    logPlatform("[CSV] Generating relational telemetry table for BI tools...");
-
-    let csvContent = "data:text/csv;charset=utf-8,RECORD_ID,TIMESTAMP,VALUE,THRESHOLD,STATUS\r\n";
-    telemetryHistory.forEach((val, idx) => {
-      const time = new Date(Date.now() - (telemetryHistory.length - idx) * 1000).toISOString();
-      const status = val >= currentThreshold ? 'BREACH' : 'NOMINAL';
-      csvContent += `${idx},${time},${val.toFixed(2)},${currentThreshold},${status}\r\n`;
-    });
-
-    const encodedUri = encodeURI(csvContent);
-    const a = document.createElement('a');
-    a.setAttribute('href', encodedUri);
-    a.setAttribute('download', `QuantEngine_Telemetry_${Date.now()}.csv`);
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    logPlatform("[SUCCESS] CSV telemetry report successfully exported.");
-  }
-
-  function exportComplianceReport() {
-    logPlatform("[AUDIT] Compiling automated compliance summary report...");
-
-    const report = {
-      reportType: "SEBRA82-SOC2-COMPLIANCE-SUMMARY",
-      generatedAt: new Date().toISOString(),
-      nodeId: "UK-CENTRAL-01",
-      metrics: {
-        totalRecordsEvaluated: telemetryHistory.length,
-        totalBreachesDetected: detectedSpikesBuffer.length,
-        currentThresholdSetting: currentThreshold,
-        currentBaselineSetting: currentBaseline,
-        systemStatus: activeBreachesCount > 0 ? "DRIFT_WARNING" : "NOMINAL"
-      },
-      auditSignature: "SHA-256:8f4c...39a1"
-    };
-
-    const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `QuantEngine_Compliance_Report_${Date.now()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-
-    logPlatform("[SUCCESS] Compliance audit summary report generated.");
-  }
-
-  function exportPlatformState() {
-    const state = { platform: "QuantEngine v13.0", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
-    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = "platform_state.json"; a.click();
-    URL.revokeObjectURL(url);
-    logPlatform("[EXPORT] Platform state exported successfully.");
-  }
-  function importPlatformState(e) { logPlatform("[IMPORT] State file loaded into memory buffers."); }
-
-  function masterRenderLoop() {
-    globalTick += 1;
-    renderBackgroundModel();
-    if (vaultAuthMode > 0) {
-      renderAtoms();
-      renderThresholdGraph();
-      renderSpikeExtractionWindow();
-      if (globalTick % 15 === 0 && isRunning) pushDataDump();
+    // Longitude lines rotating
+    for (let lon = 0; lon < 6; lon++) {
+      let angle = rotation + (lon * Math.PI / 3);
+      globeCtx.beginPath();
+      globeCtx.ellipse(centerX, centerY, radius * Math.cos(angle), radius, 0, 0, Math.PI * 2);
+      globeCtx.stroke();
     }
-    requestAnimationFrame(masterRenderLoop);
-  }
 
-  const bgCanvas = document.getElementById('backgroundModelCanvas');
-  const bgCtx = bgCanvas.getContext('2d');
-  function resizeBackgroundCanvas() {
-    bgCanvas.width = window.innerWidth;
-    bgCanvas.height = window.innerHeight;
-  }
-  window.onresize = resizeBackgroundCanvas;
-
-  function renderBackgroundModel() {
-    const width = bgCanvas.width;
-    const height = bgCanvas.height;
-
-    if (activeBreachesCount > 0) {
-      bgCtx.fillStyle = 'rgba(240, 136, 62, 0.08)';
-    } else {
-      bgCtx.fillStyle = 'rgba(2, 4, 8, 0.15)';
-    }
-    bgCtx.fillRect(0, 0, width, height);
-
-    const corruptionFactor = (vaultAuthMode === 2) ? 12.0 : 1.0;
-    const t = globalTick * 0.03;
-
-    bgCtx.lineWidth = 1.5;
-    for (let line = 0; line < 6; line++) {
-      if (activeBreachesCount > 0) {
-        bgCtx.strokeStyle = line % 2 === 0 ? 'rgba(240, 136, 62, 0.15)' : 'rgba(192, 132, 252, 0.15)';
-      } else {
-        bgCtx.strokeStyle = line % 2 === 0 ? 'rgba(0, 243, 255, 0.12)' : 'rgba(192, 132, 252, 0.12)';
-      }
-      bgCtx.beginPath();
+    // Glowing Node Points on Globe surface
+    for (let i = 0; i < 8; i++) {
+      let nodeAngle = rotation + (i * 0.8);
+      let nx = centerX + Math.cos(nodeAngle) * (radius * 0.7);
+      let ny = centerY + Math.sin(nodeAngle * 0.7) * (radius * 0.6);
       
-      for (let x = 0; x < width; x += 15) {
-        const k = 0.01 * corruptionFactor;
-        const wave = Math.cos((x * k) + t + line) ** 2 * Math.sin((x * 0.005) - t);
-        const y = (height / 2) + (line - 3) * 65 + (wave * 45);
-        if (x === 0) bgCtx.moveTo(x, y);
-        else bgCtx.lineTo(x, y);
-      }
-      bgCtx.stroke();
+      globeCtx.fillStyle = i % 2 === 0 ? '#00f3ff' : '#c084fc';
+      globeCtx.beginPath();
+      globeCtx.arc(nx, ny, 3, 0, Math.PI * 2);
+      globeCtx.fill();
+
+      // Halo ring
+      globeCtx.strokeStyle = i % 2 === 0 ? 'rgba(0,243,255,0.5)' : 'rgba(192,132,252,0.5)';
+      globeCtx.beginPath();
+      globeCtx.arc(nx, ny, 6, 0, Math.PI * 2);
+      globeCtx.stroke();
     }
   }
 
-  const atomCanvas = document.getElementById('atomicCanvas');
-  const atomCtx = atomCanvas.getContext('2d');
-  function updateAtomSimulation() {
-    document.getElementById('atomScaleVal').innerText = document.getElementById('atomScaleSlider').value;
-  }
+  // Mini Sparkline Render
+  const sparkCanvas = document.getElementById('sparkline1');
+  const sparkCtx = sparkCanvas.getContext('2d');
+  const sparkData = [30, 45, 42, 60, 55, 75, 70, 85, 90, 88, 95];
 
-  function renderAtoms() {
-    const width = atomCanvas.width;
-    const height = atomCanvas.height;
-    atomCtx.fillStyle = '#000';
-    atomCtx.fillRect(0, 0, width, height);
+  function renderSparkline() {
+    const w = sparkCanvas.width;
+    const h = sparkCanvas.height;
+    sparkCtx.clearRect(0,0,w,h);
 
-    const orbitalMode = parseInt(document.getElementById('orbitalModeSelect').value);
-    const spin = globalTick * 0.02;
-    const atomCount = 20;
+    sparkCtx.strokeStyle = '#00f3ff';
+    sparkCtx.lineWidth = 2;
+    sparkCtx.beginPath();
 
-    for (let i = 0; i < atomCount; i++) {
-      const angle = (i / atomCount) * Math.PI * 2 + spin;
-      const xBase = width / 2 + Math.cos(angle) * 45;
-      const yBase = height / 2 + Math.sin(angle) * 30;
-
-      let harmonic = 1.0;
-      const dx = Math.cos(angle);
-      const dy = Math.sin(angle);
-      if (orbitalMode === 1) harmonic = 2.5 * dy * dy;
-      else if (orbitalMode === 2) { const c = dx*dx - dy*dy; harmonic = Math.abs(3.2 * c * c); }
-
-      const x = width / 2 + (xBase - width / 2) * harmonic;
-      const y = height / 2 + (yBase - height / 2) * harmonic;
-
-      atomCtx.fillStyle = i % 2 === 0 ? '#00f3ff' : '#c084fc';
-      atomCtx.beginPath();
-      atomCtx.arc(x, y, 3.5, 0, Math.PI * 2);
-      atomCtx.fill();
-    }
-    atomCtx.fillStyle = '#7ee787';
-    atomCtx.beginPath();
-    atomCtx.arc(width / 2, height / 2, 5.5, 0, Math.PI * 2);
-    atomCtx.fill();
-  }
-
-  const threshCtx = threshCanvas.getContext('2d');
-  function renderThresholdGraph() {
-    const width = threshCanvas.width;
-    const height = threshCanvas.height;
-
-    threshCtx.fillStyle = 'rgba(3, 7, 15, 0.45)';
-    threshCtx.fillRect(0, 0, width, height);
-
-    if (isRunning) {
-      const beta = parseFloat(document.getElementById('betaSlider').value);
-      const gamma = 1.0 / Math.sqrt(1.0 - beta * beta);
-      const noise = (Math.random() - 0.5) * (vaultAuthMode === 2 ? 35 : (10 * gamma));
-      const nextVal = currentBaseline + Math.sin(globalTick * 0.1) * 20 + noise;
-      telemetryHistory.push(nextVal);
-      if (telemetryHistory.length > 250) telemetryHistory.shift();
-
-      if (nextVal >= currentThreshold) {
-        detectedSpikesBuffer.push(nextVal);
-        if (detectedSpikesBuffer.length > 50) detectedSpikesBuffer.shift();
-      }
-    }
-
-    const baselineY = height - (currentBaseline / 100) * height;
-    threshCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-    threshCtx.lineWidth = 1;
-    threshCtx.setLineDash([4, 4]);
-    threshCtx.beginPath();
-    threshCtx.moveTo(0, baselineY); threshCtx.lineTo(width, baselineY);
-    threshCtx.stroke();
-    threshCtx.setLineDash([]);
-
-    const thresholdY = height - (currentThreshold / 100) * height;
-    threshCtx.strokeStyle = '#f0883e';
-    threshCtx.lineWidth = 1.5;
-    threshCtx.beginPath();
-    threshCtx.moveTo(0, thresholdY); threshCtx.lineTo(width, thresholdY);
-    threshCtx.stroke();
-
-    threshCtx.save();
-    threshCtx.translate(graphPanX, 0);
-    threshCtx.scale(graphZoom, 1.0);
-
-    threshCtx.strokeStyle = vaultAuthMode === 2 ? '#ff3344' : '#00f3ff';
-    threshCtx.lineWidth = 2;
-    threshCtx.beginPath();
-    
-    let breaches = 0;
-    const step = width / (telemetryHistory.length || 1);
-    telemetryHistory.forEach((val, idx) => {
-      const x = idx * step;
-      const y = height - (val / 100) * height;
-      if (val >= currentThreshold) breaches++;
-      if (idx === 0) threshCtx.moveTo(x, y);
-      else threshCtx.lineTo(x, y);
+    const step = w / (sparkData.length - 1);
+    sparkData.forEach((val, idx) => {
+      let x = idx * step;
+      let y = h - (val / 100) * h;
+      if (idx === 0) sparkCtx.moveTo(x, y);
+      else sparkCtx.lineTo(x, y);
     });
-    threshCtx.stroke();
-    threshCtx.restore();
-
-    activeBreachesCount = breaches;
+    sparkCtx.stroke();
   }
 
-  const spikeCanvas = document.getElementById('spikeCanvas');
-  const spikeCtx = spikeCanvas.getContext('2d');
-  function renderSpikeExtractionWindow() {
-    const width = spikeCanvas.width;
-    const height = spikeCanvas.height;
-
-    spikeCtx.fillStyle = 'rgba(3, 7, 15, 0.6)';
-    spikeCtx.fillRect(0, 0, width, height);
-
-    document.getElementById('extractedCount').innerText = detectedSpikesBuffer.length;
-
-    if (detectedSpikesBuffer.length === 0) {
-      spikeCtx.fillStyle = '#8b949e';
-      spikeCtx.font = '10px monospace';
-      spikeCtx.fillText('Awaiting spike isolation trigger...', 15, height / 2);
-      return;
-    }
-
-    spikeCtx.strokeStyle = '#c084fc';
-    spikeCtx.lineWidth = 2;
-    spikeCtx.beginPath();
-
-    const step = width / Math.max(detectedSpikesBuffer.length, 10);
-    detectedSpikesBuffer.forEach((val, idx) => {
-      const x = idx * step;
-      const y = height - ((val - currentThreshold) / (100 - currentThreshold + 1)) * height;
-      if (idx === 0) spikeCtx.moveTo(x, y);
-      else spikeCtx.lineTo(x, y);
-    });
-    spikeCtx.stroke();
+  function triggerDeepSync() {
+    alert("Global telemetry matrix synced successfully across all edge nodes.");
   }
 
-  function isolateDetectedSpikes() {
-    logPlatform(`[AUDIT] Isolated ${detectedSpikesBuffer.length} threshold breach events into sub-graph window.`);
+  function animationLoop() {
+    tick++;
+    renderGlobe();
+    renderSparkline();
+    requestAnimationFrame(animationLoop);
   }
 
   window.onload = () => {
-    resizeBackgroundCanvas();
-    updateThresholdParams();
-    updateAtomSimulation();
-    updateNoiseCalc();
-    masterRenderLoop();
+    animationLoop();
   };
 </script>
 
