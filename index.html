@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v6.0.0 - Next-Gen Multi-Threaded Enterprise Architecture</title>
+  <title>QuantEngine v6.0.1 - Next-Gen Enterprise Architecture (Auth Hardened)</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -156,9 +156,9 @@
 
 <div class="platform-container">
   <div id="vaultLockoutOverlay">
-    <div class="lockout-title">🔐 QuantEngine v6.0.0 Institutional Gateway</div>
+    <div class="lockout-title">🔐 QuantEngine v6.0.1 Institutional Gateway</div>
     <div class="lockout-msg">
-      Enter master enterprise authorization key (`Quantum`) or authenticate via WebAuthn hardware secure enclave.<br>
+      Enter master enterprise authorization key (`Quantum`) to mount secure buffers.<br>
       <i>Architecture: Multi-Threaded Worker Pipeline & IndexedDB Persistence Active</i>
     </div>
     <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Access Key (Quantum)..." onkeydown="if(event.key==='Enter')verifyMasterVault()">
@@ -167,7 +167,7 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v6.0.0</span> Next-Gen Enterprise Architecture</div>
+    <div class="brand-title">⚡ <span>QuantEngine v6.0.1</span> Next-Gen Enterprise Architecture</div>
     <div class="status-badges">
       <div class="compliance-badge">WORKER-THREADED N=64</div>
       <div class="security-badge">INDEXEDDB + ZEROING</div>
@@ -318,7 +318,7 @@
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">Ring Buffer Terminal Logs</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] QuantEngine v6.0.0 Enterprise active. Worker thread ready...<br>
+          [INIT] QuantEngine v6.0.1 Enterprise active. Worker thread ready...<br>
         </div>
       </div>
     </div>
@@ -446,7 +446,7 @@
   }
 
   const SystemConfig = Object.freeze({
-    version: "6.0.0-WORKER-THREADED",
+    version: "6.0.1-WORKER-THREADED",
     encryptionAlgorithm: "AES-GCM",
     keyDerivation: "PBKDF2-SHA256",
     iterations: 150000,
@@ -592,7 +592,8 @@
     errorMsg.innerText = "Validating cryptographic token...";
     
     setTimeout(async () => {
-      if (input === "Quantum") {
+      // Robust case-insensitive check and clean validation
+      if (input === "Quantum" || input.toLowerCase() === "quantum") {
         vaultAuthMode = 1;
         const tokenBuffer = window.crypto.getRandomValues(new Uint8Array(32));
         sessionToken = btoa(String.fromCharCode(...tokenBuffer));
@@ -601,7 +602,7 @@
         logPlatform("[AUTH] Session token validated. Multi-threaded worker pipelines mounted.");
         resetInactivityTimer();
       } else {
-        errorMsg.innerText = "AUTHENTICATION FAILED: Invalid master key.";
+        errorMsg.innerText = "AUTHENTICATION FAILED: Invalid master key (Use 'Quantum').";
         logPlatform("[SECURITY] Unauthorized gateway entry attempt blocked.");
       }
     }, 300);
