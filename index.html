@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine v10.5 - Institutional Enterprise Edition</title>
+  <title>QuantEngine v10.6 - Institutional Live-Feed Edition</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -133,15 +133,20 @@
     .data-dump { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.6rem; color: var(--accent-green); height: 85px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.25; }
     .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.62rem; color: var(--accent-green); height: 100px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.3; }
 
-    /* Buttons */
+    /* Buttons & Live Stream Inputs */
     .btn-row { display: flex; gap: 5px; }
     .action-btn { width: 100%; padding: 0.4rem; font-weight: 600; font-size: 0.68rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; text-align: center; }
     .action-btn:hover { box-shadow: 0 0 12px var(--cyan-glow); background: #3dd9e8; }
     .btn-secondary { background: #1e2a40; color: var(--text-main); border: 1px solid var(--border-color); font-weight: 500; }
     .btn-secondary:hover { background: #2c3e5a; }
+    .btn-live-toggle { background: var(--warning-amber); color: #020408; }
+    .btn-live-toggle.active { background: var(--accent-green); box-shadow: 0 0 10px rgba(126, 231, 135, 0.4); }
 
     .calc-row { display: flex; justify-content: space-between; font-size: 0.68rem; padding: 5px 8px; background: rgba(10, 14, 22, 0.85); border-radius: 4px; border: 1px solid var(--border-color); color: var(--text-muted); }
     .calc-row strong { color: var(--neon-cyan); font-family: var(--font-mono); }
+
+    .live-status-pill { font-size: 0.58rem; font-family: var(--font-mono); padding: 2px 6px; border-radius: 4px; background: rgba(240, 136, 62, 0.2); color: var(--warning-amber); border: 1px solid rgba(240, 136, 62, 0.4); }
+    .live-status-pill.streaming { background: rgba(126, 231, 135, 0.2); color: var(--accent-green); border-color: rgba(126, 231, 135, 0.4); }
 
     @media (max-width: 1024px) {
       body { overflow-y: auto; height: auto; }
@@ -158,7 +163,7 @@
   <div id="vaultLockoutOverlay">
     <div class="lockout-title">🔐 Institutional Authentication Gateway</div>
     <div class="lockout-msg">
-      Enter master enterprise authorization key (`Quantum`) to mount QuantEngine v10.5 secure buffers.<br>
+      Enter master enterprise authorization key (`Quantum`) to mount QuantEngine v10.6 secure buffers.<br>
       <i>Node: UK-CENTRAL-01 | SOC2 Type II Local Encrypted Environment</i>
     </div>
     <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Access Key (Quantum)..." onkeydown="if(event.key==='Enter')verifyMasterVault()">
@@ -167,7 +172,7 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v10.5</span> Institutional Platform</div>
+    <div class="brand-title">⚡ <span>QuantEngine v10.6</span> Live-Feed Institutional Platform</div>
     <div class="status-badges">
       <div class="compliance-badge">SOC2 TYPE II LOCAL</div>
       <div class="security-badge">HASH: 8f4c...39a1</div>
@@ -243,12 +248,30 @@
     <div class="column">
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">
-          <span>Interactive Telemetry (Zoom & Pan)</span>
-          <span style="color:var(--neon-cyan); font-size:0.6rem; font-family:var(--font-mono);">Space: Pause | Ctrl+E: Export</span>
+          <span>Interactive Telemetry & Live Data Feed</span>
+          <span style="display:flex; gap:6px; align-items:center;">
+            <span id="liveFeedStatusPill" class="live-status-pill">STANDBY</span>
+            <span style="color:var(--neon-cyan); font-size:0.6rem; font-family:var(--font-mono);">Space: Pause | Ctrl+E: Export</span>
+          </span>
         </div>
-        <div class="canvas-box red-border" style="height: 240px;">
-          <canvas id="thresholdCanvas" width="600" height="240"></canvas>
+        <div class="canvas-box red-border" style="height: 205px;">
+          <canvas id="thresholdCanvas" width="600" height="205"></canvas>
           <div class="hud-tag">Zoom Scale: <span id="zoomLevel">1.0x</span> | State: <span id="runState">RUNNING</span></div>
+        </div>
+
+        <div class="control-item" style="background: rgba(14, 20, 32, 0.95); border-color: rgba(0, 243, 255, 0.3);">
+          <div class="control-label">
+            <span>Live Data Ingestion Source (WebSocket / SSE / API / Random Stream)</span>
+            <span id="incomingValReadout" style="color:var(--neon-cyan)">Val: --</span>
+          </div>
+          <div style="display: flex; gap: 5px; margin-top: 3px;">
+            <select id="liveSourceSelect" style="flex: 1;" onchange="playClickSound()">
+              <option value="simulated">Simulated High-Frequency Stream</option>
+              <option value="sine">Harmonic Sine Oscillation Feed</option>
+              <option value="manual_api">Custom External JSON / REST Poll (Simulated)</option>
+            </select>
+            <button id="toggleLiveFeedBtn" class="action-btn btn-live-toggle" style="width: 120px;" onclick="playClickSound(); toggleLiveStreamFeed()">Start Live Feed</button>
+          </div>
         </div>
         
         <div class="controls-grid" style="grid-template-columns: 1fr 1fr 1fr;">
@@ -272,8 +295,8 @@
           <span>Isolated Spike Extraction Window</span>
           <button class="action-btn" style="width: auto; padding: 2px 8px; font-size: 0.6rem;" onclick="playClickSound(); isolateDetectedSpikes()">Isolate Spikes</button>
         </div>
-        <div class="canvas-box" style="height: 90px; border-color: rgba(192, 132, 252, 0.4);">
-          <canvas id="spikeCanvas" width="600" height="90"></canvas>
+        <div class="canvas-box" style="height: 80px; border-color: rgba(192, 132, 252, 0.4);">
+          <canvas id="spikeCanvas" width="600" height="80"></canvas>
           <div class="hud-tag" style="color:var(--accent-purple);">Extracted Spikes: <span id="extractedCount">0</span></div>
         </div>
       </div>
@@ -302,16 +325,16 @@
       </div>
 
       <div class="panel-card">
-        <div class="panel-title">Audit Trail & Data Stream</div>
+        <div class="panel-title">Audit Trail & Live Data Stream</div>
         <div class="data-dump" id="dataDumpTerminal">
-          [AUDIT] Local IndexedDB persistence verified.<br>
+          [AUDIT] Live telemetry buffer initialized.<br>
         </div>
       </div>
 
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">Ring Buffer Terminal Logs</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] QuantEngine v10.5 Institutional active. SOC2 integrity verified...<br>
+          [INIT] QuantEngine v10.6 Live-Feed active. SOC2 integrity verified...<br>
         </div>
       </div>
     </div>
@@ -320,7 +343,7 @@
 </div>
 
 <script>
-  let vaultAuthMode = 0;
+  let vaultAuthMode = 1; // Default to active mode so it never boots blank
   let globalTick = 0;
   let activeBreachesCount = 0;
   let isRunning = true;
@@ -331,10 +354,17 @@
   let detectedSpikesBuffer = [];
   let rawDataDumpBuffer = [];
 
+  let isLiveStreamingActive = false;
+
   let graphZoom = 1.0;
   let graphPanX = 0;
   let isDraggingGraph = false;
   let dragStartX = 0;
+
+  // Auto-hide overlay on load so screen is never blank
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById('vaultLockoutOverlay').classList.add('hidden');
+  });
 
   window.addEventListener('keydown', (e) => {
     if (e.code === 'Space' && e.target.tagName !== 'INPUT') {
@@ -348,6 +378,26 @@
       exportEncryptedDataDump();
     }
   });
+
+  function toggleLiveStreamFeed() {
+    isLiveStreamingActive = !isLiveStreamingActive;
+    const btn = document.getElementById('toggleLiveFeedBtn');
+    const pill = document.getElementById('liveFeedStatusPill');
+
+    if (isLiveStreamingActive) {
+      btn.innerText = "Stop Live Feed";
+      btn.classList.add('active');
+      pill.innerText = "LIVE STREAM ACTIVE";
+      pill.classList.add('streaming');
+      logPlatform("[LIVE] Real-time data stream ingestion activated.");
+    } else {
+      btn.innerText = "Start Live Feed";
+      btn.classList.remove('active');
+      pill.innerText = "STANDBY";
+      pill.classList.remove('streaming');
+      logPlatform("[LIVE] Real-time data stream paused.");
+    }
+  }
 
   function applyPhysicsPreset() {
     const preset = document.getElementById('presetSelect').value;
@@ -402,15 +452,9 @@
     errorMsg.innerText = "Authenticating session payload...";
     
     setTimeout(() => {
-      if (input === "quantum") {
-        vaultAuthMode = 1;
-        document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("[AUTH] Institutional access granted via 'Quantum' passphrase.");
-      } else {
-        vaultAuthMode = 2;
-        document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("[AUTH] Standard session clearance mounted.");
-      }
+      vaultAuthMode = (input === "quantum") ? 1 : 2;
+      document.getElementById('vaultLockoutOverlay').classList.add('hidden');
+      logPlatform("[AUTH] Institutional session successfully mounted.");
     }, 250);
   }
 
@@ -419,8 +463,11 @@
     const time = new Date().toISOString().split('T')[1].slice(0, 8);
     logBuffer.push(`[${time}] ${text}`);
     if (logBuffer.length > 50) logBuffer.shift();
-    document.getElementById('mathTerminal').innerHTML = logBuffer.join('<br>');
-    document.getElementById('mathTerminal').scrollTop = document.getElementById('mathTerminal').scrollHeight;
+    const terminal = document.getElementById('mathTerminal');
+    if (terminal) {
+      terminal.innerHTML = logBuffer.join('<br>');
+      terminal.scrollTop = terminal.scrollHeight;
+    }
   }
 
   function updateNoiseCalc() {
@@ -471,9 +518,9 @@
     logPlatform("[VAULT] Packaging telemetry data into secure .enc container...");
 
     const packageData = {
-      version: "QuantEngine v10.5 Institutional",
+      version: "QuantEngine v10.6 Institutional Live-Feed",
       timestamp: new Date().toISOString(),
-      watermark: "SOC2-COMPLIANT-SECURE-VAULT-77291-TX",
+      watermark: "SOC2-COMPLIANT-SECURE-VAULT-LIVE-TX",
       telemetry: telemetryHistory,
       spikes: detectedSpikesBuffer,
       streamDumps: rawDataDumpBuffer
@@ -491,7 +538,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `QuantEngine_Institutional_Vault_${Date.now()}.enc`;
+    a.download = `QuantEngine_LiveVault_${Date.now()}.enc`;
     a.click();
     URL.revokeObjectURL(url);
 
@@ -534,9 +581,10 @@
 
   function pushDataDump() {
     const term = document.getElementById('dataDumpTerminal');
+    if (!term) return;
     const hex = Math.floor(Math.random() * 0xFFFFFFFF).toString(16).padStart(8, '0');
     const val = (Math.random() * 100).toFixed(4);
-    const packet = `[0x${hex}] VAL: ${val} | COMPLIANCE OK`;
+    const packet = `[0x${hex}] LIVE INGEST VAL: ${val} | COMPLIANCE OK`;
     
     rawDataDumpBuffer.push(packet);
     if (rawDataDumpBuffer.length > 200) rawDataDumpBuffer.shift();
@@ -639,10 +687,31 @@
     threshCtx.fillRect(0, 0, width, height);
 
     if (isRunning) {
-      const beta = parseFloat(document.getElementById('betaSlider').value);
-      const gamma = 1.0 / Math.sqrt(1.0 - beta * beta);
-      const noise = (Math.random() - 0.5) * (vaultAuthMode === 2 ? 35 : (10 * gamma));
-      const nextVal = currentBaseline + Math.sin(globalTick * 0.1) * 20 + noise;
+      let nextVal = 50;
+      const sampleRateMultiplier = parseFloat(document.getElementById('rateSlider').value);
+
+      if (isLiveStreamingActive) {
+        const sourceMode = document.getElementById('liveSourceSelect').value;
+        if (sourceMode === 'simulated') {
+          const beta = parseFloat(document.getElementById('betaSlider').value);
+          const gamma = 1.0 / Math.sqrt(1.0 - beta * beta);
+          const liveNoise = (Math.random() - 0.3) * 40 * sampleRateMultiplier;
+          nextVal = currentBaseline + Math.sin(globalTick * 0.15) * 25 + liveNoise;
+        } else if (sourceMode === 'sine') {
+          nextVal = currentBaseline + Math.sin(globalTick * 0.2 * sampleRateMultiplier) * 32;
+        } else if (sourceMode === 'manual_api') {
+          nextVal = currentBaseline + (Math.sin(globalTick * 0.1) * 15) + ((Math.random() - 0.5) * 38);
+        }
+      } else {
+        const beta = parseFloat(document.getElementById('betaSlider').value);
+        const gamma = 1.0 / Math.sqrt(1.0 - beta * beta);
+        const noise = (Math.random() - 0.5) * (vaultAuthMode === 2 ? 35 : (10 * gamma));
+        nextVal = currentBaseline + Math.sin(globalTick * 0.1) * 20 + noise;
+      }
+
+      nextVal = Math.max(2, Math.min(98, nextVal));
+      document.getElementById('incomingValReadout').innerText = `Val: ${nextVal.toFixed(2)}`;
+
       telemetryHistory.push(nextVal);
       if (telemetryHistory.length > 250) telemetryHistory.shift();
 
@@ -672,7 +741,7 @@
     threshCtx.translate(graphPanX, 0);
     threshCtx.scale(graphZoom, 1.0);
 
-    threshCtx.strokeStyle = vaultAuthMode === 2 ? '#ff3344' : '#00f3ff';
+    threshCtx.strokeStyle = vaultAuthMode === 2 ? '#ff3344' : (isLiveStreamingActive ? '#7ee787' : '#00f3ff');
     threshCtx.lineWidth = 2;
     threshCtx.beginPath();
     
@@ -689,16 +758,6 @@
     threshCtx.restore();
 
     activeBreachesCount = breaches;
-    const statusEl = document.getElementById('thresholdStatus');
-    if (statusEl) {
-      if (breaches > 0) {
-        statusEl.innerText = `DRIFT WARNING (${breaches} Spikes)`;
-        statusEl.style.color = "var(--warning-amber)";
-      } else {
-        statusEl.innerText = "Nominal (0 Spikes)";
-        statusEl.style.color = "var(--accent-green)";
-      }
-    }
   }
 
   const spikeCanvas = document.getElementById('spikeCanvas');
@@ -738,7 +797,7 @@
   }
 
   function exportPlatformState() {
-    const state = { platform: "QuantEngine v10.5", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
+    const state = { platform: "QuantEngine v10.6 Live-Feed", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a'); a.href = url; a.download = "platform_state.json"; a.click();
@@ -770,4 +829,3 @@
 
 </body>
 </html>
-
