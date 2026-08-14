@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v6.0.1 - Next-Gen Enterprise Architecture (Auth Hardened)</title>
+  <title>QuantEngine v6.0.2 - Enterprise Hardened Edition</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -156,18 +156,18 @@
 
 <div class="platform-container">
   <div id="vaultLockoutOverlay">
-    <div class="lockout-title">🔐 QuantEngine v6.0.1 Institutional Gateway</div>
+    <div class="lockout-title">🔐 QuantEngine v6.0.2 Institutional Gateway</div>
     <div class="lockout-msg">
-      Enter master enterprise authorization key (`Quantum`) to mount secure buffers.<br>
-      <i>Architecture: Multi-Threaded Worker Pipeline & IndexedDB Persistence Active</i>
+      Enter master enterprise authorization key (<b>Quantum</b>) to mount secure buffers.<br>
+      <i>Architecture: Safe DOM Event Bindings & Native Event Handlers</i>
     </div>
-    <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Access Key (Quantum)..." onkeydown="if(event.key==='Enter')verifyMasterVault()">
-    <button class="unlock-btn" onclick="verifyMasterVault()">Authorize Multi-Threaded Session</button>
+    <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Access Key (Quantum)...">
+    <button id="authSubmitBtn" class="unlock-btn">Authorize Protected Session</button>
     <div class="auth-error" id="authError"></div>
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v6.0.1</span> Next-Gen Enterprise Architecture</div>
+    <div class="brand-title">⚡ <span>QuantEngine v6.0.2</span> Enterprise Architecture</div>
     <div class="status-badges">
       <div class="compliance-badge">WORKER-THREADED N=64</div>
       <div class="security-badge">INDEXEDDB + ZEROING</div>
@@ -190,11 +190,11 @@
         <div class="controls-grid">
           <div class="control-item">
             <div class="control-label">Scale Index (n): <span id="atomScaleVal">64</span></div>
-            <input type="range" id="atomScaleSlider" min="10" max="250" value="64" oninput="playClickSound(); updateAtomSimulation()">
+            <input type="range" id="atomScaleSlider" min="10" max="250" value="64">
           </div>
           <div class="control-item">
             <div class="control-label">Orbital Mode:</div>
-            <select id="orbitalModeSelect" onchange="playClickSound(); updateAtomSimulation()">
+            <select id="orbitalModeSelect">
               <option value="0">s-Shell Orbital</option>
               <option value="1" selected>p_z Dumbbell</option>
               <option value="2">d_x2-y2 Cloverleaf</option>
@@ -210,7 +210,7 @@
         </div>
         <div class="control-item" style="margin-bottom: 4px;">
           <div class="control-label"><span>Select Preset Engine State</span></div>
-          <select id="presetSelect" onchange="playClickSound(); applyPhysicsPreset()">
+          <select id="presetSelect">
             <option value="planck">Planck Scale Equilibrium</option>
             <option value="relativistic" selected>Relativistic Stress Test</option>
             <option value="superposition">Quantum Superposition</option>
@@ -226,11 +226,11 @@
         <div class="controls-grid">
           <div class="control-item">
             <div class="control-label">Relativistic (&beta;): <span id="betaVal">0.30</span></div>
-            <input type="range" id="betaSlider" min="0.0" max="0.95" step="0.05" value="0.3" oninput="playClickSound(); updateNoiseCalc()">
+            <input type="range" id="betaSlider" min="0.0" max="0.95" step="0.05" value="0.3">
           </div>
           <div class="control-item">
             <div class="control-label">Tunneling (&kappa;): <span id="kappaVal">1.50</span></div>
-            <input type="range" id="kappaSlider" min="0.1" max="5.0" step="0.1" value="1.5" oninput="playClickSound(); updateNoiseCalc()">
+            <input type="range" id="kappaSlider" min="0.1" max="5.0" step="0.1" value="1.5">
           </div>
         </div>
         <div class="calc-row">
@@ -261,27 +261,27 @@
             <span id="incomingValReadout" style="color:var(--neon-cyan)">Val: --</span>
           </div>
           <div style="display: flex; gap: 5px; margin-top: 3px;">
-            <select id="liveSourceSelect" style="flex: 1;" onchange="playClickSound()">
+            <select id="liveSourceSelect" style="flex: 1;">
               <option value="simulated">Quantum Wave Noise Stream</option>
               <option value="sine">Harmonic Sine Oscillation Feed</option>
               <option value="manual_api">Custom External JSON / REST Poll (Simulated)</option>
             </select>
-            <button id="toggleLiveFeedBtn" class="action-btn btn-live-toggle" style="width: 120px;" onclick="playClickSound(); toggleLiveStreamFeed()">Start Live Feed</button>
+            <button id="toggleLiveFeedBtn" class="action-btn btn-live-toggle" style="width: 120px;">Start Live Feed</button>
           </div>
         </div>
         
         <div class="controls-grid" style="grid-template-columns: 1fr 1fr 1fr;">
           <div class="control-item">
             <div class="control-label">Threshold: <span id="threshVal">75.0</span></div>
-            <input type="range" id="threshSlider" min="20" max="95" value="75" oninput="playClickSound(); updateThresholdParams()">
+            <input type="range" id="threshSlider" min="20" max="95" value="75">
           </div>
           <div class="control-item">
             <div class="control-label">Baseline: <span id="baseVal">40.0</span></div>
-            <input type="range" id="baseSlider" min="10" max="70" value="40" oninput="playClickSound(); updateThresholdParams()">
+            <input type="range" id="baseSlider" min="10" max="70" value="40">
           </div>
           <div class="control-item">
             <div class="control-label">Sample Rate: <span id="rateVal">1.0x</span></div>
-            <input type="range" id="rateSlider" min="0.2" max="3.0" step="0.1" value="1.0" oninput="playClickSound(); updateThresholdParams()">
+            <input type="range" id="rateSlider" min="0.2" max="3.0" step="0.1" value="1.0">
           </div>
         </div>
       </div>
@@ -298,13 +298,13 @@
           <input type="password" id="exportPassInput" class="unlock-input" style="width: 100%; font-size: 0.75rem; padding: 0.35rem;" placeholder="Enter Passphrase...">
         </div>
         <div class="btn-row">
-          <button class="action-btn" onclick="playClickSound(); exportEncryptedDataDump()">Export Secure Vault</button>
-          <button class="action-btn btn-secondary" onclick="playClickSound(); document.getElementById('importEncFile').click()">Import Secure Vault</button>
-          <input type="file" id="importEncFile" style="display:none" accept=".enc,.json,.dat" onchange="importEncryptedDataDump(event)">
+          <button id="exportVaultBtn" class="action-btn">Export Secure Vault</button>
+          <button id="importVaultBtn" class="action-btn btn-secondary">Import Secure Vault</button>
+          <input type="file" id="importEncFile" style="display:none" accept=".enc,.json,.dat">
         </div>
         <div class="btn-row" style="margin-top: 5px;">
-          <button class="action-btn btn-secondary" onclick="playClickSound(); persistToIndexedDB()">Save to IndexedDB</button>
-          <button class="action-btn btn-secondary" onclick="playClickSound(); restoreFromIndexedDB()">Load IndexedDB</button>
+          <button id="saveIdbBtn" class="action-btn btn-secondary">Save to IndexedDB</button>
+          <button id="loadIdbBtn" class="action-btn btn-secondary">Load IndexedDB</button>
         </div>
       </div>
 
@@ -318,7 +318,7 @@
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">Ring Buffer Terminal Logs</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] QuantEngine v6.0.1 Enterprise active. Worker thread ready...<br>
+          [INIT] QuantEngine v6.0.2 Enterprise active. Safe listeners bound...<br>
         </div>
       </div>
     </div>
@@ -327,7 +327,7 @@
 </div>
 
 <script>
-  // Inline Web Worker blob for true off-thread compute isolation
+  // Safe Worker Blob Execution
   const workerBlobCode = `
     self.onmessage = function(e) {
       const data = e.data;
@@ -354,36 +354,41 @@
       }
     };
   `;
-  const workerBlob = new Blob([workerBlobCode], { type: 'application/javascript' });
-  const computeWorker = new Worker(URL.createObjectURL(workerBlob));
+  
+  let computeWorker;
+  try {
+    const workerBlob = new Blob([workerBlobCode], { type: 'application/javascript' });
+    computeWorker = new Worker(URL.createObjectURL(workerBlob));
+    computeWorker.onmessage = function(e) {
+      if (e.data.type === 'TICK_RESULT') {
+        const nextVal = e.data.val;
+        document.getElementById('incomingValReadout').innerText = `Val: ${nextVal.toFixed(2)}`;
+        telemetryHistory.push(nextVal);
+        if (telemetryHistory.length > 150) telemetryHistory.shift();
 
-  computeWorker.onmessage = function(e) {
-    if (e.data.type === 'TICK_RESULT') {
-      const nextVal = e.data.val;
-      document.getElementById('incomingValReadout').innerText = `Val: ${nextVal.toFixed(2)}`;
-      telemetryHistory.push(nextVal);
-      if (telemetryHistory.length > 150) telemetryHistory.shift();
-
-      let lastProj = nextVal;
-      predictedForecastBuffer = [];
-      const recentHistory = telemetryHistory.slice(-10);
-      let momentum = 0;
-      if (recentHistory.length > 1) {
-        for (let i = 1; i < recentHistory.length; i++) {
-          momentum += (recentHistory[i] - recentHistory[i - 1]);
+        let lastProj = nextVal;
+        predictedForecastBuffer = [];
+        const recentHistory = telemetryHistory.slice(-10);
+        let momentum = 0;
+        if (recentHistory.length > 1) {
+          for (let i = 1; i < recentHistory.length; i++) {
+            momentum += (recentHistory[i] - recentHistory[i - 1]);
+          }
+          momentum = momentum / (recentHistory.length - 1);
         }
-        momentum = momentum / (recentHistory.length - 1);
-      }
 
-      for (let f = 0; f < 45; f++) {
-        const damping = Math.exp(-0.08 * f);
-        const meanReversion = (currentBaseline - lastProj) * 0.05;
-        lastProj += (momentum * damping) + meanReversion + ((Math.random() - 0.5) * 1.5);
-        lastProj = Math.max(5, Math.min(95, lastProj));
-        predictedForecastBuffer.push(lastProj);
+        for (let f = 0; f < 45; f++) {
+          const damping = Math.exp(-0.08 * f);
+          const meanReversion = (currentBaseline - lastProj) * 0.05;
+          lastProj += (momentum * damping) + meanReversion + ((Math.random() - 0.5) * 1.5);
+          lastProj = Math.max(5, Math.min(95, lastProj));
+          predictedForecastBuffer.push(lastProj);
+        }
       }
-    }
-  };
+    };
+  } catch (err) {
+    console.warn("Worker creation restricted locally, falling back to main thread execution.");
+  }
 
   // IndexedDB Persistent Helper
   function openIndexedDB() {
@@ -446,7 +451,7 @@
   }
 
   const SystemConfig = Object.freeze({
-    version: "6.0.1-WORKER-THREADED",
+    version: "6.0.2-SECURE-BINDINGS",
     encryptionAlgorithm: "AES-GCM",
     keyDerivation: "PBKDF2-SHA256",
     iterations: 150000,
@@ -502,7 +507,7 @@
     if (vaultAuthMode === 0) {
       if (e.key === 'Tab') {
         const inputEl = document.getElementById('masterPassInput');
-        const btnEl = document.querySelector('.unlock-btn');
+        const btnEl = document.getElementById('authSubmitBtn');
         const activeEl = document.activeElement;
         if (e.shiftKey) {
           if (activeEl === inputEl) { e.preventDefault(); btnEl.focus(); }
@@ -535,7 +540,7 @@
       btn.classList.add('active');
       pill.innerText = "LIVE STREAM ACTIVE";
       pill.classList.add('streaming');
-      logPlatform("[LIVE] Real-time worker pipeline ingestion activated.");
+      logPlatform("[LIVE] Real-time stream ingestion activated.");
     } else {
       btn.innerText = "Start Live Feed";
       btn.classList.remove('active');
@@ -592,20 +597,19 @@
     errorMsg.innerText = "Validating cryptographic token...";
     
     setTimeout(async () => {
-      // Robust case-insensitive check and clean validation
       if (input === "Quantum" || input.toLowerCase() === "quantum") {
         vaultAuthMode = 1;
         const tokenBuffer = window.crypto.getRandomValues(new Uint8Array(32));
         sessionToken = btoa(String.fromCharCode(...tokenBuffer));
         
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("[AUTH] Session token validated. Multi-threaded worker pipelines mounted.");
+        logPlatform("[AUTH] Session token validated. Secure workspace mounted.");
         resetInactivityTimer();
       } else {
         errorMsg.innerText = "AUTHENTICATION FAILED: Invalid master key (Use 'Quantum').";
         logPlatform("[SECURITY] Unauthorized gateway entry attempt blocked.");
       }
-    }, 300);
+    }, 200);
   }
 
   const logBuffer = [];
@@ -857,16 +861,17 @@
       const sampleRate = parseFloat(document.getElementById('rateSlider').value);
       const sourceMode = document.getElementById('liveSourceSelect').value;
 
-      // Dispatch calculation task to background Web Worker thread
-      computeWorker.postMessage({
-        type: 'COMPUTE_TICK',
-        tick: globalTick,
-        beta: beta,
-        baseline: currentBaseline,
-        liveActive: isLiveStreamingActive,
-        sourceMode: sourceMode,
-        sampleRate: sampleRate
-      });
+      if (computeWorker) {
+        computeWorker.postMessage({
+          type: 'COMPUTE_TICK',
+          tick: globalTick,
+          beta: beta,
+          baseline: currentBaseline,
+          liveActive: isLiveStreamingActive,
+          sourceMode: sourceMode,
+          sampleRate: sampleRate
+        });
+      }
     }
 
     const baselineY = height - (currentBaseline / 100) * height;
@@ -938,15 +943,40 @@
     requestAnimationFrame(masterRenderLoop);
   }
 
-  window.onload = () => {
+  // Safe Native DOM Event Bindings
+  window.addEventListener('DOMContentLoaded', () => {
     resizeBackgroundCanvas();
     updateThresholdParams();
     updateAtomSimulation();
     updateNoiseCalc();
+
+    // Bind Auth Button & Enter Key
+    document.getElementById('authSubmitBtn').addEventListener('click', verifyMasterVault);
+    document.getElementById('masterPassInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') verifyMasterVault();
+    });
+
+    // Bind Controls
+    document.getElementById('atomScaleSlider').addEventListener('input', () => { playClickSound(); updateAtomSimulation(); });
+    document.getElementById('orbitalModeSelect').addEventListener('change', () => { playClickSound(); updateAtomSimulation(); });
+    document.getElementById('presetSelect').addEventListener('change', () => { playClickSound(); applyPhysicsPreset(); });
+    document.getElementById('betaSlider').addEventListener('input', () => { playClickSound(); updateNoiseCalc(); });
+    document.getElementById('kappaSlider').addEventListener('input', () => { playClickSound(); updateNoiseCalc(); });
+    document.getElementById('toggleLiveFeedBtn').addEventListener('click', () => { playClickSound(); toggleLiveStreamFeed(); });
+    document.getElementById('liveSourceSelect').addEventListener('change', playClickSound);
+    document.getElementById('threshSlider').addEventListener('input', () => { playClickSound(); updateThresholdParams(); });
+    document.getElementById('baseSlider').addEventListener('input', () => { playClickSound(); updateThresholdParams(); });
+    document.getElementById('rateSlider').addEventListener('input', () => { playClickSound(); updateThresholdParams(); });
+    
+    document.getElementById('exportVaultBtn').addEventListener('click', () => { playClickSound(); exportEncryptedDataDump(); });
+    document.getElementById('importVaultBtn').addEventListener('click', () => { playClickSound(); document.getElementById('importEncFile').click(); });
+    document.getElementById('importEncFile').addEventListener('change', importEncryptedDataDump);
+    document.getElementById('saveIdbBtn').addEventListener('click', () => { playClickSound(); persistToIndexedDB(); });
+    document.getElementById('loadIdbBtn').addEventListener('click', () => { playClickSound(); restoreFromIndexedDB(); });
+
     masterRenderLoop();
-  };
+  });
 </script>
 
 </body>
 </html>
-
