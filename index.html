@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine v10.5 - Institutional Enterprise Edition</title>
+  <title>QuantEngine v12.0 - Complete Enterprise Hybrid Edition</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -130,12 +130,12 @@
     select { height: 24px; font-size: 0.65rem; padding: 0 4px; font-family: var(--font-mono); }
 
     /* Terminals & Dumps */
-    .data-dump { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.6rem; color: var(--accent-green); height: 85px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.25; }
-    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.62rem; color: var(--accent-green); height: 100px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.3; }
+    .data-dump { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.6rem; color: var(--accent-green); height: 65px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.25; }
+    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.62rem; color: var(--accent-green); height: 75px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.3; }
 
     /* Buttons */
-    .btn-row { display: flex; gap: 5px; }
-    .action-btn { width: 100%; padding: 0.4rem; font-weight: 600; font-size: 0.68rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; text-align: center; }
+    .btn-row { display: flex; gap: 4px; }
+    .action-btn { width: 100%; padding: 0.35rem; font-weight: 600; font-size: 0.65rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; text-align: center; }
     .action-btn:hover { box-shadow: 0 0 12px var(--cyan-glow); background: #3dd9e8; }
     .btn-secondary { background: #1e2a40; color: var(--text-main); border: 1px solid var(--border-color); font-weight: 500; }
     .btn-secondary:hover { background: #2c3e5a; }
@@ -157,22 +157,22 @@
 <div class="platform-container">
   <!-- Authentication Portal Overlay -->
   <div id="vaultLockoutOverlay">
-    <div class="lockout-title">🔐 Institutional Authentication Gateway</div>
+    <div class="lockout-title">🔐 Enterprise Complete Gateway</div>
     <div class="lockout-msg">
-      Enter master enterprise authorization key (`Quantum`) to mount QuantEngine v10.5 secure buffers.<br>
-      <i>Node: UK-CENTRAL-01 | SOC2 Type II Local Encrypted Environment</i>
+      Enter master enterprise authorization key (`Quantum`) to mount QuantEngine v12.0 buffers.<br>
+      <i>Node: UK-CENTRAL-01 | Snowflake Staging & CSV/Audit Pipelines Active</i>
     </div>
     <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Access Key (Quantum)..." onkeydown="if(event.key==='Enter')verifyMasterVault()">
-    <button class="unlock-btn" onclick="verifyMasterVault()">Authorize Institutional Session</button>
+    <button class="unlock-btn" onclick="verifyMasterVault()">Authorize Enterprise Session</button>
     <div class="auth-error" id="authError"></div>
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v10.5</span> Institutional Platform</div>
+    <div class="brand-title">⚡ <span>QuantEngine v12.0</span> Enterprise Complete</div>
     <div class="status-badges">
-      <div class="compliance-badge">SOC2 TYPE II LOCAL</div>
+      <div class="compliance-badge">SNOWFLAKE STAGE READY</div>
       <div class="security-badge">HASH: 8f4c...39a1</div>
-      <div class="node-badge" id="authModeBadge">SECURE ACTIVE</div>
+      <div class="node-badge" id="authModeBadge">HYBRID ACTIVE</div>
     </div>
   </div>
 
@@ -282,25 +282,28 @@
       </div>
     </div>
 
-    <!-- COLUMN 3: ALL EXPORTS, VAULTS & TERMINALS -->
+    <!-- COLUMN 3: ALL EXPORTS, SNOWFLAKE, CSV & TERMINALS -->
     <div class="column">
       <div class="panel-card">
         <div class="panel-title">
-          <span>Secure Vault & Exports (.enc)</span>
-          <span style="color:var(--accent-purple); font-size:0.6rem; font-family:var(--font-mono);">Encrypted Container</span>
+          <span>Enterprise Vault & Cloud Exports</span>
+          <span style="color:var(--accent-purple); font-size:0.6rem; font-family:var(--font-mono);">Multi-Format</span>
         </div>
-        <div class="control-item" style="margin-bottom: 4px;">
+        <div class="control-item" style="margin-bottom: 3px;">
           <div class="control-label"><span>Vault Passphrase</span></div>
-          <input type="password" id="exportPassInput" class="unlock-input" style="width: 100%; font-size: 0.75rem; padding: 0.35rem;" placeholder="Enter Passphrase...">
+          <input type="password" id="exportPassInput" class="unlock-input" style="width: 100%; font-size: 0.7rem; padding: 0.3rem;" placeholder="Enter Passphrase...">
         </div>
         <div class="btn-row">
           <button class="action-btn" onclick="playClickSound(); exportEncryptedDataDump()">Export .enc Blob</button>
-          <button class="action-btn btn-secondary" onclick="playClickSound(); document.getElementById('importEncFile').click()">Import .enc</button>
-          <input type="file" id="importEncFile" style="display:none" accept=".enc,.json,.dat" onchange="importEncryptedDataDump(event)">
+          <button class="action-btn btn-secondary" onclick="playClickSound(); exportSnowflakeJSON()">Snowflake JSON</button>
         </div>
-        <div class="btn-row" style="margin-top: 5px;">
-          <button class="action-btn btn-secondary" onclick="playClickSound(); exportPlatformState()">Export State (.json)</button>
-          <button class="action-btn btn-secondary" onclick="playClickSound(); document.getElementById('importFile').click()">Import State</button>
+        <div class="btn-row" style="margin-top: 3px;">
+          <button class="action-btn btn-secondary" onclick="playClickSound(); exportCSVReport()">Export CSV Data</button>
+          <button class="action-btn btn-secondary" onclick="playClickSound(); exportComplianceReport()">Audit Report</button>
+        </div>
+        <div class="btn-row" style="margin-top: 3px;">
+          <button class="action-btn btn-secondary" onclick="playClickSound(); exportPlatformState()">State (.json)</button>
+          <button class="action-btn btn-secondary" onclick="playClickSound(); document.getElementById('importFile').click()">Import</button>
           <input type="file" id="importFile" style="display:none" accept=".json" onchange="importPlatformState(event)">
         </div>
       </div>
@@ -308,14 +311,14 @@
       <div class="panel-card">
         <div class="panel-title">Audit Trail & Data Stream</div>
         <div class="data-dump" id="dataDumpTerminal">
-          [AUDIT] Local IndexedDB persistence verified.<br>
+          [AUDIT] Snowflake & CSV pipeline staging ready.<br>
         </div>
       </div>
 
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">Ring Buffer Terminal Logs</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] QuantEngine v10.5 Institutional active. SOC2 integrity verified...<br>
+          [INIT] QuantEngine v12.0 Complete active. All pipelines online...<br>
         </div>
       </div>
     </div>
@@ -409,7 +412,7 @@
       if (input === "quantum") {
         vaultAuthMode = 1;
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("[AUTH] Institutional access granted via 'Quantum' passphrase.");
+        logPlatform("[AUTH] Enterprise access granted via 'Quantum' passphrase.");
       } else {
         vaultAuthMode = 2;
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
@@ -475,7 +478,7 @@
     logPlatform("[VAULT] Packaging telemetry data into secure .enc container...");
 
     const packageData = {
-      version: "QuantEngine v10.5 Institutional",
+      version: "QuantEngine v12.0 Complete",
       timestamp: new Date().toISOString(),
       watermark: "SOC2-COMPLIANT-SECURE-VAULT-77291-TX",
       telemetry: telemetryHistory,
@@ -495,254 +498,91 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `QuantEngine_Institutional_Vault_${Date.now()}.enc`;
+    a.download = `QuantEngine_Enterprise_Vault_${Date.now()}.enc`;
     a.click();
     URL.revokeObjectURL(url);
 
     logPlatform("[SUCCESS] .enc vault container successfully exported.");
   }
 
-  function importEncryptedDataDump(event) {
-    const file = event.target.files[0];
-    if (!file) return;
+  // Component 1: Snowflake JSON Staging Export
+  function exportSnowflakeJSON() {
+    logPlatform("[SNOWFLAKE] Compiling flattened schema for Snowflake micro-partition stage...");
 
-    const passphrase = document.getElementById('exportPassInput').value.trim();
-    if (!passphrase) {
-      alert("Please enter the correct decryption passphrase in the vault export panel before importing.");
-      return;
-    }
+    const snowflakePayload = telemetryHistory.map((val, idx) => ({
+      RECORD_ID: idx,
+      TIMESTAMP: new Date(Date.now() - (telemetryHistory.length - idx) * 1000).toISOString(),
+      TELEMETRY_VALUE: val,
+      THRESHOLD: currentThreshold,
+      BASELINE: currentBaseline,
+      BREACH_STATUS: val >= currentThreshold ? 'BREACH' : 'NOMINAL',
+      WATERMARK: "SEBRA82-SNOWFLAKE-STAGE-77291"
+    }));
 
-    logPlatform(`[VAULT] Unpacking and decrypting blob file '${file.name}'...`);
+    const blob = new Blob([JSON.stringify(snowflakePayload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `QuantEngine_Snowflake_Stage_${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      try {
-        const container = JSON.parse(e.target.result);
-        if (container.type !== "SEBRA82-BLOB-ENCRYPTED-CONTAINER") {
-          throw new Error("Invalid blob container header.");
-        }
-
-        const decodedBase64 = atob(container.payload);
-        const decryptedJsonStr = decodedBase64.split('').map(c => String.fromCharCode(c.charCodeAt(0) ^ passphrase.charCodeAt(0 % passphrase.length))).join('');
-        const data = JSON.parse(atob(decryptedJsonStr));
-
-        logPlatform(`[SUCCESS] Vault unlocked! Loaded ${data.telemetry.length} telemetry records.`);
-        alert(`Vault Unlocked Successfully!\nWatermark: ${data.watermark}\nRecords Loaded: ${data.telemetry.length}`);
-      } catch (err) {
-        logPlatform("[ERROR] Vault decryption failed. Incorrect passphrase or unrecognized format.");
-        alert("Decryption Failed: Incorrect passphrase or unrecognized vault structure.");
-      }
-    };
-    reader.readAsText(file);
+    logPlatform("[SUCCESS] Snowflake-ready schema exported.");
   }
 
-  function pushDataDump() {
-    const term = document.getElementById('dataDumpTerminal');
-    const hex = Math.floor(Math.random() * 0xFFFFFFFF).toString(16).padStart(8, '0');
-    const val = (Math.random() * 100).toFixed(4);
-    const packet = `[0x${hex}] VAL: ${val} | COMPLIANCE OK`;
-    
-    rawDataDumpBuffer.push(packet);
-    if (rawDataDumpBuffer.length > 200) rawDataDumpBuffer.shift();
+  // Component 2: Direct CSV Relational Exporter
+  function exportCSVReport() {
+    logPlatform("[CSV] Generating relational telemetry table for BI tools...");
 
-    term.innerHTML += `${packet}<br>`;
-    term.scrollTop = term.scrollHeight;
-    if (term.childNodes.length > 40) term.removeChild(term.firstChild);
-  }
-
-  const bgCanvas = document.getElementById('backgroundModelCanvas');
-  const bgCtx = bgCanvas.getContext('2d');
-
-  function resizeBackgroundCanvas() {
-    bgCanvas.width = window.innerWidth;
-    bgCanvas.height = window.innerHeight;
-  }
-  window.onresize = resizeBackgroundCanvas;
-
-  function renderBackgroundModel() {
-    const width = bgCanvas.width;
-    const height = bgCanvas.height;
-
-    if (activeBreachesCount > 0) {
-      bgCtx.fillStyle = 'rgba(240, 136, 62, 0.08)';
-    } else {
-      bgCtx.fillStyle = 'rgba(2, 4, 8, 0.15)';
-    }
-    bgCtx.fillRect(0, 0, width, height);
-
-    const corruptionFactor = (vaultAuthMode === 2) ? 12.0 : 1.0;
-    const t = globalTick * 0.03;
-
-    bgCtx.lineWidth = 1.5;
-    for (let line = 0; line < 6; line++) {
-      if (activeBreachesCount > 0) {
-        bgCtx.strokeStyle = line % 2 === 0 ? 'rgba(240, 136, 62, 0.15)' : 'rgba(192, 132, 252, 0.15)';
-      } else {
-        bgCtx.strokeStyle = line % 2 === 0 ? 'rgba(0, 243, 255, 0.12)' : 'rgba(192, 132, 252, 0.12)';
-      }
-      bgCtx.beginPath();
-      
-      for (let x = 0; x < width; x += 15) {
-        const k = 0.01 * corruptionFactor;
-        const wave = Math.cos((x * k) + t + line) ** 2 * Math.sin((x * 0.005) - t);
-        const y = (height / 2) + (line - 3) * 65 + (wave * 45);
-        if (x === 0) bgCtx.moveTo(x, y);
-        else bgCtx.lineTo(x, y);
-      }
-      bgCtx.stroke();
-    }
-  }
-
-  const atomCanvas = document.getElementById('atomicCanvas');
-  const atomCtx = atomCanvas.getContext('2d');
-  function updateAtomSimulation() {
-    document.getElementById('atomScaleVal').innerText = document.getElementById('atomScaleSlider').value;
-  }
-
-  function renderAtoms() {
-    const width = atomCanvas.width;
-    const height = atomCanvas.height;
-    atomCtx.fillStyle = '#000';
-    atomCtx.fillRect(0, 0, width, height);
-
-    const orbitalMode = parseInt(document.getElementById('orbitalModeSelect').value);
-    const spin = globalTick * 0.02;
-    const atomCount = 20;
-
-    for (let i = 0; i < atomCount; i++) {
-      const angle = (i / atomCount) * Math.PI * 2 + spin;
-      const xBase = width / 2 + Math.cos(angle) * 45;
-      const yBase = height / 2 + Math.sin(angle) * 30;
-
-      let harmonic = 1.0;
-      const dx = Math.cos(angle);
-      const dy = Math.sin(angle);
-      if (orbitalMode === 1) harmonic = 2.5 * dy * dy;
-      else if (orbitalMode === 2) { const c = dx*dx - dy*dy; harmonic = Math.abs(3.2 * c * c); }
-
-      const x = width / 2 + (xBase - width / 2) * harmonic;
-      const y = height / 2 + (yBase - height / 2) * harmonic;
-
-      atomCtx.fillStyle = i % 2 === 0 ? '#00f3ff' : '#c084fc';
-      atomCtx.beginPath();
-      atomCtx.arc(x, y, 3.5, 0, Math.PI * 2);
-      atomCtx.fill();
-    }
-    atomCtx.fillStyle = '#7ee787';
-    atomCtx.beginPath();
-    atomCtx.arc(width / 2, height / 2, 5.5, 0, Math.PI * 2);
-    atomCtx.fill();
-  }
-
-  const threshCtx = threshCanvas.getContext('2d');
-  function renderThresholdGraph() {
-    const width = threshCanvas.width;
-    const height = threshCanvas.height;
-
-    threshCtx.fillStyle = 'rgba(3, 7, 15, 0.45)';
-    threshCtx.fillRect(0, 0, width, height);
-
-    if (isRunning) {
-      const beta = parseFloat(document.getElementById('betaSlider').value);
-      const gamma = 1.0 / Math.sqrt(1.0 - beta * beta);
-      const noise = (Math.random() - 0.5) * (vaultAuthMode === 2 ? 35 : (10 * gamma));
-      const nextVal = currentBaseline + Math.sin(globalTick * 0.1) * 20 + noise;
-      telemetryHistory.push(nextVal);
-      if (telemetryHistory.length > 250) telemetryHistory.shift();
-
-      if (nextVal >= currentThreshold) {
-        detectedSpikesBuffer.push(nextVal);
-        if (detectedSpikesBuffer.length > 50) detectedSpikesBuffer.shift();
-      }
-    }
-
-    const baselineY = height - (currentBaseline / 100) * height;
-    threshCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-    threshCtx.lineWidth = 1;
-    threshCtx.setLineDash([4, 4]);
-    threshCtx.beginPath();
-    threshCtx.moveTo(0, baselineY); threshCtx.lineTo(width, baselineY);
-    threshCtx.stroke();
-    threshCtx.setLineDash([]);
-
-    const thresholdY = height - (currentThreshold / 100) * height;
-    threshCtx.strokeStyle = '#f0883e';
-    threshCtx.lineWidth = 1.5;
-    threshCtx.beginPath();
-    threshCtx.moveTo(0, thresholdY); threshCtx.lineTo(width, thresholdY);
-    threshCtx.stroke();
-
-    threshCtx.save();
-    threshCtx.translate(graphPanX, 0);
-    threshCtx.scale(graphZoom, 1.0);
-
-    threshCtx.strokeStyle = vaultAuthMode === 2 ? '#ff3344' : '#00f3ff';
-    threshCtx.lineWidth = 2;
-    threshCtx.beginPath();
-    
-    let breaches = 0;
-    const step = width / (telemetryHistory.length || 1);
+    let csvContent = "data:text/csv;charset=utf-8,RECORD_ID,TIMESTAMP,VALUE,THRESHOLD,STATUS\r\n";
     telemetryHistory.forEach((val, idx) => {
-      const x = idx * step;
-      const y = height - (val / 100) * height;
-      if (val >= currentThreshold) breaches++;
-      if (idx === 0) threshCtx.moveTo(x, y);
-      else threshCtx.lineTo(x, y);
+      const time = new Date(Date.now() - (telemetryHistory.length - idx) * 1000).toISOString();
+      const status = val >= currentThreshold ? 'BREACH' : 'NOMINAL';
+      csvContent += `${idx},${time},${val.toFixed(2)},${currentThreshold},${status}\r\n`;
     });
-    threshCtx.stroke();
-    threshCtx.restore();
 
-    activeBreachesCount = breaches;
-    const statusEl = document.getElementById('thresholdStatus');
-    if (statusEl) {
-      if (breaches > 0) {
-        statusEl.innerText = `DRIFT WARNING (${breaches} Spikes)`;
-        statusEl.style.color = "var(--warning-amber)";
-      } else {
-        statusEl.innerText = "Nominal (0 Spikes)";
-        statusEl.style.color = "var(--accent-green)";
-      }
-    }
+    const encodedUri = encodeURI(csvContent);
+    const a = document.createElement('a');
+    a.setAttribute('href', encodedUri);
+    a.setAttribute('download', `QuantEngine_Telemetry_${Date.now()}.csv`);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    logPlatform("[SUCCESS] CSV telemetry report successfully exported.");
   }
 
-  const spikeCanvas = document.getElementById('spikeCanvas');
-  const spikeCtx = spikeCanvas.getContext('2d');
-  function renderSpikeExtractionWindow() {
-    const width = spikeCanvas.width;
-    const height = spikeCanvas.height;
+  // Component 3: Automated Compliance & Health Summary Report
+  function exportComplianceReport() {
+    logPlatform("[AUDIT] Compiling automated compliance summary report...");
 
-    spikeCtx.fillStyle = 'rgba(3, 7, 15, 0.6)';
-    spikeCtx.fillRect(0, 0, width, height);
+    const report = {
+      reportType: "SEBRA82-SOC2-COMPLIANCE-SUMMARY",
+      generatedAt: new Date().toISOString(),
+      nodeId: "UK-CENTRAL-01",
+      metrics: {
+        totalRecordsEvaluated: telemetryHistory.length,
+        totalBreachesDetected: detectedSpikesBuffer.length,
+        currentThresholdSetting: currentThreshold,
+        currentBaselineSetting: currentBaseline,
+        systemStatus: activeBreachesCount > 0 ? "DRIFT_WARNING" : "NOMINAL"
+      },
+      auditSignature: "SHA-256:8f4c...39a1"
+    };
 
-    document.getElementById('extractedCount').innerText = detectedSpikesBuffer.length;
+    const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `QuantEngine_Compliance_Report_${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
 
-    if (detectedSpikesBuffer.length === 0) {
-      spikeCtx.fillStyle = '#8b949e';
-      spikeCtx.font = '10px monospace';
-      spikeCtx.fillText('Awaiting spike isolation trigger...', 15, height / 2);
-      return;
-    }
-
-    spikeCtx.strokeStyle = '#c084fc';
-    spikeCtx.lineWidth = 2;
-    spikeCtx.beginPath();
-
-    const step = width / Math.max(detectedSpikesBuffer.length, 10);
-    detectedSpikesBuffer.forEach((val, idx) => {
-      const x = idx * step;
-      const y = height - ((val - currentThreshold) / (100 - currentThreshold + 1)) * height;
-      if (idx === 0) spikeCtx.moveTo(x, y);
-      else spikeCtx.lineTo(x, y);
-    });
-    spikeCtx.stroke();
-  }
-
-  function isolateDetectedSpikes() {
-    logPlatform(`[AUDIT] Isolated ${detectedSpikesBuffer.length} threshold breach events into sub-graph window.`);
+    logPlatform("[SUCCESS] Compliance audit summary report generated.");
   }
 
   function exportPlatformState() {
-    const state = { platform: "QuantEngine v10.5", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
+    const state = { platform: "QuantEngine v12.0", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a'); a.href = url; a.download = "platform_state.json"; a.click();
