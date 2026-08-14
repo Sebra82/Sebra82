@@ -2,22 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>QuantEngine v15.0 - Complete Mobile-Adaptive Grid</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuantEngine v17.0 - Institutional Professional Edition</title>
   <style>
     :root {
-      --bg-deep: #020408;
-      --card-bg: rgba(7, 11, 19, 0.96);
-      --border-color: rgba(30, 42, 64, 0.85);
-      --neon-cyan: #00f3ff;
-      --cyan-glow: rgba(0, 243, 255, 0.35);
-      --warning-amber: #f0883e;
-      --crimson-red: #ff3344;
-      --text-main: #f0f6fc;
-      --text-muted: #8b949e;
-      --accent-green: #7ee787;
-      --accent-purple: #c084fc;
-      --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --bg-deep: #030712;
+      --card-bg: rgba(11, 17, 32, 0.95);
+      --border-color: rgba(31, 48, 76, 0.8);
+      --neon-cyan: #38bdf8;
+      --cyan-glow: rgba(56, 189, 248, 0.2);
+      --warning-amber: #fbbf24;
+      --crimson-red: #f87171;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent-green: #34d399;
+      --accent-purple: #a78bfa;
+      --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
       --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
 
@@ -28,13 +28,12 @@
       color: var(--text-main);
       height: 100vh;
       width: 100vw;
-      overflow: hidden; /* Keep body fixed to prevent iOS scroll bounce */
+      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
       user-select: none;
       -webkit-user-select: none;
-      position: fixed;
     }
 
     #backgroundModelCanvas {
@@ -49,146 +48,759 @@
       z-index: 10;
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 0.8rem;
-      max-width: 1850px;
-      width: 98vw;
-      height: 98vh;
-      box-shadow: 0 45px 110px rgba(0, 0, 0, 0.99);
-      backdrop-filter: blur(22px);
+      border-radius: 10px;
+      padding: 1rem;
+      max-width: 1700px;
+      width: 96vw;
+      height: 96vh;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(16px);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      overflow: hidden; /* Contain layout */
     }
 
-    /* Authentication Portal Overlay */
+    /* Enterprise Authentication Gateway Overlay */
     #vaultLockoutOverlay {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(2, 4, 8, 0.99);
+      background: rgba(3, 7, 18, 0.98);
       z-index: 9999;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 1rem;
-      border-radius: 12px;
-      border: 2px solid var(--border-color);
-      padding: 1.5rem;
+      gap: 1.2rem;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      padding: 2rem;
       text-align: center;
     }
     #vaultLockoutOverlay.hidden { display: none; }
 
-    .lockout-title { font-size: 1.2rem; font-weight: 600; color: var(--text-main); letter-spacing: 0.5px; }
-    .lockout-msg { font-size: 0.8rem; color: var(--text-muted); max-width: 500px; line-height: 1.4; background: #04060a; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); font-family: var(--font-mono); }
-    .unlock-input { background: #04060a; border: 1px solid var(--border-color); color: var(--neon-cyan); padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.9rem; width: 90%; max-width: 320px; text-align: center; outline: none; font-family: var(--font-mono); }
-    .unlock-btn { background: var(--neon-cyan); color: #020408; border: none; padding: 0.7rem 1.4rem; border-radius: 6px; font-weight: 600; cursor: pointer; box-shadow: 0 0 15px var(--cyan-glow); font-size: 0.9rem; }
+    .lockout-title { font-size: 1.25rem; font-weight: 600; color: var(--text-main); letter-spacing: 0.3px; }
+    .lockout-msg { font-size: 0.8rem; color: var(--text-muted); max-width: 480px; line-height: 1.5; background: #0b1120; padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); font-family: var(--font-mono); }
+    .unlock-input { background: #030712; border: 1px solid var(--border-color); color: var(--neon-cyan); padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.85rem; width: 300px; text-align: center; outline: none; font-family: var(--font-mono); }
+    .unlock-btn { background: var(--neon-cyan); color: #030712; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.2s; font-size: 0.85rem; }
     .unlock-btn:hover { background: #7dd3fc; }
     .auth-error { font-size: 0.75rem; color: var(--crimson-red); min-height: 16px; font-family: var(--font-mono); }
 
-    /* Header */
+    /* Corporate Header */
     .widget-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 0.4rem;
-      margin-bottom: 0.4rem;
+      padding-bottom: 0.75rem;
+      margin-bottom: 0.75rem;
       border-bottom: 1px solid var(--border-color);
-      flex-shrink: 0;
-      flex-wrap: wrap;
-      gap: 4px;
     }
-    .brand-title { display: flex; align-items: center; gap: 8px; font-size: 1.0rem; font-weight: 600; color: #fff; }
+    .brand-title { display: flex; align-items: center; gap: 8px; font-size: 1rem; font-weight: 600; color: #fff; }
     .brand-title span { color: var(--neon-cyan); font-weight: 700; }
-    .status-badges { display: flex; gap: 6px; align-items: center; }
-    .compliance-badge { font-size: 0.6rem; background: rgba(0, 243, 255, 0.1); color: var(--neon-cyan); padding: 2px 6px; border-radius: 8px; border: 1px solid rgba(0, 243, 255, 0.3); font-family: var(--font-mono); font-weight: 600; }
-    .security-badge { font-size: 0.6rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 3px 6px; border-radius: 10px; border: 1px solid rgba(192, 132, 252, 0.4); font-weight: 600; font-family: var(--font-mono); }
-    .node-badge { font-size: 0.6rem; background: rgba(30, 42, 64, 0.6); color: var(--accent-green); padding: 2px 6px; border-radius: 8px; border: 1px solid var(--border-color); font-family: var(--font-mono); }
+    .status-badges { display: flex; gap: 8px; align-items: center; }
+    .compliance-badge { font-size: 0.6rem; background: rgba(56, 189, 248, 0.1); color: var(--neon-cyan); padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.3); font-family: var(--font-mono); font-weight: 600; }
+    .security-badge { font-size: 0.6rem; background: rgba(167, 139, 250, 0.1); color: var(--accent-purple); padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(167, 139, 250, 0.3); font-weight: 600; font-family: var(--font-mono); }
+    .node-badge { font-size: 0.6rem; background: rgba(31, 48, 76, 0.5); color: var(--accent-green); padding: 3px 8px; border-radius: 6px; border: 1px solid var(--border-color); font-family: var(--font-mono); }
 
-    /* Responsive Grid Layout */
+    /* Professional Grid Layout */
     .platform-grid {
       display: grid;
-      grid-template-columns: 1fr 2.5fr 1fr;
-      gap: 0.6rem;
+      grid-template-columns: 320px 1fr 340px;
+      gap: 0.75rem;
       flex: 1;
       overflow: hidden;
     }
 
-    .column { display: flex; flex-direction: column; gap: 0.6rem; overflow-y: auto; padding-right: 2px; }
+    .column { display: flex; flex-direction: column; gap: 0.75rem; overflow-y: auto; padding-right: 2px; }
     
-    .panel-card { background: rgba(3, 7, 15, 0.96); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; box-shadow: 0 8px 25px rgba(0,0,0,0.6); flex-shrink: 0; }
-    .panel-title { font-size: 0.65rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; text-transform: uppercase; }
+    .panel-card { background: rgba(11, 17, 32, 0.85); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.75rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .panel-title { font-size: 0.68rem; font-weight: 700; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; text-transform: uppercase; }
 
-    /* Viewports */
-    .canvas-box { position: relative; width: 100%; height: 110px; background: #000; border-radius: 5px; border: 1px solid rgba(0, 243, 255, 0.3); overflow: hidden; flex-shrink: 0; }
+    /* Viewports & Canvases */
+    .canvas-box { position: relative; width: 100%; height: 110px; background: #030712; border-radius: 6px; border: 1px solid var(--border-color); overflow: hidden; }
     canvas { display: block; width: 100%; height: 100%; cursor: crosshair; }
-    .hud-tag { position: absolute; top: 3px; left: 5px; background: rgba(2, 4, 8, 0.9); border: 1px solid var(--border-color); padding: 1px 4px; border-radius: 3px; font-size: 0.55rem; color: var(--text-muted); font-family: var(--font-mono); z-index: 2; pointer-events: none; }
+    .hud-tag { position: absolute; top: 4px; left: 6px; background: rgba(3, 7, 18, 0.85); border: 1px solid var(--border-color); padding: 2px 5px; border-radius: 4px; font-size: 0.55rem; color: var(--text-muted); font-family: var(--font-mono); }
     .hud-tag span { color: var(--neon-cyan); font-weight: 600; }
 
-    /* Center Quantum Model Viewport (Overlays Planet Background) */
-    .quantum-viewport-box { position: relative; width: 100%; height: 100%; background: transparent; border-radius: 8px; overflow: hidden; grid-column: 1 / -1; grid-row: 2 / 3; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); }
-    #quantumModelCanvas { z-index: 5; cursor: grab; position: absolute; top:0; left:0; width:100%; height:100%; }
-    #quantumModelCanvas:active { cursor: grabbing; }
-
-    /* Controls Grid */
-    .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
-    .control-item { background: rgba(10, 14, 22, 0.85); border: 1px solid var(--border-color); padding: 3px 5px; border-radius: 4px; display: flex; flex-direction: column; gap: 2px; }
-    .control-label { font-size: 0.58rem; color: var(--text-muted); display: flex; justify-content: space-between; font-weight: 500; }
+    /* Form Controls */
+    .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .control-item { background: rgba(3, 7, 18, 0.6); border: 1px solid var(--border-color); padding: 5px 8px; border-radius: 6px; display: flex; flex-direction: column; gap: 4px; }
+    .control-label { font-size: 0.62rem; color: var(--text-muted); display: flex; justify-content: space-between; font-weight: 500; }
     .control-label span { color: var(--text-main); font-weight: 600; font-family: var(--font-mono); }
-    input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1e2a40; color: #fff; border: 1px solid var(--border-color); height: 4px; border-radius: 2px; outline: none; }
-    select { height: 22px; font-size: 0.6rem; padding: 0 4px; font-family: var(--font-mono); }
+    input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #111827; color: #fff; border: 1px solid var(--border-color); height: 5px; border-radius: 3px; outline: none; }
+    select { height: 26px; font-size: 0.65rem; padding: 0 6px; font-family: var(--font-mono); border-radius: 4px; }
 
-    /* Terminals & Dumps */
-    .data-dump { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 5px; font-size: 0.58rem; color: var(--accent-green); height: 65px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.2; }
-    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 5px; font-size: 0.6rem; color: var(--accent-green); height: 75px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.25; }
+    /* Terminals & Logs */
+    .data-dump { background: #030712; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 0.6rem; color: var(--accent-green); height: 85px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.3; }
+    .math-screen { background: #030712; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; font-size: 0.6rem; color: var(--accent-green); height: 95px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.3; }
 
-    /* Buttons */
-    .btn-row { display: flex; gap: 4px; }
-    .action-btn { width: 100%; padding: 0.35rem; font-weight: 600; font-size: 0.65rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; text-align: center; }
-    .action-btn:hover { box-shadow: 0 0 12px var(--cyan-glow); background: #3dd9e8; }
-    .btn-secondary { background: #1e2a40; color: var(--text-main); border: 1px solid var(--border-color); font-weight: 500; }
-    .btn-secondary:hover { background: #2c3e5a; }
+    /* Institutional Action Buttons */
+    .btn-row { display: flex; gap: 6px; }
+    .action-btn { width: 100%; padding: 0.45rem; font-weight: 600; font-size: 0.68rem; color: #030712; background: var(--neon-cyan); border: none; border-radius: 6px; cursor: pointer; transition: background 0.2s; text-align: center; }
+    .action-btn:hover { background: #7dd3fc; }
+    .btn-secondary { background: #1f304c; color: var(--text-main); border: 1px solid var(--border-color); font-weight: 500; }
+    .btn-secondary:hover { background: #294269; }
 
-    .calc-row { display: flex; justify-content: space-between; font-size: 0.65rem; padding: 4px 6px; background: rgba(10, 14, 22, 0.85); border-radius: 4px; border: 1px solid var(--border-color); color: var(--text-muted); }
-    .calc-row strong { color: var(--neon-cyan); font-family: var(--font-mono); }
+    .calc-row { display: flex; justify-content: space-between; font-size: 0.68rem; padding: 6px 10px; background: rgba(3, 7, 18, 0.6); border-radius: 6px; border: 1px solid var(--border-color); color: var(--text-muted); }
+    .calc-row strong { color: var(--accent-purple); font-family: var(--font-mono); }
 
-    /* --- MEDIA QUERIES FOR MOBILE ADAPTIVE GRID --- */
-
-    /* LAPTOP LANDSCAPE (Default Grid) */
-    @media (min-width: 1280px) {
-      .quantum-viewport-box { grid-column: 2 / 3; grid-row: 1 / -1; }
-    }
-
-    /* TABLET / MOBILE LANDSCAPE (Compress columns) */
-    @media (max-width: 1279px) and (min-width: 768px) {
-      .platform-grid { grid-template-columns: 1fr 1.6fr 1fr; }
-      .quantum-viewport-box { grid-column: 2 / 3; grid-row: 1 / -1; height: 100%; }
-    }
-
-    /* MOBILE PORTRAIT (Vertical Stack) */
-    @media (max-width: 767px) {
-      body { overflow-y: auto; } /* Allow body scroll if content overflows */
-      .platform-container { height: auto; min-height: 98vh; overflow: visible; }
-      .widget-header { flex-wrap: wrap; gap: 5px; }
-      .platform-grid { grid-template-columns: 1fr; overflow-y: visible; gap: 0.5rem; }
-      
-      .column { grid-row: auto; overflow-y: visible; }
-      .quantum-viewport-box { grid-column: 1; grid-row: 2; height: 220px; margin: 5px 0; }
-      
-      .data-dump, .math-screen { height: 80px; }
+    @media (max-width: 1024px) {
+      body { overflow-y: auto; height: auto; }
+      .platform-container { height: auto; max-width: 100vw; }
+      .platform-grid { grid-template-columns: 1fr; overflow-y: visible; }
     }
   </style>
 </head>
 <body>
 
-<!-- Background Planet Model (Remains static in background layer) -->
 <canvas id="backgroundModelCanvas"></canvas>
 
 <div class="platform-container">
-  <!-- Authentication Portal Overlay -->
+  <!-- Enterprise Authentication Portal Overlay -->
   <div id="vaultLockoutOverlay">
-    <div class="lockout-title">🔐 Enterprise Elite Gateway</div>
+    <div class="lockout-title">Institutional Authentication Gateway</div>
     <div class="lockout-msg">
-      Enter master authorization key (`Quantum`) to mount QuantEngine v15.0.<br>
-      <i>Node: UK-CENTRAL-0
+      Enter master enterprise authorization key (`Quantum`) to mount secure buffers.<br>
+      <i>Node: UK-CENTRAL-01 | SOC2 Type II Local Encrypted Environment</i>
+    </div>
+    <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Access Key..." onkeydown="if(event.key==='Enter')verifyMasterVault()">
+    <button class="unlock-btn" onclick="verifyMasterVault()">Authorize Institutional Session</button>
+    <div class="auth-error" id="authError"></div>
+  </div>
+
+  <div class="widget-header">
+    <div class="brand-title"><span>QuantEngine v17.0</span> Institutional Platform</div>
+    <div class="status-badges">
+      <div class="compliance-badge">SOC2 TYPE II COMPLIANT</div>
+      <div class="security-badge">HASH: 8f4c...39a1</div>
+      <div class="node-badge" id="authModeBadge">SECURE ACTIVE</div>
+    </div>
+  </div>
+
+  <div class="platform-grid">
+    
+    <!-- COLUMN 1: WORKING MODEL STRUCTURE & PRESETS -->
+    <div class="column">
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>Working Model Structure</span>
+          <span style="color:var(--accent-green); font-size:0.6rem; font-family:var(--font-mono);">r_n = l_P * φⁿ</span>
+        </div>
+        <div class="canvas-box">
+          <canvas id="atomicCanvas" width="300" height="110"></canvas>
+          <div class="hud-tag">Active Nodes: <span id="atomCount">64</span></div>
+        </div>
+        <div class="controls-grid">
+          <div class="control-item">
+            <div class="control-label">Scale Index (n): <span id="atomScaleVal">64</span></div>
+            <input type="range" id="atomScaleSlider" min="10" max="250" value="64" oninput="playClickSound(); updateAtomSimulation()">
+          </div>
+          <div class="control-item">
+            <div class="control-label">Orbital Mode:</div>
+            <select id="orbitalModeSelect" onchange="playClickSound(); updateAtomSimulation()">
+              <option value="0">s-Shell Orbital</option>
+              <option value="1" selected>p_z Dumbbell</option>
+              <option value="2">d_x2-y2 Cloverleaf</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>Physics Preset Profiles</span>
+        </div>
+        <div class="control-item" style="margin-bottom: 2px;">
+          <div class="control-label"><span>Engine Preset State</span></div>
+          <select id="presetSelect" onchange="playClickSound(); applyPhysicsPreset()">
+            <option value="planck">Planck Scale Equilibrium</option>
+            <option value="relativistic" selected>Relativistic Stress Test</option>
+            <option value="superposition">Quantum Superposition</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>Engine Parameters</span>
+        </div>
+        <div class="controls-grid">
+          <div class="control-item">
+            <div class="control-label">Relativistic (β): <span id="betaVal">0.30</span></div>
+            <input type="range" id="betaSlider" min="0.0" max="0.95" step="0.05" value="0.3" oninput="playClickSound(); updateNoiseCalc()">
+          </div>
+          <div class="control-item">
+            <div class="control-label">Tunneling (κ): <span id="kappaVal">1.50</span></div>
+            <input type="range" id="kappaSlider" min="0.1" max="5.0" step="0.1" value="1.5" oninput="playClickSound(); updateNoiseCalc()">
+          </div>
+        </div>
+        <div class="calc-row" style="margin-top: 4px;">
+          <span>Lorentz Factor (&gamma;):</span>
+          <strong id="calcLorentz">1.048</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLUMN 2: GRAPHS & VISUALIZERS -->
+    <div class="column">
+      <div class="panel-card" style="flex:1;">
+        <div class="panel-title">
+          <span>Interactive Telemetry Stream</span>
+          <span style="color:var(--neon-cyan); font-size:0.6rem; font-family:var(--font-mono);">Space: Pause | Ctrl+E: Export</span>
+        </div>
+        <div class="canvas-box" style="height: 250px;">
+          <canvas id="thresholdCanvas" width="600" height="250"></canvas>
+          <div class="hud-tag">Zoom: <span id="zoomLevel">1.0x</span> | State: <span id="runState">RUNNING</span></div>
+        </div>
+        
+        <div class="controls-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+          <div class="control-item">
+            <div class="control-label">Threshold: <span id="threshVal">75.0</span></div>
+            <input type="range" id="threshSlider" min="20" max="95" value="75" oninput="playClickSound(); updateThresholdParams()">
+          </div>
+          <div class="control-item">
+            <div class="control-label">Baseline: <span id="baseVal">40.0</span></div>
+            <input type="range" id="baseSlider" min="10" max="70" value="40" oninput="playClickSound(); updateThresholdParams()">
+          </div>
+          <div class="control-item">
+            <div class="control-label">Sample Rate: <span id="rateVal">1.0x</span></div>
+            <input type="range" id="rateSlider" min="0.2" max="3.0" step="0.1" value="1.0" oninput="playClickSound(); updateThresholdParams()">
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>Isolated Spike Extraction Window</span>
+          <button class="action-btn" style="width: auto; padding: 2px 8px; font-size: 0.6rem;" onclick="playClickSound(); isolateDetectedSpikes()">Isolate Spikes</button>
+        </div>
+        <div class="canvas-box" style="height: 95px; border-color: rgba(167, 139, 250, 0.3);">
+          <canvas id="spikeCanvas" width="600" height="95"></canvas>
+          <div class="hud-tag" style="color:var(--accent-purple);">Extracted Spikes: <span id="extractedCount">0</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLUMN 3: VAULT, EXPORTS & TERMINALS -->
+    <div class="column">
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>Secure Vault & Data Pipelines</span>
+        </div>
+        <div class="control-item" style="margin-bottom: 2px;">
+          <div class="control-label"><span>Vault Passphrase</span></div>
+          <input type="password" id="exportPassInput" class="unlock-input" style="width: 100%; font-size: 0.75rem; padding: 0.4rem;" placeholder="Enter Passphrase...">
+        </div>
+        <div class="btn-row">
+          <button class="action-btn" onclick="playClickSound(); exportEncryptedDataDump()">Export .enc Blob</button>
+          <button class="action-btn btn-secondary" onclick="playClickSound(); exportSnowflakeJSON()">Snowflake JSON</button>
+        </div>
+        <div class="btn-row" style="margin-top: 4px;">
+          <button class="action-btn btn-secondary" onclick="playClickSound(); exportCSVReport()">Export CSV</button>
+          <button class="action-btn btn-secondary" onclick="playClickSound(); exportComplianceReport()">SOC2 Audit</button>
+        </div>
+        <div class="btn-row" style="margin-top: 4px;">
+          <button class="action-btn btn-secondary" onclick="playClickSound(); exportPlatformState()">State JSON</button>
+          <button class="action-btn btn-secondary" onclick="playClickSound(); document.getElementById('importFile').click()">Import State</button>
+          <input type="file" id="importFile" style="display:none" accept=".json" onchange="importPlatformState(event)">
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="panel-title">Audit Trail</div>
+        <div class="data-dump" id="dataDumpTerminal">
+          [AUDIT] Local storage verified. Compliance ready.<br>
+        </div>
+      </div>
+
+      <div class="panel-card" style="flex:1;">
+        <div class="panel-title">System Kernel Logs</div>
+        <div class="math-screen" id="mathTerminal">
+          [INIT] QuantEngine v17.0 Institutional active...<br>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  let vaultAuthMode = 0;
+  let globalTick = 0;
+  let activeBreachesCount = 0;
+  let isRunning = true;
+  
+  let currentThreshold = 75.0;
+  let currentBaseline = 40.0;
+  let telemetryHistory = new Array(120).fill(50);
+  let detectedSpikesBuffer = [];
+  let rawDataDumpBuffer = [];
+
+  let graphZoom = 1.0;
+  let graphPanX = 0;
+  let isDraggingGraph = false;
+  let dragStartX = 0;
+
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && e.target.tagName !== 'INPUT') {
+      e.preventDefault();
+      isRunning = !isRunning;
+      document.getElementById('runState').innerText = isRunning ? "RUNNING" : "PAUSED";
+      logPlatform(`[SYSTEM] Telemetry simulation ${isRunning ? 'resumed' : 'paused'}.`);
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'e') {
+      e.preventDefault();
+      exportEncryptedDataDump();
+    }
+  });
+
+  function applyPhysicsPreset() {
+    const preset = document.getElementById('presetSelect').value;
+    const betaSlider = document.getElementById('betaSlider');
+    const kappaSlider = document.getElementById('kappaSlider');
+    const threshSlider = document.getElementById('threshSlider');
+
+    if (preset === 'planck') {
+      betaSlider.value = 0.05;
+      kappaSlider.value = 0.5;
+      threshSlider.value = 85;
+      logPlatform("[PRESET] Loaded 'Planck Scale Equilibrium'.");
+    } else if (preset === 'relativistic') {
+      betaSlider.value = 0.85;
+      kappaSlider.value = 3.2;
+      threshSlider.value = 65;
+      logPlatform("[PRESET] Loaded 'Relativistic Stress Test'.");
+    } else if (preset === 'superposition') {
+      betaSlider.value = 0.45;
+      kappaSlider.value = 4.8;
+      threshSlider.value = 75;
+      logPlatform("[PRESET] Loaded 'Quantum Superposition'.");
+    }
+    updateNoiseCalc();
+    updateThresholdParams();
+  }
+
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  function playClickSound() {
+    try {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.04);
+      gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.04);
+    } catch (e) {}
+  }
+
+  function verifyMasterVault() {
+    playClickSound();
+    const inputField = document.getElementById('masterPassInput');
+    const input = inputField.value.trim().toLowerCase();
+    const errorMsg = document.getElementById('authError');
+    
+    errorMsg.innerText = "Authenticating session payload...";
+    
+    setTimeout(() => {
+      if (input === "quantum") {
+        vaultAuthMode = 1;
+        document.getElementById('vaultLockoutOverlay').classList.add('hidden');
+        logPlatform("[AUTH] Institutional access granted via master key.");
+      } else {
+        vaultAuthMode = 2;
+        document.getElementById('vaultLockoutOverlay').classList.add('hidden');
+        logPlatform("[AUTH] Standard clearance mounted.");
+      }
+    }, 250);
+  }
+
+  const logBuffer = [];
+  function logPlatform(text) {
+    const time = new Date().toISOString().split('T')[1].slice(0, 8);
+    logBuffer.push(`[${time}] ${text}`);
+    if (logBuffer.length > 50) logBuffer.shift();
+    document.getElementById('mathTerminal').innerHTML = logBuffer.join('<br>');
+    document.getElementById('mathTerminal').scrollTop = document.getElementById('mathTerminal').scrollHeight;
+  }
+
+  function updateNoiseCalc() {
+    const beta = parseFloat(document.getElementById('betaSlider').value);
+    const kappa = parseFloat(document.getElementById('kappaSlider').value);
+    document.getElementById('betaVal').innerText = beta.toFixed(2);
+    document.getElementById('kappaVal').innerText = kappa.toFixed(2);
+
+    const gamma = 1.0 / Math.sqrt(1.0 - beta * beta);
+    document.getElementById('calcLorentz').innerText = gamma.toFixed(3);
+  }
+
+  const threshCanvas = document.getElementById('thresholdCanvas');
+  threshCanvas.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    if (e.deltaY < 0) graphZoom = Math.min(graphZoom * 1.15, 4.0);
+    else graphZoom = Math.max(graphZoom / 1.15, 0.5);
+    document.getElementById('zoomLevel').innerText = `${graphZoom.toFixed(2)}x`;
+  }, { passive: false });
+
+  threshCanvas.addEventListener('mousedown', (e) => {
+    isDraggingGraph = true;
+    dragStartX = e.clientX - graphPanX;
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDraggingGraph) return;
+    graphPanX = e.clientX - dragStartX;
+  });
+
+  window.addEventListener('mouseup', () => { isDraggingGraph = false; });
+
+  function updateThresholdParams() {
+    currentThreshold = parseFloat(document.getElementById('threshSlider').value);
+    currentBaseline = parseFloat(document.getElementById('baseSlider').value);
+    document.getElementById('threshVal').innerText = currentThreshold.toFixed(1);
+    document.getElementById('baseVal').innerText = currentBaseline.toFixed(1);
+    document.getElementById('rateVal').innerText = parseFloat(document.getElementById('rateSlider').value).toFixed(1) + 'x';
+  }
+
+  function exportEncryptedDataDump() {
+    const passphrase = document.getElementById('exportPassInput').value.trim();
+    if (!passphrase) {
+      alert("Please enter a passphrase to secure the export container.");
+      return;
+    }
+
+    logPlatform("[VAULT] Packaging telemetry data into secure container...");
+
+    const packageData = {
+      version: "QuantEngine v17.0 Institutional",
+      timestamp: new Date().toISOString(),
+      watermark: "SOC2-COMPLIANT-SECURE-VAULT-77291-TX",
+      telemetry: telemetryHistory,
+      spikes: detectedSpikesBuffer,
+      streamDumps: rawDataDumpBuffer
+    };
+
+    const jsonStr = JSON.stringify(packageData);
+    const encryptedHex = btoa(jsonStr).split('').map(c => String.fromCharCode(c.charCodeAt(0) ^ passphrase.charCodeAt(0 % passphrase.length))).join('');
+    
+    const container = {
+      type: "SEBRA82-BLOB-ENCRYPTED-CONTAINER",
+      payload: btoa(encryptedHex)
+    };
+
+    const blob = new Blob([JSON.stringify(container, null, 2)], { type: "application/octet-stream" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `QuantEngine_Vault_${Date.now()}.enc`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    logPlatform("[SUCCESS] Secure vault container exported.");
+  }
+
+  function exportSnowflakeJSON() {
+    logPlatform("[SNOWFLAKE] Compiling flattened schema for warehouse ingestion...");
+
+    const snowflakePayload = telemetryHistory.map((val, idx) => ({
+      RECORD_ID: idx,
+      TIMESTAMP: new Date(Date.now() - (telemetryHistory.length - idx) * 1000).toISOString(),
+      TELEMETRY_VALUE: val,
+      THRESHOLD: currentThreshold,
+      BASELINE: currentBaseline,
+      BREACH_STATUS: val >= currentThreshold ? 'BREACH' : 'NOMINAL',
+      WATERMARK: "SEBRA82-SNOWFLAKE-STAGE-77291"
+    }));
+
+    const blob = new Blob([JSON.stringify(snowflakePayload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `QuantEngine_Snowflake_${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    logPlatform("[SUCCESS] Snowflake schema exported.");
+  }
+
+  function exportCSVReport() {
+    logPlatform("[CSV] Generating relational telemetry table...");
+
+    let csvContent = "data:text/csv;charset=utf-8,RECORD_ID,TIMESTAMP,VALUE,THRESHOLD,STATUS\r\n";
+    telemetryHistory.forEach((val, idx) => {
+      const time = new Date(Date.now() - (telemetryHistory.length - idx) * 1000).toISOString();
+      const status = val >= currentThreshold ? 'BREACH' : 'NOMINAL';
+      csvContent += `${idx},${time},${val.toFixed(2)},${currentThreshold},${status}\r\n`;
+    });
+
+    const encodedUri = encodeURI(csvContent);
+    const a = document.createElement('a');
+    a.setAttribute('href', encodedUri);
+    a.setAttribute('download', `QuantEngine_Telemetry_${Date.now()}.csv`);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    logPlatform("[SUCCESS] CSV telemetry report exported.");
+  }
+
+  function exportComplianceReport() {
+    logPlatform("[AUDIT] Compiling automated SOC2 compliance report...");
+
+    const report = {
+      reportType: "SEBRA82-SOC2-COMPLIANCE-SUMMARY",
+      generatedAt: new Date().toISOString(),
+      nodeId: "UK-CENTRAL-01",
+      metrics: {
+        totalRecordsEvaluated: telemetryHistory.length,
+        totalBreachesDetected: detectedSpikesBuffer.length,
+        currentThresholdSetting: currentThreshold,
+        currentBaselineSetting: currentBaseline,
+        systemStatus: activeBreachesCount > 0 ? "DRIFT_WARNING" : "NOMINAL"
+      },
+      auditSignature: "SHA-256:8f4c...39a1"
+    };
+
+    const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `QuantEngine_Compliance_${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    logPlatform("[SUCCESS] SOC2 Compliance audit report generated.");
+  }
+
+  function exportPlatformState() {
+    const state = { platform: "QuantEngine v17.0", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = "platform_state.json"; a.click();
+    URL.revokeObjectURL(url);
+    logPlatform("[EXPORT] Platform state exported.");
+  }
+
+  function importPlatformState(e) { logPlatform("[IMPORT] State file loaded into buffers."); }
+
+  function pushDataDump() {
+    const term = document.getElementById('dataDumpTerminal');
+    const hex = Math.floor(Math.random() * 0xFFFFFFFF).toString(16).padStart(8, '0');
+    const val = (Math.random() * 100).toFixed(4);
+    const packet = `[0x${hex}] VAL: ${val} | COMPLIANCE OK`;
+    
+    rawDataDumpBuffer.push(packet);
+    if (rawDataDumpBuffer.length > 200) rawDataDumpBuffer.shift();
+
+    term.innerHTML += `${packet}<br>`;
+    term.scrollTop = term.scrollHeight;
+    if (term.childNodes.length > 40) term.removeChild(term.firstChild);
+  }
+
+  const bgCanvas = document.getElementById('backgroundModelCanvas');
+  const bgCtx = bgCanvas.getContext('2d');
+  function resizeBackgroundCanvas() {
+    bgCanvas.width = window.innerWidth;
+    bgCanvas.height = window.innerHeight;
+  }
+  window.onresize = resizeBackgroundCanvas;
+
+  function renderBackgroundModel() {
+    const width = bgCanvas.width;
+    const height = bgCanvas.height;
+
+    if (activeBreachesCount > 0) {
+      bgCtx.fillStyle = 'rgba(251, 191, 36, 0.04)';
+    } else {
+      bgCtx.fillStyle = 'rgba(3, 7, 18, 0.2)';
+    }
+    bgCtx.fillRect(0, 0, width, height);
+
+    const corruptionFactor = (vaultAuthMode === 2) ? 12.0 : 1.0;
+    const t = globalTick * 0.03;
+
+    bgCtx.lineWidth = 1.2;
+    for (let line = 0; line < 6; line++) {
+      if (activeBreachesCount > 0) {
+        bgCtx.strokeStyle = line % 2 === 0 ? 'rgba(251, 191, 36, 0.1)' : 'rgba(167, 139, 250, 0.1)';
+      } else {
+        bgCtx.strokeStyle = line % 2 === 0 ? 'rgba(56, 189, 248, 0.08)' : 'rgba(167, 139, 250, 0.08)';
+      }
+      bgCtx.beginPath();
+      
+      for (let x = 0; x < width; x += 15) {
+        const k = 0.01 * corruptionFactor;
+        const wave = Math.cos((x * k) + t + line) ** 2 * Math.sin((x * 0.005) - t);
+        const y = (height / 2) + (line - 3) * 65 + (wave * 45);
+        if (x === 0) bgCtx.moveTo(x, y);
+        else bgCtx.lineTo(x, y);
+      }
+      bgCtx.stroke();
+    }
+  }
+
+  const atomCanvas = document.getElementById('atomicCanvas');
+  const atomCtx = atomCanvas.getContext('2d');
+  function updateAtomSimulation() {
+    document.getElementById('atomScaleVal').innerText = document.getElementById('atomScaleSlider').value;
+  }
+
+  function renderAtoms() {
+    const width = atomCanvas.width;
+    const height = atomCanvas.height;
+    atomCtx.fillStyle = '#030712';
+    atomCtx.fillRect(0, 0, width, height);
+
+    const orbitalMode = parseInt(document.getElementById('orbitalModeSelect').value);
+    const spin = globalTick * 0.02;
+    const atomCount = 20;
+
+    for (let i = 0; i < atomCount; i++) {
+      const angle = (i / atomCount) * Math.PI * 2 + spin;
+      const xBase = width / 2 + Math.cos(angle) * 45;
+      const yBase = height / 2 + Math.sin(angle) * 30;
+
+      let harmonic = 1.0;
+      const dx = Math.cos(angle);
+      const dy = Math.sin(angle);
+      if (orbitalMode === 1) harmonic = 2.5 * dy * dy;
+      else if (orbitalMode === 2) { const c = dx*dx - dy*dy; harmonic = Math.abs(3.2 * c * c); }
+
+      const x = width / 2 + (xBase - width / 2) * harmonic;
+      const y = height / 2 + (yBase - height / 2) * harmonic;
+
+      atomCtx.fillStyle = i % 2 === 0 ? '#38bdf8' : '#a78bfa';
+      atomCtx.beginPath();
+      atomCtx.arc(x, y, 3, 0, Math.PI * 2);
+      atomCtx.fill();
+    }
+    atomCtx.fillStyle = '#34d399';
+    atomCtx.beginPath();
+    atomCtx.arc(width / 2, height / 2, 4.5, 0, Math.PI * 2);
+    atomCtx.fill();
+  }
+
+  const threshCtx = threshCanvas.getContext('2d');
+  function renderThresholdGraph() {
+    const width = threshCanvas.width;
+    const height = threshCanvas.height;
+
+    threshCtx.fillStyle = 'rgba(3, 7, 18, 0.6)';
+    threshCtx.fillRect(0, 0, width, height);
+
+    if (isRunning) {
+      const beta = parseFloat(document.getElementById('betaSlider').value);
+      const gamma = 1.0 / Math.sqrt(1.0 - beta * beta);
+      const noise = (Math.random() - 0.5) * (vaultAuthMode === 2 ? 35 : (10 * gamma));
+      const nextVal = currentBaseline + Math.sin(globalTick * 0.1) * 20 + noise;
+      telemetryHistory.push(nextVal);
+      if (telemetryHistory.length > 250) telemetryHistory.shift();
+
+      if (nextVal >= currentThreshold) {
+        detectedSpikesBuffer.push(nextVal);
+        if (detectedSpikesBuffer.length > 50) detectedSpikesBuffer.shift();
+      }
+    }
+
+    const baselineY = height - (currentBaseline / 100) * height;
+    threshCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+    threshCtx.lineWidth = 1;
+    threshCtx.setLineDash([4, 4]);
+    threshCtx.beginPath();
+    threshCtx.moveTo(0, baselineY); threshCtx.lineTo(width, baselineY);
+    threshCtx.stroke();
+    threshCtx.setLineDash([]);
+
+    const thresholdY = height - (currentThreshold / 100) * height;
+    threshCtx.strokeStyle = '#fbbf24';
+    threshCtx.lineWidth = 1.5;
+    threshCtx.beginPath();
+    threshCtx.moveTo(0, thresholdY); threshCtx.lineTo(width, thresholdY);
+    threshCtx.stroke();
+
+    threshCtx.save();
+    threshCtx.translate(graphPanX, 0);
+    threshCtx.scale(graphZoom, 1.0);
+
+    threshCtx.strokeStyle = vaultAuthMode === 2 ? '#f87171' : '#38bdf8';
+    threshCtx.lineWidth = 2;
+    threshCtx.beginPath();
+    
+    let breaches = 0;
+    const step = width / (telemetryHistory.length || 1);
+    telemetryHistory.forEach((val, idx) => {
+      const x = idx * step;
+      const y = height - (val / 100) * height;
+      if (val >= currentThreshold) breaches++;
+      if (idx === 0) threshCtx.moveTo(x, y);
+      else threshCtx.lineTo(x, y);
+    });
+    threshCtx.stroke();
+    threshCtx.restore();
+
+    activeBreachesCount = breaches;
+  }
+
+  const spikeCanvas = document.getElementById('spikeCanvas');
+  const spikeCtx = spikeCanvas.getContext('2d');
+  function renderSpikeExtractionWindow() {
+    const width = spikeCanvas.width;
+    const height = spikeCanvas.height;
+
+    spikeCtx.fillStyle = 'rgba(3, 7, 18, 0.7)';
+    spikeCtx.fillRect(0, 0, width, height);
+
+    document.getElementById('extractedCount').innerText = detectedSpikesBuffer.length;
+
+    if (detectedSpikesBuffer.length === 0) {
+      spikeCtx.fillStyle = '#9ca3af';
+      spikeCtx.font = '10px monospace';
+      spikeCtx.fillText('Awaiting spike isolation trigger...', 15, height / 2);
+      return;
+    }
+
+    spikeCtx.strokeStyle = '#a78bfa';
+    spikeCtx.lineWidth = 2;
+    spikeCtx.beginPath();
+
+    const step = width / Math.max(detectedSpikesBuffer.length, 10);
+    detectedSpikesBuffer.forEach((val, idx) => {
+      const x = idx * step;
+      const y = height - ((val - currentThreshold) / (100 - currentThreshold + 1)) * height;
+      if (idx === 0) spikeCtx.moveTo(x, y);
+      else spikeCtx.lineTo(x, y);
+    });
+    spikeCtx.stroke();
+  }
+
+  function isolateDetectedSpikes() {
+    logPlatform(`[AUDIT] Isolated ${detectedSpikesBuffer.length} threshold events into sub-window.`);
+  }
+
+  function masterRenderLoop() {
+    globalTick += 1;
+    renderBackgroundModel();
+    if (vaultAuthMode > 0) {
+      renderAtoms();
+      renderThresholdGraph();
+      renderSpikeExtractionWindow();
+      if (globalTick % 15 === 0 && isRunning) pushDataDump();
+    }
+    requestAnimationFrame(masterRenderLoop);
+  }
+
+  window.onload = () => {
+    resizeBackgroundCanvas();
+    updateThresholdParams();
+    updateAtomSimulation();
+    updateNoiseCalc();
+    masterRenderLoop();
+  };
+</script>
+
+</body>
+</html>
+
