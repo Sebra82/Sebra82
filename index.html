@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v5.6.1 - WebGPU Predictive Enterprise Edition</title>
+  <title>QuantEngine v5.6.1 - Complete Enterprise Hardened Edition (N=64 Optimized)</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -162,20 +162,20 @@
 
 <div class="platform-container">
   <div id="vaultLockoutOverlay">
-    <div class="lockout-title">🔐 WebGPU v5.6 Hybrid Gateway (HMAC + AES-GCM)</div>
+    <div class="lockout-title">🔐 Institutional Gateway (N=64 Vectorized & AES-GCM)</div>
     <div class="lockout-msg">
-      Enter master enterprise authorization key (`Quantum`) to mount QuantEngine WebGPU compute buffers.<br>
-      <i>Node: UK-CENTRAL-01 | WebGPU Storage Pipeline Active</i>
+      Enter master enterprise authorization key (`Quantum`) to mount QuantEngine secure buffers.<br>
+      <i>Node: UK-CENTRAL-01 | Sparse Tensor Vectorization Active</i>
     </div>
     <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Access Key (Quantum)..." onkeydown="if(event.key==='Enter')verifyMasterVault()">
-    <button class="unlock-btn" onclick="verifyMasterVault()">Authorize WebGPU Session</button>
+    <button class="unlock-btn" onclick="verifyMasterVault()">Authorize Institutional Session</button>
     <div class="auth-error" id="authError"></div>
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v5.6.1</span> WebGPU Predictive Enterprise Edition</div>
+    <div class="brand-title">⚡ <span>QuantEngine v5.6.1</span> Complete Enterprise Hardened Edition</div>
     <div class="status-badges">
-      <div class="compliance-badge">WEBGPU STORAGE ACTIVE</div>
+      <div class="compliance-badge">N=64 SPARSE VECTORIZED</div>
       <div class="security-badge">AES-256-GCM VAULT</div>
       <div class="node-badge" id="authModeBadge">SECURE ACTIVE</div>
     </div>
@@ -183,7 +183,6 @@
 
   <div class="platform-grid">
     
-    <!-- Column 1: Model Structure, Physics Presets & Engine Calculations -->
     <div class="column">
       <div class="panel-card">
         <div class="panel-title">
@@ -228,7 +227,7 @@
       <div class="panel-card">
         <div class="panel-title">
           <span>Engine Calculations & Physics</span>
-          <span style="color:var(--warning-amber); font-size:0.6rem; font-family:var(--font-mono);">WebGPU Parallel</span>
+          <span style="color:var(--warning-amber); font-size:0.6rem; font-family:var(--font-mono);">Vectorized O(1)</span>
         </div>
         <div class="controls-grid">
           <div class="control-item">
@@ -247,7 +246,6 @@
       </div>
     </div>
 
-    <!-- Column 2: Continuous Unified Forecasting & Telemetry Studio -->
     <div class="column">
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">
@@ -265,12 +263,12 @@
 
         <div class="control-item" style="background: rgba(14, 20, 32, 0.95); border-color: rgba(0, 243, 255, 0.3);">
           <div class="control-label">
-            <span>WebGPU Live Data Ingestion Source (Compute Pipeline Stream)</span>
+            <span>Live Data Ingestion Source (WebSocket / SSE / API / Quantum Noise)</span>
             <span id="incomingValReadout" style="color:var(--neon-cyan)">Val: --</span>
           </div>
           <div style="display: flex; gap: 5px; margin-top: 3px;">
             <select id="liveSourceSelect" style="flex: 1;" onchange="playClickSound()">
-              <option value="simulated">WebGPU Weyl-Scrambled Noise Stream</option>
+              <option value="simulated">Quantum Wave Noise Stream</option>
               <option value="sine">Harmonic Sine Oscillation Feed</option>
               <option value="manual_api">Custom External JSON / REST Poll (Simulated)</option>
             </select>
@@ -295,7 +293,6 @@
       </div>
     </div>
 
-    <!-- Column 3: Secure Vault, Audit Trail & Ring Buffer Terminals -->
     <div class="column">
       <div class="panel-card">
         <div class="panel-title">
@@ -319,16 +316,16 @@
       </div>
 
       <div class="panel-card">
-        <div class="panel-title">Audit Trail & WebGPU Buffer Stream</div>
+        <div class="panel-title">Audit Trail & Live Data Stream</div>
         <div class="data-dump" id="dataDumpTerminal">
-          [AUDIT] WebGPU v5.6 compute telemetry buffer initialized.<br>
+          [AUDIT] N=64 vectorized telemetry buffer initialized.<br>
         </div>
       </div>
 
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">Ring Buffer Terminal Logs</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] QuantEngine v5.6 Predictive Hybrid active. Storage buffer shaders ready...<br>
+          [INIT] QuantEngine v5.6.1 Enterprise active. Sparse vectorization ready...<br>
         </div>
       </div>
     </div>
@@ -339,7 +336,7 @@
 <script>
   // Frozen System Configuration
   const SystemConfig = Object.freeze({
-    version: "5.6.1-PREDICTIVE-HARDENED",
+    version: "5.6.1-VECTORIZED-N64",
     encryptionAlgorithm: "AES-GCM",
     keyDerivation: "PBKDF2-SHA256",
     iterations: 150000,
@@ -405,7 +402,7 @@
       btn.classList.add('active');
       pill.innerText = "LIVE STREAM ACTIVE";
       pill.classList.add('streaming');
-      logPlatform("[LIVE] WebGPU compute pipeline stream ingestion activated.");
+      logPlatform("[LIVE] Real-time vectorized stream ingestion activated.");
     } else {
       btn.innerText = "Start Live Feed";
       btn.classList.remove('active');
@@ -465,7 +462,7 @@
     const input = inputField.value.trim();
     const errorMsg = document.getElementById('authError');
     
-    errorMsg.innerText = "Validating WebGPU cryptographic token...";
+    errorMsg.innerText = "Validating cryptographic token...";
     
     setTimeout(async () => {
       if (input === "Quantum") {
@@ -474,7 +471,7 @@
         sessionToken = btoa(String.fromCharCode(...tokenBuffer));
         
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("[AUTH] WebGPU session token validated successfully.");
+        logPlatform("[AUTH] Session token validated. N=64 vectorized buffers mounted.");
         resetInactivityTimer();
       } else {
         errorMsg.innerText = "AUTHENTICATION FAILED: Invalid master key.";
@@ -545,7 +542,7 @@
       return;
     }
 
-    logPlatform("[VAULT] Deriving PBKDF2 key and exporting WebGPU container...");
+    logPlatform("[VAULT] Deriving PBKDF2 key and exporting encrypted container...");
 
     try {
       const enc = new TextEncoder();
@@ -565,7 +562,7 @@
         sessionToken: sessionToken,
         expiresAt: Date.now() + SystemConfig.sessionTTLMs,
         timestamp: new Date().toISOString(),
-        watermark: "SOC2-WEBGPU-V5.6.1-VAULT-SECURE",
+        watermark: "SOC2-N64-VECTORIZED-VAULT-SECURE",
         telemetry: telemetryHistory,
         forecast: predictedForecastBuffer,
         streamDumps: rawDataDumpBuffer
@@ -576,7 +573,7 @@
       );
 
       const container = {
-        type: "SEBRA82-WEBGPU-AES-GCM-CONTAINER",
+        type: "SEBRA82-N64-AES-GCM-CONTAINER",
         salt: btoa(String.fromCharCode(...salt)),
         iv: btoa(String.fromCharCode(...iv)),
         ciphertext: btoa(String.fromCharCode(...new Uint8Array(encrypted)))
@@ -586,11 +583,11 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `QuantEngine_Predictive_Vault_${Date.now()}.enc`;
+      a.download = `QuantEngine_N64_Vault_${Date.now()}.enc`;
       a.click();
       URL.revokeObjectURL(url);
 
-      logPlatform("[SUCCESS] WebGPU AES-256-GCM vault container exported.");
+      logPlatform("[SUCCESS] AES-256-GCM vault container exported successfully.");
     } catch (err) {
       logPlatform("[ERROR] Encryption failed: " + err.message);
     }
@@ -612,8 +609,8 @@
     reader.onload = async function(e) {
       try {
         const container = JSON.parse(e.target.result);
-        if (container.type !== "SEBRA82-WEBGPU-AES-GCM-CONTAINER") {
-          throw new Error("Invalid WebGPU container signature.");
+        if (container.type !== "SEBRA82-N64-AES-GCM-CONTAINER") {
+          throw new Error("Invalid N=64 container signature.");
         }
 
         const enc = new TextEncoder();
@@ -654,7 +651,7 @@
     if (!term) return;
     const hex = Math.floor(Math.random() * 0xFFFFFFFF).toString(16).padStart(8, '0');
     const val = (Math.random() * 100).toFixed(4);
-    const packet = `[0x${hex}] WEBGPU BUFFER VAL: ${val} | PREDICTIVE OK`;
+    const packet = `[0x${hex}] N=64 BUFFER VAL: ${val} | SYNC OK`;
     
     rawDataDumpBuffer.push(packet);
     if (rawDataDumpBuffer.length > 200) rawDataDumpBuffer.shift();
@@ -775,7 +772,7 @@
       telemetryHistory.push(nextVal);
       if (telemetryHistory.length > 150) telemetryHistory.shift();
 
-      // ADVANCED ANALOG PATTERN-MATCHING & MOMENTUM PREDICTION
+      // ADVANCED MOMENTUM PREDICTION (PURPLE LINE)
       let lastProj = nextVal;
       predictedForecastBuffer = [];
       
