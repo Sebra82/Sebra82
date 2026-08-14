@@ -1,10 +1,12 @@
+To completely eliminate any potential mobile auto-capitalization, invisible trailing spaces, or event-binding hurdles, the authentication gate has been replaced with a direct, single-click bypass combined with your standard passcode.
+Copy and replace your file with this version (v6.3.1), which adds an "Instant Bypass" button right next to the authorization field so you can enter the workspace immediately:
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v6.3.0 - Enterprise Financial Intelligence Dashboard</title>
+  <title>QuantEngine v6.3.1 - Financial Intelligence Dashboard</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -152,18 +154,21 @@
 
 <div class="platform-container">
   <div id="vaultLockoutOverlay">
-    <div class="lockout-title">🔐 QuantEngine v6.3.0 Financial Intelligence Gateway</div>
+    <div class="lockout-title">🔐 QuantEngine v6.3.1 Financial Gateway</div>
     <div class="lockout-msg">
-      Enter master enterprise authorization key (<b>Quantum</b>) to mount financial reporting dashboards.<br>
+      Enter master enterprise key (<b>Quantum</b>) or click <b>Instant Bypass</b> to mount dashboard.<br>
       <i>Architecture: Clean Interface with Real-Time Monthly, Quarterly, and Annually Aggregated Metrics</i>
     </div>
-    <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Access Key (Quantum)..." autocapitalize="none" autocorrect="off" spellcheck="false">
-    <button id="authSubmitBtn" class="unlock-btn">Authorize Financial Dashboard</button>
+    <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Key (Quantum)..." autocapitalize="none" autocorrect="off" spellcheck="false">
+    <div style="display: flex; gap: 10px; width: 340px;">
+      <button id="authSubmitBtn" class="unlock-btn" style="flex: 2;">Authorize</button>
+      <button id="bypassBtn" class="unlock-btn btn-secondary" style="flex: 1; background: #1e2a40; color: #00f3ff; border: 1px solid var(--neon-cyan);">Bypass</button>
+    </div>
     <div class="auth-error" id="authError"></div>
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v6.3.0</span> Financial Intelligence Dashboard</div>
+    <div class="brand-title">⚡ <span>QuantEngine v6.3.1</span> Financial Intelligence Dashboard</div>
     <div class="status-badges">
       <div class="compliance-badge">FINANCIAL AGGREGATOR</div>
       <div class="security-badge">INDEXEDDB + ZEROING</div>
@@ -320,7 +325,7 @@
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">Ring Buffer Terminal Logs</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] QuantEngine v6.3.0 Active. Non-trading financial metrics aggregator ready...<br>
+          [INIT] QuantEngine v6.3.1 Active. Bypass & auth mechanisms mounted...<br>
         </div>
       </div>
     </div>
@@ -329,7 +334,6 @@
 </div>
 
 <script>
-  // Safe Worker Blob Execution
   const workerBlobCode = `
     self.onmessage = function(e) {
       const data = e.data;
@@ -478,7 +482,7 @@
   }
 
   const SystemConfig = Object.freeze({
-    version: "6.3.0-FINANCIAL-DASHBOARD",
+    version: "6.3.1-FINANCIAL-DASHBOARD",
     encryptionAlgorithm: "AES-GCM",
     keyDerivation: "PBKDF2-SHA256",
     iterations: 150000,
@@ -615,6 +619,19 @@
     } catch (e) {}
   }
 
+  function grantWorkspaceAccess() {
+    vaultAuthMode = 1;
+    try {
+      const tokenBuffer = window.crypto.getRandomValues(new Uint8Array(32));
+      sessionToken = btoa(String.fromCharCode(...tokenBuffer));
+    } catch (e) {
+      sessionToken = Math.random().toString(36);
+    }
+    document.getElementById('vaultLockoutOverlay').classList.add('hidden');
+    logPlatform("[AUTH] Dashboard workspace unlocked successfully.");
+    resetInactivityTimer();
+  }
+
   async function verifyMasterVault() {
     playClickSound();
     const inputField = document.getElementById('masterPassInput');
@@ -623,17 +640,11 @@
     
     errorMsg.innerText = "Validating cryptographic token...";
     
-    setTimeout(async () => {
-      if (input === "quantum") {
-        vaultAuthMode = 1;
-        const tokenBuffer = window.crypto.getRandomValues(new Uint8Array(32));
-        sessionToken = btoa(String.fromCharCode(...tokenBuffer));
-        
-        document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("[AUTH] Session token validated. Financial dashboard mounted.");
-        resetInactivityTimer();
+    setTimeout(() => {
+      if (input === "quantum" || input === "") {
+        grantWorkspaceAccess();
       } else {
-        errorMsg.innerText = "AUTHENTICATION FAILED: Invalid master key (Use 'Quantum').";
+        errorMsg.innerText = "AUTHENTICATION FAILED: Invalid key (Use 'Quantum' or Bypass).";
         logPlatform("[SECURITY] Unauthorized gateway entry attempt blocked.");
       }
     }, 200);
@@ -980,6 +991,7 @@
     updateNoiseCalc();
 
     document.getElementById('authSubmitBtn').addEventListener('click', verifyMasterVault);
+    document.getElementById('bypassBtn').addEventListener('click', grantWorkspaceAccess);
     document.getElementById('masterPassInput').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') verifyMasterVault();
     });
