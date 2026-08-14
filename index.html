@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuantEngine v12.0 - Complete Enterprise Hybrid Edition</title>
+  <title>QuantEngine v13.0 - Enterprise Elite Edition</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -157,22 +157,22 @@
 <div class="platform-container">
   <!-- Authentication Portal Overlay -->
   <div id="vaultLockoutOverlay">
-    <div class="lockout-title">🔐 Enterprise Complete Gateway</div>
+    <div class="lockout-title">🔐 Enterprise Elite Gateway</div>
     <div class="lockout-msg">
-      Enter master enterprise authorization key (`Quantum`) to mount QuantEngine v12.0 buffers.<br>
-      <i>Node: UK-CENTRAL-01 | Snowflake Staging & CSV/Audit Pipelines Active</i>
+      Enter master enterprise authorization key (`Quantum`) to mount QuantEngine v13.0 buffers.<br>
+      <i>Node: UK-CENTRAL-01 | Snowflake, CSV, & SOC2 Compliance Active</i>
     </div>
     <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Access Key (Quantum)..." onkeydown="if(event.key==='Enter')verifyMasterVault()">
-    <button class="unlock-btn" onclick="verifyMasterVault()">Authorize Enterprise Session</button>
+    <button class="unlock-btn" onclick="verifyMasterVault()">Authorize Elite Session</button>
     <div class="auth-error" id="authError"></div>
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v12.0</span> Enterprise Complete</div>
+    <div class="brand-title">⚡ <span>QuantEngine v13.0</span> Enterprise Elite</div>
     <div class="status-badges">
       <div class="compliance-badge">SNOWFLAKE STAGE READY</div>
       <div class="security-badge">HASH: 8f4c...39a1</div>
-      <div class="node-badge" id="authModeBadge">HYBRID ACTIVE</div>
+      <div class="node-badge" id="authModeBadge">ELITE ACTIVE</div>
     </div>
   </div>
 
@@ -318,7 +318,7 @@
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">Ring Buffer Terminal Logs</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] QuantEngine v12.0 Complete active. All pipelines online...<br>
+          [INIT] QuantEngine v13.0 Elite active. All pipelines online...<br>
         </div>
       </div>
     </div>
@@ -412,7 +412,7 @@
       if (input === "quantum") {
         vaultAuthMode = 1;
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("[AUTH] Enterprise access granted via 'Quantum' passphrase.");
+        logPlatform("[AUTH] Elite access granted via 'Quantum' passphrase.");
       } else {
         vaultAuthMode = 2;
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
@@ -478,7 +478,7 @@
     logPlatform("[VAULT] Packaging telemetry data into secure .enc container...");
 
     const packageData = {
-      version: "QuantEngine v12.0 Complete",
+      version: "QuantEngine v13.0 Elite",
       timestamp: new Date().toISOString(),
       watermark: "SOC2-COMPLIANT-SECURE-VAULT-77291-TX",
       telemetry: telemetryHistory,
@@ -498,14 +498,13 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `QuantEngine_Enterprise_Vault_${Date.now()}.enc`;
+    a.download = `QuantEngine_Elite_Vault_${Date.now()}.enc`;
     a.click();
     URL.revokeObjectURL(url);
 
     logPlatform("[SUCCESS] .enc vault container successfully exported.");
   }
 
-  // Component 1: Snowflake JSON Staging Export
   function exportSnowflakeJSON() {
     logPlatform("[SNOWFLAKE] Compiling flattened schema for Snowflake micro-partition stage...");
 
@@ -530,7 +529,6 @@
     logPlatform("[SUCCESS] Snowflake-ready schema exported.");
   }
 
-  // Component 2: Direct CSV Relational Exporter
   function exportCSVReport() {
     logPlatform("[CSV] Generating relational telemetry table for BI tools...");
 
@@ -552,7 +550,6 @@
     logPlatform("[SUCCESS] CSV telemetry report successfully exported.");
   }
 
-  // Component 3: Automated Compliance & Health Summary Report
   function exportComplianceReport() {
     logPlatform("[AUDIT] Compiling automated compliance summary report...");
 
@@ -582,7 +579,7 @@
   }
 
   function exportPlatformState() {
-    const state = { platform: "QuantEngine v12.0", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
+    const state = { platform: "QuantEngine v13.0", zoom: graphZoom, threshold: currentThreshold, baseline: currentBaseline, time: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a'); a.href = url; a.download = "platform_state.json"; a.click();
@@ -601,6 +598,186 @@
       if (globalTick % 15 === 0 && isRunning) pushDataDump();
     }
     requestAnimationFrame(masterRenderLoop);
+  }
+
+  const bgCanvas = document.getElementById('backgroundModelCanvas');
+  const bgCtx = bgCanvas.getContext('2d');
+  function resizeBackgroundCanvas() {
+    bgCanvas.width = window.innerWidth;
+    bgCanvas.height = window.innerHeight;
+  }
+  window.onresize = resizeBackgroundCanvas;
+
+  function renderBackgroundModel() {
+    const width = bgCanvas.width;
+    const height = bgCanvas.height;
+
+    if (activeBreachesCount > 0) {
+      bgCtx.fillStyle = 'rgba(240, 136, 62, 0.08)';
+    } else {
+      bgCtx.fillStyle = 'rgba(2, 4, 8, 0.15)';
+    }
+    bgCtx.fillRect(0, 0, width, height);
+
+    const corruptionFactor = (vaultAuthMode === 2) ? 12.0 : 1.0;
+    const t = globalTick * 0.03;
+
+    bgCtx.lineWidth = 1.5;
+    for (let line = 0; line < 6; line++) {
+      if (activeBreachesCount > 0) {
+        bgCtx.strokeStyle = line % 2 === 0 ? 'rgba(240, 136, 62, 0.15)' : 'rgba(192, 132, 252, 0.15)';
+      } else {
+        bgCtx.strokeStyle = line % 2 === 0 ? 'rgba(0, 243, 255, 0.12)' : 'rgba(192, 132, 252, 0.12)';
+      }
+      bgCtx.beginPath();
+      
+      for (let x = 0; x < width; x += 15) {
+        const k = 0.01 * corruptionFactor;
+        const wave = Math.cos((x * k) + t + line) ** 2 * Math.sin((x * 0.005) - t);
+        const y = (height / 2) + (line - 3) * 65 + (wave * 45);
+        if (x === 0) bgCtx.moveTo(x, y);
+        else bgCtx.lineTo(x, y);
+      }
+      bgCtx.stroke();
+    }
+  }
+
+  const atomCanvas = document.getElementById('atomicCanvas');
+  const atomCtx = atomCanvas.getContext('2d');
+  function updateAtomSimulation() {
+    document.getElementById('atomScaleVal').innerText = document.getElementById('atomScaleSlider').value;
+  }
+
+  function renderAtoms() {
+    const width = atomCanvas.width;
+    const height = atomCanvas.height;
+    atomCtx.fillStyle = '#000';
+    atomCtx.fillRect(0, 0, width, height);
+
+    const orbitalMode = parseInt(document.getElementById('orbitalModeSelect').value);
+    const spin = globalTick * 0.02;
+    const atomCount = 20;
+
+    for (let i = 0; i < atomCount; i++) {
+      const angle = (i / atomCount) * Math.PI * 2 + spin;
+      const xBase = width / 2 + Math.cos(angle) * 45;
+      const yBase = height / 2 + Math.sin(angle) * 30;
+
+      let harmonic = 1.0;
+      const dx = Math.cos(angle);
+      const dy = Math.sin(angle);
+      if (orbitalMode === 1) harmonic = 2.5 * dy * dy;
+      else if (orbitalMode === 2) { const c = dx*dx - dy*dy; harmonic = Math.abs(3.2 * c * c); }
+
+      const x = width / 2 + (xBase - width / 2) * harmonic;
+      const y = height / 2 + (yBase - height / 2) * harmonic;
+
+      atomCtx.fillStyle = i % 2 === 0 ? '#00f3ff' : '#c084fc';
+      atomCtx.beginPath();
+      atomCtx.arc(x, y, 3.5, 0, Math.PI * 2);
+      atomCtx.fill();
+    }
+    atomCtx.fillStyle = '#7ee787';
+    atomCtx.beginPath();
+    atomCtx.arc(width / 2, height / 2, 5.5, 0, Math.PI * 2);
+    atomCtx.fill();
+  }
+
+  const threshCtx = threshCanvas.getContext('2d');
+  function renderThresholdGraph() {
+    const width = threshCanvas.width;
+    const height = threshCanvas.height;
+
+    threshCtx.fillStyle = 'rgba(3, 7, 15, 0.45)';
+    threshCtx.fillRect(0, 0, width, height);
+
+    if (isRunning) {
+      const beta = parseFloat(document.getElementById('betaSlider').value);
+      const gamma = 1.0 / Math.sqrt(1.0 - beta * beta);
+      const noise = (Math.random() - 0.5) * (vaultAuthMode === 2 ? 35 : (10 * gamma));
+      const nextVal = currentBaseline + Math.sin(globalTick * 0.1) * 20 + noise;
+      telemetryHistory.push(nextVal);
+      if (telemetryHistory.length > 250) telemetryHistory.shift();
+
+      if (nextVal >= currentThreshold) {
+        detectedSpikesBuffer.push(nextVal);
+        if (detectedSpikesBuffer.length > 50) detectedSpikesBuffer.shift();
+      }
+    }
+
+    const baselineY = height - (currentBaseline / 100) * height;
+    threshCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+    threshCtx.lineWidth = 1;
+    threshCtx.setLineDash([4, 4]);
+    threshCtx.beginPath();
+    threshCtx.moveTo(0, baselineY); threshCtx.lineTo(width, baselineY);
+    threshCtx.stroke();
+    threshCtx.setLineDash([]);
+
+    const thresholdY = height - (currentThreshold / 100) * height;
+    threshCtx.strokeStyle = '#f0883e';
+    threshCtx.lineWidth = 1.5;
+    threshCtx.beginPath();
+    threshCtx.moveTo(0, thresholdY); threshCtx.lineTo(width, thresholdY);
+    threshCtx.stroke();
+
+    threshCtx.save();
+    threshCtx.translate(graphPanX, 0);
+    threshCtx.scale(graphZoom, 1.0);
+
+    threshCtx.strokeStyle = vaultAuthMode === 2 ? '#ff3344' : '#00f3ff';
+    threshCtx.lineWidth = 2;
+    threshCtx.beginPath();
+    
+    let breaches = 0;
+    const step = width / (telemetryHistory.length || 1);
+    telemetryHistory.forEach((val, idx) => {
+      const x = idx * step;
+      const y = height - (val / 100) * height;
+      if (val >= currentThreshold) breaches++;
+      if (idx === 0) threshCtx.moveTo(x, y);
+      else threshCtx.lineTo(x, y);
+    });
+    threshCtx.stroke();
+    threshCtx.restore();
+
+    activeBreachesCount = breaches;
+  }
+
+  const spikeCanvas = document.getElementById('spikeCanvas');
+  const spikeCtx = spikeCanvas.getContext('2d');
+  function renderSpikeExtractionWindow() {
+    const width = spikeCanvas.width;
+    const height = spikeCanvas.height;
+
+    spikeCtx.fillStyle = 'rgba(3, 7, 15, 0.6)';
+    spikeCtx.fillRect(0, 0, width, height);
+
+    document.getElementById('extractedCount').innerText = detectedSpikesBuffer.length;
+
+    if (detectedSpikesBuffer.length === 0) {
+      spikeCtx.fillStyle = '#8b949e';
+      spikeCtx.font = '10px monospace';
+      spikeCtx.fillText('Awaiting spike isolation trigger...', 15, height / 2);
+      return;
+    }
+
+    spikeCtx.strokeStyle = '#c084fc';
+    spikeCtx.lineWidth = 2;
+    spikeCtx.beginPath();
+
+    const step = width / Math.max(detectedSpikesBuffer.length, 10);
+    detectedSpikesBuffer.forEach((val, idx) => {
+      const x = idx * step;
+      const y = height - ((val - currentThreshold) / (100 - currentThreshold + 1)) * height;
+      if (idx === 0) spikeCtx.moveTo(x, y);
+      else spikeCtx.lineTo(x, y);
+    });
+    spikeCtx.stroke();
+  }
+
+  function isolateDetectedSpikes() {
+    logPlatform(`[AUDIT] Isolated ${detectedSpikesBuffer.length} threshold breach events into sub-graph window.`);
   }
 
   window.onload = () => {
