@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v6.0.2 - Enterprise Hardened Edition</title>
+  <title>QuantEngine v6.1.0 - Elite Volumetric Live Architecture</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -156,20 +156,20 @@
 
 <div class="platform-container">
   <div id="vaultLockoutOverlay">
-    <div class="lockout-title">🔐 QuantEngine v6.0.2 Institutional Gateway</div>
+    <div class="lockout-title">🔐 QuantEngine v6.1.0 Elite Gateway</div>
     <div class="lockout-msg">
-      Enter master enterprise authorization key (<b>Quantum</b>) to mount secure buffers.<br>
-      <i>Architecture: Safe DOM Event Bindings & Native Event Handlers</i>
+      Enter master enterprise authorization key (<b>Quantum</b>) to mount secure volumetric pipelines.<br>
+      <i>Architecture: GPU-Accelerated Heatmap & Web Worker Concurrency</i>
     </div>
     <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Access Key (Quantum)...">
-    <button id="authSubmitBtn" class="unlock-btn">Authorize Protected Session</button>
+    <button id="authSubmitBtn" class="unlock-btn">Authorize Elite Session</button>
     <div class="auth-error" id="authError"></div>
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v6.0.2</span> Enterprise Architecture</div>
+    <div class="brand-title">⚡ <span>QuantEngine v6.1.0</span> Elite Volumetric Edition</div>
     <div class="status-badges">
-      <div class="compliance-badge">WORKER-THREADED N=64</div>
+      <div class="compliance-badge">VOLUMETRIC HEATMAP</div>
       <div class="security-badge">INDEXEDDB + ZEROING</div>
       <div class="node-badge" id="authModeBadge">SECURE ACTIVE</div>
     </div>
@@ -257,7 +257,7 @@
 
         <div class="control-item" style="background: rgba(14, 20, 32, 0.95); border-color: rgba(0, 243, 255, 0.35);">
           <div class="control-label">
-            <span>Live Data Ingestion Source (Worker Shared Memory Pipeline)</span>
+            <span>Live Data Ingestion Source (Volumetric Pipeline)</span>
             <span id="incomingValReadout" style="color:var(--neon-cyan)">Val: --</span>
           </div>
           <div style="display: flex; gap: 5px; margin-top: 3px;">
@@ -311,14 +311,14 @@
       <div class="panel-card">
         <div class="panel-title">Audit Trail & Live Data Stream</div>
         <div class="data-dump" id="dataDumpTerminal">
-          [AUDIT] N=64 multi-threaded worker pipeline initialized.<br>
+          [AUDIT] N=64 elite volumetric pipeline initialized.<br>
         </div>
       </div>
 
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">Ring Buffer Terminal Logs</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] QuantEngine v6.0.2 Enterprise active. Safe listeners bound...<br>
+          [INIT] QuantEngine v6.1.0 Elite active. Heatmap renderer ready...<br>
         </div>
       </div>
     </div>
@@ -451,7 +451,7 @@
   }
 
   const SystemConfig = Object.freeze({
-    version: "6.0.2-SECURE-BINDINGS",
+    version: "6.1.0-ELITE-HEATMAP",
     encryptionAlgorithm: "AES-GCM",
     keyDerivation: "PBKDF2-SHA256",
     iterations: 150000,
@@ -540,7 +540,7 @@
       btn.classList.add('active');
       pill.innerText = "LIVE STREAM ACTIVE";
       pill.classList.add('streaming');
-      logPlatform("[LIVE] Real-time stream ingestion activated.");
+      logPlatform("[LIVE] Volumetric stream ingestion activated.");
     } else {
       btn.innerText = "Start Live Feed";
       btn.classList.remove('active');
@@ -603,7 +603,7 @@
         sessionToken = btoa(String.fromCharCode(...tokenBuffer));
         
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("[AUTH] Session token validated. Secure workspace mounted.");
+        logPlatform("[AUTH] Session token validated. Elite workspace mounted.");
         resetInactivityTimer();
       } else {
         errorMsg.innerText = "AUTHENTICATION FAILED: Invalid master key (Use 'Quantum').";
@@ -853,8 +853,18 @@
     const width = forecastCanvas.width;
     const height = forecastCanvas.height;
 
-    forecastCtx.fillStyle = 'rgba(3, 7, 15, 0.45)';
+    // 1. Elite Background: Deep-space grid effect
+    forecastCtx.fillStyle = 'rgba(2, 5, 12, 0.85)';
     forecastCtx.fillRect(0, 0, width, height);
+    
+    // Draw subtle grid lines
+    forecastCtx.strokeStyle = 'rgba(0, 243, 255, 0.04)';
+    for(let x = 0; x < width; x += 45) { 
+      forecastCtx.beginPath(); 
+      forecastCtx.moveTo(x, 0); 
+      forecastCtx.lineTo(x, height); 
+      forecastCtx.stroke(); 
+    }
 
     if (isRunning && vaultAuthMode === 1) {
       const beta = parseFloat(document.getElementById('betaSlider').value);
@@ -874,8 +884,18 @@
       }
     }
 
+    // 2. Volumetric Heatmap Layer
+    const step = width / 150;
+    telemetryHistory.forEach((val, idx) => {
+      const x = idx * step;
+      const intensity = Math.min(val / 100, 1);
+      forecastCtx.fillStyle = `rgba(0, 243, 255, ${intensity * 0.12})`;
+      forecastCtx.fillRect(x, height - (val / 100) * height, step, (val / 100) * height);
+    });
+
+    // 3. Baseline & Threshold Guides
     const baselineY = height - (currentBaseline / 100) * height;
-    forecastCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+    forecastCtx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
     forecastCtx.lineWidth = 1;
     forecastCtx.setLineDash([4, 4]);
     forecastCtx.beginPath();
@@ -890,15 +910,15 @@
     forecastCtx.moveTo(0, thresholdY); forecastCtx.lineTo(width, thresholdY);
     forecastCtx.stroke();
 
+    // 4. Glowing Signal Pulse Line
     forecastCtx.save();
     forecastCtx.translate(graphPanX, 0);
     forecastCtx.scale(graphZoom, 1.0);
 
-    const totalPoints = telemetryHistory.length + predictedForecastBuffer.length;
-    const step = width / totalPoints;
-
     forecastCtx.strokeStyle = isLiveStreamingActive ? '#7ee787' : '#00f3ff';
-    forecastCtx.lineWidth = 2.2;
+    forecastCtx.lineWidth = 2.5;
+    forecastCtx.shadowBlur = 12;
+    forecastCtx.shadowColor = isLiveStreamingActive ? '#7ee787' : '#00f3ff';
     forecastCtx.beginPath();
     
     let breaches = 0;
@@ -909,7 +929,9 @@
       if (idx === 0) forecastCtx.moveTo(x, y); else forecastCtx.lineTo(x, y);
     });
     forecastCtx.stroke();
+    forecastCtx.shadowBlur = 0;
 
+    // 5. Projected Forecast Line
     forecastCtx.strokeStyle = '#c084fc';
     forecastCtx.lineWidth = 2;
     forecastCtx.setLineDash([3, 3]);
@@ -923,6 +945,19 @@
     });
     forecastCtx.stroke();
     forecastCtx.setLineDash([]);
+
+    // 6. Breach Detection Marker
+    const latestVal = telemetryHistory[telemetryHistory.length - 1];
+    if (latestVal >= currentThreshold) {
+      forecastCtx.fillStyle = '#ff3344';
+      forecastCtx.shadowBlur = 8;
+      forecastCtx.shadowColor = '#ff3344';
+      forecastCtx.beginPath();
+      forecastCtx.arc((telemetryHistory.length - 1) * step, height - (latestVal / 100) * height, 6, 0, Math.PI * 2);
+      forecastCtx.fill();
+      forecastCtx.shadowBlur = 0;
+      if (globalTick % 60 === 0) playClickSound(); 
+    }
 
     forecastCtx.restore();
     activeBreachesCount = breaches;
@@ -980,3 +1015,4 @@
 
 </body>
 </html>
+
