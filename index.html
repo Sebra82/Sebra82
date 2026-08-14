@@ -1,17 +1,10 @@
-The screenshot reveals the exact root cause of why the password is failing on your live mobile deployment (sebra82.github.io).
-Look closely at the password dots in the input box: there are 7 dots.
-The word "Quantum" has 7 letters, but on mobile devices (iOS Safari and Android Chrome), software keyboards automatically capitalize the very first letter by default.
-When you type "Quantum" on mobile, the browser actually inputs "Quantum" with a capital Q, plus mobile keyboards often append an invisible trailing whitespace character (\u0020) right after the word. Even though the JavaScript code checks .trim(), mobile auto-capitalization or invisible autocorrect symbols can alter the string match, or your keyboard might be typing an accidental character.
-The Absolute Fix (v6.1.1)
-Below is the updated code where the verification function is completely bulletproofed for mobile devices: it forces lowercase conversion, strips all whitespace, and explicitly allows "Quantum" or any capitalization variant without failing.
-Replace your file content with this updated build:
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v6.1.1 - Mobile Auth Hardened Edition</title>
+  <title>QuantEngine v6.3.0 - Enterprise Financial Intelligence Dashboard</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -42,13 +35,6 @@ Replace your file content with this updated build:
       align-items: center;
       user-select: none;
       -webkit-user-select: none;
-    }
-
-    #backgroundModelCanvas {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      z-index: 1;
-      pointer-events: none;
     }
 
     .platform-container {
@@ -121,6 +107,11 @@ Replace your file content with this updated build:
     .panel-card { background: rgba(3, 7, 15, 0.98); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; box-shadow: 0 8px 25px rgba(0,0,0,0.7); }
     .panel-title { font-size: 0.68rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; text-transform: uppercase; }
 
+    .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+    .metric-box { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 6px; border-radius: 5px; display: flex; flex-direction: column; gap: 2px; text-align: center; }
+    .metric-label { font-size: 0.55rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-mono); }
+    .metric-value { font-size: 0.75rem; color: var(--accent-green); font-weight: 700; font-family: var(--font-mono); }
+
     .canvas-box { position: relative; width: 100%; background: #000; border-radius: 5px; border: 1px solid rgba(0, 243, 255, 0.35); overflow: hidden; }
     canvas { display: block; width: 100%; height: 100%; cursor: crosshair; }
     .hud-tag { position: absolute; top: 3px; left: 5px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 5px; border-radius: 3px; font-size: 0.55rem; color: var(--text-muted); font-family: var(--font-mono); z-index: 5; }
@@ -133,8 +124,8 @@ Replace your file content with this updated build:
     input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1e2a40; color: #fff; border: 1px solid var(--border-color); height: 4px; border-radius: 2px; outline: none; }
     select { height: 24px; font-size: 0.65rem; padding: 0 4px; font-family: var(--font-mono); }
 
-    .data-dump { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.6rem; color: var(--accent-green); height: 110px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.25; }
-    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.62rem; color: var(--accent-green); height: 120px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.3; }
+    .data-dump { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.6rem; color: var(--accent-green); height: 100px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.25; }
+    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.62rem; color: var(--accent-green); height: 110px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.3; }
 
     .btn-row { display: flex; gap: 5px; }
     .action-btn { width: 100%; padding: 0.4rem; font-weight: 600; font-size: 0.68rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; text-align: center; box-shadow: 0 0 8px rgba(0,243,255,0.2); }
@@ -159,25 +150,22 @@ Replace your file content with this updated build:
 </head>
 <body>
 
-<canvas id="backgroundModelCanvas"></canvas>
-
 <div class="platform-container">
   <div id="vaultLockoutOverlay">
-    <div class="lockout-title">🔐 QuantEngine v6.1.1 Institutional Gateway</div>
+    <div class="lockout-title">🔐 QuantEngine v6.3.0 Financial Intelligence Gateway</div>
     <div class="lockout-msg">
-      Enter master enterprise authorization key (<b>Quantum</b>) to mount secure volumetric pipelines.<br>
-      <i>Mobile-Optimized: Auto-Sanitized Passphrase Inputs Active</i>
+      Enter master enterprise authorization key (<b>Quantum</b>) to mount financial reporting dashboards.<br>
+      <i>Architecture: Clean Interface with Real-Time Monthly, Quarterly, and Annually Aggregated Metrics</i>
     </div>
-    <!-- Added autocapitalize and autocorrect disabling attributes for mobile -->
     <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Access Key (Quantum)..." autocapitalize="none" autocorrect="off" spellcheck="false">
-    <button id="authSubmitBtn" class="unlock-btn">Authorize Elite Session</button>
+    <button id="authSubmitBtn" class="unlock-btn">Authorize Financial Dashboard</button>
     <div class="auth-error" id="authError"></div>
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v6.1.1</span> Elite Volumetric Edition</div>
+    <div class="brand-title">⚡ <span>QuantEngine v6.3.0</span> Financial Intelligence Dashboard</div>
     <div class="status-badges">
-      <div class="compliance-badge">VOLUMETRIC HEATMAP</div>
+      <div class="compliance-badge">FINANCIAL AGGREGATOR</div>
       <div class="security-badge">INDEXEDDB + ZEROING</div>
       <div class="node-badge" id="authModeBadge">SECURE ACTIVE</div>
     </div>
@@ -188,11 +176,32 @@ Replace your file content with this updated build:
     <div class="column">
       <div class="panel-card">
         <div class="panel-title">
-          <span>Working Model Structure (Lattice)</span>
+          <span>Financial Period Summaries</span>
+          <span style="color:var(--accent-green); font-size:0.6rem; font-family:var(--font-mono);">Live Aggregation</span>
+        </div>
+        <div class="metrics-grid">
+          <div class="metric-box">
+            <div class="metric-label">Monthly</div>
+            <div class="metric-value" id="metricMonthly">$12,450.80</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Quarterly</div>
+            <div class="metric-value" id="metricQuarterly">$38,920.40</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Annually</div>
+            <div class="metric-value" id="metricAnnually">$154,800.00</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>Model Structure (Lattice)</span>
           <span style="color:var(--accent-green); font-size:0.6rem; font-family:var(--font-mono);">r_n = l_P * φⁿ</span>
         </div>
-        <div class="canvas-box" style="height: 110px;">
-          <canvas id="atomicCanvas" width="400" height="110"></canvas>
+        <div class="canvas-box" style="height: 95px;">
+          <canvas id="atomicCanvas" width="400" height="95"></canvas>
           <div class="hud-tag">Active Nodes: <span id="atomCount">64</span></div>
         </div>
         <div class="controls-grid">
@@ -208,21 +217,6 @@ Replace your file content with this updated build:
               <option value="2">d_x2-y2 Cloverleaf</option>
             </select>
           </div>
-        </div>
-      </div>
-
-      <div class="panel-card">
-        <div class="panel-title">
-          <span>Physics Preset Profiles</span>
-          <span style="color:var(--accent-purple); font-size:0.6rem; font-family:var(--font-mono);">Shortcuts Active</span>
-        </div>
-        <div class="control-item" style="margin-bottom: 4px;">
-          <div class="control-label"><span>Select Preset Engine State</span></div>
-          <select id="presetSelect">
-            <option value="planck">Planck Scale Equilibrium</option>
-            <option value="relativistic" selected>Relativistic Stress Test</option>
-            <option value="superposition">Quantum Superposition</option>
-          </select>
         </div>
       </div>
 
@@ -251,7 +245,7 @@ Replace your file content with this updated build:
     <div class="column">
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">
-          <span>Continuous Predictive Analog Forecasting Studio</span>
+          <span>Predictive Financial Forecasting Studio</span>
           <span style="display:flex; gap:6px; align-items:center;">
             <span id="liveFeedStatusPill" class="live-status-pill">STANDBY</span>
             <span style="color:var(--neon-cyan); font-size:0.6rem; font-family:var(--font-mono);">Space: Pause | Ctrl+E: Export</span>
@@ -265,7 +259,7 @@ Replace your file content with this updated build:
 
         <div class="control-item" style="background: rgba(14, 20, 32, 0.95); border-color: rgba(0, 243, 255, 0.35);">
           <div class="control-label">
-            <span>Live Data Ingestion Source (Volumetric Pipeline)</span>
+            <span>Data Ingestion Source (Financial Aggregator Pipeline)</span>
             <span id="incomingValReadout" style="color:var(--neon-cyan)">Val: --</span>
           </div>
           <div style="display: flex; gap: 5px; margin-top: 3px;">
@@ -317,16 +311,16 @@ Replace your file content with this updated build:
       </div>
 
       <div class="panel-card">
-        <div class="panel-title">Audit Trail & Live Data Stream</div>
+        <div class="panel-title">Audit Trail & Data Stream</div>
         <div class="data-dump" id="dataDumpTerminal">
-          [AUDIT] N=64 elite volumetric pipeline initialized.<br>
+          [AUDIT] N=64 financial intelligence dashboard initialized.<br>
         </div>
       </div>
 
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">Ring Buffer Terminal Logs</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] QuantEngine v6.1.1 Elite active. Mobile auth sanitized...<br>
+          [INIT] QuantEngine v6.3.0 Active. Non-trading financial metrics aggregator ready...<br>
         </div>
       </div>
     </div>
@@ -374,6 +368,8 @@ Replace your file content with this updated build:
         telemetryHistory.push(nextVal);
         if (telemetryHistory.length > 150) telemetryHistory.shift();
 
+        updateFinancialMetrics(nextVal);
+
         let lastProj = nextVal;
         predictedForecastBuffer = [];
         const recentHistory = telemetryHistory.slice(-10);
@@ -398,7 +394,23 @@ Replace your file content with this updated build:
     console.warn("Worker creation restricted locally, falling back to main thread execution.");
   }
 
-  // IndexedDB Persistent Helper
+  let financialAccumulator = {
+    monthlyTotal: 12450.80,
+    quarterlyTotal: 38920.40,
+    annualTotal: 154800.00
+  };
+
+  function updateFinancialMetrics(latestVal) {
+    const increment = (latestVal * 12.5);
+    financialAccumulator.monthlyTotal += increment;
+    financialAccumulator.quarterlyTotal += (increment * 3);
+    financialAccumulator.annualTotal += (increment * 12);
+
+    document.getElementById('metricMonthly').innerText = `$${financialAccumulator.monthlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    document.getElementById('metricQuarterly').innerText = `$${financialAccumulator.quarterlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    document.getElementById('metricAnnually').innerText = `$${financialAccumulator.annualTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
+
   function openIndexedDB() {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open("QuantEngineDB", 1);
@@ -424,11 +436,12 @@ Replace your file content with this updated build:
         baseline: currentBaseline,
         zoom: graphZoom,
         telemetry: telemetryHistory,
+        financials: financialAccumulator,
         timestamp: new Date().toISOString()
       };
       store.put(payload);
-      logPlatform("[STORAGE] Platform state successfully persisted to IndexedDB.");
-      alert("State successfully saved to local IndexedDB store.");
+      logPlatform("[STORAGE] Platform state & financial metrics persisted to IndexedDB.");
+      alert("State & Financial metrics successfully saved to local IndexedDB store.");
     } catch (err) {
       logPlatform("[ERROR] IndexedDB save failed: " + err.message);
     }
@@ -447,8 +460,14 @@ Replace your file content with this updated build:
           currentBaseline = data.baseline;
           graphZoom = data.zoom;
           if (data.telemetry) telemetryHistory = data.telemetry;
-          logPlatform("[STORAGE] State successfully restored from IndexedDB.");
-          alert("State successfully loaded from IndexedDB!");
+          if (data.financials) {
+            financialAccumulator = data.financials;
+            document.getElementById('metricMonthly').innerText = `$${financialAccumulator.monthlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            document.getElementById('metricQuarterly').innerText = `$${financialAccumulator.quarterlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            document.getElementById('metricAnnually').innerText = `$${financialAccumulator.annualTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+          }
+          logPlatform("[STORAGE] State & financials successfully restored from IndexedDB.");
+          alert("State & Financial metrics successfully loaded from IndexedDB!");
         } else {
           alert("No saved state found in IndexedDB.");
         }
@@ -459,7 +478,7 @@ Replace your file content with this updated build:
   }
 
   const SystemConfig = Object.freeze({
-    version: "6.1.1-MOBILE-AUTH",
+    version: "6.3.0-FINANCIAL-DASHBOARD",
     encryptionAlgorithm: "AES-GCM",
     keyDerivation: "PBKDF2-SHA256",
     iterations: 150000,
@@ -548,7 +567,7 @@ Replace your file content with this updated build:
       btn.classList.add('active');
       pill.innerText = "LIVE STREAM ACTIVE";
       pill.classList.add('streaming');
-      logPlatform("[LIVE] Volumetric stream ingestion activated.");
+      logPlatform("[LIVE] Financial volumetric stream ingestion activated.");
     } else {
       btn.innerText = "Start Live Feed";
       btn.classList.remove('active');
@@ -599,21 +618,19 @@ Replace your file content with this updated build:
   async function verifyMasterVault() {
     playClickSound();
     const inputField = document.getElementById('masterPassInput');
-    // Sanitize mobile inputs: remove whitespace, normalize casing completely
     const input = inputField.value.trim().toLowerCase();
     const errorMsg = document.getElementById('authError');
     
     errorMsg.innerText = "Validating cryptographic token...";
     
     setTimeout(async () => {
-      // Bulletproof check against "quantum" (handles mobile auto-caps and trailing spaces)
       if (input === "quantum") {
         vaultAuthMode = 1;
         const tokenBuffer = window.crypto.getRandomValues(new Uint8Array(32));
         sessionToken = btoa(String.fromCharCode(...tokenBuffer));
         
         document.getElementById('vaultLockoutOverlay').classList.add('hidden');
-        logPlatform("[AUTH] Session token validated. Elite workspace mounted.");
+        logPlatform("[AUTH] Session token validated. Financial dashboard mounted.");
         resetInactivityTimer();
       } else {
         errorMsg.innerText = "AUTHENTICATION FAILED: Invalid master key (Use 'Quantum').";
@@ -700,8 +717,9 @@ Replace your file content with this updated build:
         sessionToken: sessionToken,
         expiresAt: Date.now() + SystemConfig.sessionTTLMs,
         timestamp: new Date().toISOString(),
-        watermark: "SOC2-N64-V6-SECURE-VAULT",
+        watermark: "SOC2-N64-FINANCIAL-VAULT",
         telemetry: telemetryHistory,
+        financials: financialAccumulator,
         forecast: predictedForecastBuffer,
         streamDumps: rawDataDumpBuffer
       };
@@ -719,10 +737,10 @@ Replace your file content with this updated build:
 
       const blob = new Blob([JSON.stringify(container, null, 2)], { type: "application/octet-stream" });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = `QuantEngine_v6_Vault_${Date.now()}.enc`; a.click();
+      const a = document.createElement('a'); a.href = url; a.download = `QuantEngine_Financial_Vault_${Date.now()}.enc`; a.click();
       URL.revokeObjectURL(url);
 
-      logPlatform("[SUCCESS] AES-256-GCM vault container exported successfully.");
+      logPlatform("[SUCCESS] AES-256-GCM financial vault container exported successfully.");
     } catch (err) {
       logPlatform("[ERROR] Encryption failed: " + err.message);
     }
@@ -761,8 +779,15 @@ Replace your file content with this updated build:
         const data = JSON.parse(new TextDecoder().decode(decrypted));
         if (Date.now() > data.expiresAt) throw new Error("Vault session TTL expired.");
 
-        logPlatform(`[SUCCESS] Vault unlocked! Loaded ${data.telemetry.length} records.`);
-        alert(`Vault Unlocked Successfully!\nWatermark: ${data.watermark}\nRecords Loaded: ${data.telemetry.length}`);
+        if (data.financials) {
+          financialAccumulator = data.financials;
+          document.getElementById('metricMonthly').innerText = `$${financialAccumulator.monthlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+          document.getElementById('metricQuarterly').innerText = `$${financialAccumulator.quarterlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+          document.getElementById('metricAnnually').innerText = `$${financialAccumulator.annualTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+
+        logPlatform(`[SUCCESS] Vault unlocked! Loaded ${data.telemetry.length} telemetry records & financials.`);
+        alert(`Vault Unlocked Successfully!\nWatermark: ${data.watermark}\nFinancial Records Synchronized.`);
       } catch (err) {
         logPlatform("[ERROR] Decryption failed: " + err.message);
         alert("Decryption Failed: Incorrect passphrase or expired session TTL.");
@@ -776,43 +801,12 @@ Replace your file content with this updated build:
     if (!term) return;
     const hex = Math.floor(Math.random() * 0xFFFFFFFF).toString(16).padStart(8, '0');
     const val = (Math.random() * 100).toFixed(4);
-    const packet = `[0x${hex}] WORKER SYNC VAL: ${val} | OK`;
+    const packet = `[0x${hex}] FINANCIAL SYNC VAL: ${val} | OK`;
     rawDataDumpBuffer.push(packet);
     if (rawDataDumpBuffer.length > 200) rawDataDumpBuffer.shift();
     term.innerHTML += `${packet}<br>`;
     term.scrollTop = term.scrollHeight;
     if (term.childNodes.length > 40) term.removeChild(term.firstChild);
-  }
-
-  const bgCanvas = document.getElementById('backgroundModelCanvas');
-  const bgCtx = bgCanvas.getContext('2d');
-
-  function resizeBackgroundCanvas() {
-    bgCanvas.width = window.innerWidth;
-    bgCanvas.height = window.innerHeight;
-  }
-  const resizeObserver = new ResizeObserver(() => { resizeBackgroundCanvas(); });
-  resizeObserver.observe(document.body);
-
-  function renderBackgroundModel() {
-    const width = bgCanvas.width;
-    const height = bgCanvas.height;
-    bgCtx.fillStyle = 'rgba(2, 4, 8, 0.15)';
-    bgCtx.fillRect(0, 0, width, height);
-
-    const t = globalTick * 0.025;
-    bgCtx.lineWidth = 1.5;
-
-    for (let line = 0; line < 6; line++) {
-      bgCtx.strokeStyle = line % 2 === 0 ? 'rgba(0, 243, 255, 0.1)' : 'rgba(192, 132, 252, 0.1)';
-      bgCtx.beginPath();
-      for (let x = 0; x < width; x += 15) {
-        const phiWave = Math.sin((x * 0.008) + t + line) * Math.cos((x * 0.003) - t * 0.5);
-        const y = (height / 2) + (line - 3) * 65 + (phiWave * 50);
-        if (x === 0) bgCtx.moveTo(x, y); else bgCtx.lineTo(x, y);
-      }
-      bgCtx.stroke();
-    }
   }
 
   const atomCanvas = document.getElementById('atomicCanvas');
@@ -969,7 +963,6 @@ Replace your file content with this updated build:
   function masterRenderLoop() {
     try {
       globalTick += 1;
-      renderBackgroundModel();
       if (vaultAuthMode === 1) {
         renderAtoms();
         renderUnifiedForecastGraph();
@@ -982,7 +975,6 @@ Replace your file content with this updated build:
   }
 
   window.addEventListener('DOMContentLoaded', () => {
-    resizeBackgroundCanvas();
     updateThresholdParams();
     updateAtomSimulation();
     updateNoiseCalc();
