@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>QuantEngine v14.5 - Mobile Quantum Grid</title>
+  <title>QuantEngine v15.0 - Complete Mobile-Adaptive Grid</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -28,16 +28,15 @@
       color: var(--text-main);
       height: 100vh;
       width: 100vw;
-      overflow: hidden;
+      overflow: hidden; /* Keep body fixed to prevent iOS scroll bounce */
       display: flex;
       justify-content: center;
       align-items: center;
       user-select: none;
       -webkit-user-select: none;
-      position: fixed; /* Prevents iOS body scroll */
+      position: fixed;
     }
 
-    /* Background Planet Model Canvas */
     #backgroundModelCanvas {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -60,7 +59,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      overflow: hidden; /* Contain children */
+      overflow: hidden; /* Contain layout */
     }
 
     /* Authentication Portal Overlay */
@@ -97,22 +96,23 @@
       margin-bottom: 0.4rem;
       border-bottom: 1px solid var(--border-color);
       flex-shrink: 0;
+      flex-wrap: wrap;
+      gap: 4px;
     }
     .brand-title { display: flex; align-items: center; gap: 8px; font-size: 1.0rem; font-weight: 600; color: #fff; }
     .brand-title span { color: var(--neon-cyan); font-weight: 700; }
     .status-badges { display: flex; gap: 6px; align-items: center; }
     .compliance-badge { font-size: 0.6rem; background: rgba(0, 243, 255, 0.1); color: var(--neon-cyan); padding: 2px 6px; border-radius: 8px; border: 1px solid rgba(0, 243, 255, 0.3); font-family: var(--font-mono); font-weight: 600; }
-    .security-badge { font-size: 0.6rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 2px 6px; border-radius: 10px; border: 1px solid rgba(192, 132, 252, 0.4); font-weight: 600; font-family: var(--font-mono); }
+    .security-badge { font-size: 0.6rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 3px 6px; border-radius: 10px; border: 1px solid rgba(192, 132, 252, 0.4); font-weight: 600; font-family: var(--font-mono); }
     .node-badge { font-size: 0.6rem; background: rgba(30, 42, 64, 0.6); color: var(--accent-green); padding: 2px 6px; border-radius: 8px; border: 1px solid var(--border-color); font-family: var(--font-mono); }
 
     /* Responsive Grid Layout */
     .platform-grid {
       display: grid;
-      grid-template-columns: 1fr 2fr 1fr;
+      grid-template-columns: 1fr 2.5fr 1fr;
       gap: 0.6rem;
       flex: 1;
       overflow: hidden;
-      padding-bottom: 0.4rem;
     }
 
     .column { display: flex; flex-direction: column; gap: 0.6rem; overflow-y: auto; padding-right: 2px; }
@@ -127,8 +127,8 @@
     .hud-tag span { color: var(--neon-cyan); font-weight: 600; }
 
     /* Center Quantum Model Viewport (Overlays Planet Background) */
-    .quantum-viewport-box { position: relative; width: 100%; height: 100%; background: transparent; border-radius: 8px; overflow: hidden; grid-column: 1 / -1; grid-row: 1 / 2; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); }
-    #quantumModelCanvas { z-index: 5; cursor: grab; }
+    .quantum-viewport-box { position: relative; width: 100%; height: 100%; background: transparent; border-radius: 8px; overflow: hidden; grid-column: 1 / -1; grid-row: 2 / 3; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); }
+    #quantumModelCanvas { z-index: 5; cursor: grab; position: absolute; top:0; left:0; width:100%; height:100%; }
     #quantumModelCanvas:active { cursor: grabbing; }
 
     /* Controls Grid */
@@ -157,23 +157,38 @@
 
     /* LAPTOP LANDSCAPE (Default Grid) */
     @media (min-width: 1280px) {
-      .platform-grid { grid-template-columns: 1fr 2.5fr 1fr; }
       .quantum-viewport-box { grid-column: 2 / 3; grid-row: 1 / -1; }
-      .column { grid-row: 1 / -1; } /* Keep columns spanning */
     }
 
     /* TABLET / MOBILE LANDSCAPE (Compress columns) */
     @media (max-width: 1279px) and (min-width: 768px) {
-      .platform-grid { grid-template-columns: 1fr 1.5fr 1fr; }
-      .column { display: flex; flex-direction: column; gap: 0.5rem; }
+      .platform-grid { grid-template-columns: 1fr 1.6fr 1fr; }
       .quantum-viewport-box { grid-column: 2 / 3; grid-row: 1 / -1; height: 100%; }
     }
 
     /* MOBILE PORTRAIT (Vertical Stack) */
     @media (max-width: 767px) {
-      body { overflow-y: auto; } /* Allow body to scroll if content exceeds height */
+      body { overflow-y: auto; } /* Allow body scroll if content overflows */
       .platform-container { height: auto; min-height: 98vh; overflow: visible; }
       .widget-header { flex-wrap: wrap; gap: 5px; }
       .platform-grid { grid-template-columns: 1fr; overflow-y: visible; gap: 0.5rem; }
       
-      .
+      .column { grid-row: auto; overflow-y: visible; }
+      .quantum-viewport-box { grid-column: 1; grid-row: 2; height: 220px; margin: 5px 0; }
+      
+      .data-dump, .math-screen { height: 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Background Planet Model (Remains static in background layer) -->
+<canvas id="backgroundModelCanvas"></canvas>
+
+<div class="platform-container">
+  <!-- Authentication Portal Overlay -->
+  <div id="vaultLockoutOverlay">
+    <div class="lockout-title">🔐 Enterprise Elite Gateway</div>
+    <div class="lockout-msg">
+      Enter master authorization key (`Quantum`) to mount QuantEngine v15.0.<br>
+      <i>Node: UK-CENTRAL-0
