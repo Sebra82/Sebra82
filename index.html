@@ -1,12 +1,11 @@
-To completely eliminate any potential mobile auto-capitalization, invisible trailing spaces, or event-binding hurdles, the authentication gate has been replaced with a direct, single-click bypass combined with your standard passcode.
-Copy and replace your file with this version (v6.3.1), which adds an "Instant Bypass" button right next to the authorization field so you can enter the workspace immediately:
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v6.3.1 - Financial Intelligence Dashboard</title>
+  <title>QuantEngine v6.3.2 - Financial Intelligence Dashboard</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -154,21 +153,21 @@ Copy and replace your file with this version (v6.3.1), which adds an "Instant By
 
 <div class="platform-container">
   <div id="vaultLockoutOverlay">
-    <div class="lockout-title">🔐 QuantEngine v6.3.1 Financial Gateway</div>
+    <div class="lockout-title">🔐 QuantEngine v6.3.2 Financial Gateway</div>
     <div class="lockout-msg">
-      Enter master enterprise key (<b>Quantum</b>) or click <b>Instant Bypass</b> to mount dashboard.<br>
-      <i>Architecture: Clean Interface with Real-Time Monthly, Quarterly, and Annually Aggregated Metrics</i>
+      Enter master key (<b>Quantum</b>) or click <b>Instant Bypass</b> to mount dashboard instantly.<br>
+      <i>Mobile-Hardened: Direct Inline Event Bindings Active</i>
     </div>
-    <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Key (Quantum)..." autocapitalize="none" autocorrect="off" spellcheck="false">
+    <input type="password" id="masterPassInput" class="unlock-input" placeholder="Enter Key (Quantum)..." onkeydown="if(event.key==='Enter')verifyMasterVault()" autocapitalize="none" autocorrect="off" spellcheck="false">
     <div style="display: flex; gap: 10px; width: 340px;">
-      <button id="authSubmitBtn" class="unlock-btn" style="flex: 2;">Authorize</button>
-      <button id="bypassBtn" class="unlock-btn btn-secondary" style="flex: 1; background: #1e2a40; color: #00f3ff; border: 1px solid var(--neon-cyan);">Bypass</button>
+      <button onclick="verifyMasterVault()" class="unlock-btn" style="flex: 2;">Authorize</button>
+      <button onclick="grantWorkspaceAccess()" class="unlock-btn btn-secondary" style="flex: 1; background: #1e2a40; color: #00f3ff; border: 1px solid var(--neon-cyan);">Bypass</button>
     </div>
     <div class="auth-error" id="authError"></div>
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v6.3.1</span> Financial Intelligence Dashboard</div>
+    <div class="brand-title">⚡ <span>QuantEngine v6.3.2</span> Financial Intelligence Dashboard</div>
     <div class="status-badges">
       <div class="compliance-badge">FINANCIAL AGGREGATOR</div>
       <div class="security-badge">INDEXEDDB + ZEROING</div>
@@ -212,11 +211,11 @@ Copy and replace your file with this version (v6.3.1), which adds an "Instant By
         <div class="controls-grid">
           <div class="control-item">
             <div class="control-label">Scale Index (n): <span id="atomScaleVal">64</span></div>
-            <input type="range" id="atomScaleSlider" min="10" max="250" value="64">
+            <input type="range" id="atomScaleSlider" min="10" max="250" value="64" oninput="playClickSound(); updateAtomSimulation()">
           </div>
           <div class="control-item">
             <div class="control-label">Orbital Mode:</div>
-            <select id="orbitalModeSelect">
+            <select id="orbitalModeSelect" onchange="playClickSound(); updateAtomSimulation()">
               <option value="0">s-Shell Orbital</option>
               <option value="1" selected>p_z Dumbbell</option>
               <option value="2">d_x2-y2 Cloverleaf</option>
@@ -233,11 +232,11 @@ Copy and replace your file with this version (v6.3.1), which adds an "Instant By
         <div class="controls-grid">
           <div class="control-item">
             <div class="control-label">Relativistic (&beta;): <span id="betaVal">0.30</span></div>
-            <input type="range" id="betaSlider" min="0.0" max="0.95" step="0.05" value="0.3">
+            <input type="range" id="betaSlider" min="0.0" max="0.95" step="0.05" value="0.3" oninput="playClickSound(); updateNoiseCalc()">
           </div>
           <div class="control-item">
             <div class="control-label">Tunneling (&kappa;): <span id="kappaVal">1.50</span></div>
-            <input type="range" id="kappaSlider" min="0.1" max="5.0" step="0.1" value="1.5">
+            <input type="range" id="kappaSlider" min="0.1" max="5.0" step="0.1" value="1.5" oninput="playClickSound(); updateNoiseCalc()">
           </div>
         </div>
         <div class="calc-row">
@@ -268,27 +267,27 @@ Copy and replace your file with this version (v6.3.1), which adds an "Instant By
             <span id="incomingValReadout" style="color:var(--neon-cyan)">Val: --</span>
           </div>
           <div style="display: flex; gap: 5px; margin-top: 3px;">
-            <select id="liveSourceSelect" style="flex: 1;">
+            <select id="liveSourceSelect" style="flex: 1;" onchange="playClickSound()">
               <option value="simulated">Quantum Wave Noise Stream</option>
               <option value="sine">Harmonic Sine Oscillation Feed</option>
               <option value="manual_api">Custom External JSON / REST Poll (Simulated)</option>
             </select>
-            <button id="toggleLiveFeedBtn" class="action-btn btn-live-toggle" style="width: 120px;">Start Live Feed</button>
+            <button id="toggleLiveFeedBtn" onclick="playClickSound(); toggleLiveStreamFeed()" class="action-btn btn-live-toggle" style="width: 120px;">Start Live Feed</button>
           </div>
         </div>
         
         <div class="controls-grid" style="grid-template-columns: 1fr 1fr 1fr;">
           <div class="control-item">
             <div class="control-label">Threshold: <span id="threshVal">75.0</span></div>
-            <input type="range" id="threshSlider" min="20" max="95" value="75">
+            <input type="range" id="threshSlider" min="20" max="95" value="75" oninput="playClickSound(); updateThresholdParams()">
           </div>
           <div class="control-item">
             <div class="control-label">Baseline: <span id="baseVal">40.0</span></div>
-            <input type="range" id="baseSlider" min="10" max="70" value="40">
+            <input type="range" id="baseSlider" min="10" max="70" value="40" oninput="playClickSound(); updateThresholdParams()">
           </div>
           <div class="control-item">
             <div class="control-label">Sample Rate: <span id="rateVal">1.0x</span></div>
-            <input type="range" id="rateSlider" min="0.2" max="3.0" step="0.1" value="1.0">
+            <input type="range" id="rateSlider" min="0.2" max="3.0" step="0.1" value="1.0" oninput="playClickSound(); updateThresholdParams()">
           </div>
         </div>
       </div>
@@ -305,13 +304,13 @@ Copy and replace your file with this version (v6.3.1), which adds an "Instant By
           <input type="password" id="exportPassInput" class="unlock-input" style="width: 100%; font-size: 0.75rem; padding: 0.35rem;" placeholder="Enter Passphrase...">
         </div>
         <div class="btn-row">
-          <button id="exportVaultBtn" class="action-btn">Export Secure Vault</button>
-          <button id="importVaultBtn" class="action-btn btn-secondary">Import Secure Vault</button>
-          <input type="file" id="importEncFile" style="display:none" accept=".enc,.json,.dat">
+          <button onclick="playClickSound(); exportEncryptedDataDump()" class="action-btn">Export Secure Vault</button>
+          <button onclick="playClickSound(); document.getElementById('importEncFile').click()" class="action-btn btn-secondary">Import Secure Vault</button>
+          <input type="file" id="importEncFile" style="display:none" accept=".enc,.json,.dat" onchange="importEncryptedDataDump(event)">
         </div>
         <div class="btn-row" style="margin-top: 5px;">
-          <button id="saveIdbBtn" class="action-btn btn-secondary">Save to IndexedDB</button>
-          <button id="loadIdbBtn" class="action-btn btn-secondary">Load IndexedDB</button>
+          <button onclick="playClickSound(); persistToIndexedDB()" class="action-btn btn-secondary">Save to IndexedDB</button>
+          <button onclick="playClickSound(); restoreFromIndexedDB()" class="action-btn btn-secondary">Load IndexedDB</button>
         </div>
       </div>
 
@@ -325,7 +324,7 @@ Copy and replace your file with this version (v6.3.1), which adds an "Instant By
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">Ring Buffer Terminal Logs</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] QuantEngine v6.3.1 Active. Bypass & auth mechanisms mounted...<br>
+          [INIT] QuantEngine v6.3.2 Active. Direct inline bindings verified...<br>
         </div>
       </div>
     </div>
@@ -482,7 +481,7 @@ Copy and replace your file with this version (v6.3.1), which adds an "Instant By
   }
 
   const SystemConfig = Object.freeze({
-    version: "6.3.1-FINANCIAL-DASHBOARD",
+    version: "6.3.2-FINANCIAL-DASHBOARD",
     encryptionAlgorithm: "AES-GCM",
     keyDerivation: "PBKDF2-SHA256",
     iterations: 150000,
@@ -535,20 +534,7 @@ Copy and replace your file with this version (v6.3.1), which adds an "Instant By
   });
 
   window.addEventListener('keydown', (e) => {
-    if (vaultAuthMode === 0) {
-      if (e.key === 'Tab') {
-        const inputEl = document.getElementById('masterPassInput');
-        const btnEl = document.getElementById('authSubmitBtn');
-        const activeEl = document.activeElement;
-        if (e.shiftKey) {
-          if (activeEl === inputEl) { e.preventDefault(); btnEl.focus(); }
-        } else {
-          if (activeEl === btnEl) { e.preventDefault(); inputEl.focus(); }
-        }
-      }
-      return;
-    }
-
+    if (vaultAuthMode === 0) return;
     if (e.code === 'Space' && e.target.tagName !== 'INPUT') {
       e.preventDefault();
       isRunning = !isRunning;
@@ -632,7 +618,7 @@ Copy and replace your file with this version (v6.3.1), which adds an "Instant By
     resetInactivityTimer();
   }
 
-  async function verifyMasterVault() {
+  function verifyMasterVault() {
     playClickSound();
     const inputField = document.getElementById('masterPassInput');
     const input = inputField.value.trim().toLowerCase();
@@ -985,36 +971,11 @@ Copy and replace your file with this version (v6.3.1), which adds an "Instant By
     requestAnimationFrame(masterRenderLoop);
   }
 
-  window.addEventListener('DOMContentLoaded', () => {
-    updateThresholdParams();
-    updateAtomSimulation();
-    updateNoiseCalc();
-
-    document.getElementById('authSubmitBtn').addEventListener('click', verifyMasterVault);
-    document.getElementById('bypassBtn').addEventListener('click', grantWorkspaceAccess);
-    document.getElementById('masterPassInput').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') verifyMasterVault();
-    });
-
-    document.getElementById('atomScaleSlider').addEventListener('input', () => { playClickSound(); updateAtomSimulation(); });
-    document.getElementById('orbitalModeSelect').addEventListener('change', () => { playClickSound(); updateAtomSimulation(); });
-    document.getElementById('presetSelect').addEventListener('change', () => { playClickSound(); applyPhysicsPreset(); });
-    document.getElementById('betaSlider').addEventListener('input', () => { playClickSound(); updateNoiseCalc(); });
-    document.getElementById('kappaSlider').addEventListener('input', () => { playClickSound(); updateNoiseCalc(); });
-    document.getElementById('toggleLiveFeedBtn').addEventListener('click', () => { playClickSound(); toggleLiveStreamFeed(); });
-    document.getElementById('liveSourceSelect').addEventListener('change', playClickSound);
-    document.getElementById('threshSlider').addEventListener('input', () => { playClickSound(); updateThresholdParams(); });
-    document.getElementById('baseSlider').addEventListener('input', () => { playClickSound(); updateThresholdParams(); });
-    document.getElementById('rateSlider').addEventListener('input', () => { playClickSound(); updateThresholdParams(); });
-    
-    document.getElementById('exportVaultBtn').addEventListener('click', () => { playClickSound(); exportEncryptedDataDump(); });
-    document.getElementById('importVaultBtn').addEventListener('click', () => { playClickSound(); document.getElementById('importEncFile').click(); });
-    document.getElementById('importEncFile').addEventListener('change', importEncryptedDataDump);
-    document.getElementById('saveIdbBtn').addEventListener('click', () => { playClickSound(); persistToIndexedDB(); });
-    document.getElementById('loadIdbBtn').addEventListener('click', () => { playClickSound(); restoreFromIndexedDB(); });
-
-    masterRenderLoop();
-  });
+  // Initialize immediately on script execution
+  updateThresholdParams();
+  updateAtomSimulation();
+  updateNoiseCalc();
+  masterRenderLoop();
 </script>
 
 </body>
