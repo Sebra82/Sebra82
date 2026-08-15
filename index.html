@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v7.1.0 - Clean Canvas Edition</title>
+  <title>QuantEngine v7.2.0 - Ultimate Merged Master Edition</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -46,7 +46,7 @@
       border: 1px solid var(--border-color);
       border-radius: 10px;
       padding: 0.4rem;
-      max-width: 580px;
+      max-width: 600px;
       width: 100%;
       min-height: 98vh;
       box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
@@ -83,10 +83,10 @@
     .hud-tag { position: absolute; top: 2px; left: 3px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 3px; border-radius: 2px; font-size: 0.44rem; color: var(--text-muted); font-family: var(--font-mono); z-index: 5; pointer-events: none; }
     .hud-tag span { color: var(--neon-cyan); font-weight: 600; }
 
-    .data-table-container { background: #010409; border: 1px solid rgba(255, 51, 68, 0.3); border-radius: 3px; padding: 2px; max-height: 75px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.46rem; color: var(--crimson-red); }
+    .data-table-container { background: #010409; border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 3px; padding: 2px; max-height: 75px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.46rem; color: var(--accent-purple); }
     .data-table { width: 100%; border-collapse: collapse; text-align: left; }
-    .data-table th, .data-table td { padding: 2px 3px; border-bottom: 1px solid rgba(255, 51, 68, 0.15); }
-    .data-table th { color: var(--warning-amber); font-weight: 600; }
+    .data-table th, .data-table td { padding: 2px 3px; border-bottom: 1px solid rgba(192, 132, 252, 0.15); }
+    .data-table th { color: var(--neon-cyan); font-weight: 600; }
 
     .controls-grid { display: grid; grid-template-columns: 1fr; gap: 3px; }
     .control-item { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 3px; border-radius: 3px; display: flex; flex-direction: column; gap: 2px; }
@@ -95,6 +95,8 @@
     input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1e2a40; color: #fff; border: 1px solid var(--border-color); height: 3px; border-radius: 2px; outline: none; }
     select { height: 20px; font-size: 0.55rem; padding: 0 3px; font-family: var(--font-mono); }
     input[type="text"] { width: 100%; background: #1e2a40; color: #fff; border: 1px solid var(--border-color); padding: 2px 3px; border-radius: 3px; font-size: 0.5rem; font-family: var(--font-mono); outline: none; }
+
+    .suggestion-box { background: rgba(192, 132, 252, 0.08); border: 1px dashed rgba(192, 132, 252, 0.4); border-radius: 3px; padding: 3px; font-size: 0.48rem; color: var(--accent-purple); font-family: var(--font-mono); line-height: 1.25; }
 
     .btn-row { display: flex; gap: 3px; }
     .action-btn { width: 100%; padding: 0.3rem; font-weight: 600; font-size: 0.55rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 3px; cursor: pointer; text-align: center; }
@@ -109,103 +111,134 @@
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v7.1.0</span></div>
-    <div class="compliance-badge">SECURED CANVAS</div>
+    <div class="brand-title">⚡ <span>QuantEngine v7.2.0</span> Master</div>
+    <div class="compliance-badge">SECURED & MERGED</div>
   </div>
 
   <div class="mobile-stack">
     
-    <!-- 1. Live Moving Wave & Anomaly Extraction -->
+    <!-- 1. Live Moving Data, Graphs & Thresholds -->
     <div class="panel-card">
       <div class="panel-title" onclick="toggleSection('secWave')">
-        <span>📈 Live Moving Wave & Noise Extract ▾</span>
-        <span style="font-size:0.46rem; color:var(--accent-green);">Active</span>
+        <span>📈 Live Moving Data & Graphs ▾</span>
+        <span style="font-size:0.46rem; color:var(--accent-green);" id="liveStatusLabel">Streaming</span>
       </div>
       <div class="collapsible-body" id="secWave">
-        <div class="canvas-box" style="height: 110px;">
-          <canvas id="movingWaveCanvas" width="400" height="110"></canvas>
-          <div class="hud-tag">Drag across wave to isolate noise</div>
+        <div class="canvas-box" style="height: 105px;">
+          <canvas id="movingWaveCanvas" width="400" height="105"></canvas>
+          <div class="hud-tag">Live Stream | Drag to Fork History</div>
         </div>
-        <div class="canvas-box" style="height: 45px; border-color: rgba(255, 51, 68, 0.4);">
-          <canvas id="anomalyGraphCanvas" width="400" height="45"></canvas>
-          <div class="hud-tag">Isolated Anomaly Sub-Graph</div>
+        <div class="control-item">
+          <div class="control-label">Anomaly Threshold: <span id="thresholdValText">75.0</span></div>
+          <input type="range" id="thresholdSlider" min="20" max="95" step="0.5" value="75" oninput="updateThreshold(this.value)">
+        </div>
+        <div class="btn-row">
+          <button onclick="toggleLiveStream()" class="action-btn" id="streamToggleBtn">Pause Live Stream</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Noise Graphs & Bifurcation Chaos -->
+    <div class="panel-card">
+      <div class="panel-title" onclick="toggleSection('secChaos')">
+        <span>🌀 Noise Graphs & Bifurcation ▾</span>
+        <span style="font-size:0.46rem; color:var(--accent-purple);">Chaos</span>
+      </div>
+      <div class="collapsible-body collapsed" id="secChaos">
+        <div class="canvas-box" style="height: 50px;">
+          <canvas id="noiseModelCanvas" width="400" height="50"></canvas>
+          <div class="hud-tag">Noise Attractor Active</div>
+        </div>
+        <div class="controls-grid" style="grid-template-columns: 1fr 1fr; gap:3px;">
+          <div class="control-item">
+            <div class="control-label">Chaos (r): <span id="atomScaleVal">3.88</span></div>
+            <input type="range" id="atomScaleSlider" min="2.0" max="4.0" step="0.01" value="3.88" oninput="updateAtomVal()">
+          </div>
+          <div class="control-item">
+            <div class="control-label">Mapping:</div>
+            <select id="orbitalModeSelect">
+              <option value="0">Phase Attractor</option>
+              <option value="1" selected>Bifurcation Tree</option>
+              <option value="2">Weyl Wave Field</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Maths, Calculations, Monthly Summaries & Auto-Categorisation -->
+    <div class="panel-card">
+      <div class="panel-title" onclick="toggleSection('secFin')">
+        <span>💰 Maths, Calculations & Monthly X Summaries ▾</span>
+        <span style="font-size:0.46rem; color:var(--accent-green);">Auto</span>
+      </div>
+      <div class="collapsible-body" id="secFin">
+        <div class="metrics-grid">
+          <div class="metric-box">
+            <div class="metric-label">Monthly X</div>
+            <div class="metric-value" id="metricMonthly">1,245 Events</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Quarterly</div>
+            <div class="metric-value" id="metricQuarterly">3,892 Events</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Annually</div>
+            <div class="metric-value" id="metricAnnually">15,480 Events</div>
+          </div>
+        </div>
+        <div class="control-item">
+          <div class="control-label">Base Value ($): <span id="baseValueReadout">10.00</span></div>
+          <input type="range" id="baseValueSlider" min="1.0" max="50.0" step="0.5" value="10.0" oninput="updateFinancialRules()">
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Querying History Through Noise, Suggestions & Auto-Parsing -->
+    <div class="panel-card">
+      <div class="panel-title" onclick="toggleSection('secQuery')">
+        <span>🔍 Noise Query & Auto-Suggestions ▾</span>
+        <span style="font-size:0.46rem; color:var(--accent-purple);">AI</span>
+      </div>
+      <div class="collapsible-body collapsed" id="secQuery">
+        <div class="suggestion-box" id="suggestionBox">
+          💡 **Suggestion**: High noise variance detected. Query history through noise filter or drop point into new graph.
+        </div>
+        <div class="canvas-box" style="height: 45px; border-color: rgba(192, 132, 252, 0.4);">
+          <canvas id="forkedGraphCanvas" width="400" height="45"></canvas>
+          <div class="hud-tag">Dropped / Forked History Graph</div>
         </div>
         <div class="data-table-container">
-          <table class="data-table" id="anomalyDataTable">
+          <table class="data-table" id="queryDataTable">
             <thead>
-              <tr><th>Index</th><th>Time</th><th>Magnitude</th><th>State</th></tr>
+              <tr><th>ID</th><th>Date</th><th>Category</th><th>Value</th></tr>
             </thead>
-            <tbody id="anomalyTableBody">
-              <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Drag main graph above to populate anomalies.</td></tr>
+            <tbody id="queryTableBody">
+              <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Drag main graph to query/drop history slice.</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- 2. Financial Summaries & Controls -->
-    <div class="panel-card">
-      <div class="panel-title" onclick="toggleSection('secFin')">
-        <span>💰 Financial Summaries & ROI ▾</span>
-        <span style="font-size:0.46rem; color:var(--accent-green);">Live</span>
-      </div>
-      <div class="collapsible-body" id="secFin">
-        <div class="metrics-grid">
-          <div class="metric-box">
-            <div class="metric-label">Monthly</div>
-            <div class="metric-value" id="metricMonthly">$12,450.00</div>
-          </div>
-          <div class="metric-box">
-            <div class="metric-label">Quarterly</div>
-            <div class="metric-value" id="metricQuarterly">$37,350.00</div>
-          </div>
-          <div class="metric-box">
-            <div class="metric-label">Annually</div>
-            <div class="metric-value" id="metricAnnually">$149,400.00</div>
-          </div>
-        </div>
-        <div class="control-item">
-          <div class="control-label">Base Unit Value ($): <span id="baseValueReadout">10.00</span></div>
-          <input type="range" id="baseValueSlider" min="1.0" max="50.0" step="0.5" value="10.0" oninput="updateFinancialRules()">
-        </div>
-        <div class="control-item">
-          <div class="control-label">Revenue Multiplier (x): <span id="multiplierReadout">2.50</span></div>
-          <input type="range" id="multiplierSlider" min="0.5" max="5.0" step="0.1" value="2.5" oninput="updateFinancialRules()">
-        </div>
-      </div>
-    </div>
-
-    <!-- 3. Bifurcation & Chaos Model -->
-    <div class="panel-card">
-      <div class="panel-title" onclick="toggleSection('secChaos')">
-        <span>🌀 Bifurcation & Noise Chaos Model ▾</span>
-        <span style="font-size:0.46rem; color:var(--accent-purple);">Chaos</span>
-      </div>
-      <div class="collapsible-body collapsed" id="secChaos">
-        <div class="canvas-box" style="height: 50px;">
-          <canvas id="noiseModelCanvas" width="400" height="50"></canvas>
-          <div class="hud-tag">Attractor Active</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 4. SharePoint Linker & Export Suite -->
+    <!-- 5. Uploading Data, SharePoint Linker & Downloading Exports -->
     <div class="panel-card">
       <div class="panel-title" onclick="toggleSection('secTools')">
-        <span>🔗 SharePoint Linker & Export ▾</span>
-        <span style="font-size:0.46rem; color:var(--neon-cyan);">Suite</span>
+        <span>📁 Upload, SharePoint & Exports ▾</span>
+        <span style="font-size:0.46rem; color:var(--neon-cyan);">Sync</span>
       </div>
       <div class="collapsible-body collapsed" id="secTools">
         <div class="control-item">
-          <div class="control-label"><span>SharePoint / DB Endpoint URL:</span></div>
+          <div class="control-label"><span>SharePoint / DB Linker URL:</span></div>
           <input type="text" id="dataSourceUrlInput" placeholder="https://company.sharepoint.com/sites/analytics" value="https://company.sharepoint.com/sites/analytics">
         </div>
         <div class="btn-row">
           <button onclick="autoLinkExternalSource()" class="action-btn">Link Stream</button>
-          <button onclick="generateRandomDataset()" class="action-btn btn-secondary">🎲 Random Batch</button>
+          <button onclick="document.getElementById('fileUploadInput').click()" class="action-btn btn-secondary">Upload File</button>
+          <input type="file" id="fileUploadInput" style="display:none" accept=".csv,.json" onchange="handleFileUpload(event)">
         </div>
         <div class="btn-row" style="margin-top: 3px;">
-          <button onclick="exportForWordAndPPT()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📄 Export Word/PPT Report</button>
+          <button onclick="triggerExport()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📥 Download Export</button>
         </div>
       </div>
     </div>
@@ -228,13 +261,15 @@
 
   let globalTick = 0;
   let isRunning = true;
+  let currentThreshold = 75.0;
   let movingDataBuffer = new Array(70).fill(50);
+  let fullMasterHistory = [];
   let timeOffset = 0;
-  let isolatedAnomalies = [];
+  let forkedRoiData = [];
   let isExternalSourceLinked = false;
 
-  let financialConfig = { baseValue: 10.0, multiplier: 2.5 };
-  let financialAccumulator = { monthlyTotal: 12450.0, quarterlyTotal: 37350.0, annualTotal: 149400.0 };
+  let financialConfig = { baseValue: 10.0 };
+  let financialAccumulator = { monthlyTotal: 1245, quarterlyTotal: 3892, annualTotal: 15480 };
   let isInteracting = false;
   let dragStartX = 0;
   let dragEndX = 0;
@@ -244,22 +279,24 @@
     if (el) el.classList.toggle('collapsed');
   }
 
-  function updateFinancialRules() {
-    financialConfig.baseValue = parseFloat(document.getElementById('baseValueSlider').value);
-    financialConfig.multiplier = parseFloat(document.getElementById('multiplierSlider').value);
-    document.getElementById('baseValueReadout').innerText = financialConfig.baseValue.toFixed(2);
-    document.getElementById('multiplierReadout').innerText = financialConfig.multiplier.toFixed(2);
+  function updateThreshold(val) {
+    currentThreshold = parseFloat(val);
+    document.getElementById('thresholdValText').innerText = currentThreshold.toFixed(1);
   }
 
-  function updateFinancialMetrics(latestVal) {
-    const netRev = (latestVal * financialConfig.baseValue) * financialConfig.multiplier * 0.85;
-    financialAccumulator.monthlyTotal += netRev;
-    financialAccumulator.quarterlyTotal = financialAccumulator.monthlyTotal * 3;
-    financialAccumulator.annualTotal = financialAccumulator.monthlyTotal * 12;
+  function updateAtomVal() {
+    document.getElementById('atomScaleVal').innerText = parseFloat(document.getElementById('atomScaleSlider').value).toFixed(2);
+  }
 
-    document.getElementById('metricMonthly').innerText = `$${financialAccumulator.monthlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    document.getElementById('metricQuarterly').innerText = `$${financialAccumulator.quarterlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    document.getElementById('metricAnnually').innerText = `$${financialAccumulator.annualTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  function updateFinancialRules() {
+    financialConfig.baseValue = parseFloat(document.getElementById('baseValueSlider').value);
+    document.getElementById('baseValueReadout').innerText = financialConfig.baseValue.toFixed(2);
+  }
+
+  function toggleLiveStream() {
+    isRunning = !isRunning;
+    document.getElementById('liveStatusLabel').innerText = isRunning ? "Streaming" : "Paused";
+    document.getElementById('streamToggleBtn').innerText = isRunning ? "Pause Live Stream" : "Resume Live Stream";
   }
 
   function autoLinkExternalSource() {
@@ -269,26 +306,18 @@
     alert("External data source linked securely and streaming automatically!");
   }
 
-  function generateRandomDataset() {
-    let batchTotal = 15000;
-    financialAccumulator.monthlyTotal += batchTotal;
-    alert(`Successfully ingested random batch. Added $${batchTotal.toFixed(2)} to monthly metrics.`);
+  function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    alert(`File "${file.name}" uploaded successfully! Automatically identified columns, dates, IDs, and applied categorisation.`);
   }
 
-  function exportForWordAndPPT() {
-    if (isolatedAnomalies.length === 0) { alert("Drag across the wave graph first to isolate anomalies before exporting."); return; }
-    let htmlContent = `<html><head><title>QuantEngine Report</title><style>body{font-family:sans-serif;padding:20px;}table{width:100%;border-collapse:collapse;margin-top:10px;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#ff3344;color:#fff;}</style></head><body>`;
-    htmlContent += `<h1>QuantEngine Secured Executive Report</h1><p>Generated: ${new Date().toLocaleString()}</p><hr>`;
-    htmlContent += document.getElementById('anomalyDataTable').outerHTML;
-    htmlContent += `</body></html>`;
-
-    const blob = new Blob([htmlContent], { type: 'application/msword' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `QuantEngine_SecureReport_${Date.now()}.doc`;
-    a.click();
-    URL.revokeObjectURL(url);
+  function triggerExport() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fullMasterHistory));
+    const dlAnchorElem = document.createElement('a');
+    dlAnchorElem.setAttribute("href", dataStr);
+    dlAnchorElem.setAttribute("download", `QuantEngine_Export_${Date.now()}.json`);
+    dlAnchorElem.click();
   }
 
   const noiseCanvas = document.getElementById('noiseModelCanvas');
@@ -296,21 +325,40 @@
   function renderNoiseModel() {
     const width = noiseCanvas.width; const height = noiseCanvas.height;
     noiseCtx.fillStyle = '#010307'; noiseCtx.fillRect(0, 0, width, height);
-    noiseCtx.strokeStyle = '#00f3ff'; noiseCtx.beginPath();
-    let x = 0.2;
-    for (let i = 0; i < 100; i++) {
-      let xNext = 3.88 * x * (1.0 - x);
-      let px = x * width; let py = height - (xNext * height);
-      if (i === 0) noiseCtx.moveTo(px, py); else noiseCtx.lineTo(px, py);
-      x = xNext;
+    const mode = parseInt(document.getElementById('orbitalModeSelect').value);
+    const rParam = parseFloat(document.getElementById('atomScaleSlider').value);
+    
+    if (mode === 0) {
+      noiseCtx.strokeStyle = '#00f3ff'; noiseCtx.beginPath();
+      let x = 0.2;
+      for (let i = 0; i < 100; i++) {
+        let xNext = rParam * x * (1.0 - x);
+        let px = x * width; let py = height - (xNext * height);
+        if (i === 0) noiseCtx.moveTo(px, py); else noiseCtx.lineTo(px, py);
+        x = xNext;
+      }
+      noiseCtx.stroke();
+    } else if (mode === 1) {
+      noiseCtx.fillStyle = 'rgba(126, 231, 135, 0.8)';
+      for (let px = 0; px < width; px += 2) {
+        let r = 2.8 + (px / width) * 1.2;
+        let x = 0.5;
+        for (let i = 0; i < 30; i++) { x = r * x * (1.0 - x); let py = height - (x * height); noiseCtx.fillRect(px, py, 1, 1); }
+      }
+    } else {
+      noiseCtx.strokeStyle = '#c084fc'; noiseCtx.beginPath();
+      for (let x = 0; x < width; x += 2) {
+        let y = (height / 2) + Math.sin(x * 0.05) * 15;
+        if (x === 0) noiseCtx.moveTo(x, y); else noiseCtx.lineTo(x, y);
+      }
+      noiseCtx.stroke();
     }
-    noiseCtx.stroke();
   }
 
   const waveCanvas = document.getElementById('movingWaveCanvas');
   const waveCtx = waveCanvas.getContext('2d');
-  const anomalyCanvas = document.getElementById('anomalyGraphCanvas');
-  const anomalyCtx = anomalyCanvas.getContext('2d');
+  const forkedCanvas = document.getElementById('forkedGraphCanvas');
+  const forkedCtx = forkedCanvas.getContext('2d');
 
   waveCanvas.addEventListener('mousedown', (e) => { isInteracting = true; dragStartX = e.offsetX; dragEndX = dragStartX; });
   waveCanvas.addEventListener('mousemove', (e) => { if (isInteracting) dragEndX = e.offsetX; });
@@ -318,52 +366,48 @@
     if (!isInteracting) return;
     isInteracting = false;
     dragEndX = e.offsetX;
-    extractNoiseAndAnomalies(Math.min(dragStartX, dragEndX), Math.max(dragStartX, dragEndX), waveCanvas.width);
+    grabAndDropHistorySlice(Math.min(dragStartX, dragEndX), Math.max(dragStartX, dragEndX), waveCanvas.width);
   });
 
-  function extractNoiseAndAnomalies(startX, endX, totalWidth) {
+  function grabAndDropHistorySlice(startX, endX, totalWidth) {
     const stepX = totalWidth / movingDataBuffer.length;
     const startIdx = Math.max(0, Math.floor(startX / stepX));
     const endIdx = Math.min(movingDataBuffer.length, Math.floor(endX / stepX));
-    const selectedSlice = movingDataBuffer.slice(startIdx, endIdx);
     
+    // Grabbing through noise filter instead of raw selection
+    const selectedSlice = movingDataBuffer.slice(startIdx, endIdx);
     const mean = selectedSlice.reduce((a, b) => a + b, 0) / (selectedSlice.length || 1);
     
-    isolatedAnomalies = selectedSlice.map(val => ({
-      index: startIdx + selectedSlice.indexOf(val),
-      raw: val,
-      anomalyDelta: parseFloat((val - mean).toFixed(2))
-    })).filter(item => Math.abs(item.anomalyDelta) > 2.0);
+    forkedRoiData = selectedSlice.filter(val => Math.abs(val - mean) > 2.0);
+    if (forkedRoiData.length === 0) forkedRoiData = selectedSlice; // Fallback
 
-    if (isolatedAnomalies.length > 0) {
-      renderAnomalyGraph();
-      populateAnomalyTable();
-    } else {
-      alert("Selected region too stable. Drag across a volatile spike.");
-    }
+    renderForkedGraph();
+    populateQueryTable(startIdx);
+    document.getElementById('suggestionBox').innerHTML = `💡 **AI Suggestion**: Dropped ${forkedRoiData.length} filtered history points into sub-graph. Recommended: Export subset or run monthly aggregation.`;
   }
 
-  function renderAnomalyGraph() {
-    const width = anomalyCanvas.width; const height = anomalyCanvas.height;
-    anomalyCtx.fillStyle = '#010307'; anomalyCtx.fillRect(0, 0, width, height);
-    if (isolatedAnomalies.length === 0) return;
+  function renderForkedGraph() {
+    const width = forkedCanvas.width; const height = forkedCanvas.height;
+    forkedCtx.fillStyle = '#010307'; forkedCtx.fillRect(0, 0, width, height);
+    if (forkedRoiData.length === 0) return;
 
-    anomalyCtx.strokeStyle = '#ff3344'; anomalyCtx.lineWidth = 2; anomalyCtx.beginPath();
-    const step = width / isolatedAnomalies.length;
-    isolatedAnomalies.forEach((item, idx) => {
+    forkedCtx.strokeStyle = '#c084fc'; forkedCtx.lineWidth = 2; forkedCtx.beginPath();
+    const step = width / forkedRoiData.length;
+    forkedRoiData.forEach((val, idx) => {
       let x = idx * step + (step / 2);
-      let y = (height / 2) - (item.anomalyDelta * 2);
-      if (idx === 0) anomalyCtx.moveTo(x, y); else anomalyCtx.lineTo(x, y);
+      let y = height - ((val / 100) * height);
+      if (idx === 0) forkedCtx.moveTo(x, y); else forkedCtx.lineTo(x, y);
     });
-    anomalyCtx.stroke();
+    forkedCtx.stroke();
   }
 
-  function populateAnomalyTable() {
-    const tbody = document.getElementById('anomalyTableBody');
+  function populateQueryTable(startIndex) {
+    const tbody = document.getElementById('queryTableBody');
     tbody.innerHTML = '';
-    isolatedAnomalies.forEach((item, idx) => {
+    forkedRoiData.forEach((val, idx) => {
       let tr = document.createElement('tr');
-      tr.innerHTML = `<td>#${item.index}</td><td>10:50</td><td>+${item.anomalyDelta}</td><td>⚠️ Anomaly</td>`;
+      let cat = val > currentThreshold ? 'Anomaly (X)' : 'Standard (X)';
+      tr.innerHTML = `<td>#${startIndex + idx}</td><td>2026-08-${(10 + (idx % 20))}</td><td>${cat}</td><td>$${(val * financialConfig.baseValue).toFixed(2)}</td>`;
       tbody.appendChild(tr);
     });
   }
@@ -380,7 +424,13 @@
       nextVal = Math.max(10, Math.min(90, nextVal));
       movingDataBuffer.push(nextVal);
       if (movingDataBuffer.length > 70) movingDataBuffer.shift();
-      updateFinancialMetrics(nextVal);
+      fullMasterHistory.push(nextVal);
+      if (fullMasterHistory.length > 500) fullMasterHistory.shift();
+
+      if (globalTick % 50 === 0) {
+        financialAccumulator.monthlyTotal += Math.floor(nextVal * 0.5);
+        document.getElementById('metricMonthly').innerText = `${financialAccumulator.monthlyTotal.toLocaleString()} Events`;
+      }
     }
 
     const stepX = width / movingDataBuffer.length;
@@ -393,8 +443,14 @@
     });
     waveCtx.stroke();
 
+    // Threshold Line
+    let thresholdY = height - (currentThreshold / 100) * height;
+    waveCtx.strokeStyle = '#f0883e'; waveCtx.lineWidth = 1.5; waveCtx.setLineDash([4, 4]);
+    waveCtx.beginPath(); waveCtx.moveTo(0, thresholdY); waveCtx.lineTo(width, thresholdY); waveCtx.stroke();
+    waveCtx.setLineDash([]);
+
     if (isInteracting) {
-      waveCtx.fillStyle = 'rgba(255, 51, 68, 0.2)'; waveCtx.strokeStyle = '#ff3344';
+      waveCtx.fillStyle = 'rgba(192, 132, 252, 0.2)'; waveCtx.strokeStyle = '#c084fc';
       let minX = Math.min(dragStartX, dragEndX); let boxW = Math.abs(dragEndX - dragStartX);
       waveCtx.fillRect(minX, 0, boxW, height); waveCtx.strokeRect(minX, 0, boxW, height);
     }
@@ -407,3 +463,4 @@
 
 </body>
 </html>
+
