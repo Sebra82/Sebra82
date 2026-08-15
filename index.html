@@ -355,8 +355,16 @@
           <span class="predictive-chip" onclick="teachAndMaximize('tools', 'cardTools')">Workspace Explorer</span>
         </div>
         <div class="ai-chat-input-row">
-          <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Ask AI how to use a tool..." onkeypress="if(event.key==='Enter') submitAIChat()">
+          <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Ask AI how to use a tool..." oninput="updatePredictiveInput(this.value)" onkeypress="if(event.key==='Enter') submitAIChat()">
           <button class="ai-chat-btn" onclick="submitAIChat()">Ask</button>
+        </div>
+        <!-- Dynamic Predictive Next Words Bar -->
+        <div class="predictive-prompt-bar" id="dynamicPredictiveBar" style="margin-top: 2px;">
+          <span style="font-size: 0.38rem; color: var(--accent-purple);">Next Words:</span>
+          <span class="predictive-chip" onclick="insertPredictedWord('how')">how</span>
+          <span class="predictive-chip" onclick="insertPredictedWord('to')">to</span>
+          <span class="predictive-chip" onclick="insertPredictedWord('configure')">configure</span>
+          <span class="predictive-chip" onclick="insertPredictedWord('simulate')">simulate</span>
         </div>
       </div>
     </div>
@@ -726,6 +734,32 @@
     setTimeout(() => { tutor.style.display = 'none'; }, 10000);
   }
 
+  function updatePredictiveInput(val) {
+    const bar = document.getElementById('dynamicPredictiveBar');
+    const text = val.trim().toLowerCase();
+    
+    let predictions = ['how', 'to', 'configure', 'simulate'];
+    if (text.includes('atom') || text.includes('3d')) {
+      predictions = ['matrix', 'shells', 'rotation', 'zoom'];
+    } else if (text.includes('math') || text.includes('tensor')) {
+      predictions = ['vector', 'damping', 'forecast', 'alpha'];
+    } else if (text.includes('noise') || text.includes('graph')) {
+      predictions = ['stream', 'spike', 'threshold', 'subset'];
+    } else if (text.includes('query') || text.includes('table')) {
+      predictions = ['records', 'mapping', 'export', 'rows'];
+    }
+
+    bar.innerHTML = `<span style="font-size: 0.38rem; color: var(--accent-purple);">Next Words:</span>` + 
+      predictions.map(word => `<span class="predictive-chip" onclick="insertPredictedWord('${word}')">${word}</span>`).join('');
+  }
+
+  function insertPredictedWord(word) {
+    const input = document.getElementById('aiChatInput');
+    input.value += (input.value.endsWith(' ') || input.value === '' ? '' : ' ') + word + ' ';
+    input.focus();
+    updatePredictiveInput(input.value);
+  }
+
   function submitAIChat() {
     const inputField = document.getElementById('aiChatInput');
     const streamBox = document.getElementById('aiChatStream');
@@ -734,6 +768,7 @@
 
     streamBox.innerHTML += `<div class="chat-msg-user">You: ${inputField.value}</div>`;
     inputField.value = "";
+    updatePredictiveInput("");
 
     if (query.includes('atom') || query.includes('3d')) {
       teachAndMaximize('atom', 'cardAtom');
