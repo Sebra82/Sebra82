@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v5.6 - Fully Interactive Breathing 3D Atom Master Suite</title>
+  <title>SEBRA82 v5.6 - Ultimate Unified Master Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -103,7 +103,7 @@
       order: -99;
     }
     .panel-card.fluid-maximized .collapsible-body { max-height: 1600px !important; display: flex !important; }
-    .panel-card.fluid-maximized .canvas-box { height: 60vh !important; }
+    .panel-card.fluid-maximized .expanded-graph-suite { display: flex !important; }
     .panel-card.dropped-tab { order: 99; padding: 0.2rem 0.4rem; opacity: 0.65; border-style: dashed; }
     .panel-card.dropped-tab .collapsible-body { display: none !important; }
 
@@ -117,12 +117,14 @@
     .panel-title { font-size: 0.58rem; font-weight: 700; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; cursor: pointer; }
     .panel-title:hover { color: var(--neon-cyan); }
 
-    .canvas-box { position: relative; width: 100%; background: radial-gradient(circle at center, #0a1128 0%, #000000 100%); border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.4); overflow: hidden; transition: height 0.3s ease; }
+    .canvas-box { position: relative; width: 100%; background: radial-gradient(circle at center, #0a1128 0%, #000000 100%); border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.4); overflow: hidden; }
     
     canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; pointer-events: auto !important; }
     canvas:active { cursor: grabbing; }
 
     .hud-tag { position: absolute; top: 2px; left: 3px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 3px; border-radius: 2px; font-size: 0.44rem; color: var(--neon-cyan); font-family: var(--font-mono); z-index: 5; pointer-events: none; text-shadow: 0 0 6px var(--cyan-glow); }
+
+    .expanded-graph-suite { display: none; flex-direction: column; gap: 0.4rem; background: rgba(0, 243, 255, 0.04); border: 1px solid rgba(0, 243, 255, 0.25); padding: 6px; border-radius: 6px; margin-top: 2px; }
 
     .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
     .metric-box { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 4px; border-radius: 3px; display: flex; flex-direction: column; gap: 1px; text-align: center; }
@@ -371,7 +373,7 @@
   const atomCanvas = document.getElementById('atom3DCanvas');
   const atomCtx = atomCanvas.getContext('2d');
   let atomRotX = 0.5, atomRotY = 0.2, atomZoom = 1.2, atomDepth = 1.0;
-  let isDraggingAtom = false, lastX = 0, lastY = 0, touchStartDist = 0;
+  let isDraggingAtom = false, lastX = 0, lastY = 0;
 
   let atomNodes = [];
   for (let i = 0; i < 320; i++) {
@@ -454,7 +456,7 @@
     }
   }
 
-  // Robust Interactive Touch and Pointer Bindings bound to window/canvas for fluid motion
+  // Guaranteed Full Screen Pointer & Mouse Interaction Handlers for Atom Canvas
   atomCanvas.addEventListener('pointerdown', (e) => {
     isDraggingAtom = true;
     lastX = e.clientX;
@@ -465,8 +467,8 @@
 
   atomCanvas.addEventListener('pointermove', (e) => {
     if (!isDraggingAtom) return;
-    atomRotY += (e.clientX - lastX) * 0.02;
-    atomRotX -= (e.clientY - lastY) * 0.02;
+    atomRotY += (e.clientX - lastX) * 0.025;
+    atomRotX -= (e.clientY - lastY) * 0.025;
     lastX = e.clientX;
     lastY = e.clientY;
     e.preventDefault();
@@ -477,13 +479,11 @@
     try { atomCanvas.releasePointerCapture(e.pointerId); } catch(err) {}
   });
 
-  atomCanvas.addEventListener('pointercancel', (e) => {
-    isDraggingAtom = false;
-  });
+  atomCanvas.addEventListener('pointercancel', () => { isDraggingAtom = false; });
 
   atomCanvas.addEventListener('wheel', (e) => {
     e.preventDefault();
-    atomZoom = Math.max(0.4, Math.min(5.0, atomZoom + e.deltaY * -0.002));
+    atomZoom = Math.max(0.3, Math.min(6.0, atomZoom + e.deltaY * -0.002));
   }, { passive: false });
 
   function renderVividAtom() {
@@ -605,9 +605,8 @@
 
   function updateWaveOptics() {
     const scaleIdx = parseInt(document.getElementById('qubit-slider').value);
-    const theta = parseFloat(document.getElementById('theta-slider').value);
+    const theta = 0.5;
     document.getElementById('secure-scale-val').innerText = scaleIdx;
-    document.getElementById('theta-val').innerText = theta.toFixed(2) + " rad";
 
     const w = waveCanvas.width, h = waveCanvas.height;
     waveCtx.fillStyle = '#04060a'; waveCtx.fillRect(0, 0, w, h);
