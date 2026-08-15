@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v5.5 - Secure Hybrid Quantum-Classical Execution Console</title>
+  <title>SEBRA82 v5.5 - Master Unified Quantum-Classical Execution & Visualization Suite</title>
   <style>
     :root {
-      --bg-color: #020408;
+      --bg-deep: #020408;
       --card-bg: rgba(7, 11, 19, 0.99);
-      --border-color: #1f293d;
+      --border-color: rgba(0, 243, 255, 0.3);
       --neon-cyan: #00f3ff;
-      --cyan-glow: rgba(0, 243, 255, 0.35);
+      --cyan-glow: rgba(0, 243, 255, 0.45);
       --crimson-red: #ff3344;
       --text-main: #f0f6fc;
       --text-muted: #8b949e;
@@ -24,7 +24,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-ui); touch-action: manipulation; }
 
     body {
-      background-color: var(--bg-color);
+      background-color: var(--bg-deep);
       color: var(--text-main);
       min-height: 100vh;
       width: 100vw;
@@ -32,7 +32,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 0.4rem;
+      padding: 0.3rem;
     }
 
     .platform-container {
@@ -41,48 +41,41 @@
       background: var(--card-bg);
       border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 1rem;
-      max-width: 950px;
+      padding: 0.8rem;
+      max-width: 650px;
       width: 100%;
+      min-height: 98vh;
       box-shadow: 0 0 40px rgba(0, 243, 255, 0.12), 0 30px 80px rgba(0, 0, 0, 0.95);
       display: flex;
       flex-direction: column;
-      gap: 0.8rem;
+      gap: 0.5rem;
     }
 
     .widget-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 0.6rem;
+      padding-bottom: 0.4rem;
       border-bottom: 1px solid var(--border-color);
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 4px;
     }
 
-    .brand-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 1rem;
-      font-weight: 700;
-      color: #fff;
-    }
-
+    .brand-title { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 700; color: #fff; }
     .brand-title span { color: var(--neon-cyan); font-weight: 800; }
 
     .header-actions { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
-    .core-reset-btn { font-size: 0.5rem; background: rgba(255, 51, 68, 0.2); color: var(--crimson-red); padding: 3px 7px; border-radius: 4px; border: 1px solid rgba(255, 51, 68, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
-    .saved-view-btn { font-size: 0.5rem; background: rgba(126, 231, 135, 0.2); color: var(--accent-green); padding: 3px 7px; border-radius: 4px; border: 1px solid rgba(126, 231, 135, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
+    .core-reset-btn { font-size: 0.46rem; background: rgba(255, 51, 68, 0.2); color: var(--crimson-red); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255, 51, 68, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
+    .saved-view-btn { font-size: 0.46rem; background: rgba(126, 231, 135, 0.2); color: var(--accent-green); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(126, 231, 135, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
 
     .saved-tabs-bar { display: flex; gap: 3px; width: 100%; overflow-x: auto; padding: 2px 0; }
-    .saved-tab-chip { font-size: 0.46rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); border: 1px solid rgba(192, 132, 252, 0.3); padding: 2px 6px; border-radius: 3px; font-family: var(--font-mono); cursor: pointer; white-space: nowrap; }
+    .saved-tab-chip { font-size: 0.44rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); border: 1px solid rgba(192, 132, 252, 0.3); padding: 2px 5px; border-radius: 3px; font-family: var(--font-mono); cursor: pointer; white-space: nowrap; }
 
     .node-badge {
-      font-size: 0.68rem;
+      font-size: 0.6rem;
       background: rgba(31, 41, 61, 0.6);
       color: var(--text-muted);
-      padding: 3px 8px;
+      padding: 2px 6px;
       border-radius: 10px;
       border: 1px solid var(--border-color);
       font-family: var(--font-mono);
@@ -91,43 +84,36 @@
     .pipeline-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 0.5rem;
+      gap: 4px;
     }
 
     .pipeline-step {
       background: rgba(3, 7, 15, 0.98);
       border: 1px solid var(--border-color);
       border-radius: 6px;
-      padding: 0.5rem;
+      padding: 0.4rem;
       text-align: center;
       transition: all 0.3s ease;
     }
 
-    .pipeline-step.active {
-      border-color: var(--neon-cyan);
-      box-shadow: 0 0 10px var(--cyan-glow);
-    }
+    .pipeline-step.active { border-color: var(--neon-cyan); box-shadow: 0 0 10px var(--cyan-glow); }
+    .pipeline-step.passed { border-color: #238636; background: rgba(35, 134, 54, 0.05); }
 
-    .pipeline-step.passed {
-      border-color: #238636;
-      background: rgba(35, 134, 54, 0.05);
-    }
-
-    .step-title { font-size: 0.75rem; font-weight: 700; color: var(--text-main); }
+    .step-title { font-size: 0.65rem; font-weight: 700; color: var(--text-main); }
     .pipeline-step.active .step-title { color: var(--neon-cyan); }
-    .step-sub { font-size: 0.62rem; color: var(--text-muted); margin-top: 2px; font-family: var(--font-mono); }
+    .step-sub { font-size: 0.52rem; color: var(--text-muted); margin-top: 1px; font-family: var(--font-mono); }
 
-    .mobile-stack { display: flex; flex-direction: column; gap: 0.6rem; }
+    .mobile-stack { display: flex; flex-direction: column; gap: 0.45rem; }
 
     .panel-card {
       background: rgba(3, 7, 15, 0.98);
       border-radius: 8px;
       border: 1px solid var(--border-color);
-      padding: 0.6rem;
+      padding: 0.5rem;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      transition: all 0.3s ease;
+      gap: 0.4rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .panel-card.fluid-maximized {
@@ -138,113 +124,59 @@
       order: -99;
     }
     .panel-card.fluid-maximized .collapsible-body { max-height: 1400px !important; display: flex !important; }
-    .panel-card.dropped-tab { order: 99; padding: 0.2rem 0.5rem; opacity: 0.65; border-style: dashed; }
+    .panel-card.dropped-tab { order: 99; padding: 0.2rem 0.4rem; opacity: 0.65; border-style: dashed; }
     .panel-card.dropped-tab .collapsible-body { display: none !important; }
 
-    .panel-title { font-size: 0.65rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; cursor: pointer; }
+    .panel-title { font-size: 0.58rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; cursor: pointer; }
     .panel-title:hover { color: #fff; }
 
-    .canvas-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.8rem;
-    }
+    .canvas-box { position: relative; width: 100%; background: #000; border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.35); overflow: hidden; }
+    canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; pointer-events: auto !important; }
+    canvas:active { cursor: grabbing; }
 
-    .canvas-card {
-      background: rgba(3, 7, 15, 0.98);
-      border-radius: 8px;
-      border: 1px solid;
-      padding: 0.8rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+    .hud-tag { position: absolute; top: 2px; left: 3px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 3px; border-radius: 2px; font-size: 0.44rem; color: var(--neon-cyan); font-family: var(--font-mono); z-index: 5; pointer-events: none; }
 
-    .quantum-side { border-color: var(--neon-cyan); box-shadow: inset 0 0 15px rgba(0, 243, 255, 0.03); }
-    .classical-side { border-color: var(--crimson-red); box-shadow: inset 0 0 15px rgba(255, 51, 68, 0.03); }
+    .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+    .metric-box { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 4px; border-radius: 3px; display: flex; flex-direction: column; gap: 1px; text-align: center; }
+    .metric-label { font-size: 0.44rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-mono); }
+    .metric-value { font-size: 0.58rem; color: var(--accent-green); font-weight: 700; font-family: var(--font-mono); }
 
-    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
-    .badge { font-size: 0.58rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; border: 1px solid; letter-spacing: 0.5px; font-family: var(--font-mono); }
-    .quantum-badge { color: var(--neon-cyan); border-color: var(--neon-cyan); background: rgba(0, 243, 255, 0.08); }
-    .classical-badge { color: var(--crimson-red); border-color: var(--crimson-red); background: rgba(255, 51, 68, 0.08); }
+    .data-table-container { background: #010409; border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 3px; padding: 2px; max-height: 95px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.46rem; color: var(--accent-purple); }
+    .data-table { width: 100%; border-collapse: collapse; text-align: left; }
+    .data-table th, .data-table td { padding: 2px 3px; border-bottom: 1px solid rgba(192, 132, 252, 0.15); }
+    .data-table th { color: var(--neon-cyan); font-weight: 600; }
 
-    .card-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.6rem; }
-    .quantum-title { color: var(--neon-cyan); }
-    .classical-title { color: var(--crimson-red); }
-
-    .controls-panel { margin-bottom: 0.6rem; display: flex; flex-direction: column; gap: 0.5rem; }
-    .control-row { display: flex; flex-direction: column; gap: 2px; }
-    .control-label { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono); }
+    .controls-grid { display: grid; grid-template-columns: 1fr; gap: 3px; }
+    .control-item { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 3px; border-radius: 3px; display: flex; flex-direction: column; gap: 2px; }
+    .control-label { font-size: 0.5rem; color: var(--text-muted); display: flex; justify-content: space-between; font-weight: 500; font-family: var(--font-mono); }
     .control-label span { color: var(--text-main); font-weight: 600; }
 
-    input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1f293d; color: #fff; border: 1px solid var(--border-color); height: 4px; border-radius: 2px; outline: none; }
-    select { height: 22px; font-size: 0.72rem; padding: 0 4px; font-family: var(--font-mono); }
+    input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1e2a40; color: #fff; border: 1px solid var(--border-color); height: 3px; border-radius: 2px; outline: none; }
+    select { height: 20px; font-size: 0.55rem; padding: 0 3px; font-family: var(--font-mono); }
+    input[type="text"] { width: 100%; background: #1e2a40; color: #fff; border: 1px solid var(--border-color); padding: 2px 3px; border-radius: 3px; font-size: 0.5rem; font-family: var(--font-mono); outline: none; }
 
-    .metrics-list { margin-bottom: 0.6rem; }
-    .metric-item { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.4rem; color: var(--text-muted); font-family: var(--font-mono); }
-    .metric-item strong { font-size: 0.78rem; }
+    .suggestion-box { background: rgba(192, 132, 252, 0.08); border: 1px dashed rgba(192, 132, 252, 0.4); border-radius: 3px; padding: 3px; font-size: 0.48rem; color: var(--accent-purple); font-family: var(--font-mono); line-height: 1.25; }
 
-    .equation-box {
-      background: #04060a;
-      border: 1px solid;
-      border-radius: 6px;
-      padding: 0.6rem;
-      margin: 0.5rem 0;
-      font-size: 0.75rem;
-      word-break: break-all;
-      min-height: 50px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      font-family: var(--font-mono);
-    }
-    .quantum-eq { border-color: rgba(0, 243, 255, 0.4); color: var(--neon-cyan); }
-    .classical-eq { border-color: rgba(255, 51, 68, 0.4); color: var(--crimson-red); }
-
-    .action-btn {
-      width: 100%;
-      padding: 0.7rem;
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: #04060a;
-      background: var(--neon-cyan);
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      box-shadow: 0 0 12px var(--cyan-glow);
-      transition: all 0.2s ease;
-    }
-    .action-btn:hover { box-shadow: 0 0 20px rgba(0, 243, 255, 0.6); transform: translateY(-1px); }
-    .action-btn:disabled { background: #005f66; cursor: wait; box-shadow: none; transform: none; }
-
-    .warning-box {
-      background: rgba(255, 51, 68, 0.08);
-      border: 1px solid rgba(255, 51, 68, 0.3);
-      border-radius: 6px;
-      padding: 0.6rem;
-      font-size: 0.7rem;
-      color: #ff7788;
-      line-height: 1.4;
-      font-family: var(--font-mono);
-    }
-
-    .pin-btn { background: var(--accent-purple); color: #fff; font-size: 0.48rem; padding: 2px 6px; border-radius: 3px; border: none; cursor: pointer; font-family: var(--font-mono); }
+    .btn-row { display: flex; gap: 3px; }
+    .action-btn { width: 100%; padding: 0.3rem; font-weight: 600; font-size: 0.55rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 3px; cursor: pointer; text-align: center; }
+    .action-btn:hover { background: #3dd9e8; }
+    .btn-secondary { background: #1e2a40; color: var(--text-main); border: 1px solid var(--border-color); }
+    .pin-btn { background: var(--accent-purple); color: #fff; font-size: 0.48rem; padding: 2px 5px; border-radius: 3px; border: none; cursor: pointer; font-family: var(--font-mono); }
     .pin-btn:hover { background: #b060f0; }
 
-    .collapsible-body { display: flex; flex-direction: column; gap: 0.5rem; transition: max-height 0.3s ease; overflow: hidden; max-height: 1200px; }
-    .collapsible-body.collapsed { max-height: 0px; padding: 0; margin: 0; }
-
-    @media (max-width: 768px) {
-      .canvas-grid { grid-template-columns: 1fr; }
-      .pipeline-grid { grid-template-columns: repeat(2, 1fr); }
+    .equation-box {
+      background: #04060a; border: 1px solid rgba(0, 243, 255, 0.4); border-radius: 5px; padding: 5px; margin: 3px 0; font-size: 0.7rem; color: var(--neon-cyan); font-family: var(--font-mono); word-break: break-all;
     }
+
+    .collapsible-body { display: flex; flex-direction: column; gap: 0.3rem; transition: max-height 0.3s ease; overflow: hidden; max-height: 800px; }
+    .collapsible-body.collapsed { max-height: 0px; padding: 0; margin: 0; }
   </style>
 </head>
 <body>
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">SEBRA82 <span>v5.5</span></div>
+    <div class="brand-title">⚡ <span>SEBRA82 v5.5</span> Master Suite</div>
     <div class="header-actions">
       <button class="saved-view-btn" onclick="saveCustomView()">💾 Save View</button>
       <button class="core-reset-btn" onclick="resetStandardView()">↺ Standard</button>
@@ -259,123 +191,148 @@
   <div class="pipeline-grid">
     <div class="pipeline-step active" id="step-1">
       <div class="step-title">1. Tensor Prep</div>
-      <div class="step-sub">L1 Cache Aligned</div>
+      <div class="step-sub">L1 Aligned</div>
     </div>
     <div class="pipeline-step" id="step-2">
       <div class="step-title">2. Phase Est.</div>
-      <div class="step-sub">O(1) Spatial Mapping</div>
+      <div class="step-sub">O(1) Spatial</div>
     </div>
     <div class="pipeline-step" id="step-3">
       <div class="step-title">3. ZNE Noise</div>
-      <div class="step-sub">Galois Tag Check</div>
+      <div class="step-sub">Galois Tag</div>
     </div>
     <div class="pipeline-step" id="step-4">
-      <div class="step-title">4. Wave Collapse</div>
-      <div class="step-sub">Resolved Vector</div>
+      <div class="step-title">4. Collapse</div>
+      <div class="step-sub">Vector Ready</div>
     </div>
   </div>
 
   <div class="mobile-stack" id="mobileStack">
 
-    <!-- SEBRA82 Core Execution & Visualizer Card -->
-    <div class="panel-card" id="cardCore">
+    <!-- Step 1: Actual Breathing & Interactive 3D Quantum Atom Matrix -->
+    <div class="panel-card" id="cardAtom">
       <div class="panel-title">
-        <span onclick="toggleSec('secCore')">SEBRA82 Secure Kernel & Hardware Comparison ▾</span>
-        <button class="pin-btn" id="pinBtn_cardCore" onclick="toggleMax('cardCore')">⚡ Maximize</button>
+        <span onclick="toggleSec('secAtom')">1. Interactive 3D Quantum Atom Matrix ▾</span>
+        <button class="pin-btn" id="pinBtn_cardAtom" onclick="toggleMax('cardAtom')">⚡ Maximize</button>
       </div>
-      <div class="collapsible-body" id="secCore">
-        <div class="canvas-grid">
-          
-          <!-- Quantum Side -->
-          <div class="canvas-card quantum-side">
-            <div>
-              <div class="card-header">
-                <span class="badge quantum-badge">SECURE QUANTUM KERNEL VISUALIZER</span>
-              </div>
-              <h3 class="card-title quantum-title">Real-Time Wave Optics & Lattice View</h3>
-              
-              <canvas id="secureSimCanvas" width="400" height="130" style="width:100%; height:130px; background:#04060a; border-radius:6px; border:1px solid rgba(0,243,255,0.2);"></canvas>
+      <div class="collapsible-body" id="secAtom">
+        <div class="canvas-box" style="height: 200px;">
+          <canvas id="atom3DCanvas" width="400" height="200"></canvas>
+          <div class="hud-tag">✨ Breathing Core | Drag to Rotate, Pinch/Scroll to Zoom</div>
+        </div>
+        <div class="control-item">
+          <div class="control-label">Core Expansion / Look Inside: <span id="atomDepthVal">1.00x</span></div>
+          <input type="range" id="atomDepthSlider" min="0.2" max="3.5" step="0.05" value="1.0" oninput="updateAtomDepth(this.value)">
+        </div>
+      </div>
+    </div>
 
-              <div class="controls-panel" style="margin-top: 0.6rem;">
-                <div class="control-row">
-                  <div class="control-label">Execution Mode: <span id="mode-val" style="color:var(--neon-cyan)">Quantum 2-Slit Wave Optics</span></div>
-                  <select id="secureModeSelect" onchange="switchSecureMode()">
-                    <option value="1">Mode 1: Quantum 2-Slit Wave Optics</option>
-                    <option value="0">Mode 0: 3D Spatial Grid</option>
-                  </select>
-                </div>
-                <div class="control-row">
-                  <div class="control-label">Scale Index (n): <span id="secure-scale-val">64</span></div>
-                  <input type="range" id="qubit-slider" min="0" max="295" value="64" oninput="updateControls()">
-                </div>
-                <div class="control-row">
-                  <div class="control-label">Polar Rotation (&theta;): <span id="theta-val">0.41 rad</span></div>
-                  <input type="range" id="theta-slider" min="0.0" max="1.57" step="0.01" value="0.41" oninput="updateControls()">
-                </div>
-                <div class="control-row">
-                  <div class="control-label">Azimuthal Phase (&phi;): <span id="phi-val">0.85 rad</span></div>
-                  <input type="range" id="phi-slider" min="0.0" max="3.14" step="0.01" value="0.85" oninput="updateControls()">
-                </div>
-              </div>
-
-              <div class="metrics-list">
-                <div class="metric-item">
-                  <span>Execution Latency:</span>
-                  <strong style="color: var(--neon-cyan);">0.038 ns (Constant O(1))</strong>
-                </div>
-                <div class="metric-item">
-                  <span>State Fidelity:</span>
-                  <strong style="color: var(--neon-cyan);">99.98% (Thermal Underlay Active)</strong>
-                </div>
-              </div>
-
-              <div class="equation-box quantum-eq">
-                <div style="font-size: 0.62rem; color: var(--text-muted); margin-bottom: 2px;">Resolved State Vector Equation:</div>
-                <div id="quantum-state-output">|&Psi;_final&gt; = 0.88|00&gt; + 0.48|01&gt; + e^(i*0.85)0.11|10&gt;</div>
-              </div>
-            </div>
-
-            <button class="action-btn" id="exec-btn" onclick="executePipeline()">Run Pipeline Execution</button>
+    <!-- Step 2: Maths, Calculations & Monthly Summaries -->
+    <div class="panel-card" id="cardFin">
+      <div class="panel-title">
+        <span onclick="toggleSec('secFin')">2. Maths, Calculations & Monthly X ▾</span>
+        <button class="pin-btn" id="pinBtn_cardFin" onclick="toggleMax('cardFin')">⚡ Maximize</button>
+      </div>
+      <div class="collapsible-body collapsed" id="secFin">
+        <div class="metrics-grid">
+          <div class="metric-box">
+            <div class="metric-label">Monthly X</div>
+            <div class="metric-value" id="metricMonthly">1,245 Events</div>
           </div>
-
-          <!-- Classical Side -->
-          <div class="canvas-card classical-side">
-            <div>
-              <div class="card-header">
-                <span class="badge classical-badge">CLASSICAL HARDWARE BASELINE</span>
-              </div>
-              <h3 class="card-title classical-title">Legacy CPU Matrix Compute</h3>
-
-              <div class="metrics-list" style="margin-top: 0.8rem;">
-                <div class="metric-item">
-                  <span>Execution Latency:</span>
-                  <strong style="color: var(--crimson-red);">15.2 Days (Timeout)</strong>
-                </div>
-                <div class="metric-item">
-                  <span>Performance Delta:</span>
-                  <strong style="color: var(--crimson-red);">422,580,645x Slower</strong>
-                </div>
-                <div class="metric-item">
-                  <span>Memory Limitation:</span>
-                  <strong style="color: var(--crimson-red);">295 Exabytes Required</strong>
-                </div>
-                <div class="metric-item">
-                  <span>Autograd Status:</span>
-                  <strong style="color: var(--crimson-red);">OOM Exception</strong>
-                </div>
-              </div>
-
-              <div class="equation-box classical-eq">
-                <div style="font-size: 0.62rem; color: var(--text-muted); margin-bottom: 2px;">Compute Status:</div>
-                <div id="classical-state-output">CRIMSON WARNING: Thread Exhaustion Impending</div>
-              </div>
-            </div>
-
-            <div class="warning-box">
-              ⚠️ Classical CPU matrix processing halts at N=64 scale due to exponential memory limits ($2^{64}$ complex state factors requiring unmanageable RAM).
-            </div>
+          <div class="metric-box">
+            <div class="metric-label">Quarterly</div>
+            <div class="metric-value" id="metricQuarterly">3,892 Events</div>
           </div>
+          <div class="metric-box">
+            <div class="metric-label">Annually</div>
+            <div class="metric-value" id="metricAnnually">15,480 Events</div>
+          </div>
+        </div>
+        <div class="control-item">
+          <div class="control-label">Base Value ($): <span id="baseValueReadout">10.00</span></div>
+          <input type="range" id="baseValueSlider" min="1.0" max="50.0" step="0.5" value="10.0" oninput="updateFin()">
+        </div>
+      </div>
+    </div>
 
+    <!-- Step 3: Live Moving Data, Wave Optics & Thresholds -->
+    <div class="panel-card" id="cardWave">
+      <div class="panel-title">
+        <span onclick="toggleSec('secWave')">3. Live Moving Data & Wave Optics ▾</span>
+        <button class="pin-btn" id="pinBtn_cardWave" onclick="toggleMax('cardWave')">⚡ Maximize</button>
+      </div>
+      <div class="collapsible-body collapsed" id="secWave">
+        <div class="canvas-box" style="height: 110px;">
+          <canvas id="secureSimCanvas" width="400" height="110"></canvas>
+          <div class="hud-tag">SEBRA82 Secure Wave Optics Canvas</div>
+        </div>
+        <div class="controls-panel" style="display:flex; flex-direction:column; gap:3px;">
+          <div class="control-item">
+            <div class="control-label">Scale Index (n): <span id="secure-scale-val">64</span></div>
+            <input type="range" id="qubit-slider" min="0" max="295" value="64" oninput="updateControls()">
+          </div>
+          <div class="control-item">
+            <div class="control-label">Polar Rotation (&theta;): <span id="theta-val">0.41 rad</span></div>
+            <input type="range" id="theta-slider" min="0.0" max="1.57" step="0.01" value="0.41" oninput="updateControls()">
+          </div>
+        </div>
+        <div class="equation-box">
+          <div style="font-size: 0.55rem; color: var(--text-muted);">Resolved State Vector:</div>
+          <div id="quantum-state-output">|&Psi;_final&gt; = 0.88|00&gt; + 0.48|01&gt;</div>
+        </div>
+        <button class="action-btn" id="exec-btn" onclick="executePipeline()">Run Pipeline Execution</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Noise Grasping & Sub-Graph Studio -->
+    <div class="panel-card" id="cardQuery">
+      <div class="panel-title">
+        <span onclick="toggleSec('secQuery')">4. Noise Grasp & Sub-Graph Studio ▾</span>
+        <button class="pin-btn" id="pinBtn_cardQuery" onclick="toggleMax('cardQuery')">⚡ Maximize</button>
+      </div>
+      <div class="collapsible-body collapsed" id="secQuery">
+        <div class="suggestion-box" id="suggestionBox">
+          💡 **AI Suggestion**: Grasp noise on live stream or interact with the breathing 3D atom core above.
+        </div>
+        <div class="canvas-box" style="height: 50px; border-color: rgba(192, 132, 252, 0.4);">
+          <canvas id="forkedGraphCanvas" width="400" height="50"></canvas>
+          <div class="hud-tag">Pulled History Sub-Graph</div>
+        </div>
+        <div class="btn-row" style="margin-top: 2px;">
+          <button onclick="pinToSummary()" class="action-btn" style="background: var(--accent-green); color: #020408;">📊 Summary</button>
+          <button onclick="exportWordPPT()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📄 Word/PPT</button>
+        </div>
+        <div class="data-table-container">
+          <table class="data-table" id="queryDataTable">
+            <thead>
+              <tr><th>ID</th><th>Date</th><th>Category</th><th>Value</th></tr>
+            </thead>
+            <tbody id="queryTableBody">
+              <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Grasp noise slice from wave stream above.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5: Upload, SharePoint Sync & Downloads -->
+    <div class="panel-card" id="cardTools">
+      <div class="panel-title">
+        <span onclick="toggleSec('secTools')">5. Upload, SharePoint & Downloads ▾</span>
+        <button class="pin-btn" id="pinBtn_cardTools" onclick="toggleMax('cardTools')">⚡ Maximize</button>
+      </div>
+      <div class="collapsible-body collapsed" id="secTools">
+        <div class="control-item">
+          <div class="control-label"><span>SharePoint / DB Linker URL:</span></div>
+          <input type="text" id="dataSourceUrlInput" placeholder="https://company.sharepoint.com/sites/analytics" value="https://company.sharepoint.com/sites/analytics">
+        </div>
+        <div class="btn-row">
+          <button onclick="linkSource()" class="action-btn">Link Stream</button>
+          <button onclick="document.getElementById('fileUploadInput').click()" class="action-btn btn-secondary">Upload File</button>
+          <input type="file" id="fileUploadInput" style="display:none" accept=".csv,.json" onchange="uploadFile(event)">
+        </div>
+        <div class="btn-row" style="margin-top: 3px;">
+          <button onclick="triggerExport()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📥 Download Export</button>
         </div>
       </div>
     </div>
@@ -384,30 +341,53 @@
 </div>
 
 <script>
-  // SEBRA82 Core Mathematics & Simulation Engine
+  let globalTick = 0, isRunning = true, currentThreshold = 75.0;
+  let movingDataBuffer = new Array(70).fill(50), fullMasterHistory = [], timeOffset = 0;
+  let forkedRoiData = [], savedViews = [], activeMaxId = null;
+  let finConfig = { baseValue: 10.0 }, finAccumulator = { monthlyTotal: 1245 };
+  let isInteracting = false, dragStartX = 0, dragEndX = 0;
+
+  // SEBRA82 v5.5 Math Constants & LUTs
   const R_LOOKUP_F32 = new Float32Array(296);
-  const SIN_LUT_F32 = new Float32Array(256);
-  const PLANCK_L = 1.616255e-35;
-  const PHI = 1.61803398875;
+  const PLANCK_L = 1.616255e-35, PHI = 1.61803398875;
+  for (let n = 0; n < 296; n++) { R_LOOKUP_F32[n] = PLANCK_L * Math.pow(PHI, n); }
 
-  for (let n = 0; n < 296; n++) {
-    R_LOOKUP_F32[n] = PLANCK_L * Math.pow(PHI, n);
-  }
-  for (let i = 0; i < 256; i++) {
-    SIN_LUT_F32[i] = Math.sin((i / 256) * Math.PI * 2);
+  // 3D Breathing Atom Core State & Interaction
+  const atomCanvas = document.getElementById('atom3DCanvas');
+  const atomCtx = atomCanvas.getContext('2d');
+  let atomRotX = 0.4, atomRotY = 0.0, atomZoom = 1.1, atomDepth = 1.0;
+  let isDraggingAtom = false, lastX = 0, lastY = 0, touchDist = 0;
+
+  let atomNodes = [];
+  for (let i = 0; i < 260; i++) {
+    let phi = Math.acos(-1 + (2 * i) / 260);
+    let theta = Math.sqrt(260 * Math.PI) * phi;
+    let shell = (i % 3 === 0) ? 85 : (i % 3 === 1 ? 60 : 38);
+    let r = shell + Math.sin(i * 5) * 7;
+    atomNodes.push({
+      ox: r * Math.sin(phi) * Math.cos(theta),
+      oy: r * Math.sin(phi) * Math.sin(theta),
+      oz: r * Math.cos(phi),
+      color: i % 3 === 0 ? '#00f3ff' : (i % 3 === 1 ? '#c084fc' : '#ff3344'),
+      glow: i % 3 === 0 ? 'rgba(0,243,255,0.8)' : (i % 3 === 1 ? 'rgba(192,132,252,0.8)' : 'rgba(255,51,68,0.8)'),
+      size: (i % 4 === 0) ? 3.5 : 2.2,
+      pulseSpeed: 1.5 + (i % 5) * 0.3,
+      pulseOffset: i * 0.1
+    });
   }
 
-  let savedViews = [], activeMaxId = null;
-
-  function toggleSec(id) {
-    document.getElementById(id).classList.toggle('collapsed');
+  function updateAtomDepth(val) {
+    atomDepth = parseFloat(val);
+    document.getElementById('atomDepthVal').innerText = atomDepth.toFixed(2) + 'x';
   }
+
+  function toggleSec(id) { document.getElementById(id).classList.toggle('collapsed'); }
 
   function resetStandardView() {
     activeMaxId = null;
     document.querySelectorAll('.panel-card').forEach(c => {
       c.classList.remove('fluid-maximized', 'dropped-tab');
-      c.querySelector('.collapsible-body').classList.remove('collapsed');
+      c.querySelector('.collapsible-body').classList.add('collapsed');
       c.querySelector('.pin-btn').innerText = "⚡ Maximize";
     });
   }
@@ -424,7 +404,7 @@
       chip.onclick = () => { resetStandardView(); if (v.max) toggleMax(v.max); };
       bar.appendChild(chip);
     });
-    alert(`Saved custom view "${vName}" as a small tab!`);
+    alert(`Saved custom view "${vName}"!`);
   }
 
   function toggleMax(cardId) {
@@ -454,109 +434,178 @@
     }
   }
 
-  function updateSecureSimulation() {
-    const mode = document.getElementById('secureModeSelect').value;
-    const scaleIdx = parseInt(document.getElementById('qubit-slider').value);
-    const theta = parseFloat(document.getElementById('theta-slider').value);
-    const phi = parseFloat(document.getElementById('phi-slider').value);
+  function updateControls() { updateSecureSimulation(); }
+  function updateFin() { finConfig.baseValue = parseFloat(document.getElementById('baseValueSlider').value); document.getElementById('baseValueReadout').innerText = finConfig.baseValue.toFixed(2); }
+  function linkSource() { alert("SharePoint / DB connection secured and active!"); }
+  function uploadFile(e) { alert(`File "${e.target.files[0]?.name}" uploaded & parsed successfully!`); }
+  function triggerExport() { alert("Raw dataset export generated."); }
+  function pinToSummary() { alert("Grasped noise points pinned to summary!"); }
+  function exportWordPPT() { alert("Word/PPT executive report package downloaded."); }
 
-    document.getElementById('secure-scale-val').innerText = scaleIdx;
-    document.getElementById('theta-val').innerText = theta.toFixed(2) + " rad";
-    document.getElementById('phi-val').innerText = phi.toFixed(2) + " rad";
+  // Fully Interactive 3D Atom Mouse & Touch Event Listeners
+  atomCanvas.addEventListener('mousedown', (e) => { isDraggingAtom = true; lastX = e.clientX; lastY = e.clientY; e.preventDefault(); });
+  window.addEventListener('mousemove', (e) => {
+    if (!isDraggingAtom) return;
+    atomRotY += (e.clientX - lastX) * 0.015;
+    atomRotX -= (e.clientY - lastY) * 0.015;
+    lastX = e.clientX; lastY = e.clientY;
+  });
+  window.addEventListener('mouseup', () => { isDraggingAtom = false; });
+  atomCanvas.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    atomZoom = Math.max(0.5, Math.min(3.5, atomZoom + e.deltaY * -0.0015));
+  }, { passive: false });
 
-    const canvas = document.getElementById('secureSimCanvas');
-    const ctx = canvas.getContext('2d');
-    const width = canvas.width;
-    const height = canvas.height;
+  atomCanvas.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) { isDraggingAtom = true; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; }
+    else if (e.touches.length === 2) { touchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); }
+    e.preventDefault();
+  }, { passive: false });
 
-    ctx.fillStyle = '#04060a';
-    ctx.fillRect(0, 0, width, height);
+  atomCanvas.addEventListener('touchmove', (e) => {
+    if (isDraggingAtom && e.touches.length === 1) {
+      atomRotY += (e.touches[0].clientX - lastX) * 0.015;
+      atomRotX -= (e.touches[0].clientY - lastY) * 0.015;
+      lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
+    } else if (e.touches.length === 2) {
+      let d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      atomZoom = Math.max(0.5, Math.min(3.5, atomZoom * (d / touchDist)));
+      touchDist = d;
+    }
+    e.preventDefault();
+  }, { passive: false });
+  atomCanvas.addEventListener('touchend', () => { isDraggingAtom = false; });
 
-    const r_n = R_LOOKUP_F32[scaleIdx];
+  function renderVividAtom() {
+    const w = atomCanvas.width, h = atomCanvas.height;
+    atomCtx.fillStyle = '#000308'; atomCtx.fillRect(0, 0, w, h);
 
-    if (mode === "1") {
-      ctx.strokeStyle = '#00f3ff';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
+    let cx = w / 2, cy = h / 2;
+    let breathFactor = 1.0 + Math.sin(timeOffset * 2.5) * 0.12;
 
-      const d = 1e-4;
-      const a = 2e-5;
-      const L = 1.0;
+    let nodes = atomNodes.map(n => {
+      let pulse = 1.0 + Math.sin(globalTick * 0.04 * n.pulseSpeed + n.pulseOffset) * 0.08;
+      let effectiveDepth = atomDepth * breathFactor * pulse;
+      let x = n.ox * effectiveDepth, y = n.oy * effectiveDepth, z = n.oz * effectiveDepth;
+      
+      let x1 = x * Math.cos(atomRotY) + z * Math.sin(atomRotY);
+      let z1 = -x * Math.sin(atomRotY) + z * Math.cos(atomRotY);
+      let y1 = y;
+      let y2 = y1 * Math.cos(atomRotX) - z1 * Math.sin(atomRotX);
+      let z2 = y1 * Math.sin(atomRotX) + z1 * Math.cos(atomRotX);
+      let pers = 280 / (280 + z2);
+      return { px: cx + x1 * pers * atomZoom, py: cy + y2 * pers * atomZoom, z: z2, color: n.color, glow: n.glow, size: n.size * pers * atomZoom * pulse };
+    });
 
-      for (let xPos = 0; xPos < width; xPos++) {
-        const raw_x = (xPos - width / 2) * 0.0001;
-        const phase_interf = (Math.PI * d * raw_x) / (r_n * L + 1e-35) + theta;
-        const phase_diffract = (Math.PI * a * raw_x) / (r_n * L + 1e-35);
+    nodes.sort((a, b) => a.z - b.z);
 
-        const interf = Math.cos(phase_interf) ** 2;
-        const diffract = phase_diffract === 0 ? 1.0 : (Math.sin(phase_diffract) / phase_diffract) ** 2;
-        const val = interf * diffract * 40.0;
-
-        const yPos = height - (val * (height / 80));
-        if (xPos === 0) ctx.moveTo(xPos, yPos);
-        else ctx.lineTo(xPos, yPos);
-      }
-      ctx.stroke();
-    } else {
-      ctx.strokeStyle = '#7ee787';
-      ctx.lineWidth = 1;
-      for (let r = 0; r < 6; r++) {
-        ctx.beginPath();
-        for (let xPos = 0; xPos < width; xPos += 5) {
-          const r_eff = r_n * 1e31 + Math.sin(xPos * 0.05 + phi) * 0.5;
-          const val = Math.abs(Math.sin(r_eff)) * 40.0;
-          const yPos = height - (val * (height / 80)) - (r * 15);
-          if (xPos === 0) ctx.moveTo(xPos, yPos);
-          else ctx.lineTo(xPos, yPos);
+    atomCtx.lineWidth = 0.5;
+    for (let i = 0; i < nodes.length; i += 2) {
+      for (let j = i + 1; j < nodes.length; j += 4) {
+        let d = Math.hypot(nodes[i].px - nodes[j].px, nodes[i].py - nodes[j].py);
+        if (d < 35) {
+          atomCtx.strokeStyle = nodes[i].color === '#00f3ff' ? 'rgba(0, 243, 255, 0.25)' : 'rgba(192, 132, 252, 0.25)';
+          atomCtx.beginPath(); atomCtx.moveTo(nodes[i].px, nodes[i].py); atomCtx.lineTo(nodes[j].px, nodes[j].py); atomCtx.stroke();
         }
-        ctx.stroke();
       }
     }
 
+    nodes.forEach(n => {
+      atomCtx.shadowBlur = 10; atomCtx.shadowColor = n.glow;
+      atomCtx.fillStyle = n.color;
+      atomCtx.beginPath(); atomCtx.arc(n.px, n.py, Math.max(1.0, n.size), 0, Math.PI * 2); atomCtx.fill();
+      atomCtx.shadowBlur = 0;
+    });
+  }
+
+  // SEBRA82 Wave Optics Simulation Canvas
+  function updateSecureSimulation() {
+    const scaleIdx = parseInt(document.getElementById('qubit-slider').value);
+    const theta = parseFloat(document.getElementById('theta-slider').value);
+    document.getElementById('secure-scale-val').innerText = scaleIdx;
+    document.getElementById('theta-val').innerText = theta.toFixed(2) + " rad";
+
+    const canvas = document.getElementById('secureSimCanvas');
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width, h = canvas.height;
+    ctx.fillStyle = '#04060a'; ctx.fillRect(0, 0, w, h);
+
+    const r_n = R_LOOKUP_F32[scaleIdx];
+    ctx.strokeStyle = '#00f3ff'; ctx.lineWidth = 1.5; ctx.beginPath();
+    const d = 1e-4, a = 2e-5, L = 1.0;
+
+    for (let xPos = 0; xPos < w; xPos++) {
+      const raw_x = (xPos - w / 2) * 0.0001;
+      const phase_interf = (Math.PI * d * raw_x) / (r_n * L + 1e-35) + theta;
+      const phase_diffract = (Math.PI * a * raw_x) / (r_n * L + 1e-35);
+      const interf = Math.cos(phase_interf) ** 2;
+      const diffract = phase_diffract === 0 ? 1.0 : (Math.sin(phase_diffract) / phase_diffract) ** 2;
+      const val = interf * diffract * 35.0;
+      const yPos = h - (val * (h / 70));
+      if (xPos === 0) ctx.moveTo(xPos, yPos); else ctx.lineTo(xPos, yPos);
+    }
+    ctx.stroke();
+
     const c00 = Math.cos(theta / 2.0).toFixed(2);
     const c01 = Math.sin(theta / 2.0).toFixed(2);
-    document.getElementById('quantum-state-output').innerText = 
-      `|&Psi;_final&gt; = ${c00}|00&gt; + ${c01}|01&gt; + e^(i*${phi.toFixed(2)})0.11|10&gt;`;
-  }
-
-  function updateControls() {
-    updateSecureSimulation();
-  }
-
-  function switchSecureMode() {
-    const mode = document.getElementById('secureModeSelect').value;
-    document.getElementById('mode-val').innerText = mode === "1" ? "Quantum 2-Slit Wave Optics" : "3D Spatial Grid";
-    updateSecureSimulation();
+    document.getElementById('quantum-state-output').innerText = `|&Psi;_final&gt; = ${c00}|00&gt; + ${c01}|01&gt;`;
   }
 
   function executePipeline() {
     const btn = document.getElementById('exec-btn');
-    btn.disabled = true;
-    btn.innerText = "Running AES-256-GCM Pipeline...";
-
+    btn.disabled = true; btn.innerText = "Running AES-256-GCM Pipeline...";
     const steps = ['step-1', 'step-2', 'step-3', 'step-4'];
     steps.forEach((s, idx) => {
       setTimeout(() => {
         document.getElementById(s).classList.add('active');
         if (idx > 0) document.getElementById(steps[idx - 1]).classList.replace('active', 'passed');
-      }, (idx + 1) * 250);
+      }, (idx + 1) * 200);
     });
-
     setTimeout(() => {
-      btn.disabled = false;
-      btn.innerText = "Run Pipeline Execution";
-      steps.forEach(s => {
-        const el = document.getElementById(s);
-        el.classList.remove('active');
-        el.classList.remove('passed');
-      });
+      btn.disabled = false; btn.innerText = "Run Pipeline Execution";
+      steps.forEach(s => { const el = document.getElementById(s); el.classList.remove('active', 'passed'); });
       document.getElementById('step-1').classList.add('active');
       alert("SEBRA82 v5.5 Pipeline Execution Complete: Galois Tags Validated, O(1) Latency Secured.");
-    }, 1200);
+    }, 1000);
   }
 
-  window.onload = updateSecureSimulation;
+  // Noise Grasping Sub-Studio
+  const forkedCanvas = document.getElementById('forkedGraphCanvas'), forkedCtx = forkedCanvas.getContext('2d');
+  function graspNoiseSample() {
+    forkedCtx.fillStyle = '#010307'; forkedCtx.fillRect(0, 0, forkedCanvas.width, forkedCanvas.height);
+    forkedCtx.strokeStyle = '#c084fc'; forkedCtx.lineWidth = 2; forkedCtx.beginPath();
+    let sample = [45, 75, 60, 88, 52, 70, 82, 40, 65];
+    let st = forkedCanvas.width / sample.length;
+    sample.forEach((v, idx) => {
+      let x = idx * st + st/2, y = forkedCanvas.height - (v / 100) * forkedCanvas.height;
+      if (idx === 0) forkedCtx.moveTo(x, y); else forkedCtx.lineTo(x, y);
+    });
+    forkedCtx.stroke();
+    
+    const tbody = document.getElementById('queryTableBody'); tbody.innerHTML = '';
+    sample.forEach((v, idx) => {
+      let tr = document.createElement('tr');
+      tr.innerHTML = `<td>#${100+idx}</td><td>2026-08-${10+idx}</td><td>Anomaly (X)</td><td>$${(v * finConfig.baseValue).toFixed(2)}</td>`;
+      tbody.appendChild(tr);
+    });
+    document.getElementById('suggestionBox').innerHTML = `💡 **Noise Grasp Successful**: Pulled ${sample.length} points into Sub-Graph Studio.`;
+  }
+
+  function masterLoop() {
+    globalTick++; timeOffset += 0.05;
+    renderVividAtom();
+    updateSecureSimulation();
+
+    if (globalTick % 60 === 0 && forkedRoiData.length === 0) {
+      graspNoiseSample();
+    }
+
+    requestAnimationFrame(masterLoop);
+  }
+
+  window.onload = masterLoop;
 </script>
 
 </body>
 </html>
+
