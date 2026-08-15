@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v7.6 - Hardened Institutional Master Suite</title>
+  <title>SEBRA82 v7.7 - Advanced Predictive Noise & Anomaly Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -392,13 +392,13 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v7.6</span> Executive Master Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v7.7</span> Executive Master Suite</div>
     <div class="header-actions">
       <button class="gen-rand-btn" onclick="generateRandomDataEpoch()">🎲 Random Data</button>
       <button class="saved-view-btn" onclick="saveCustomView()">💾 Save View</button>
       <button class="core-reset-btn" onclick="resetStandardView()">↺ Standard</button>
     </div>
-    <div class="node-badge" id="vault-status">VAULT: HARDENED [High-Sensitivity Pinch Zoom]</div>
+    <div class="node-badge" id="vault-status">VAULT: PREDICTIVE ANOMALY ENGINE [v7.7]</div>
     <div class="saved-tabs-bar" id="savedTabsBar">
       <span style="font-size: 0.44rem; color: var(--text-muted); font-family: var(--font-mono); align-self: center;">Saved Tabs:</span>
     </div>
@@ -406,7 +406,7 @@
 
   <div class="mobile-stack" id="mobileStack">
 
-    <!-- Step 1: Fully Interactive Breathing 3D Quantum Atom Matrix (High-Sensitivity Pinch Zoom) -->
+    <!-- Step 1: Fully Interactive Breathing 3D Quantum Atom Matrix -->
     <div class="panel-card" id="cardAtom">
       <div class="section-category-bar">
         <span class="cat-chip cat-calc">Calculation</span>
@@ -502,7 +502,7 @@
         <span class="cat-chip cat-world">World</span>
       </div>
       <div class="panel-title" onclick="toggleSec('secWave')">
-        <span>3. Live Noise Graph & Streaming Studio</span>
+        <span>3. Live Noise Graph & Predictive Studio</span>
         <div style="display:flex; gap:4px; align-items:center;">
           <span style="font-size:0.44rem; color:var(--neon-cyan);">[Click to Expand]</span>
           <button class="pin-btn" id="pinBtn_cardWave" onclick="event.stopPropagation(); toggleMax('cardWave')">⚡ Maximize & Expand</button>
@@ -515,7 +515,7 @@
       <div class="collapsible-body collapsed" id="secWave">
         <div class="canvas-box" style="height: 140px;">
           <canvas id="secureSimCanvas" width="400" height="140"></canvas>
-          <div class="hud-tag" id="waveHudTag">🔴 LIVE STREAM | Hover to Inspect | Drag to Pull Subset</div>
+          <div class="hud-tag" id="waveHudTag">🔴 LIVE STREAM | Drag to Cut Section for Custom Graph</div>
           <div class="graph-toolbar">
             <button class="graph-tool-btn" onclick="togglePauseStream()">⏸ Pause</button>
             <button class="graph-tool-btn" onclick="resetZoomPan()">🔍 Reset Zoom</button>
@@ -523,21 +523,40 @@
           </div>
         </div>
         
-        <div class="expanded-graph-suite" id="expandedGraphSuite" style="display: flex; flex-direction:column; gap:4px; background: rgba(0, 243, 255, 0.04); border: 1px solid rgba(0, 243, 255, 0.3); padding: 5px; border-radius: 5px;">
-          <div style="font-size: 0.5rem; color: var(--neon-cyan); font-family: var(--font-mono); font-weight:700;">⚡ PULLED SUBSET: SPIKES, Z-SCORE ANOMALIES & FORECAST</div>
-          <div class="canvas-box" style="height: 100px; border-color: rgba(255, 51, 68, 0.5);">
-            <canvas id="subsetSpikeCanvas" width="400" height="100"></canvas>
-            <div class="hud-tag" style="color:var(--crimson-red);">Rolling Z-Score Anomaly & Projection</div>
+        <!-- Expanded Predictive & Custom Cut Section Suite -->
+        <div class="expanded-graph-suite" id="expandedGraphSuite" style="display: flex; flex-direction:column; gap:6px; background: rgba(0, 243, 255, 0.04); border: 1px solid rgba(0, 243, 255, 0.3); padding: 6px; border-radius: 5px;">
+          <div style="font-size: 0.5rem; color: var(--neon-cyan); font-family: var(--font-mono); font-weight:700;">⚡ AUTOMATIC PREDICTIVE ANOMALY & SPIKE PROJECTION GRAPH</div>
+          <div class="canvas-box" style="height: 90px; border-color: rgba(255, 51, 68, 0.5);">
+            <canvas id="predictiveForecastCanvas" width="400" height="90"></canvas>
+            <div class="hud-tag" style="color:var(--crimson-red);">Auto-Plotted Predictive Trajectory & Spikes</div>
           </div>
+
+          <div style="font-size: 0.5rem; color: var(--accent-green); font-family: var(--font-mono); font-weight:700; margin-top: 2px;">✂ CUSTOM CUT SECTION STUDIO (Adjust Thresholds & Baselines)</div>
+          <div class="canvas-box" style="height: 90px; border-color: rgba(126, 231, 135, 0.5);">
+            <canvas id="customCutCanvas" width="400" height="90"></canvas>
+            <div class="hud-tag" style="color:var(--accent-green);">Custom Cut Subgraph View</div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+            <div class="control-item">
+              <div class="control-label">Custom Threshold: <span id="customThreshVal">70.0</span></div>
+              <input type="range" id="customThreshSlider" min="20" max="95" step="1" value="70" oninput="document.getElementById('customThreshVal').innerText=this.value; updateCustomCutGraph();">
+            </div>
+            <div class="control-item">
+              <div class="control-label">Custom Baseline Offset: <span id="customBaseVal">0.0</span></div>
+              <input type="range" id="customBaseSlider" min="-30" max="30" step="1" value="0" oninput="document.getElementById('customBaseVal').innerText=this.value; updateCustomCutGraph();">
+            </div>
+          </div>
+
           <div class="btn-row">
-            <button onclick="commitSubsetGraphTab()" class="action-btn" style="background:var(--accent-purple); color:#fff;">📌 Pin Subset as New View Tab</button>
+            <button onclick="commitSubsetGraphTab()" class="action-btn" style="background:var(--accent-purple); color:#fff;">📌 Pin Cut Graph as New View Tab</button>
             <button onclick="exportExpandedReport()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📄 Export Report</button>
           </div>
         </div>
 
         <div class="control-item">
-          <div class="control-label">Z-Score Threshold Multiplier: <span id="spikeThreshVal">2.00</span> &sigma;</div>
-          <input type="range" id="spikeThreshSlider" min="1.0" max="4.0" step="0.1" value="2.0" oninput="document.getElementById('spikeThreshVal').innerText=parseFloat(this.value).toFixed(2); renderSubsetSpikes(); populateAnomalyTable();">
+          <div class="control-label">Main Z-Score Detection Threshold: <span id="spikeThreshVal">2.00</span> &sigma;</div>
+          <input type="range" id="spikeThreshSlider" min="1.0" max="4.0" step="0.1" value="2.0" oninput="document.getElementById('spikeThreshVal').innerText=parseFloat(this.value).toFixed(2); renderPredictiveForecast(); populateAnomalyTable();">
         </div>
       </div>
     </div>
@@ -563,7 +582,7 @@
       </div>
       <div class="collapsible-body collapsed" id="secQuery">
         <div class="suggestion-box" id="suggestionBox">
-          💡 **AI Suggestion**: Fully operational! Drag across the live interactive noise graph in Step 3 to filter history. Automatically maps IDs, Dates, and Categories.
+          💡 **AI Suggestion**: Fully operational! Drag across the live interactive noise graph in Step 3 to cut sections and auto-plot predictive steps.
         </div>
         <div class="data-table-container">
           <table class="data-table" id="queryDataTable">
@@ -571,7 +590,7 @@
               <tr><th>ID</th><th>Date</th><th>Category</th><th>Magnitude</th></tr>
             </thead>
             <tbody id="queryTableBody">
-              <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Pull a selection across the noise graph above to load query table.</td></tr>
+              <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Cut a section across the noise graph above to load query table.</td></tr>
             </tbody>
           </table>
         </div>
@@ -649,7 +668,7 @@
       </div>
       <div class="collapsible-body" id="secSummary">
         <div style="font-size: 0.48rem; color: var(--text-muted); font-family: var(--font-mono); line-height: 1.3;">
-          🏆 <strong>Key Operational Insights</strong>: Quantum wave lattices maintain double-precision normalized coherence at $\gamma=1.45$. Rolling Z-score anomaly tracking indicates <strong>12.4% variance frequency</strong> across historical epochs.
+          🏆 <strong>Key Operational Insights</strong>: Quantum wave lattices maintain double-precision normalized coherence at $\gamma=1.45$. Predictive auto-plotting engine active with automated spike tracking.
         </div>
         <div class="summary-grid">
           <div class="summary-metric-card">
@@ -661,11 +680,11 @@
             <div class="summary-metric-val" id="sumMetricVol">15,480 X</div>
           </div>
           <div class="summary-metric-card">
-            <div class="summary-metric-title">Z-Score Anomalies</div>
+            <div class="summary-metric-title">Auto-Projected Spikes</div>
             <div class="summary-metric-val" id="sumMetricSpikes">4 Detected</div>
           </div>
           <div class="summary-metric-card">
-            <div class="summary-metric-title">Hardening Rating</div>
+            <div class="summary-metric-title">Engine Rating</div>
             <div class="summary-metric-val" style="color: var(--accent-green);">100 / 100</div>
           </div>
         </div>
@@ -736,7 +755,7 @@
 
     switch(toolKey) {
       case 'atom':
-        explanation = "<strong>3D Quantum Atom Matrix</strong>: Displays a breathing multi-shell quantum particle lattice. High-sensitivity pinch or scroll on the 3D view to zoom in and look inside.";
+        explanation = "<strong>3D Quantum Atom Matrix</strong>: Displays a breathing multi-shell quantum particle lattice. Pinch or scroll on the 3D view to zoom in and look inside.";
         secId = 'secAtom';
         break;
       case 'math':
@@ -744,11 +763,11 @@
         secId = 'secFin';
         break;
       case 'noise':
-        explanation = "<strong>Live Noise Graph</strong>: Spectral stream with rolling Z-score anomaly detection.";
+        explanation = "<strong>Live Noise Graph & Predictive Studio</strong>: Drag across the live stream to cut sections. Automatically plots predictive steps, potential spikes, and allows real-time baseline/threshold adjustments.";
         secId = 'secWave';
         break;
       case 'query':
-        explanation = "<strong>Query Table Studio</strong>: Automated statistical mapping interface populated directly from your pulled noise stream subsets.";
+        explanation = "<strong>Query Table Studio</strong>: Automated statistical mapping interface populated directly from your cut noise sections.";
         secId = 'secQuery';
         break;
       case 'tools':
@@ -773,19 +792,16 @@
 
   const predictionDictionary = [
     "how to navigate model",
+    "how to cut section from noise",
+    "how to adjust custom thresholds",
+    "how to view predictive spike graphs",
     "how to configure atom matrix",
     "how to run quantum simulation",
-    "how to analyze noise graph spikes",
-    "how to query anomaly data",
-    "how to explore workspace folders",
+    "show me predictive anomaly graph",
+    "show me custom cut section studio",
     "show me 3d quantum atom matrix",
-    "show me math modeling studio",
-    "show me live noise stream",
-    "show me query export table",
-    "show me workspace folder explorer",
     "simulate quantum tensor wave",
-    "simulate financial alpha forecast",
-    "export anomaly report package"
+    "simulate financial alpha forecast"
   ];
 
   function getPredictionMatch(val) {
@@ -857,14 +873,14 @@
       teachAndMaximize('atom', 'cardAtom');
     } else if (queryLower.includes('math') || queryLower.includes('tensor') || queryLower.includes('forecast')) {
       teachAndMaximize('math', 'cardFin');
-    } else if (queryLower.includes('noise') || queryLower.includes('graph') || queryLower.includes('subset')) {
+    } else if (queryLower.includes('noise') || queryLower.includes('graph') || queryLower.includes('spike') || queryLower.includes('cut')) {
       teachAndMaximize('noise', 'cardWave');
     } else if (queryLower.includes('table') || queryLower.includes('query')) {
       teachAndMaximize('query', 'cardQuery');
     } else if (queryLower.includes('tool') || queryLower.includes('folder') || queryLower.includes('explorer')) {
       teachAndMaximize('tools', 'cardTools');
     } else {
-      streamBox.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: I can teach you about the Atom Matrix, Math Studio, Noise Graph, Query Table, or Workspace Explorer. Just ask!</div>`;
+      streamBox.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: I can teach you about the Atom Matrix, Math Studio, Predictive Noise Graphs, Cut Section Studio, or Workspace Explorer. Just ask!</div>`;
     }
     streamBox.scrollTop = streamBox.scrollHeight;
   }
@@ -901,7 +917,7 @@
   const PLANCK_L = 1.616255e-35, PHI = 1.61803398875;
   for (let n = 0; n < 296; n++) { R_LOOKUP_F64[n] = PLANCK_L * Math.pow(PHI, n); }
 
-  // Breathing 3D Quantum Atom Core Setup with High-Sensitivity Pinch-to-Zoom & Pointer Dragging
+  // Breathing 3D Quantum Atom Core Setup
   const atomCanvas = document.getElementById('atom3DCanvas');
   const atomCtx = atomCanvas.getContext('2d');
   let atomRotX = 0.5, atomRotY = 0.2, atomZoom = 1.2;
@@ -927,7 +943,6 @@
     });
   }
 
-  // Pointer Events for Drag-to-Rotate and High-Sensitivity Pinch-to-Zoom
   atomCanvas.addEventListener('pointerdown', (e) => {
     activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     atomCanvas.setPointerCapture(e.pointerId);
@@ -949,12 +964,10 @@
     activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
     if (activePointers.size === 2) {
-      // High-Sensitivity Pinch-to-Zoom calculation (amplified gain factor)
       const pts = Array.from(activePointers.values());
       const currentDist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
       if (initialPinchDist > 0) {
         const factor = currentDist / initialPinchDist;
-        // Multiplied sensitivity scaling for instantaneous responsiveness across full matrix
         atomZoom = Math.max(0.3, Math.min(8.0, atomZoom * (1 + (factor - 1) * 0.35)));
       }
       initialPinchDist = currentDist;
@@ -984,7 +997,6 @@
   atomCanvas.addEventListener('pointerup', handlePointerEnd);
   atomCanvas.addEventListener('pointercancel', handlePointerEnd);
 
-  // Desktop Mouse Wheel Zoom (High-Sensitivity)
   atomCanvas.addEventListener('wheel', (e) => {
     e.preventDefault();
     atomZoom = Math.max(0.3, Math.min(8.0, atomZoom + e.deltaY * -0.005));
@@ -1098,7 +1110,8 @@
   function generateRandomDataEpoch() {
     waveBuffer = waveBuffer.map(() => Math.floor(Math.random() * 75) + 15);
     extractedSubset = waveBuffer.slice(25, 100);
-    renderSubsetSpikes();
+    renderPredictiveForecast();
+    updateCustomCutGraph();
     populateAnomalyTable();
   }
 
@@ -1159,10 +1172,15 @@
     });
   }
 
+  // --- Live Noise Graph & Predictive Studio ---
   const waveCanvas = document.getElementById('secureSimCanvas');
   const waveCtx = waveCanvas.getContext('2d');
-  const subsetCanvas = document.getElementById('subsetSpikeCanvas');
-  const subsetCtx = subsetCanvas ? subsetCanvas.getContext('2d') : null;
+  
+  const predictiveCanvas = document.getElementById('predictiveForecastCanvas');
+  const predictiveCtx = predictiveCanvas ? predictiveCanvas.getContext('2d') : null;
+
+  const customCutCanvas = document.getElementById('customCutCanvas');
+  const customCutCtx = customCutCanvas ? customCutCanvas.getContext('2d') : null;
 
   function togglePauseStream() {
     isStreamPaused = !isStreamPaused;
@@ -1198,7 +1216,7 @@
     if (!isSelecting) return;
     isSelecting = false;
     selectEndX = e.offsetX;
-    pullSubsetAndPredict();
+    cutSectionFromNoise();
   });
 
   waveCanvas.addEventListener('wheel', (e) => {
@@ -1211,17 +1229,18 @@
     }
   }, { passive: false });
 
-  function pullSubsetAndPredict() {
+  function cutSectionFromNoise() {
     let sIdx = Math.floor((Math.min(selectStartX, selectEndX) / waveCanvas.width) * (waveBuffer.length / zoomLevel) + panOffset);
     let eIdx = Math.floor((Math.max(selectStartX, selectEndX) / waveCanvas.width) * (waveBuffer.length / zoomLevel) + panOffset);
     sIdx = Math.max(0, sIdx);
     eIdx = Math.min(waveBuffer.length, eIdx);
-    if (Math.abs(eIdx - sIdx) < 3) { sIdx = Math.max(0, sIdx - 15); eIdx = Math.min(waveBuffer.length, eIdx + 15); }
+    if (Math.abs(eIdx - sIdx) < 3) { sIdx = Math.max(0, sIdx - 20); eIdx = Math.min(waveBuffer.length, eIdx + 20); }
     
     extractedSubset = waveBuffer.slice(sIdx, eIdx);
     if (extractedSubset.length === 0) extractedSubset = [60, 85, 92, 78, 88];
 
-    renderSubsetSpikes();
+    renderPredictiveForecast();
+    updateCustomCutGraph();
     populateAnomalyTable();
   }
 
@@ -1233,55 +1252,106 @@
     return data.map(v => ({ val: v, zScore: Math.abs((v - mean) / stdDev) }));
   }
 
-  function renderSubsetSpikes() {
-    if (!subsetCtx) return;
-    const w = subsetCanvas.width, h = subsetCanvas.height;
-    subsetCtx.fillStyle = '#010307'; subsetCtx.fillRect(0, 0, w, h);
+  // Automatically plot automated predictive steps, spikes, and potential anomalies into Graph 2
+  function renderPredictiveForecast() {
+    if (!predictiveCtx) return;
+    const w = predictiveCanvas.width, h = predictiveCanvas.height;
+    predictiveCtx.fillStyle = '#010307'; predictiveCtx.fillRect(0, 0, w, h);
     if (extractedSubset.length === 0) return;
 
     let zThreshold = parseFloat(document.getElementById('spikeThreshVal').value);
     let analyzedData = computeZScores(extractedSubset);
 
-    subsetCtx.strokeStyle = '#00f3ff'; subsetCtx.lineWidth = 2; subsetCtx.beginPath();
-    let st = w / (extractedSubset.length + 8);
+    // Plot Historical Cut Section
+    predictiveCtx.strokeStyle = '#00f3ff'; predictiveCtx.lineWidth = 2; predictiveCtx.beginPath();
+    let st = w / (extractedSubset.length + 12);
     analyzedData.forEach((item, idx) => {
       let x = idx * st + 5, y = h - (item.val / 100) * h;
-      if (idx === 0) subsetCtx.moveTo(x, y); else subsetCtx.lineTo(x, y);
+      if (idx === 0) predictiveCtx.moveTo(x, y); else predictiveCtx.lineTo(x, y);
     });
-    subsetCtx.stroke();
+    predictiveCtx.stroke();
 
+    // Track Anomalies
     let anomalyCount = 0;
     analyzedData.forEach((item, idx) => {
       if (item.zScore > zThreshold) {
         anomalyCount++;
         let x = idx * st + 5, y = h - (item.val / 100) * h;
-        subsetCtx.fillStyle = '#ff3344';
-        subsetCtx.beginPath(); subsetCtx.arc(x, y, 3.5, 0, Math.PI * 2); subsetCtx.fill();
+        predictiveCtx.fillStyle = '#ff3344';
+        predictiveCtx.beginPath(); predictiveCtx.arc(x, y, 3.5, 0, Math.PI * 2); predictiveCtx.fill();
       }
     });
 
     document.getElementById('sumMetricSpikes').innerText = anomalyCount + " Detected";
 
-    subsetCtx.strokeStyle = '#c084fc'; subsetCtx.lineWidth = 2; subsetCtx.setLineDash([3, 3]); subsetCtx.beginPath();
+    // Automatically plot automated predictive future steps & potential spike anomalies
+    predictiveCtx.strokeStyle = '#c084fc'; predictiveCtx.lineWidth = 2; predictiveCtx.setLineDash([3, 3]); predictiveCtx.beginPath();
     let lastX = (extractedSubset.length - 1) * st + 5;
     let lastY = h - (extractedSubset[extractedSubset.length - 1] / 100) * h;
-    subsetCtx.moveTo(lastX, lastY);
+    predictiveCtx.moveTo(lastX, lastY);
 
     let predVal = extractedSubset[extractedSubset.length - 1];
-    for (let p = 1; p <= 8; p++) {
-      predVal += (Math.sin(p + timeOffset) * 8);
-      predVal = Math.min(95, Math.max(20, predVal));
+    for (let p = 1; p <= 10; p++) {
+      predVal += (Math.sin(p * 0.8 + timeOffset) * 12);
+      predVal = Math.min(95, Math.max(15, predVal));
       let px = lastX + p * st;
       let py = h - (predVal / 100) * h;
-      subsetCtx.lineTo(px, py);
+      predictiveCtx.lineTo(px, py);
+
+      // Plot potential predictive future spikes in amber
+      if (predVal > 78) {
+        predictiveCtx.fillStyle = '#f0883e';
+        predictiveCtx.fillRect(px - 2, py - 2, 4, 4);
+      }
     }
-    subsetCtx.stroke();
-    subsetCtx.setLineDash([]);
+    predictiveCtx.stroke();
+    predictiveCtx.setLineDash([]);
+  }
+
+  // Custom Cut Graph with User-Adjustable Thresholds and Baselines
+  function updateCustomCutGraph() {
+    if (!customCutCtx) return;
+    const w = customCutCanvas.width, h = customCutCanvas.height;
+    customCutCtx.fillStyle = '#010307'; customCutCtx.fillRect(0, 0, w, h);
+    if (extractedSubset.length === 0) return;
+
+    let customThresh = parseFloat(document.getElementById('customThreshSlider').value);
+    let customBase = parseFloat(document.getElementById('customBaseSlider').value);
+
+    let adjustedData = extractedSubset.map(v => Math.min(95, Math.max(5, v + customBase)));
+
+    customCutCtx.strokeStyle = '#7ee787'; customCutCtx.lineWidth = 2; customCutCtx.beginPath();
+    let st = w / (adjustedData.length + 4);
+    adjustedData.forEach((v, idx) => {
+      let x = idx * st + 5, y = h - (v / 100) * h;
+      if (idx === 0) customCutCtx.moveTo(x, y); else customCutCtx.lineTo(x, y);
+    });
+    customCutCtx.stroke();
+
+    // Render custom threshold baseline line across the custom graph
+    let threshY = h - (customThresh / 100) * h;
+    customCutCtx.strokeStyle = 'rgba(255, 51, 68, 0.7)';
+    customCutCtx.lineWidth = 1;
+    customCutCtx.setLineDash([4, 2]);
+    customCutCtx.beginPath();
+    customCutCtx.moveTo(0, threshY);
+    customCutCtx.lineTo(w, threshY);
+    customCutCtx.stroke();
+    customCutCtx.setLineDash([]);
+
+    // Plot markers where custom threshold is breached
+    adjustedData.forEach((v, idx) => {
+      if (v > customThresh) {
+        let x = idx * st + 5, y = h - (v / 100) * h;
+        customCutCtx.fillStyle = '#ff3344';
+        customCutCtx.beginPath(); customCutCtx.arc(x, y, 3, 0, Math.PI * 2); customCutCtx.fill();
+      }
+    });
   }
 
   function commitSubsetGraphTab() {
     if (extractedSubset.length === 0) return;
-    const vName = `Subset_${savedViews.length + 1}`;
+    const vName = `CutGraph_${savedViews.length + 1}`;
     savedViews.push({ name: vName, max: 'cardWave' });
     renderSavedTabs();
   }
@@ -1299,7 +1369,7 @@
     let zThreshold = parseFloat(document.getElementById('spikeThreshVal').value);
     
     if (extractedSubset.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted); text-align:center;">No subset selected. Drag across live noise graph above.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted); text-align:center;">No section cut. Drag across live noise graph above.</td></tr>`;
       document.getElementById('sumQueryCount').innerText = "0 rows";
       return;
     }
@@ -1308,7 +1378,7 @@
     analyzedData.forEach((item, idx) => {
       let tr = document.createElement('tr');
       let isAnom = item.zScore > zThreshold;
-      let safeCategory = escapeHtml(isAnom ? '⚠️ Z-Anomaly (' + item.zScore.toFixed(2) + '&sigma;)' : 'Normal Wave');
+      let safeCategory = escapeHtml(isAnom ? '⚠️ Predictive Z-Spike (' + item.zScore.toFixed(2) + '&sigma;)' : 'Normal Wave');
       let safeMag = escapeHtml('$' + (item.val * finConfig.baseValue * finConfig.damping).toFixed(2));
       tr.innerHTML = `<td>#${4000 + idx}</td><td>2026-0${(idx % 6) + 1}-${10+idx}</td><td>${safeCategory}</td><td>${safeMag}</td>`;
       tbody.appendChild(tr);
@@ -1316,7 +1386,7 @@
 
     document.getElementById('sumQueryCount').innerText = extractedSubset.length + " rows";
     document.getElementById('sumSubPoints').innerText = extractedSubset.length;
-    document.getElementById('suggestionBox').innerHTML = `💡 **Query Studio Active**: Successfully queried ${extractedSubset.length} points with rolling Z-score analysis (&sigma; threshold = ${zThreshold}).`;
+    document.getElementById('suggestionBox').innerHTML = `💡 **Predictive Studio Active**: Successfully cut and mapped ${extractedSubset.length} points with automated predictive step plotting.`;
   }
 
   function updateWaveOptics() {
@@ -1375,14 +1445,16 @@
   function masterLoop() {
     renderVividAtom();
     updateWaveOptics();
-    renderSubsetSpikes();
+    renderPredictiveForecast();
+    updateCustomCutGraph();
     requestAnimationFrame(masterLoop);
   }
 
   window.onload = () => {
     masterLoop();
     extractedSubset = waveBuffer.slice(25, 85);
-    renderSubsetSpikes();
+    renderPredictiveForecast();
+    updateCustomCutGraph();
     populateAnomalyTable();
     updateInteractiveMathReadout();
   };
