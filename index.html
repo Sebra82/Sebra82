@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v8.1.0 - Vivid & Intuitive 3D Quantum Atom Matrix</title>
+  <title>QuantEngine v8.3.0 - Breathing Interactive 3D Quantum Atom Matrix</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -22,7 +22,7 @@
       --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-ui); touch-action: manipulation; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-ui); }
 
     body {
       background-color: var(--bg-deep);
@@ -35,7 +35,6 @@
       align-items: center;
       user-select: none;
       -webkit-user-select: none;
-      -webkit-touch-callout: none;
       padding: 0.2rem;
     }
 
@@ -76,7 +75,7 @@
 
     .mobile-stack { display: flex; flex-direction: column; gap: 0.4rem; }
 
-    .panel-card { background: rgba(3, 7, 15, 0.98); border-radius: 6px; border: 1px solid var(--border-color); padding: 0.4rem; display: flex; flex-direction: column; gap: 0.3rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .panel-card { background: rgba(3, 7, 15, 0.98); border-radius: 6px; border: 1px solid var(--border-color); padding: 0.4rem; display: flex; flex-direction: column; gap: 0.3rem; transition: all 0.3s ease; }
     
     .panel-card.fluid-maximized {
       flex: 1;
@@ -85,17 +84,8 @@
       box-shadow: 0 0 35px rgba(0,243,255,0.5);
       order: -99;
     }
-    .panel-card.fluid-maximized .collapsible-body {
-      max-height: 1400px !important;
-      display: flex !important;
-    }
-
-    .panel-card.dropped-tab {
-      order: 99;
-      padding: 0.2rem 0.4rem;
-      opacity: 0.65;
-      border-style: dashed;
-    }
+    .panel-card.fluid-maximized .collapsible-body { max-height: 1400px !important; display: flex !important; }
+    .panel-card.dropped-tab { order: 99; padding: 0.2rem 0.4rem; opacity: 0.65; border-style: dashed; }
     .panel-card.dropped-tab .collapsible-body { display: none !important; }
 
     .panel-title { font-size: 0.58rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; cursor: pointer; }
@@ -107,8 +97,10 @@
     .metric-value { font-size: 0.58rem; color: var(--accent-green); font-weight: 700; font-family: var(--font-mono); }
 
     .canvas-box { position: relative; width: 100%; background: radial-gradient(circle at center, #0a1128 0%, #000000 100%); border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.5); overflow: hidden; }
-    canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+    
+    canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; pointer-events: auto !important; }
     canvas:active { cursor: grabbing; }
+
     .hud-tag { position: absolute; top: 2px; left: 3px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 4px; border-radius: 2px; font-size: 0.46rem; color: var(--neon-cyan); font-family: var(--font-mono); z-index: 5; pointer-events: none; text-shadow: 0 0 6px var(--cyan-glow); }
 
     .data-table-container { background: #010409; border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 3px; padding: 2px; max-height: 110px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.46rem; color: var(--accent-purple); }
@@ -141,7 +133,7 @@
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v8.1.0</span> Vivid 3D Atom</div>
+    <div class="brand-title">⚡ <span>QuantEngine v8.3.0</span> Breathing Atom</div>
     <div class="header-actions">
       <button class="saved-view-btn" onclick="saveCustomView()">💾 Save View</button>
       <button class="core-reset-btn" onclick="resetStandardView()">↺ Standard</button>
@@ -153,16 +145,16 @@
 
   <div class="mobile-stack" id="mobileStack">
     
-    <!-- Part 1: Vivid, Glowing 3D Quantum Atom Matrix (Swipe to rotate, Pinch/Scroll to zoom, Slider to look inside) -->
+    <!-- Part 1: Breathing & Interactive 3D Quantum Atom Matrix -->
     <div class="panel-card" id="cardAtom">
       <div class="panel-title">
-        <span onclick="toggleSec('secAtom')">1. Vivid 3D Quantum Atom Matrix ▾</span>
+        <span onclick="toggleSec('secAtom')">1. Breathing 3D Quantum Atom Matrix ▾</span>
         <button class="pin-btn" id="pinBtn_cardAtom" onclick="toggleMax('cardAtom')">⚡ Maximize</button>
       </div>
       <div class="collapsible-body" id="secAtom">
-        <div class="canvas-box" style="height: 260px;">
+        <div class="canvas-box" style="height: 260px;" id="atomBox">
           <canvas id="atom3DCanvas" width="400" height="260"></canvas>
-          <div class="hud-tag">✨ VIVID 3D CORE | Swipe to Rotate, Pinch to Zoom</div>
+          <div class="hud-tag">✨ BREATHING CORE | Drag to Rotate, Pinch/Scroll to Zoom</div>
         </div>
         <div class="control-item">
           <div class="control-label">Look Inside / Core Expansion: <span id="atomDepthVal">1.00x</span></div>
@@ -228,7 +220,7 @@
       </div>
       <div class="collapsible-body collapsed" id="secQuery">
         <div class="suggestion-box" id="suggestionBox">
-          💡 **AI Suggestion**: Grasp noise on live graph or interact with the vivid 3D atom core above.
+          💡 **AI Suggestion**: Grasp noise on live graph or interact with the breathing 3D atom core above.
         </div>
         <div class="canvas-box" style="height: 50px; border-color: rgba(192, 132, 252, 0.4);">
           <canvas id="forkedGraphCanvas" width="400" height="50"></canvas>
@@ -277,30 +269,18 @@
 </div>
 
 <script>
-  document.addEventListener('contextmenu', event => event.preventDefault());
-  document.addEventListener('keydown', event => {
-    if (event.key === 'F12' || 
-        (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J' || event.key === 'C')) || 
-        (event.ctrlKey && (event.key === 'U' || event.key === 'S' || event.key === 'P'))) {
-      event.preventDefault();
-      return false;
-    }
-  });
-  setInterval(() => { debugger; }, 4000);
-
   let globalTick = 0, isRunning = true, currentThreshold = 75.0;
   let movingDataBuffer = new Array(70).fill(50), fullMasterHistory = [], timeOffset = 0;
   let forkedRoiData = [], pinnedSummaries = [], savedViews = [], activeMaxId = null;
   let finConfig = { baseValue: 10.0 }, finAccumulator = { monthlyTotal: 1245 };
   let isInteracting = false, dragStartX = 0, dragEndX = 0;
 
-  // Vivid 3D Atom Core State
+  // 3D Breathing Atom Core State & Event Bindings
   const atomCanvas = document.getElementById('atom3DCanvas');
   const atomCtx = atomCanvas.getContext('2d');
   let atomRotX = 0.4, atomRotY = 0.0, atomZoom = 1.1, atomDepth = 1.0;
   let isDraggingAtom = false, lastX = 0, lastY = 0, touchDist = 0;
 
-  // Rich Multi-Shell Vivid Lattice Nodes
   let atomNodes = [];
   for (let i = 0; i < 280; i++) {
     let phi = Math.acos(-1 + (2 * i) / 280);
@@ -313,7 +293,9 @@
       oz: r * Math.cos(phi),
       color: i % 3 === 0 ? '#00f3ff' : (i % 3 === 1 ? '#c084fc' : '#ff3344'),
       glow: i % 3 === 0 ? 'rgba(0,243,255,0.8)' : (i % 3 === 1 ? 'rgba(192,132,252,0.8)' : 'rgba(255,51,68,0.8)'),
-      size: (i % 4 === 0) ? 3.8 : 2.4
+      size: (i % 4 === 0) ? 3.8 : 2.4,
+      pulseSpeed: 1.5 + (i % 5) * 0.3,
+      pulseOffset: i * 0.1
     });
   }
 
@@ -386,35 +368,54 @@
   function pinToSummary() { alert("Grasped noise points pinned to summary!"); }
   function exportWordPPT() { alert("Word/PPT executive report package downloaded."); }
 
-  // Vivid 3D Atom Mouse & Touch Controls
-  atomCanvas.addEventListener('mousedown', (e) => { isDraggingAtom = true; lastX = e.clientX; lastY = e.clientY; });
+  // Fully Interactive 3D Atom Mouse & Touch Event Listeners
+  atomCanvas.addEventListener('mousedown', (e) => {
+    isDraggingAtom = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    e.preventDefault();
+  });
+
   window.addEventListener('mousemove', (e) => {
     if (!isDraggingAtom) return;
-    atomRotY += (e.clientX - lastX) * 0.012;
-    atomRotX -= (e.clientY - lastY) * 0.012;
-    lastX = e.clientX; lastY = e.clientY;
+    atomRotY += (e.clientX - lastX) * 0.015;
+    atomRotX -= (e.clientY - lastY) * 0.015;
+    lastX = e.clientX;
+    lastY = e.clientY;
   });
+
   window.addEventListener('mouseup', () => { isDraggingAtom = false; });
+
   atomCanvas.addEventListener('wheel', (e) => {
     e.preventDefault();
-    atomZoom = Math.max(0.6, Math.min(3.0, atomZoom + e.deltaY * -0.0015));
+    atomZoom = Math.max(0.5, Math.min(3.5, atomZoom + e.deltaY * -0.0015));
   }, { passive: false });
 
   atomCanvas.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) { isDraggingAtom = true; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; }
-    else if (e.touches.length === 2) { touchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); }
-  });
+    if (e.touches.length === 1) {
+      isDraggingAtom = true;
+      lastX = e.touches[0].clientX;
+      lastY = e.touches[0].clientY;
+    } else if (e.touches.length === 2) {
+      touchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    }
+    e.preventDefault();
+  }, { passive: false });
+
   atomCanvas.addEventListener('touchmove', (e) => {
     if (isDraggingAtom && e.touches.length === 1) {
-      atomRotY += (e.touches[0].clientX - lastX) * 0.012;
-      atomRotX -= (e.touches[0].clientY - lastY) * 0.012;
-      lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
+      atomRotY += (e.touches[0].clientX - lastX) * 0.015;
+      atomRotX -= (e.touches[0].clientY - lastY) * 0.015;
+      lastX = e.touches[0].clientX;
+      lastY = e.touches[0].clientY;
     } else if (e.touches.length === 2) {
       let d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-      atomZoom = Math.max(0.6, Math.min(3.0, atomZoom * (d / touchDist)));
+      atomZoom = Math.max(0.5, Math.min(3.5, atomZoom * (d / touchDist)));
       touchDist = d;
     }
-  });
+    e.preventDefault();
+  }, { passive: false });
+
   atomCanvas.addEventListener('touchend', () => { isDraggingAtom = false; });
 
   function renderVividAtom() {
@@ -423,40 +424,44 @@
     atomCtx.fillRect(0, 0, w, h);
 
     let cx = w / 2, cy = h / 2;
+    // Organic breathing scale factor using sine wave oscillation over timeOffset
+    let breathFactor = 1.0 + Math.sin(timeOffset * 2.5) * 0.12;
+
     let nodes = atomNodes.map(n => {
-      let x = n.ox * atomDepth, y = n.oy * atomDepth, z = n.oz * atomDepth;
+      let pulse = 1.0 + Math.sin(globalTick * 0.04 * n.pulseSpeed + n.pulseOffset) * 0.08;
+      let effectiveDepth = atomDepth * breathFactor * pulse;
+      let x = n.ox * effectiveDepth, y = n.oy * effectiveDepth, z = n.oz * effectiveDepth;
+      
       let x1 = x * Math.cos(atomRotY) + z * Math.sin(atomRotY);
       let z1 = -x * Math.sin(atomRotY) + z * Math.cos(atomRotY);
       let y1 = y;
       let y2 = y1 * Math.cos(atomRotX) - z1 * Math.sin(atomRotX);
       let z2 = y1 * Math.sin(atomRotX) + z1 * Math.cos(atomRotX);
       let pers = 320 / (320 + z2);
-      return { px: cx + x1 * pers * atomZoom, py: cy + y2 * pers * atomZoom, z: z2, color: n.color, glow: n.glow, size: n.size * pers * atomZoom };
+      return { px: cx + x1 * pers * atomZoom, py: cy + y2 * pers * atomZoom, z: z2, color: n.color, glow: n.glow, size: n.size * pers * atomZoom * pulse };
     });
 
     nodes.sort((a, b) => a.z - b.z);
 
-    // Glowing Matrix Mesh Lines
     atomCtx.lineWidth = 0.6;
     for (let i = 0; i < nodes.length; i += 2) {
       for (let j = i + 1; j < nodes.length; j += 3) {
         let d = Math.hypot(nodes[i].px - nodes[j].px, nodes[i].py - nodes[j].py);
-        if (d < 38) {
-          atomCtx.strokeStyle = nodes[i].color === '#00f3ff' ? 'rgba(0, 243, 255, 0.25)' : 'rgba(192, 132, 252, 0.25)';
+        if (d < 42) {
+          atomCtx.strokeStyle = nodes[i].color === '#00f3ff' ? 'rgba(0, 243, 255, 0.3)' : 'rgba(192, 132, 252, 0.3)';
           atomCtx.beginPath(); atomCtx.moveTo(nodes[i].px, nodes[i].py); atomCtx.lineTo(nodes[j].px, nodes[j].py); atomCtx.stroke();
         }
       }
     }
 
-    // Vivid Glowing Nodes
     nodes.forEach(n => {
-      atomCtx.shadowBlur = 10;
+      atomCtx.shadowBlur = 12;
       atomCtx.shadowColor = n.glow;
       atomCtx.fillStyle = n.color;
       atomCtx.beginPath();
       atomCtx.arc(n.px, n.py, Math.max(1.2, n.size), 0, Math.PI * 2);
       atomCtx.fill();
-      atomCtx.shadowBlur = 0; // reset
+      atomCtx.shadowBlur = 0;
     });
   }
 
@@ -474,7 +479,6 @@
     forkedRoiData = movingDataBuffer.slice(sIdx, eIdx);
     if (forkedRoiData.length === 0) forkedRoiData = [50, 70, 60, 85, 40];
 
-    // Render Sub-Graph
     forkedCtx.fillStyle = '#010307'; forkedCtx.fillRect(0, 0, forkedCanvas.width, forkedCanvas.height);
     forkedCtx.strokeStyle = '#c084fc'; forkedCtx.lineWidth = 2; forkedCtx.beginPath();
     let st = forkedCanvas.width / forkedRoiData.length;
@@ -484,7 +488,6 @@
     });
     forkedCtx.stroke();
 
-    // Populate Table
     const tbody = document.getElementById('queryTableBody'); tbody.innerHTML = '';
     forkedRoiData.forEach((v, idx) => {
       let tr = document.createElement('tr');
