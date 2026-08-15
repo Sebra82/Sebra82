@@ -398,7 +398,7 @@
       <button class="saved-view-btn" onclick="saveCustomView()">💾 Save View</button>
       <button class="core-reset-btn" onclick="resetStandardView()">↺ Standard</button>
     </div>
-    <div class="node-badge" id="vault-status">VAULT: HARDENED [Pinch-to-Zoom Enabled]</div>
+    <div class="node-badge" id="vault-status">VAULT: HARDENED [High-Sensitivity Pinch Zoom]</div>
     <div class="saved-tabs-bar" id="savedTabsBar">
       <span style="font-size: 0.44rem; color: var(--text-muted); font-family: var(--font-mono); align-self: center;">Saved Tabs:</span>
     </div>
@@ -406,7 +406,7 @@
 
   <div class="mobile-stack" id="mobileStack">
 
-    <!-- Step 1: Fully Interactive Breathing 3D Quantum Atom Matrix (Pinch/Scroll Zoom, No Slider) -->
+    <!-- Step 1: Fully Interactive Breathing 3D Quantum Atom Matrix (High-Sensitivity Pinch Zoom) -->
     <div class="panel-card" id="cardAtom">
       <div class="section-category-bar">
         <span class="cat-chip cat-calc">Calculation</span>
@@ -428,7 +428,7 @@
       <div class="collapsible-body collapsed" id="secAtom">
         <div class="canvas-box" style="height: 220px;" id="atomBox">
           <canvas id="atom3DCanvas" width="400" height="220"></canvas>
-          <div class="hud-tag">✨ 3D CORE | Drag to Rotate, Pinch or Scroll to Zoom Inside</div>
+          <div class="hud-tag">✨ 3D CORE | Drag to Rotate, High-Sensitivity Pinch/Scroll to Zoom</div>
         </div>
       </div>
     </div>
@@ -736,7 +736,7 @@
 
     switch(toolKey) {
       case 'atom':
-        explanation = "<strong>3D Quantum Atom Matrix</strong>: Displays a breathing multi-shell quantum particle lattice. Pinch or scroll on the 3D view to zoom in and look inside.";
+        explanation = "<strong>3D Quantum Atom Matrix</strong>: Displays a breathing multi-shell quantum particle lattice. High-sensitivity pinch or scroll on the 3D view to zoom in and look inside.";
         secId = 'secAtom';
         break;
       case 'math':
@@ -901,7 +901,7 @@
   const PLANCK_L = 1.616255e-35, PHI = 1.61803398875;
   for (let n = 0; n < 296; n++) { R_LOOKUP_F64[n] = PLANCK_L * Math.pow(PHI, n); }
 
-  // Breathing 3D Quantum Atom Core Setup with Pinch-to-Zoom & Pointer Dragging
+  // Breathing 3D Quantum Atom Core Setup with High-Sensitivity Pinch-to-Zoom & Pointer Dragging
   const atomCanvas = document.getElementById('atom3DCanvas');
   const atomCtx = atomCanvas.getContext('2d');
   let atomRotX = 0.5, atomRotY = 0.2, atomZoom = 1.2;
@@ -927,7 +927,7 @@
     });
   }
 
-  // Pointer Events for Drag-to-Rotate and Pinch-to-Zoom
+  // Pointer Events for Drag-to-Rotate and High-Sensitivity Pinch-to-Zoom
   atomCanvas.addEventListener('pointerdown', (e) => {
     activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     atomCanvas.setPointerCapture(e.pointerId);
@@ -949,12 +949,13 @@
     activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
     if (activePointers.size === 2) {
-      // Pinch-to-Zoom calculation
+      // High-Sensitivity Pinch-to-Zoom calculation (amplified gain factor)
       const pts = Array.from(activePointers.values());
       const currentDist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
       if (initialPinchDist > 0) {
         const factor = currentDist / initialPinchDist;
-        atomZoom = Math.max(0.4, Math.min(6.0, atomZoom * (1 + (factor - 1) * 0.1)));
+        // Multiplied sensitivity scaling for instantaneous responsiveness across full matrix
+        atomZoom = Math.max(0.3, Math.min(8.0, atomZoom * (1 + (factor - 1) * 0.35)));
       }
       initialPinchDist = currentDist;
     } else if (isDraggingAtom && activePointers.size === 1) {
@@ -983,10 +984,10 @@
   atomCanvas.addEventListener('pointerup', handlePointerEnd);
   atomCanvas.addEventListener('pointercancel', handlePointerEnd);
 
-  // Desktop Mouse Wheel Zoom
+  // Desktop Mouse Wheel Zoom (High-Sensitivity)
   atomCanvas.addEventListener('wheel', (e) => {
     e.preventDefault();
-    atomZoom = Math.max(0.3, Math.min(6.0, atomZoom + e.deltaY * -0.002));
+    atomZoom = Math.max(0.3, Math.min(8.0, atomZoom + e.deltaY * -0.005));
   }, { passive: false });
 
   function setMathMode(mode) {
