@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v6.3.4 - Financial Intelligence Dashboard</title>
+  <title>QuantEngine v6.3.5 - Financial Intelligence Dashboard</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -52,23 +52,6 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-    }
-
-    #vaultLockoutOverlay {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(2, 4, 8, 0.995);
-      z-index: 9999;
-      display: none; /* DISABLED IN V6.3.4 TO ENSURE IMMEDIATE DASHBOARD ACCESS */
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 1.2rem;
-      border-radius: 14px;
-      border: 2px solid var(--neon-cyan);
-      padding: 2rem;
-      text-align: center;
-      box-shadow: inset 0 0 30px rgba(0, 243, 255, 0.2);
     }
 
     .widget-header {
@@ -143,15 +126,12 @@
 <body>
 
 <div class="platform-container">
-  <!-- Completely bypassed the login overlay so it opens instantly -->
-  <div id="vaultLockoutOverlay" style="display: none;"></div>
-
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v6.3.4</span> Financial Intelligence Dashboard</div>
+    <div class="brand-title">⚡ <span>QuantEngine v6.3.5</span> Financial Intelligence Dashboard</div>
     <div class="status-badges">
       <div class="compliance-badge">FINANCIAL AGGREGATOR</div>
       <div class="security-badge">INDEXEDDB + ZEROING</div>
-      <div class="node-badge" id="authModeBadge">UNLOCKED ACTIVE</div>
+      <div class="node-badge" id="authModeBadge">DIRECT RENDER ACTIVE</div>
     </div>
   </div>
 
@@ -207,7 +187,7 @@
       <div class="panel-card">
         <div class="panel-title">
           <span>Engine Calculations & Physics</span>
-          <span style="color:var(--warning-amber); font-size:0.6rem; font-family:var(--font-mono);">Worker Offloaded</span>
+          <span style="color:var(--warning-amber); font-size:0.6rem; font-family:var(--font-mono);">Direct Execution</span>
         </div>
         <div class="controls-grid">
           <div class="control-item">
@@ -244,7 +224,7 @@
         <div class="control-item" style="background: rgba(14, 20, 32, 0.95); border-color: rgba(0, 243, 255, 0.35);">
           <div class="control-label">
             <span>Data Ingestion Source (Financial Aggregator Pipeline)</span>
-            <span id="incomingValReadout" style="color:var(--neon-cyan)">Val: --</span>
+            <span id="incomingValReadout" style="color:var(--neon-cyan)">Val: 50.00</span>
           </div>
           <div style="display: flex; gap: 5px; margin-top: 3px;">
             <select id="liveSourceSelect" style="flex: 1;" onchange="playClickSound()">
@@ -304,7 +284,7 @@
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">Ring Buffer Terminal Logs</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] QuantEngine v6.3.4 Active. Access gate fully removed...<br>
+          [INIT] QuantEngine v6.3.5 Active. Direct synchronous rendering pipeline mounted...<br>
         </div>
       </div>
     </div>
@@ -313,69 +293,18 @@
 </div>
 
 <script>
-  const workerBlobCode = `
-    self.onmessage = function(e) {
-      const data = e.data;
-      if (data.type === 'COMPUTE_TICK') {
-        const { tick, beta, baseline, liveActive, sourceMode, sampleRate } = data;
-        let nextVal = 50;
-        const gamma = 1.0 / Math.sqrt(1.0 - (beta * beta));
-        
-        if (liveActive) {
-          if (sourceMode === 'simulated') {
-            const weylNoise = (((tick * 0.61803398875) % 1.0) - 0.5) * 45 * sampleRate * gamma;
-            nextVal = baseline + Math.sin(tick * 0.12) * 28 + weylNoise;
-          } else if (sourceMode === 'sine') {
-            nextVal = baseline + Math.sin(tick * 0.2 * sampleRate) * 32;
-          } else {
-            nextVal = baseline + (Math.sin(tick * 0.1) * 18) + ((Math.random() - 0.5) * 42);
-          }
-        } else {
-          const noise = (Math.random() - 0.5) * (12 * gamma);
-          nextVal = baseline + Math.sin(tick * 0.1) * 20 + noise;
-        }
-        nextVal = Math.max(2, Math.min(98, nextVal));
-        self.postMessage({ type: 'TICK_RESULT', val: nextVal, tick });
-      }
-    };
-  `;
-  
-  let computeWorker;
-  try {
-    const workerBlob = new Blob([workerBlobCode], { type: 'application/javascript' });
-    computeWorker = new Worker(URL.createObjectURL(workerBlob));
-    computeWorker.onmessage = function(e) {
-      if (e.data.type === 'TICK_RESULT') {
-        const nextVal = e.data.val;
-        document.getElementById('incomingValReadout').innerText = `Val: ${nextVal.toFixed(2)}`;
-        telemetryHistory.push(nextVal);
-        if (telemetryHistory.length > 150) telemetryHistory.shift();
-
-        updateFinancialMetrics(nextVal);
-
-        let lastProj = nextVal;
-        predictedForecastBuffer = [];
-        const recentHistory = telemetryHistory.slice(-10);
-        let momentum = 0;
-        if (recentHistory.length > 1) {
-          for (let i = 1; i < recentHistory.length; i++) {
-            momentum += (recentHistory[i] - recentHistory[i - 1]);
-          }
-          momentum = momentum / (recentHistory.length - 1);
-        }
-
-        for (let f = 0; f < 45; f++) {
-          const damping = Math.exp(-0.08 * f);
-          const meanReversion = (currentBaseline - lastProj) * 0.05;
-          lastProj += (momentum * damping) + meanReversion + ((Math.random() - 0.5) * 1.5);
-          lastProj = Math.max(5, Math.min(95, lastProj));
-          predictedForecastBuffer.push(lastProj);
-        }
-      }
-    };
-  } catch (err) {
-    console.warn("Worker creation restricted locally, falling back to main thread execution.");
-  }
+  let globalTick = 0;
+  let isRunning = true;
+  let currentThreshold = 75.0;
+  let currentBaseline = 40.0;
+  let telemetryHistory = new Array(150).fill(50);
+  let predictedForecastBuffer = new Array(50).fill(50);
+  let rawDataDumpBuffer = [];
+  let isLiveStreamingActive = false;
+  let graphZoom = 1.0;
+  let graphPanX = 0;
+  let isDraggingGraph = false;
+  let dragStartX = 0;
 
   let financialAccumulator = {
     monthlyTotal: 12450.80,
@@ -389,9 +318,12 @@
     financialAccumulator.quarterlyTotal += (increment * 3);
     financialAccumulator.annualTotal += (increment * 12);
 
-    document.getElementById('metricMonthly').innerText = `$${financialAccumulator.monthlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    document.getElementById('metricQuarterly').innerText = `$${financialAccumulator.quarterlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    document.getElementById('metricAnnually').innerText = `$${financialAccumulator.annualTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const mEl = document.getElementById('metricMonthly');
+    const qEl = document.getElementById('metricQuarterly');
+    const aEl = document.getElementById('metricAnnually');
+    if(mEl) mEl.innerText = `$${financialAccumulator.monthlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    if(qEl) qEl.innerText = `$${financialAccumulator.quarterlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    if(aEl) aEl.innerText = `$${financialAccumulator.annualTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   }
 
   function openIndexedDB() {
@@ -460,44 +392,13 @@
     }
   }
 
-  const SystemConfig = Object.freeze({
-    version: "6.3.4-FINANCIAL-DASHBOARD",
-    encryptionAlgorithm: "AES-GCM",
-    keyDerivation: "PBKDF2-SHA256",
-    iterations: 150000,
-    sessionTTLMs: 3600000
-  });
-
-  // Automatically set to 1 so the app is unlocked on load instantly
-  let vaultAuthMode = 1;
-  let globalTick = 0;
-  let activeBreachesCount = 0;
-  let isRunning = true;
-  
-  let currentThreshold = 75.0;
-  let currentBaseline = 40.0;
-  let telemetryHistory = new Array(150).fill(50);
-  let predictedForecastBuffer = new Array(50).fill(50);
-  let rawDataDumpBuffer = [];
-
-  let isLiveStreamingActive = false;
-  let sessionToken = "auto-unlocked-session";
-  let inactivityTimer = null;
-
-  function resetInactivityTimer() {
-    clearTimeout(inactivityTimer);
-  }
-
   window.addEventListener('keydown', (e) => {
     if (e.code === 'Space' && e.target.tagName !== 'INPUT') {
       e.preventDefault();
       isRunning = !isRunning;
-      document.getElementById('runState').innerText = isRunning ? "RUNNING" : "PAUSED";
+      const runStateEl = document.getElementById('runState');
+      if(runStateEl) runStateEl.innerText = isRunning ? "RUNNING" : "PAUSED";
       logPlatform(`[SYSTEM] Simulation ${isRunning ? 'resumed' : 'paused'}.`);
-    }
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'e') {
-      e.preventDefault();
-      exportEncryptedDataDump();
     }
   });
 
@@ -507,38 +408,14 @@
     const pill = document.getElementById('liveFeedStatusPill');
 
     if (isLiveStreamingActive) {
-      btn.innerText = "Stop Live Feed";
-      btn.classList.add('active');
-      pill.innerText = "LIVE STREAM ACTIVE";
-      pill.classList.add('streaming');
+      if(btn) { btn.innerText = "Stop Live Feed"; btn.classList.add('active'); }
+      if(pill) { pill.innerText = "LIVE STREAM ACTIVE"; pill.classList.add('streaming'); }
       logPlatform("[LIVE] Financial volumetric stream ingestion activated.");
     } else {
-      btn.innerText = "Start Live Feed";
-      btn.classList.remove('active');
-      pill.innerText = "STANDBY";
-      pill.classList.remove('streaming');
+      if(btn) { btn.innerText = "Start Live Feed"; btn.classList.remove('active'); }
+      if(pill) { pill.innerText = "STANDBY"; pill.classList.remove('streaming'); }
       logPlatform("[LIVE] Real-time data stream paused.");
     }
-  }
-
-  function applyPhysicsPreset() {
-    const preset = document.getElementById('presetSelect').value;
-    const betaSlider = document.getElementById('betaSlider');
-    const kappaSlider = document.getElementById('kappaSlider');
-    const threshSlider = document.getElementById('threshSlider');
-
-    if (preset === 'planck') {
-      betaSlider.value = 0.05; kappaSlider.value = 0.5; threshSlider.value = 85;
-      logPlatform("[PRESET] Loaded 'Planck Scale Equilibrium' profile.");
-    } else if (preset === 'relativistic') {
-      betaSlider.value = 0.85; kappaSlider.value = 3.2; threshSlider.value = 65;
-      logPlatform("[PRESET] Loaded 'Relativistic Stress Test' profile.");
-    } else if (preset === 'superposition') {
-      betaSlider.value = 0.45; kappaSlider.value = 4.8; threshSlider.value = 75;
-      logPlatform("[PRESET] Loaded 'Quantum Superposition' profile.");
-    }
-    updateNoiseCalc();
-    updateThresholdParams();
   }
 
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -559,7 +436,6 @@
     } catch (e) {}
   }
 
-  const logBuffer = [];
   function logPlatform(text) {
     const time = new Date().toISOString().split('T')[1].slice(0, 8);
     logBuffer.push(`[${time}] ${text}`);
@@ -570,6 +446,7 @@
       terminal.scrollTop = terminal.scrollHeight;
     }
   }
+  const logBuffer = [];
 
   function updateNoiseCalc() {
     const beta = parseFloat(document.getElementById('betaSlider').value);
@@ -581,28 +458,22 @@
   }
 
   const forecastCanvas = document.getElementById('unifiedForecastCanvas');
-  let graphZoom = 1.0;
-  let graphPanX = 0;
-  let isDraggingGraph = false;
-  let dragStartX = 0;
-
   forecastCanvas.addEventListener('wheel', (e) => {
     e.preventDefault();
     if (e.deltaY < 0) graphZoom = Math.min(graphZoom * 1.15, 4.0);
     else graphZoom = Math.max(graphZoom / 1.15, 0.5);
-    document.getElementById('zoomLevel').innerText = `${graphZoom.toFixed(2)}x`;
+    const zoomEl = document.getElementById('zoomLevel');
+    if(zoomEl) zoomEl.innerText = `${graphZoom.toFixed(2)}x`;
   }, { passive: false });
 
   forecastCanvas.addEventListener('mousedown', (e) => {
     isDraggingGraph = true;
     dragStartX = e.clientX - graphPanX;
   });
-
   window.addEventListener('mousemove', (e) => {
     if (!isDraggingGraph) return;
     graphPanX = e.clientX - dragStartX;
   });
-
   window.addEventListener('mouseup', () => { isDraggingGraph = false; });
 
   function updateThresholdParams() {
@@ -613,126 +484,12 @@
     document.getElementById('rateVal').innerText = parseFloat(document.getElementById('rateSlider').value).toFixed(1) + 'x';
   }
 
-  async function exportEncryptedDataDump() {
-    const passphrase = document.getElementById('exportPassInput').value.trim();
-    if (!passphrase) { alert("Please enter a secure passphrase for AES-GCM encryption."); return; }
-
-    logPlatform("[VAULT] Deriving PBKDF2 key and exporting encrypted container...");
-
-    try {
-      const enc = new TextEncoder();
-      const salt = window.crypto.getRandomValues(new Uint8Array(16));
-      const iv = window.crypto.getRandomValues(new Uint8Array(12));
-
-      const keyMaterial = await window.crypto.subtle.importKey(
-        "raw", enc.encode(passphrase), { name: "PBKDF2" }, false, ["deriveKey"]
-      );
-      const key = await window.crypto.subtle.deriveKey(
-        { name: "PBKDF2", salt, iterations: SystemConfig.iterations, hash: "SHA-256" },
-        keyMaterial, { name: "AES-GCM", length: 256 }, false, ["encrypt"]
-      );
-
-      const packageData = {
-        config: SystemConfig,
-        sessionToken: sessionToken,
-        expiresAt: Date.now() + SystemConfig.sessionTTLMs,
-        timestamp: new Date().toISOString(),
-        watermark: "SOC2-N64-FINANCIAL-VAULT",
-        telemetry: telemetryHistory,
-        financials: financialAccumulator,
-        forecast: predictedForecastBuffer,
-        streamDumps: rawDataDumpBuffer
-      };
-
-      const encrypted = await window.crypto.subtle.encrypt(
-        { name: "AES-GCM", iv }, key, enc.encode(JSON.stringify(packageData))
-      );
-
-      const container = {
-        type: "SEBRA82-N64-AES-GCM-CONTAINER",
-        salt: btoa(String.fromCharCode(...salt)),
-        iv: btoa(String.fromCharCode(...iv)),
-        ciphertext: btoa(String.fromCharCode(...new Uint8Array(encrypted)))
-      };
-
-      const blob = new Blob([JSON.stringify(container, null, 2)], { type: "application/octet-stream" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = `QuantEngine_Financial_Vault_${Date.now()}.enc`; a.click();
-      URL.revokeObjectURL(url);
-
-      logPlatform("[SUCCESS] AES-256-GCM financial vault container exported successfully.");
-    } catch (err) {
-      logPlatform("[ERROR] Encryption failed: " + err.message);
-    }
-  }
-
-  async function importEncryptedDataDump(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const passphrase = document.getElementById('exportPassInput').value.trim();
-    if (!passphrase) { alert("Please enter the decryption passphrase first."); return; }
-
-    logPlatform(`[VAULT] Unpacking and verifying container '${file.name}'...`);
-    const reader = new FileReader();
-    reader.onload = async function(e) {
-      try {
-        const container = JSON.parse(e.target.result);
-        if (container.type !== "SEBRA82-N64-AES-GCM-CONTAINER") throw new Error("Invalid container signature.");
-
-        const enc = new TextEncoder();
-        const salt = Uint8Array.from(atob(container.salt), c => c.charCodeAt(0));
-        const iv = Uint8Array.from(atob(container.iv), c => c.charCodeAt(0));
-        const ciphertext = Uint8Array.from(atob(container.ciphertext), c => c.charCodeAt(0));
-
-        const keyMaterial = await window.crypto.subtle.importKey(
-          "raw", enc.encode(passphrase), { name: "PBKDF2" }, false, ["deriveKey"]
-        );
-        const key = await window.crypto.subtle.deriveKey(
-          { name: "PBKDF2", salt, iterations: SystemConfig.iterations, hash: "SHA-256" },
-          keyMaterial, { name: "AES-GCM", length: 256 }, false, ["decrypt"]
-        );
-
-        const decrypted = await window.crypto.subtle.decrypt(
-          { name: "AES-GCM", iv }, key, ciphertext
-        );
-        const data = JSON.parse(new TextDecoder().decode(decrypted));
-        if (Date.now() > data.expiresAt) throw new Error("Vault session TTL expired.");
-
-        if (data.financials) {
-          financialAccumulator = data.financials;
-          document.getElementById('metricMonthly').innerText = `$${financialAccumulator.monthlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-          document.getElementById('metricQuarterly').innerText = `$${financialAccumulator.quarterlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-          document.getElementById('metricAnnually').innerText = `$${financialAccumulator.annualTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-        }
-
-        logPlatform(`[SUCCESS] Vault unlocked! Loaded ${data.telemetry.length} telemetry records & financials.`);
-        alert(`Vault Unlocked Successfully!\nWatermark: ${data.watermark}\nFinancial Records Synchronized.`);
-      } catch (err) {
-        logPlatform("[ERROR] Decryption failed: " + err.message);
-        alert("Decryption Failed: Incorrect passphrase or expired session TTL.");
-      }
-    };
-    reader.readAsText(file);
-  }
-
-  function pushDataDump() {
-    const term = document.getElementById('dataDumpTerminal');
-    if (!term) return;
-    const hex = Math.floor(Math.random() * 0xFFFFFFFF).toString(16).padStart(8, '0');
-    const val = (Math.random() * 100).toFixed(4);
-    const packet = `[0x${hex}] FINANCIAL SYNC VAL: ${val} | OK`;
-    rawDataDumpBuffer.push(packet);
-    if (rawDataDumpBuffer.length > 200) rawDataDumpBuffer.shift();
-    term.innerHTML += `${packet}<br>`;
-    term.scrollTop = term.scrollHeight;
-    if (term.childNodes.length > 40) term.removeChild(term.firstChild);
-  }
-
   const atomCanvas = document.getElementById('atomicCanvas');
   const atomCtx = atomCanvas.getContext('2d');
   function updateAtomSimulation() {
-    document.getElementById('atomScaleVal').innerText = document.getElementById('atomScaleSlider').value;
+    const scaleValEl = document.getElementById('atomScaleVal');
+    const scaleSliderEl = document.getElementById('atomScaleSlider');
+    if(scaleValEl && scaleSliderEl) scaleValEl.innerText = scaleSliderEl.value;
   }
 
   function renderAtoms() {
@@ -741,7 +498,8 @@
     atomCtx.fillStyle = '#000';
     atomCtx.fillRect(0, 0, width, height);
 
-    const orbitalMode = parseInt(document.getElementById('orbitalModeSelect').value);
+    const orbitalModeEl = document.getElementById('orbitalModeSelect');
+    const orbitalMode = orbitalModeEl ? parseInt(orbitalModeSelect.value) : 1;
     const spin = globalTick * 0.02;
     const atomCount = 24;
 
@@ -770,7 +528,6 @@
     atomCtx.fill();
   }
 
-  const forecastCanvas = document.getElementById('unifiedForecastCanvas');
   const forecastCtx = forecastCanvas.getContext('2d');
 
   function renderUnifiedForecastGraph() {
@@ -788,21 +545,53 @@
       forecastCtx.stroke(); 
     }
 
-    if (isRunning && vaultAuthMode === 1) {
+    if (isRunning) {
       const beta = parseFloat(document.getElementById('betaSlider').value);
       const sampleRate = parseFloat(document.getElementById('rateSlider').value);
       const sourceMode = document.getElementById('liveSourceSelect').value;
+      const gamma = 1.0 / Math.sqrt(1.0 - (beta * beta));
 
-      if (computeWorker) {
-        computeWorker.postMessage({
-          type: 'COMPUTE_TICK',
-          tick: globalTick,
-          beta: beta,
-          baseline: currentBaseline,
-          liveActive: isLiveStreamingActive,
-          sourceMode: sourceMode,
-          sampleRate: sampleRate
-        });
+      let nextVal = 50;
+      if (isLiveStreamingActive) {
+        if (sourceMode === 'simulated') {
+          const weylNoise = (((globalTick * 0.61803398875) % 1.0) - 0.5) * 45 * sampleRate * gamma;
+          nextVal = currentBaseline + Math.sin(globalTick * 0.12) * 28 + weylNoise;
+        } else if (sourceMode === 'sine') {
+          nextVal = currentBaseline + Math.sin(globalTick * 0.2 * sampleRate) * 32;
+        } else {
+          nextVal = currentBaseline + (Math.sin(globalTick * 0.1) * 18) + ((Math.random() - 0.5) * 42);
+        }
+      } else {
+        const noise = (Math.random() - 0.5) * (12 * gamma);
+        nextVal = currentBaseline + Math.sin(globalTick * 0.1) * 20 + noise;
+      }
+      nextVal = Math.max(2, Math.min(98, nextVal));
+
+      const readoutEl = document.getElementById('incomingValReadout');
+      if(readoutEl) readoutEl.innerText = `Val: ${nextVal.toFixed(2)}`;
+
+      telemetryHistory.push(nextVal);
+      if (telemetryHistory.length > 150) telemetryHistory.shift();
+
+      updateFinancialMetrics(nextVal);
+
+      let lastProj = nextVal;
+      predictedForecastBuffer = [];
+      const recentHistory = telemetryHistory.slice(-10);
+      let momentum = 0;
+      if (recentHistory.length > 1) {
+        for (let i = 1; i < recentHistory.length; i++) {
+          momentum += (recentHistory[i] - recentHistory[i - 1]);
+        }
+        momentum = momentum / (recentHistory.length - 1);
+      }
+
+      for (let f = 0; f < 45; f++) {
+        const damping = Math.exp(-0.08 * f);
+        const meanReversion = (currentBaseline - lastProj) * 0.05;
+        lastProj += (momentum * damping) + meanReversion + ((Math.random() - 0.5) * 1.5);
+        lastProj = Math.max(5, Math.min(95, lastProj));
+        predictedForecastBuffer.push(lastProj);
       }
     }
 
@@ -872,29 +661,38 @@
       forecastCtx.beginPath();
       forecastCtx.arc((telemetryHistory.length - 1) * step, height - (latestVal / 100) * height, 6, 0, Math.PI * 2);
       forecastCtx.fill();
-      forecastCtx.shadowBlur = 0;
+      forecastCtx.shadowBlur =.0;
       if (globalTick % 60 === 0) playClickSound(); 
     }
 
     forecastCtx.restore();
-    activeBreachesCount = breaches;
   }
 
   function masterRenderLoop() {
     try {
       globalTick += 1;
-      if (vaultAuthMode === 1) {
-        renderAtoms();
-        renderUnifiedForecastGraph();
-        if (globalTick % 15 === 0 && isRunning) pushDataDump();
+      renderAtoms();
+      renderUnifiedForecastGraph();
+      if (globalTick % 15 === 0 && isRunning) {
+        const term = document.getElementById('dataDumpTerminal');
+        if (term) {
+          const hex = Math.floor(Math.random() * 0xFFFFFFFF).toString(16).padStart(8, '0');
+          const val = (Math.random() * 100).toFixed(4);
+          const packet = `[0x${hex}] FINANCIAL SYNC VAL: ${val} | OK`;
+          rawDataDumpBuffer.push(packet);
+          if (rawDataDumpBuffer.length > 200) rawDataDumpBuffer.shift();
+          term.innerHTML += `${packet}<br>`;
+          term.scrollTop = term.scrollHeight;
+          if (term.childNodes.length > 40) term.removeChild(term.firstChild);
+        }
       }
     } catch (err) {
-      logPlatform(`[CRITICAL] Render loop exception caught: ${err.message}`);
+      console.error(err);
     }
     requestAnimationFrame(masterRenderLoop);
   }
 
-  // Initialize immediately on script execution
+  // Direct synchronous initialization on execution
   updateThresholdParams();
   updateAtomSimulation();
   updateNoiseCalc();
