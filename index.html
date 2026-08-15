@@ -1,14 +1,12 @@
-Here is QuantEngine v6.4.8. It introduces the Zoom-to-Snapshot & Executive Export Suite, giving you the exact tools you requested:
- * Graph Zoom & Slice Inspection: Select any region on the live moving graph to instantly zoom in, spawning a dedicated high-resolution sub-graph and an itemized data table of those exact values.
- * Dashboard Summary Integration: With a single click on "Throw into Dashboard Summary", your zoomed graph snapshot and table are pinned directly to the executive dashboard overview cards.
- * Office Export (Word & PowerPoint Ready): Export your summaries, tables, and snapshots directly into clean, formatted HTML/CSV packages that drop straight into Microsoft Word, PowerPoint, or executive presentations.
+Here is QuantEngine v6.4.9. It introduces your exact request: Drag-to-Spawn Noise & Anomaly Extraction.
+When you click and drag across any section of the live moving wave graph, the system now automatically filters out the stable baseline data and only extracts, isolates, and graphs the noise and anomalies into a brand new dedicated sub-graph and itemized table!
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v6.4.8 - Zoom, Table Generator & Office Export Suite</title>
+  <title>QuantEngine v6.4.9 - Noise & Anomaly Drag-Spawn Matrix</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -100,16 +98,10 @@ Here is QuantEngine v6.4.8. It introduces the Zoom-to-Snapshot & Executive Expor
     .hud-tag { position: absolute; top: 3px; left: 5px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 5px; border-radius: 3px; font-size: 0.52rem; color: var(--text-muted); font-family: var(--font-mono); z-index: 5; pointer-events: none; }
     .hud-tag span { color: var(--neon-cyan); font-weight: 600; }
 
-    .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
-    .control-item { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 4px 6px; border-radius: 4px; display: flex; flex-direction: column; gap: 3px; }
-    .control-label { font-size: 0.58rem; color: var(--text-muted); display: flex; justify-content: space-between; font-weight: 500; }
-    .control-label span { color: var(--text-main); font-weight: 600; font-family: var(--font-mono); }
-    input[type="range"] { width: 100%; accent-color: var(--neon-cyan); background: #1e2a40; color: #fff; border: 1px solid var(--border-color); height: 4px; border-radius: 2px; outline: none; }
-
-    .data-table-container { background: #010409; border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 5px; padding: 4px; max-height: 100px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.54rem; color: var(--accent-purple); }
+    .data-table-container { background: #010409; border: 1px solid rgba(255, 51, 68, 0.3); border-radius: 5px; padding: 4px; max-height: 105px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.54rem; color: var(--crimson-red); }
     .data-table { width: 100%; border-collapse: collapse; text-align: left; }
-    .data-table th, .data-table td { padding: 3px 5px; border-bottom: 1px solid rgba(192, 132, 252, 0.15); }
-    .data-table th { color: var(--neon-cyan); font-weight: 600; }
+    .data-table th, .data-table td { padding: 3px 5px; border-bottom: 1px solid rgba(255, 51, 68, 0.15); }
+    .data-table th { color: var(--warning-amber); font-weight: 600; }
 
     .btn-row { display: flex; gap: 5px; }
     .action-btn { width: 100%; padding: 0.4rem; font-weight: 600; font-size: 0.65rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; text-align: center; box-shadow: 0 0 8px rgba(0,243,255,0.2); }
@@ -117,7 +109,7 @@ Here is QuantEngine v6.4.8. It introduces the Zoom-to-Snapshot & Executive Expor
     .btn-secondary { background: #1e2a40; color: var(--text-main); border: 1px solid var(--border-color); font-weight: 500; }
     .btn-dashboard-toggle { background: var(--accent-purple); color: #020408; }
     .btn-dashboard-toggle.active { background: var(--accent-green); box-shadow: 0 0 12px rgba(126, 231, 135, 0.5); }
-    .live-status-pill { font-size: 0.55rem; font-family: var(--font-mono); padding: 2px 6px; border-radius: 4px; background: rgba(126, 231, 135, 0.2); color: var(--accent-green); border: 1px solid rgba(126, 231, 135, 0.4); }
+    .live-status-pill { font-size: 0.55rem; font-family: var(--font-mono); padding: 2px 6px; border-radius: 4px; background: rgba(255, 51, 68, 0.2); color: var(--crimson-red); border: 1px solid rgba(255, 51, 68, 0.4); }
 
     @media (max-width: 1024px) {
       body { overflow-y: auto; height: auto; }
@@ -130,7 +122,7 @@ Here is QuantEngine v6.4.8. It introduces the Zoom-to-Snapshot & Executive Expor
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v6.4.8</span> Zoom, Table & Office Export Suite</div>
+    <div class="brand-title">⚡ <span>QuantEngine v6.4.9</span> Noise & Anomaly Extraction Matrix</div>
     <div class="status-badges">
       <button onclick="playClickSound(); toggleDashboardMode()" class="action-btn btn-dashboard-toggle" id="dashboardToggleBtn" style="padding: 3px 8px; font-size: 0.6rem;">📊 Toggle Dashboard Summary</button>
       <div class="compliance-badge" id="viewModeBadge">WORKBENCH MODE</div>
@@ -170,9 +162,6 @@ Here is QuantEngine v6.4.8. It introduces the Zoom-to-Snapshot & Executive Expor
         <div class="btn-row">
           <button onclick="playClickSound(); exportForWordAndPPT()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📄 Export Report for Word/PPT</button>
         </div>
-        <div style="font-size: 0.56rem; color: var(--text-muted); font-family: var(--font-mono); margin-top: 2px;">
-          Generates a clean HTML report containing all zoomed snapshots and tables ready to copy-paste into Word or PowerPoint.
-        </div>
       </div>
 
       <div class="panel-card" style="flex:1;">
@@ -180,42 +169,42 @@ Here is QuantEngine v6.4.8. It introduces the Zoom-to-Snapshot & Executive Expor
           <span>Pinned Dashboard Summaries</span>
           <span style="color:var(--neon-cyan); font-size:0.58rem; font-family:var(--font-mono);">Executive Cards</span>
         </div>
-        <div class="data-table-container" id="dashboardPinnedSummaries" style="max-height: 120px;">
-          <div style="color: var(--text-muted); text-align: center; padding: 10px;">No graphs pinned yet. Zoom into a graph and click "Pin to Dashboard".</div>
+        <div class="data-table-container" id="dashboardPinnedSummaries" style="max-height: 110px; border-color: rgba(0,243,255,0.3); color: var(--neon-cyan);">
+          <div style="color: var(--text-muted); text-align: center; padding: 10px;">No anomaly snapshots pinned yet. Drag across graph to isolate noise.</div>
         </div>
       </div>
     </div>
 
-    <!-- Central Column: Moving Wave Graph & Zoom Table Generator -->
+    <!-- Central Column: Moving Wave & Noise/Anomaly Spawn Sub-Graph -->
     <div class="column" id="colCenter">
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">
-          <span>Live Moving Wave Graph (Drag to Zoom & Table)</span>
-          <span class="live-status-pill">ZOOM READY</span>
+          <span>Live Moving Wave (Drag to Spawn Noise Sub-Graph)</span>
+          <span class="live-status-pill">DRAG TO EXTRACT NOISE</span>
         </div>
         
-        <div class="canvas-box" style="height: 160px; border-color: rgba(0, 243, 255, 0.45);">
-          <canvas id="movingWaveCanvas" width="700" height="160"></canvas>
-          <div class="hud-tag">Drag mouse/touch across wave to zoom slice</div>
+        <div class="canvas-box" style="height: 155px; border-color: rgba(0, 243, 255, 0.45);">
+          <canvas id="movingWaveCanvas" width="700" height="155"></canvas>
+          <div class="hud-tag">Drag mouse/touch across wave to isolate anomalies</div>
         </div>
 
-        <!-- Zoomed Sub-Graph & Table Generator Card -->
-        <div class="panel-card" style="background: rgba(1, 4, 10, 0.98); border-color: rgba(192, 132, 252, 0.4); padding: 5px;">
-          <div class="panel-title" style="color: var(--accent-purple); font-size: 0.6rem; margin-bottom: 3px;">
-            <span>Zoomed Sub-Graph & Data Table Generator</span>
-            <button onclick="playClickSound(); pinToDashboardSummary()" class="action-btn" style="width: auto; padding: 2px 6px; font-size: 0.52rem; background: var(--accent-green); color: #020408;">📌 Pin to Dashboard Summary</button>
+        <!-- Anomaly Extraction Sub-Graph Card -->
+        <div class="panel-card" style="background: rgba(1, 4, 10, 0.98); border-color: rgba(255, 51, 68, 0.4); padding: 5px;">
+          <div class="panel-title" style="color: var(--crimson-red); font-size: 0.6rem; margin-bottom: 3px;">
+            <span>Isolated Noise & Anomaly Sub-Graph</span>
+            <button onclick="playClickSound(); pinToDashboardSummary()" class="action-btn" style="width: auto; padding: 2px 6px; font-size: 0.52rem; background: var(--accent-green); color: #020408;">📌 Pin to Dashboard</button>
           </div>
-          <div class="canvas-box" style="height: 65px; border-color: rgba(192, 132, 252, 0.3); margin-bottom: 4px;">
-            <canvas id="zoomedGraphCanvas" width="700" height="65"></canvas>
-            <div class="hud-tag">Zoomed View</div>
+          <div class="canvas-box" style="height: 60px; border-color: rgba(255, 51, 68, 0.3); margin-bottom: 4px;">
+            <canvas id="anomalyGraphCanvas" width="700" height="60"></canvas>
+            <div class="hud-tag">Noise & Anomaly Only</div>
           </div>
           <div class="data-table-container">
-            <table class="data-table" id="zoomedDataTable">
+            <table class="data-table" id="anomalyDataTable">
               <thead>
-                <tr><th>Index</th><th>Timestamp</th><th>Magnitude ($)</th><th>Status</th></tr>
+                <tr><th>Index</th><th>Timestamp</th><th>Anomaly Magnitude</th><th>Variance State</th></tr>
               </thead>
-              <tbody id="zoomedTableBody">
-                <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Drag across main graph above to generate table data.</td></tr>
+              <tbody id="anomalyTableBody">
+                <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Drag across main graph to filter out baseline and extract noise.</td></tr>
               </tbody>
             </table>
           </div>
@@ -238,7 +227,7 @@ Here is QuantEngine v6.4.8. It introduces the Zoom-to-Snapshot & Executive Expor
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">System Telemetry Logs</div>
         <div style="background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.6rem; color: var(--accent-green); height: 160px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.3;" id="mathTerminal">
-          [INIT] QuantEngine v6.4.8 online. Zoom & Table generator ready...<br>
+          [INIT] QuantEngine v6.4.9 online. Anomaly extraction filter active...<br>
         </div>
       </div>
     </div>
@@ -251,7 +240,7 @@ Here is QuantEngine v6.4.8. It introduces the Zoom-to-Snapshot & Executive Expor
   let isRunning = true;
   let movingDataBuffer = new Array(80).fill(50);
   let timeOffset = 0;
-  let zoomedRoiData = [];
+  let isolatedAnomalies = [];
   let pinnedDashboardCards = [];
   let isDashboardModeActive = false;
 
@@ -320,13 +309,8 @@ Here is QuantEngine v6.4.8. It introduces the Zoom-to-Snapshot & Executive Expor
 
   const waveCanvas = document.getElementById('movingWaveCanvas');
   const waveCtx = waveCanvas.getContext('2d');
-  const zoomedCanvas = document.getElementById('zoomedGraphCanvas');
-  const zoomedCtx = zoomedCanvas.getContext('2d');
-
-  function getClientX(e) {
-    if (e.touches && e.touches.length > 0) return e.touches[0].clientX;
-    return e.clientX;
-  }
+  const anomalyCanvas = document.getElementById('anomalyGraphCanvas');
+  const anomalyCtx = anomalyCanvas.getContext('2d');
 
   waveCanvas.addEventListener('mousedown', (e) => { isInteracting = true; dragStartX = e.offsetX; dragEndX = dragStartX; });
   waveCanvas.addEventListener('mousemove', (e) => { if (isInteracting) dragEndX = e.offsetX; });
@@ -334,96 +318,98 @@ Here is QuantEngine v6.4.8. It introduces the Zoom-to-Snapshot & Executive Expor
     if (!isInteracting) return;
     isInteracting = false;
     dragEndX = e.offsetX;
-    processZoomSlice(Math.min(dragStartX, dragEndX), Math.max(dragStartX, dragEndX), waveCanvas.width);
+    extractNoiseAndAnomalies(Math.min(dragStartX, dragEndX), Math.max(dragStartX, dragEndX), waveCanvas.width);
   });
 
-  function processZoomSlice(startX, endX, totalWidth) {
+  function extractNoiseAndAnomalies(startX, endX, totalWidth) {
     const stepX = totalWidth / movingDataBuffer.length;
     const startIdx = Math.max(0, Math.floor(startX / stepX));
     const endIdx = Math.min(movingDataBuffer.length, Math.floor(endX / stepX));
 
-    zoomedRoiData = movingDataBuffer.slice(startIdx, endIdx);
-    if (zoomedRoiData.length > 2) {
-      renderZoomedGraph();
-      populateZoomedTable(startIdx);
-      logPlatform(`[ZOOM] Created slice view with ${zoomedRoiData.length} data points.`);
+    const selectedSlice = movingDataBuffer.slice(startIdx, endIdx);
+    
+    // Calculate baseline mean to subtract and isolate only noise/anomalies
+    const mean = selectedSlice.reduce((a, b) => a + b, 0) / (selectedSlice.length || 1);
+    
+    // Filter to keep ONLY variance deviations (noise & anomalies)
+    isolatedAnomalies = selectedSlice.map(val => ({
+      index: startIdx + selectedSlice.indexOf(val),
+      raw: val,
+      anomalyDelta: parseFloat((val - mean).toFixed(2))
+    })).filter(item => Math.abs(item.anomalyDelta) > 3.0); // Threshold filter for noise/anomalies
+
+    if (isolatedAnomalies.length > 0) {
+      renderAnomalyGraph();
+      populateAnomalyTable();
+      logPlatform(`[ANOMALY] Extracted ${isolatedAnomalies.length} noise/anomaly points from dragged window.`);
+    } else {
+      alert("Selected region was too stable. Drag across a volatile or spiking region to isolate noise.");
     }
   }
 
-  function renderZoomedGraph() {
-    const width = zoomedCanvas.width;
-    const height = zoomedCanvas.height;
-    zoomedCtx.fillStyle = '#010307';
-    zoomedCtx.fillRect(0, 0, width, height);
-    if (zoomedRoiData.length === 0) return;
+  function renderAnomalyGraph() {
+    const width = anomalyCanvas.width;
+    const height = anomalyCanvas.height;
+    anomalyCtx.fillStyle = '#010307';
+    anomalyCtx.fillRect(0, 0, width, height);
+    if (isolatedAnomalies.length === 0) return;
 
-    zoomedCtx.strokeStyle = '#c084fc';
-    zoomedCtx.lineWidth = 2;
-    zoomedCtx.beginPath();
-    const step = width / zoomedRoiData.length;
-    zoomedRoiData.forEach((val, idx) => {
+    anomalyCtx.strokeStyle = '#ff3344';
+    anomalyCtx.lineWidth = 2;
+    anomalyCtx.beginPath();
+    const step = width / isolatedAnomalies.length;
+    isolatedAnomalies.forEach((item, idx) => {
       let x = idx * step + (step / 2);
-      let y = height - ((val / 100) * height);
-      if (idx === 0) zoomedCtx.moveTo(x, y); else zoomedCtx.lineTo(x, y);
+      let y = (height / 2) - (item.anomalyDelta * 2); // Center around zero baseline
+      if (idx === 0) anomalyCtx.moveTo(x, y); else anomalyCtx.lineTo(x, y);
     });
-    zoomedCtx.stroke();
+    anomalyCtx.stroke();
   }
 
-  function populateZoomedTable(startIndex) {
-    const tbody = document.getElementById('zoomedTableBody');
+  function populateAnomalyTable() {
+    const tbody = document.getElementById('anomalyTableBody');
     tbody.innerHTML = '';
-    zoomedRoiData.forEach((val, idx) => {
+    isolatedAnomalies.forEach((item, idx) => {
       let tr = document.createElement('tr');
-      let revVal = (val * 10).toFixed(2);
-      let status = val > 75 ? '⚠️ Breach' : '✅ Nominal';
-      tr.innerHTML = `<td>#${startIndex + idx}</td><td>10:25:${(idx * 12).toFixed(0)}</td><td>$${revVal}</td><td>${status}</td>`;
+      tr.innerHTML = `<td>#${item.index}</td><td>10:28:${(idx * 15).toFixed(0)}</td><td>+${item.anomalyDelta}</td><td>⚠️ Anomaly Variance</td>`;
       tbody.appendChild(tr);
     });
   }
 
   function pinToDashboardSummary() {
-    if (zoomedRoiData.length === 0) { alert("Please drag across the main graph first to zoom into a slice."); return; }
+    if (isolatedAnomalies.length === 0) { alert("Please drag across the main graph first to isolate anomalies."); return; }
     
     const cardId = `card_${Date.now()}`;
-    const minVal = Math.min(...zoomedRoiData).toFixed(1);
-    const maxVal = Math.max(...zoomedRoiData).toFixed(1);
-    
-    pinnedDashboardCards.push({ id: cardId, points: zoomedRoiData.length, min: minVal, max: maxVal });
+    pinnedDashboardCards.push({ id: cardId, count: isolatedAnomalies.length });
     
     const container = document.getElementById('dashboardPinnedSummaries');
     if (pinnedDashboardCards.length === 1) container.innerHTML = '';
 
     const cardDiv = document.createElement('div');
-    cardDiv.style.cssText = "background:rgba(0,243,255,0.05); border:1px solid var(--border-color); padding:5px; margin-bottom:4px; border-radius:4px;";
-    cardDiv.innerHTML = `📌 <b>Snapshot #${pinnedDashboardCards.length}</b>: ${zoomedRoiData.length} pts | Min: $${minVal} | Max: $${maxVal}`;
+    cardDiv.style.cssText = "background:rgba(255,51,68,0.08); border:1px solid rgba(255,51,68,0.4); padding:5px; margin-bottom:4px; border-radius:4px; color:var(--crimson-red);";
+    cardDiv.innerHTML = `📌 <b>Anomaly Snapshot #${pinnedDashboardCards.length}</b>: Isolated ${isolatedAnomalies.length} noise events.`;
     container.appendChild(cardDiv);
 
-    logPlatform(`[DASHBOARD] Pinned zoomed graph & table snapshot #${pinnedDashboardCards.length}.`);
-    alert("Pinned successfully to Executive Dashboard Summary!");
+    logPlatform(`[DASHBOARD] Pinned anomaly snapshot #${pinnedDashboardCards.length} to executive summary.`);
+    alert("Anomaly snapshot pinned to Dashboard Summary!");
   }
 
   function exportForWordAndPPT() {
-    if (pinnedDashboardCards.length === 0) { alert("Pin at least one zoomed graph/table to the dashboard summary before exporting."); return; }
+    if (pinnedDashboardCards.length === 0) { alert("Pin at least one anomaly snapshot to the dashboard summary before exporting."); return; }
     
-    let htmlContent = `<html><head><title>QuantEngine Executive Report</title><style>body{font-family:sans-serif;padding:20px;background:#fff;color:#333;}table{width:100%;border-collapse:collapse;margin-top:10px;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#00f3ff;color:#000;}</style></head><body>`;
-    htmlContent += `<h1>QuantEngine Executive Summary Report</h1><p>Generated: ${new Date().toLocaleString()}</p><hr>`;
-    
-    pinnedDashboardCards.forEach((c, idx) => {
-      htmlContent += `<h3>Snapshot #${idx + 1}</h3><p>Points: ${c.points} | Min Magnitude: $${c.min} | Max Magnitude: $${c.max}</p>`;
-    });
-
-    htmlContent += `<h2>Itemized Data Table Snapshot</h2>`;
-    htmlContent += document.getElementById('zoomedDataTable').outerHTML;
+    let htmlContent = `<html><head><title>QuantEngine Anomaly Report</title><style>body{font-family:sans-serif;padding:20px;}table{width:100%;border-collapse:collapse;margin-top:10px;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#ff3344;color:#fff;}</style></head><body>`;
+    htmlContent += `<h1>QuantEngine Noise & Anomaly Executive Report</h1><p>Generated: ${new Date().toLocaleString()}</p><hr>`;
+    htmlContent += document.getElementById('anomalyDataTable').outerHTML;
     htmlContent += `</body></html>`;
 
     const blob = new Blob([htmlContent], { type: 'application/msword' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `QuantEngine_ExecutiveReport_${Date.now()}.doc`;
+    a.download = `QuantEngine_AnomalyReport_${Date.now()}.doc`;
     a.click();
     URL.revokeObjectURL(url);
-    logPlatform("[EXPORT] Successfully generated Word/PPT compatible report.");
+    logPlatform("[EXPORT] Successfully generated Word/PPT anomaly report.");
   }
 
   function renderMovingWaveGraph() {
@@ -435,7 +421,7 @@ Here is QuantEngine v6.4.8. It introduces the Zoom-to-Snapshot & Executive Expor
     if (isRunning) {
       globalTick += 1;
       timeOffset += 0.05;
-      let nextVal = 50 + Math.sin(timeOffset * 2) * 25 + (Math.random() - 0.5) * 10;
+      let nextVal = 50 + Math.sin(timeOffset * 2) * 25 + (Math.random() - 0.5) * 15;
       nextVal = Math.max(10, Math.min(90, nextVal));
       movingDataBuffer.push(nextVal);
       if (movingDataBuffer.length > 90) movingDataBuffer.shift();
@@ -453,8 +439,8 @@ Here is QuantEngine v6.4.8. It introduces the Zoom-to-Snapshot & Executive Expor
     waveCtx.stroke();
 
     if (isInteracting) {
-      waveCtx.fillStyle = 'rgba(192, 132, 252, 0.2)';
-      waveCtx.strokeStyle = '#c084fc';
+      waveCtx.fillStyle = 'rgba(255, 51, 68, 0.2)';
+      waveCtx.strokeStyle = '#ff3344';
       let minX = Math.min(dragStartX, dragEndX);
       let boxW = Math.abs(dragEndX - dragStartX);
       waveCtx.fillRect(minX, 0, boxW, height);
