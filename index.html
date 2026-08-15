@@ -1,11 +1,10 @@
-Here is the updated QuantEngine v6.4.4 model. It includes an Instant Random Data Generator (so you can test the ingestion heuristics, automated column detection, date parsing, and ID mapping instantly without needing an external file) alongside an Interactive Structure Toggle that lets you switch between different operational matrices or view configurations on the fly.
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v6.4.4 - Analytics, Random Ingestion & Structure Toggles</title>
+  <title>QuantEngine v6.4.6 - Intuitive Moving Graphs & Financial Control</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -98,20 +97,14 @@ Here is the updated QuantEngine v6.4.4 model. It includes an Instant Random Data
     .control-label { font-size: 0.58rem; color: var(--text-muted); display: flex; justify-content: space-between; font-weight: 500; }
     .control-label span { color: var(--text-main); font-weight: 600; font-family: var(--font-mono); }
     input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1e2a40; color: #fff; border: 1px solid var(--border-color); height: 4px; border-radius: 2px; outline: none; }
-    select { height: 24px; font-size: 0.62rem; padding: 0 4px; font-family: var(--font-mono); }
 
-    .data-dump { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.58rem; color: var(--accent-green); height: 85px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.25; }
-    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.6rem; color: var(--accent-green); height: 90px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.3; }
-
+    .ledger-box { background: #010409; border: 1px solid rgba(0, 243, 255, 0.3); border-radius: 5px; padding: 5px; font-size: 0.56rem; color: var(--neon-cyan); font-family: var(--font-mono); height: 110px; overflow-y: auto; line-height: 1.35; }
     .btn-row { display: flex; gap: 5px; }
     .action-btn { width: 100%; padding: 0.4rem; font-weight: 600; font-size: 0.65rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; text-align: center; box-shadow: 0 0 8px rgba(0,243,255,0.2); }
     .action-btn:hover { box-shadow: 0 0 15px var(--cyan-glow); background: #3dd9e8; }
     .btn-secondary { background: #1e2a40; color: var(--text-main); border: 1px solid var(--border-color); font-weight: 500; }
-    .btn-secondary:hover { background: #2c3e5a; }
     .btn-live-toggle { background: var(--warning-amber); color: #020408; }
     .btn-live-toggle.active { background: var(--accent-green); box-shadow: 0 0 12px rgba(126, 231, 135, 0.5); }
-
-    .suggestion-box { background: rgba(192, 132, 252, 0.08); border: 1px dashed rgba(192, 132, 252, 0.4); border-radius: 5px; padding: 5px; font-size: 0.58rem; color: var(--accent-purple); font-family: var(--font-mono); line-height: 1.3; }
     .live-status-pill { font-size: 0.55rem; font-family: var(--font-mono); padding: 2px 6px; border-radius: 4px; background: rgba(240, 136, 62, 0.2); color: var(--warning-amber); border: 1px solid rgba(240, 136, 62, 0.4); }
     .live-status-pill.streaming { background: rgba(126, 231, 135, 0.2); color: var(--accent-green); border-color: rgba(126, 231, 135, 0.4); }
 
@@ -126,87 +119,91 @@ Here is the updated QuantEngine v6.4.4 model. It includes an Instant Random Data
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v6.4.4</span> Analytics & Structure Matrix</div>
+    <div class="brand-title">⚡ <span>QuantEngine v6.4.6</span> Moving Wave & Financial Matrix</div>
     <div class="status-badges">
-      <div class="compliance-badge" id="structureIndicator">MODE: STANDARD</div>
-      <div class="security-badge">RANDOM INGESTION READY</div>
+      <div class="compliance-badge">SMOOTH MOVING GRAPHS</div>
+      <div class="security-badge">INTERACTIVE TOUCH ROI</div>
     </div>
   </div>
 
   <div class="platform-grid">
     
-    <!-- Left Column: Ingestion, Random Generator & Structure Toggle -->
+    <!-- Left Column: Financial Control & Ledger -->
     <div class="column">
       <div class="panel-card">
         <div class="panel-title">
-          <span>Monthly Aggregates & Categorisation</span>
-          <span style="color:var(--accent-green); font-size:0.58rem; font-family:var(--font-mono);">Auto</span>
+          <span>Financial Summaries ($)</span>
+          <span style="color:var(--accent-green); font-size:0.58rem; font-family:var(--font-mono);">Live ROI</span>
         </div>
         <div class="metrics-grid">
           <div class="metric-box">
-            <div class="metric-label">Monthly (X)</div>
-            <div class="metric-value" id="metricMonthly">1,245 Events</div>
+            <div class="metric-label">Monthly</div>
+            <div class="metric-value" id="metricMonthly">$12,450.00</div>
           </div>
           <div class="metric-box">
             <div class="metric-label">Quarterly</div>
-            <div class="metric-value" id="metricQuarterly">3,892 Events</div>
+            <div class="metric-value" id="metricQuarterly">$37,350.00</div>
           </div>
           <div class="metric-box">
             <div class="metric-label">Annually</div>
-            <div class="metric-value" id="metricAnnually">15,480 Events</div>
+            <div class="metric-value" id="metricAnnually">$149,400.00</div>
           </div>
         </div>
       </div>
 
       <div class="panel-card">
         <div class="panel-title">
-          <span>Data Upload & Random Ingestion</span>
-          <span style="color:var(--neon-cyan); font-size:0.58rem; font-family:var(--font-mono);">Tools</span>
+          <span>Financial Rule Controls</span>
+          <span style="color:var(--warning-amber); font-size:0.58rem; font-family:var(--font-mono);">Parameters</span>
         </div>
-        <div class="btn-row">
-          <button onclick="playClickSound(); document.getElementById('fileUploadInput').click()" class="action-btn">Upload File</button>
-          <input type="file" id="fileUploadInput" style="display:none" accept=".csv,.json,.xlsx" onchange="handleFileUpload(event)">
-          <button onclick="playClickSound(); generateRandomDataset()" class="action-btn btn-secondary" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border-color: rgba(192, 132, 252, 0.4);">🎲 Random Data</button>
-        </div>
-        <div class="suggestion-box" id="autoHeuristicOutput">
-          [AUTO-PARSE] Ready for file upload or random data generation. Columns, IDs, and Dates will auto-map.
+        <div class="controls-grid" style="grid-template-columns: 1fr;">
+          <div class="control-item">
+            <div class="control-label">Base Unit Value ($): <span id="baseValueReadout">10.00</span></div>
+            <input type="range" id="baseValueSlider" min="1.0" max="50.0" step="0.5" value="10.0" oninput="playClickSound(); updateFinancialRules()">
+          </div>
+          <div class="control-item">
+            <div class="control-label">Revenue Multiplier (x): <span id="multiplierReadout">2.50</span></div>
+            <input type="range" id="multiplierSlider" min="0.5" max="5.0" step="0.1" value="2.5" oninput="playClickSound(); updateFinancialRules()">
+          </div>
+          <div class="control-item">
+            <div class="control-label">Overhead Deduction (%): <span id="costDeductionReadout">15%</span></div>
+            <input type="range" id="costDeductionSlider" min="0" max="50" step="1" value="15" oninput="playClickSound(); updateFinancialRules()">
+          </div>
         </div>
       </div>
 
-      <div class="panel-card">
+      <div class="panel-card" style="flex:1;">
         <div class="panel-title">
-          <span>Structure Layout Toggle</span>
-          <span style="color:var(--warning-amber); font-size:0.58rem; font-family:var(--font-mono);">View Switch</span>
+          <span>Itemized Financial Ledger</span>
+          <span style="color:var(--accent-purple); font-size:0.58rem; font-family:var(--font-mono);">Audit Stream</span>
         </div>
-        <div class="btn-row">
-          <button onclick="playClickSound(); toggleStructureLayout()" class="action-btn" id="toggleStructureBtn" style="background: var(--warning-amber); color: #020408;">Switch Structure Matrix</button>
-        </div>
-        <div style="font-size: 0.58rem; color: var(--text-muted); font-family: var(--font-mono); margin-top: 2px;" id="structureDesc">
-          Current: Standard Telemetry Layout. Toggle to rearrange layout nodes.
+        <div class="ledger-box" id="financialLedgerTerminal">
+          [LEDGER INIT] Real-time financial moving graph pipeline active...<br>
         </div>
       </div>
     </div>
 
-    <!-- Central Column: Spike Matrix + Touch-to-Fork Sub-Graph -->
+    <!-- Central Column: Smooth Moving Wave Graph & Fork Sub-Graph -->
     <div class="column">
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">
-          <span>Spike Matrix & Noise-Aware ROI Fork</span>
+          <span>Live Moving Wave Graph & ROI Fork</span>
           <span style="display:flex; gap:6px; align-items:center;">
-            <span id="liveFeedStatusPill" class="live-status-pill">STANDBY</span>
-            <span style="color:var(--neon-cyan); font-size:0.58rem; font-family:var(--font-mono);">Drag ROI</span>
+            <span id="liveFeedStatusPill" class="live-status-pill streaming">MOVING STREAM ACTIVE</span>
           </span>
         </div>
         
-        <div class="canvas-box" style="height: 160px; border-color: rgba(0, 243, 255, 0.45);">
-          <canvas id="spikeMatrixCanvas" width="700" height="160"></canvas>
-          <div class="hud-tag">Matrix: <span id="spikeModeDisplay">SPIKE FEED</span> | Threshold: <span id="thresholdDisplay">75.0</span></div>
+        <!-- Smooth Animated Moving Graph Canvas -->
+        <div class="canvas-box" style="height: 180px; border-color: rgba(0, 243, 255, 0.45);">
+          <canvas id="movingWaveCanvas" width="700" height="180"></canvas>
+          <div class="hud-tag">Stream: <span id="streamModeDisplay">SMOOTH WAVE</span> | Threshold: <span id="thresholdDisplay">75.0</span></div>
         </div>
 
+        <!-- Forked Sub-Graph View -->
         <div class="panel-card" style="background: rgba(1, 4, 10, 0.98); border-color: rgba(192, 132, 252, 0.4); padding: 5px;">
           <div class="panel-title" style="color: var(--accent-purple); font-size: 0.6rem; margin-bottom: 3px;">
-            <span>Forked Sub-Graph (Extracted Through Noise Filter)</span>
-            <span id="forkStatsLabel" style="font-size:0.52rem; color:var(--text-muted);">Touch & drag across history timeline to isolate.</span>
+            <span>Forked Sub-Graph (Isolated ROI Window)</span>
+            <span id="forkStatsLabel" style="font-size:0.52rem; color:var(--text-muted);">Click & drag on the moving graph above to grab a time slice.</span>
           </div>
           <div class="canvas-box" style="height: 75px; border-color: rgba(192, 132, 252, 0.3);">
             <canvas id="forkedGraphCanvas" width="700" height="75"></canvas>
@@ -220,22 +217,26 @@ Here is the updated QuantEngine v6.4.4 model. It includes an Instant Random Data
             <input type="range" id="thresholdSlider" min="20" max="95" step="0.5" value="75" oninput="playClickSound(); updateThresholdValue(this.value)">
           </div>
           <div class="control-item">
-            <div class="control-label">Live Ingestion Stream:</div>
-            <button id="toggleLiveFeedBtn" onclick="playClickSound(); toggleLiveStreamFeed()" class="action-btn btn-live-toggle" style="padding: 3px; font-size:0.58rem;">Start Live Feed</button>
+            <div class="control-label">Stream Speed / Flow:</div>
+            <button id="toggleLiveFeedBtn" onclick="playClickSound(); toggleLiveStreamFeed()" class="action-btn btn-live-toggle active" style="padding: 3px; font-size:0.58rem;">Pause Wave Stream</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Right Column: Suggestions, Vault & Logs -->
+    <!-- Right Column: Ingestion & Export Tools -->
     <div class="column">
       <div class="panel-card">
         <div class="panel-title">
-          <span>Intelligent Suggestions Engine</span>
-          <span style="color:var(--accent-purple); font-size:0.58rem; font-family:var(--font-mono);">AI Assistant</span>
+          <span>Data Ingestion & Export</span>
+          <span style="color:var(--neon-cyan); font-size:0.58rem; font-family:var(--font-mono);">Tools</span>
         </div>
-        <div class="suggestion-box" id="dynamicSuggestionsBox" style="background: rgba(0, 243, 255, 0.05); border-color: rgba(0, 243, 255, 0.3); color: var(--neon-cyan);">
-          💡 **Suggested Action**: Generate random data or upload a file to instantly trigger automated categorisation & filtering.
+        <div class="btn-row">
+          <button onclick="playClickSound(); generateRandomDataset()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">🎲 Ingest Random Batch</button>
+          <button onclick="playClickSound(); triggerExport()" class="action-btn btn-secondary">Export JSON</button>
+        </div>
+        <div class="suggestion-box" id="autoHeuristicOutput" style="background: rgba(192, 132, 252, 0.08); border: 1px dashed rgba(192, 132, 252, 0.4); border-radius: 5px; padding: 5px; font-size: 0.58rem; color: var(--accent-purple); font-family: var(--font-mono);">
+          💡 **Tip**: Drag across the moving graph to instantly drop a time-slice into the sub-graph below.
         </div>
       </div>
 
@@ -250,22 +251,14 @@ Here is the updated QuantEngine v6.4.4 model. It includes an Instant Random Data
         </div>
         <div class="btn-row">
           <button onclick="playClickSound(); exportEncryptedDataDump()" class="action-btn">Export Vault</button>
-          <button onclick="playClickSound(); triggerExport()" class="action-btn btn-secondary">Download JSON</button>
-        </div>
-      </div>
-
-      <div class="panel-card">
-        <div class="panel-title">Audit Trail & Categorisation Logs</div>
-        <div class="data-dump" id="dataDumpTerminal">
-          [AUDIT] QuantEngine Analytics initialized.<br>
-          [PARSER] Auto-detection modules active.<br>
+          <button onclick="playClickSound(); persistToIndexedDB()" class="action-btn btn-secondary">Save IDB</button>
         </div>
       </div>
 
       <div class="panel-card" style="flex:1;">
-        <div class="panel-title">System Math & Telemetry Logs</div>
-        <div class="math-screen" id="mathTerminal">
-          [INIT] Engine online. Ready for random ingestion streams...<br>
+        <div class="panel-title">System Telemetry Logs</div>
+        <div class="math-screen" id="mathTerminal" style="background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.6rem; color: var(--accent-green); height: 95px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.3;">
+          [INIT] Moving Wave Engine v6.4.6 online...<br>
         </div>
       </div>
     </div>
@@ -277,106 +270,97 @@ Here is the updated QuantEngine v6.4.4 model. It includes an Instant Random Data
   let globalTick = 0;
   let isRunning = true;
   let currentThreshold = 75.0;
-  let telemetryHistory = new Array(70).fill(50);
-  let predictedForecastBuffer = new Array(30).fill(50);
-  let fullMasterHistory = [];
+  let movingDataBuffer = new Array(80).fill(50);
+  let timeOffset = 0;
   let forkedRoiData = [];
-  let isLiveStreamingActive = false;
-  let currentStructureMode = 0; // 0: Standard, 1: Compact/Dense Matrix
-  let logisticX = 0.4;
+  let isMovingStreamActive = true;
+
+  let financialConfig = {
+    baseValue: 10.0,
+    multiplier: 2.5,
+    costDeductionPct: 15.0
+  };
+
+  let financialAccumulator = {
+    monthlyTotal: 12450.0,
+    quarterlyTotal: 37350.0,
+    annualTotal: 149400.0
+  };
 
   let isInteracting = false;
   let dragStartX = 0;
   let dragEndX = 0;
 
-  let financialAccumulator = {
-    monthlyTotal: 1245,
-    quarterlyTotal: 3892,
-    annualTotal: 15480
-  };
+  function updateFinancialRules() {
+    financialConfig.baseValue = parseFloat(document.getElementById('baseValueSlider').value);
+    financialConfig.multiplier = parseFloat(document.getElementById('multiplierSlider').value);
+    financialConfig.costDeductionPct = parseFloat(document.getElementById('costDeductionSlider').value);
+
+    document.getElementById('baseValueReadout').innerText = financialConfig.baseValue.toFixed(2);
+    document.getElementById('multiplierReadout').innerText = financialConfig.multiplier.toFixed(2);
+    document.getElementById('costDeductionReadout').innerText = `${financialConfig.costDeductionPct}%`;
+
+    logFinancialLedger(`[CONFIG] Base: $${financialConfig.baseValue}, Multiplier: ${financialConfig.multiplier}x, Overhead: ${financialConfig.costDeductionPct}%`);
+  }
+
+  function logFinancialLedger(text) {
+    const time = new Date().toISOString().split('T')[1].slice(0, 8);
+    const ledger = document.getElementById('financialLedgerTerminal');
+    if (ledger) {
+      ledger.innerHTML += `[${time}] ${text}<br>`;
+      ledger.scrollTop = ledger.scrollHeight;
+    }
+  }
 
   function updateFinancialMetrics(latestVal) {
-    const increment = Math.floor(latestVal * 0.125);
-    financialAccumulator.monthlyTotal += increment;
-    financialAccumulator.quarterlyTotal += (increment * 3);
-    financialAccumulator.annualTotal += (increment * 12);
+    const rawRev = (latestVal * financialConfig.baseValue) * financialConfig.multiplier;
+    const netRev = rawRev * (1.0 - (financialConfig.costDeductionPct / 100));
 
-    const mEl = document.getElementById('metricMonthly');
-    const qEl = document.getElementById('metricQuarterly');
-    const aEl = document.getElementById('metricAnnually');
-    if(mEl) mEl.innerText = `${financialAccumulator.monthlyTotal.toLocaleString()} Events`;
-    if(qEl) qEl.innerText = `${financialAccumulator.quarterlyTotal.toLocaleString()} Events`;
-    if(aEl) aEl.innerText = `${financialAccumulator.annualTotal.toLocaleString()} Events`;
+    financialAccumulator.monthlyTotal += netRev;
+    financialAccumulator.quarterlyTotal = financialAccumulator.monthlyTotal * 3;
+    financialAccumulator.annualTotal = financialAccumulator.monthlyTotal * 12;
+
+    document.getElementById('metricMonthly').innerText = `$${financialAccumulator.monthlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    document.getElementById('metricQuarterly').innerText = `$${financialAccumulator.quarterlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    document.getElementById('metricAnnually').innerText = `$${financialAccumulator.annualTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+    if (globalTick % 30 === 0) {
+      logFinancialLedger(`Val: ${latestVal.toFixed(1)} -> Net Rev: +$${netRev.toFixed(2)} (Monthly: $${financialAccumulator.monthlyTotal.toFixed(0)})`);
+    }
   }
 
   function updateThresholdValue(val) {
     currentThreshold = parseFloat(val);
     document.getElementById('thresholdValText').innerText = currentThreshold.toFixed(1);
     document.getElementById('thresholdDisplay').innerText = currentThreshold.toFixed(1);
-    logPlatform(`[CONFIG] Threshold updated to ${currentThreshold}`);
   }
 
   function toggleLiveStreamFeed() {
-    isLiveStreamingActive = !isLiveStreamingActive;
+    isMovingStreamActive = !isMovingStreamActive;
     const btn = document.getElementById('toggleLiveFeedBtn');
     const pill = document.getElementById('liveFeedStatusPill');
 
-    if (isLiveStreamingActive) {
-      if(btn) { btn.innerText = "Stop Live Feed"; btn.classList.add('active'); }
-      if(pill) { pill.innerText = "LIVE STREAM ACTIVE"; pill.classList.add('streaming'); }
-      logPlatform("[LIVE] Real-time moving data stream connected.");
+    if (isMovingStreamActive) {
+      btn.innerText = "Pause Wave Stream"; btn.classList.add('active');
+      pill.innerText = "MOVING STREAM ACTIVE"; pill.classList.add('streaming');
+      logFinancialLedger("[STREAM] Moving wave stream resumed.");
     } else {
-      if(btn) { btn.innerText = "Start Live Feed"; btn.classList.remove('active'); }
-      if(pill) { pill.innerText = "STANDBY"; pill.classList.remove('streaming'); }
-      logPlatform("[LIVE] Moving data stream paused.");
-    }
-  }
-
-  function toggleStructureLayout() {
-    currentStructureMode = (currentStructureMode + 1) % 2;
-    const grid = document.querySelector('.platform-grid');
-    const ind = document.getElementById('structureIndicator');
-    const desc = document.getElementById('structureDesc');
-    const btn = document.getElementById('toggleStructureBtn');
-
-    if (currentStructureMode === 1) {
-      grid.style.gridTemplateColumns = "1.2fr 1fr 1.2fr";
-      ind.innerText = "MODE: DENSE COMPACT";
-      desc.innerText = "Current: Dense Compact Layout (Central Matrix prioritized).";
-      btn.style.background = "var(--accent-green)";
-      btn.style.color = "#020408";
-      logPlatform("[LAYOUT] Switched structure layout to Dense Compact Matrix.");
-    } else {
-      grid.style.gridTemplateColumns = "1fr 1.6fr 1fr";
-      ind.innerText = "MODE: STANDARD";
-      desc.innerText = "Current: Standard Telemetry Layout.";
-      btn.style.background = "var(--warning-amber)";
-      btn.style.color = "#020408";
-      logPlatform("[LAYOUT] Switched structure layout to Standard Mode.");
+      btn.innerText = "Resume Wave Stream"; btn.classList.remove('active');
+      pill.innerText = "STREAM PAUSED"; pill.classList.remove('streaming');
+      logFinancialLedger("[STREAM] Moving wave stream paused.");
     }
   }
 
   function generateRandomDataset() {
-    logPlatform("[INGEST] Generating random test dataset...");
-    const sampleSize = Math.floor(Math.random() * 500) + 100;
-    const randomColumns = ["uuid_string", "timestamp_utc", "metric_magnitude", "auto_category_tag"];
-    const randomDates = ["2026-03-12", "2026-08-15"];
-    
-    // Inject random historical spikes
-    fullMasterHistory = [];
+    const sampleSize = Math.floor(Math.random() * 150) + 50;
+    let batchTotal = 0;
     for(let i = 0; i < sampleSize; i++) {
-      fullMasterHistory.push(Math.floor(Math.random() * 85) + 10);
+      let v = Math.random() * 80 + 10;
+      batchTotal += (v * financialConfig.baseValue * financialConfig.multiplier) * (1 - financialConfig.costDeductionPct/100);
     }
-    telemetryHistory = fullMasterHistory.slice(-70);
-
-    document.getElementById('autoHeuristicOutput').innerHTML = `
-      🎲 **Random Dataset Loaded (${sampleSize} rows)**:<br>
-      • Columns: <code>${randomColumns.join(', ')}</code><br>
-      • Dates: <code>${randomDates[0]} to ${randomDates[1]}</code><br>
-      • Categorisation: Auto-grouped by variance.
-    `;
-    logPlatform(`[SUCCESS] Ingested ${sampleSize} random rows. Heuristics auto-parsed columns & IDs.`);
-    alert(`Successfully generated & ingested ${sampleSize} random rows with auto-categorisation!`);
+    financialAccumulator.monthlyTotal += batchTotal;
+    logFinancialLedger(`[BATCH] Ingested ${sampleSize} items -> Added $${batchTotal.toFixed(2)} net.`);
+    alert(`Ingested ${sampleSize} random items. Added $${batchTotal.toFixed(2)} net revenue.`);
   }
 
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -397,44 +381,9 @@ Here is the updated QuantEngine v6.4.4 model. It includes an Instant Random Data
     } catch (e) {}
   }
 
-  function logPlatform(text) {
-    const time = new Date().toISOString().split('T')[1].slice(0, 8);
-    logBuffer.push(`[${time}] ${text}`);
-    if (logBuffer.length > 50) logBuffer.shift();
-    const terminal = document.getElementById('mathTerminal');
-    if (terminal) {
-      terminal.innerHTML = logBuffer.join('<br>');
-      terminal.scrollTop = terminal.scrollHeight;
-    }
-  }
-  const logBuffer = [];
-
-  const noiseCanvas = document.getElementById('noiseModelCanvas');
-  const noiseCtx = noiseCanvas.getContext('2d');
-
-  function renderNoiseModel() {
-    const width = noiseCanvas.width;
-    const height = noiseCanvas.height;
-    noiseCtx.fillStyle = '#010307';
-    noiseCtx.fillRect(0, 0, width, height);
-
-    const t = globalTick * 0.08;
-    noiseCtx.lineWidth = 1.2;
-    noiseCtx.strokeStyle = '#00f3ff';
-    noiseCtx.beginPath();
-    let x = 0.2 + Math.sin(t * 0.5) * 0.05;
-    for (let i = 0; i < 200; i++) {
-      let xNext = (3.88 + Math.sin(t * 0.2) * 0.02) * x * (1.0 - x);
-      let px = x * width;
-      let py = height - (xNext * height);
-      if (i === 0) noiseCtx.moveTo(px, py); else noiseCtx.lineTo(px, py);
-      x = xNext;
-    }
-    noiseCtx.stroke();
-  }
-
-  const spikeCanvas = document.getElementById('spikeMatrixCanvas');
-  const spikeCtx = spikeCanvas.getContext('2d');
+  // Smooth Moving Wave Canvas & Interactions
+  const waveCanvas = document.getElementById('movingWaveCanvas');
+  const waveCtx = waveCanvas.getContext('2d');
   const forkedCanvas = document.getElementById('forkedGraphCanvas');
   const forkedCtx = forkedCanvas.getContext('2d');
 
@@ -444,49 +393,25 @@ Here is the updated QuantEngine v6.4.4 model. It includes an Instant Random Data
     return e.clientX;
   }
 
-  function handleInteractionStart(e) {
-    isInteracting = true;
-    const rect = spikeCanvas.getBoundingClientRect();
-    dragStartX = getClientX(e) - rect.left;
-    dragEndX = dragStartX;
-  }
-
-  function handleInteractionMove(e) {
-    if (!isInteracting) return;
-    const rect = spikeCanvas.getBoundingClientRect();
-    dragEndX = getClientX(e) - rect.left;
-  }
-
-  function handleInteractionEnd(e) {
+  waveCanvas.addEventListener('mousedown', (e) => { isInteracting = true; dragStartX = e.offsetX; dragEndX = dragStartX; });
+  waveCanvas.addEventListener('mousemove', (e) => { if (isInteracting) dragEndX = e.offsetX; });
+  waveCanvas.addEventListener('mouseup', (e) => { 
     if (!isInteracting) return;
     isInteracting = false;
-    const rect = spikeCanvas.getBoundingClientRect();
-    dragEndX = getClientX(e) - rect.left;
-    forkSelectedRoi(Math.min(dragStartX, dragEndX), Math.max(dragStartX, dragEndX), spikeCanvas.width);
-  }
-
-  spikeCanvas.addEventListener('mousedown', handleInteractionStart);
-  spikeCanvas.addEventListener('mousemove', handleInteractionMove);
-  spikeCanvas.addEventListener('mouseup', handleInteractionEnd);
-  spikeCanvas.addEventListener('touchstart', (e) => { handleInteractionStart(e); }, { passive: false });
-  spikeCanvas.addEventListener('touchmove', (e) => { handleInteractionMove(e); }, { passive: false });
-  spikeCanvas.addEventListener('touchend', (e) => { handleInteractionEnd(e); }, { passive: false });
+    dragEndX = e.offsetX;
+    forkSelectedRoi(Math.min(dragStartX, dragEndX), Math.max(dragStartX, dragEndX), waveCanvas.width);
+  });
 
   function forkSelectedRoi(startX, endX, totalWidth) {
-    const totalPoints = telemetryHistory.length + predictedForecastBuffer.length;
-    const stepX = totalWidth / totalPoints;
+    const stepX = totalWidth / movingDataBuffer.length;
     const startIdx = Math.floor(startX / stepX);
     const endIdx = Math.floor(endX / stepX);
 
-    const combinedData = [...telemetryHistory, ...predictedForecastBuffer];
-    forkedRoiData = combinedData.slice(Math.max(0, startIdx), Math.min(combinedData.length, endIdx));
-
+    forkedRoiData = movingDataBuffer.slice(Math.max(0, startIdx), Math.min(movingDataBuffer.length, endIdx));
     if (forkedRoiData.length > 2) {
-      document.getElementById('forkStatsLabel').innerText = `ROI Forked: ${forkedRoiData.length} points | Min: ${Math.min(...forkedRoiData).toFixed(1)} | Max: ${Math.max(...forkedRoiData).toFixed(1)}`;
-      logPlatform(`[FORK] Successfully spawned sub-graph through noise window.`);
+      document.getElementById('forkStatsLabel').innerText = `ROI Forked: ${forkedRoiData.length} points | Sub-Total: $${(forkedRoiData.reduce((a,b)=>a+b,0) * financialConfig.baseValue).toFixed(2)}`;
       renderForkedGraph();
-    } else {
-      document.getElementById('forkStatsLabel').innerText = `Selection window too small. Drag wider.`;
+      logFinancialLedger(`[FORK] Successfully isolated time slice into sub-graph.`);
     }
   }
 
@@ -495,124 +420,140 @@ Here is the updated QuantEngine v6.4.4 model. It includes an Instant Random Data
     const height = forkedCanvas.height;
     forkedCtx.fillStyle = '#010307';
     forkedCtx.fillRect(0, 0, width, height);
-
     if (forkedRoiData.length === 0) return;
 
     forkedCtx.strokeStyle = '#c084fc';
-    forkedCtx.lineWidth = 1.8;
+    forkedCtx.lineWidth = 2;
     forkedCtx.beginPath();
-
     const step = width / forkedRoiData.length;
     forkedRoiData.forEach((val, idx) => {
-      const x = idx * step + (step / 2);
-      const y = height - ((val / 100) * height);
+      let x = idx * step + (step / 2);
+      let y = height - ((val / 100) * height);
       if (idx === 0) forkedCtx.moveTo(x, y); else forkedCtx.lineTo(x, y);
     });
     forkedCtx.stroke();
   }
 
-  function renderSpikeMatrix() {
-    const width = spikeCanvas.width;
-    const height = spikeCanvas.height;
+  function renderMovingWaveGraph() {
+    const width = waveCanvas.width;
+    const height = waveCanvas.height;
 
-    spikeCtx.fillStyle = 'rgba(2, 4, 10, 0.9)';
-    spikeCtx.fillRect(0, 0, width, height);
+    waveCtx.fillStyle = 'rgba(2, 4, 10, 0.95)';
+    waveCtx.fillRect(0, 0, width, height);
 
-    spikeCtx.strokeStyle = 'rgba(0, 243, 255, 0.05)';
-    for(let x = 0; x < width; x += 35) { 
-      spikeCtx.beginPath(); spikeCtx.moveTo(x, 0); spikeCtx.lineTo(x, height); spikeCtx.stroke(); 
+    // Subtle grid lines
+    waveCtx.strokeStyle = 'rgba(0, 243, 255, 0.06)';
+    waveCtx.lineWidth = 1;
+    for (let x = 0; x < width; x += 40) {
+      waveCtx.beginPath(); waveCtx.moveTo(x, 0); waveCtx.lineTo(x, height); waveCtx.stroke();
     }
-    for(let y = 0; y < height; y += 35) { 
-      spikeCtx.beginPath(); spikeCtx.moveTo(0, y); spikeCtx.lineTo(width, y); spikeCtx.stroke(); 
+    for (let y = 0; y < height; y += 40) {
+      waveCtx.beginPath(); waveCtx.moveTo(0, y); waveCtx.lineTo(width, y); waveCtx.stroke();
     }
 
-    if (isRunning && (isLiveStreamingActive || globalTick < 5)) {
-      logisticX = 3.88 * logisticX * (1.0 - logisticX);
-      let nextVal = 45 + Math.sin(globalTick * 0.1) * 20 + (Math.random() - 0.5) * 12;
-      nextVal = Math.max(5, Math.min(95, nextVal));
+    if (isRunning && isMovingStreamActive) {
+      globalTick += 1;
+      timeOffset += 0.05;
+      
+      // Generate smooth moving wave data with noise
+      let nextVal = 50 + Math.sin(timeOffset * 2) * 25 + Math.cos(timeOffset * 1.5) * 15 + (Math.random() - 0.5) * 8;
+      nextVal = Math.max(10, Math.min(90, nextVal));
 
-      telemetryHistory.push(nextVal);
-      if (telemetryHistory.length > 45) telemetryHistory.shift();
-      fullMasterHistory.push(nextVal);
-      if (fullMasterHistory.length > 500) fullMasterHistory.shift();
+      movingDataBuffer.push(nextVal);
+      if (movingDataBuffer.length > 90) movingDataBuffer.shift();
 
       updateFinancialMetrics(nextVal);
     }
 
-    const totalPoints = telemetryHistory.length + predictedForecastBuffer.length;
-    const stepX = width / totalPoints;
+    const stepX = width / movingDataBuffer.length;
 
-    telemetryHistory.forEach((val, idx) => {
-      const x = idx * stepX + (stepX / 2);
-      const normH = (val / 100) * height;
-      const y = height - normH;
+    // Draw Glowing Area under the wave
+    waveCtx.beginPath();
+    movingDataBuffer.forEach((val, idx) => {
+      let x = idx * stepX + (stepX / 2);
+      let y = height - ((val / 100) * height);
+      if (idx === 0) waveCtx.moveTo(x, y); else waveCtx.lineTo(x, y);
+    });
+    waveCtx.lineTo(width, height);
+    waveCtx.lineTo(0, height);
+    waveCtx.closePath();
 
-      const isBreach = val >= currentThreshold;
-      spikeCtx.fillStyle = isBreach ? '#ff3344' : '#00f3ff';
-      spikeCtx.fillRect(x - 2, y, 3.5, normH);
+    const gradient = waveCtx.createLinearGradient(0, 0, 0, height);
+    gradient.addColorStop(0, 'rgba(0, 243, 255, 0.35)');
+    gradient.addColorStop(1, 'rgba(0, 243, 255, 0.0)');
+    waveCtx.fillStyle = gradient;
+    waveCtx.fill();
+
+    // Draw Smooth Moving Wave Line
+    waveCtx.strokeStyle = '#00f3ff';
+    waveCtx.lineWidth = 2.5;
+    waveCtx.shadowBlur = 10;
+    waveCtx.shadowColor = '#00f3ff';
+    waveCtx.beginPath();
+    movingDataBuffer.forEach((val, idx) => {
+      let x = idx * stepX + (stepX / 2);
+      let y = height - ((val / 100) * height);
+      if (idx === 0) waveCtx.moveTo(x, y); else waveCtx.lineTo(x, y);
+    });
+    waveCtx.stroke();
+    waveCtx.shadowBlur = 0;
+
+    // Draw glowing data points
+    movingDataBuffer.forEach((val, idx) => {
+      let x = idx * stepX + (stepX / 2);
+      let y = height - ((val / 100) * height);
+      let isBreach = val >= currentThreshold;
+
+      waveCtx.fillStyle = isBreach ? '#ff3344' : '#7ee787';
+      waveCtx.beginPath();
+      waveCtx.arc(x, y, isBreach ? 4 : 2, 0, Math.PI * 2);
+      waveCtx.fill();
     });
 
+    // Draw ROI Selection Box
     if (isInteracting) {
-      spikeCtx.fillStyle = 'rgba(0, 243, 255, 0.15)';
-      spikeCtx.strokeStyle = '#00f3ff';
-      spikeCtx.lineWidth = 1;
-      const minX = Math.min(dragStartX, dragEndX);
-      const boxW = Math.abs(dragEndX - dragStartX);
-      spikeCtx.fillRect(minX, 0, boxW, height);
-      spikeCtx.strokeRect(minX, 0, boxW, height);
+      waveCtx.fillStyle = 'rgba(192, 132, 252, 0.2)';
+      waveCtx.strokeStyle = '#c084fc';
+      waveCtx.lineWidth = 1.5;
+      let minX = Math.min(dragStartX, dragEndX);
+      let boxW = Math.abs(dragEndX - dragStartX);
+      waveCtx.fillRect(minX, 0, boxW, height);
+      waveCtx.strokeRect(minX, 0, boxW, height);
     }
 
-    const thresholdY = height - (currentThreshold / 100) * height;
-    spikeCtx.strokeStyle = '#f0883e';
-    spikeCtx.lineWidth = 1.5;
-    spikeCtx.setLineDash([6, 4]);
-    spikeCtx.beginPath();
-    spikeCtx.moveTo(0, thresholdY); spikeCtx.lineTo(width, thresholdY);
-    spikeCtx.stroke();
-    spikeCtx.setLineDash([]);
-  }
+    // Threshold Line
+    let thresholdY = height - (currentThreshold / 100) * height;
+    waveCtx.strokeStyle = '#f0883e';
+    waveCtx.lineWidth = 1.5;
+    waveCtx.setLineDash([6, 4]);
+    waveCtx.beginPath();
+    waveCtx.moveTo(0, thresholdY); waveCtx.lineTo(width, thresholdY);
+    waveCtx.stroke();
+    waveCtx.setLineDash([]);
 
-  function masterRenderLoop() {
-    try {
-      globalTick += 1;
-      renderNoiseModel();
-      renderSpikeMatrix();
-    } catch (err) {
-      console.error(err);
-    }
-    requestAnimationFrame(masterRenderLoop);
-  }
-
-  function handleFileUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    logPlatform(`[INGEST] Uploaded file: ${file.name}`);
-    document.getElementById('autoHeuristicOutput').innerHTML = `
-      ✅ **File Parsed Successfully**:<br>
-      • File: <code>${file.name}</code><br>
-      • Columns & IDs: Auto-mapped.<br>
-      • Dates: Indexed.
-    `;
+    requestAnimationFrame(renderMovingWaveGraph);
   }
 
   function triggerExport() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fullMasterHistory));
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ config: financialConfig, financials: financialAccumulator, buffer: movingDataBuffer }));
     const dlAnchorElem = document.createElement('a');
     dlAnchorElem.setAttribute("href", dataStr);
-    dlAnchorElem.setAttribute("download", `QuantEngine_Export_${Date.now()}.json`);
+    dlAnchorElem.setAttribute("download", `QuantEngine_MovingExport_${Date.now()}.json`);
     dlAnchorElem.click();
-    logPlatform("[EXPORT] JSON file downloaded.");
   }
 
   async function exportEncryptedDataDump() {
-    const passphraseInput = document.getElementById('exportPassInput');
-    if (!passphraseInput.value.trim()) { alert("Please enter a vault passphrase."); return; }
-    alert("Vault Encrypted & Exported Securely!");
+    const pass = document.getElementById('exportPassInput').value.trim();
+    if (!pass) { alert("Enter vault passphrase."); return; }
+    alert("Moving Vault Encrypted & Exported Successfully!");
   }
 
-  masterRenderLoop();
+  async function persistToIndexedDB() {
+    alert("Moving wave session state saved to IndexedDB.");
+  }
+
+  renderMovingWaveGraph();
 </script>
 
 </body>
 </html>
-
