@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v7.8.0 - Flowing Master Edition</title>
+  <title>QuantEngine v7.9.0 - Standard Minimized & Saved Tabs Master Edition</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -67,12 +67,17 @@
     .brand-title { display: flex; align-items: center; gap: 5px; font-size: 0.78rem; font-weight: 700; color: #fff; }
     .brand-title span { color: var(--neon-cyan); font-weight: 800; }
     
-    .header-actions { display: flex; gap: 3px; }
+    .header-actions { display: flex; gap: 3px; align-items: center; flex-wrap: wrap; }
     .core-reset-btn { font-size: 0.48rem; background: rgba(255, 51, 68, 0.2); color: var(--crimson-red); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255, 51, 68, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
     .core-reset-btn:hover { background: rgba(255, 51, 68, 0.4); }
 
     .saved-view-btn { font-size: 0.48rem; background: rgba(126, 231, 135, 0.2); color: var(--accent-green); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(126, 231, 135, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
     .saved-view-btn:hover { background: rgba(126, 231, 135, 0.4); }
+
+    /* Saved Views Small Tab Container */
+    .saved-tabs-bar { display: flex; gap: 3px; width: 100%; overflow-x: auto; padding: 2px 0; }
+    .saved-tab-chip { font-size: 0.44rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); border: 1px solid rgba(192, 132, 252, 0.3); padding: 2px 5px; border-radius: 3px; font-family: var(--font-mono); cursor: pointer; white-space: nowrap; }
+    .saved-tab-chip:hover { background: rgba(192, 132, 252, 0.3); }
 
     .mobile-stack { display: flex; flex-direction: column; gap: 0.4rem; }
 
@@ -149,10 +154,14 @@
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v7.8.0 Flowing Master</span></div>
+    <div class="brand-title">⚡ <span>QuantEngine v7.9.0</span> Flowing Master</div>
     <div class="header-actions">
       <button class="saved-view-btn" onclick="saveCurrentCustomView()">💾 Save View</button>
       <button class="core-reset-btn" onclick="resetToStandardView()">↺ Standard View</button>
+    </div>
+    <div class="saved-tabs-bar" id="savedTabsBar">
+      <span style="font-size: 0.44rem; color: var(--text-muted); font-family: var(--font-mono); align-self: center;">Saved Tabs:</span>
+      <!-- Dynamic small tabs injected here -->
     </div>
   </div>
 
@@ -164,7 +173,7 @@
         <span onclick="toggleSection('secFin')">1. Maths, Calculations & Monthly X ▾</span>
         <button class="pin-btn" id="pinBtn_cardFin" onclick="toggleFluidMaximize('cardFin')">⚡ Maximize</button>
       </div>
-      <div class="collapsible-body" id="secFin">
+      <div class="collapsible-body collapsed" id="secFin">
         <div class="metrics-grid">
           <div class="metric-box">
             <div class="metric-label">Monthly X</div>
@@ -192,7 +201,7 @@
         <span onclick="toggleSection('secWave')">2. Live Moving Data & Graphs ▾</span>
         <button class="pin-btn" id="pinBtn_cardWave" onclick="toggleFluidMaximize('cardWave')">⚡ Maximize</button>
       </div>
-      <div class="collapsible-body" id="secWave">
+      <div class="collapsible-body collapsed" id="secWave">
         <div class="canvas-box" style="height: 130px;">
           <canvas id="movingWaveCanvas" width="400" height="130"></canvas>
           <div class="hud-tag">Live Stream | Drag/Pinch to Grasp Noise</div>
@@ -213,7 +222,7 @@
         <span onclick="toggleSection('secChaos')">3. Noise Graphs & Bifurcation ▾</span>
         <button class="pin-btn" id="pinBtn_cardChaos" onclick="toggleFluidMaximize('cardChaos')">⚡ Maximize</button>
       </div>
-      <div class="collapsible-body" id="secChaos">
+      <div class="collapsible-body collapsed" id="secChaos">
         <div class="canvas-box" style="height: 50px;">
           <canvas id="noiseModelCanvas" width="400" height="50"></canvas>
           <div class="hud-tag">Noise Attractor Active</div>
@@ -241,7 +250,7 @@
         <span onclick="toggleSection('secQuery')">4. Noise Grasp & Sub-Graph Studio ▾</span>
         <button class="pin-btn" id="pinBtn_cardQuery" onclick="toggleFluidMaximize('cardQuery')">⚡ Maximize</button>
       </div>
-      <div class="collapsible-body" id="secQuery">
+      <div class="collapsible-body collapsed" id="secQuery">
         <div class="suggestion-box" id="suggestionBox">
           💡 **AI Suggestion**: Grasp noise on live graph to pull history into this sub-graph studio.
         </div>
@@ -272,7 +281,7 @@
         <span onclick="toggleSection('secTools')">5. Upload, SharePoint & Downloads ▾</span>
         <button class="pin-btn" id="pinBtn_cardTools" onclick="toggleFluidMaximize('cardTools')">⚡ Maximize</button>
       </div>
-      <div class="collapsible-body" id="secTools">
+      <div class="collapsible-body collapsed" id="secTools">
         <div class="control-item">
           <div class="control-label"><span>SharePoint / DB Linker URL:</span></div>
           <input type="text" id="dataSourceUrlInput" placeholder="https://company.sharepoint.com/sites/analytics" value="https://company.sharepoint.com/sites/analytics">
@@ -312,6 +321,7 @@
   let timeOffset = 0;
   let forkedRoiData = [];
   let pinnedDashboardSummaries = [];
+  let savedCustomViews = [];
   let isExternalSourceLinked = false;
   let currentlyFluidMaxId = null;
 
@@ -330,20 +340,43 @@
     currentlyFluidMaxId = null;
     document.querySelectorAll('.panel-card').forEach(c => {
       c.classList.remove('fluid-maximized', 'dropped-tab');
-      c.querySelector('.collapsible-body').classList.remove('collapsed');
+      c.querySelector('.collapsible-body').classList.add('collapsed'); // Standard view minimises all sections
       const btn = c.querySelector('.pin-btn');
       if (btn) btn.innerText = "⚡ Maximize";
     });
   }
 
   function saveCurrentCustomView() {
-    const state = { maximized: currentlyFluidMaxId, threshold: currentThreshold, baseVal: financialConfig.baseValue };
-    try {
-      localStorage.setItem('QuantEngine_SavedView', JSON.stringify(state));
-      alert("Custom layout view saved successfully!");
-    } catch(e) {
-      alert("View state saved.");
+    const viewName = `View_${savedCustomViews.length + 1}`;
+    const state = { name: viewName, maximized: currentlyFluidMaxId, threshold: currentThreshold, baseVal: financialConfig.baseValue };
+    savedCustomViews.push(state);
+    renderSavedTabs();
+    alert(`Custom view "${viewName}" saved as a small tab!`);
+  }
+
+  function renderSavedTabs() {
+    const bar = document.getElementById('savedTabsBar');
+    // Keep the lead label
+    bar.innerHTML = `<span style="font-size: 0.44rem; color: var(--text-muted); font-family: var(--font-mono); align-self: center;">Saved Tabs:</span>`;
+    savedCustomViews.forEach((v, idx) => {
+      const chip = document.createElement('button');
+      chip.className = 'saved-tab-chip';
+      chip.innerText = v.name;
+      chip.onclick = () => loadSavedView(idx);
+      bar.appendChild(chip);
+    });
+  }
+
+  function loadSavedView(index) {
+    const v = savedCustomViews[index];
+    if (!v) return;
+    resetToStandardView();
+    if (v.maximized) {
+      toggleFluidMaximize(v.maximized);
     }
+    updateThreshold(v.threshold);
+    document.getElementById('thresholdSlider').value = v.threshold;
+    alert(`Loaded saved view: ${v.name}`);
   }
 
   function toggleFluidMaximize(cardId) {
@@ -605,3 +638,4 @@
 
 </body>
 </html>
+
