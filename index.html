@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v7.4.0 - Pinned Maximize & Bottom Tab Dock Edition</title>
+  <title>QuantEngine v7.5.0 - Smart Expanded Maximize & Office Export Edition</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -71,16 +71,17 @@
 
     .panel-card { background: rgba(3, 7, 15, 0.98); border-radius: 6px; border: 1px solid var(--border-color); padding: 0.4rem; display: flex; flex-direction: column; gap: 0.3rem; transition: all 0.3s ease; }
     
-    /* Pinned & Maximized State */
+    /* Pinned & Maximized State - Shows all data expanded fully */
     .panel-card.pinned-maximized {
       flex: 1;
-      min-height: 65vh;
+      min-height: 70vh;
       border-color: var(--neon-cyan);
       box-shadow: 0 0 25px rgba(0,243,255,0.3);
       order: -99;
     }
     .panel-card.pinned-maximized .collapsible-body {
-      max-height: 1000px !important;
+      max-height: 1200px !important;
+      display: flex !important;
     }
 
     /* Dropped to Bottom Tab Dock State */
@@ -108,7 +109,7 @@
     .hud-tag { position: absolute; top: 2px; left: 3px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 3px; border-radius: 2px; font-size: 0.44rem; color: var(--text-muted); font-family: var(--font-mono); z-index: 5; pointer-events: none; }
     .hud-tag span { color: var(--neon-cyan); font-weight: 600; }
 
-    .data-table-container { background: #010409; border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 3px; padding: 2px; max-height: 75px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.46rem; color: var(--accent-purple); }
+    .data-table-container { background: #010409; border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 3px; padding: 2px; max-height: 90px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.46rem; color: var(--accent-purple); }
     .data-table { width: 100%; border-collapse: collapse; text-align: left; }
     .data-table th, .data-table td { padding: 2px 3px; border-bottom: 1px solid rgba(192, 132, 252, 0.15); }
     .data-table th { color: var(--neon-cyan); font-weight: 600; }
@@ -138,8 +139,8 @@
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v7.4.0</span> Pinned Max</div>
-    <div class="compliance-badge">SECURED & PINNED</div>
+    <div class="brand-title">⚡ <span>QuantEngine v7.5.0</span> Smart Expanded Max</div>
+    <div class="compliance-badge">SECURED & EXPORTABLE</div>
   </div>
 
   <div class="mobile-stack" id="mobileStack">
@@ -148,12 +149,12 @@
     <div class="panel-card" id="cardWave">
       <div class="panel-title">
         <span onclick="toggleSection('secWave')">📈 Live Moving Data & Graphs ▾</span>
-        <button class="pin-btn" id="pinBtn_cardWave" onclick="togglePinMaximize('cardWave')">📌 Maximize & Pin</button>
+        <button class="pin-btn" id="pinBtn_cardWave" onclick="togglePinMaximize('cardWave')">📌 Maximize & Expand</button>
       </div>
       <div class="collapsible-body" id="secWave">
         <div class="canvas-box" style="height: 110px;">
           <canvas id="movingWaveCanvas" width="400" height="110"></canvas>
-          <div class="hud-tag">Live Stream | Drag to Fork History</div>
+          <div class="hud-tag">Live Stream | Drag to Fork & Pull History</div>
         </div>
         <div class="control-item">
           <div class="control-label">Anomaly Threshold: <span id="thresholdValText">75.0</span></div>
@@ -169,7 +170,7 @@
     <div class="panel-card" id="cardChaos">
       <div class="panel-title">
         <span onclick="toggleSection('secChaos')">🌀 Noise Graphs & Bifurcation ▾</span>
-        <button class="pin-btn" id="pinBtn_cardChaos" onclick="togglePinMaximize('cardChaos')">📌 Maximize & Pin</button>
+        <button class="pin-btn" id="pinBtn_cardChaos" onclick="togglePinMaximize('cardChaos')">📌 Maximize & Expand</button>
       </div>
       <div class="collapsible-body" id="secChaos">
         <div class="canvas-box" style="height: 50px;">
@@ -197,7 +198,7 @@
     <div class="panel-card" id="cardFin">
       <div class="panel-title">
         <span onclick="toggleSection('secFin')">💰 Maths, Calculations & Monthly X ▾</span>
-        <button class="pin-btn" id="pinBtn_cardFin" onclick="togglePinMaximize('cardFin')">📌 Maximize & Pin</button>
+        <button class="pin-btn" id="pinBtn_cardFin" onclick="togglePinMaximize('cardFin')">📌 Maximize & Expand</button>
       </div>
       <div class="collapsible-body" id="secFin">
         <div class="metrics-grid">
@@ -224,16 +225,20 @@
     <!-- 4. Querying History Through Noise, Suggestions & Auto-Parsing -->
     <div class="panel-card" id="cardQuery">
       <div class="panel-title">
-        <span onclick="toggleSection('secQuery')">🔍 Noise Query & Auto-Suggestions ▾</span>
-        <button class="pin-btn" id="pinBtn_cardQuery" onclick="togglePinMaximize('cardQuery')">📌 Maximize & Pin</button>
+        <span onclick="toggleSection('secQuery')">🔍 Noise Query & New Graph Sub-Studio ▾</span>
+        <button class="pin-btn" id="pinBtn_cardQuery" onclick="togglePinMaximize('cardQuery')">📌 Maximize & Expand</button>
       </div>
       <div class="collapsible-body" id="secQuery">
         <div class="suggestion-box" id="suggestionBox">
-          💡 **Suggestion**: High noise variance detected. Query history through noise filter or drop point into new graph.
+          💡 **AI Suggestion**: Drag across main graph to pull history through noise filter into the new graph & table below.
         </div>
-        <div class="canvas-box" style="height: 45px; border-color: rgba(192, 132, 252, 0.4);">
-          <canvas id="forkedGraphCanvas" width="400" height="45"></canvas>
-          <div class="hud-tag">Dropped / Forked History Graph</div>
+        <div class="canvas-box" style="height: 55px; border-color: rgba(192, 132, 252, 0.4);">
+          <canvas id="forkedGraphCanvas" width="400" height="55"></canvas>
+          <div class="hud-tag">Pulled History Sub-Graph</div>
+        </div>
+        <div class="btn-row" style="margin-top: 2px;">
+          <button onclick="pinToDashboardSummary()" class="action-btn" style="background: var(--accent-green); color: #020408;">📊 Export to Dashboard Summary</button>
+          <button onclick="exportForWordAndPPT()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📄 Export Word/PPT</button>
         </div>
         <div class="data-table-container">
           <table class="data-table" id="queryDataTable">
@@ -241,7 +246,7 @@
               <tr><th>ID</th><th>Date</th><th>Category</th><th>Value</th></tr>
             </thead>
             <tbody id="queryTableBody">
-              <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Drag main graph to query/drop history slice.</td></tr>
+              <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Drag main graph to pull history slice.</td></tr>
             </tbody>
           </table>
         </div>
@@ -252,7 +257,7 @@
     <div class="panel-card" id="cardTools">
       <div class="panel-title">
         <span onclick="toggleSection('secTools')">📁 Upload, SharePoint & Exports ▾</span>
-        <button class="pin-btn" id="pinBtn_cardTools" onclick="togglePinMaximize('cardTools')">📌 Maximize & Pin</button>
+        <button class="pin-btn" id="pinBtn_cardTools" onclick="togglePinMaximize('cardTools')">📌 Maximize & Expand</button>
       </div>
       <div class="collapsible-body" id="secTools">
         <div class="control-item">
@@ -265,7 +270,7 @@
           <input type="file" id="fileUploadInput" style="display:none" accept=".csv,.json" onchange="handleFileUpload(event)">
         </div>
         <div class="btn-row" style="margin-top: 3px;">
-          <button onclick="triggerExport()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📥 Download Export</button>
+          <button onclick="triggerExport()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📥 Download Raw Export</button>
         </div>
       </div>
     </div>
@@ -293,6 +298,7 @@
   let fullMasterHistory = [];
   let timeOffset = 0;
   let forkedRoiData = [];
+  let pinnedDashboardSummaries = [];
   let isExternalSourceLinked = false;
   let currentlyPinnedId = null;
 
@@ -314,31 +320,32 @@
     if (currentlyPinnedId === cardId) {
       // Unpin and return everything to standard tab layout
       card.classList.remove('pinned-maximized');
-      pinBtn.innerText = "📌 Maximize & Pin";
+      pinBtn.innerText = "📌 Maximize & Expand";
       
       document.querySelectorAll('.panel-card').forEach(c => {
         c.classList.remove('dropped-tab');
+        c.querySelector('.collapsible-body').classList.remove('collapsed');
       });
       currentlyPinnedId = null;
     } else {
-      // If another card was pinned, clear it first
       if (currentlyPinnedId) {
         const prevCard = document.getElementById(currentlyPinnedId);
         prevCard.classList.remove('pinned-maximized');
-        document.getElementById(`pinBtn_${currentlyPinnedId}`).innerText = "📌 Maximize & Pin";
+        document.getElementById(`pinBtn_${currentlyPinnedId}`).innerText = "📌 Maximize & Expand";
       }
 
-      // Pin and maximize this card, drop all others to bottom as tabs
       currentlyPinnedId = cardId;
       card.classList.add('pinned-maximized');
       card.classList.remove('dropped-tab');
+      card.querySelector('.collapsible-body').classList.remove('collapsed');
       pinBtn.innerText = "↩ Minimize / Unpin";
 
       document.querySelectorAll('.panel-card').forEach(c => {
         if (c.id !== cardId) {
           c.classList.add('dropped-tab');
           c.classList.remove('pinned-maximized');
-          document.getElementById(`pinBtn_${c.id}`).innerText = "📌 Maximize & Pin";
+          document.getElementById(`pinBtn_${c.id}`).innerText = "📌 Maximize & Expand";
+          c.querySelector('.collapsible-body').classList.add('collapsed');
         }
       });
     }
@@ -360,7 +367,6 @@
 
   function toggleLiveStream() {
     isRunning = !isRunning;
-    document.getElementById('liveStatusLabel').innerText = isRunning ? "Streaming" : "Paused";
     document.getElementById('streamToggleBtn').innerText = isRunning ? "Pause Live Stream" : "Resume Live Stream";
   }
 
@@ -383,6 +389,32 @@
     dlAnchorElem.setAttribute("href", dataStr);
     dlAnchorElem.setAttribute("download", `QuantEngine_Export_${Date.now()}.json`);
     dlAnchorElem.click();
+  }
+
+  function pinToDashboardSummary() {
+    if (forkedRoiData.length === 0) { alert("Please drag across the main graph first to pull history into the new graph."); return; }
+    pinnedDashboardSummaries.push({ points: forkedRoiData.length, time: new Date().toLocaleTimeString() });
+    alert(`Successfully exported ${forkedRoiData.length} points into Dashboard Summary!`);
+  }
+
+  function exportForWordAndPPT() {
+    if (forkedRoiData.length === 0 && pinnedDashboardSummaries.length === 0) { 
+      alert("Please pull a history slice into the new graph before exporting to Word or PowerPoint."); 
+      return; 
+    }
+    let htmlContent = `<html><head><title>QuantEngine Executive Report</title><style>body{font-family:sans-serif;padding:20px;}table{width:100%;border-collapse:collapse;margin-top:10px;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#00f3ff;color:#000;}</style></head><body>`;
+    htmlContent += `<h1>QuantEngine Executive Summary Report</h1><p>Generated: ${new Date().toLocaleString()}</p><hr>`;
+    htmlContent += `<h3>Pulled History Sub-Studio Data Table</h3>`;
+    htmlContent += document.getElementById('queryDataTable').outerHTML;
+    htmlContent += `</body></html>`;
+
+    const blob = new Blob([htmlContent], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `QuantEngine_ExecutiveReport_${Date.now()}.doc`;
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
   const noiseCanvas = document.getElementById('noiseModelCanvas');
@@ -447,7 +479,7 @@
 
     renderForkedGraph();
     populateQueryTable(startIdx);
-    document.getElementById('suggestionBox').innerHTML = `💡 **AI Suggestion**: Dropped ${forkedRoiData.length} filtered history points into sub-graph.`;
+    document.getElementById('suggestionBox').innerHTML = `💡 **AI Suggestion**: Pulled ${forkedRoiData.length} history points into new sub-graph. Ready for Dashboard Summary or Word/PPT export.`;
   }
 
   function renderForkedGraph() {
