@@ -1,16 +1,14 @@
-Here is QuantEngine v6.4.3, fully upgraded to meet your exact specifications:
- * Active Real-Time Motion: Both the left-panel canvas (Bifurcation / Noise Tree) and the central canvas (Spike Matrix + Predictive Forecast Curve) are fully animated in real-time.
- * Graph Section "Grab & Fork" (Interactive ROI Selection): You can now click and drag your mouse across any section of the central spike/forecast graph to "grab" a specific data window. Releasing the mouse instantly forks that selected region into a dedicated secondary sub-graph/matrix view for isolated anomaly analysis.
- * Historical Rollback & Scrubbing: Added a time-scrubber history buffer allowing you to inspect past telemetry states and historical anomalies dynamically.
-QuantEngine v6.4.3 Codebase
+Here is QuantEngine v6.4.4, fully upgraded to support Touch and Mobile Drag-to-Fork Gestures alongside desktop mouse interactions.
+Now, whether you are on a desktop using a mouse or on a mobile/tablet screen using your finger, you can touch, drag, and "grab" any section of the central spike matrix to instantly fork that telemetry window into the sub-graph view.
+QuantEngine v6.4.4 Codebase
 Save this updated single-file code directly into your .html file:
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v6.4.3 - Interactive Grab, Fork & History Matrix</title>
+  <title>QuantEngine v6.4.4 - Mobile Touch Grab, Fork & History Matrix</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -28,14 +26,14 @@ Save this updated single-file code directly into your .html file:
       --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-ui); }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-ui); touch-action: manipulation; }
 
     body {
       background-color: var(--bg-deep);
       color: var(--text-main);
-      height: 100vh;
+      min-height: 100vh;
       width: 100vw;
-      overflow: hidden;
+      overflow-x: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -52,7 +50,7 @@ Save this updated single-file code directly into your .html file:
       padding: 0.8rem;
       max-width: 1850px;
       width: 98vw;
-      height: 98vh;
+      min-height: 96vh;
       box-shadow: 0 0 50px rgba(0, 243, 255, 0.15), 0 45px 110px rgba(0, 0, 0, 0.99);
       backdrop-filter: blur(25px);
       display: flex;
@@ -67,64 +65,65 @@ Save this updated single-file code directly into your .html file:
       padding-bottom: 0.5rem;
       margin-bottom: 0.5rem;
       border-bottom: 1px solid var(--border-color);
+      flex-wrap: wrap;
+      gap: 5px;
     }
-    .brand-title { display: flex; align-items: center; gap: 8px; font-size: 1.15rem; font-weight: 700; color: #fff; }
+    .brand-title { display: flex; align-items: center; gap: 8px; font-size: 1rem; font-weight: 700; color: #fff; }
     .brand-title span { color: var(--neon-cyan); font-weight: 800; text-shadow: 0 0 8px var(--cyan-glow); }
-    .status-badges { display: flex; gap: 8px; align-items: center; }
-    .security-badge { font-size: 0.62rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 3px 8px; border-radius: 10px; border: 1px solid rgba(192, 132, 252, 0.4); font-weight: 600; font-family: var(--font-mono); }
-    .compliance-badge { font-size: 0.62rem; background: rgba(0, 243, 255, 0.12); color: var(--neon-cyan); padding: 3px 8px; border-radius: 8px; border: 1px solid rgba(0, 243, 255, 0.4); font-family: var(--font-mono); font-weight: 700; }
-    .node-badge { font-size: 0.62rem; background: rgba(30, 42, 64, 0.8); color: var(--accent-green); padding: 3px 8px; border-radius: 8px; border: 1px solid var(--border-color); font-family: var(--font-mono); }
+    .status-badges { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .security-badge { font-size: 0.58rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 3px 6px; border-radius: 10px; border: 1px solid rgba(192, 132, 252, 0.4); font-weight: 600; font-family: var(--font-mono); }
+    .compliance-badge { font-size: 0.58rem; background: rgba(0, 243, 255, 0.12); color: var(--neon-cyan); padding: 3px 6px; border-radius: 8px; border: 1px solid rgba(0, 243, 255, 0.4); font-family: var(--font-mono); font-weight: 700; }
+    .node-badge { font-size: 0.58rem; background: rgba(30, 42, 64, 0.8); color: var(--accent-green); padding: 3px 6px; border-radius: 8px; border: 1px solid var(--border-color); font-family: var(--font-mono); }
 
     .platform-grid {
       display: grid;
       grid-template-columns: 1fr 1.6fr 1fr;
       gap: 0.6rem;
       flex: 1;
-      overflow: hidden;
     }
 
-    .column { display: flex; flex-direction: column; gap: 0.6rem; overflow-y: auto; padding-right: 2px; }
+    .column { display: flex; flex-direction: column; gap: 0.6rem; }
     
     .panel-card { background: rgba(3, 7, 15, 0.98); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; box-shadow: 0 8px 25px rgba(0,0,0,0.7); }
     .panel-title { font-size: 0.68rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; text-transform: uppercase; }
 
     .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
     .metric-box { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 6px; border-radius: 5px; display: flex; flex-direction: column; gap: 2px; text-align: center; }
-    .metric-label { font-size: 0.55rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-mono); }
-    .metric-value { font-size: 0.75rem; color: var(--accent-green); font-weight: 700; font-family: var(--font-mono); }
+    .metric-label { font-size: 0.52rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-mono); }
+    .metric-value { font-size: 0.72rem; color: var(--accent-green); font-weight: 700; font-family: var(--font-mono); }
 
     .canvas-box { position: relative; width: 100%; background: #000; border-radius: 5px; border: 1px solid rgba(0, 243, 255, 0.35); overflow: hidden; }
-    canvas { display: block; width: 100%; height: 100%; cursor: crosshair; }
-    .hud-tag { position: absolute; top: 3px; left: 5px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 5px; border-radius: 3px; font-size: 0.55rem; color: var(--text-muted); font-family: var(--font-mono); z-index: 5; }
+    canvas { display: block; width: 100%; height: 100%; cursor: crosshair; touch-action: none; }
+    .hud-tag { position: absolute; top: 3px; left: 5px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 5px; border-radius: 3px; font-size: 0.52rem; color: var(--text-muted); font-family: var(--font-mono); z-index: 5; pointer-events: none; }
     .hud-tag span { color: var(--neon-cyan); font-weight: 600; }
 
     .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
     .control-item { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 4px 6px; border-radius: 4px; display: flex; flex-direction: column; gap: 3px; }
-    .control-label { font-size: 0.6rem; color: var(--text-muted); display: flex; justify-content: space-between; font-weight: 500; }
+    .control-label { font-size: 0.58rem; color: var(--text-muted); display: flex; justify-content: space-between; font-weight: 500; }
     .control-label span { color: var(--text-main); font-weight: 600; font-family: var(--font-mono); }
     input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1e2a40; color: #fff; border: 1px solid var(--border-color); height: 4px; border-radius: 2px; outline: none; }
-    select { height: 24px; font-size: 0.65rem; padding: 0 4px; font-family: var(--font-mono); }
+    select { height: 24px; font-size: 0.62rem; padding: 0 4px; font-family: var(--font-mono); }
 
-    .data-dump { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.6rem; color: var(--accent-green); height: 90px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.25; }
-    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.62rem; color: var(--accent-green); height: 95px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.3; }
+    .data-dump { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.58rem; color: var(--accent-green); height: 85px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.25; }
+    .math-screen { background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.6rem; color: var(--accent-green); height: 90px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.3; }
 
     .btn-row { display: flex; gap: 5px; }
-    .action-btn { width: 100%; padding: 0.4rem; font-weight: 600; font-size: 0.68rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; text-align: center; box-shadow: 0 0 8px rgba(0,243,255,0.2); }
+    .action-btn { width: 100%; padding: 0.4rem; font-weight: 600; font-size: 0.65rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; text-align: center; box-shadow: 0 0 8px rgba(0,243,255,0.2); }
     .action-btn:hover { box-shadow: 0 0 15px var(--cyan-glow); background: #3dd9e8; }
     .btn-secondary { background: #1e2a40; color: var(--text-main); border: 1px solid var(--border-color); font-weight: 500; }
     .btn-secondary:hover { background: #2c3e5a; }
     .btn-live-toggle { background: var(--warning-amber); color: #020408; }
     .btn-live-toggle.active { background: var(--accent-green); box-shadow: 0 0 12px rgba(126, 231, 135, 0.5); }
 
-    .calc-row { display: flex; justify-content: space-between; font-size: 0.68rem; padding: 5px 8px; background: rgba(10, 14, 22, 0.9); border-radius: 4px; border: 1px solid var(--border-color); color: var(--text-muted); }
+    .calc-row { display: flex; justify-content: space-between; font-size: 0.65rem; padding: 5px 8px; background: rgba(10, 14, 22, 0.9); border-radius: 4px; border: 1px solid var(--border-color); color: var(--text-muted); }
     .calc-row strong { color: var(--neon-cyan); font-family: var(--font-mono); }
 
-    .live-status-pill { font-size: 0.58rem; font-family: var(--font-mono); padding: 2px 6px; border-radius: 4px; background: rgba(240, 136, 62, 0.2); color: var(--warning-amber); border: 1px solid rgba(240, 136, 62, 0.4); }
+    .live-status-pill { font-size: 0.55rem; font-family: var(--font-mono); padding: 2px 6px; border-radius: 4px; background: rgba(240, 136, 62, 0.2); color: var(--warning-amber); border: 1px solid rgba(240, 136, 62, 0.4); }
     .live-status-pill.streaming { background: rgba(126, 231, 135, 0.2); color: var(--accent-green); border-color: rgba(126, 231, 135, 0.4); }
 
     @media (max-width: 1024px) {
       body { overflow-y: auto; height: auto; }
-      .platform-container { height: auto; max-width: 100vw; }
+      .platform-container { height: auto; width: 100vw; border-radius: 0; padding: 0.5rem; }
       .platform-grid { grid-template-columns: 1fr; overflow-y: visible; }
     }
   </style>
@@ -133,11 +132,10 @@ Save this updated single-file code directly into your .html file:
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v6.4.3</span> Interactive Fork & History Matrix</div>
+    <div class="brand-title">⚡ <span>QuantEngine v6.4.4</span> Mobile Touch Fork Matrix</div>
     <div class="status-badges">
-      <div class="compliance-badge">ROI FORK & HISTORY ACTIVE</div>
-      <div class="security-badge">LIVE DUAL-CANVAS</div>
-      <div class="node-badge" id="authModeBadge">60 FPS REAL-TIME</div>
+      <div class="compliance-badge">TOUCH ROI FORK ACTIVE</div>
+      <div class="security-badge">MOBILE 60 FPS</div>
     </div>
   </div>
 
@@ -147,7 +145,7 @@ Save this updated single-file code directly into your .html file:
       <div class="panel-card">
         <div class="panel-title">
           <span>Financial Period Summaries</span>
-          <span style="color:var(--accent-green); font-size:0.6rem; font-family:var(--font-mono);">Live Aggregation</span>
+          <span style="color:var(--accent-green); font-size:0.58rem; font-family:var(--font-mono);">Live</span>
         </div>
         <div class="metrics-grid">
           <div class="metric-box">
@@ -165,27 +163,27 @@ Save this updated single-file code directly into your .html file:
         </div>
       </div>
 
-      <!-- Left Panel: Animated Bifurcation / Noise Tree -->
+      <!-- Left Panel: Noise / Bifurcation Tree -->
       <div class="panel-card">
         <div class="panel-title">
-          <span>Animated Bifurcation & Noise Tree</span>
-          <span style="color:var(--accent-purple); font-size:0.6rem; font-family:var(--font-mono);">Dynamic Chaos</span>
+          <span>Bifurcation & Noise Tree</span>
+          <span style="color:var(--accent-purple); font-size:0.58rem; font-family:var(--font-mono);">Chaos</span>
         </div>
-        <div class="canvas-box" style="height: 100px;">
-          <canvas id="noiseModelCanvas" width="400" height="100"></canvas>
-          <div class="hud-tag">Chaos Attractor: <span id="noiseStateLabel">ACTIVE</span></div>
+        <div class="canvas-box" style="height: 95px;">
+          <canvas id="noiseModelCanvas" width="400" height="95"></canvas>
+          <div class="hud-tag">Attractor: <span id="noiseStateLabel">ACTIVE</span></div>
         </div>
         <div class="controls-grid">
           <div class="control-item">
-            <div class="control-label">Chaos Param (r): <span id="atomScaleVal">3.88</span></div>
+            <div class="control-label">Chaos (r): <span id="atomScaleVal">3.88</span></div>
             <input type="range" id="atomScaleSlider" min="2.0" max="4.0" step="0.01" value="3.88" oninput="playClickSound(); updateAtomSimulation()">
           </div>
           <div class="control-item">
             <div class="control-label">Mapping Mode:</div>
             <select id="orbitalModeSelect" onchange="playClickSound(); updateAtomSimulation()">
-              <option value="0">Animated Phase Attractor</option>
-              <option value="1" selected>Dynamic Bifurcation Tree</option>
-              <option value="2">Weyl Non-Linear Wave Field</option>
+              <option value="0">Phase Attractor</option>
+              <option value="1" selected>Bifurcation Tree</option>
+              <option value="2">Weyl Wave Field</option>
             </select>
           </div>
         </div>
@@ -195,43 +193,43 @@ Save this updated single-file code directly into your .html file:
       <div class="panel-card">
         <div class="panel-title">
           <span>Historical Rollback & Scrubbing</span>
-          <span style="color:var(--warning-amber); font-size:0.6rem; font-family:var(--font-mono);">Time Inspector</span>
+          <span style="color:var(--warning-amber); font-size:0.58rem; font-family:var(--font-mono);">Scrubber</span>
         </div>
         <div class="control-item">
           <div class="control-label">History Frame: <span id="historyVal">Live Now</span></div>
           <input type="range" id="historySlider" min="0" max="100" value="100" oninput="playClickSound(); scrubHistoryTimeline(this.value)">
         </div>
         <div class="btn-row" style="margin-top: 4px;">
-          <button onclick="playClickSound(); resetToLiveTime()" class="action-btn btn-secondary" style="font-size: 0.6rem; padding: 0.3rem;">Return to Live Stream</button>
+          <button onclick="playClickSound(); resetToLiveTime()" class="action-btn btn-secondary" style="font-size: 0.58rem; padding: 0.25rem;">Return to Live Stream</button>
         </div>
       </div>
     </div>
 
-    <!-- Central Panel: Spike Matrix + Grab & Fork Graph -->
+    <!-- Central Panel: Spike Matrix + Touch Grab & Fork Graph -->
     <div class="column">
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">
-          <span>Spike Matrix & Grab-to-Fork Sub-Graph</span>
+          <span>Spike Matrix & Touch-to-Fork Sub-Graph</span>
           <span style="display:flex; gap:6px; align-items:center;">
             <span id="liveFeedStatusPill" class="live-status-pill">STANDBY</span>
-            <span style="color:var(--neon-cyan); font-size:0.6rem; font-family:var(--font-mono);">Drag to Fork ROI</span>
+            <span style="color:var(--neon-cyan); font-size:0.58rem; font-family:var(--font-mono);">Touch/Drag ROI</span>
           </span>
         </div>
         
-        <!-- Primary Main Canvas (Draggable for ROI Fork) -->
-        <div class="canvas-box" style="height: 180px; border-color: rgba(0, 243, 255, 0.45);">
-          <canvas id="spikeMatrixCanvas" width="700" height="180"></canvas>
-          <div class="hud-tag">Main Matrix: <span id="spikeModeDisplay">LIVE SPIKES + FORECAST</span> | Breaches: <span id="breachCount">0</span></div>
+        <!-- Main Canvas supporting Mouse + Touch Events -->
+        <div class="canvas-box" style="height: 170px; border-color: rgba(0, 243, 255, 0.45);">
+          <canvas id="spikeMatrixCanvas" width="700" height="170"></canvas>
+          <div class="hud-tag">Matrix: <span id="spikeModeDisplay">LIVE SPIKES</span> | Breaches: <span id="breachCount">0</span></div>
         </div>
 
-        <!-- Forked Sub-Graph View (Created by dragging mouse on main canvas) -->
+        <!-- Forked Sub-Graph View -->
         <div class="panel-card" style="background: rgba(1, 4, 10, 0.98); border-color: rgba(192, 132, 252, 0.4); padding: 5px;">
-          <div class="panel-title" style="color: var(--accent-purple); font-size: 0.62rem; margin-bottom: 3px;">
+          <div class="panel-title" style="color: var(--accent-purple); font-size: 0.6rem; margin-bottom: 3px;">
             <span>Forked Sub-Graph (Isolated ROI Window)</span>
-            <span id="forkStatsLabel" style="font-size:0.55rem; color:var(--text-muted);">No ROI selected. Drag mouse on top graph.</span>
+            <span id="forkStatsLabel" style="font-size:0.52rem; color:var(--text-muted);">Touch & drag on main graph to fork.</span>
           </div>
-          <div class="canvas-box" style="height: 85px; border-color: rgba(192, 132, 252, 0.3);">
-            <canvas id="forkedGraphCanvas" width="700" height="85"></canvas>
+          <div class="canvas-box" style="height: 80px; border-color: rgba(192, 132, 252, 0.3);">
+            <canvas id="forkedGraphCanvas" width="700" height="80"></canvas>
             <div class="hud-tag">Sub-Graph ROI</div>
           </div>
         </div>
@@ -247,7 +245,7 @@ Save this updated single-file code directly into your .html file:
               <option value="sine">Linear Trend + Forecast Projection</option>
               <option value="manual_api">Stochastic Attractor Feed</option>
             </select>
-            <button id="toggleLiveFeedBtn" onclick="playClickSound(); toggleLiveStreamFeed()" class="action-btn btn-live-toggle" style="width: 120px;">Start Feed</button>
+            <button id="toggleLiveFeedBtn" onclick="playClickSound(); toggleLiveStreamFeed()" class="action-btn btn-live-toggle" style="width: 110px;">Start Feed</button>
           </div>
         </div>
       </div>
@@ -257,19 +255,19 @@ Save this updated single-file code directly into your .html file:
       <div class="panel-card">
         <div class="panel-title">
           <span>Secure Vault & IndexedDB Sync</span>
-          <span style="color:var(--accent-purple); font-size:0.6rem; font-family:var(--font-mono);">Encrypted Container</span>
+          <span style="color:var(--accent-purple); font-size:0.58rem; font-family:var(--font-mono);">AES-256</span>
         </div>
         <div class="control-item" style="margin-bottom: 4px;">
           <div class="control-label"><span>Vault Passphrase</span></div>
-          <input type="password" id="exportPassInput" class="unlock-input" style="width: 100%; font-size: 0.75rem; padding: 0.35rem;" placeholder="Enter Passphrase...">
+          <input type="password" id="exportPassInput" class="unlock-input" style="width: 100%; font-size: 0.72rem; padding: 0.3rem;" placeholder="Enter Passphrase...">
         </div>
         <div class="btn-row">
-          <button onclick="playClickSound(); exportEncryptedDataDump()" class="action-btn">Export Secure Vault</button>
-          <button onclick="playClickSound(); document.getElementById('importEncFile').click()" class="action-btn btn-secondary">Import Secure Vault</button>
+          <button onclick="playClickSound(); exportEncryptedDataDump()" class="action-btn">Export Vault</button>
+          <button onclick="playClickSound(); document.getElementById('importEncFile').click()" class="action-btn btn-secondary">Import Vault</button>
           <input type="file" id="importEncFile" style="display:none" accept=".enc,.json,.dat" onchange="importEncryptedDataDump(event)">
         </div>
         <div class="btn-row" style="margin-top: 5px;">
-          <button onclick="playClickSound(); persistToIndexedDB()" class="action-btn btn-secondary">Save to IndexedDB</button>
+          <button onclick="playClickSound(); persistToIndexedDB()" class="action-btn btn-secondary">Save IndexedDB</button>
           <button onclick="playClickSound(); restoreFromIndexedDB()" class="action-btn btn-secondary">Load IndexedDB</button>
         </div>
       </div>
@@ -277,14 +275,14 @@ Save this updated single-file code directly into your .html file:
       <div class="panel-card">
         <div class="panel-title">Audit Trail & Data Stream</div>
         <div class="data-dump" id="dataDumpTerminal">
-          [AUDIT] N=64 Interactive Fork Matrix initialized.<br>
+          [AUDIT] N=64 Touch Fork Matrix initialized.<br>
         </div>
       </div>
 
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">Ring Buffer Terminal Logs</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] QuantEngine v6.4.3 Active. ROI grab & history scrubbing online...<br>
+          [INIT] QuantEngine v6.4.4 Active. Touch gestures online...<br>
         </div>
       </div>
     </div>
@@ -297,9 +295,9 @@ Save this updated single-file code directly into your .html file:
   let isRunning = true;
   let currentThreshold = 75.0;
   let currentBaseline = 40.0;
-  let telemetryHistory = new Array(80).fill(50);
-  let predictedForecastBuffer = new Array(40).fill(50);
-  let fullMasterHistory = []; // Archives all historical records for scrubbing
+  let telemetryHistory = new Array(70).fill(50);
+  let predictedForecastBuffer = new Array(30).fill(50);
+  let fullMasterHistory = [];
   let forkedRoiData = [];
   let rawDataDumpBuffer = [];
   let isLiveStreamingActive = false;
@@ -307,8 +305,8 @@ Save this updated single-file code directly into your .html file:
   let logisticX = 0.4;
   let isHistoryScrubbingActive = false;
 
-  // Mouse interaction state for graph "Grab & Fork"
-  let isMouseDown = false;
+  // Touch and Mouse Interaction State for Grab & Fork
+  let isInteracting = false;
   let dragStartX = 0;
   let dragEndX = 0;
 
@@ -392,7 +390,7 @@ Save this updated single-file code directly into your .html file:
     if(scaleValEl && scaleSliderEl) scaleValEl.innerText = parseFloat(scaleSliderEl.value).toFixed(2);
   }
 
-  // Animated Left-Panel Chaos / Noise Tree Renderer
+  // Left Panel Chaos Renderer
   const noiseCanvas = document.getElementById('noiseModelCanvas');
   const noiseCtx = noiseCanvas.getContext('2d');
 
@@ -407,7 +405,6 @@ Save this updated single-file code directly into your .html file:
     const t = globalTick * 0.08;
 
     if (mode === 0) {
-      // Animated Phase Attractor
       noiseCtx.lineWidth = 1.2;
       noiseCtx.strokeStyle = '#00f3ff';
       noiseCtx.beginPath();
@@ -421,7 +418,6 @@ Save this updated single-file code directly into your .html file:
       }
       noiseCtx.stroke();
     } else if (mode === 1) {
-      // Dynamic Bifurcation Tree with slight phase pulse
       noiseCtx.fillStyle = 'rgba(126, 231, 135, 0.8)';
       for (let px = 0; px < width; px += 1) {
         let r = 2.8 + (px / width) * 1.2 + Math.sin(t * 0.1) * 0.01;
@@ -434,7 +430,6 @@ Save this updated single-file code directly into your .html file:
         }
       }
     } else {
-      // Weyl Wave Field
       noiseCtx.lineWidth = 1.2;
       noiseCtx.strokeStyle = '#c084fc';
       noiseCtx.beginPath();
@@ -448,34 +443,48 @@ Save this updated single-file code directly into your .html file:
     }
   }
 
-  // Central Canvas: Historical Spikes + Forecast + ROI Fork Selection
+  // Central Canvas + Mobile Touch & Mouse ROI Grab Event Handlers
   const spikeCanvas = document.getElementById('spikeMatrixCanvas');
   const spikeCtx = spikeCanvas.getContext('2d');
   const forkedCanvas = document.getElementById('forkedGraphCanvas');
   const forkedCtx = forkedCanvas.getContext('2d');
 
-  // Mouse Event Listeners for Grab & Fork on Main Canvas
-  spikeCanvas.addEventListener('mousedown', (e) => {
-    isMouseDown = true;
-    const rect = spikeCanvas.getBoundingClientRect();
-    dragStartX = e.clientX - rect.left;
-  });
+  function getClientX(e) {
+    if (e.touches && e.touches.length > 0) return e.touches[0].clientX;
+    if (e.changedTouches && e.changedTouches.length > 0) return e.changedTouches[0].clientX;
+    return e.clientX;
+  }
 
-  spikeCanvas.addEventListener('mousemove', (e) => {
-    if (!isMouseDown) return;
+  function handleInteractionStart(e) {
+    isInteracting = true;
     const rect = spikeCanvas.getBoundingClientRect();
-    dragEndX = e.clientX - rect.left;
-  });
+    dragStartX = getClientX(e) - rect.left;
+    dragEndX = dragStartX;
+  }
 
-  spikeCanvas.addEventListener('mouseup', (e) => {
-    if (!isMouseDown) return;
-    isMouseDown = false;
+  function handleInteractionMove(e) {
+    if (!isInteracting) return;
     const rect = spikeCanvas.getBoundingClientRect();
-    dragEndX = e.clientX - rect.left;
+    dragEndX = getClientX(e) - rect.left;
+  }
 
-    // Fork the selected ROI data window into the sub-graph
+  function handleInteractionEnd(e) {
+    if (!isInteracting) return;
+    isInteracting = false;
+    const rect = spikeCanvas.getBoundingClientRect();
+    dragEndX = getClientX(e) - rect.left;
     forkSelectedRoi(Math.min(dragStartX, dragEndX), Math.max(dragStartX, dragEndX), spikeCanvas.width);
-  });
+  }
+
+  // Mouse bindings
+  spikeCanvas.addEventListener('mousedown', handleInteractionStart);
+  spikeCanvas.addEventListener('mousemove', handleInteractionMove);
+  spikeCanvas.addEventListener('mouseup', handleInteractionEnd);
+
+  // Mobile Touch bindings (passive: false to prevent page scrolling while dragging graph)
+  spikeCanvas.addEventListener('touchstart', (e) => { handleInteractionStart(e); }, { passive: false });
+  spikeCanvas.addEventListener('touchmove', (e) => { handleInteractionMove(e); }, { passive: false });
+  spikeCanvas.addEventListener('touchend', (e) => { handleInteractionEnd(e); }, { passive: false });
 
   function forkSelectedRoi(startX, endX, totalWidth) {
     const totalPoints = telemetryHistory.length + predictedForecastBuffer.length;
@@ -489,7 +498,7 @@ Save this updated single-file code directly into your .html file:
 
     if (forkedRoiData.length > 2) {
       document.getElementById('forkStatsLabel').innerText = `ROI Forked: ${forkedRoiData.length} nodes | Min: ${Math.min(...forkedRoiData).toFixed(1)} | Max: ${Math.max(...forkedRoiData).toFixed(1)}`;
-      logPlatform(`[FORK] Created sub-graph ROI containing ${forkedRoiData.length} telemetry points.`);
+      logPlatform(`[FORK] Created sub-graph ROI with ${forkedRoiData.length} telemetry points.`);
       renderForkedGraph();
     } else {
       document.getElementById('forkStatsLabel').innerText = `Selection too small. Drag a wider window.`;
@@ -524,7 +533,6 @@ Save this updated single-file code directly into your .html file:
     spikeCtx.fillStyle = 'rgba(2, 4, 10, 0.9)';
     spikeCtx.fillRect(0, 0, width, height);
 
-    // Background grid
     spikeCtx.strokeStyle = 'rgba(0, 243, 255, 0.05)';
     for(let x = 0; x < width; x += 35) { 
       spikeCtx.beginPath(); spikeCtx.moveTo(x, 0); spikeCtx.lineTo(x, height); spikeCtx.stroke(); 
@@ -544,15 +552,14 @@ Save this updated single-file code directly into your .html file:
       if(readoutEl) readoutEl.innerText = `Val: ${nextVal.toFixed(2)}`;
 
       telemetryHistory.push(nextVal);
-      if (telemetryHistory.length > 50) telemetryHistory.shift();
+      if (telemetryHistory.length > 45) telemetryHistory.shift();
 
       fullMasterHistory.push(nextVal);
       if (fullMasterHistory.length > 500) fullMasterHistory.shift();
 
-      // Forecast buffer
       let tempX = logisticX;
       predictedForecastBuffer = [];
-      for (let i = 0; i < 30; i++) {
+      for (let i = 0; i < 25; i++) {
         tempX = rParam * tempX * (1.0 - tempX);
         let futureVal = 50 + (tempX - 0.5) * 40;
         predictedForecastBuffer.push(Math.max(5, Math.min(95, futureVal)));
@@ -561,7 +568,6 @@ Save this updated single-file code directly into your .html file:
       updateFinancialMetrics(nextVal);
     }
 
-    // Draw Spikes
     const totalPoints = telemetryHistory.length + predictedForecastBuffer.length;
     const stepX = width / totalPoints;
 
@@ -585,7 +591,6 @@ Save this updated single-file code directly into your .html file:
       spikeCtx.shadowBlur = 0;
     });
 
-    // Draw Forecast Curve
     spikeCtx.strokeStyle = '#c084fc';
     spikeCtx.lineWidth = 2;
     spikeCtx.beginPath();
@@ -597,8 +602,7 @@ Save this updated single-file code directly into your .html file:
     });
     spikeCtx.stroke();
 
-    // If user is dragging mouse for ROI fork, draw selection box
-    if (isMouseDown) {
+    if (isInteracting) {
       spikeCtx.fillStyle = 'rgba(0, 243, 255, 0.15)';
       spikeCtx.strokeStyle = '#00f3ff';
       spikeCtx.lineWidth = 1;
@@ -608,7 +612,6 @@ Save this updated single-file code directly into your .html file:
       spikeCtx.strokeRect(minX, 0, boxW, height);
     }
 
-    // Threshold Line
     const thresholdY = height - (currentThreshold / 100) * height;
     spikeCtx.strokeStyle = '#f0883e';
     spikeCtx.lineWidth = 1.5;
@@ -623,7 +626,7 @@ Save this updated single-file code directly into your .html file:
     isHistoryScrubbingActive = true;
     if (fullMasterHistory.length < 10) return;
     const targetIdx = Math.floor((val / 100) * (fullMasterHistory.length - 10));
-    telemetryHistory = fullMasterHistory.slice(targetIdx, targetIdx + 50);
+    telemetryHistory = fullMasterHistory.slice(targetIdx, targetIdx + 45);
     document.getElementById('historyVal').innerText = `Frame: ${targetIdx}`;
   }
 
@@ -650,7 +653,7 @@ Save this updated single-file code directly into your .html file:
     const passphrase = passphraseInput ? passphraseInput.value.trim() : "";
     if (!passphrase) { alert("Please enter a secure passphrase for AES-GCM encryption."); return; }
 
-    logPlatform("[VAULT] Exporting interactive fork container...");
+    logPlatform("[VAULT] Exporting touch-fork container...");
     try {
       const enc = new TextEncoder();
       const salt = window.crypto.getRandomValues(new Uint8Array(16));
@@ -665,7 +668,7 @@ Save this updated single-file code directly into your .html file:
       );
 
       const packageData = {
-        version: "6.4.3-FORK-VAULT",
+        version: "6.4.4-MOBILE-VAULT",
         timestamp: new Date().toISOString(),
         history: fullMasterHistory,
         forkedRoi: forkedRoiData,
@@ -685,7 +688,7 @@ Save this updated single-file code directly into your .html file:
 
       const blob = new Blob([JSON.stringify(container, null, 2)], { type: "application/octet-stream" });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = `QuantEngine_Fork_Vault_${Date.now()}.enc`; a.click();
+      const a = document.createElement('a'); a.href = url; a.download = `QuantEngine_MobileVault_${Date.now()}.enc`; a.click();
       URL.revokeObjectURL(url);
       logPlatform("[SUCCESS] Vault exported successfully.");
     } catch (err) {
