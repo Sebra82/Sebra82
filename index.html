@@ -28,13 +28,13 @@
     body {
       background-color: var(--bg-deep);
       color: var(--text-main);
-      height: 100vh;
+      min-height: 100vh;
       width: 100vw;
-      overflow: hidden;
+      overflow-x: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 0.2rem;
+      padding: 0.3rem;
     }
 
     /* Sticky AI Tutor Overlay at Top */
@@ -57,12 +57,11 @@
       padding: 0.8rem;
       max-width: 650px;
       width: 100%;
-      height: 98vh;
+      min-height: 98vh;
       box-shadow: 0 0 45px rgba(0, 243, 255, 0.15), 0 30px 80px rgba(0, 0, 0, 0.95);
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
-      overflow-hidden;
     }
 
     /* Smart AI Navigator Guide Box */
@@ -191,7 +190,7 @@
       font-family: var(--font-mono);
     }
 
-    .mobile-stack { display: flex; flex-direction: column; gap: 0.45rem; flex: 1; overflow-y: auto; padding-right: 2px; }
+    .mobile-stack { display: flex; flex-direction: column; gap: 0.45rem; flex: 1; position: relative; }
 
     /* Base Panel Card with Fluid CSS Transition Animations */
     .panel-card {
@@ -227,24 +226,25 @@
     #cardQuery { border-left: 3px solid #f0883e; background: linear-gradient(135deg, rgba(240, 136, 62, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); }
     #cardTools { border-left: 3px solid #38bdf8; background: linear-gradient(135deg, rgba(56, 189, 248, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); }
 
-    /* Window Maximization / Minimization System */
+    /* Window Maximization / Minimization System - Fully Visible */
     .panel-card.fluid-maximized {
       flex: 1 1 auto;
       min-height: 65vh;
       border-color: var(--neon-cyan);
       box-shadow: 0 0 35px rgba(0,243,255,0.5);
       order: -99;
+      opacity: 1 !important;
     }
-    .panel-card.fluid-maximized .collapsible-body { max-height: 1600px !important; display: flex !important; }
+    .panel-card.fluid-maximized .collapsible-body { max-height: 1600px !important; display: flex !important; opacity: 1 !important; }
     .panel-card.fluid-maximized .expanded-graph-suite { display: flex !important; }
 
     .panel-card.minimized-dock-item {
       order: 100;
       flex: 0 0 auto;
       padding: 0.3rem 0.5rem;
-      opacity: 0.75;
+      opacity: 0.85;
       border-style: dashed;
-      background: rgba(10, 14, 22, 0.9);
+      background: rgba(10, 14, 22, 0.95);
     }
     .panel-card.minimized-dock-item .collapsible-body { display: none !important; }
     .panel-card.minimized-dock-item .panel-title { cursor: pointer; font-size: 0.5rem; color: var(--accent-purple); }
@@ -663,7 +663,6 @@
 <script>
   "use strict";
 
-  // Strict HTML Sanitization Utility to prevent XSS injection
   function escapeHtml(str) {
     return String(str)
       .replace(/&/g, "&amp;")
@@ -673,7 +672,6 @@
       .replace(/'/g, "&#039;");
   }
 
-  // AI Tool Tutor & Sticky HUD Navigator Logic with Automatic Window Maximization
   function toggleQuickGuide() {
     const body = document.getElementById('quickGuideBody');
     const sign = document.getElementById('guideToggleSign');
@@ -687,12 +685,18 @@
       if (c.id === cardId) {
         c.classList.add('fluid-maximized');
         c.classList.remove('minimized-dock-item');
+        c.style.display = 'flex';
+        c.style.visibility = 'visible';
+        c.style.opacity = '1';
         c.querySelector('.collapsible-body').classList.remove('collapsed');
         const pinBtn = document.getElementById(`pinBtn_${c.id}`);
         if(pinBtn) pinBtn.innerText = "↩ Standard";
       } else {
         c.classList.remove('fluid-maximized');
         c.classList.add('minimized-dock-item');
+        c.style.display = 'flex';
+        c.style.visibility = 'visible';
+        c.style.opacity = '0.85';
         c.querySelector('.collapsible-body').classList.add('collapsed');
         const pinBtn = document.getElementById(`pinBtn_${c.id}`);
         if(pinBtn) pinBtn.innerText = "⚡ Maximize";
@@ -903,6 +907,9 @@
     activeMaxId = null;
     document.querySelectorAll('.panel-card').forEach(c => {
       c.classList.remove('fluid-maximized', 'minimized-dock-item', 'nav-highlight');
+      c.style.display = 'flex';
+      c.style.visibility = 'visible';
+      c.style.opacity = '1';
       c.querySelector('.collapsible-body').classList.add('collapsed');
       const pinBtn = document.getElementById(`pinBtn_${c.id}`);
       if(pinBtn) pinBtn.innerText = "⚡ Maximize";
@@ -947,11 +954,17 @@
         if (c.id === cardId) {
           c.classList.add('fluid-maximized');
           c.classList.remove('minimized-dock-item');
+          c.style.display = 'flex';
+          c.style.visibility = 'visible';
+          c.style.opacity = '1';
           c.querySelector('.collapsible-body').classList.remove('collapsed');
           document.getElementById(`pinBtn_${c.id}`).innerText = "↩ Standard";
         } else {
           c.classList.remove('fluid-maximized');
           c.classList.add('minimized-dock-item');
+          c.style.display = 'flex';
+          c.style.visibility = 'visible';
+          c.style.opacity = '0.85';
           c.querySelector('.collapsible-body').classList.add('collapsed');
           document.getElementById(`pinBtn_${c.id}`).innerText = "⚡ Maximize";
         }
@@ -974,11 +987,8 @@
     document.getElementById('currentPathDisplay').innerText = `📁 /root (SEBRA82_Master)`;
   }
 
-  function loadFileItem(filename) {
-    // Sanitized feedback
-  }
+  function loadFileItem(filename) {}
 
-  // Interactive Atom Canvas Bindings
   atomCanvas.addEventListener('pointerdown', (e) => {
     isDraggingAtom = true;
     lastX = e.clientX;
@@ -1053,7 +1063,6 @@
     });
   }
 
-  // --- Live Noise Graph & Streaming Suite ---
   const waveCanvas = document.getElementById('secureSimCanvas');
   const waveCtx = waveCanvas.getContext('2d');
   const subsetCanvas = document.getElementById('subsetSpikeCanvas');
