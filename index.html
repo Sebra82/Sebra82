@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v5.6 - Fully Interactive 3D Atom Master Suite</title>
+  <title>SEBRA82 v5.6 - Fully Interactive Master Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -227,6 +227,10 @@
             <div class="metric-value" id="metricAnnually">15,480 Events</div>
           </div>
         </div>
+        <div class="control-item">
+          <div class="control-label">Base Value ($): <span id="baseValueReadout">10.00</span></div>
+          <input type="range" id="baseValueSlider" min="1.0" max="50.0" step="0.5" value="10.0" oninput="updateFin()">
+        </div>
       </div>
     </div>
 
@@ -339,6 +343,7 @@
   let savedViews = [], activeMaxId = null;
   let waveBuffer = new Array(80).fill(50), extractedSpikes = [];
   let isInteracting = false, dragStartX = 0, dragEndX = 0;
+  let finConfig = { baseValue: 10.0 };
 
   const R_LOOKUP_F32 = new Float32Array(296);
   const PLANCK_L = 1.616255e-35, PHI = 1.61803398875;
@@ -371,6 +376,11 @@
   function updateAtomDepth(val) {
     atomDepth = parseFloat(val);
     document.getElementById('atomDepthVal').innerText = atomDepth.toFixed(2) + 'x';
+  }
+
+  function updateFin() {
+    finConfig.baseValue = parseFloat(document.getElementById('baseValueSlider').value);
+    document.getElementById('baseValueReadout').innerText = finConfig.baseValue.toFixed(2);
   }
 
   function toggleSec(id) { document.getElementById(id).classList.toggle('collapsed'); }
@@ -426,12 +436,12 @@
     }
   }
 
-  // Fully Working Native Mouse & Touch Listeners bound directly to window/document for reliable atom rotation
+  // Fully Interactive Mouse & Touch Bindings for Atom Canvas
   atomCanvas.addEventListener('mousedown', (e) => {
     isDraggingAtom = true;
     lastX = e.clientX;
     lastY = e.clientY;
-    e.preventDefault();
+    e.stopPropagation();
   });
 
   window.addEventListener('mousemove', (e) => {
@@ -457,7 +467,7 @@
     } else if (e.touches.length === 2) {
       touchStartDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
     }
-    e.preventDefault();
+    e.stopPropagation();
   }, { passive: false });
 
   atomCanvas.addEventListener('touchmove', (e) => {
@@ -471,7 +481,7 @@
       atomZoom = Math.max(0.4, Math.min(5.0, atomZoom * (d / touchStartDist)));
       touchStartDist = d;
     }
-    e.preventDefault();
+    e.stopPropagation();
   }, { passive: false });
 
   atomCanvas.addEventListener('touchend', () => { isDraggingAtom = false; });
