@@ -1,11 +1,10 @@
-Here is the fully repaired and optimized version. All animation loops, real-time telemetry streams, predictive route trackers, time-series spike accumulators, and Executive Summary live-mirroring graphs have been fixed and tuned for smooth, continuous, 60 FPS motion.
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.nasa.gov https://*.usgs.gov; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v8.3 - Fully Reactive Master Suite</title>
+  <title>SEBRA82 v8.4 - Clean Stream & Fully Animated Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -384,13 +383,13 @@ Here is the fully repaired and optimized version. All animation loops, real-time
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v8.2</span> Split-Metric Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v8.4</span> Clean Stream Suite</div>
     <div class="header-actions">
       <button class="gen-rand-btn" onclick="fetchLiveTelemetryData()">🛰 Fetch API</button>
       <button class="saved-view-btn" onclick="saveCustomView()">💾 Save</button>
       <button class="core-reset-btn" onclick="resetStandardView()">↺ Reset</button>
     </div>
-    <div class="node-badge" id="vault-status">VAULT: FULLY REACTIVE ENGINE [v8.2]</div>
+    <div class="node-badge" id="vault-status">VAULT: CLEAN ANIMATION ENGINE [v8.4]</div>
     <div class="saved-tabs-bar" id="savedTabsBar">
       <span style="font-size: 0.4rem; color: var(--text-muted); font-family: var(--font-mono); align-self: center;">Tabs:</span>
     </div>
@@ -660,7 +659,7 @@ Here is the fully repaired and optimized version. All animation loops, real-time
       </div>
       <div class="collapsible-body" id="secSummary">
         <div style="font-size: 0.44rem; color: var(--text-muted); font-family: var(--font-mono); line-height: 1.25;" id="execSummaryText">
-          🏆 <strong>Insights</strong>: NASA space weather & USGS seismic feeds synchronized. Live anomaly graph mirroring is on standby.
+          🏆 <strong>Insights</strong>: NASA space weather & USGS seismic feeds synchronized. Live anomaly graph mirroring is active.
         </div>
         
         <div class="canvas-box" style="height: 80px; border-color: rgba(126, 231, 135, 0.5); margin-top: 2px;" id="execMirrorContainer">
@@ -891,7 +890,7 @@ Here is the fully repaired and optimized version. All animation loops, real-time
   let isStreamPaused = false, zoomLevel = 1.0, panOffset = 0;
   let hoverIndex = -1, burstMultiplier = 1.0;
   let finConfig = { baseValue: 10.0, damping: 1.45, mathMode: 'quantum' };
-  let isExecSummaryPinned = false;
+  let isExecSummaryPinned = true; // Enabled by default for seamless auto-updating
   let activeLiveSource = 'nasa';
 
   let historyStack = [];
@@ -1083,7 +1082,6 @@ Here is the fully repaired and optimized version. All animation loops, real-time
     fetchLiveTelemetryData();
   }
 
-  // Live Selection & Interactive Noise Stream
   const waveCanvas = document.getElementById('secureSimCanvas');
   const waveCtx = waveCanvas.getContext('2d');
   
@@ -1163,7 +1161,6 @@ Here is the fully repaired and optimized version. All animation loops, real-time
     });
     timeSeriesCtx.stroke();
 
-    // Explicitly plot each anomaly and spike over time
     displayData.forEach((item, idx) => {
       let x = idx * st;
       let y = h - (item.val / 100) * h;
