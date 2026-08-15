@@ -398,7 +398,7 @@
       <button class="saved-view-btn" onclick="saveCustomView()">💾 Save View</button>
       <button class="core-reset-btn" onclick="resetStandardView()">↺ Standard</button>
     </div>
-    <div class="node-badge" id="vault-status">VAULT: HARDENED [Ghost-Text Predictive Engine]</div>
+    <div class="node-badge" id="vault-status">VAULT: HARDENED [Pinch-to-Zoom Enabled]</div>
     <div class="saved-tabs-bar" id="savedTabsBar">
       <span style="font-size: 0.44rem; color: var(--text-muted); font-family: var(--font-mono); align-self: center;">Saved Tabs:</span>
     </div>
@@ -406,7 +406,7 @@
 
   <div class="mobile-stack" id="mobileStack">
 
-    <!-- Step 1: Fully Interactive Breathing 3D Quantum Atom Matrix -->
+    <!-- Step 1: Fully Interactive Breathing 3D Quantum Atom Matrix (Pinch/Scroll Zoom, No Slider) -->
     <div class="panel-card" id="cardAtom">
       <div class="section-category-bar">
         <span class="cat-chip cat-calc">Calculation</span>
@@ -428,11 +428,7 @@
       <div class="collapsible-body collapsed" id="secAtom">
         <div class="canvas-box" style="height: 220px;" id="atomBox">
           <canvas id="atom3DCanvas" width="400" height="220"></canvas>
-          <div class="hud-tag">✨ BREATHING CORE | Drag to Rotate, Scroll/Pinch to Zoom & Look Inside</div>
-        </div>
-        <div class="control-item">
-          <div class="control-label">Core Expansion / Look Inside (Depth): <span id="atomDepthVal">1.00x</span></div>
-          <input type="range" id="atomDepthSlider" min="0.1" max="4.0" step="0.05" value="1.0" oninput="updateAtomDepth(this.value)">
+          <div class="hud-tag">✨ 3D CORE | Drag to Rotate, Pinch or Scroll to Zoom Inside</div>
         </div>
       </div>
     </div>
@@ -740,7 +736,7 @@
 
     switch(toolKey) {
       case 'atom':
-        explanation = "<strong>3D Quantum Atom Matrix</strong>: Displays a breathing multi-shell quantum particle lattice using double-precision float calculations.";
+        explanation = "<strong>3D Quantum Atom Matrix</strong>: Displays a breathing multi-shell quantum particle lattice. Pinch or scroll on the 3D view to zoom in and look inside.";
         secId = 'secAtom';
         break;
       case 'math':
@@ -771,7 +767,7 @@
     setTimeout(() => { tutor.style.display = 'none'; }, 10000);
   }
 
-  // --- Fixed Ghost Text Prediction Engine ---
+  // --- Inline Ghost Text Prediction Engine ---
   let currentPrediction = "";
   let fullMatchedPhrase = "";
 
@@ -818,7 +814,6 @@
   function handleGhostKeyDown(e) {
     const input = e.target;
     
-    // Accept full suggestion via Tab or ArrowRight
     if ((e.key === 'Tab' || e.key === 'ArrowRight') && currentPrediction.length > 0) {
       e.preventDefault();
       input.value = fullMatchedPhrase;
@@ -828,14 +823,12 @@
       return;
     }
 
-    // Accept prediction progressively as the user types matching letters
     if (currentPrediction.length > 0 && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
       const nextExpectedLetter = currentPrediction[0].toLowerCase();
       if (e.key.toLowerCase() === nextExpectedLetter) {
         e.preventDefault();
         input.value += currentPrediction[0];
         
-        // Update remaining prediction dynamically from current input value
         const match = getPredictionMatch(input.value);
         currentPrediction = match.remaining;
         fullMatchedPhrase = match.full;
@@ -908,11 +901,13 @@
   const PLANCK_L = 1.616255e-35, PHI = 1.61803398875;
   for (let n = 0; n < 296; n++) { R_LOOKUP_F64[n] = PLANCK_L * Math.pow(PHI, n); }
 
-  // Breathing 3D Quantum Atom Core Setup
+  // Breathing 3D Quantum Atom Core Setup with Pinch-to-Zoom & Pointer Dragging
   const atomCanvas = document.getElementById('atom3DCanvas');
   const atomCtx = atomCanvas.getContext('2d');
-  let atomRotX = 0.5, atomRotY = 0.2, atomZoom = 1.2, atomDepth = 1.0;
+  let atomRotX = 0.5, atomRotY = 0.2, atomZoom = 1.2;
   let isDraggingAtom = false, lastX = 0, lastY = 0;
+  let activePointers = new Map();
+  let initialPinchDist = 0;
 
   let atomNodes = [];
   for (let i = 0; i < 320; i++) {
@@ -932,10 +927,67 @@
     });
   }
 
-  function updateAtomDepth(val) {
-    atomDepth = parseFloat(val);
-    document.getElementById('atomDepthVal').innerText = atomDepth.toFixed(2) + 'x';
+  // Pointer Events for Drag-to-Rotate and Pinch-to-Zoom
+  atomCanvas.addEventListener('pointerdown', (e) => {
+    activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    atomCanvas.setPointerCapture(e.pointerId);
+    
+    if (activePointers.size === 1) {
+      isDraggingAtom = true;
+      lastX = e.clientX;
+      lastY = e.clientY;
+    } else if (activePointers.size === 2) {
+      isDraggingAtom = false;
+      const pts = Array.from(activePointers.values());
+      initialPinchDist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+    }
+    e.preventDefault();
+  });
+
+  atomCanvas.addEventListener('pointermove', (e) => {
+    if (!activePointers.has(e.pointerId)) return;
+    activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+    if (activePointers.size === 2) {
+      // Pinch-to-Zoom calculation
+      const pts = Array.from(activePointers.values());
+      const currentDist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+      if (initialPinchDist > 0) {
+        const factor = currentDist / initialPinchDist;
+        atomZoom = Math.max(0.4, Math.min(6.0, atomZoom * (1 + (factor - 1) * 0.1)));
+      }
+      initialPinchDist = currentDist;
+    } else if (isDraggingAtom && activePointers.size === 1) {
+      atomRotY += (e.clientX - lastX) * 0.025;
+      atomRotX -= (e.clientY - lastY) * 0.025;
+      lastX = e.clientX;
+      lastY = e.clientY;
+    }
+    e.preventDefault();
+  });
+
+  function handlePointerEnd(e) {
+    activePointers.delete(e.pointerId);
+    try { atomCanvas.releasePointerCapture(e.pointerId); } catch(err) {}
+    if (activePointers.size < 2) initialPinchDist = 0;
+    if (activePointers.size === 1) {
+      const remainingPt = Array.from(activePointers.values())[0];
+      isDraggingAtom = true;
+      lastX = remainingPt.x;
+      lastY = remainingPt.y;
+    } else {
+      isDraggingAtom = false;
+    }
   }
+
+  atomCanvas.addEventListener('pointerup', handlePointerEnd);
+  atomCanvas.addEventListener('pointercancel', handlePointerEnd);
+
+  // Desktop Mouse Wheel Zoom
+  atomCanvas.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    atomZoom = Math.max(0.3, Math.min(6.0, atomZoom + e.deltaY * -0.002));
+  }, { passive: false });
 
   function setMathMode(mode) {
     finConfig.mathMode = mode;
@@ -1059,33 +1111,6 @@
 
   function loadFileItem(filename) {}
 
-  atomCanvas.addEventListener('pointerdown', (e) => {
-    isDraggingAtom = true;
-    lastX = e.clientX;
-    lastY = e.clientY;
-    atomCanvas.setPointerCapture(e.pointerId);
-    e.preventDefault();
-  });
-
-  atomCanvas.addEventListener('pointermove', (e) => {
-    if (!isDraggingAtom) return;
-    atomRotY += (e.clientX - lastX) * 0.025;
-    atomRotX -= (e.clientY - lastY) * 0.025;
-    lastX = e.clientX;
-    lastY = e.clientY;
-    e.preventDefault();
-  });
-
-  atomCanvas.addEventListener('pointerup', (e) => {
-    isDraggingAtom = false;
-    try { atomCanvas.releasePointerCapture(e.pointerId); } catch(err) {}
-  });
-
-  atomCanvas.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    atomZoom = Math.max(0.3, Math.min(6.0, atomZoom + e.deltaY * -0.002));
-  }, { passive: false });
-
   function renderVividAtom() {
     const w = atomCanvas.width, h = atomCanvas.height;
     atomCtx.fillStyle = '#000308';
@@ -1096,7 +1121,7 @@
 
     let nodes = atomNodes.map(n => {
       let pulse = 1.0 + Math.sin(globalTick * 0.05 * n.pulseSpeed + n.pulseOffset) * 0.1;
-      let effectiveDepth = atomDepth * breathFactor * pulse;
+      let effectiveDepth = breathFactor * pulse;
       let x = n.ox * effectiveDepth, y = n.oy * effectiveDepth, z = n.oz * effectiveDepth;
       
       let x1 = x * Math.cos(atomRotY) + z * Math.sin(atomRotY);
