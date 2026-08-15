@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v7.5 - Sticky AI Tutor & Full Master Suite</title>
+  <title>SEBRA82 v7.6 - Master Suite with Sticky HUD & Window Maximization</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -191,7 +191,7 @@
 
     .mobile-stack { display: flex; flex-direction: column; gap: 0.45rem; flex: 1; position: relative; }
 
-    /* Base Panel Card with Subtle Differentiated Color Tints & Pulse Highlight */
+    /* Base Panel Card with Subtle Differentiated Color Tints & Maximize / Minimize Support */
     .panel-card {
       background: rgba(5, 9, 18, 0.98);
       border-radius: 8px;
@@ -218,6 +218,7 @@
     #cardQuery { border-left: 3px solid #f0883e; background: linear-gradient(135deg, rgba(240, 136, 62, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); }
     #cardTools { border-left: 3px solid #38bdf8; background: linear-gradient(135deg, rgba(56, 189, 248, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); }
 
+    /* Window Maximization / Minimization System */
     .panel-card.fluid-maximized {
       flex: 1;
       min-height: 65vh;
@@ -330,7 +331,7 @@
       <span id="guideToggleSign">[-]</span>
     </div>
     <div class="quick-guide-content" id="quickGuideBody">
-      <span>• <strong>Interactive Guidance:</strong> Click any prompt below to learn what the tool is, how to use it, and navigate directly to it!</span>
+      <span>• <strong>Interactive Guidance:</strong> Click any prompt below to learn what the tool is, how to use it, maximize that window, and minimize all others underneath!</span>
       
       <!-- AI Chat Box -->
       <div class="ai-guide-chat">
@@ -340,11 +341,11 @@
         <!-- Predictive Tool Tutor Chips -->
         <div class="predictive-prompt-bar" id="predictiveBar">
           <span style="font-size: 0.4rem; color: var(--text-muted);">Learn & Go:</span>
-          <span class="predictive-chip" onclick="teachAndNavigate('atom')">3D Atom Matrix</span>
-          <span class="predictive-chip" onclick="teachAndNavigate('math')">Math Studio</span>
-          <span class="predictive-chip" onclick="teachAndNavigate('noise')">Noise Graph</span>
-          <span class="predictive-chip" onclick="teachAndNavigate('query')">Query Table</span>
-          <span class="predictive-chip" onclick="teachAndNavigate('tools')">Workspace Explorer</span>
+          <span class="predictive-chip" onclick="teachAndMaximize('atom', 'cardAtom')">3D Atom Matrix</span>
+          <span class="predictive-chip" onclick="teachAndMaximize('math', 'cardFin')">Math Studio</span>
+          <span class="predictive-chip" onclick="teachAndMaximize('noise', 'cardWave')">Noise Graph</span>
+          <span class="predictive-chip" onclick="teachAndMaximize('query', 'cardQuery')">Query Table</span>
+          <span class="predictive-chip" onclick="teachAndMaximize('tools', 'cardTools')">Workspace Explorer</span>
         </div>
         <div class="ai-chat-input-row">
           <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Ask AI how to use a tool..." onkeypress="if(event.key==='Enter') submitAIChat()">
@@ -355,7 +356,7 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v7.5</span> Executive Master Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v7.6</span> Executive Master Suite</div>
     <div class="header-actions">
       <button class="gen-rand-btn" onclick="generateRandomDataEpoch()">🎲 Random Data</button>
       <button class="saved-view-btn" onclick="saveCustomView()">💾 Save View</button>
@@ -643,7 +644,7 @@
 </div>
 
 <script>
-  // AI Tool Tutor & Sticky HUD Navigator Logic
+  // AI Tool Tutor & Sticky HUD Navigator Logic with Automatic Window Maximization
   function toggleQuickGuide() {
     const body = document.getElementById('quickGuideBody');
     const sign = document.getElementById('guideToggleSign');
@@ -651,11 +652,26 @@
     sign.innerText = body.classList.contains('collapsed') ? '[+]' : '[-]';
   }
 
-  function scrollToSection(cardId, sectionId) {
-    const sec = document.getElementById(sectionId);
-    if (sec && sec.classList.contains('collapsed')) {
-      sec.classList.remove('collapsed');
-    }
+  function maximizeAndFocus(cardId, sectionId) {
+    // 1. Maximize target card and minimize all others into the dock
+    activeMaxId = cardId;
+    document.querySelectorAll('.panel-card').forEach(c => {
+      if (c.id === cardId) {
+        c.classList.add('fluid-maximized');
+        c.classList.remove('minimized-dock-item');
+        c.querySelector('.collapsible-body').classList.remove('collapsed');
+        const pinBtn = document.getElementById(`pinBtn_${c.id}`);
+        if(pinBtn) pinBtn.innerText = "↩ Standard";
+      } else {
+        c.classList.remove('fluid-maximized');
+        c.classList.add('minimized-dock-item');
+        c.querySelector('.collapsible-body').classList.add('collapsed');
+        const pinBtn = document.getElementById(`pinBtn_${c.id}`);
+        if(pinBtn) pinBtn.innerText = "⚡ Maximize";
+      }
+    });
+
+    // 2. Scroll and pulse highlight
     const card = document.getElementById(cardId);
     if (card) {
       card.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -664,35 +680,34 @@
     }
   }
 
-  function teachAndNavigate(toolKey) {
+  function teachAndMaximize(toolKey, cardId) {
     const tutor = document.getElementById('stickyTutor');
     const content = document.getElementById('tutorContent');
     const streamBox = document.getElementById('aiChatStream');
     
     let explanation = "";
-    let cardId = "";
     let secId = "";
 
     switch(toolKey) {
       case 'atom':
         explanation = "<strong>3D Quantum Atom Matrix</strong>: Displays a breathing multi-shell quantum particle lattice. <em>How to use:</em> Click and drag on the 3D sphere to rotate viewing angles; scroll or pinch to zoom and look inside.";
-        cardId = 'cardAtom'; secId = 'secAtom';
+        secId = 'secAtom';
         break;
       case 'math':
         explanation = "<strong>Maths Studio</strong>: A high-precision tensor and alpha modeling engine. <em>How to use:</em> Toggle between Quantum Tensors and Alpha Forecasts, then adjust base magnitude and non-linear damping (&gamma;) sliders.";
-        cardId = 'cardFin'; secId = 'secFin';
+        secId = 'secFin';
         break;
       case 'noise':
         explanation = "<strong>Live Noise Graph</strong>: A real-time spectral monitoring stream. <em>How to use:</em> Click and drag horizontally across the wave stream to 'pull' a historical data subset and view predictive trajectory projections.";
-        cardId = 'cardWave'; secId = 'secWave';
+        secId = 'secWave';
         break;
       case 'query':
         explanation = "<strong>Query Table Studio</strong>: Automated data mapping interface. <em>How to use:</em> Automatically populates IDs, dates, and categorized anomalies whenever you pull a subset from the live noise graph.";
-        cardId = 'cardQuery'; secId = 'secQuery';
+        secId = 'secQuery';
         break;
       case 'tools':
         explanation = "<strong>Workspace Folder Explorer</strong>: Local vault directory manager. <em>How to use:</em> Browse embedded 6-12 month epochs, load datasets, link live SharePoint streams, or trigger local package downloads.";
-        cardId = 'cardTools'; secId = 'secTools';
+        secId = 'secTools';
         break;
     }
 
@@ -704,8 +719,8 @@
     streamBox.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI Tutor</strong>: <div class="tutor-box">${explanation}</div></div>`;
     streamBox.scrollTop = streamBox.scrollHeight;
 
-    // Navigate and auto-dismiss HUD after 10s
-    scrollToSection(cardId, secId);
+    // Maximize window to top, minimize others underneath, and auto-dismiss HUD after 10s
+    maximizeAndFocus(cardId, secId);
     setTimeout(() => { tutor.style.display = 'none'; }, 10000);
   }
 
@@ -719,15 +734,15 @@
     inputField.value = "";
 
     if (query.includes('atom') || query.includes('3d')) {
-      teachAndNavigate('atom');
+      teachAndMaximize('atom', 'cardAtom');
     } else if (query.includes('math') || query.includes('tensor') || query.includes('forecast')) {
-      teachAndNavigate('math');
+      teachAndMaximize('math', 'cardFin');
     } else if (query.includes('noise') || query.includes('graph') || query.includes('subset')) {
-      teachAndNavigate('noise');
+      teachAndMaximize('noise', 'cardWave');
     } else if (query.includes('table') || query.includes('query')) {
-      teachAndNavigate('query');
+      teachAndMaximize('query', 'cardQuery');
     } else if (query.includes('tool') || query.includes('folder') || query.includes('explorer')) {
-      teachAndNavigate('tools');
+      teachAndMaximize('tools', 'cardTools');
     } else {
       streamBox.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: I can teach you about the Atom Matrix, Math Studio, Noise Graph, Query Table, or Workspace Explorer. Just ask!</div>`;
     }
@@ -826,7 +841,8 @@
     document.querySelectorAll('.panel-card').forEach(c => {
       c.classList.remove('fluid-maximized', 'minimized-dock-item', 'nav-highlight');
       c.querySelector('.collapsible-body').classList.add('collapsed');
-      c.querySelector('.pin-btn').innerText = "⚡ Maximize";
+      const pinBtn = document.getElementById(`pinBtn_${c.id}`);
+      if(pinBtn) pinBtn.innerText = "⚡ Maximize";
     });
   }
 
@@ -861,7 +877,6 @@
 
   function toggleMax(cardId) {
     const card = document.getElementById(cardId);
-    const pinBtn = document.getElementById(`pinBtn_${cardId}`);
     if (activeMaxId === cardId) {
       resetStandardView();
     } else {
@@ -869,7 +884,7 @@
       document.querySelectorAll('.panel-card').forEach(c => {
         if (c.id === cardId) {
           c.classList.add('fluid-maximized');
-          c.classList.remove('minimized-dock-item', 'dropped-tab');
+          c.classList.remove('minimized-dock-item');
           c.querySelector('.collapsible-body').classList.remove('collapsed');
           document.getElementById(`pinBtn_${c.id}`).innerText = "↩ Standard";
         } else {
