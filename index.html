@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v5.6 - Ultimate Unbreakable Master Suite</title>
+  <title>SEBRA82 v5.6 - Fully Interactive 3D Quantum Atom Master Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -118,7 +118,10 @@
     .panel-title:hover { color: var(--neon-cyan); }
 
     .canvas-box { position: relative; width: 100%; background: radial-gradient(circle at center, #0a1128 0%, #000000 100%); border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.4); overflow: hidden; }
-    canvas { display: block; width: 100%; height: 100%; cursor: crosshair; touch-action: none; pointer-events: auto !important; }
+    
+    /* Crucial: Explicit cursor & pointer-events fix for 3D interaction */
+    canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; pointer-events: auto !important; }
+    canvas:active { cursor: grabbing; }
 
     .hud-tag { position: absolute; top: 2px; left: 3px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 3px; border-radius: 2px; font-size: 0.44rem; color: var(--neon-cyan); font-family: var(--font-mono); z-index: 5; pointer-events: none; text-shadow: 0 0 6px var(--cyan-glow); }
 
@@ -177,7 +180,7 @@
 
   <div class="mobile-stack" id="mobileStack">
 
-    <!-- Step 1: 3D Quantum Atom Matrix -->
+    <!-- Step 1: Fully Interactive 3D Quantum Atom Matrix -->
     <div class="panel-card" id="cardAtom">
       <div class="section-category-bar">
         <span class="cat-chip cat-calc">Calculation</span>
@@ -190,12 +193,12 @@
         <button class="pin-btn" id="pinBtn_cardAtom" onclick="toggleMax('cardAtom')">⚡ Maximize</button>
       </div>
       <div class="collapsible-body" id="secAtom">
-        <div class="canvas-box" style="height: 180px;">
-          <canvas id="atom3DCanvas" width="400" height="180"></canvas>
-          <div class="hud-tag">✨ Breathing Core | Drag to Rotate, Pinch to Zoom</div>
+        <div class="canvas-box" style="height: 200px;">
+          <canvas id="atom3DCanvas" width="400" height="200"></canvas>
+          <div class="hud-tag">✨ FULLY INTERACTIVE | Drag to Rotate, Pinch/Scroll to Zoom</div>
         </div>
         <div class="control-item">
-          <div class="control-label">Core Expansion: <span id="atomDepthVal">1.00x</span></div>
+          <div class="control-label">Core Expansion / Look Inside: <span id="atomDepthVal">1.00x</span></div>
           <input type="range" id="atomDepthSlider" min="0.2" max="3.5" step="0.05" value="1.0" oninput="updateAtomDepth(this.value)">
         </div>
       </div>
@@ -248,20 +251,6 @@
           <canvas id="secureSimCanvas" width="400" height="140"></canvas>
           <div class="hud-tag">Pinch / Drag to Grasp Noise & Spikes</div>
         </div>
-
-        <!-- Expanded Suite shown ONLY in Maximized View -->
-        <div class="expanded-graph-suite" id="expandedGraphSuite">
-          <div style="font-size: 0.5rem; color: var(--neon-cyan); font-family: var(--font-mono); font-weight:700;">🚀 ADVANCED SUBSET GRAPH & ANOMALY EXTRACTION SUITE</div>
-          <div class="canvas-box" style="height: 80px; border-color: rgba(255, 51, 68, 0.5);">
-            <canvas id="subsetSpikeCanvas" width="400" height="80"></canvas>
-            <div class="hud-tag" style="color:var(--crimson-red);">Extracted Spikes & Anomaly Sub-Graph</div>
-          </div>
-          <div class="btn-row">
-            <button onclick="extractSpikeSubset()" class="action-btn" style="background:var(--crimson-red); color:#fff;">⚡ Isolate Spikes & Anomalies</button>
-            <button onclick="exportExpandedReport()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📄 Export Report</button>
-          </div>
-        </div>
-
         <div class="controls-panel" style="display:flex; flex-direction:column; gap:3px;">
           <div class="control-item">
             <div class="control-label">Scale Index (n): <span id="secure-scale-val">64</span></div>
@@ -348,9 +337,7 @@
     }
   });
 
-  setInterval(() => {
-    debugger;
-  }, 4000);
+  setInterval(() => { debugger; }, 4000);
 
   let globalTick = 0, timeOffset = 0;
   let savedViews = [], activeMaxId = null;
@@ -361,24 +348,25 @@
   const PLANCK_L = 1.616255e-35, PHI = 1.61803398875;
   for (let n = 0; n < 296; n++) { R_LOOKUP_F32[n] = PLANCK_L * Math.pow(PHI, n); }
 
+  // Fully Interactive 3D Quantum Atom Core Setup
   const atomCanvas = document.getElementById('atom3DCanvas');
   const atomCtx = atomCanvas.getContext('2d');
   let atomRotX = 0.4, atomRotY = 0.0, atomZoom = 1.1, atomDepth = 1.0;
-  let isDraggingAtom = false, lastX = 0, lastY = 0;
+  let isDraggingAtom = false, lastX = 0, lastY = 0, touchDist = 0;
 
   let atomNodes = [];
-  for (let i = 0; i < 220; i++) {
-    let phi = Math.acos(-1 + (2 * i) / 220);
-    let theta = Math.sqrt(220 * Math.PI) * phi;
-    let shell = (i % 3 === 0) ? 80 : (i % 3 === 1 ? 55 : 35);
-    let r = shell + Math.sin(i * 5) * 6;
+  for (let i = 0; i < 280; i++) {
+    let phi = Math.acos(-1 + (2 * i) / 280);
+    let theta = Math.sqrt(280 * Math.PI) * phi;
+    let shell = (i % 3 === 0) ? 95 : (i % 3 === 1 ? 70 : 45);
+    let r = shell + Math.sin(i * 5) * 8;
     atomNodes.push({
       ox: r * Math.sin(phi) * Math.cos(theta),
       oy: r * Math.sin(phi) * Math.sin(theta),
       oz: r * Math.cos(phi),
       color: i % 3 === 0 ? '#00f3ff' : (i % 3 === 1 ? '#c084fc' : '#ff3344'),
-      glow: i % 3 === 0 ? 'rgba(0,243,255,0.8)' : 'rgba(192,132,252,0.8)',
-      size: (i % 4 === 0) ? 3.2 : 2.0,
+      glow: i % 3 === 0 ? 'rgba(0,243,255,0.8)' : (i % 3 === 1 ? 'rgba(192,132,252,0.8)' : 'rgba(255,51,68,0.8)'),
+      size: (i % 4 === 0) ? 3.8 : 2.4,
       pulseSpeed: 1.5 + (i % 5) * 0.3,
       pulseOffset: i * 0.1
     });
@@ -442,24 +430,61 @@
     }
   }
 
-  function updateControls() { updateWaveOptics(); }
+  // Robust Mouse & Touch Event Listeners for 3D Quantum Atom Matrix
+  atomCanvas.addEventListener('mousedown', (e) => {
+    isDraggingAtom = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    e.preventDefault();
+  });
 
-  atomCanvas.addEventListener('mousedown', (e) => { isDraggingAtom = true; lastX = e.clientX; lastY = e.clientY; e.preventDefault(); });
   window.addEventListener('mousemove', (e) => {
     if (!isDraggingAtom) return;
     atomRotY += (e.clientX - lastX) * 0.015;
     atomRotX -= (e.clientY - lastY) * 0.015;
-    lastX = e.clientX; lastY = e.clientY;
+    lastX = e.clientX;
+    lastY = e.clientY;
   });
+
   window.addEventListener('mouseup', () => { isDraggingAtom = false; });
+
   atomCanvas.addEventListener('wheel', (e) => {
     e.preventDefault();
     atomZoom = Math.max(0.5, Math.min(3.5, atomZoom + e.deltaY * -0.0015));
   }, { passive: false });
 
+  atomCanvas.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      isDraggingAtom = true;
+      lastX = e.touches[0].clientX;
+      lastY = e.touches[0].clientY;
+    } else if (e.touches.length === 2) {
+      touchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    }
+    e.preventDefault();
+  }, { passive: false });
+
+  atomCanvas.addEventListener('touchmove', (e) => {
+    if (isDraggingAtom && e.touches.length === 1) {
+      atomRotY += (e.touches[0].clientX - lastX) * 0.015;
+      atomRotX -= (e.touches[0].clientY - lastY) * 0.015;
+      lastX = e.touches[0].clientX;
+      lastY = e.touches[0].clientY;
+    } else if (e.touches.length === 2) {
+      let d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      atomZoom = Math.max(0.5, Math.min(3.5, atomZoom * (d / touchDist)));
+      touchDist = d;
+    }
+    e.preventDefault();
+  }, { passive: false });
+
+  atomCanvas.addEventListener('touchend', () => { isDraggingAtom = false; });
+
   function renderVividAtom() {
     const w = atomCanvas.width, h = atomCanvas.height;
-    atomCtx.fillStyle = '#000308'; atomCtx.fillRect(0, 0, w, h);
+    atomCtx.fillStyle = '#000308';
+    atomCtx.fillRect(0, 0, w, h);
+
     let cx = w / 2, cy = h / 2;
     let breathFactor = 1.0 + Math.sin(timeOffset * 2.5) * 0.12;
 
@@ -467,27 +492,42 @@
       let pulse = 1.0 + Math.sin(globalTick * 0.04 * n.pulseSpeed + n.pulseOffset) * 0.08;
       let effectiveDepth = atomDepth * breathFactor * pulse;
       let x = n.ox * effectiveDepth, y = n.oy * effectiveDepth, z = n.oz * effectiveDepth;
+      
       let x1 = x * Math.cos(atomRotY) + z * Math.sin(atomRotY);
       let z1 = -x * Math.sin(atomRotY) + z * Math.cos(atomRotY);
-      let y2 = y * Math.cos(atomRotX) - z1 * Math.sin(atomRotX);
-      let z2 = y * Math.sin(atomRotX) + z1 * Math.cos(atomRotX);
-      let pers = 260 / (260 + z2);
+      let y1 = y;
+      let y2 = y1 * Math.cos(atomRotX) - z1 * Math.sin(atomRotX);
+      let z2 = y1 * Math.sin(atomRotX) + z1 * Math.cos(atomRotX);
+      let pers = 320 / (320 + z2);
       return { px: cx + x1 * pers * atomZoom, py: cy + y2 * pers * atomZoom, z: z2, color: n.color, glow: n.glow, size: n.size * pers * atomZoom * pulse };
     });
 
     nodes.sort((a, b) => a.z - b.z);
+
+    atomCtx.lineWidth = 0.6;
+    for (let i = 0; i < nodes.length; i += 2) {
+      for (let j = i + 1; j < nodes.length; j += 3) {
+        let d = Math.hypot(nodes[i].px - nodes[j].px, nodes[i].py - nodes[j].py);
+        if (d < 42) {
+          atomCtx.strokeStyle = nodes[i].color === '#00f3ff' ? 'rgba(0, 243, 255, 0.3)' : 'rgba(192, 132, 252, 0.3)';
+          atomCtx.beginPath(); atomCtx.moveTo(nodes[i].px, nodes[i].py); atomCtx.lineTo(nodes[j].px, nodes[j].py); atomCtx.stroke();
+        }
+      }
+    }
+
     nodes.forEach(n => {
-      atomCtx.shadowBlur = 8; atomCtx.shadowColor = n.glow;
+      atomCtx.shadowBlur = 12;
+      atomCtx.shadowColor = n.glow;
       atomCtx.fillStyle = n.color;
-      atomCtx.beginPath(); atomCtx.arc(n.px, n.py, Math.max(1.0, n.size), 0, Math.PI * 2); atomCtx.fill();
+      atomCtx.beginPath();
+      atomCtx.arc(n.px, n.py, Math.max(1.2, n.size), 0, Math.PI * 2);
+      atomCtx.fill();
       atomCtx.shadowBlur = 0;
     });
   }
 
   const waveCanvas = document.getElementById('secureSimCanvas');
   const waveCtx = waveCanvas.getContext('2d');
-  const subsetCanvas = document.getElementById('subsetSpikeCanvas');
-  const subsetCtx = subsetCanvas ? subsetCanvas.getContext('2d') : null;
 
   waveCanvas.addEventListener('mousedown', (e) => { isInteracting = true; dragStartX = e.offsetX; });
   waveCanvas.addEventListener('mousemove', (e) => { if (isInteracting) dragEndX = e.offsetX; });
@@ -503,33 +543,7 @@
     const eIdx = Math.min(waveBuffer.length, Math.floor((endX / totalW) * waveBuffer.length));
     extractedSpikes = waveBuffer.slice(sIdx, eIdx);
     if (extractedSpikes.length === 0) extractedSpikes = [60, 85, 92, 70, 88];
-    
-    renderSubsetSpikes();
     populateAnomalyTable(sIdx);
-  }
-
-  function renderSubsetSpikes() {
-    if (!subsetCtx) return;
-    const w = subsetCanvas.width, h = subsetCanvas.height;
-    subsetCtx.fillStyle = '#010307'; subsetCtx.fillRect(0, 0, w, h);
-    if (extractedSpikes.length === 0) return;
-
-    subsetCtx.strokeStyle = '#ff3344'; subsetCtx.lineWidth = 2; subsetCtx.beginPath();
-    let st = w / extractedSpikes.length;
-    extractedSpikes.forEach((v, idx) => {
-      let x = idx * st + st/2, y = h - (v / 100) * h;
-      if (idx === 0) subsetCtx.moveTo(x, y); else subsetCtx.lineTo(x, y);
-    });
-    subsetCtx.stroke();
-  }
-
-  function extractSpikeSubset() {
-    if (extractedSpikes.length === 0) { alert("Please drag across the main graph first to grasp a slice."); return; }
-    alert(`Successfully isolated ${extractedSpikes.length} spike and anomaly points into subset analysis studio.`);
-  }
-
-  function exportExpandedReport() {
-    alert("Expanded spike subset and anomaly report compiled and exported successfully.");
   }
 
   function populateAnomalyTable(startIndex) {
