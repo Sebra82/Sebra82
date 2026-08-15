@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v5.6 - Fully Interactive 3D Quantum Atom Master Suite</title>
+  <title>SEBRA82 v5.6 - True Interactive 3D Quantum Atom Master Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -22,7 +22,7 @@
       --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-ui); touch-action: manipulation; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-ui); touch-action: none; }
 
     body {
       background-color: var(--bg-deep);
@@ -103,7 +103,6 @@
       order: -99;
     }
     .panel-card.fluid-maximized .collapsible-body { max-height: 1600px !important; display: flex !important; }
-    .panel-card.fluid-maximized .expanded-graph-suite { display: flex !important; }
     .panel-card.dropped-tab { order: 99; padding: 0.2rem 0.4rem; opacity: 0.65; border-style: dashed; }
     .panel-card.dropped-tab .collapsible-body { display: none !important; }
 
@@ -119,13 +118,10 @@
 
     .canvas-box { position: relative; width: 100%; background: radial-gradient(circle at center, #0a1128 0%, #000000 100%); border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.4); overflow: hidden; }
     
-    /* Crucial: Explicit cursor & pointer-events fix for 3D interaction */
-    canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; pointer-events: auto !important; }
+    canvas { display: block; width: 100%; height: 100%; cursor: grab; pointer-events: auto !important; }
     canvas:active { cursor: grabbing; }
 
     .hud-tag { position: absolute; top: 2px; left: 3px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 3px; border-radius: 2px; font-size: 0.44rem; color: var(--neon-cyan); font-family: var(--font-mono); z-index: 5; pointer-events: none; text-shadow: 0 0 6px var(--cyan-glow); }
-
-    .expanded-graph-suite { display: none; flex-direction: column; gap: 0.4rem; background: rgba(0, 243, 255, 0.04); border: 1px solid rgba(0, 243, 255, 0.25); padding: 6px; border-radius: 6px; margin-top: 2px; }
 
     .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
     .metric-box { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 4px; border-radius: 3px; display: flex; flex-direction: column; gap: 1px; text-align: center; }
@@ -180,7 +176,7 @@
 
   <div class="mobile-stack" id="mobileStack">
 
-    <!-- Step 1: Fully Interactive 3D Quantum Atom Matrix -->
+    <!-- Step 1: True Interactive SEBRA82 3D Quantum Atom Matrix -->
     <div class="panel-card" id="cardAtom">
       <div class="section-category-bar">
         <span class="cat-chip cat-calc">Calculation</span>
@@ -189,17 +185,17 @@
         <span class="cat-chip cat-fin">Finance</span>
       </div>
       <div class="panel-title">
-        <span onclick="toggleSec('secAtom')">1. Interactive 3D Quantum Atom Matrix ▾</span>
+        <span onclick="toggleSec('secAtom')">1. SEBRA82 3D Quantum Atom Matrix ▾</span>
         <button class="pin-btn" id="pinBtn_cardAtom" onclick="toggleMax('cardAtom')">⚡ Maximize</button>
       </div>
       <div class="collapsible-body" id="secAtom">
-        <div class="canvas-box" style="height: 200px;">
-          <canvas id="atom3DCanvas" width="400" height="200"></canvas>
-          <div class="hud-tag">✨ FULLY INTERACTIVE | Drag to Rotate, Pinch/Scroll to Zoom</div>
+        <div class="canvas-box" style="height: 220px;" id="atomBox">
+          <canvas id="atom3DCanvas" width="400" height="220"></canvas>
+          <div class="hud-tag">✨ SEBRA82 M4P MODEL | Drag to Rotate, Scroll/Pinch to Zoom & Look Inside</div>
         </div>
         <div class="control-item">
-          <div class="control-label">Core Expansion / Look Inside: <span id="atomDepthVal">1.00x</span></div>
-          <input type="range" id="atomDepthSlider" min="0.2" max="3.5" step="0.05" value="1.0" oninput="updateAtomDepth(this.value)">
+          <div class="control-label">Look Inside / Core Expansion (Depth): <span id="atomDepthVal">1.00x</span></div>
+          <input type="range" id="atomDepthSlider" min="0.1" max="4.0" step="0.05" value="1.0" oninput="updateAtomDepth(this.value)">
         </div>
       </div>
     </div>
@@ -348,27 +344,27 @@
   const PLANCK_L = 1.616255e-35, PHI = 1.61803398875;
   for (let n = 0; n < 296; n++) { R_LOOKUP_F32[n] = PLANCK_L * Math.pow(PHI, n); }
 
-  // Fully Interactive 3D Quantum Atom Core Setup
+  // True Interactive SEBRA82 M4P 3D Quantum Atom Core Setup
   const atomCanvas = document.getElementById('atom3DCanvas');
   const atomCtx = atomCanvas.getContext('2d');
-  let atomRotX = 0.4, atomRotY = 0.0, atomZoom = 1.1, atomDepth = 1.0;
-  let isDraggingAtom = false, lastX = 0, lastY = 0, touchDist = 0;
+  let atomRotX = 0.5, atomRotY = 0.2, atomZoom = 1.2, atomDepth = 1.0;
+  let isDraggingAtom = false, lastX = 0, lastY = 0, touchStartDist = 0;
 
   let atomNodes = [];
-  for (let i = 0; i < 280; i++) {
-    let phi = Math.acos(-1 + (2 * i) / 280);
-    let theta = Math.sqrt(280 * Math.PI) * phi;
-    let shell = (i % 3 === 0) ? 95 : (i % 3 === 1 ? 70 : 45);
-    let r = shell + Math.sin(i * 5) * 8;
+  for (let i = 0; i < 320; i++) {
+    let phi = Math.acos(-1 + (2 * i) / 320);
+    let theta = Math.sqrt(320 * Math.PI) * phi;
+    let shell = (i % 3 === 0) ? 90 : (i % 3 === 1 ? 65 : 42);
+    let r = shell + Math.sin(i * 4) * 9;
     atomNodes.push({
       ox: r * Math.sin(phi) * Math.cos(theta),
       oy: r * Math.sin(phi) * Math.sin(theta),
       oz: r * Math.cos(phi),
       color: i % 3 === 0 ? '#00f3ff' : (i % 3 === 1 ? '#c084fc' : '#ff3344'),
-      glow: i % 3 === 0 ? 'rgba(0,243,255,0.8)' : (i % 3 === 1 ? 'rgba(192,132,252,0.8)' : 'rgba(255,51,68,0.8)'),
-      size: (i % 4 === 0) ? 3.8 : 2.4,
-      pulseSpeed: 1.5 + (i % 5) * 0.3,
-      pulseOffset: i * 0.1
+      glow: i % 3 === 0 ? 'rgba(0,243,255,0.9)' : (i % 3 === 1 ? 'rgba(192,132,252,0.9)' : 'rgba(255,51,68,0.9)'),
+      size: (i % 4 === 0) ? 3.6 : 2.2,
+      pulseSpeed: 1.2 + (i % 5) * 0.4,
+      pulseOffset: i * 0.12
     });
   }
 
@@ -430,12 +426,12 @@
     }
   }
 
-  // Robust Mouse & Touch Event Listeners for 3D Quantum Atom Matrix
+  // Fully Responsive Mouse & Touch Listeners directly on the Atom Canvas
   atomCanvas.addEventListener('mousedown', (e) => {
     isDraggingAtom = true;
     lastX = e.clientX;
     lastY = e.clientY;
-    e.preventDefault();
+    e.stopPropagation();
   });
 
   window.addEventListener('mousemove', (e) => {
@@ -450,7 +446,7 @@
 
   atomCanvas.addEventListener('wheel', (e) => {
     e.preventDefault();
-    atomZoom = Math.max(0.5, Math.min(3.5, atomZoom + e.deltaY * -0.0015));
+    atomZoom = Math.max(0.4, Math.min(4.5, atomZoom + e.deltaY * -0.002));
   }, { passive: false });
 
   atomCanvas.addEventListener('touchstart', (e) => {
@@ -459,9 +455,9 @@
       lastX = e.touches[0].clientX;
       lastY = e.touches[0].clientY;
     } else if (e.touches.length === 2) {
-      touchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      touchStartDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
     }
-    e.preventDefault();
+    e.stopPropagation();
   }, { passive: false });
 
   atomCanvas.addEventListener('touchmove', (e) => {
@@ -472,10 +468,10 @@
       lastY = e.touches[0].clientY;
     } else if (e.touches.length === 2) {
       let d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-      atomZoom = Math.max(0.5, Math.min(3.5, atomZoom * (d / touchDist)));
-      touchDist = d;
+      atomZoom = Math.max(0.4, Math.min(4.5, atomZoom * (d / touchStartDist)));
+      touchStartDist = d;
     }
-    e.preventDefault();
+    e.stopPropagation();
   }, { passive: false });
 
   atomCanvas.addEventListener('touchend', () => { isDraggingAtom = false; });
@@ -486,10 +482,12 @@
     atomCtx.fillRect(0, 0, w, h);
 
     let cx = w / 2, cy = h / 2;
-    let breathFactor = 1.0 + Math.sin(timeOffset * 2.5) * 0.12;
+    // Organic breathing scale factor using sine wave oscillation over timeOffset
+    let breathFactor = 1.0 + Math.sin(timeOffset * 2.2) * 0.15;
 
     let nodes = atomNodes.map(n => {
-      let pulse = 1.0 + Math.sin(globalTick * 0.04 * n.pulseSpeed + n.pulseOffset) * 0.08;
+      let pulse = 1.0 + Math.sin(globalTick * 0.05 * n.pulseSpeed + n.pulseOffset) * 0.1;
+      // Multiplying by atomDepth allows zooming / looking inside the core lattice
       let effectiveDepth = atomDepth * breathFactor * pulse;
       let x = n.ox * effectiveDepth, y = n.oy * effectiveDepth, z = n.oz * effectiveDepth;
       
@@ -498,25 +496,27 @@
       let y1 = y;
       let y2 = y1 * Math.cos(atomRotX) - z1 * Math.sin(atomRotX);
       let z2 = y1 * Math.sin(atomRotX) + z1 * Math.cos(atomRotX);
+      
       let pers = 320 / (320 + z2);
       return { px: cx + x1 * pers * atomZoom, py: cy + y2 * pers * atomZoom, z: z2, color: n.color, glow: n.glow, size: n.size * pers * atomZoom * pulse };
     });
 
     nodes.sort((a, b) => a.z - b.z);
 
+    // Draw connecting matrix mesh lines
     atomCtx.lineWidth = 0.6;
     for (let i = 0; i < nodes.length; i += 2) {
-      for (let j = i + 1; j < nodes.length; j += 3) {
+      for (let j = i + 1; j < nodes.length; j += 4) {
         let d = Math.hypot(nodes[i].px - nodes[j].px, nodes[i].py - nodes[j].py);
-        if (d < 42) {
-          atomCtx.strokeStyle = nodes[i].color === '#00f3ff' ? 'rgba(0, 243, 255, 0.3)' : 'rgba(192, 132, 252, 0.3)';
+        if (d < 45) {
+          atomCtx.strokeStyle = nodes[i].color === '#00f3ff' ? 'rgba(0, 243, 255, 0.35)' : 'rgba(192, 132, 252, 0.35)';
           atomCtx.beginPath(); atomCtx.moveTo(nodes[i].px, nodes[i].py); atomCtx.lineTo(nodes[j].px, nodes[j].py); atomCtx.stroke();
         }
       }
     }
 
     nodes.forEach(n => {
-      atomCtx.shadowBlur = 12;
+      atomCtx.shadowBlur = 14;
       atomCtx.shadowColor = n.glow;
       atomCtx.fillStyle = n.color;
       atomCtx.beginPath();
