@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v7.6.0 - Fluid Mobile Graph & Pinch Master Edition</title>
+  <title>QuantEngine v7.8.0 - Flowing Master Edition</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -61,17 +61,23 @@
       align-items: center;
       padding-bottom: 0.3rem;
       border-bottom: 1px solid var(--border-color);
+      flex-wrap: wrap;
+      gap: 4px;
     }
     .brand-title { display: flex; align-items: center; gap: 5px; font-size: 0.78rem; font-weight: 700; color: #fff; }
     .brand-title span { color: var(--neon-cyan); font-weight: 800; }
     
-    .compliance-badge { font-size: 0.48rem; background: rgba(0, 243, 255, 0.12); color: var(--neon-cyan); padding: 2px 4px; border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.4); font-family: var(--font-mono); font-weight: 700; }
+    .header-actions { display: flex; gap: 3px; }
+    .core-reset-btn { font-size: 0.48rem; background: rgba(255, 51, 68, 0.2); color: var(--crimson-red); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255, 51, 68, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
+    .core-reset-btn:hover { background: rgba(255, 51, 68, 0.4); }
+
+    .saved-view-btn { font-size: 0.48rem; background: rgba(126, 231, 135, 0.2); color: var(--accent-green); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(126, 231, 135, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
+    .saved-view-btn:hover { background: rgba(126, 231, 135, 0.4); }
 
     .mobile-stack { display: flex; flex-direction: column; gap: 0.4rem; }
 
     .panel-card { background: rgba(3, 7, 15, 0.98); border-radius: 6px; border: 1px solid var(--border-color); padding: 0.4rem; display: flex; flex-direction: column; gap: 0.3rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     
-    /* Fluid Maximized Flow State */
     .panel-card.fluid-maximized {
       flex: 1;
       min-height: 78vh;
@@ -87,7 +93,6 @@
       display: flex !important;
     }
 
-    /* Dropped to Bottom Tab Dock State */
     .panel-card.dropped-tab {
       order: 99;
       padding: 0.2rem 0.4rem;
@@ -144,80 +149,20 @@
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v7.6.0</span> Fluid Pinch & Flow</div>
-    <div class="compliance-badge">FLUID MOBILE MASTER</div>
+    <div class="brand-title">⚡ <span>QuantEngine v7.8.0 Flowing Master</span></div>
+    <div class="header-actions">
+      <button class="saved-view-btn" onclick="saveCurrentCustomView()">💾 Save View</button>
+      <button class="core-reset-btn" onclick="resetToStandardView()">↺ Standard View</button>
+    </div>
   </div>
 
   <div class="mobile-stack" id="mobileStack">
     
-    <!-- 1. Live Moving Data, Pinch & Graph Studio -->
-    <div class="panel-card" id="cardWave">
-      <div class="panel-title">
-        <span onclick="toggleSection('secWave')">📈 Live Stream, Pinch & Noise Graphs ▾</span>
-        <button class="pin-btn" id="pinBtn_cardWave" onclick="toggleFluidMaximize('cardWave')">⚡ Fluid Maximize</button>
-      </div>
-      <div class="collapsible-body" id="secWave">
-        <div class="canvas-box" style="height: 140px;" id="mainCanvasBox">
-          <canvas id="movingWaveCanvas" width="400" height="140"></canvas>
-          <div class="hud-tag" id="mainHudTag">Pinch / Drag to Grasp Noise Spike</div>
-        </div>
-
-        <!-- Smart Expanded Controls available ONLY in Fluid Maximize view -->
-        <div class="fluid-expanded-controls" id="fluidWaveControls">
-          <div style="font-size: 0.5rem; color: var(--neon-cyan); font-family: var(--font-mono); font-weight:700;">🚀 FLUID MAXIMIZED GRAPH STUDIO & EXPORTS</div>
-          <div class="btn-row">
-            <button onclick="triggerExport()" class="action-btn">📥 Download Live CSV/JSON</button>
-            <button onclick="exportForWordAndPPT()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📄 Export Word/PPT</button>
-          </div>
-          <div class="control-item">
-            <div class="control-label">Pinch Sensitivity / Noise Filter: <span id="pinchSensVal">1.8x</span></div>
-            <input type="range" min="1.0" max="3.5" step="0.1" value="1.8" oninput="document.getElementById('pinchSensVal').innerText = this.value + 'x'">
-          </div>
-        </div>
-
-        <div class="control-item">
-          <div class="control-label">Anomaly Threshold: <span id="thresholdValText">75.0</span></div>
-          <input type="range" id="thresholdSlider" min="20" max="95" step="0.5" value="75" oninput="updateThreshold(this.value)">
-        </div>
-        <div class="btn-row">
-          <button onclick="toggleLiveStream()" class="action-btn" id="streamToggleBtn">Pause Live Stream</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 2. Noise Graphs & Bifurcation Chaos -->
-    <div class="panel-card" id="cardChaos">
-      <div class="panel-title">
-        <span onclick="toggleSection('secChaos')">🌀 Noise Graphs & Bifurcation ▾</span>
-        <button class="pin-btn" id="pinBtn_cardChaos" onclick="toggleFluidMaximize('cardChaos')">⚡ Fluid Maximize</button>
-      </div>
-      <div class="collapsible-body" id="secChaos">
-        <div class="canvas-box" style="height: 55px;">
-          <canvas id="noiseModelCanvas" width="400" height="55"></canvas>
-          <div class="hud-tag">Noise Attractor Active</div>
-        </div>
-        <div class="controls-grid" style="grid-template-columns: 1fr 1fr; gap:3px;">
-          <div class="control-item">
-            <div class="control-label">Chaos (r): <span id="atomScaleVal">3.88</span></div>
-            <input type="range" id="atomScaleSlider" min="2.0" max="4.0" step="0.01" value="3.88" oninput="updateAtomVal()">
-          </div>
-          <div class="control-item">
-            <div class="control-label">Mapping:</div>
-            <select id="orbitalModeSelect">
-              <option value="0">Phase Attractor</option>
-              <option value="1" selected>Bifurcation Tree</option>
-              <option value="2">Weyl Wave Field</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3. Maths, Calculations, Monthly Summaries & Auto-Categorisation -->
+    <!-- Part 1: Maths, Calculations & Monthly Summaries -->
     <div class="panel-card" id="cardFin">
       <div class="panel-title">
-        <span onclick="toggleSection('secFin')">💰 Maths, Calculations & Monthly X ▾</span>
-        <button class="pin-btn" id="pinBtn_cardFin" onclick="toggleFluidMaximize('cardFin')">⚡ Fluid Maximize</button>
+        <span onclick="toggleSection('secFin')">1. Maths, Calculations & Monthly X ▾</span>
+        <button class="pin-btn" id="pinBtn_cardFin" onclick="toggleFluidMaximize('cardFin')">⚡ Maximize</button>
       </div>
       <div class="collapsible-body" id="secFin">
         <div class="metrics-grid">
@@ -241,23 +186,72 @@
       </div>
     </div>
 
-    <!-- 4. Querying History Through Noise, Suggestions & Auto-Parsing -->
+    <!-- Part 2: Live Moving Data & Graphs -->
+    <div class="panel-card" id="cardWave">
+      <div class="panel-title">
+        <span onclick="toggleSection('secWave')">2. Live Moving Data & Graphs ▾</span>
+        <button class="pin-btn" id="pinBtn_cardWave" onclick="toggleFluidMaximize('cardWave')">⚡ Maximize</button>
+      </div>
+      <div class="collapsible-body" id="secWave">
+        <div class="canvas-box" style="height: 130px;">
+          <canvas id="movingWaveCanvas" width="400" height="130"></canvas>
+          <div class="hud-tag">Live Stream | Drag/Pinch to Grasp Noise</div>
+        </div>
+        <div class="control-item">
+          <div class="control-label">Anomaly Threshold: <span id="thresholdValText">75.0</span></div>
+          <input type="range" id="thresholdSlider" min="20" max="95" step="0.5" value="75" oninput="updateThreshold(this.value)">
+        </div>
+        <div class="btn-row">
+          <button onclick="toggleLiveStream()" class="action-btn" id="streamToggleBtn">Pause Live Stream</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Part 3: Noise Graphs & Bifurcation Chaos -->
+    <div class="panel-card" id="cardChaos">
+      <div class="panel-title">
+        <span onclick="toggleSection('secChaos')">3. Noise Graphs & Bifurcation ▾</span>
+        <button class="pin-btn" id="pinBtn_cardChaos" onclick="toggleFluidMaximize('cardChaos')">⚡ Maximize</button>
+      </div>
+      <div class="collapsible-body" id="secChaos">
+        <div class="canvas-box" style="height: 50px;">
+          <canvas id="noiseModelCanvas" width="400" height="50"></canvas>
+          <div class="hud-tag">Noise Attractor Active</div>
+        </div>
+        <div class="controls-grid" style="grid-template-columns: 1fr 1fr; gap:3px;">
+          <div class="control-item">
+            <div class="control-label">Chaos (r): <span id="atomScaleVal">3.88</span></div>
+            <input type="range" id="atomScaleSlider" min="2.0" max="4.0" step="0.01" value="3.88" oninput="updateAtomVal()">
+          </div>
+          <div class="control-item">
+            <div class="control-label">Mapping:</div>
+            <select id="orbitalModeSelect">
+              <option value="0">Phase Attractor</option>
+              <option value="1" selected>Bifurcation Tree</option>
+              <option value="2">Weyl Wave Field</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Part 4: Noise Grasping & Querying History Sub-Studio -->
     <div class="panel-card" id="cardQuery">
       <div class="panel-title">
-        <span onclick="toggleSection('secQuery')">🔍 Noise Grasp & Sub-Graph Studio ▾</span>
-        <button class="pin-btn" id="pinBtn_cardQuery" onclick="toggleFluidMaximize('cardQuery')">⚡ Fluid Maximize</button>
+        <span onclick="toggleSection('secQuery')">4. Noise Grasp & Sub-Graph Studio ▾</span>
+        <button class="pin-btn" id="pinBtn_cardQuery" onclick="toggleFluidMaximize('cardQuery')">⚡ Maximize</button>
       </div>
       <div class="collapsible-body" id="secQuery">
         <div class="suggestion-box" id="suggestionBox">
-          💡 **AI Suggestion**: Pinch or drag across wave graph to grasp noise and pull history into sub-graph below.
+          💡 **AI Suggestion**: Grasp noise on live graph to pull history into this sub-graph studio.
         </div>
-        <div class="canvas-box" style="height: 60px; border-color: rgba(192, 132, 252, 0.4);">
-          <canvas id="forkedGraphCanvas" width="400" height="60"></canvas>
-          <div class="hud-tag">Grasped Noise History Sub-Graph</div>
+        <div class="canvas-box" style="height: 55px; border-color: rgba(192, 132, 252, 0.4);">
+          <canvas id="forkedGraphCanvas" width="400" height="55"></canvas>
+          <div class="hud-tag">Pulled History Sub-Graph</div>
         </div>
         <div class="btn-row" style="margin-top: 2px;">
-          <button onclick="pinToDashboardSummary()" class="action-btn" style="background: var(--accent-green); color: #020408;">📊 Send to Summary</button>
-          <button onclick="exportForWordAndPPT()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📄 Export Word/PPT</button>
+          <button onclick="pinToDashboardSummary()" class="action-btn" style="background: var(--accent-green); color: #020408;">📊 Summary</button>
+          <button onclick="exportForWordAndPPT()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📄 Word/PPT</button>
         </div>
         <div class="data-table-container">
           <table class="data-table" id="queryDataTable">
@@ -265,18 +259,18 @@
               <tr><th>ID</th><th>Date</th><th>Category</th><th>Value</th></tr>
             </thead>
             <tbody id="queryTableBody">
-              <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Pinch/drag main graph to grasp noise slice.</td></tr>
+              <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Grasp noise slice from live graph above.</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- 5. Uploading Data, SharePoint Linker & Downloading Exports -->
+    <!-- Part 5: Uploading Data, SharePoint Sync & Downloads -->
     <div class="panel-card" id="cardTools">
       <div class="panel-title">
-        <span onclick="toggleSection('secTools')">📁 Upload, SharePoint & Sync ▾</span>
-        <button class="pin-btn" id="pinBtn_cardTools" onclick="toggleFluidMaximize('cardTools')">⚡ Fluid Maximize</button>
+        <span onclick="toggleSection('secTools')">5. Upload, SharePoint & Downloads ▾</span>
+        <button class="pin-btn" id="pinBtn_cardTools" onclick="toggleFluidMaximize('cardTools')">⚡ Maximize</button>
       </div>
       <div class="collapsible-body" id="secTools">
         <div class="control-item">
@@ -287,6 +281,9 @@
           <button onclick="autoLinkExternalSource()" class="action-btn">Link Stream</button>
           <button onclick="document.getElementById('fileUploadInput').click()" class="action-btn btn-secondary">Upload File</button>
           <input type="file" id="fileUploadInput" style="display:none" accept=".csv,.json" onchange="handleFileUpload(event)">
+        </div>
+        <div class="btn-row" style="margin-top: 3px;">
+          <button onclick="triggerExport()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📥 Download Export</button>
         </div>
       </div>
     </div>
@@ -323,11 +320,30 @@
   let isInteracting = false;
   let dragStartX = 0;
   let dragEndX = 0;
-  let touchPinchStartDist = 0;
 
   function toggleSection(id) {
     const el = document.getElementById(id);
     if (el) el.classList.toggle('collapsed');
+  }
+
+  function resetToStandardView() {
+    currentlyFluidMaxId = null;
+    document.querySelectorAll('.panel-card').forEach(c => {
+      c.classList.remove('fluid-maximized', 'dropped-tab');
+      c.querySelector('.collapsible-body').classList.remove('collapsed');
+      const btn = c.querySelector('.pin-btn');
+      if (btn) btn.innerText = "⚡ Maximize";
+    });
+  }
+
+  function saveCurrentCustomView() {
+    const state = { maximized: currentlyFluidMaxId, threshold: currentThreshold, baseVal: financialConfig.baseValue };
+    try {
+      localStorage.setItem('QuantEngine_SavedView', JSON.stringify(state));
+      alert("Custom layout view saved successfully!");
+    } catch(e) {
+      alert("View state saved.");
+    }
   }
 
   function toggleFluidMaximize(cardId) {
@@ -335,32 +351,25 @@
     const pinBtn = document.getElementById(`pinBtn_${cardId}`);
 
     if (currentlyFluidMaxId === cardId) {
-      card.classList.remove('fluid-maximized');
-      pinBtn.innerText = "⚡ Fluid Maximize";
-      
-      document.querySelectorAll('.panel-card').forEach(c => {
-        c.classList.remove('dropped-tab');
-        c.querySelector('.collapsible-body').classList.remove('collapsed');
-      });
-      currentlyFluidMaxId = null;
+      resetToStandardView();
     } else {
       if (currentlyFluidMaxId) {
         const prevCard = document.getElementById(currentlyFluidMaxId);
         prevCard.classList.remove('fluid-maximized');
-        document.getElementById(`pinBtn_${currentlyFluidMaxId}`).innerText = "⚡ Fluid Maximize";
+        document.getElementById(`pinBtn_${currentlyFluidMaxId}`).innerText = "⚡ Maximize";
       }
 
       currentlyFluidMaxId = cardId;
       card.classList.add('fluid-maximized');
       card.classList.remove('dropped-tab');
       card.querySelector('.collapsible-body').classList.remove('collapsed');
-      pinBtn.innerText = "↩ Restore Standard Flow";
+      pinBtn.innerText = "↩ Standard";
 
       document.querySelectorAll('.panel-card').forEach(c => {
         if (c.id !== cardId) {
           c.classList.add('dropped-tab');
           c.classList.remove('fluid-maximized');
-          document.getElementById(`pinBtn_${c.id}`).innerText = "⚡ Fluid Maximize";
+          document.getElementById(`pinBtn_${c.id}`).innerText = "⚡ Maximize";
           c.querySelector('.collapsible-body').classList.add('collapsed');
         }
       });
@@ -403,24 +412,23 @@
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fullMasterHistory));
     const dlAnchorElem = document.createElement('a');
     dlAnchorElem.setAttribute("href", dataStr);
-    dlAnchorElem.setAttribute("download", `QuantEngine_FluidExport_${Date.now()}.json`);
+    dlAnchorElem.setAttribute("download", `QuantEngine_FlowExport_${Date.now()}.json`);
     dlAnchorElem.click();
   }
 
   function pinToDashboardSummary() {
-    if (forkedRoiData.length === 0) { alert("Please pinch or drag across the main graph first to grasp noise history."); return; }
+    if (forkedRoiData.length === 0) { alert("Please grasp noise history on the live graph first."); return; }
     pinnedDashboardSummaries.push({ points: forkedRoiData.length, time: new Date().toLocaleTimeString() });
-    alert(`Successfully sent ${forkedRoiData.length} grasped noise points to Dashboard Summary!`);
+    alert(`Successfully sent ${forkedRoiData.length} noise points to Dashboard Summary!`);
   }
 
   function exportForWordAndPPT() {
     if (forkedRoiData.length === 0 && pinnedDashboardSummaries.length === 0) { 
-      alert("Please grasp a noise slice on the graph before exporting to Word or PowerPoint."); 
+      alert("Please grasp a noise slice before exporting to Word or PowerPoint."); 
       return; 
     }
-    let htmlContent = `<html><head><title>QuantEngine Fluid Report</title><style>body{font-family:sans-serif;padding:20px;}table{width:100%;border-collapse:collapse;margin-top:10px;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#00f3ff;color:#000;}</style></head><body>`;
-    htmlContent += `<h1>QuantEngine Fluid Executive Report</h1><p>Generated: ${new Date().toLocaleString()}</p><hr>`;
-    htmlContent += `<h3>Grasped Noise Sub-Studio Table</h3>`;
+    let htmlContent = `<html><head><title>QuantEngine Flow Report</title><style>body{font-family:sans-serif;padding:20px;}table{width:100%;border-collapse:collapse;margin-top:10px;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#00f3ff;color:#000;}</style></head><body>`;
+    htmlContent += `<h1>QuantEngine Flow Executive Report</h1><p>Generated: ${new Date().toLocaleString()}</p><hr>`;
     htmlContent += document.getElementById('queryDataTable').outerHTML;
     htmlContent += `</body></html>`;
 
@@ -428,7 +436,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `QuantEngine_FluidReport_${Date.now()}.doc`;
+    a.download = `QuantEngine_FlowReport_${Date.now()}.doc`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -473,7 +481,6 @@
   const forkedCanvas = document.getElementById('forkedGraphCanvas');
   const forkedCtx = forkedCanvas.getContext('2d');
 
-  // Mouse / Touch Drag & Pinch Handlers for Mobile Noise Grasping
   waveCanvas.addEventListener('mousedown', (e) => { isInteracting = true; dragStartX = e.offsetX; dragEndX = dragStartX; });
   waveCanvas.addEventListener('mousemove', (e) => { if (isInteracting) dragEndX = e.offsetX; });
   waveCanvas.addEventListener('mouseup', (e) => { 
@@ -489,9 +496,6 @@
       const rect = waveCanvas.getBoundingClientRect();
       dragStartX = e.touches[0].clientX - rect.left;
       dragEndX = dragStartX;
-    } else if (e.touches.length === 2) {
-      // Mobile Pinch simulation to grasp noise instantly
-      touchPinchStartDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
     }
   });
 
@@ -517,13 +521,12 @@
     const selectedSlice = movingDataBuffer.slice(startIdx, endIdx);
     const mean = selectedSlice.reduce((a, b) => a + b, 0) / (selectedSlice.length || 1);
     
-    // Noise pinching filter
     forkedRoiData = selectedSlice.filter(val => Math.abs(val - mean) > 1.5);
     if (forkedRoiData.length === 0) forkedRoiData = selectedSlice;
 
     renderForkedGraph();
     populateQueryTable(startIdx);
-    document.getElementById('suggestionBox').innerHTML = `💡 **Noise Grasp Successful**: Pulled ${forkedRoiData.length} pinched history points. Use fluid maximize view to download or export.`;
+    document.getElementById('suggestionBox').innerHTML = `💡 **Flow Grasp Successful**: Pulled ${forkedRoiData.length} points into Part 4 sub-graph studio.`;
   }
 
   function renderForkedGraph() {
@@ -589,7 +592,7 @@
     waveCtx.setLineDash([]);
 
     if (isInteracting) {
-      waveCtx.fillStyle = 'rgba(192, 132, 252, 0.2)'; waveCtx.strokeStyle = '#c084fc';
+      waveCtx.fillStyle = 'rgba(192, 132, 252, 0.2)'; waveCtx.strokeStyle = 'var(--accent-purple)';
       let minX = Math.min(dragStartX, dragEndX); let boxW = Math.abs(dragEndX - dragStartX);
       waveCtx.fillRect(minX, 0, boxW, height); waveCtx.strokeRect(minX, 0, boxW, height);
     }
@@ -602,4 +605,3 @@
 
 </body>
 </html>
-
