@@ -771,42 +771,45 @@
     setTimeout(() => { tutor.style.display = 'none'; }, 10000);
   }
 
-  // --- Inline Ghost Text Prediction Engine (Auto-accept on typing next letter or Tab) ---
+  // --- Fixed Ghost Text Prediction Engine ---
   let currentPrediction = "";
+  let fullMatchedPhrase = "";
+
+  const predictionDictionary = [
+    "how to navigate model",
+    "how to configure atom matrix",
+    "how to run quantum simulation",
+    "how to analyze noise graph spikes",
+    "how to query anomaly data",
+    "how to explore workspace folders",
+    "show me 3d quantum atom matrix",
+    "show me math modeling studio",
+    "show me live noise stream",
+    "show me query export table",
+    "show me workspace folder explorer",
+    "simulate quantum tensor wave",
+    "simulate financial alpha forecast",
+    "export anomaly report package"
+  ];
 
   function getPredictionMatch(val) {
     const text = val.toLowerCase();
-    if (!text) return "";
+    if (!text) return { remaining: "", full: "" };
     
-    const dictionary = [
-      "how to navigate model",
-      "how to configure atom matrix",
-      "how to run quantum simulation",
-      "how to analyze noise graph spikes",
-      "how to query anomaly data",
-      "how to explore workspace folders",
-      "show me 3d quantum atom matrix",
-      "show me math modeling studio",
-      "show me live noise stream",
-      "show me query export table",
-      "show me workspace folder explorer",
-      "simulate quantum tensor wave",
-      "simulate financial alpha forecast",
-      "export anomaly report package"
-    ];
-
-    for (let phrase of dictionary) {
+    for (let phrase of predictionDictionary) {
       if (phrase.startsWith(text) && phrase.length > text.length) {
-        return phrase.slice(text.length);
+        return { remaining: phrase.slice(text.length), full: phrase };
       }
     }
-    return "";
+    return { remaining: "", full: "" };
   }
 
   function handleGhostInput(e) {
     const input = e.target;
     const val = input.value;
-    currentPrediction = getPredictionMatch(val);
+    const match = getPredictionMatch(val);
+    currentPrediction = match.remaining;
+    fullMatchedPhrase = match.full;
     
     const overlay = document.getElementById('ghostOverlay');
     overlay.innerHTML = escapeHtml(val) + `<span style="color: rgba(139, 148, 158, 0.55);">${escapeHtml(currentPrediction)}</span>`;
@@ -814,18 +817,29 @@
 
   function handleGhostKeyDown(e) {
     const input = e.target;
+    
+    // Accept full suggestion via Tab or ArrowRight
     if ((e.key === 'Tab' || e.key === 'ArrowRight') && currentPrediction.length > 0) {
       e.preventDefault();
-      input.value += currentPrediction;
+      input.value = fullMatchedPhrase;
       currentPrediction = "";
+      fullMatchedPhrase = "";
       document.getElementById('ghostOverlay').innerHTML = escapeHtml(input.value);
-    } else if (currentPrediction.length > 0 && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-      // Automatically accept and consume the typed letter if it matches the next predicted character
+      return;
+    }
+
+    // Accept prediction progressively as the user types matching letters
+    if (currentPrediction.length > 0 && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
       const nextExpectedLetter = currentPrediction[0].toLowerCase();
       if (e.key.toLowerCase() === nextExpectedLetter) {
         e.preventDefault();
         input.value += currentPrediction[0];
-        currentPrediction = currentPrediction.slice(1);
+        
+        // Update remaining prediction dynamically from current input value
+        const match = getPredictionMatch(input.value);
+        currentPrediction = match.remaining;
+        fullMatchedPhrase = match.full;
+
         const overlay = document.getElementById('ghostOverlay');
         overlay.innerHTML = escapeHtml(input.value) + `<span style="color: rgba(139, 148, 158, 0.55);">${escapeHtml(currentPrediction)}</span>`;
       }
@@ -842,6 +856,7 @@
     streamBox.innerHTML += `<div class="chat-msg-user">You: ${safeQuery}</div>`;
     inputField.value = "";
     currentPrediction = "";
+    fullMatchedPhrase = "";
     document.getElementById('ghostOverlay').innerHTML = "";
 
     const queryLower = rawQuery.toLowerCase();
