@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v7.5.0 - Smart Expanded Maximize & Office Export Edition</title>
+  <title>QuantEngine v7.6.0 - Fluid Mobile Graph & Pinch Master Edition</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -69,18 +69,21 @@
 
     .mobile-stack { display: flex; flex-direction: column; gap: 0.4rem; }
 
-    .panel-card { background: rgba(3, 7, 15, 0.98); border-radius: 6px; border: 1px solid var(--border-color); padding: 0.4rem; display: flex; flex-direction: column; gap: 0.3rem; transition: all 0.3s ease; }
+    .panel-card { background: rgba(3, 7, 15, 0.98); border-radius: 6px; border: 1px solid var(--border-color); padding: 0.4rem; display: flex; flex-direction: column; gap: 0.3rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     
-    /* Pinned & Maximized State - Shows all data expanded fully */
-    .panel-card.pinned-maximized {
+    /* Fluid Maximized Flow State */
+    .panel-card.fluid-maximized {
       flex: 1;
-      min-height: 70vh;
+      min-height: 78vh;
       border-color: var(--neon-cyan);
-      box-shadow: 0 0 25px rgba(0,243,255,0.3);
+      box-shadow: 0 0 30px rgba(0,243,255,0.4);
       order: -99;
     }
-    .panel-card.pinned-maximized .collapsible-body {
-      max-height: 1200px !important;
+    .panel-card.fluid-maximized .collapsible-body {
+      max-height: 1400px !important;
+      display: flex !important;
+    }
+    .panel-card.fluid-maximized .fluid-expanded-controls {
       display: flex !important;
     }
 
@@ -88,7 +91,7 @@
     .panel-card.dropped-tab {
       order: 99;
       padding: 0.2rem 0.4rem;
-      opacity: 0.75;
+      opacity: 0.65;
       border-style: dashed;
     }
     .panel-card.dropped-tab:hover { opacity: 1; border-color: var(--accent-purple); }
@@ -109,7 +112,7 @@
     .hud-tag { position: absolute; top: 2px; left: 3px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 3px; border-radius: 2px; font-size: 0.44rem; color: var(--text-muted); font-family: var(--font-mono); z-index: 5; pointer-events: none; }
     .hud-tag span { color: var(--neon-cyan); font-weight: 600; }
 
-    .data-table-container { background: #010409; border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 3px; padding: 2px; max-height: 90px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.46rem; color: var(--accent-purple); }
+    .data-table-container { background: #010409; border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 3px; padding: 2px; max-height: 110px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.46rem; color: var(--accent-purple); }
     .data-table { width: 100%; border-collapse: collapse; text-align: left; }
     .data-table th, .data-table td { padding: 2px 3px; border-bottom: 1px solid rgba(192, 132, 252, 0.15); }
     .data-table th { color: var(--neon-cyan); font-weight: 600; }
@@ -131,6 +134,8 @@
     .pin-btn { background: var(--accent-purple); color: #fff; font-size: 0.48rem; padding: 2px 5px; border-radius: 3px; border: none; cursor: pointer; }
     .pin-btn:hover { background: #b060f0; }
 
+    .fluid-expanded-controls { display: none; flex-direction: column; gap: 0.3rem; background: rgba(0, 243, 255, 0.04); border: 1px solid rgba(0, 243, 255, 0.2); padding: 4px; border-radius: 4px; margin-top: 2px; }
+
     .collapsible-body { display: flex; flex-direction: column; gap: 0.3rem; transition: max-height 0.3s ease; overflow: hidden; max-height: 600px; }
     .collapsible-body.collapsed { max-height: 0px; padding: 0; margin: 0; }
   </style>
@@ -139,23 +144,37 @@
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v7.5.0</span> Smart Expanded Max</div>
-    <div class="compliance-badge">SECURED & EXPORTABLE</div>
+    <div class="brand-title">⚡ <span>QuantEngine v7.6.0</span> Fluid Pinch & Flow</div>
+    <div class="compliance-badge">FLUID MOBILE MASTER</div>
   </div>
 
   <div class="mobile-stack" id="mobileStack">
     
-    <!-- 1. Live Moving Data, Graphs & Thresholds -->
+    <!-- 1. Live Moving Data, Pinch & Graph Studio -->
     <div class="panel-card" id="cardWave">
       <div class="panel-title">
-        <span onclick="toggleSection('secWave')">📈 Live Moving Data & Graphs ▾</span>
-        <button class="pin-btn" id="pinBtn_cardWave" onclick="togglePinMaximize('cardWave')">📌 Maximize & Expand</button>
+        <span onclick="toggleSection('secWave')">📈 Live Stream, Pinch & Noise Graphs ▾</span>
+        <button class="pin-btn" id="pinBtn_cardWave" onclick="toggleFluidMaximize('cardWave')">⚡ Fluid Maximize</button>
       </div>
       <div class="collapsible-body" id="secWave">
-        <div class="canvas-box" style="height: 110px;">
-          <canvas id="movingWaveCanvas" width="400" height="110"></canvas>
-          <div class="hud-tag">Live Stream | Drag to Fork & Pull History</div>
+        <div class="canvas-box" style="height: 140px;" id="mainCanvasBox">
+          <canvas id="movingWaveCanvas" width="400" height="140"></canvas>
+          <div class="hud-tag" id="mainHudTag">Pinch / Drag to Grasp Noise Spike</div>
         </div>
+
+        <!-- Smart Expanded Controls available ONLY in Fluid Maximize view -->
+        <div class="fluid-expanded-controls" id="fluidWaveControls">
+          <div style="font-size: 0.5rem; color: var(--neon-cyan); font-family: var(--font-mono); font-weight:700;">🚀 FLUID MAXIMIZED GRAPH STUDIO & EXPORTS</div>
+          <div class="btn-row">
+            <button onclick="triggerExport()" class="action-btn">📥 Download Live CSV/JSON</button>
+            <button onclick="exportForWordAndPPT()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📄 Export Word/PPT</button>
+          </div>
+          <div class="control-item">
+            <div class="control-label">Pinch Sensitivity / Noise Filter: <span id="pinchSensVal">1.8x</span></div>
+            <input type="range" min="1.0" max="3.5" step="0.1" value="1.8" oninput="document.getElementById('pinchSensVal').innerText = this.value + 'x'">
+          </div>
+        </div>
+
         <div class="control-item">
           <div class="control-label">Anomaly Threshold: <span id="thresholdValText">75.0</span></div>
           <input type="range" id="thresholdSlider" min="20" max="95" step="0.5" value="75" oninput="updateThreshold(this.value)">
@@ -170,11 +189,11 @@
     <div class="panel-card" id="cardChaos">
       <div class="panel-title">
         <span onclick="toggleSection('secChaos')">🌀 Noise Graphs & Bifurcation ▾</span>
-        <button class="pin-btn" id="pinBtn_cardChaos" onclick="togglePinMaximize('cardChaos')">📌 Maximize & Expand</button>
+        <button class="pin-btn" id="pinBtn_cardChaos" onclick="toggleFluidMaximize('cardChaos')">⚡ Fluid Maximize</button>
       </div>
       <div class="collapsible-body" id="secChaos">
-        <div class="canvas-box" style="height: 50px;">
-          <canvas id="noiseModelCanvas" width="400" height="50"></canvas>
+        <div class="canvas-box" style="height: 55px;">
+          <canvas id="noiseModelCanvas" width="400" height="55"></canvas>
           <div class="hud-tag">Noise Attractor Active</div>
         </div>
         <div class="controls-grid" style="grid-template-columns: 1fr 1fr; gap:3px;">
@@ -198,7 +217,7 @@
     <div class="panel-card" id="cardFin">
       <div class="panel-title">
         <span onclick="toggleSection('secFin')">💰 Maths, Calculations & Monthly X ▾</span>
-        <button class="pin-btn" id="pinBtn_cardFin" onclick="togglePinMaximize('cardFin')">📌 Maximize & Expand</button>
+        <button class="pin-btn" id="pinBtn_cardFin" onclick="toggleFluidMaximize('cardFin')">⚡ Fluid Maximize</button>
       </div>
       <div class="collapsible-body" id="secFin">
         <div class="metrics-grid">
@@ -225,19 +244,19 @@
     <!-- 4. Querying History Through Noise, Suggestions & Auto-Parsing -->
     <div class="panel-card" id="cardQuery">
       <div class="panel-title">
-        <span onclick="toggleSection('secQuery')">🔍 Noise Query & New Graph Sub-Studio ▾</span>
-        <button class="pin-btn" id="pinBtn_cardQuery" onclick="togglePinMaximize('cardQuery')">📌 Maximize & Expand</button>
+        <span onclick="toggleSection('secQuery')">🔍 Noise Grasp & Sub-Graph Studio ▾</span>
+        <button class="pin-btn" id="pinBtn_cardQuery" onclick="toggleFluidMaximize('cardQuery')">⚡ Fluid Maximize</button>
       </div>
       <div class="collapsible-body" id="secQuery">
         <div class="suggestion-box" id="suggestionBox">
-          💡 **AI Suggestion**: Drag across main graph to pull history through noise filter into the new graph & table below.
+          💡 **AI Suggestion**: Pinch or drag across wave graph to grasp noise and pull history into sub-graph below.
         </div>
-        <div class="canvas-box" style="height: 55px; border-color: rgba(192, 132, 252, 0.4);">
-          <canvas id="forkedGraphCanvas" width="400" height="55"></canvas>
-          <div class="hud-tag">Pulled History Sub-Graph</div>
+        <div class="canvas-box" style="height: 60px; border-color: rgba(192, 132, 252, 0.4);">
+          <canvas id="forkedGraphCanvas" width="400" height="60"></canvas>
+          <div class="hud-tag">Grasped Noise History Sub-Graph</div>
         </div>
         <div class="btn-row" style="margin-top: 2px;">
-          <button onclick="pinToDashboardSummary()" class="action-btn" style="background: var(--accent-green); color: #020408;">📊 Export to Dashboard Summary</button>
+          <button onclick="pinToDashboardSummary()" class="action-btn" style="background: var(--accent-green); color: #020408;">📊 Send to Summary</button>
           <button onclick="exportForWordAndPPT()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📄 Export Word/PPT</button>
         </div>
         <div class="data-table-container">
@@ -246,7 +265,7 @@
               <tr><th>ID</th><th>Date</th><th>Category</th><th>Value</th></tr>
             </thead>
             <tbody id="queryTableBody">
-              <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Drag main graph to pull history slice.</td></tr>
+              <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Pinch/drag main graph to grasp noise slice.</td></tr>
             </tbody>
           </table>
         </div>
@@ -256,8 +275,8 @@
     <!-- 5. Uploading Data, SharePoint Linker & Downloading Exports -->
     <div class="panel-card" id="cardTools">
       <div class="panel-title">
-        <span onclick="toggleSection('secTools')">📁 Upload, SharePoint & Exports ▾</span>
-        <button class="pin-btn" id="pinBtn_cardTools" onclick="togglePinMaximize('cardTools')">📌 Maximize & Expand</button>
+        <span onclick="toggleSection('secTools')">📁 Upload, SharePoint & Sync ▾</span>
+        <button class="pin-btn" id="pinBtn_cardTools" onclick="toggleFluidMaximize('cardTools')">⚡ Fluid Maximize</button>
       </div>
       <div class="collapsible-body" id="secTools">
         <div class="control-item">
@@ -268,9 +287,6 @@
           <button onclick="autoLinkExternalSource()" class="action-btn">Link Stream</button>
           <button onclick="document.getElementById('fileUploadInput').click()" class="action-btn btn-secondary">Upload File</button>
           <input type="file" id="fileUploadInput" style="display:none" accept=".csv,.json" onchange="handleFileUpload(event)">
-        </div>
-        <div class="btn-row" style="margin-top: 3px;">
-          <button onclick="triggerExport()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📥 Download Raw Export</button>
         </div>
       </div>
     </div>
@@ -300,51 +316,51 @@
   let forkedRoiData = [];
   let pinnedDashboardSummaries = [];
   let isExternalSourceLinked = false;
-  let currentlyPinnedId = null;
+  let currentlyFluidMaxId = null;
 
   let financialConfig = { baseValue: 10.0 };
   let financialAccumulator = { monthlyTotal: 1245, quarterlyTotal: 3892, annualTotal: 15480 };
   let isInteracting = false;
   let dragStartX = 0;
   let dragEndX = 0;
+  let touchPinchStartDist = 0;
 
   function toggleSection(id) {
     const el = document.getElementById(id);
     if (el) el.classList.toggle('collapsed');
   }
 
-  function togglePinMaximize(cardId) {
+  function toggleFluidMaximize(cardId) {
     const card = document.getElementById(cardId);
     const pinBtn = document.getElementById(`pinBtn_${cardId}`);
 
-    if (currentlyPinnedId === cardId) {
-      // Unpin and return everything to standard tab layout
-      card.classList.remove('pinned-maximized');
-      pinBtn.innerText = "📌 Maximize & Expand";
+    if (currentlyFluidMaxId === cardId) {
+      card.classList.remove('fluid-maximized');
+      pinBtn.innerText = "⚡ Fluid Maximize";
       
       document.querySelectorAll('.panel-card').forEach(c => {
         c.classList.remove('dropped-tab');
         c.querySelector('.collapsible-body').classList.remove('collapsed');
       });
-      currentlyPinnedId = null;
+      currentlyFluidMaxId = null;
     } else {
-      if (currentlyPinnedId) {
-        const prevCard = document.getElementById(currentlyPinnedId);
-        prevCard.classList.remove('pinned-maximized');
-        document.getElementById(`pinBtn_${currentlyPinnedId}`).innerText = "📌 Maximize & Expand";
+      if (currentlyFluidMaxId) {
+        const prevCard = document.getElementById(currentlyFluidMaxId);
+        prevCard.classList.remove('fluid-maximized');
+        document.getElementById(`pinBtn_${currentlyFluidMaxId}`).innerText = "⚡ Fluid Maximize";
       }
 
-      currentlyPinnedId = cardId;
-      card.classList.add('pinned-maximized');
+      currentlyFluidMaxId = cardId;
+      card.classList.add('fluid-maximized');
       card.classList.remove('dropped-tab');
       card.querySelector('.collapsible-body').classList.remove('collapsed');
-      pinBtn.innerText = "↩ Minimize / Unpin";
+      pinBtn.innerText = "↩ Restore Standard Flow";
 
       document.querySelectorAll('.panel-card').forEach(c => {
         if (c.id !== cardId) {
           c.classList.add('dropped-tab');
-          c.classList.remove('pinned-maximized');
-          document.getElementById(`pinBtn_${c.id}`).innerText = "📌 Maximize & Expand";
+          c.classList.remove('fluid-maximized');
+          document.getElementById(`pinBtn_${c.id}`).innerText = "⚡ Fluid Maximize";
           c.querySelector('.collapsible-body').classList.add('collapsed');
         }
       });
@@ -387,24 +403,24 @@
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fullMasterHistory));
     const dlAnchorElem = document.createElement('a');
     dlAnchorElem.setAttribute("href", dataStr);
-    dlAnchorElem.setAttribute("download", `QuantEngine_Export_${Date.now()}.json`);
+    dlAnchorElem.setAttribute("download", `QuantEngine_FluidExport_${Date.now()}.json`);
     dlAnchorElem.click();
   }
 
   function pinToDashboardSummary() {
-    if (forkedRoiData.length === 0) { alert("Please drag across the main graph first to pull history into the new graph."); return; }
+    if (forkedRoiData.length === 0) { alert("Please pinch or drag across the main graph first to grasp noise history."); return; }
     pinnedDashboardSummaries.push({ points: forkedRoiData.length, time: new Date().toLocaleTimeString() });
-    alert(`Successfully exported ${forkedRoiData.length} points into Dashboard Summary!`);
+    alert(`Successfully sent ${forkedRoiData.length} grasped noise points to Dashboard Summary!`);
   }
 
   function exportForWordAndPPT() {
     if (forkedRoiData.length === 0 && pinnedDashboardSummaries.length === 0) { 
-      alert("Please pull a history slice into the new graph before exporting to Word or PowerPoint."); 
+      alert("Please grasp a noise slice on the graph before exporting to Word or PowerPoint."); 
       return; 
     }
-    let htmlContent = `<html><head><title>QuantEngine Executive Report</title><style>body{font-family:sans-serif;padding:20px;}table{width:100%;border-collapse:collapse;margin-top:10px;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#00f3ff;color:#000;}</style></head><body>`;
-    htmlContent += `<h1>QuantEngine Executive Summary Report</h1><p>Generated: ${new Date().toLocaleString()}</p><hr>`;
-    htmlContent += `<h3>Pulled History Sub-Studio Data Table</h3>`;
+    let htmlContent = `<html><head><title>QuantEngine Fluid Report</title><style>body{font-family:sans-serif;padding:20px;}table{width:100%;border-collapse:collapse;margin-top:10px;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#00f3ff;color:#000;}</style></head><body>`;
+    htmlContent += `<h1>QuantEngine Fluid Executive Report</h1><p>Generated: ${new Date().toLocaleString()}</p><hr>`;
+    htmlContent += `<h3>Grasped Noise Sub-Studio Table</h3>`;
     htmlContent += document.getElementById('queryDataTable').outerHTML;
     htmlContent += `</body></html>`;
 
@@ -412,7 +428,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `QuantEngine_ExecutiveReport_${Date.now()}.doc`;
+    a.download = `QuantEngine_FluidReport_${Date.now()}.doc`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -457,16 +473,43 @@
   const forkedCanvas = document.getElementById('forkedGraphCanvas');
   const forkedCtx = forkedCanvas.getContext('2d');
 
+  // Mouse / Touch Drag & Pinch Handlers for Mobile Noise Grasping
   waveCanvas.addEventListener('mousedown', (e) => { isInteracting = true; dragStartX = e.offsetX; dragEndX = dragStartX; });
   waveCanvas.addEventListener('mousemove', (e) => { if (isInteracting) dragEndX = e.offsetX; });
   waveCanvas.addEventListener('mouseup', (e) => { 
     if (!isInteracting) return;
     isInteracting = false;
     dragEndX = e.offsetX;
-    grabAndDropHistorySlice(Math.min(dragStartX, dragEndX), Math.max(dragStartX, dragEndX), waveCanvas.width);
+    graspNoiseAndPullHistory(Math.min(dragStartX, dragEndX), Math.max(dragStartX, dragEndX), waveCanvas.width);
   });
 
-  function grabAndDropHistorySlice(startX, endX, totalWidth) {
+  waveCanvas.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      isInteracting = true;
+      const rect = waveCanvas.getBoundingClientRect();
+      dragStartX = e.touches[0].clientX - rect.left;
+      dragEndX = dragStartX;
+    } else if (e.touches.length === 2) {
+      // Mobile Pinch simulation to grasp noise instantly
+      touchPinchStartDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    }
+  });
+
+  waveCanvas.addEventListener('touchmove', (e) => {
+    if (isInteracting && e.touches.length === 1) {
+      const rect = waveCanvas.getBoundingClientRect();
+      dragEndX = e.touches[0].clientX - rect.left;
+    }
+  });
+
+  waveCanvas.addEventListener('touchend', (e) => {
+    if (isInteracting) {
+      isInteracting = false;
+      graspNoiseAndPullHistory(Math.min(dragStartX, dragEndX), Math.max(dragStartX, dragEndX), waveCanvas.width);
+    }
+  });
+
+  function graspNoiseAndPullHistory(startX, endX, totalWidth) {
     const stepX = totalWidth / movingDataBuffer.length;
     const startIdx = Math.max(0, Math.floor(startX / stepX));
     const endIdx = Math.min(movingDataBuffer.length, Math.floor(endX / stepX));
@@ -474,12 +517,13 @@
     const selectedSlice = movingDataBuffer.slice(startIdx, endIdx);
     const mean = selectedSlice.reduce((a, b) => a + b, 0) / (selectedSlice.length || 1);
     
-    forkedRoiData = selectedSlice.filter(val => Math.abs(val - mean) > 2.0);
+    // Noise pinching filter
+    forkedRoiData = selectedSlice.filter(val => Math.abs(val - mean) > 1.5);
     if (forkedRoiData.length === 0) forkedRoiData = selectedSlice;
 
     renderForkedGraph();
     populateQueryTable(startIdx);
-    document.getElementById('suggestionBox').innerHTML = `💡 **AI Suggestion**: Pulled ${forkedRoiData.length} history points into new sub-graph. Ready for Dashboard Summary or Word/PPT export.`;
+    document.getElementById('suggestionBox').innerHTML = `💡 **Noise Grasp Successful**: Pulled ${forkedRoiData.length} pinched history points. Use fluid maximize view to download or export.`;
   }
 
   function renderForkedGraph() {
