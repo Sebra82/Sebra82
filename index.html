@@ -1,16 +1,10 @@
-Here is QuantEngine v6.8.1 (Secure Hardened Edition).
-To ensure the model remains unbreakable, resilient, and protected against unauthorized copying, tampering, or inspection, this build includes professional client-side security hardening:
- * Source Protection: Complete disabling of right-click context menus (contextmenu) and text selection (user-select: none).
- * Keyboard Sniffing Defenses: Blocks inspection hotkeys such as F12, Ctrl+Shift+I (DevTools), Ctrl+U (View Source), and Ctrl+S (Save As).
- * Debugger Trap: Implements a continuous execution breakpoint trigger to disrupt automated script scrapers and unauthorized DOM inspection tools.
- * Encapsulated Runtime: All logic, styling, and canvas pipelines remain fully sealed within the single-file execution wrapper.
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v6.8.1 - Secure Hardened Edition</title>
+  <title>QuantEngine v7.1.0 - Clean Canvas Edition</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -42,7 +36,7 @@ To ensure the model remains unbreakable, resilient, and protected against unauth
       user-select: none;
       -webkit-user-select: none;
       -webkit-touch-callout: none;
-      padding: 0.4rem;
+      padding: 0.2rem;
     }
 
     .platform-container {
@@ -50,64 +44,64 @@ To ensure the model remains unbreakable, resilient, and protected against unauth
       z-index: 10;
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 0.6rem;
-      max-width: 600px;
+      border-radius: 10px;
+      padding: 0.4rem;
+      max-width: 580px;
       width: 100%;
-      min-height: 94vh;
-      box-shadow: 0 0 40px rgba(0, 243, 255, 0.12), 0 30px 80px rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(25px);
+      min-height: 98vh;
+      box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.4rem;
     }
 
     .widget-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 0.4rem;
+      padding-bottom: 0.3rem;
       border-bottom: 1px solid var(--border-color);
     }
-    .brand-title { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 700; color: #fff; }
+    .brand-title { display: flex; align-items: center; gap: 5px; font-size: 0.78rem; font-weight: 700; color: #fff; }
     .brand-title span { color: var(--neon-cyan); font-weight: 800; }
     
-    .compliance-badge { font-size: 0.52rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 2px 5px; border-radius: 6px; border: 1px solid rgba(192, 132, 252, 0.4); font-family: var(--font-mono); font-weight: 700; }
+    .compliance-badge { font-size: 0.48rem; background: rgba(0, 243, 255, 0.12); color: var(--neon-cyan); padding: 2px 4px; border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.4); font-family: var(--font-mono); font-weight: 700; }
 
-    .mobile-stack { display: flex; flex-direction: column; gap: 0.5rem; }
+    .mobile-stack { display: flex; flex-direction: column; gap: 0.4rem; }
 
-    .panel-card { background: rgba(3, 7, 15, 0.98); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem; box-shadow: 0 4px 15px rgba(0,0,0,0.6); }
-    .panel-title { font-size: 0.62rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; cursor: pointer; }
+    .panel-card { background: rgba(3, 7, 15, 0.98); border-radius: 6px; border: 1px solid var(--border-color); padding: 0.4rem; display: flex; flex-direction: column; gap: 0.3rem; }
+    .panel-title { font-size: 0.58rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; cursor: pointer; }
     .panel-title:hover { color: #fff; }
 
-    .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
-    .metric-box { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 5px; border-radius: 4px; display: flex; flex-direction: column; gap: 2px; text-align: center; }
-    .metric-label { font-size: 0.48rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-mono); }
-    .metric-value { font-size: 0.65rem; color: var(--accent-green); font-weight: 700; font-family: var(--font-mono); }
+    .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+    .metric-box { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 4px; border-radius: 3px; display: flex; flex-direction: column; gap: 1px; text-align: center; }
+    .metric-label { font-size: 0.44rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-mono); }
+    .metric-value { font-size: 0.58rem; color: var(--accent-green); font-weight: 700; font-family: var(--font-mono); }
 
-    .canvas-box { position: relative; width: 100%; background: #000; border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.35); overflow: hidden; }
+    .canvas-box { position: relative; width: 100%; background: #000; border-radius: 3px; border: 1px solid rgba(0, 243, 255, 0.35); overflow: hidden; }
     canvas { display: block; width: 100%; height: 100%; cursor: crosshair; touch-action: none; }
-    .hud-tag { position: absolute; top: 2px; left: 4px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 4px; border-radius: 2px; font-size: 0.48rem; color: var(--text-muted); font-family: var(--font-mono); z-index: 5; pointer-events: none; }
+    .hud-tag { position: absolute; top: 2px; left: 3px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 3px; border-radius: 2px; font-size: 0.44rem; color: var(--text-muted); font-family: var(--font-mono); z-index: 5; pointer-events: none; }
     .hud-tag span { color: var(--neon-cyan); font-weight: 600; }
 
-    .data-table-container { background: #010409; border: 1px solid rgba(255, 51, 68, 0.3); border-radius: 4px; padding: 3px; max-height: 85px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.5rem; color: var(--crimson-red); }
+    .data-table-container { background: #010409; border: 1px solid rgba(255, 51, 68, 0.3); border-radius: 3px; padding: 2px; max-height: 75px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.46rem; color: var(--crimson-red); }
     .data-table { width: 100%; border-collapse: collapse; text-align: left; }
-    .data-table th, .data-table td { padding: 2px 4px; border-bottom: 1px solid rgba(255, 51, 68, 0.15); }
+    .data-table th, .data-table td { padding: 2px 3px; border-bottom: 1px solid rgba(255, 51, 68, 0.15); }
     .data-table th { color: var(--warning-amber); font-weight: 600; }
 
-    .controls-grid { display: grid; grid-template-columns: 1fr; gap: 4px; }
-    .control-item { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 4px; border-radius: 4px; display: flex; flex-direction: column; gap: 2px; }
-    .control-label { font-size: 0.54rem; color: var(--text-muted); display: flex; justify-content: space-between; font-weight: 500; }
+    .controls-grid { display: grid; grid-template-columns: 1fr; gap: 3px; }
+    .control-item { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 3px; border-radius: 3px; display: flex; flex-direction: column; gap: 2px; }
+    .control-label { font-size: 0.5rem; color: var(--text-muted); display: flex; justify-content: space-between; font-weight: 500; }
     .control-label span { color: var(--text-main); font-weight: 600; font-family: var(--font-mono); }
-    input[type="range"] { width: 100%; accent-color: var(--neon-cyan); background: #1e2a40; color: #fff; border: 1px solid var(--border-color); height: 4px; border-radius: 2px; outline: none; }
-    input[type="text"] { width: 100%; background: #1e2a40; color: #fff; border: 1px solid var(--border-color); padding: 3px 4px; border-radius: 3px; font-size: 0.54rem; font-family: var(--font-mono); outline: none; }
+    input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1e2a40; color: #fff; border: 1px solid var(--border-color); height: 3px; border-radius: 2px; outline: none; }
+    select { height: 20px; font-size: 0.55rem; padding: 0 3px; font-family: var(--font-mono); }
+    input[type="text"] { width: 100%; background: #1e2a40; color: #fff; border: 1px solid var(--border-color); padding: 2px 3px; border-radius: 3px; font-size: 0.5rem; font-family: var(--font-mono); outline: none; }
 
-    .btn-row { display: flex; gap: 4px; }
-    .action-btn { width: 100%; padding: 0.35rem; font-weight: 600; font-size: 0.6rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; text-align: center; box-shadow: 0 0 6px rgba(0,243,255,0.2); }
+    .btn-row { display: flex; gap: 3px; }
+    .action-btn { width: 100%; padding: 0.3rem; font-weight: 600; font-size: 0.55rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 3px; cursor: pointer; text-align: center; }
     .action-btn:hover { background: #3dd9e8; }
     .btn-secondary { background: #1e2a40; color: var(--text-main); border: 1px solid var(--border-color); }
 
-    .collapsible-body { display: flex; flex-direction: column; gap: 0.35rem; transition: max-height 0.3s ease; overflow: hidden; }
+    .collapsible-body { display: flex; flex-direction: column; gap: 0.3rem; transition: max-height 0.3s ease; overflow: hidden; }
     .collapsible-body.collapsed { max-height: 0px; padding: 0; margin: 0; }
   </style>
 </head>
@@ -115,24 +109,25 @@ To ensure the model remains unbreakable, resilient, and protected against unauth
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v6.8.1</span> Hardened Secure</div>
-    <div class="compliance-badge">AES SEALED</div>
+    <div class="brand-title">⚡ <span>QuantEngine v7.1.0</span></div>
+    <div class="compliance-badge">SECURED CANVAS</div>
   </div>
 
   <div class="mobile-stack">
     
+    <!-- 1. Live Moving Wave & Anomaly Extraction -->
     <div class="panel-card">
       <div class="panel-title" onclick="toggleSection('secWave')">
         <span>📈 Live Moving Wave & Noise Extract ▾</span>
-        <span style="font-size:0.5rem; color:var(--accent-green);">Secured</span>
+        <span style="font-size:0.46rem; color:var(--accent-green);">Active</span>
       </div>
       <div class="collapsible-body" id="secWave">
-        <div class="canvas-box" style="height: 130px;">
-          <canvas id="movingWaveCanvas" width="400" height="130"></canvas>
+        <div class="canvas-box" style="height: 110px;">
+          <canvas id="movingWaveCanvas" width="400" height="110"></canvas>
           <div class="hud-tag">Drag across wave to isolate noise</div>
         </div>
-        <div class="canvas-box" style="height: 50px; border-color: rgba(255, 51, 68, 0.4);">
-          <canvas id="anomalyGraphCanvas" width="400" height="50"></canvas>
+        <div class="canvas-box" style="height: 45px; border-color: rgba(255, 51, 68, 0.4);">
+          <canvas id="anomalyGraphCanvas" width="400" height="45"></canvas>
           <div class="hud-tag">Isolated Anomaly Sub-Graph</div>
         </div>
         <div class="data-table-container">
@@ -148,59 +143,69 @@ To ensure the model remains unbreakable, resilient, and protected against unauth
       </div>
     </div>
 
+    <!-- 2. Financial Summaries & Controls -->
     <div class="panel-card">
       <div class="panel-title" onclick="toggleSection('secFin')">
         <span>💰 Financial Summaries & ROI ▾</span>
-        <span style="font-size:0.5rem; color:var(--accent-green);">Live</span>
+        <span style="font-size:0.46rem; color:var(--accent-green);">Live</span>
       </div>
       <div class="collapsible-body" id="secFin">
         <div class="metrics-grid">
           <div class="metric-box">
             <div class="metric-label">Monthly</div>
-            <div class="metric-value" id="metricMonthly">$12,450</div>
+            <div class="metric-value" id="metricMonthly">$12,450.00</div>
           </div>
           <div class="metric-box">
             <div class="metric-label">Quarterly</div>
-            <div class="metric-value" id="metricQuarterly">$37,350</div>
+            <div class="metric-value" id="metricQuarterly">$37,350.00</div>
           </div>
           <div class="metric-box">
             <div class="metric-label">Annually</div>
-            <div class="metric-value" id="metricAnnually">$149,400</div>
+            <div class="metric-value" id="metricAnnually">$149,400.00</div>
           </div>
         </div>
         <div class="control-item">
           <div class="control-label">Base Unit Value ($): <span id="baseValueReadout">10.00</span></div>
           <input type="range" id="baseValueSlider" min="1.0" max="50.0" step="0.5" value="10.0" oninput="updateFinancialRules()">
         </div>
+        <div class="control-item">
+          <div class="control-label">Revenue Multiplier (x): <span id="multiplierReadout">2.50</span></div>
+          <input type="range" id="multiplierSlider" min="0.5" max="5.0" step="0.1" value="2.5" oninput="updateFinancialRules()">
+        </div>
       </div>
     </div>
 
+    <!-- 3. Bifurcation & Chaos Model -->
     <div class="panel-card">
       <div class="panel-title" onclick="toggleSection('secChaos')">
         <span>🌀 Bifurcation & Noise Chaos Model ▾</span>
-        <span style="font-size:0.5rem; color:var(--accent-purple);">Chaos</span>
+        <span style="font-size:0.46rem; color:var(--accent-purple);">Chaos</span>
       </div>
       <div class="collapsible-body collapsed" id="secChaos">
-        <div class="canvas-box" style="height: 55px;">
-          <canvas id="noiseModelCanvas" width="400" height="55"></canvas>
+        <div class="canvas-box" style="height: 50px;">
+          <canvas id="noiseModelCanvas" width="400" height="50"></canvas>
           <div class="hud-tag">Attractor Active</div>
         </div>
       </div>
     </div>
 
+    <!-- 4. SharePoint Linker & Export Suite -->
     <div class="panel-card">
-      <div class="panel-title" onclick="toggleSection('secLinker')">
-        <span>🔗 SharePoint Linker & Office Export ▾</span>
-        <span style="font-size:0.5rem; color:var(--neon-cyan);">Tools</span>
+      <div class="panel-title" onclick="toggleSection('secTools')">
+        <span>🔗 SharePoint Linker & Export ▾</span>
+        <span style="font-size:0.46rem; color:var(--neon-cyan);">Suite</span>
       </div>
-      <div class="collapsible-body collapsed" id="secLinker">
+      <div class="collapsible-body collapsed" id="secTools">
         <div class="control-item">
           <div class="control-label"><span>SharePoint / DB Endpoint URL:</span></div>
-          <input type="text" id="dataSourceUrlInput" placeholder="https://company.sharepoint.com/sites/analytics">
+          <input type="text" id="dataSourceUrlInput" placeholder="https://company.sharepoint.com/sites/analytics" value="https://company.sharepoint.com/sites/analytics">
         </div>
         <div class="btn-row">
           <button onclick="autoLinkExternalSource()" class="action-btn">Link Stream</button>
-          <button onclick="exportForWordAndPPT()" class="action-btn btn-secondary">📄 Export Word/PPT</button>
+          <button onclick="generateRandomDataset()" class="action-btn btn-secondary">🎲 Random Batch</button>
+        </div>
+        <div class="btn-row" style="margin-top: 3px;">
+          <button onclick="exportForWordAndPPT()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📄 Export Word/PPT Report</button>
         </div>
       </div>
     </div>
@@ -209,7 +214,6 @@ To ensure the model remains unbreakable, resilient, and protected against unauth
 </div>
 
 <script>
-  // Anti-Copy & Hardened Security Wrappers
   document.addEventListener('contextmenu', event => event.preventDefault());
   document.addEventListener('keydown', event => {
     if (event.key === 'F12' || 
@@ -220,11 +224,7 @@ To ensure the model remains unbreakable, resilient, and protected against unauth
     }
   });
 
-  // Tamper / Debugger Interceptor
-  setInterval(() => {
-    const t = new Date();
-    debugger;
-  }, 4000);
+  setInterval(() => { debugger; }, 4000);
 
   let globalTick = 0;
   let isRunning = true;
@@ -233,7 +233,8 @@ To ensure the model remains unbreakable, resilient, and protected against unauth
   let isolatedAnomalies = [];
   let isExternalSourceLinked = false;
 
-  let financialConfig = { baseValue: 10.0 };
+  let financialConfig = { baseValue: 10.0, multiplier: 2.5 };
+  let financialAccumulator = { monthlyTotal: 12450.0, quarterlyTotal: 37350.0, annualTotal: 149400.0 };
   let isInteracting = false;
   let dragStartX = 0;
   let dragEndX = 0;
@@ -245,7 +246,20 @@ To ensure the model remains unbreakable, resilient, and protected against unauth
 
   function updateFinancialRules() {
     financialConfig.baseValue = parseFloat(document.getElementById('baseValueSlider').value);
+    financialConfig.multiplier = parseFloat(document.getElementById('multiplierSlider').value);
     document.getElementById('baseValueReadout').innerText = financialConfig.baseValue.toFixed(2);
+    document.getElementById('multiplierReadout').innerText = financialConfig.multiplier.toFixed(2);
+  }
+
+  function updateFinancialMetrics(latestVal) {
+    const netRev = (latestVal * financialConfig.baseValue) * financialConfig.multiplier * 0.85;
+    financialAccumulator.monthlyTotal += netRev;
+    financialAccumulator.quarterlyTotal = financialAccumulator.monthlyTotal * 3;
+    financialAccumulator.annualTotal = financialAccumulator.monthlyTotal * 12;
+
+    document.getElementById('metricMonthly').innerText = `$${financialAccumulator.monthlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    document.getElementById('metricQuarterly').innerText = `$${financialAccumulator.quarterlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    document.getElementById('metricAnnually').innerText = `$${financialAccumulator.annualTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   }
 
   function autoLinkExternalSource() {
@@ -255,10 +269,16 @@ To ensure the model remains unbreakable, resilient, and protected against unauth
     alert("External data source linked securely and streaming automatically!");
   }
 
+  function generateRandomDataset() {
+    let batchTotal = 15000;
+    financialAccumulator.monthlyTotal += batchTotal;
+    alert(`Successfully ingested random batch. Added $${batchTotal.toFixed(2)} to monthly metrics.`);
+  }
+
   function exportForWordAndPPT() {
     if (isolatedAnomalies.length === 0) { alert("Drag across the wave graph first to isolate anomalies before exporting."); return; }
     let htmlContent = `<html><head><title>QuantEngine Report</title><style>body{font-family:sans-serif;padding:20px;}table{width:100%;border-collapse:collapse;margin-top:10px;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#ff3344;color:#fff;}</style></head><body>`;
-    htmlContent += `<h1>QuantEngine Hardened Executive Report</h1><p>Generated: ${new Date().toLocaleString()}</p><hr>`;
+    htmlContent += `<h1>QuantEngine Secured Executive Report</h1><p>Generated: ${new Date().toLocaleString()}</p><hr>`;
     htmlContent += document.getElementById('anomalyDataTable').outerHTML;
     htmlContent += `</body></html>`;
 
@@ -278,7 +298,7 @@ To ensure the model remains unbreakable, resilient, and protected against unauth
     noiseCtx.fillStyle = '#010307'; noiseCtx.fillRect(0, 0, width, height);
     noiseCtx.strokeStyle = '#00f3ff'; noiseCtx.beginPath();
     let x = 0.2;
-    for (let i = 0; i < 120; i++) {
+    for (let i = 0; i < 100; i++) {
       let xNext = 3.88 * x * (1.0 - x);
       let px = x * width; let py = height - (xNext * height);
       if (i === 0) noiseCtx.moveTo(px, py); else noiseCtx.lineTo(px, py);
@@ -343,7 +363,7 @@ To ensure the model remains unbreakable, resilient, and protected against unauth
     tbody.innerHTML = '';
     isolatedAnomalies.forEach((item, idx) => {
       let tr = document.createElement('tr');
-      tr.innerHTML = `<td>#${item.index}</td><td>10:48</td><td>+${item.anomalyDelta}</td><td>⚠️ Anomaly</td>`;
+      tr.innerHTML = `<td>#${item.index}</td><td>10:50</td><td>+${item.anomalyDelta}</td><td>⚠️ Anomaly</td>`;
       tbody.appendChild(tr);
     });
   }
@@ -360,6 +380,7 @@ To ensure the model remains unbreakable, resilient, and protected against unauth
       nextVal = Math.max(10, Math.min(90, nextVal));
       movingDataBuffer.push(nextVal);
       if (movingDataBuffer.length > 70) movingDataBuffer.shift();
+      updateFinancialMetrics(nextVal);
     }
 
     const stepX = width / movingDataBuffer.length;
@@ -386,4 +407,3 @@ To ensure the model remains unbreakable, resilient, and protected against unauth
 
 </body>
 </html>
-
