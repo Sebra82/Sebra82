@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v6.0 - Ultimate Master Suite</title>
+  <title>SEBRA82 v6.1 - Fully Interactive Noise Graph Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -134,6 +134,11 @@
 
     .hud-tag { position: absolute; top: 2px; left: 3px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 3px; border-radius: 2px; font-size: 0.44rem; color: var(--neon-cyan); font-family: var(--font-mono); z-index: 5; pointer-events: none; text-shadow: 0 0 6px var(--cyan-glow); }
 
+    /* Interactive Graph Toolbar overlay */
+    .graph-toolbar { position: absolute; bottom: 3px; right: 4px; display: flex; gap: 3px; z-index: 6; }
+    .graph-tool-btn { font-size: 0.4rem; font-family: var(--font-mono); background: rgba(0, 243, 255, 0.2); color: var(--neon-cyan); border: 1px solid rgba(0, 243, 255, 0.4); padding: 1px 4px; border-radius: 2px; cursor: pointer; }
+    .graph-tool-btn:hover { background: rgba(0, 243, 255, 0.4); color: #fff; }
+
     .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
     .metric-box { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 4px; border-radius: 3px; display: flex; flex-direction: column; gap: 1px; text-align: center; }
     .metric-label { font-size: 0.44rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-mono); }
@@ -161,7 +166,6 @@
     .pin-btn { background: var(--accent-purple); color: #fff; font-size: 0.48rem; padding: 2px 5px; border-radius: 3px; border: none; cursor: pointer; font-family: var(--font-mono); }
     .pin-btn:hover { background: #b060f0; }
 
-    /* Intuitive File Browser & Explorer Display Underneath */
     .file-explorer-box { background: #010307; border: 1px solid var(--border-color); border-radius: 4px; padding: 5px; font-family: var(--font-mono); font-size: 0.46rem; color: var(--accent-green); display: flex; flex-direction: column; gap: 3px; }
     .explorer-toolbar { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,243,255,0.2); padding-bottom: 3px; font-size: 0.44rem; color: var(--text-muted); }
     .explorer-content { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; min-height: 65px; max-height: 95px; overflow-y: auto; }
@@ -178,7 +182,7 @@
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v6.0</span> Master Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v6.1</span> Master Suite</div>
     <div class="header-actions">
       <button class="gen-rand-btn" onclick="generateRandomDataEpoch()">🎲 Random Data</button>
       <button class="saved-view-btn" onclick="saveCustomView()">💾 Save View</button>
@@ -250,7 +254,7 @@
       </div>
     </div>
 
-    <!-- Step 3: Live Noise Graph with Real-Time Streaming (6-12M Span + Pull Subsets) -->
+    <!-- Step 3: Highly Interactive Noise Graph (Hover Inspector, Zoom/Pan, Drag Subset & Live Stream) -->
     <div class="panel-card" id="cardWave">
       <div class="section-category-bar">
         <span class="cat-chip cat-calc">Calculation</span>
@@ -259,13 +263,18 @@
         <span class="cat-chip cat-world">World</span>
       </div>
       <div class="panel-title">
-        <span onclick="toggleSec('secWave')">3. Live Noise Graph & Streaming Studio ▾</span>
+        <span onclick="toggleSec('secWave')">3. Advanced Interactive Noise Graph & Streaming Studio ▾</span>
         <button class="pin-btn" id="pinBtn_cardWave" onclick="toggleMax('cardWave')">⚡ Maximize & Expand</button>
       </div>
       <div class="collapsible-body collapsed" id="secWave">
-        <div class="canvas-box" style="height: 130px;">
-          <canvas id="secureSimCanvas" width="400" height="130"></canvas>
-          <div class="hud-tag">🔴 LIVE STREAMING NOISE | Drag across wave to pull subset slice (6-12M)</div>
+        <div class="canvas-box" style="height: 140px;">
+          <canvas id="secureSimCanvas" width="400" height="140"></canvas>
+          <div class="hud-tag" id="waveHudTag">🔴 LIVE STREAM | Hover to Inspect | Drag to Pull Subset</div>
+          <div class="graph-toolbar">
+            <button class="graph-tool-btn" onclick="togglePauseStream()">⏸ Pause</button>
+            <button class="graph-tool-btn" onclick="resetZoomPan()">🔍 Reset Zoom</button>
+            <button class="graph-tool-btn" onclick="triggerSpikeBurst()">⚡ Burst</button>
+          </div>
         </div>
         
         <!-- Isolated Extracted Spikes & Anomalies Sub-Graph with Predictive Next Steps -->
@@ -302,7 +311,7 @@
       </div>
       <div class="collapsible-body collapsed" id="secQuery">
         <div class="suggestion-box" id="suggestionBox">
-          💡 **AI Suggestion**: Fully operational! Drag across the live noise graph in Step 3 to filter history. Automatically maps IDs, Dates, and Categories.
+          💡 **AI Suggestion**: Fully operational! Drag across the live interactive noise graph in Step 3 to filter history. Automatically maps IDs, Dates, and Categories.
         </div>
         <div class="data-table-container">
           <table class="data-table" id="queryDataTable">
@@ -387,8 +396,10 @@
 
   let globalTick = 0, timeOffset = 0;
   let savedViews = [], activeMaxId = null;
-  let waveBuffer = new Array(120).fill(50), extractedSubset = [];
+  let waveBuffer = new Array(150).fill(50), extractedSubset = [];
   let isSelecting = false, selectStartX = 0, selectEndX = 0;
+  let isStreamPaused = false, zoomLevel = 1.0, panOffset = 0;
+  let hoverIndex = -1, burstMultiplier = 1.0;
   let finConfig = { baseValue: 10.0 };
 
   const R_LOOKUP_F32 = new Float32Array(296);
@@ -494,14 +505,14 @@
 
   function generateRandomDataEpoch() {
     waveBuffer = waveBuffer.map(() => Math.floor(Math.random() * 75) + 15);
-    extractedSubset = waveBuffer.slice(20, 80);
+    extractedSubset = waveBuffer.slice(25, 100);
     renderSubsetSpikes();
     populateAnomalyTable();
     
     document.getElementById('metricM6').innerText = (Math.floor(Math.random() * 3000) + 800).toLocaleString() + " X";
     document.getElementById('metricM3').innerText = (Math.floor(Math.random() * 4000) + 1200).toLocaleString() + " X";
     document.getElementById('metricCurrent').innerText = (Math.floor(Math.random() * 10000) + 10000).toLocaleString() + " X";
-    alert("🎲 Random 6-12 month streaming epoch generated successfully across all graphs and query studio!");
+    alert("🎲 Random 6-12 month streaming epoch generated successfully across all interactive graphs!");
   }
 
   function openFolder(path) {
@@ -593,12 +604,27 @@
     });
   }
 
-  // Live Streaming Noise Graph & Interactive Subset Selection
+  // --- Highly Interactive Live Noise Graph & Streaming Suite ---
   const waveCanvas = document.getElementById('secureSimCanvas');
   const waveCtx = waveCanvas.getContext('2d');
   const subsetCanvas = document.getElementById('subsetSpikeCanvas');
   const subsetCtx = subsetCanvas ? subsetCanvas.getContext('2d') : null;
 
+  function togglePauseStream() {
+    isStreamPaused = !isStreamPaused;
+  }
+
+  function resetZoomPan() {
+    zoomLevel = 1.0;
+    panOffset = 0;
+  }
+
+  function triggerSpikeBurst() {
+    burstMultiplier = 1.8;
+    setTimeout(() => { burstMultiplier = 1.0; }, 1200);
+  }
+
+  // Mouse / Pointer interactions for Noise Graph (Hover Inspector, Zoom, Pan, Drag Selection)
   waveCanvas.addEventListener('pointerdown', (e) => {
     isSelecting = true;
     selectStartX = e.offsetX;
@@ -606,8 +632,13 @@
   });
 
   waveCanvas.addEventListener('pointermove', (e) => {
-    if (!isSelecting) return;
-    selectEndX = e.offsetX;
+    const rect = waveCanvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    hoverIndex = Math.floor((mouseX / waveCanvas.width) * (waveBuffer.length / zoomLevel) + panOffset);
+    
+    if (isSelecting) {
+      selectEndX = e.offsetX;
+    }
   });
 
   waveCanvas.addEventListener('pointerup', (e) => {
@@ -617,10 +648,22 @@
     pullSubsetAndPredict();
   });
 
+  waveCanvas.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    if (e.deltaY < 0) {
+      zoomLevel = Math.min(4.0, zoomLevel + 0.2);
+    } else {
+      zoomLevel = Math.max(1.0, zoomLevel - 0.2);
+      if (zoomLevel === 1.0) panOffset = 0;
+    }
+  }, { passive: false });
+
   function pullSubsetAndPredict() {
-    let sIdx = Math.floor((Math.min(selectStartX, selectEndX) / waveCanvas.width) * waveBuffer.length);
-    let eIdx = Math.floor((Math.max(selectStartX, selectEndX) / waveCanvas.width) * waveBuffer.length);
-    if (Math.abs(eIdx - sIdx) < 3) { sIdx = Math.max(0, sIdx - 10); eIdx = Math.min(waveBuffer.length, eIdx + 10); }
+    let sIdx = Math.floor((Math.min(selectStartX, selectEndX) / waveCanvas.width) * (waveBuffer.length / zoomLevel) + panOffset);
+    let eIdx = Math.floor((Math.max(selectStartX, selectEndX) / waveCanvas.width) * (waveBuffer.length / zoomLevel) + panOffset);
+    sIdx = Math.max(0, sIdx);
+    eIdx = Math.min(waveBuffer.length, eIdx);
+    if (Math.abs(eIdx - sIdx) < 3) { sIdx = Math.max(0, sIdx - 15); eIdx = Math.min(waveBuffer.length, eIdx + 15); }
     
     extractedSubset = waveBuffer.slice(sIdx, eIdx);
     if (extractedSubset.length === 0) extractedSubset = [60, 85, 92, 78, 88];
@@ -692,7 +735,6 @@
     alert(`File "${file.name}" uploaded. Automatically parsing columns, IDs, dates, and synchronizing query table.`);
   }
 
-  // Fully working Export Query and Table Studio Population
   function populateAnomalyTable() {
     const tbody = document.getElementById('queryTableBody'); tbody.innerHTML = '';
     let threshold = parseFloat(document.getElementById('spikeThreshVal').value);
@@ -712,6 +754,11 @@
   }
 
   function updateWaveOptics() {
+    if (!isStreamPaused) {
+      globalTick++; 
+      timeOffset += 0.04;
+    }
+
     const scaleIdx = 64;
     const w = waveCanvas.width, h = waveCanvas.height;
     waveCtx.fillStyle = '#04060a'; waveCtx.fillRect(0, 0, w, h);
@@ -720,20 +767,35 @@
     waveCtx.strokeStyle = '#00f3ff'; waveCtx.lineWidth = 1.8; waveCtx.beginPath();
     const d = 1e-4, a = 2e-5, L = 1.0;
 
+    let visibleCount = Math.floor(w / zoomLevel);
     waveBuffer = [];
+    
     for (let xPos = 0; xPos < w; xPos++) {
+      let dataIdx = Math.floor(panOffset + (xPos / w) * visibleCount);
       const raw_x = (xPos - w / 2) * 0.0001;
       const phase_interf = (Math.PI * d * raw_x) / (r_n * L + 1e-35) + 0.5;
       const phase_diffract = (Math.PI * a * raw_x) / (r_n * L + 1e-35);
       const interf = Math.cos(phase_interf + timeOffset) ** 2;
       const diffract = phase_diffract === 0 ? 1.0 : (Math.sin(phase_diffract) / phase_diffract) ** 2;
-      const val = Math.min(95, Math.max(15, interf * diffract * 75.0 + Math.sin(xPos * 0.15 + timeOffset) * 6));
+      const val = Math.min(95, Math.max(15, interf * diffract * 75.0 * burstMultiplier + Math.sin(xPos * 0.15 + timeOffset) * 6));
       waveBuffer.push(val);
 
       const yPos = h - (val * (h / 100));
       if (xPos === 0) waveCtx.moveTo(xPos, yPos); else waveCtx.lineTo(xPos, yPos);
     }
     waveCtx.stroke();
+
+    // Hover Inspector HUD Feedback
+    if (hoverIndex >= 0 && hoverIndex < waveBuffer.length) {
+      let hVal = waveBuffer[hoverIndex];
+      let hX = (hoverIndex / waveBuffer.length) * w;
+      waveCtx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      waveCtx.setLineDash([2, 2]);
+      waveCtx.beginPath(); waveCtx.moveTo(hX, 0); waveCtx.lineTo(hX, h); waveCtx.stroke();
+      waveCtx.setLineDash([]);
+      
+      document.getElementById('waveHudTag').innerText = `🔴 LIVE STREAM | Index: #${4000 + hoverIndex} | Val: $${(hVal * finConfig.baseValue).toFixed(2)}`;
+    }
 
     if (isSelecting) {
       waveCtx.fillStyle = 'rgba(0, 243, 255, 0.2)';
@@ -746,7 +808,6 @@
   }
 
   function masterLoop() {
-    globalTick++; timeOffset += 0.04;
     renderVividAtom();
     updateWaveOptics();
     renderSubsetSpikes();
