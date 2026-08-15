@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v5.6 - Ultimate Unified Master Suite</title>
+  <title>SEBRA82 v5.6 - Fully Interactive Breathing 3D Atom Master Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -123,8 +123,6 @@
     canvas:active { cursor: grabbing; }
 
     .hud-tag { position: absolute; top: 2px; left: 3px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 3px; border-radius: 2px; font-size: 0.44rem; color: var(--neon-cyan); font-family: var(--font-mono); z-index: 5; pointer-events: none; text-shadow: 0 0 6px var(--cyan-glow); }
-
-    .expanded-graph-suite { display: none; flex-direction: column; gap: 0.4rem; background: rgba(0, 243, 255, 0.04); border: 1px solid rgba(0, 243, 255, 0.25); padding: 6px; border-radius: 6px; margin-top: 2px; }
 
     .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
     .metric-box { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 4px; border-radius: 3px; display: flex; flex-direction: column; gap: 1px; text-align: center; }
@@ -456,7 +454,7 @@
     }
   }
 
-  // Fully Interactive Breathing Atom Mouse & Touch Bindings
+  // Fully Interactive Breathing Atom Mouse & Touch Bindings (Restoring rotation motion)
   atomCanvas.addEventListener('mousedown', (e) => {
     isDraggingAtom = true;
     lastX = e.clientX;
@@ -617,10 +615,10 @@
     extractedSpikes.forEach((v, idx) => {
       let tr = document.createElement('tr');
       let isAnom = v > parseFloat(document.getElementById('spikeThreshVal').innerText);
-      tr.innerHTML = `<td>#${startIndex + idx}</td><td>2026-08-${10+idx}</td><td>${isAnom ? '⚠️ Spike / Anomaly' : 'Standard Wave'}</td><td>$${(v * finConfig.baseValue).toFixed(2)}</td>`;
+      tr.innerHTML = `<td>#${startIndex + idx}</td><td>2026-08-${10+idx}</td><td>${isAnom ? '⚠️ Spike / Anomaly' : 'Standard Wave'}</td><td>$${(v * 10).toFixed(2)}</td>`;
       tbody.appendChild(tr);
     });
-    document.getElementById('suggestionBox').innerHTML = `💡 **AI Suggestion**: Extracted ${extractedSpikes.length} points. Automatically categorized into monthly summaries and auto-detected IDs/Dates.`;
+    document.getElementById('suggestionBox').innerHTML = `💡 **Grasp Successful**: Extracted ${extractedSpikes.length} points. Automatically categorized into monthly summaries and auto-detected IDs/Dates.`;
   }
 
   function updateWaveOptics() {
