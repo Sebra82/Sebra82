@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v6.2 - Ultimate Interactive Master Suite</title>
+  <title>SEBRA82 v6.3 - Executive Insight & Enhanced Master Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -128,6 +128,10 @@
     .panel-title { font-size: 0.58rem; font-weight: 700; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; cursor: pointer; }
     .panel-title:hover { color: var(--neon-cyan); }
 
+    /* Summary bar for each section when collapsed */
+    .section-summary-preview { font-size: 0.46rem; color: var(--text-muted); font-family: var(--font-mono); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 3px 5px; border-radius: 3px; border-left: 2px solid var(--neon-cyan); }
+    .section-summary-preview span strong { color: var(--accent-green); }
+
     .canvas-box { position: relative; width: 100%; background: radial-gradient(circle at center, #0a1128 0%, #000000 100%); border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.4); overflow: hidden; }
     
     canvas { display: block; width: 100%; height: 100%; cursor: crosshair; touch-action: none; pointer-events: auto !important; }
@@ -138,7 +142,6 @@
     .graph-tool-btn { font-size: 0.4rem; font-family: var(--font-mono); background: rgba(0, 243, 255, 0.2); color: var(--neon-cyan); border: 1px solid rgba(0, 243, 255, 0.4); padding: 1px 4px; border-radius: 2px; cursor: pointer; }
     .graph-tool-btn:hover { background: rgba(0, 243, 255, 0.4); color: #fff; }
 
-    /* Interactive Math Studio Dashboard Enhancements */
     .math-dashboard { display: grid; grid-template-columns: 1fr; gap: 4px; }
     .math-interactive-card { background: rgba(10, 14, 22, 0.95); border: 1px solid rgba(0, 243, 255, 0.25); border-radius: 4px; padding: 5px; display: flex; flex-direction: column; gap: 3px; }
     .math-live-readout { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 0.5rem; background: rgba(0, 243, 255, 0.06); border: 1px solid rgba(0, 243, 255, 0.2); padding: 3px 5px; border-radius: 3px; color: var(--neon-cyan); }
@@ -181,6 +184,13 @@
     .file-row { display: flex; align-items: center; gap: 4px; cursor: pointer; padding: 1px 2px; border-radius: 2px; }
     .file-row:hover { background: rgba(0, 243, 255, 0.15); color: #fff; }
 
+    /* Executive Bottom Summary Dashboard Card */
+    .summary-dashboard-card { background: linear-gradient(135deg, rgba(0,243,255,0.08) 0%, rgba(192,132,252,0.08) 100%); border: 1px solid var(--neon-cyan); }
+    .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; }
+    .summary-metric-card { background: rgba(2,4,8,0.8); border: 1px solid rgba(0,243,255,0.3); border-radius: 4px; padding: 5px; text-align: center; font-family: var(--font-mono); }
+    .summary-metric-title { font-size: 0.42rem; color: var(--text-muted); text-transform: uppercase; }
+    .summary-metric-val { font-size: 0.65rem; color: var(--neon-cyan); font-weight: bold; margin-top: 2px; }
+
     .collapsible-body { display: flex; flex-direction: column; gap: 0.3rem; transition: max-height 0.3s ease; overflow: hidden; max-height: 900px; }
     .collapsible-body.collapsed { max-height: 0px; padding: 0; margin: 0; }
   </style>
@@ -189,7 +199,7 @@
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v6.2</span> Master Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v6.3</span> Executive Master Suite</div>
     <div class="header-actions">
       <button class="gen-rand-btn" onclick="generateRandomDataEpoch()">🎲 Random Data</button>
       <button class="saved-view-btn" onclick="saveCustomView()">💾 Save View</button>
@@ -211,11 +221,18 @@
         <span class="cat-chip cat-world">World</span>
         <span class="cat-chip cat-fin">Finance</span>
       </div>
-      <div class="panel-title">
-        <span onclick="toggleSec('secAtom')">1. Breathing 3D Quantum Atom Matrix ▾</span>
-        <button class="pin-btn" id="pinBtn_cardAtom" onclick="toggleMax('cardAtom')">⚡ Maximize</button>
+      <div class="panel-title" onclick="toggleSec('secAtom')">
+        <span>1. Breathing 3D Quantum Atom Matrix</span>
+        <div style="display:flex; gap:4px; align-items:center;">
+          <span style="font-size:0.44rem; color:var(--neon-cyan);">[Click to Expand]</span>
+          <button class="pin-btn" id="pinBtn_cardAtom" onclick="event.stopPropagation(); toggleMax('cardAtom')">⚡ Maximize</button>
+        </div>
       </div>
-      <div class="collapsible-body" id="secAtom">
+      <div class="section-summary-preview" id="sumPreviewAtom" onclick="toggleSec('secAtom')">
+        <span>Status: <strong>Active Lattice</strong> | Shell Nodes: <strong>320</strong></span>
+        <span>🔍 Click for Enhanced 3D View</span>
+      </div>
+      <div class="collapsible-body collapsed" id="secAtom">
         <div class="canvas-box" style="height: 220px;" id="atomBox">
           <canvas id="atom3DCanvas" width="400" height="220"></canvas>
           <div class="hud-tag">✨ BREATHING CORE | Drag to Rotate, Scroll/Pinch to Zoom & Look Inside</div>
@@ -227,7 +244,7 @@
       </div>
     </div>
 
-    <!-- Step 2: Ultra-Intuitive & Interactive Maths, Calculations & 6-12M Suite -->
+    <!-- Step 2: Maths, Calculations & Modeling Studio -->
     <div class="panel-card" id="cardFin">
       <div class="section-category-bar">
         <span class="cat-chip cat-calc">Calculation</span>
@@ -235,9 +252,16 @@
         <span class="cat-chip cat-world">World</span>
         <span class="cat-chip cat-sci">Science</span>
       </div>
-      <div class="panel-title">
-        <span onclick="toggleSec('secFin')">2. Interactive Maths, Calculations & Modeling Studio ▾</span>
-        <button class="pin-btn" id="pinBtn_cardFin" onclick="toggleMax('cardFin')">⚡ Maximize</button>
+      <div class="panel-title" onclick="toggleSec('secFin')">
+        <span>2. Maths, Calculations & Modeling Studio</span>
+        <div style="display:flex; gap:4px; align-items:center;">
+          <span style="font-size:0.44rem; color:var(--neon-cyan);">[Click to Expand]</span>
+          <button class="pin-btn" id="pinBtn_cardFin" onclick="event.stopPropagation(); toggleMax('cardFin')">⚡ Maximize</button>
+        </div>
+      </div>
+      <div class="section-summary-preview" id="sumPreviewFin" onclick="toggleSec('secFin')">
+        <span>Current Model: <<strong>Quantum Tensor</strong>> | 12M Events: <strong>15,480 X</strong></span>
+        <span>🔍 Click for Enhanced Dashboard</span>
       </div>
       <div class="collapsible-body collapsed" id="secFin">
         <div class="math-dashboard">
@@ -280,7 +304,7 @@
       </div>
     </div>
 
-    <!-- Step 3: Highly Interactive Noise Graph (Hover Inspector, Zoom/Pan, Drag Subset & Live Stream) -->
+    <!-- Step 3: Live Noise Graph & Streaming Studio -->
     <div class="panel-card" id="cardWave">
       <div class="section-category-bar">
         <span class="cat-chip cat-calc">Calculation</span>
@@ -288,9 +312,16 @@
         <span class="cat-chip cat-fin">Finance</span>
         <span class="cat-chip cat-world">World</span>
       </div>
-      <div class="panel-title">
-        <span onclick="toggleSec('secWave')">3. Advanced Interactive Noise Graph & Streaming Studio ▾</span>
-        <button class="pin-btn" id="pinBtn_cardWave" onclick="toggleMax('cardWave')">⚡ Maximize & Expand</button>
+      <div class="panel-title" onclick="toggleSec('secWave')">
+        <span>3. Live Noise Graph & Streaming Studio</span>
+        <div style="display:flex; gap:4px; align-items:center;">
+          <span style="font-size:0.44rem; color:var(--neon-cyan);">[Click to Expand]</span>
+          <button class="pin-btn" id="pinBtn_cardWave" onclick="event.stopPropagation(); toggleMax('cardWave')">⚡ Maximize & Expand</button>
+        </div>
+      </div>
+      <div class="section-summary-preview" id="sumPreviewWave" onclick="toggleSec('secWave')">
+        <span>Stream Status: <strong>Streaming Active (6-12M)</strong> | Pulled Points: <strong id="sumSubPoints">60</strong></span>
+        <span>🔍 Click for Enhanced Noise Graph</span>
       </div>
       <div class="collapsible-body collapsed" id="secWave">
         <div class="canvas-box" style="height: 140px;">
@@ -322,7 +353,7 @@
       </div>
     </div>
 
-    <!-- Step 4: Fully Working Export Query & Table Studio -->
+    <!-- Step 4: Export Query & Table Studio -->
     <div class="panel-card" id="cardQuery">
       <div class="section-category-bar">
         <span class="cat-chip cat-world">World</span>
@@ -330,9 +361,16 @@
         <span class="cat-chip cat-sci">Science</span>
         <span class="cat-chip cat-fin">Finance</span>
       </div>
-      <div class="panel-title">
-        <span onclick="toggleSec('secQuery')">4. Export Query & Table Studio ▾</span>
-        <button class="pin-btn" id="pinBtn_cardQuery" onclick="toggleMax('cardQuery')">⚡ Maximize</button>
+      <div class="panel-title" onclick="toggleSec('secQuery')">
+        <span>4. Export Query & Table Studio</span>
+        <div style="display:flex; gap:4px; align-items:center;">
+          <span style="font-size:0.44rem; color:var(--neon-cyan);">[Click to Expand]</span>
+          <button class="pin-btn" id="pinBtn_cardQuery" onclick="event.stopPropagation(); toggleMax('cardQuery')">⚡ Maximize</button>
+        </div>
+      </div>
+      <div class="section-summary-preview" id="sumPreviewQuery" onclick="toggleSec('secQuery')">
+        <span>Query Records: <strong id="sumQueryCount">60 rows</strong> | Status: <strong>Mapped & Categorized</strong></span>
+        <span>🔍 Click for Enhanced Table</span>
       </div>
       <div class="collapsible-body collapsed" id="secQuery">
         <div class="suggestion-box" id="suggestionBox">
@@ -351,7 +389,7 @@
       </div>
     </div>
 
-    <!-- Step 5: Upload, Downloads & Intuitive Folder Explorer Displayed Underneath -->
+    <!-- Step 5: Upload, Downloads & Folder Explorer -->
     <div class="panel-card" id="cardTools">
       <div class="section-category-bar">
         <span class="cat-chip cat-world">World</span>
@@ -359,9 +397,16 @@
         <span class="cat-chip cat-calc">Calculation</span>
         <span class="cat-chip cat-sci">Science</span>
       </div>
-      <div class="panel-title">
-        <span onclick="toggleSec('secTools')">5. Upload, Downloads & Folder Explorer ▾</span>
-        <button class="pin-btn" id="pinBtn_cardTools" onclick="toggleMax('cardTools')">⚡ Maximize</button>
+      <div class="panel-title" onclick="toggleSec('secTools')">
+        <span>5. Upload, Downloads & Folder Explorer</span>
+        <div style="display:flex; gap:4px; align-items:center;">
+          <span style="font-size:0.44rem; color: var(--neon-cyan);">[Click to Expand]</span>
+          <button class="pin-btn" id="pinBtn_cardTools" onclick="event.stopPropagation(); toggleMax('cardTools')">⚡ Maximize</button>
+        </div>
+      </div>
+      <div class="section-summary-preview" id="sumPreviewTools" onclick="toggleSec('secTools')">
+        <span>Workspace: <strong>/root/datasets (6-12M)</strong> | Stream: <strong>Active</strong></span>
+        <span>🔍 Click for File Explorer</span>
       </div>
       <div class="collapsible-body collapsed" id="secTools">
         <div class="control-item">
@@ -398,6 +443,42 @@
         </div>
         <div class="btn-row" style="margin-top: 3px;">
           <button onclick="triggerExport()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📥 Download Export Package</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Area at Bottom: Best Insights & Graphs Dashboard -->
+    <div class="panel-card summary-dashboard-card" id="cardSummary">
+      <div class="section-category-bar">
+        <span class="cat-chip cat-calc">Executive Summary</span>
+        <span class="cat-chip cat-sci">Insights</span>
+        <span class="cat-chip cat-fin">Metrics</span>
+      </div>
+      <div class="panel-title" onclick="toggleSec('secSummary')">
+        <span>⭐ Executive Insights & Best Metrics Dashboard ▾</span>
+        <button class="pin-btn" id="pinBtn_cardSummary" onclick="event.stopPropagation(); toggleMax('cardSummary')">⚡ Maximize</button>
+      </div>
+      <div class="collapsible-body" id="secSummary">
+        <div style="font-size: 0.48rem; color: var(--text-muted); font-family: var(--font-mono); line-height: 1.3;">
+          🏆 <strong>Key Operational Insights</strong>: Quantum wave lattices are maintaining optimal coherence at $\gamma=1.45$. Live noise streams indicate <strong>12.4% anomaly spike frequency</strong> across the current 6-12 month historical epoch.
+        </div>
+        <div class="summary-grid">
+          <div class="summary-metric-card">
+            <div class="summary-metric-title">Active Quantum Nodes</div>
+            <div class="summary-metric-val">320 Shell Nodes</div>
+          </div>
+          <div class="summary-metric-card">
+            <div class="summary-metric-title">12M Event Volume</div>
+            <div class="summary-metric-val" id="sumMetricVol">15,480 X</div>
+          </div>
+          <div class="summary-metric-card">
+            <div class="summary-metric-title">Pulled Subset Spikes</div>
+            <div class="summary-metric-val" id="sumMetricSpikes">4 Detected</div>
+          </div>
+          <div class="summary-metric-card">
+            <div class="summary-metric-title">Vault Security Rating</div>
+            <div class="summary-metric-val" style="color: var(--accent-green);">100 / 100</div>
+          </div>
         </div>
       </div>
     </div>
@@ -560,10 +641,12 @@
     renderSubsetSpikes();
     populateAnomalyTable();
     
+    let randVol = (Math.floor(Math.random() * 10000) + 10000).toLocaleString() + " X";
     document.getElementById('metricM6').innerText = (Math.floor(Math.random() * 3000) + 800).toLocaleString() + " X";
     document.getElementById('metricM3').innerText = (Math.floor(Math.random() * 4000) + 1200).toLocaleString() + " X";
-    document.getElementById('metricCurrent').innerText = (Math.floor(Math.random() * 10000) + 10000).toLocaleString() + " X";
-    alert("🎲 Random 6-12 month streaming epoch generated successfully across all interactive graphs & math models!");
+    document.getElementById('metricCurrent').innerText = randVol;
+    document.getElementById('sumMetricVol').innerText = randVol;
+    alert("🎲 Random 6-12 month streaming epoch generated successfully across all charts and summary dashboards!");
   }
 
   function openFolder(path) {
@@ -655,7 +738,7 @@
     });
   }
 
-  // --- Highly Interactive Live Noise Graph & Streaming Suite ---
+  // --- Live Noise Graph & Streaming Suite ---
   const waveCanvas = document.getElementById('secureSimCanvas');
   const waveCtx = waveCanvas.getContext('2d');
   const subsetCanvas = document.getElementById('subsetSpikeCanvas');
@@ -738,13 +821,17 @@
     });
     subsetCtx.stroke();
 
+    let spikeCount = 0;
     extractedSubset.forEach((v, idx) => {
       if (v > threshold) {
+        spikeCount++;
         let x = idx * st + 5, y = h - (v / 100) * h;
         subsetCtx.fillStyle = '#ff3344';
         subsetCtx.beginPath(); subsetCtx.arc(x, y, 3.5, 0, Math.PI * 2); subsetCtx.fill();
       }
     });
+
+    document.getElementById('sumMetricSpikes').innerText = spikeCount + " Detected";
 
     subsetCtx.strokeStyle = '#c084fc'; subsetCtx.lineWidth = 2; subsetCtx.setLineDash([3, 3]); subsetCtx.beginPath();
     let lastX = (extractedSubset.length - 1) * st + 5;
@@ -791,6 +878,7 @@
     
     if (extractedSubset.length === 0) {
       tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted); text-align:center;">No subset selected. Drag across live noise graph above.</td></tr>`;
+      document.getElementById('sumQueryCount').innerText = "0 rows";
       return;
     }
 
@@ -800,6 +888,9 @@
       tr.innerHTML = `<td>#${4000 + idx}</td><td>2026-0${(idx % 6) + 1}-${10+idx}</td><td>${isAnom ? '⚠️ Spike / Anomaly' : 'Standard Wave'}</td><td>$${(v * finConfig.baseValue * finConfig.damping).toFixed(2)}</td>`;
       tbody.appendChild(tr);
     });
+
+    document.getElementById('sumQueryCount').innerText = extractedSubset.length + " rows";
+    document.getElementById('sumSubPoints').innerText = extractedSubset.length;
     document.getElementById('suggestionBox').innerHTML = `💡 **Query Studio Active**: Successfully queried ${extractedSubset.length} historical points from live noise stream with active damping coefficient (&gamma;=${finConfig.damping}).`;
   }
 
