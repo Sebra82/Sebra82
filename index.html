@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v6.4 - Differentiated Section Master Suite</title>
+  <title>SEBRA82 v6.5 - Guided Master Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -51,6 +51,38 @@
       flex-direction: column;
       gap: 0.5rem;
     }
+
+    /* Quick Guide Box Styling */
+    .quick-guide-box {
+      background: rgba(0, 243, 255, 0.05);
+      border: 1px dashed var(--neon-cyan);
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-family: var(--font-mono);
+      font-size: 0.45rem;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .quick-guide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--neon-cyan);
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .quick-guide-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      color: var(--text-muted);
+      border-top: 1px dashed rgba(0,243,255,0.2);
+      padding-top: 3px;
+    }
+    .quick-guide-content.collapsed { display: none; }
 
     .widget-header {
       display: flex;
@@ -204,8 +236,23 @@
 <body>
 
 <div class="platform-container">
+  <!-- Interactive Quick Start Guide at Top -->
+  <div class="quick-guide-box">
+    <div class="quick-guide-header" onclick="toggleQuickGuide()">
+      <span>📘 SEBRA82 Quick Start Guide (Click to Toggle)</span>
+      <span id="guideToggleSign">[-]</span>
+    </div>
+    <div class="quick-guide-content" id="quickGuideBody">
+      <span>• <strong>Atom Matrix:</strong> Drag to rotate, pinch/scroll to zoom and explore Planck-scale shells.</span>
+      <span>• <strong>Maths & Models:</strong> Switch between Quantum Wave Tensors & Financial Alpha forecasts.</span>
+      <span>• <strong>Live Noise Graph:</strong> Drag across wave slices to isolate anomalies & view predictive forecasts.</span>
+      <span>• <strong>Query Studio:</strong> Automatically maps IDs, dates, and categorized metrics from selections.</span>
+      <span>• <strong>Navigation:</strong> Click any card title to expand, or use "Maximize" to isolate views.</span>
+    </div>
+  </div>
+
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v6.4</span> Executive Master Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v6.5</span> Executive Master Suite</div>
     <div class="header-actions">
       <button class="gen-rand-btn" onclick="generateRandomDataEpoch()">🎲 Random Data</button>
       <button class="saved-view-btn" onclick="saveCustomView()">💾 Save View</button>
@@ -493,6 +540,14 @@
 </div>
 
 <script>
+  // Quick Guide Toggle Controller
+  function toggleQuickGuide() {
+    const body = document.getElementById('quickGuideBody');
+    const sign = document.getElementById('guideToggleSign');
+    body.classList.toggle('collapsed');
+    sign.innerText = body.classList.contains('collapsed') ? '[+]' : '[-]';
+  }
+
   // Anti-Copy & Hardened Security Wrappers
   document.addEventListener('contextmenu', event => event.preventDefault());
   document.addEventListener('keydown', event => {
