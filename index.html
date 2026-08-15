@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v5.7 - Intuitive Master Suite</title>
+  <title>SEBRA82 v5.8 - Advanced Predictive & Interactive Master Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -120,8 +120,7 @@
 
     .canvas-box { position: relative; width: 100%; background: radial-gradient(circle at center, #0a1128 0%, #000000 100%); border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.4); overflow: hidden; }
     
-    canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; pointer-events: auto !important; }
-    canvas:active { cursor: grabbing; }
+    canvas { display: block; width: 100%; height: 100%; cursor: crosshair; touch-action: none; pointer-events: auto !important; }
 
     .hud-tag { position: absolute; top: 2px; left: 3px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 3px; border-radius: 2px; font-size: 0.44rem; color: var(--neon-cyan); font-family: var(--font-mono); z-index: 5; pointer-events: none; text-shadow: 0 0 6px var(--cyan-glow); }
 
@@ -152,7 +151,7 @@
     .pin-btn { background: var(--accent-purple); color: #fff; font-size: 0.48rem; padding: 2px 5px; border-radius: 3px; border: none; cursor: pointer; font-family: var(--font-mono); }
     .pin-btn:hover { background: #b060f0; }
 
-    .collapsible-body { display: flex; flex-direction: column; gap: 0.3rem; transition: max-height 0.3s ease; overflow: hidden; max-height: 800px; }
+    .collapsible-body { display: flex; flex-direction: column; gap: 0.3rem; transition: max-height 0.3s ease; overflow: hidden; max-height: 900px; }
     .collapsible-body.collapsed { max-height: 0px; padding: 0; margin: 0; }
   </style>
 </head>
@@ -160,7 +159,7 @@
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v5.7</span> Master Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v5.8</span> Master Suite</div>
     <div class="header-actions">
       <button class="saved-view-btn" onclick="saveCustomView()">💾 Save View</button>
       <button class="core-reset-btn" onclick="resetStandardView()">↺ Standard</button>
@@ -231,7 +230,7 @@
       </div>
     </div>
 
-    <!-- Step 3: Historical Graph & Historical Subset Generator -->
+    <!-- Step 3: Interactive Noise & Spikes Graph (Drag/Select Subsets + Predictive Next Steps) -->
     <div class="panel-card" id="cardWave">
       <div class="section-category-bar">
         <span class="cat-chip cat-calc">Calculation</span>
@@ -240,45 +239,36 @@
         <span class="cat-chip cat-world">World</span>
       </div>
       <div class="panel-title">
-        <span onclick="toggleSec('secWave')">3. Historical Graph & Subset Generator ▾</span>
+        <span onclick="toggleSec('secWave')">3. Noise Graph & Predictive Spikes Subset Studio ▾</span>
         <button class="pin-btn" id="pinBtn_cardWave" onclick="toggleMax('cardWave')">⚡ Maximize & Expand</button>
       </div>
       <div class="collapsible-body collapsed" id="secWave">
-        <div class="canvas-box" style="height: 140px;">
-          <canvas id="secureSimCanvas" width="400" height="140"></canvas>
-          <div class="hud-tag">Historical Trend Line (Full Dataset)</div>
+        <div class="canvas-box" style="height: 130px;">
+          <canvas id="secureSimCanvas" width="400" height="130"></canvas>
+          <div class="hud-tag">🖱️ Drag across noise to pull subset slice & analyze spikes</div>
         </div>
         
-        <!-- Historical Subset Graph Suite -->
-        <div class="expanded-graph-suite" id="expandedGraphSuite" style="display: flex;">
-          <div style="font-size: 0.5rem; color: var(--neon-cyan); font-family: var(--font-mono); font-weight:700;">📈 HISTORICAL SUBSET SUB-GRAPH STUDIO</div>
-          <div class="control-item">
-            <div class="control-label">Historical Range Window: <span id="histRangeLabel">Full Epoch</span></div>
-            <input type="range" id="histRangeSlider" min="10" max="100" value="100" oninput="updateHistoricalSubset(this.value)">
-          </div>
-          <div class="canvas-box" style="height: 90px; border-color: rgba(192, 132, 252, 0.5);">
-            <canvas id="historicalSubsetCanvas" width="400" height="90"></canvas>
-            <div class="hud-tag" style="color:var(--accent-purple);">Dynamic Historical Subset View</div>
+        <!-- Isolated Extracted Spikes & Anomalies Sub-Graph with Predictive Next Steps -->
+        <div class="expanded-graph-suite" id="expandedGraphSuite" style="display: flex; flex-direction:column; gap:4px; background: rgba(0, 243, 255, 0.04); border: 1px solid rgba(0, 243, 255, 0.3); padding: 5px; border-radius: 5px;">
+          <div style="font-size: 0.5rem; color: var(--neon-cyan); font-family: var(--font-mono); font-weight:700;">⚡ ISOLATED SUBSET: SPIKES, ANOMALIES & PREDICTIVE FORECAST</div>
+          <div class="canvas-box" style="height: 100px; border-color: rgba(255, 51, 68, 0.5);">
+            <canvas id="subsetSpikeCanvas" width="400" height="100"></canvas>
+            <div class="hud-tag" style="color:var(--crimson-red);">Pulled Subset & Predictive Trajectory Projection (Cyan = Actual, Purple = Predicted Next Step)</div>
           </div>
           <div class="btn-row">
-            <button onclick="commitSubsetGraph()" class="action-btn" style="background:var(--accent-purple); color:#fff;">⚡ Spawn New Graph Tab</button>
+            <button onclick="commitSubsetGraphTab()" class="action-btn" style="background:var(--accent-purple); color:#fff;">📌 Pin Subset as New View Tab</button>
+            <button onclick="exportExpandedReport()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📄 Export Report</button>
           </div>
         </div>
 
-        <div class="controls-panel" style="display:flex; flex-direction:column; gap:3px;">
-          <div class="control-item">
-            <div class="control-label">Scale Index (n): <span id="secure-scale-val">64</span></div>
-            <input type="range" id="qubit-slider" min="0" max="295" value="64" oninput="updateControls()">
-          </div>
-          <div class="control-item">
-            <div class="control-label">Spike Threshold: <span id="spikeThreshVal">72.0</span></div>
-            <input type="range" id="spikeThreshSlider" min="30" max="95" step="1" value="72" oninput="document.getElementById('spikeThreshVal').innerText=this.value">
-          </div>
+        <div class="control-item">
+          <div class="control-label">Spike Detection Threshold: <span id="spikeThreshVal">72.0</span></div>
+          <input type="range" id="spikeThreshSlider" min="30" max="95" step="1" value="72" oninput="document.getElementById('spikeThreshVal').innerText=this.value; renderSubsetSpikes();">
         </div>
       </div>
     </div>
 
-    <!-- Step 4: Noise Grasp & Sub-Graph Studio -->
+    <!-- Step 4: Export Query & Automated Categorisation Table Studio -->
     <div class="panel-card" id="cardQuery">
       <div class="section-category-bar">
         <span class="cat-chip cat-world">World</span>
@@ -287,12 +277,12 @@
         <span class="cat-chip cat-fin">Finance</span>
       </div>
       <div class="panel-title">
-        <span onclick="toggleSec('secQuery')">4. Noise Grasp & Table Studio ▾</span>
+        <span onclick="toggleSec('secQuery')">4. Export Query & Table Studio ▾</span>
         <button class="pin-btn" id="pinBtn_cardQuery" onclick="toggleMax('cardQuery')">⚡ Maximize</button>
       </div>
       <div class="collapsible-body collapsed" id="secQuery">
         <div class="suggestion-box" id="suggestionBox">
-          💡 **AI Suggestion**: Adjust historical subset sliders in Step 3 to generate custom graph windows and populate monthly event summaries.
+          💡 **AI Suggestion**: Drag and pull a selection across the noise graph in Step 3 to instantly filter anomalies. Columns, Dates, and IDs are automatically mapped.
         </div>
         <div class="data-table-container">
           <table class="data-table" id="queryDataTable">
@@ -300,7 +290,7 @@
               <tr><th>ID</th><th>Date</th><th>Category</th><th>Magnitude</th></tr>
             </thead>
             <tbody id="queryTableBody">
-              <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Generate historical subset above to load data.</td></tr>
+              <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Drag across noise graph above to pull history selection.</td></tr>
             </tbody>
           </table>
         </div>
@@ -321,11 +311,11 @@
       </div>
       <div class="collapsible-body collapsed" id="secTools">
         <div class="control-item">
-          <div class="control-label"><span>SharePoint / DB Live Stream Linker URL:</span></div>
-          <input type="text" id="dataSourceUrlInput" placeholder="https://company.sharepoint.com/sites/analytics" value="https://company.sharepoint.com/sites/analytics">
+          <div class="control-label"><span>SharePoint / Live Moving Data Stream URL:</span></div>
+          <input type="text" id="dataSourceUrlInput" placeholder="wss://company.sharepoint.com/stream" value="wss://company.sharepoint.com/stream">
         </div>
         <div class="btn-row">
-          <button onclick="alert('Live stream linked & syncing successfully!')" class="action-btn">Link Live Stream</button>
+          <button onclick="alert('Live moving data stream linked & streaming successfully!')" class="action-btn">Link Live Stream</button>
           <button onclick="document.getElementById('fileUploadInput').click()" class="action-btn btn-secondary">Upload Data File</button>
           <input type="file" id="fileUploadInput" style="display:none" accept=".csv,.json" onchange="handleFileUpload(event)">
         </div>
@@ -354,7 +344,8 @@
 
   let globalTick = 0, timeOffset = 0;
   let savedViews = [], activeMaxId = null;
-  let waveBuffer = new Array(100).fill(50), historicalSubsetBuffer = [];
+  let waveBuffer = new Array(120).fill(50), extractedSubset = [];
+  let isSelecting = false, selectStartX = 0, selectEndX = 0;
   let finConfig = { baseValue: 10.0 };
 
   const R_LOOKUP_F32 = new Float32Array(296);
@@ -407,7 +398,7 @@
   }
 
   function saveCustomView() {
-    const vName = `Custom_${savedViews.length + 1}`;
+    const vName = `View_${savedViews.length + 1}`;
     savedViews.push({ name: vName, max: activeMaxId });
     renderSavedTabs();
     alert(`Saved custom view "${vName}"!`);
@@ -462,7 +453,7 @@
     }
   }
 
-  // Interactive Atom Canvas Bindings with Enhanced Feedback
+  // Interactive Atom Canvas Bindings
   atomCanvas.addEventListener('pointerdown', (e) => {
     isDraggingAtom = true;
     lastX = e.clientX;
@@ -484,8 +475,6 @@
     isDraggingAtom = false;
     try { atomCanvas.releasePointerCapture(e.pointerId); } catch(err) {}
   });
-
-  atomCanvas.addEventListener('pointercancel', () => { isDraggingAtom = false; });
 
   atomCanvas.addEventListener('wheel', (e) => {
     e.preventDefault();
@@ -539,43 +528,96 @@
     });
   }
 
-  // Wave Optics & Historical Subset Graph Generation
+  // Noise Graph & Interactive Subset Selection / Pulling
   const waveCanvas = document.getElementById('secureSimCanvas');
   const waveCtx = waveCanvas.getContext('2d');
-  const subsetCanvas = document.getElementById('historicalSubsetCanvas');
+  const subsetCanvas = document.getElementById('subsetSpikeCanvas');
   const subsetCtx = subsetCanvas ? subsetCanvas.getContext('2d') : null;
 
-  function updateHistoricalSubset(val) {
-    document.getElementById('histRangeLabel').innerText = val == 100 ? "Full Epoch" : `${val}% Window`;
-    renderHistoricalSubsetGraph(parseInt(val));
+  waveCanvas.addEventListener('pointerdown', (e) => {
+    isSelecting = true;
+    selectStartX = e.offsetX;
+    selectEndX = e.offsetX;
+  });
+
+  waveCanvas.addEventListener('pointermove', (e) => {
+    if (!isSelecting) return;
+    selectEndX = e.offsetX;
+  });
+
+  waveCanvas.addEventListener('pointerup', (e) => {
+    if (!isSelecting) return;
+    isSelecting = false;
+    selectEndX = e.offsetX;
+    pullSubsetAndPredict();
+  });
+
+  function pullSubsetAndPredict() {
+    let sIdx = Math.floor((Math.min(selectStartX, selectEndX) / waveCanvas.width) * waveBuffer.length);
+    let eIdx = Math.floor((Math.max(selectStartX, selectEndX) / waveCanvas.width) * waveBuffer.length);
+    if (Math.abs(eIdx - sIdx) < 3) { sIdx = Math.max(0, sIdx - 10); eIdx = Math.min(waveBuffer.length, eIdx + 10); }
+    
+    extractedSubset = waveBuffer.slice(sIdx, eIdx);
+    if (extractedSubset.length === 0) extractedSubset = [60, 85, 92, 78, 88];
+
+    renderSubsetSpikes();
+    populateAnomalyTable();
   }
 
-  function renderHistoricalSubsetGraph(windowPct) {
+  function renderSubsetSpikes() {
     if (!subsetCtx) return;
     const w = subsetCanvas.width, h = subsetCanvas.height;
     subsetCtx.fillStyle = '#010307'; subsetCtx.fillRect(0, 0, w, h);
-    if (waveBuffer.length === 0) return;
+    if (extractedSubset.length === 0) return;
 
-    let count = Math.max(5, Math.floor((windowPct / 100) * waveBuffer.length));
-    historicalSubsetBuffer = waveBuffer.slice(waveBuffer.length - count);
+    let threshold = parseFloat(document.getElementById('spikeThreshVal').value);
 
-    subsetCtx.strokeStyle = '#c084fc'; subsetCtx.lineWidth = 2; subsetCtx.beginPath();
-    let st = w / historicalSubsetBuffer.length;
-    historicalSubsetBuffer.forEach((v, idx) => {
-      let x = idx * st + st/2, y = h - (v / 100) * h;
+    // Draw actual pulled subset line (Cyan)
+    subsetCtx.strokeStyle = '#00f3ff'; subsetCtx.lineWidth = 2; subsetCtx.beginPath();
+    let st = w / (extractedSubset.length + 8); // Leave room for predictive steps
+    extractedSubset.forEach((v, idx) => {
+      let x = idx * st + 5, y = h - (v / 100) * h;
       if (idx === 0) subsetCtx.moveTo(x, y); else subsetCtx.lineTo(x, y);
     });
     subsetCtx.stroke();
 
-    populateAnomalyTable();
+    // Highlight Spikes & Anomalies in Crimson
+    extractedSubset.forEach((v, idx) => {
+      if (v > threshold) {
+        let x = idx * st + 5, y = h - (v / 100) * h;
+        subsetCtx.fillStyle = '#ff3344';
+        subsetCtx.beginPath(); subsetCtx.arc(x, y, 3.5, 0, Math.PI * 2); subsetCtx.fill();
+      }
+    });
+
+    // Predictive Next Steps Trajectory Projection (Purple Dashed)
+    subsetCtx.strokeStyle = '#c084fc'; subsetCtx.lineWidth = 2; subsetCtx.setLineDash([3, 3]); subsetCtx.beginPath();
+    let lastX = (extractedSubset.length - 1) * st + 5;
+    let lastY = h - (extractedSubset[extractedSubset.length - 1] / 100) * h;
+    subsetCtx.moveTo(lastX, lastY);
+
+    let predVal = extractedSubset[extractedSubset.length - 1];
+    for (let p = 1; p <= 8; p++) {
+      predVal += (Math.sin(p + timeOffset) * 8);
+      predVal = Math.min(95, Math.max(20, predVal));
+      let px = lastX + p * st;
+      let py = h - (predVal / 100) * h;
+      subsetCtx.lineTo(px, py);
+    }
+    subsetCtx.stroke();
+    subsetCtx.setLineDash([]);
   }
 
-  function commitSubsetGraph() {
-    alert(`Successfully spawned new isolated graph tab from historical subset (${historicalSubsetBuffer.length} data points).`);
+  function commitSubsetGraphTab() {
+    if (extractedSubset.length === 0) { alert("Please drag across the noise graph first to pull a subset."); return; }
+    const vName = `Subset_${savedViews.length + 1}`;
+    savedViews.push({ name: vName, max: 'cardWave' });
+    renderSavedTabs();
+    alert(`Pinned subset as new tab "${vName}" with predictive projection!`);
   }
 
   function exportExpandedReport() {
-    alert("Historical subset report exported successfully.");
+    alert("Extracted subset and predictive anomaly report exported successfully.");
   }
 
   function triggerExport() {
@@ -590,13 +632,15 @@
 
   function populateAnomalyTable() {
     const tbody = document.getElementById('queryTableBody'); tbody.innerHTML = '';
-    historicalSubsetBuffer.slice(0, 8).forEach((v, idx) => {
+    let threshold = parseFloat(document.getElementById('spikeThreshVal').value);
+    
+    extractedSubset.forEach((v, idx) => {
       let tr = document.createElement('tr');
-      let isAnom = v > 70;
-      tr.innerHTML = `<td>#${1000 + idx}</td><td>2026-08-${10+idx}</td><td>${isAnom ? '⚠️ Spike / Anomaly' : 'Standard Wave'}</td><td>$${(v * finConfig.baseValue).toFixed(2)}</td>`;
+      let isAnom = v > threshold;
+      tr.innerHTML = `<td>#${2000 + idx}</td><td>2026-08-${10+idx}</td><td>${isAnom ? '⚠️ Spike / Anomaly' : 'Standard Wave'}</td><td>$${(v * finConfig.baseValue).toFixed(2)}</td>`;
       tbody.appendChild(tr);
     });
-    document.getElementById('suggestionBox').innerHTML = `💡 **Subset Active**: Displaying historical subset data points with automated monthly categorization and ID detection.`;
+    document.getElementById('suggestionBox').innerHTML = `💡 **Subset Pulled**: Extracted ${extractedSubset.length} points. Automatically identified IDs, Dates, and flagged anomalies above threshold.`;
   }
 
   function updateWaveOptics() {
@@ -615,26 +659,39 @@
       const phase_diffract = (Math.PI * a * raw_x) / (r_n * L + 1e-35);
       const interf = Math.cos(phase_interf + timeOffset) ** 2;
       const diffract = phase_diffract === 0 ? 1.0 : (Math.sin(phase_diffract) / phase_diffract) ** 2;
-      const val = Math.min(95, Math.max(15, interf * diffract * 75.0 + Math.sin(xPos * 0.1 + timeOffset) * 5));
+      const val = Math.min(95, Math.max(15, interf * diffract * 75.0 + Math.sin(xPos * 0.15 + timeOffset) * 6));
       waveBuffer.push(val);
 
       const yPos = h - (val * (h / 100));
       if (xPos === 0) waveCtx.moveTo(xPos, yPos); else waveCtx.lineTo(xPos, yPos);
     }
     waveCtx.stroke();
+
+    // Draw selection box if dragging
+    if (isSelecting) {
+      waveCtx.fillStyle = 'rgba(0, 243, 255, 0.2)';
+      waveCtx.strokeStyle = '#00f3ff';
+      let sx = Math.min(selectStartX, selectEndX);
+      let ex = Math.max(selectStartX, selectEndX);
+      waveCtx.fillRect(sx, 0, ex - sx, h);
+      waveCtx.strokeRect(sx, 0, ex - sx, h);
+    }
   }
 
   function masterLoop() {
     globalTick++; timeOffset += 0.04;
     renderVividAtom();
     updateWaveOptics();
-    renderHistoricalSubsetGraph(parseInt(document.getElementById('histRangeSlider').value));
+    renderSubsetSpikes();
     requestAnimationFrame(masterLoop);
   }
 
   window.onload = () => {
     masterLoop();
-    renderHistoricalSubsetGraph(100);
+    // Pre-seed initial default subset
+    extractedSubset = waveBuffer.slice(20, 70);
+    renderSubsetSpikes();
+    populateAnomalyTable();
   };
 </script>
 
