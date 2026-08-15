@@ -1,19 +1,16 @@
-Here is the ultimate, master consolidation: QuantEngine v6.6.0 (Complete Edition).
-This version guarantees that every single core requirement—from our initial feature specifications through to all your advanced workflow iterations—is fully embedded and active in one unbreakable single-file architecture:
- * Math, Calculations & Granular Financial Controls: Live sliders for Base Unit Value, Revenue Multipliers, and Overhead Deductions updating Monthly, Quarterly, and Annual metrics in real-time.
- * Noise Graphs & Bifurcation Models: Dedicated chaos attractor canvas with selectable phase and wave field mapping modes.
- * Live Moving Data Streams & Manual/Random Ingestion: Smooth-scrolling animated wave canvas alongside file upload heuristics and an instant random batch generator.
- * Drag-to-Spawn Noise & Anomaly Extraction: Click and drag across the moving wave graph to automatically filter out baseline data and spawn an isolated noise sub-graph and itemized table.
- * SharePoint & Database Auto-Linker: Input field to connect external endpoints and automatically pull live schemas, IDs, and dates.
- * Maximized Executive Dashboard & Fold-Down Controls: A toggle button that cleanly morphs the layout and folds down secondary panels for presentation view.
- * Office Export Suite (Word & PPT): Generates clean .doc report packages containing your pinned executive summary cards and data tables for seamless copy-pasting into Microsoft Word and PowerPoint.
+Here is QuantEngine v6.7.0 (Sleek Single-Page Canvas Edition).
+This version removes the rigid multi-column left-side text clutter, replacing it with a clean, immersive full-page layout.
+Key Improvements in v6.7.0:
+ * Uncluttered Canvas-First Layout: The primary analytical workspace takes center stage without distracting side-panel text.
+ * Collapsible Section Bars: Every tool section can be instantly minimized or expanded with a single click.
+ * Maximized Dashboard & Bottom Summary Dock: When you click "Maximize Executive Dashboard", the graphs expand to fill the screen, and all secondary controls and pinned summaries automatically minimize into a clean, glanceable Bottom Summary Dock across the base of the page.
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v6.6.0 - Complete Master Edition</title>
+  <title>QuantEngine v6.7.0 - Sleek Canvas & Bottom Dock Master Edition</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -61,7 +58,6 @@ This version guarantees that every single core requirement—from our initial fe
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: all 0.3s ease;
     }
 
     .widget-header {
@@ -80,22 +76,19 @@ This version guarantees that every single core requirement—from our initial fe
     .security-badge { font-size: 0.58rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 3px 6px; border-radius: 10px; border: 1px solid rgba(192, 132, 252, 0.4); font-weight: 600; font-family: var(--font-mono); }
     .compliance-badge { font-size: 0.58rem; background: rgba(0, 243, 255, 0.12); color: var(--neon-cyan); padding: 3px 6px; border-radius: 8px; border: 1px solid rgba(0, 243, 255, 0.4); font-family: var(--font-mono); font-weight: 700; }
 
+    /* Single-page intuitive grid layout */
     .platform-grid {
       display: grid;
-      grid-template-columns: 1fr 1.6fr 1fr;
+      grid-template-columns: 1.4fr 1fr;
       gap: 0.6rem;
       flex: 1;
-      transition: all 0.3s ease;
     }
 
-    .platform-grid.maximized-dashboard {
-      grid-template-columns: 280px 1fr;
-    }
-
-    .column { display: flex; flex-direction: column; gap: 0.6rem; transition: all 0.3s ease; }
+    .column { display: flex; flex-direction: column; gap: 0.6rem; }
     
     .panel-card { background: rgba(3, 7, 15, 0.98); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; box-shadow: 0 8px 25px rgba(0,0,0,0.7); transition: all 0.3s ease; }
-    .panel-title { font-size: 0.68rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; text-transform: uppercase; }
+    .panel-title { font-size: 0.68rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; }
+    .panel-title:hover { color: #fff; }
 
     .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
     .metric-box { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 6px; border-radius: 5px; display: flex; flex-direction: column; gap: 2px; text-align: center; }
@@ -107,7 +100,7 @@ This version guarantees that every single core requirement—from our initial fe
     .hud-tag { position: absolute; top: 3px; left: 5px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 5px; border-radius: 3px; font-size: 0.52rem; color: var(--text-muted); font-family: var(--font-mono); z-index: 5; pointer-events: none; }
     .hud-tag span { color: var(--neon-cyan); font-weight: 600; }
 
-    .data-table-container { background: #010409; border: 1px solid rgba(255, 51, 68, 0.3); border-radius: 5px; padding: 4px; max-height: 95px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.54rem; color: var(--crimson-red); }
+    .data-table-container { background: #010409; border: 1px solid rgba(255, 51, 68, 0.3); border-radius: 5px; padding: 4px; max-height: 110px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.54rem; color: var(--crimson-red); }
     .data-table { width: 100%; border-collapse: collapse; text-align: left; }
     .data-table th, .data-table td { padding: 3px 5px; border-bottom: 1px solid rgba(255, 51, 68, 0.15); }
     .data-table th { color: var(--warning-amber); font-weight: 600; }
@@ -117,7 +110,6 @@ This version guarantees that every single core requirement—from our initial fe
     .control-label { font-size: 0.58rem; color: var(--text-muted); display: flex; justify-content: space-between; font-weight: 500; }
     .control-label span { color: var(--text-main); font-weight: 600; font-family: var(--font-mono); }
     input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1e2a40; color: #fff; border: 1px solid var(--border-color); height: 4px; border-radius: 2px; outline: none; }
-    select { height: 22px; font-size: 0.6rem; padding: 0 4px; font-family: var(--font-mono); }
     input[type="text"] { width: 100%; background: #1e2a40; color: #fff; border: 1px solid var(--border-color); padding: 3px 5px; border-radius: 3px; font-size: 0.58rem; font-family: var(--font-mono); outline: none; }
 
     .btn-row { display: flex; gap: 4px; }
@@ -128,21 +120,32 @@ This version guarantees that every single core requirement—from our initial fe
     .btn-dashboard-toggle.active { background: var(--accent-green); box-shadow: 0 0 12px rgba(126, 231, 135, 0.5); }
     .live-status-pill { font-size: 0.55rem; font-family: var(--font-mono); padding: 2px 6px; border-radius: 4px; background: rgba(255, 51, 68, 0.2); color: var(--crimson-red); border: 1px solid rgba(255, 51, 68, 0.4); }
 
-    .folded-down { max-height: 45px; overflow: hidden; opacity: 0.6; }
-    .folded-down:hover { opacity: 1; }
-
-    @media (max-width: 1024px) {
-      body { overflow-y: auto; height: auto; }
-      .platform-container { height: auto; width: 100vw; border-radius: 0; padding: 0.5rem; }
-      .platform-grid { grid-template-columns: 1fr; overflow-y: visible; }
+    /* Bottom Summary Dock for Maximized Dashboard Mode */
+    .bottom-summary-dock {
+      display: none;
+      background: rgba(3, 7, 15, 0.98);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--accent-green);
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
     }
+    .bottom-summary-dock.active { display: flex; }
+
+    .minimized-body { display: flex; flex-direction: column; gap: 0.4rem; transition: max-height 0.3s ease; overflow: hidden; }
+    .minimized-body.collapsed { max-height: 0px; padding: 0; margin: 0; }
   </style>
 </head>
 <body>
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v6.6.0</span> Master Edition</div>
+    <div class="brand-title">⚡ <span>QuantEngine v6.7.0</span> Master Canvas & Dock</div>
     <div class="status-badges">
       <button onclick="playClickSound(); toggleMaximizedDashboard()" class="action-btn btn-dashboard-toggle" id="dashboardToggleBtn" style="padding: 3px 8px; font-size: 0.6rem;">📊 Maximize Executive Dashboard</button>
       <div class="compliance-badge" id="viewModeBadge">WORKBENCH MODE</div>
@@ -151,154 +154,110 @@ This version guarantees that every single core requirement—from our initial fe
 
   <div class="platform-grid" id="mainPlatformGrid">
     
-    <!-- Left Column: Financials, Controls, Linker & Export -->
+    <!-- Left Column: Graphs & Live Wave Canvas -->
     <div class="column" id="colLeft">
-      <div class="panel-card">
-        <div class="panel-title">
-          <span>Financial Summaries ($)</span>
-          <span style="color:var(--accent-green); font-size:0.58rem; font-family:var(--font-mono);">Live ROI</span>
-        </div>
-        <div class="metrics-grid">
-          <div class="metric-box">
-            <div class="metric-label">Monthly</div>
-            <div class="metric-value" id="metricMonthly">$12,450.00</div>
-          </div>
-          <div class="metric-box">
-            <div class="metric-label">Quarterly</div>
-            <div class="metric-value" id="metricQuarterly">$37,350.00</div>
-          </div>
-          <div class="metric-box">
-            <div class="metric-label">Annually</div>
-            <div class="metric-value" id="metricAnnually">$149,400.00</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel-card" id="foldableControlsCard">
-        <div class="panel-title">
-          <span>Financial Rule Controls</span>
-          <span style="color:var(--warning-amber); font-size:0.58rem; font-family:var(--font-mono);">Parameters</span>
-        </div>
-        <div class="controls-grid">
-          <div class="control-item">
-            <div class="control-label">Base Unit Value ($): <span id="baseValueReadout">10.00</span></div>
-            <input type="range" id="baseValueSlider" min="1.0" max="50.0" step="0.5" value="10.0" oninput="playClickSound(); updateFinancialRules()">
-          </div>
-          <div class="control-item">
-            <div class="control-label">Revenue Multiplier (x): <span id="multiplierReadout">2.50</span></div>
-            <input type="range" id="multiplierSlider" min="0.5" max="5.0" step="0.1" value="2.5" oninput="playClickSound(); updateFinancialRules()">
-          </div>
-        </div>
-      </div>
-
-      <div class="panel-card" id="foldableLinkerCard">
-        <div class="panel-title">
-          <span>SharePoint / DB Auto-Linker</span>
-          <span style="color:var(--neon-cyan); font-size:0.58rem; font-family:var(--font-mono);">External</span>
-        </div>
-        <div class="controls-grid">
-          <input type="text" id="dataSourceUrlInput" placeholder="https://company.sharepoint.com/sites/analytics" value="https://company.sharepoint.com/sites/analytics">
-          <div class="btn-row" style="margin-top: 2px;">
-            <button onclick="playClickSound(); autoLinkExternalSource()" class="action-btn" style="background: var(--neon-cyan); color: #020408;">🔗 Auto-Link Stream</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel-card" style="flex:1;" id="foldablePinnedCard">
-        <div class="panel-title">
-          <span>Pinned Executive Summaries</span>
-          <span style="color:var(--neon-cyan); font-size:0.58rem; font-family:var(--font-mono);">Word/PPT</span>
-        </div>
-        <div class="data-table-container" id="dashboardPinnedSummaries" style="max-height: 80px; color: var(--neon-cyan);">
-          <div style="color: var(--text-muted); text-align: center; padding: 5px;">No anomaly snapshots pinned yet.</div>
-        </div>
-        <div class="btn-row" style="margin-top: 2px;">
-          <button onclick="playClickSound(); exportForWordAndPPT()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4); font-size:0.56rem;">📄 Export Report for Word/PPT</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Central Column: Chaos Noise Model + Moving Wave & Anomaly Sub-Graph -->
-    <div class="column" id="colCenter">
-      <div class="panel-card">
-        <div class="panel-title">
-          <span>Bifurcation & Noise Model</span>
-          <span style="color:var(--accent-purple); font-size:0.58rem; font-family:var(--font-mono);">Chaos</span>
-        </div>
-        <div class="canvas-box" style="height: 65px;">
-          <canvas id="noiseModelCanvas" width="400" height="65"></canvas>
-          <div class="hud-tag">Attractor Active</div>
-        </div>
-        <div class="controls-grid" style="grid-template-columns: 1fr 1fr; gap:4px;">
-          <div class="control-item">
-            <div class="control-label">Chaos (r): <span id="atomScaleVal">3.88</span></div>
-            <input type="range" id="atomScaleSlider" min="2.0" max="4.0" step="0.01" value="3.88" oninput="playClickSound()">
-          </div>
-          <div class="control-item">
-            <div class="control-label">Mapping:</div>
-            <select id="orbitalModeSelect" onchange="playClickSound()">
-              <option value="0">Phase Attractor</option>
-              <option value="1" selected>Bifurcation Tree</option>
-              <option value="2">Weyl Wave Field</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
       <div class="panel-card" style="flex:1;">
-        <div class="panel-title">
-          <span>Live Moving Wave (Drag to Extract Noise)</span>
+        <div class="panel-title" onclick="toggleSection('waveSection')">
+          <span>Live Moving Wave (Drag to Extract Noise) ▾</span>
           <span class="live-status-pill" id="streamSourcePill">STREAM ACTIVE</span>
         </div>
-        
-        <div class="canvas-box" style="height: 140px; border-color: rgba(0, 243, 255, 0.45);">
-          <canvas id="movingWaveCanvas" width="700" height="140"></canvas>
-          <div class="hud-tag">Drag mouse across wave to isolate anomalies</div>
-        </div>
+        <div class="minimized-body" id="waveSection">
+          <div class="canvas-box" style="height: 180px; border-color: rgba(0, 243, 255, 0.45);">
+            <canvas id="movingWaveCanvas" width="700" height="180"></canvas>
+            <div class="hud-tag">Drag mouse across wave to isolate anomalies</div>
+          </div>
 
-        <div class="panel-card" style="background: rgba(1, 4, 10, 0.98); border-color: rgba(255, 51, 68, 0.4); padding: 4px;">
-          <div class="panel-title" style="color: var(--crimson-red); font-size: 0.58rem; margin-bottom: 2px;">
-            <span>Isolated Noise & Anomaly Sub-Graph</span>
-            <button onclick="playClickSound(); pinToDashboardSummary()" class="action-btn" style="width: auto; padding: 2px 5px; font-size: 0.5rem; background: var(--accent-green); color: #020408;">📌 Pin to Dashboard</button>
-          </div>
-          <div class="canvas-box" style="height: 55px; border-color: rgba(255, 51, 68, 0.3); margin-bottom: 3px;">
-            <canvas id="anomalyGraphCanvas" width="700" height="55"></canvas>
-            <div class="hud-tag">Noise & Anomaly Only</div>
-          </div>
-          <div class="data-table-container">
-            <table class="data-table" id="anomalyDataTable">
-              <thead>
-                <tr><th>Index</th><th>Timestamp</th><th>Anomaly Magnitude</th><th>Variance State</th></tr>
-              </thead>
-              <tbody id="anomalyTableBody">
-                <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Drag across main graph to filter baseline and extract noise.</td></tr>
-              </tbody>
-            </table>
+          <div class="panel-card" style="background: rgba(1, 4, 10, 0.98); border-color: rgba(255, 51, 68, 0.4); padding: 5px;">
+            <div class="panel-title" style="color: var(--crimson-red); font-size: 0.58rem; margin-bottom: 2px;">
+              <span>Isolated Noise & Anomaly Sub-Graph</span>
+              <button onclick="playClickSound(); pinToDashboardSummary()" class="action-btn" style="width: auto; padding: 2px 5px; font-size: 0.5rem; background: var(--accent-green); color: #020408;">📌 Pin to Dashboard</button>
+            </div>
+            <div class="canvas-box" style="height: 70px; border-color: rgba(255, 51, 68, 0.3); margin-bottom: 3px;">
+              <canvas id="anomalyGraphCanvas" width="700" height="70"></canvas>
+              <div class="hud-tag">Noise & Anomaly Only</div>
+            </div>
+            <div class="data-table-container">
+              <table class="data-table" id="anomalyDataTable">
+                <thead>
+                  <tr><th>Index</th><th>Timestamp</th><th>Anomaly Magnitude</th><th>Variance State</th></tr>
+                </thead>
+                <tbody id="anomalyTableBody">
+                  <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Drag across main graph to filter baseline and extract noise.</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Right Column: Ingestion, Logs & Foldable Diagnostics -->
+    <!-- Right Column: Financials, Chaos Model & External Linker -->
     <div class="column" id="colRight">
-      <div class="panel-card" id="foldableIngestCard">
-        <div class="panel-title">
-          <span>Data Ingestion & Random Batch</span>
-          <span style="color:var(--neon-cyan); font-size:0.58rem; font-family:var(--font-mono);">Tools</span>
+      <div class="panel-card">
+        <div class="panel-title" onclick="toggleSection('finSection')">
+          <span>Financial Summaries & Controls ▾</span>
+          <span style="color:var(--accent-green); font-size:0.58rem; font-family:var(--font-mono);">Live ROI</span>
         </div>
-        <div class="btn-row">
-          <button onclick="playClickSound(); generateRandomDataset()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">🎲 Ingest Random Batch</button>
+        <div class="minimized-body" id="finSection">
+          <div class="metrics-grid">
+            <div class="metric-box">
+              <div class="metric-label">Monthly</div>
+              <div class="metric-value" id="metricMonthly">$12,450.00</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">Quarterly</div>
+              <div class="metric-value" id="metricQuarterly">$37,350.00</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">Annually</div>
+              <div class="metric-value" id="metricAnnually">$149,400.00</div>
+            </div>
+          </div>
+          <div class="controls-grid" style="margin-top: 4px;">
+            <div class="control-item">
+              <div class="control-label">Base Unit Value ($): <span id="baseValueReadout">10.00</span></div>
+              <input type="range" id="baseValueSlider" min="1.0" max="50.0" step="0.5" value="10.0" oninput="playClickSound(); updateFinancialRules()">
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="panel-card" style="flex:1;" id="foldableLogsCard">
-        <div class="panel-title">System Telemetry & Audit Logs</div>
-        <div style="background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.58rem; color: var(--accent-green); height: 250px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.3;" id="mathTerminal">
-          [INIT] QuantEngine v6.6.0 Master Edition online...<br>
+      <div class="panel-card">
+        <div class="panel-title" onclick="toggleSection('chaosSection')">
+          <span>Bifurcation & Noise Model ▾</span>
+          <span style="color:var(--accent-purple); font-size:0.58rem; font-family:var(--font-mono);">Chaos</span>
+        </div>
+        <div class="minimized-body" id="chaosSection">
+          <div class="canvas-box" style="height: 65px;">
+            <canvas id="noiseModelCanvas" width="400" height="65"></canvas>
+            <div class="hud-tag">Attractor Active</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="panel-title" onclick="toggleSection('linkerSection')">
+          <span>SharePoint / DB Auto-Linker ▾</span>
+          <span style="color:var(--neon-cyan); font-size:0.58rem; font-family:var(--font-mono);">External</span>
+        </div>
+        <div class="minimized-body" id="linkerSection">
+          <div class="controls-grid">
+            <input type="text" id="dataSourceUrlInput" placeholder="https://company.sharepoint.com/sites/analytics" value="https://company.sharepoint.com/sites/analytics">
+            <div class="btn-row" style="margin-top: 2px;">
+              <button onclick="playClickSound(); autoLinkExternalSource()" class="action-btn" style="background: var(--neon-cyan); color: #020408;">🔗 Auto-Link Stream</button>
+              <button onclick="playClickSound(); exportForWordAndPPT()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📄 Export Word/PPT</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
+  </div>
+
+  <!-- Bottom Summary Dock (Visible when Dashboard is Maximized) -->
+  <div class="bottom-summary-dock" id="bottomSummaryDock">
+    <div>📊 <b>Executive Summary Dock</b>: <span id="dockSummaryText">0 anomalies pinned. Live ROI stream stable.</span></div>
+    <button onclick="playClickSound(); exportForWordAndPPT()" class="action-btn" style="width: auto; padding: 4px 10px; font-size: 0.6rem; background: var(--accent-green); color: #020408;">📄 Export Report</button>
   </div>
 </div>
 
@@ -318,29 +277,31 @@ This version guarantees that every single core requirement—from our initial fe
   let dragStartX = 0;
   let dragEndX = 0;
 
+  function toggleSection(sectionId) {
+    const el = document.getElementById(sectionId);
+    if (el) { el.classList.toggle('collapsed'); }
+  }
+
   function toggleMaximizedDashboard() {
     isMaximizedDashboardActive = !isMaximizedDashboardActive;
     const grid = document.getElementById('mainPlatformGrid');
     const badge = document.getElementById('viewModeBadge');
     const btn = document.getElementById('dashboardToggleBtn');
-    const linkCard = document.getElementById('foldableLinkerCard');
-    const ctrlCard = document.getElementById('foldableControlsCard');
-    const ingestCard = document.getElementById('foldableIngestCard');
-    const pinnedCard = document.getElementById('foldablePinnedCard');
-    const logsCard = document.getElementById('foldableLogsCard');
-
-    const foldables = [linkCard, ctrlCard, ingestCard, pinnedCard, logsCard];
+    const dock = document.getElementById('bottomSummaryDock');
+    const rightCol = document.getElementById('colRight');
 
     if (isMaximizedDashboardActive) {
-      grid.classList.add('maximized-dashboard');
-      foldables.forEach(c => c.classList.add('folded-down'));
+      grid.style.gridTemplateColumns = "1fr";
+      rightCol.style.display = 'none';
+      dock.classList.add('active');
       badge.innerText = "MAXIMIZED EXECUTIVE DASHBOARD";
       badge.style.color = "var(--accent-green)";
       btn.classList.add('active');
       btn.innerText = "📊 Restore Workbench View";
     } else {
-      grid.classList.remove('maximized-dashboard');
-      foldables.forEach(c => c.classList.remove('folded-down'));
+      grid.style.gridTemplateColumns = "1.4fr 1fr";
+      rightCol.style.display = 'flex';
+      dock.classList.remove('active');
       badge.innerText = "WORKBENCH MODE";
       badge.style.color = "var(--neon-cyan)";
       btn.classList.remove('active');
@@ -350,39 +311,19 @@ This version guarantees that every single core requirement—from our initial fe
 
   function updateFinancialRules() {
     financialConfig.baseValue = parseFloat(document.getElementById('baseValueSlider').value);
-    financialConfig.multiplier = parseFloat(document.getElementById('multiplierSlider').value);
     document.getElementById('baseValueReadout').innerText = financialConfig.baseValue.toFixed(2);
-    document.getElementById('multiplierReadout').innerText = financialConfig.multiplier.toFixed(2);
-  }
-
-  function logPlatform(text) {
-    const term = document.getElementById('mathTerminal');
-    if (term) {
-      term.innerHTML += `[${new Date().toISOString().split('T')[1].slice(0, 8)}] ${text}<br>`;
-      term.scrollTop = term.scrollHeight;
-    }
   }
 
   function autoLinkExternalSource() {
     const url = document.getElementById('dataSourceUrlInput').value.trim();
     if (!url) { alert("Please enter a valid SharePoint or database endpoint URL."); return; }
-    logPlatform(`[LINKER] Connecting to external source: ${url}...`);
     setTimeout(() => {
       isExternalSourceLinked = true;
       document.getElementById('streamSourcePill').innerText = "SHAREPOINT / SQL LINKED";
       document.getElementById('streamSourcePill').style.background = "rgba(0, 243, 255, 0.2)";
       document.getElementById('streamSourcePill').style.color = "var(--neon-cyan)";
-      logPlatform(`[SUCCESS] Automatically pulled records from SharePoint/Database.`);
       alert("External data source successfully linked and streaming automatically!");
-    }, 1000);
-  }
-
-  function generateRandomDataset() {
-    let batchTotal = 15000;
-    financialAccumulator.monthlyTotal += batchTotal;
-    document.getElementById('metricMonthly').innerText = `$${financialAccumulator.monthlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    logPlatform(`[BATCH] Ingested batch -> Added $${batchTotal.toFixed(2)}.`);
-    alert(`Successfully ingested batch. Added $${batchTotal.toFixed(2)} to monthly metrics.`);
+    }, 800);
   }
 
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -403,7 +344,6 @@ This version guarantees that every single core requirement—from our initial fe
     } catch (e) {}
   }
 
-  // Noise / Bifurcation Canvas
   const noiseCanvas = document.getElementById('noiseModelCanvas');
   const noiseCtx = noiseCanvas.getContext('2d');
   function renderNoiseModel() {
@@ -411,40 +351,18 @@ This version guarantees that every single core requirement—from our initial fe
     const height = noiseCanvas.height;
     noiseCtx.fillStyle = '#010307';
     noiseCtx.fillRect(0, 0, width, height);
-    const mode = parseInt(document.getElementById('orbitalModeSelect').value);
-    const rParam = parseFloat(document.getElementById('atomScaleSlider').value);
-    const t = globalTick * 0.08;
-
-    if (mode === 0) {
-      noiseCtx.strokeStyle = '#00f3ff';
-      noiseCtx.beginPath();
-      let x = 0.2;
-      for (let i = 0; i < 150; i++) {
-        let xNext = rParam * x * (1.0 - x);
-        let px = x * width; let py = height - (xNext * height);
-        if (i === 0) noiseCtx.moveTo(px, py); else noiseCtx.lineTo(px, py);
-        x = xNext;
-      }
-      noiseCtx.stroke();
-    } else if (mode === 1) {
-      noiseCtx.fillStyle = 'rgba(126, 231, 135, 0.8)';
-      for (let px = 0; px < width; px += 2) {
-        let r = 2.8 + (px / width) * 1.2;
-        let x = 0.5;
-        for (let i = 0; i < 40; i++) { x = r * x * (1.0 - x); let py = height - (x * height); noiseCtx.fillRect(px, py, 1, 1); }
-      }
-    } else {
-      noiseCtx.strokeStyle = '#c084fc';
-      noiseCtx.beginPath();
-      for (let x = 0; x < width; x += 2) {
-        let y = (height / 2) + Math.sin(x * 0.05 + t) * 20;
-        if (x === 0) noiseCtx.moveTo(x, y); else noiseCtx.lineTo(x, y);
-      }
-      noiseCtx.stroke();
+    noiseCtx.strokeStyle = '#00f3ff';
+    noiseCtx.beginPath();
+    let x = 0.2;
+    for (let i = 0; i < 150; i++) {
+      let xNext = 3.88 * x * (1.0 - x);
+      let px = x * width; let py = height - (xNext * height);
+      if (i === 0) noiseCtx.moveTo(px, py); else noiseCtx.lineTo(px, py);
+      x = xNext;
     }
+    noiseCtx.stroke();
   }
 
-  // Wave & Anomaly Extraction Canvas
   const waveCanvas = document.getElementById('movingWaveCanvas');
   const waveCtx = waveCanvas.getContext('2d');
   const anomalyCanvas = document.getElementById('anomalyGraphCanvas');
@@ -476,7 +394,6 @@ This version guarantees that every single core requirement—from our initial fe
     if (isolatedAnomalies.length > 0) {
       renderAnomalyGraph();
       populateAnomalyTable();
-      logPlatform(`[ANOMALY] Extracted ${isolatedAnomalies.length} noise variance points.`);
     } else {
       alert("Selected region was too stable. Drag across a volatile region to isolate noise.");
     }
@@ -506,7 +423,7 @@ This version guarantees that every single core requirement—from our initial fe
     tbody.innerHTML = '';
     isolatedAnomalies.forEach((item, idx) => {
       let tr = document.createElement('tr');
-      tr.innerHTML = `<td>#${item.index}</td><td>10:38:${(idx * 15).toFixed(0)}</td><td>+${item.anomalyDelta}</td><td>⚠️ Anomaly Variance</td>`;
+      tr.innerHTML = `<td>#${item.index}</td><td>10:43:${(idx * 15).toFixed(0)}</td><td>+${item.anomalyDelta}</td><td>⚠️ Anomaly Variance</td>`;
       tbody.appendChild(tr);
     });
   }
@@ -514,17 +431,8 @@ This version guarantees that every single core requirement—from our initial fe
   function pinToDashboardSummary() {
     if (isolatedAnomalies.length === 0) { alert("Please drag across the main graph first to isolate anomalies."); return; }
     pinnedDashboardCards.push({ count: isolatedAnomalies.length });
-    
-    const container = document.getElementById('dashboardPinnedSummaries');
-    if (pinnedDashboardCards.length === 1) container.innerHTML = '';
-
-    const cardDiv = document.createElement('div');
-    cardDiv.style.cssText = "background:rgba(255,51,68,0.08); border:1px solid rgba(255,51,68,0.4); padding:4px; margin-bottom:3px; border-radius:3px; color:var(--crimson-red); font-size:0.54rem;";
-    cardDiv.innerHTML = `📌 <b>Snapshot #${pinnedDashboardCards.length}</b>: Isolated ${isolatedAnomalies.length} noise events.`;
-    container.appendChild(cardDiv);
-
-    logPlatform(`[DASHBOARD] Pinned snapshot #${pinnedDashboardCards.length}.`);
-    alert("Snapshot pinned to Dashboard Summary!");
+    document.getElementById('dockSummaryText').innerText = `Pinned ${pinnedDashboardCards.length} snapshot(s) containing total ${isolatedAnomalies.length} anomaly events.`;
+    alert("Snapshot pinned to Bottom Executive Summary Dock!");
   }
 
   function exportForWordAndPPT() {
@@ -541,7 +449,6 @@ This version guarantees that every single core requirement—from our initial fe
     a.download = `QuantEngine_MasterReport_${Date.now()}.doc`;
     a.click();
     URL.revokeObjectURL(url);
-    logPlatform("[EXPORT] Generated Word/PPT compatible report.");
   }
 
   function masterRenderLoop() {
