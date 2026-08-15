@@ -1,13 +1,12 @@
-Elite Engineering & Security Optimization: Version 6.3.6
-The codebase has been meticulously refined for absolute zero-latency execution, pristine UI rendering, and hardened cryptographic compliance.
-Below is the fully optimized, production-ready QuantEngine v6.3.6 single-file architecture:
+Here is QuantEngine v6.3.8, upgraded to feature a hybrid model blending linear baseline trends with non-linear chaotic feedback and exponential spike dynamics across its visualizers, matrices, and noise generators.
+QuantEngine v6.3.8 Codebase
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v6.3.6 - Enterprise Financial Intelligence Dashboard</title>
+  <title>QuantEngine v6.3.8 - Hybrid Linear & Non-Linear Intelligence Dashboard</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -130,11 +129,11 @@ Below is the fully optimized, production-ready QuantEngine v6.3.6 single-file ar
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v6.3.6</span> Financial Intelligence Dashboard</div>
+    <div class="brand-title">⚡ <span>QuantEngine v6.3.8</span> Hybrid Linear & Non-Linear Matrix</div>
     <div class="status-badges">
-      <div class="compliance-badge">FINANCIAL AGGREGATOR</div>
-      <div class="security-badge">INDEXEDDB + ZEROING</div>
-      <div class="node-badge" id="authModeBadge">OPTIMIZED 60 FPS</div>
+      <div class="compliance-badge">HYBRID MATRIX</div>
+      <div class="security-badge">NON-LINEAR FEEDBACK ACTIVE</div>
+      <div class="node-badge" id="authModeBadge">60 FPS REAL-TIME</div>
     </div>
   </div>
 
@@ -162,26 +161,27 @@ Below is the fully optimized, production-ready QuantEngine v6.3.6 single-file ar
         </div>
       </div>
 
+      <!-- Noise Model Panel (Linear Baseline Trend + Non-Linear Logistic Map Feedback) -->
       <div class="panel-card">
         <div class="panel-title">
-          <span>Model Structure (Lattice)</span>
-          <span style="color:var(--accent-green); font-size:0.6rem; font-family:var(--font-mono);">r_n = l_P * φⁿ</span>
+          <span>Hybrid Noise Model (Linear + Non-Linear)</span>
+          <span style="color:var(--accent-purple); font-size:0.6rem; font-family:var(--font-mono);">x_{t+1} = r*x*(1-x) + kt</span>
         </div>
         <div class="canvas-box" style="height: 95px;">
-          <canvas id="atomicCanvas" width="400" height="95"></canvas>
-          <div class="hud-tag">Active Nodes: <span id="atomCount">64</span></div>
+          <canvas id="noiseModelCanvas" width="400" height="95"></canvas>
+          <div class="hud-tag">Model: <span id="noiseStateLabel">HYBRID PHASE MAP</span></div>
         </div>
         <div class="controls-grid">
           <div class="control-item">
-            <div class="control-label">Scale Index (n): <span id="atomScaleVal">64</span></div>
+            <div class="control-label">Linear Drift (k): <span id="atomScaleVal">64</span></div>
             <input type="range" id="atomScaleSlider" min="10" max="250" value="64" oninput="playClickSound(); updateAtomSimulation()">
           </div>
           <div class="control-item">
-            <div class="control-label">Orbital Mode:</div>
+            <div class="control-label">Interaction Mode:</div>
             <select id="orbitalModeSelect" onchange="playClickSound(); updateAtomSimulation()">
-              <option value="0">s-Shell Orbital</option>
-              <option value="1" selected>p_z Dumbbell</option>
-              <option value="2">d_x2-y2 Cloverleaf</option>
+              <option value="0">Linear Drift + Cubic Chaos</option>
+              <option value="1" selected>Logistic Non-Linear Map</option>
+              <option value="2">Bifurcation Harmonic Blend</option>
             </select>
           </div>
         </div>
@@ -209,47 +209,48 @@ Below is the fully optimized, production-ready QuantEngine v6.3.6 single-file ar
       </div>
     </div>
 
+    <!-- Central Panel: Hybrid Linear Trend + Non-Linear Spike Matrix -->
     <div class="column">
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">
-          <span>Predictive Financial Forecasting Studio</span>
+          <span>Hybrid Linear & Non-Linear Spike Matrix</span>
           <span style="display:flex; gap:6px; align-items:center;">
             <span id="liveFeedStatusPill" class="live-status-pill">STANDBY</span>
             <span style="color:var(--neon-cyan); font-size:0.6rem; font-family:var(--font-mono);">Space: Pause | Ctrl+E: Export</span>
           </span>
         </div>
         
-        <div class="canvas-box" style="height: 295px; border-color: rgba(0, 243, 255, 0.45);">
-          <canvas id="unifiedForecastCanvas" width="700" height="295"></canvas>
-          <div class="hud-tag">Zoom Scale: <span id="zoomLevel">1.0x</span> | State: <span id="runState">RUNNING</span></div>
+        <div class="canvas-box" style="height: 295px; border-color: rgba(192, 132, 252, 0.45);">
+          <canvas id="spikeMatrixCanvas" width="700" height="295"></canvas>
+          <div class="hud-tag">Matrix Mode: <span id="spikeModeDisplay">LINEAR TREND + NON-LINEAR SURGE</span> | Breaches: <span id="breachCount">0</span></div>
         </div>
 
         <div class="control-item" style="background: rgba(14, 20, 32, 0.95); border-color: rgba(0, 243, 255, 0.35);">
           <div class="control-label">
-            <span>Data Ingestion Source (Financial Aggregator Pipeline)</span>
+            <span>Hybrid Ingestion Pipeline</span>
             <span id="incomingValReadout" style="color:var(--neon-cyan)">Val: 50.00</span>
           </div>
           <div style="display: flex; gap: 5px; margin-top: 3px;">
             <select id="liveSourceSelect" style="flex: 1;" onchange="playClickSound()">
-              <option value="simulated">Quantum Wave Noise Stream</option>
-              <option value="sine">Harmonic Sine Oscillation Feed</option>
-              <option value="manual_api">Custom External JSON / REST Poll (Simulated)</option>
+              <option value="simulated">Linear + Logistic Chaos Blend</option>
+              <option value="sine">Linear Sine + Exponential Surge</option>
+              <option value="manual_api">Non-Linear Stochastic Shocks</option>
             </select>
-            <button id="toggleLiveFeedBtn" onclick="playClickSound(); toggleLiveStreamFeed()" class="action-btn btn-live-toggle" style="width: 120px;">Start Live Feed</button>
+            <button id="toggleLiveFeedBtn" onclick="playClickSound(); toggleLiveStreamFeed()" class="action-btn btn-live-toggle" style="width: 120px;">Start Hybrid Feed</button>
           </div>
         </div>
         
         <div class="controls-grid" style="grid-template-columns: 1fr 1fr 1fr;">
           <div class="control-item">
-            <div class="control-label">Threshold: <span id="threshVal">75.0</span></div>
+            <div class="control-label">Gate Limit: <span id="threshVal">75.0</span></div>
             <input type="range" id="threshSlider" min="20" max="95" value="75" oninput="playClickSound(); updateThresholdParams()">
           </div>
           <div class="control-item">
-            <div class="control-label">Baseline: <span id="baseVal">40.0</span></div>
+            <div class="control-label">Linear Base: <span id="baseVal">40.0</span></div>
             <input type="range" id="baseSlider" min="10" max="70" value="40" oninput="playClickSound(); updateThresholdParams()">
           </div>
           <div class="control-item">
-            <div class="control-label">Sample Rate: <span id="rateVal">1.0x</span></div>
+            <div class="control-label">Non-Linear Factor: <span id="rateVal">1.0x</span></div>
             <input type="range" id="rateSlider" min="0.2" max="3.0" step="0.1" value="1.0" oninput="playClickSound(); updateThresholdParams()">
           </div>
         </div>
@@ -280,14 +281,14 @@ Below is the fully optimized, production-ready QuantEngine v6.3.6 single-file ar
       <div class="panel-card">
         <div class="panel-title">Audit Trail & Data Stream</div>
         <div class="data-dump" id="dataDumpTerminal">
-          [AUDIT] N=64 financial intelligence dashboard initialized.<br>
+          [AUDIT] N=64 Hybrid Linear/Non-Linear Matrix initialized.<br>
         </div>
       </div>
 
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">Ring Buffer Terminal Logs</div>
         <div class="math-screen" id="mathTerminal">
-          [INIT] QuantEngine v6.3.6 Active. High-performance pipeline verified...<br>
+          [INIT] QuantEngine v6.3.8 Active. Hybrid chaotic feedback pipeline online...<br>
         </div>
       </div>
     </div>
@@ -300,14 +301,11 @@ Below is the fully optimized, production-ready QuantEngine v6.3.6 single-file ar
   let isRunning = true;
   let currentThreshold = 75.0;
   let currentBaseline = 40.0;
-  let telemetryHistory = new Array(150).fill(50);
-  let predictedForecastBuffer = new Array(50).fill(50);
+  let telemetryHistory = new Array(120).fill(50);
   let rawDataDumpBuffer = [];
   let isLiveStreamingActive = false;
-  let graphZoom = 1.0;
-  let graphPanX = 0;
-  let isDraggingGraph = false;
-  let dragStartX = 0;
+  let breachCounter = 0;
+  let logisticX = 0.5; // State variable for non-linear logistic map
 
   let financialAccumulator = {
     monthlyTotal: 12450.80,
@@ -329,83 +327,13 @@ Below is the fully optimized, production-ready QuantEngine v6.3.6 single-file ar
     if(aEl) aEl.innerText = `$${financialAccumulator.annualTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   }
 
-  function openIndexedDB() {
-    return new Promise((resolve, reject) => {
-      const request = indexedDB.open("QuantEngineDB", 1);
-      request.onerror = () => reject(request.error);
-      request.onsuccess = () => resolve(request.result);
-      request.onupgradeneeded = (event) => {
-        const db = event.target.result;
-        if (!db.objectStoreNames.contains("stateStore")) {
-          db.createObjectStore("stateStore", { keyPath: "id" });
-        }
-      };
-    });
-  }
-
-  async function persistToIndexedDB() {
-    try {
-      const db = await openIndexedDB();
-      const transaction = db.transaction("stateStore", "readwrite");
-      const store = transaction.objectStore("stateStore");
-      const payload = {
-        id: "active_session",
-        threshold: currentThreshold,
-        baseline: currentBaseline,
-        zoom: graphZoom,
-        telemetry: telemetryHistory,
-        financials: financialAccumulator,
-        timestamp: new Date().toISOString()
-      };
-      store.put(payload);
-      logPlatform("[STORAGE] Platform state & financial metrics persisted to IndexedDB.");
-      alert("State & Financial metrics successfully saved to local IndexedDB store.");
-    } catch (err) {
-      logPlatform("[ERROR] IndexedDB save failed: " + err.message);
-    }
-  }
-
-  async function restoreFromIndexedDB() {
-    try {
-      const db = await openIndexedDB();
-      const transaction = db.transaction("stateStore", "readonly");
-      const store = transaction.objectStore("stateStore");
-      const request = store.get("active_session");
-      request.onsuccess = () => {
-        const data = request.result;
-        if (data) {
-          currentThreshold = data.threshold;
-          currentBaseline = data.baseline;
-          graphZoom = data.zoom;
-          if (data.telemetry) telemetryHistory = data.telemetry;
-          if (data.financials) {
-            financialAccumulator = data.financials;
-            document.getElementById('metricMonthly').innerText = `$${financialAccumulator.monthlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-            document.getElementById('metricQuarterly').innerText = `$${financialAccumulator.quarterlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-            document.getElementById('metricAnnually').innerText = `$${financialAccumulator.annualTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-          }
-          logPlatform("[STORAGE] State & financials successfully restored from IndexedDB.");
-          alert("State & Financial metrics successfully loaded from IndexedDB!");
-        } else {
-          alert("No saved state found in IndexedDB.");
-        }
-      };
-    } catch (err) {
-      logPlatform("[ERROR] IndexedDB restore failed: " + err.message);
-    }
-  }
-
   window.addEventListener('keydown', (e) => {
     if (e.code === 'Space' && e.target.tagName !== 'INPUT') {
       e.preventDefault();
       isRunning = !isRunning;
-      const runStateEl = document.getElementById('runState');
-      if(runStateEl) runStateEl.innerText = isRunning ? "RUNNING" : "PAUSED";
-      logPlatform(`[SYSTEM] Simulation ${isRunning ? 'resumed' : 'paused'}.`);
-    }
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'e') {
-      e.preventDefault();
-      exportEncryptedDataDump();
+      const runStateEl = document.getElementById('spikeModeDisplay');
+      if(runStateEl) runStateEl.innerText = isRunning ? "LINEAR TREND + NON-LINEAR SURGE" : "MATRIX PAUSED";
+      logPlatform(`[SYSTEM] Hybrid Simulation ${isRunning ? 'resumed' : 'paused'}.`);
     }
   });
 
@@ -415,13 +343,13 @@ Below is the fully optimized, production-ready QuantEngine v6.3.6 single-file ar
     const pill = document.getElementById('liveFeedStatusPill');
 
     if (isLiveStreamingActive) {
-      if(btn) { btn.innerText = "Stop Live Feed"; btn.classList.add('active'); }
-      if(pill) { pill.innerText = "LIVE STREAM ACTIVE"; pill.classList.add('streaming'); }
-      logPlatform("[LIVE] Financial volumetric stream ingestion activated.");
+      if(btn) { btn.innerText = "Stop Hybrid Feed"; btn.classList.add('active'); }
+      if(pill) { pill.innerText = "LIVE HYBRID STREAM ACTIVE"; pill.classList.add('streaming'); }
+      logPlatform("[LIVE] Hybrid linear/non-linear stream ingestion activated.");
     } else {
-      if(btn) { btn.innerText = "Start Live Feed"; btn.classList.remove('active'); }
+      if(btn) { btn.innerText = "Start Hybrid Feed"; btn.classList.remove('active'); }
       if(pill) { pill.innerText = "STANDBY"; pill.classList.remove('streaming'); }
-      logPlatform("[LIVE] Real-time data stream paused.");
+      logPlatform("[LIVE] Hybrid stream paused.");
     }
   }
 
@@ -432,9 +360,9 @@ Below is the fully optimized, production-ready QuantEngine v6.3.6 single-file ar
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.04);
-      gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+      osc.frequency.setValueAtTime(850, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(250, audioCtx.currentTime + 0.04);
+      gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
       gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
       osc.connect(gain);
       gain.connect(audioCtx.destination);
@@ -464,25 +392,6 @@ Below is the fully optimized, production-ready QuantEngine v6.3.6 single-file ar
     document.getElementById('calcLorentz').innerText = gamma.toFixed(3);
   }
 
-  const forecastCanvas = document.getElementById('unifiedForecastCanvas');
-  forecastCanvas.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    if (e.deltaY < 0) graphZoom = Math.min(graphZoom * 1.15, 4.0);
-    else graphZoom = Math.max(graphZoom / 1.15, 0.5);
-    const zoomEl = document.getElementById('zoomLevel');
-    if(zoomEl) zoomEl.innerText = `${graphZoom.toFixed(2)}x`;
-  }, { passive: false });
-
-  forecastCanvas.addEventListener('mousedown', (e) => {
-    isDraggingGraph = true;
-    dragStartX = e.clientX - graphPanX;
-  });
-  window.addEventListener('mousemove', (e) => {
-    if (!isDraggingGraph) return;
-    graphPanX = e.clientX - dragStartX;
-  });
-  window.addEventListener('mouseup', () => { isDraggingGraph = false; });
-
   function updateThresholdParams() {
     currentThreshold = parseFloat(document.getElementById('threshSlider').value);
     currentBaseline = parseFloat(document.getElementById('baseSlider').value);
@@ -491,86 +400,105 @@ Below is the fully optimized, production-ready QuantEngine v6.3.6 single-file ar
     document.getElementById('rateVal').innerText = parseFloat(document.getElementById('rateSlider').value).toFixed(1) + 'x';
   }
 
-  const atomCanvas = document.getElementById('atomicCanvas');
-  const atomCtx = atomCanvas.getContext('2d');
+  // Visualizing the Hybrid Noise Model (Linear drift + Non-linear logistic feedback)
+  const noiseCanvas = document.getElementById('noiseModelCanvas');
+  const noiseCtx = noiseCanvas.getContext('2d');
   function updateAtomSimulation() {
     const scaleValEl = document.getElementById('atomScaleVal');
     const scaleSliderEl = document.getElementById('atomScaleSlider');
     if(scaleValEl && scaleSliderEl) scaleValEl.innerText = scaleSliderEl.value;
   }
 
-  function renderAtoms() {
-    const width = atomCanvas.width;
-    const height = atomCanvas.height;
-    atomCtx.fillStyle = '#000';
-    atomCtx.fillRect(0, 0, width, height);
+  function renderNoiseModel() {
+    const width = noiseCanvas.width;
+    const height = noiseCanvas.height;
+    noiseCtx.fillStyle = '#010307';
+    noiseCtx.fillRect(0, 0, width, height);
 
-    const orbitalModeEl = document.getElementById('orbitalModeSelect');
-    const orbitalMode = orbitalModeEl ? parseInt(orbitalModeEl.value) : 1;
-    const spin = globalTick * 0.02;
-    const atomCount = 24;
+    const mode = parseInt(document.getElementById('orbitalModeSelect').value);
+    const linearDrift = parseFloat(document.getElementById('atomScaleSlider').value) * 0.001;
+    const t = globalTick * 0.04;
 
-    for (let i = 0; i < atomCount; i++) {
-      const angle = (i / atomCount) * Math.PI * 2 + spin;
-      const xBase = width / 2 + Math.cos(angle) * 45;
-      const yBase = height / 2 + Math.sin(angle) * 30;
+    noiseCtx.lineWidth = 1.5;
+    noiseCtx.strokeStyle = mode === 0 ? '#00f3ff' : (mode === 1 ? '#c084fc' : '#7ee787');
+    noiseCtx.beginPath();
 
-      let harmonic = 1.0;
-      const dx = Math.cos(angle);
-      const dy = Math.sin(angle);
-      if (orbitalMode === 1) harmonic = 2.5 * dy * dy;
-      else if (orbitalMode === 2) { const c = dx*dx - dy*dy; harmonic = Math.abs(3.2 * c * c); }
+    for (let x = 0; x < width; x += 3) {
+      const nx = x * 0.025;
+      let yVal = 0;
+      
+      // Hybrid calculation combining linear trend (nx * linearDrift) with non-linear components
+      const linearComponent = (x * 0.05) - (width * 0.025); // Linear slope trend
+      
+      if (mode === 0) {
+        // Linear drift + cubic non-linear feedback
+        const nonLinear = Math.pow(Math.sin(nx + t), 3) * 20;
+        yVal = (linearComponent * 0.2) + nonLinear;
+      } else if (mode === 1) {
+        // Pure logistic chaotic non-linear modulation
+        logisticX = 3.9 * logisticX * (1.0 - logisticX); // Chaotic mapping
+        yVal = (logisticX - 0.5) * 45 + (linearComponent * 0.1);
+      } else {
+        // Bifurcation harmonic blend
+        const nonLinear = Math.sin(nx * t * 0.2) * Math.cos(nx) * 25;
+        yVal = linearComponent * 0.15 + nonLinear;
+      }
 
-      const x = width / 2 + (xBase - width / 2) * harmonic;
-      const y = height / 2 + (yBase - height / 2) * harmonic;
-
-      atomCtx.fillStyle = i % 2 === 0 ? '#00f3ff' : '#c084fc';
-      atomCtx.beginPath();
-      atomCtx.arc(x, y, 3.5, 0, Math.PI * 2);
-      atomCtx.fill();
+      const y = (height / 2) - yVal;
+      if (x === 0) noiseCtx.moveTo(x, y); else noiseCtx.lineTo(x, y);
     }
-    atomCtx.fillStyle = '#7ee787';
-    atomCtx.beginPath();
-    atomCtx.arc(width / 2, height / 2, 5.5, 0, Math.PI * 2);
-    atomCtx.fill();
+    noiseCtx.stroke();
   }
 
-  const forecastCtx = forecastCanvas.getContext('2d');
+  // Dedicated Hybrid Spike & Anomaly Matrix Canvas
+  const spikeCanvas = document.getElementById('spikeMatrixCanvas');
+  const spikeCtx = spikeCanvas.getContext('2d');
 
-  function renderUnifiedForecastGraph() {
-    const width = forecastCanvas.width;
-    const height = forecastCanvas.height;
+  function renderSpikeMatrix() {
+    const width = spikeCanvas.width;
+    const height = spikeCanvas.height;
 
-    forecastCtx.fillStyle = 'rgba(2, 5, 12, 0.85)';
-    forecastCtx.fillRect(0, 0, width, height);
-    
-    forecastCtx.strokeStyle = 'rgba(0, 243, 255, 0.04)';
-    for(let x = 0; x < width; x += 45) { 
-      forecastCtx.beginPath(); 
-      forecastCtx.moveTo(x, 0); 
-      forecastCtx.lineTo(x, height); 
-      forecastCtx.stroke(); 
+    spikeCtx.fillStyle = 'rgba(2, 4, 10, 0.9)';
+    spikeCtx.fillRect(0, 0, width, height);
+
+    // Background precision grid
+    spikeCtx.strokeStyle = 'rgba(192, 132, 252, 0.05)';
+    for(let x = 0; x < width; x += 35) { 
+      spikeCtx.beginPath(); spikeCtx.moveTo(x, 0); spikeCtx.lineTo(x, height); spikeCtx.stroke(); 
+    }
+    for(let y = 0; y < height; y += 35) { 
+      spikeCtx.beginPath(); spikeCtx.moveTo(0, y); spikeCtx.lineTo(width, y); spikeCtx.stroke(); 
     }
 
     if (isRunning) {
       const beta = parseFloat(document.getElementById('betaSlider').value);
       const sampleRate = parseFloat(document.getElementById('rateSlider').value);
       const sourceMode = document.getElementById('liveSourceSelect').value;
+      const nonLinearFactor = parseFloat(document.getElementById('rateSlider').value);
       const gamma = 1.0 / Math.sqrt(1.0 - (beta * beta));
 
       let nextVal = 50;
+      // Linear baseline progression over time combined with non-linear exponential/chaotic spikes
+      const linearTrend = currentBaseline + (globalTick % 200) * 0.05; 
+
       if (isLiveStreamingActive) {
         if (sourceMode === 'simulated') {
-          const weylNoise = (((globalTick * 0.61803398875) % 1.0) - 0.5) * 45 * sampleRate * gamma;
-          nextVal = currentBaseline + Math.sin(globalTick * 0.12) * 28 + weylNoise;
+          // Non-linear logistic feedback mixed with linear baseline
+          logisticX = 3.88 * logisticX * (1.0 - logisticX);
+          const nonLinearChaos = (logisticX - 0.5) * 40 * nonLinearFactor;
+          nextVal = linearTrend + nonLinearChaos * gamma;
         } else if (sourceMode === 'sine') {
-          nextVal = currentBaseline + Math.sin(globalTick * 0.2 * sampleRate) * 32;
+          // Linear progression with non-linear harmonic amplification
+          const nonLinearSine = Math.sin(globalTick * 0.15) * Math.exp(Math.sin(globalTick * 0.05)) * 18 * nonLinearFactor;
+          nextVal = linearTrend + nonLinearSine;
         } else {
-          nextVal = currentBaseline + (Math.sin(globalTick * 0.1) * 18) + ((Math.random() - 0.5) * 42);
+          // Non-linear stochastic shock anomalies overlaid on linear trend
+          const shock = Math.random() > 0.8 ? (Math.random() - 0.2) * 55 * nonLinearFactor : (Math.random() - 0.5) * 12;
+          nextVal = linearTrend + shock;
         }
       } else {
-        const noise = (Math.random() - 0.5) * (12 * gamma);
-        nextVal = currentBaseline + Math.sin(globalTick * 0.1) * 20 + noise;
+        const stableLinear = currentBaseline + Math.sin(globalTick * 0.05) * 10;
+        nextVal = stableLinear + (Math.random() - 0.5) * 8;
       }
       nextVal = Math.max(2, Math.min(98, nextVal));
 
@@ -578,114 +506,63 @@ Below is the fully optimized, production-ready QuantEngine v6.3.6 single-file ar
       if(readoutEl) readoutEl.innerText = `Val: ${nextVal.toFixed(2)}`;
 
       telemetryHistory.push(nextVal);
-      if (telemetryHistory.length > 150) telemetryHistory.shift();
+      if (telemetryHistory.length > 80) telemetryHistory.shift();
 
       updateFinancialMetrics(nextVal);
-
-      let lastProj = nextVal;
-      predictedForecastBuffer = [];
-      const recentHistory = telemetryHistory.slice(-10);
-      let momentum = 0;
-      if (recentHistory.length > 1) {
-        for (let i = 1; i < recentHistory.length; i++) {
-          momentum += (recentHistory[i] - recentHistory[i - 1]);
-        }
-        momentum = momentum / (recentHistory.length - 1);
-      }
-
-      for (let f = 0; f < 45; f++) {
-        const damping = Math.exp(-0.08 * f);
-        const meanReversion = (currentBaseline - lastProj) * 0.05;
-        lastProj += (momentum * damping) + meanReversion + ((Math.random() - 0.5) * 1.5);
-        lastProj = Math.max(5, Math.min(95, lastProj));
-        predictedForecastBuffer.push(lastProj);
-      }
     }
 
-    const step = width / 150;
+    // Draw Hybrid Linear/Non-Linear Spikes
+    const colWidth = width / telemetryHistory.length;
     telemetryHistory.forEach((val, idx) => {
-      const x = idx * step;
-      const intensity = Math.min(val / 100, 1);
-      forecastCtx.fillStyle = `rgba(0, 243, 255, ${intensity * 0.12})`;
-      forecastCtx.fillRect(x, height - (val / 100) * height, step, (val / 100) * height);
+      const x = idx * colWidth + (colWidth / 2);
+      const normalizedHeight = (val / 100) * height;
+      const y = height - normalizedHeight;
+
+      const isBreach = val >= currentThreshold;
+      if (isBreach && globalTick % 10 === 0) breachCounter++;
+
+      // Non-linear surge styling (Purple/Cyan gradient feel)
+      spikeCtx.fillStyle = isBreach ? '#ff3344' : '#c084fc';
+      spikeCtx.shadowBlur = isBreach ? 18 : 6;
+      spikeCtx.shadowColor = isBreach ? '#ff3344' : '#c084fc';
+
+      // Draw vertical spike representation
+      spikeCtx.fillRect(x - 2, y, 4, normalizedHeight);
+
+      // Node highlight head
+      spikeCtx.fillStyle = isBreach ? '#ffffff' : '#00f3ff';
+      spikeCtx.beginPath();
+      spikeCtx.arc(x, y, isBreach ? 4.5 : 3, 0, Math.PI * 2);
+      spikeCtx.fill();
+      spikeCtx.shadowBlur = 0;
     });
 
-    const baselineY = height - (currentBaseline / 100) * height;
-    forecastCtx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
-    forecastCtx.lineWidth = 1;
-    forecastCtx.setLineDash([4, 4]);
-    forecastCtx.beginPath();
-    forecastCtx.moveTo(0, baselineY); forecastCtx.lineTo(width, baselineY);
-    forecastCtx.stroke();
-    forecastCtx.setLineDash([]);
-
+    // Draw Non-Linear Threshold Limit Line
     const thresholdY = height - (currentThreshold / 100) * height;
-    forecastCtx.strokeStyle = '#f0883e';
-    forecastCtx.lineWidth = 1.5;
-    forecastCtx.beginPath();
-    forecastCtx.moveTo(0, thresholdY); forecastCtx.lineTo(width, thresholdY);
-    forecastCtx.stroke();
+    spikeCtx.strokeStyle = '#f0883e';
+    spikeCtx.lineWidth = 1.5;
+    spikeCtx.setLineDash([6, 4]);
+    spikeCtx.beginPath();
+    spikeCtx.moveTo(0, thresholdY); spikeCtx.lineTo(width, thresholdY);
+    spikeCtx.stroke();
+    spikeCtx.setLineDash([]);
 
-    forecastCtx.save();
-    forecastCtx.translate(graphPanX, 0);
-    forecastCtx.scale(graphZoom, 1.0);
-
-    forecastCtx.strokeStyle = isLiveStreamingActive ? '#7ee787' : '#00f3ff';
-    forecastCtx.lineWidth = 2.5;
-    forecastCtx.shadowBlur = 12;
-    forecastCtx.shadowColor = isLiveStreamingActive ? '#7ee787' : '#00f3ff';
-    forecastCtx.beginPath();
-    
-    let breaches = 0;
-    telemetryHistory.forEach((val, idx) => {
-      const x = idx * step;
-      const y = height - (val / 100) * height;
-      if (val >= currentThreshold) breaches++;
-      if (idx === 0) forecastCtx.moveTo(x, y); else forecastCtx.lineTo(x, y);
-    });
-    forecastCtx.stroke();
-    forecastCtx.shadowBlur = 0;
-
-    forecastCtx.strokeStyle = '#c084fc';
-    forecastCtx.lineWidth = 2;
-    forecastCtx.setLineDash([3, 3]);
-    forecastCtx.beginPath();
-    
-    const histLen = telemetryHistory.length;
-    predictedForecastBuffer.forEach((val, idx) => {
-      const x = (histLen + idx) * step;
-      const y = height - (val / 100) * height;
-      if (idx === 0) forecastCtx.moveTo(x, y); else forecastCtx.lineTo(x, y);
-    });
-    forecastCtx.stroke();
-    forecastCtx.setLineDash([]);
-
-    const latestVal = telemetryHistory[telemetryHistory.length - 1];
-    if (latestVal >= currentThreshold) {
-      forecastCtx.fillStyle = '#ff3344';
-      forecastCtx.shadowBlur = 8;
-      forecastCtx.shadowColor = '#ff3344';
-      forecastCtx.beginPath();
-      forecastCtx.arc((telemetryHistory.length - 1) * step, height - (latestVal / 100) * height, 6, 0, Math.PI * 2);
-      forecastCtx.fill();
-      forecastCtx.shadowBlur = 0;
-      if (globalTick % 60 === 0) playClickSound(); 
-    }
-
-    forecastCtx.restore();
+    const breachDisplay = document.getElementById('breachCount');
+    if(breachDisplay) breachDisplay.innerText = breachCounter;
   }
 
   function masterRenderLoop() {
     try {
       globalTick += 1;
-      renderAtoms();
-      renderUnifiedForecastGraph();
+      renderNoiseModel();
+      renderSpikeMatrix();
+
       if (globalTick % 15 === 0 && isRunning) {
         const term = document.getElementById('dataDumpTerminal');
         if (term) {
           const hex = Math.floor(Math.random() * 0xFFFFFFFF).toString(16).padStart(8, '0');
           const val = (Math.random() * 100).toFixed(4);
-          const packet = `[0x${hex}] FINANCIAL SYNC VAL: ${val} | OK`;
+          const packet = `[0x${hex}] HYBRID VAL: ${val} | STATE: OK`;
           rawDataDumpBuffer.push(packet);
           if (rawDataDumpBuffer.length > 200) rawDataDumpBuffer.shift();
           term.innerHTML += `${packet}<br>`;
@@ -704,7 +581,7 @@ Below is the fully optimized, production-ready QuantEngine v6.3.6 single-file ar
     const passphrase = passphraseInput ? passphraseInput.value.trim() : "";
     if (!passphrase) { alert("Please enter a secure passphrase for AES-GCM encryption."); return; }
 
-    logPlatform("[VAULT] Deriving PBKDF2 key and exporting encrypted container...");
+    logPlatform("[VAULT] Deriving PBKDF2 key and exporting hybrid container...");
 
     try {
       const enc = new TextEncoder();
@@ -720,12 +597,11 @@ Below is the fully optimized, production-ready QuantEngine v6.3.6 single-file ar
       );
 
       const packageData = {
-        version: "6.3.6-FINANCIAL-VAULT",
+        version: "6.3.8-HYBRID-VAULT",
         timestamp: new Date().toISOString(),
-        watermark: "SOC2-N64-FINANCIAL-VAULT",
+        watermark: "SOC2-N64-HYBRID-VAULT",
         telemetry: telemetryHistory,
         financials: financialAccumulator,
-        forecast: predictedForecastBuffer,
         streamDumps: rawDataDumpBuffer
       };
 
@@ -742,10 +618,10 @@ Below is the fully optimized, production-ready QuantEngine v6.3.6 single-file ar
 
       const blob = new Blob([JSON.stringify(container, null, 2)], { type: "application/octet-stream" });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = `QuantEngine_Financial_Vault_${Date.now()}.enc`; a.click();
+      const a = document.createElement('a'); a.href = url; a.download = `QuantEngine_Hybrid_Vault_${Date.now()}.enc`; a.click();
       URL.revokeObjectURL(url);
 
-      logPlatform("[SUCCESS] AES-256-GCM financial vault container exported successfully.");
+      logPlatform("[SUCCESS] Hybrid vault container exported successfully.");
     } catch (err) {
       logPlatform("[ERROR] Encryption failed: " + err.message);
     }
@@ -759,7 +635,7 @@ Below is the fully optimized, production-ready QuantEngine v6.3.6 single-file ar
     const passphrase = passphraseInput ? passphraseInput.value.trim() : "";
     if (!passphrase) { alert("Please enter the decryption passphrase first."); return; }
 
-    logPlatform(`[VAULT] Unpacking and verifying container '${file.name}'...`);
+    logPlatform(`[VAULT] Unpacking container '${file.name}'...`);
     const reader = new FileReader();
     reader.onload = async function(e) {
       try {
@@ -791,17 +667,58 @@ Below is the fully optimized, production-ready QuantEngine v6.3.6 single-file ar
           document.getElementById('metricAnnually').innerText = `$${financialAccumulator.annualTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         }
 
-        logPlatform(`[SUCCESS] Vault unlocked! Loaded ${data.telemetry ? data.telemetry.length : 0} telemetry records.`);
-        alert(`Vault Unlocked Successfully!\nWatermark: ${data.watermark}\nFinancial Records Synchronized.`);
+        logPlatform(`[SUCCESS] Vault unlocked! Loaded ${data.telemetry ? data.telemetry.length : 0} records.`);
+        alert(`Vault Unlocked Successfully!\nWatermark: ${data.watermark}`);
       } catch (err) {
         logPlatform("[ERROR] Decryption failed: " + err.message);
-        alert("Decryption Failed: Incorrect passphrase or container structure.");
+        alert("Decryption Failed: Incorrect passphrase.");
       }
     };
     reader.readAsText(file);
   }
 
-  // Initialize immediately on script execution
+  async function persistToIndexedDB() {
+    try {
+      const request = indexedDB.open("QuantEngineDB", 1);
+      request.onsuccess = (e) => {
+        const db = e.target.result;
+        const tx = db.transaction("stateStore", "readwrite");
+        tx.objectStore("stateStore").put({
+          id: "active_session",
+          threshold: currentThreshold,
+          baseline: currentBaseline,
+          financials: financialAccumulator,
+          timestamp: new Date().toISOString()
+        });
+        alert("State successfully saved to IndexedDB.");
+      };
+    } catch (err) {
+      alert("IndexedDB save failed.");
+    }
+  }
+
+  async function restoreFromIndexedDB() {
+    try {
+      const request = indexedDB.open("QuantEngineDB", 1);
+      request.onsuccess = (e) => {
+        const db = e.target.result;
+        const tx = db.transaction("stateStore", "readonly");
+        const getReq = tx.objectStore("stateStore").get("active_session");
+        getReq.onsuccess = () => {
+          if (getReq.result && getReq.result.financials) {
+            financialAccumulator = getReq.result.financials;
+            alert("State successfully restored from IndexedDB!");
+          } else {
+            alert("No saved state found.");
+          }
+        };
+      };
+    } catch (err) {
+      alert("Restore failed.");
+    }
+  }
+
+  // Initialize immediately on execution
   updateThresholdParams();
   updateAtomSimulation();
   updateNoiseCalc();
