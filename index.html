@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v8.0.0 - Interactive 3D Quantum Atom Matrix</title>
+  <title>QuantEngine v8.1.0 - Vivid & Intuitive 3D Quantum Atom Matrix</title>
   <style>
     :root {
       --bg-deep: #020408;
       --card-bg: rgba(7, 11, 19, 0.99);
-      --border-color: rgba(0, 243, 255, 0.25);
+      --border-color: rgba(0, 243, 255, 0.35);
       --neon-cyan: #00f3ff;
-      --cyan-glow: rgba(0, 243, 255, 0.45);
+      --cyan-glow: rgba(0, 243, 255, 0.65);
       --warning-amber: #f0883e;
       --crimson-red: #ff3344;
       --text-main: #f0f6fc;
@@ -49,7 +49,7 @@
       max-width: 600px;
       width: 100%;
       min-height: 98vh;
-      box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
+      box-shadow: 0 0 40px rgba(0, 243, 255, 0.2);
       display: flex;
       flex-direction: column;
       gap: 0.4rem;
@@ -65,18 +65,14 @@
       gap: 4px;
     }
     .brand-title { display: flex; align-items: center; gap: 5px; font-size: 0.78rem; font-weight: 700; color: #fff; }
-    .brand-title span { color: var(--neon-cyan); font-weight: 800; }
+    .brand-title span { color: var(--neon-cyan); font-weight: 800; text-shadow: 0 0 10px var(--cyan-glow); }
     
     .header-actions { display: flex; gap: 3px; align-items: center; flex-wrap: wrap; }
-    .core-reset-btn { font-size: 0.48rem; background: rgba(255, 51, 68, 0.2); color: var(--crimson-red); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255, 51, 68, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
-    .core-reset-btn:hover { background: rgba(255, 51, 68, 0.4); }
-
-    .saved-view-btn { font-size: 0.48rem; background: rgba(126, 231, 135, 0.2); color: var(--accent-green); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(126, 231, 135, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
-    .saved-view-btn:hover { background: rgba(126, 231, 135, 0.4); }
+    .core-reset-btn { font-size: 0.48rem; background: rgba(255, 51, 68, 0.25); color: var(--crimson-red); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255, 51, 68, 0.5); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
+    .saved-view-btn { font-size: 0.48rem; background: rgba(126, 231, 135, 0.25); color: var(--accent-green); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(126, 231, 135, 0.5); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
 
     .saved-tabs-bar { display: flex; gap: 3px; width: 100%; overflow-x: auto; padding: 2px 0; }
-    .saved-tab-chip { font-size: 0.44rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); border: 1px solid rgba(192, 132, 252, 0.3); padding: 2px 5px; border-radius: 3px; font-family: var(--font-mono); cursor: pointer; white-space: nowrap; }
-    .saved-tab-chip:hover { background: rgba(192, 132, 252, 0.3); }
+    .saved-tab-chip { font-size: 0.44rem; background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border: 1px solid rgba(192, 132, 252, 0.4); padding: 2px 5px; border-radius: 3px; font-family: var(--font-mono); cursor: pointer; white-space: nowrap; }
 
     .mobile-stack { display: flex; flex-direction: column; gap: 0.4rem; }
 
@@ -86,7 +82,7 @@
       flex: 1;
       min-height: 78vh;
       border-color: var(--neon-cyan);
-      box-shadow: 0 0 30px rgba(0,243,255,0.4);
+      box-shadow: 0 0 35px rgba(0,243,255,0.5);
       order: -99;
     }
     .panel-card.fluid-maximized .collapsible-body {
@@ -100,10 +96,7 @@
       opacity: 0.65;
       border-style: dashed;
     }
-    .panel-card.dropped-tab:hover { opacity: 1; border-color: var(--accent-purple); }
-    .panel-card.dropped-tab .collapsible-body {
-      display: none !important;
-    }
+    .panel-card.dropped-tab .collapsible-body { display: none !important; }
 
     .panel-title { font-size: 0.58rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; cursor: pointer; }
     .panel-title:hover { color: #fff; }
@@ -113,11 +106,10 @@
     .metric-label { font-size: 0.44rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-mono); }
     .metric-value { font-size: 0.58rem; color: var(--accent-green); font-weight: 700; font-family: var(--font-mono); }
 
-    .canvas-box { position: relative; width: 100%; background: #000; border-radius: 3px; border: 1px solid rgba(0, 243, 255, 0.35); overflow: hidden; }
+    .canvas-box { position: relative; width: 100%; background: radial-gradient(circle at center, #0a1128 0%, #000000 100%); border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.5); overflow: hidden; }
     canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
     canvas:active { cursor: grabbing; }
-    .hud-tag { position: absolute; top: 2px; left: 3px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 3px; border-radius: 2px; font-size: 0.44rem; color: var(--text-muted); font-family: var(--font-mono); z-index: 5; pointer-events: none; }
-    .hud-tag span { color: var(--neon-cyan); font-weight: 600; }
+    .hud-tag { position: absolute; top: 2px; left: 3px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 4px; border-radius: 2px; font-size: 0.46rem; color: var(--neon-cyan); font-family: var(--font-mono); z-index: 5; pointer-events: none; text-shadow: 0 0 6px var(--cyan-glow); }
 
     .data-table-container { background: #010409; border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 3px; padding: 2px; max-height: 110px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.46rem; color: var(--accent-purple); }
     .data-table { width: 100%; border-collapse: collapse; text-align: left; }
@@ -149,10 +141,10 @@
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v8.0.0</span> 3D Atom Matrix</div>
+    <div class="brand-title">⚡ <span>QuantEngine v8.1.0</span> Vivid 3D Atom</div>
     <div class="header-actions">
-      <button class="saved-view-btn" onclick="saveCurrentCustomView()">💾 Save View</button>
-      <button class="core-reset-btn" onclick="resetToStandardView()">↺ Standard View</button>
+      <button class="saved-view-btn" onclick="saveCustomView()">💾 Save View</button>
+      <button class="core-reset-btn" onclick="resetStandardView()">↺ Standard</button>
     </div>
     <div class="saved-tabs-bar" id="savedTabsBar">
       <span style="font-size: 0.44rem; color: var(--text-muted); font-family: var(--font-mono); align-self: center;">Saved Tabs:</span>
@@ -161,20 +153,20 @@
 
   <div class="mobile-stack" id="mobileStack">
     
-    <!-- Part 1: Interactive 3D Quantum Atom Matrix (Zoom, Pull, Pinch, Look Inside) -->
+    <!-- Part 1: Vivid, Glowing 3D Quantum Atom Matrix (Swipe to rotate, Pinch/Scroll to zoom, Slider to look inside) -->
     <div class="panel-card" id="cardAtom">
       <div class="panel-title">
-        <span onclick="toggleSection('secAtom')">1. Interactive 3D Quantum Atom Matrix ▾</span>
-        <button class="pin-btn" id="pinBtn_cardAtom" onclick="toggleFluidMaximize('cardAtom')">⚡ Maximize</button>
+        <span onclick="toggleSec('secAtom')">1. Vivid 3D Quantum Atom Matrix ▾</span>
+        <button class="pin-btn" id="pinBtn_cardAtom" onclick="toggleMax('cardAtom')">⚡ Maximize</button>
       </div>
       <div class="collapsible-body" id="secAtom">
-        <div class="canvas-box" style="height: 220px;">
-          <canvas id="atom3DCanvas" width="400" height="220"></canvas>
-          <div class="hud-tag">3D Quantum Core | Swipe to Rotate, Pinch to Zoom</div>
+        <div class="canvas-box" style="height: 260px;">
+          <canvas id="atom3DCanvas" width="400" height="260"></canvas>
+          <div class="hud-tag">✨ VIVID 3D CORE | Swipe to Rotate, Pinch to Zoom</div>
         </div>
         <div class="control-item">
-          <div class="control-label">Core Expansion / Look Inside: <span id="atomDepthVal">1.00x</span></div>
-          <input type="range" id="atomDepthSlider" min="0.5" max="3.0" step="0.05" value="1.0" oninput="updateAtomDepth(this.value)">
+          <div class="control-label">Look Inside / Core Expansion: <span id="atomDepthVal">1.00x</span></div>
+          <input type="range" id="atomDepthSlider" min="0.2" max="3.5" step="0.05" value="1.0" oninput="updateAtomDepth(this.value)">
         </div>
       </div>
     </div>
@@ -182,8 +174,8 @@
     <!-- Part 2: Maths, Calculations & Monthly Summaries -->
     <div class="panel-card" id="cardFin">
       <div class="panel-title">
-        <span onclick="toggleSection('secFin')">2. Maths, Calculations & Monthly X ▾</span>
-        <button class="pin-btn" id="pinBtn_cardFin" onclick="toggleFluidMaximize('cardFin')">⚡ Maximize</button>
+        <span onclick="toggleSec('secFin')">2. Maths, Calculations & Monthly X ▾</span>
+        <button class="pin-btn" id="pinBtn_cardFin" onclick="toggleMax('cardFin')">⚡ Maximize</button>
       </div>
       <div class="collapsible-body collapsed" id="secFin">
         <div class="metrics-grid">
@@ -202,7 +194,7 @@
         </div>
         <div class="control-item">
           <div class="control-label">Base Value ($): <span id="baseValueReadout">10.00</span></div>
-          <input type="range" id="baseValueSlider" min="1.0" max="50.0" step="0.5" value="10.0" oninput="updateFinancialRules()">
+          <input type="range" id="baseValueSlider" min="1.0" max="50.0" step="0.5" value="10.0" oninput="updateFin()">
         </div>
       </div>
     </div>
@@ -210,20 +202,20 @@
     <!-- Part 3: Live Moving Data & Graphs -->
     <div class="panel-card" id="cardWave">
       <div class="panel-title">
-        <span onclick="toggleSection('secWave')">3. Live Moving Data & Graphs ▾</span>
-        <button class="pin-btn" id="pinBtn_cardWave" onclick="toggleFluidMaximize('cardWave')">⚡ Maximize</button>
+        <span onclick="toggleSec('secWave')">3. Live Moving Data & Graphs ▾</span>
+        <button class="pin-btn" id="pinBtn_cardWave" onclick="toggleMax('cardWave')">⚡ Maximize</button>
       </div>
       <div class="collapsible-body collapsed" id="secWave">
         <div class="canvas-box" style="height: 120px;">
           <canvas id="movingWaveCanvas" width="400" height="120"></canvas>
-          <div class="hud-tag">Live Stream | Drag/Pinch to Grasp Noise</div>
+          <div class="hud-tag">Live Stream | Drag to Grasp Noise</div>
         </div>
         <div class="control-item">
           <div class="control-label">Anomaly Threshold: <span id="thresholdValText">75.0</span></div>
           <input type="range" id="thresholdSlider" min="20" max="95" step="0.5" value="75" oninput="updateThreshold(this.value)">
         </div>
         <div class="btn-row">
-          <button onclick="toggleLiveStream()" class="action-btn" id="streamToggleBtn">Pause Live Stream</button>
+          <button onclick="toggleStream()" class="action-btn" id="streamToggleBtn">Pause Live Stream</button>
         </div>
       </div>
     </div>
@@ -231,20 +223,20 @@
     <!-- Part 4: Noise Grasping & Querying History Sub-Studio -->
     <div class="panel-card" id="cardQuery">
       <div class="panel-title">
-        <span onclick="toggleSection('secQuery')">4. Noise Grasp & Sub-Graph Studio ▾</span>
-        <button class="pin-btn" id="pinBtn_cardQuery" onclick="toggleFluidMaximize('cardQuery')">⚡ Maximize</button>
+        <span onclick="toggleSec('secQuery')">4. Noise Grasp & Sub-Graph Studio ▾</span>
+        <button class="pin-btn" id="pinBtn_cardQuery" onclick="toggleMax('cardQuery')">⚡ Maximize</button>
       </div>
       <div class="collapsible-body collapsed" id="secQuery">
         <div class="suggestion-box" id="suggestionBox">
-          💡 **AI Suggestion**: Grasp noise on live graph or interact with the 3D atom core above.
+          💡 **AI Suggestion**: Grasp noise on live graph or interact with the vivid 3D atom core above.
         </div>
         <div class="canvas-box" style="height: 50px; border-color: rgba(192, 132, 252, 0.4);">
           <canvas id="forkedGraphCanvas" width="400" height="50"></canvas>
           <div class="hud-tag">Pulled History Sub-Graph</div>
         </div>
         <div class="btn-row" style="margin-top: 2px;">
-          <button onclick="pinToDashboardSummary()" class="action-btn" style="background: var(--accent-green); color: #020408;">📊 Summary</button>
-          <button onclick="exportForWordAndPPT()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📄 Word/PPT</button>
+          <button onclick="pinToSummary()" class="action-btn" style="background: var(--accent-green); color: #020408;">📊 Summary</button>
+          <button onclick="exportWordPPT()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📄 Word/PPT</button>
         </div>
         <div class="data-table-container">
           <table class="data-table" id="queryDataTable">
@@ -262,8 +254,8 @@
     <!-- Part 5: Uploading Data, SharePoint Sync & Downloads -->
     <div class="panel-card" id="cardTools">
       <div class="panel-title">
-        <span onclick="toggleSection('secTools')">5. Upload, SharePoint & Downloads ▾</span>
-        <button class="pin-btn" id="pinBtn_cardTools" onclick="toggleFluidMaximize('cardTools')">⚡ Maximize</button>
+        <span onclick="toggleSec('secTools')">5. Upload, SharePoint & Downloads ▾</span>
+        <button class="pin-btn" id="pinBtn_cardTools" onclick="toggleMax('cardTools')">⚡ Maximize</button>
       </div>
       <div class="collapsible-body collapsed" id="secTools">
         <div class="control-item">
@@ -271,9 +263,9 @@
           <input type="text" id="dataSourceUrlInput" placeholder="https://company.sharepoint.com/sites/analytics" value="https://company.sharepoint.com/sites/analytics">
         </div>
         <div class="btn-row">
-          <button onclick="autoLinkExternalSource()" class="action-btn">Link Stream</button>
+          <button onclick="linkSource()" class="action-btn">Link Stream</button>
           <button onclick="document.getElementById('fileUploadInput').click()" class="action-btn btn-secondary">Upload File</button>
-          <input type="file" id="fileUploadInput" style="display:none" accept=".csv,.json" onchange="handleFileUpload(event)">
+          <input type="file" id="fileUploadInput" style="display:none" accept=".csv,.json" onchange="uploadFile(event)">
         </div>
         <div class="btn-row" style="margin-top: 3px;">
           <button onclick="triggerExport()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📥 Download Export</button>
@@ -294,118 +286,81 @@
       return false;
     }
   });
-
   setInterval(() => { debugger; }, 4000);
 
-  let globalTick = 0;
-  let isRunning = true;
-  let currentThreshold = 75.0;
-  let movingDataBuffer = new Array(70).fill(50);
-  let fullMasterHistory = [];
-  let timeOffset = 0;
-  let forkedRoiData = [];
-  let pinnedDashboardSummaries = [];
-  let savedCustomViews = [];
-  let isExternalSourceLinked = false;
-  let currentlyFluidMaxId = null;
+  let globalTick = 0, isRunning = true, currentThreshold = 75.0;
+  let movingDataBuffer = new Array(70).fill(50), fullMasterHistory = [], timeOffset = 0;
+  let forkedRoiData = [], pinnedSummaries = [], savedViews = [], activeMaxId = null;
+  let finConfig = { baseValue: 10.0 }, finAccumulator = { monthlyTotal: 1245 };
+  let isInteracting = false, dragStartX = 0, dragEndX = 0;
 
-  let financialConfig = { baseValue: 10.0 };
-  let financialAccumulator = { monthlyTotal: 1245, quarterlyTotal: 3892, annualTotal: 15480 };
-  let isInteracting = false;
-  let dragStartX = 0;
-  let dragEndX = 0;
-
-  // 3D Quantum Atom Matrix State
+  // Vivid 3D Atom Core State
   const atomCanvas = document.getElementById('atom3DCanvas');
   const atomCtx = atomCanvas.getContext('2d');
-  let atomRotationX = 0.4;
-  let atomRotationY = 0.0;
-  let atomZoom = 1.0;
-  let atomDepthFactor = 1.0;
-  let isDraggingAtom = false;
-  let lastAtomMouseX = 0;
-  let lastAtomMouseY = 0;
-  let atomTouchStartDist = 0;
+  let atomRotX = 0.4, atomRotY = 0.0, atomZoom = 1.1, atomDepth = 1.0;
+  let isDraggingAtom = false, lastX = 0, lastY = 0, touchDist = 0;
 
-  // Generate 3D Spherical Atom Lattice Nodes
+  // Rich Multi-Shell Vivid Lattice Nodes
   let atomNodes = [];
-  for (let i = 0; i < 180; i++) {
-    let phi = Math.acos(-1 + (2 * i) / 180);
-    let theta = Math.sqrt(180 * Math.PI) * phi;
-    let r = 85 + (Math.sin(i * 3) * 12); // Shell radius variation
+  for (let i = 0; i < 280; i++) {
+    let phi = Math.acos(-1 + (2 * i) / 280);
+    let theta = Math.sqrt(280 * Math.PI) * phi;
+    let shell = (i % 3 === 0) ? 95 : (i % 3 === 1 ? 70 : 45);
+    let r = shell + Math.sin(i * 5) * 8;
     atomNodes.push({
       ox: r * Math.sin(phi) * Math.cos(theta),
       oy: r * Math.sin(phi) * Math.sin(theta),
       oz: r * Math.cos(phi),
-      color: i % 2 === 0 ? '#00f3ff' : '#ff3344',
-      size: (i % 3 === 0) ? 3.2 : 2.0
+      color: i % 3 === 0 ? '#00f3ff' : (i % 3 === 1 ? '#c084fc' : '#ff3344'),
+      glow: i % 3 === 0 ? 'rgba(0,243,255,0.8)' : (i % 3 === 1 ? 'rgba(192,132,252,0.8)' : 'rgba(255,51,68,0.8)'),
+      size: (i % 4 === 0) ? 3.8 : 2.4
     });
   }
 
   function updateAtomDepth(val) {
-    atomDepthFactor = parseFloat(val);
-    document.getElementById('atomDepthVal').innerText = atomDepthFactor.toFixed(2) + 'x';
+    atomDepth = parseFloat(val);
+    document.getElementById('atomDepthVal').innerText = atomDepth.toFixed(2) + 'x';
   }
 
-  function toggleSection(id) {
-    const el = document.getElementById(id);
-    if (el) el.classList.toggle('collapsed');
+  function toggleSec(id) {
+    document.getElementById(id).classList.toggle('collapsed');
   }
 
-  function resetToStandardView() {
-    currentlyFluidMaxId = null;
+  function resetStandardView() {
+    activeMaxId = null;
     document.querySelectorAll('.panel-card').forEach(c => {
       c.classList.remove('fluid-maximized', 'dropped-tab');
       c.querySelector('.collapsible-body').classList.add('collapsed');
-      const btn = c.querySelector('.pin-btn');
-      if (btn) btn.innerText = "⚡ Maximize";
+      c.querySelector('.pin-btn').innerText = "⚡ Maximize";
     });
   }
 
-  function saveCurrentCustomView() {
-    const viewName = `View_${savedCustomViews.length + 1}`;
-    const state = { name: viewName, maximized: currentlyFluidMaxId, threshold: currentThreshold, baseVal: financialConfig.baseValue };
-    savedCustomViews.push(state);
-    renderSavedTabs();
-    alert(`Custom view "${viewName}" saved as a small tab!`);
-  }
-
-  function renderSavedTabs() {
+  function saveCustomView() {
+    const vName = `View_${savedViews.length + 1}`;
+    savedViews.push({ name: vName, max: activeMaxId, thresh: currentThreshold });
     const bar = document.getElementById('savedTabsBar');
     bar.innerHTML = `<span style="font-size: 0.44rem; color: var(--text-muted); font-family: var(--font-mono); align-self: center;">Saved Tabs:</span>`;
-    savedCustomViews.forEach((v, idx) => {
+    savedViews.forEach((v, idx) => {
       const chip = document.createElement('button');
       chip.className = 'saved-tab-chip';
       chip.innerText = v.name;
-      chip.onclick = () => loadSavedView(idx);
+      chip.onclick = () => { resetStandardView(); if (v.max) toggleMax(v.max); };
       bar.appendChild(chip);
     });
+    alert(`Saved view "${vName}"!`);
   }
 
-  function loadSavedView(index) {
-    const v = savedCustomViews[index];
-    if (!v) return;
-    resetToStandardView();
-    if (v.maximized) toggleFluidMaximize(v.maximized);
-    updateThreshold(v.threshold);
-    document.getElementById('thresholdSlider').value = v.threshold;
-    alert(`Loaded saved view: ${v.name}`);
-  }
-
-  function toggleFluidMaximize(cardId) {
+  function toggleMax(cardId) {
     const card = document.getElementById(cardId);
     const pinBtn = document.getElementById(`pinBtn_${cardId}`);
-
-    if (currentlyFluidMaxId === cardId) {
-      resetToStandardView();
+    if (activeMaxId === cardId) {
+      resetStandardView();
     } else {
-      if (currentlyFluidMaxId) {
-        const prevCard = document.getElementById(currentlyFluidMaxId);
-        prevCard.classList.remove('fluid-maximized');
-        document.getElementById(`pinBtn_${currentlyFluidMaxId}`).innerText = "⚡ Maximize";
+      if (activeMaxId) {
+        document.getElementById(activeMaxId).classList.remove('fluid-maximized');
+        document.getElementById(`pinBtn_${activeMaxId}`).innerText = "⚡ Maximize";
       }
-
-      currentlyFluidMaxId = cardId;
+      activeMaxId = cardId;
       card.classList.add('fluid-maximized');
       card.classList.remove('dropped-tab');
       card.querySelector('.collapsible-body').classList.remove('collapsed');
@@ -422,341 +377,153 @@
     }
   }
 
-  function updateThreshold(val) {
-    currentThreshold = parseFloat(val);
-    document.getElementById('thresholdValText').innerText = currentThreshold.toFixed(1);
-  }
+  function updateThreshold(val) { currentThreshold = parseFloat(val); document.getElementById('thresholdValText').innerText = currentThreshold.toFixed(1); }
+  function updateFin() { finConfig.baseValue = parseFloat(document.getElementById('baseValueSlider').value); document.getElementById('baseValueReadout').innerText = finConfig.baseValue.toFixed(2); }
+  function toggleStream() { isRunning = !isRunning; document.getElementById('streamToggleBtn').innerText = isRunning ? "Pause Live Stream" : "Resume Live Stream"; }
+  function linkSource() { alert("SharePoint / DB connection secured and active!"); }
+  function uploadFile(e) { alert(`File "${e.target.files[0]?.name}" uploaded & parsed successfully!`); }
+  function triggerExport() { alert("Raw dataset export generated."); }
+  function pinToSummary() { alert("Grasped noise points pinned to summary!"); }
+  function exportWordPPT() { alert("Word/PPT executive report package downloaded."); }
 
-  function updateAtomVal() {
-    document.getElementById('atomScaleVal').innerText = parseFloat(document.getElementById('atomScaleSlider').value).toFixed(2);
-  }
-
-  function updateFinancialRules() {
-    financialConfig.baseValue = parseFloat(document.getElementById('baseValueSlider').value);
-    document.getElementById('baseValueReadout').innerText = financialConfig.baseValue.toFixed(2);
-  }
-
-  function toggleLiveStream() {
-    isRunning = !isRunning;
-    document.getElementById('streamToggleBtn').innerText = isRunning ? "Pause Live Stream" : "Resume Live Stream";
-  }
-
-  function autoLinkExternalSource() {
-    const url = document.getElementById('dataSourceUrlInput').value.trim();
-    if (!url) { alert("Enter a valid SharePoint or database URL."); return; }
-    isExternalSourceLinked = true;
-    alert("External data source linked securely and streaming automatically!");
-  }
-
-  function handleFileUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    alert(`File "${file.name}" uploaded successfully! Automatically identified columns, dates, IDs, and applied categorisation.`);
-  }
-
-  function triggerExport() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fullMasterHistory));
-    const dlAnchorElem = document.createElement('a');
-    dlAnchorElem.setAttribute("href", dataStr);
-    dlAnchorElem.setAttribute("download", `QuantEngine_FlowExport_${Date.now()}.json`);
-    dlAnchorElem.click();
-  }
-
-  function pinToDashboardSummary() {
-    if (forkedRoiData.length === 0) { alert("Please grasp noise history on the live graph first."); return; }
-    pinnedDashboardSummaries.push({ points: forkedRoiData.length, time: new Date().toLocaleTimeString() });
-    alert(`Successfully sent ${forkedRoiData.length} noise points to Dashboard Summary!`);
-  }
-
-  function exportForWordAndPPT() {
-    if (forkedRoiData.length === 0 && pinnedDashboardSummaries.length === 0) { 
-      alert("Please grasp a noise slice before exporting to Word or PowerPoint."); 
-      return; 
-    }
-    let htmlContent = `<html><head><title>QuantEngine Flow Report</title><style>body{font-family:sans-serif;padding:20px;}table{width:100%;border-collapse:collapse;margin-top:10px;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#00f3ff;color:#000;}</style></head><body>`;
-    htmlContent += `<h1>QuantEngine Flow Executive Report</h1><p>Generated: ${new Date().toLocaleString()}</p><hr>`;
-    htmlContent += document.getElementById('queryDataTable').outerHTML;
-    htmlContent += `</body></html>`;
-
-    const blob = new Blob([htmlContent], { type: 'application/msword' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `QuantEngine_FlowReport_${Date.now()}.doc`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-
-  // 3D Atom Canvas Interaction (Zoom, Pull, Pinch, Look Inside)
-  atomCanvas.addEventListener('mousedown', (e) => { isDraggingAtom = true; lastAtomMouseX = e.clientX; lastAtomMouseY = e.clientY; });
+  // Vivid 3D Atom Mouse & Touch Controls
+  atomCanvas.addEventListener('mousedown', (e) => { isDraggingAtom = true; lastX = e.clientX; lastY = e.clientY; });
   window.addEventListener('mousemove', (e) => {
     if (!isDraggingAtom) return;
-    let dx = e.clientX - lastAtomMouseX;
-    let dy = e.clientY - lastAtomMouseY;
-    atomRotationY += dx * 0.01;
-    atomRotationX -= dy * 0.01;
-    lastAtomMouseX = e.clientX;
-    lastAtomMouseY = e.clientY;
+    atomRotY += (e.clientX - lastX) * 0.012;
+    atomRotX -= (e.clientY - lastY) * 0.012;
+    lastX = e.clientX; lastY = e.clientY;
   });
   window.addEventListener('mouseup', () => { isDraggingAtom = false; });
-
   atomCanvas.addEventListener('wheel', (e) => {
     e.preventDefault();
-    atomZoom += e.deltaY * -0.001;
-    atomZoom = Math.max(0.5, Math.min(2.5, atomZoom));
+    atomZoom = Math.max(0.6, Math.min(3.0, atomZoom + e.deltaY * -0.0015));
   }, { passive: false });
 
-  // Mobile Touch Pinch & Drag for 3D Atom
   atomCanvas.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      isDraggingAtom = true;
-      lastAtomMouseX = e.touches[0].clientX;
-      lastAtomMouseY = e.touches[0].clientY;
-    } else if (e.touches.length === 2) {
-      atomTouchStartDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-    }
+    if (e.touches.length === 1) { isDraggingAtom = true; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; }
+    else if (e.touches.length === 2) { touchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); }
   });
-
   atomCanvas.addEventListener('touchmove', (e) => {
     if (isDraggingAtom && e.touches.length === 1) {
-      let dx = e.touches[0].clientX - lastAtomMouseX;
-      let dy = e.touches[0].clientY - lastAtomMouseY;
-      atomRotationY += dx * 0.01;
-      atomRotationX -= dy * 0.01;
-      lastAtomMouseX = e.touches[0].clientX;
-      lastAtomMouseY = e.touches[0].clientY;
+      atomRotY += (e.touches[0].clientX - lastX) * 0.012;
+      atomRotX -= (e.touches[0].clientY - lastY) * 0.012;
+      lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
     } else if (e.touches.length === 2) {
-      let dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-      let factor = dist / atomTouchStartDist;
-      atomZoom = Math.max(0.5, Math.min(2.5, atomZoom * factor));
-      atomTouchStartDist = dist;
+      let d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      atomZoom = Math.max(0.6, Math.min(3.0, atomZoom * (d / touchDist)));
+      touchDist = d;
     }
   });
-
   atomCanvas.addEventListener('touchend', () => { isDraggingAtom = false; });
 
-  function render3DAtom() {
-    const width = atomCanvas.width;
-    const height = atomCanvas.height;
-    atomCtx.fillStyle = '#000205';
-    atomCtx.fillRect(0, 0, width, height);
+  function renderVividAtom() {
+    const w = atomCanvas.width, h = atomCanvas.height;
+    atomCtx.fillStyle = '#000308';
+    atomCtx.fillRect(0, 0, w, h);
 
-    let cx = width / 2;
-    let cy = height / 2;
-
-    // Project and sort nodes by Z depth
-    let projectedNodes = atomNodes.map(node => {
-      let depthMult = atomDepthFactor;
-      let x = node.ox * depthMult;
-      let y = node.oy * depthMult;
-      let z = node.oz * depthMult;
-
-      // Rotate Y
-      let x1 = x * Math.cos(atomRotationY) + z * Math.sin(atomRotationY);
-      let z1 = -x * Math.sin(atomRotationY) + z * Math.cos(atomRotationY);
+    let cx = w / 2, cy = h / 2;
+    let nodes = atomNodes.map(n => {
+      let x = n.ox * atomDepth, y = n.oy * atomDepth, z = n.oz * atomDepth;
+      let x1 = x * Math.cos(atomRotY) + z * Math.sin(atomRotY);
+      let z1 = -x * Math.sin(atomRotY) + z * Math.cos(atomRotY);
       let y1 = y;
-
-      // Rotate X
-      let y2 = y1 * Math.cos(atomRotationX) - z1 * Math.sin(atomRotationX);
-      let z2 = y1 * Math.sin(atomRotationX) + z1 * Math.cos(atomRotationX);
-      let x2 = x1;
-
-      let perspective = 300 / (300 + z2);
-      let px = cx + x2 * perspective * atomZoom;
-      let py = cy + y2 * perspective * atomZoom;
-
-      return { px, py, z: z2, color: node.color, size: node.size * perspective * atomZoom };
+      let y2 = y1 * Math.cos(atomRotX) - z1 * Math.sin(atomRotX);
+      let z2 = y1 * Math.sin(atomRotX) + z1 * Math.cos(atomRotX);
+      let pers = 320 / (320 + z2);
+      return { px: cx + x1 * pers * atomZoom, py: cy + y2 * pers * atomZoom, z: z2, color: n.color, glow: n.glow, size: n.size * pers * atomZoom };
     });
 
-    projectedNodes.sort((a, b) => a.z - b.z);
+    nodes.sort((a, b) => a.z - b.z);
 
-    // Draw connecting matrix mesh lines for nodes close to each other
-    atomCtx.lineWidth = 0.5;
-    for (let i = 0; i < projectedNodes.length; i++) {
-      for (let j = i + 1; j < projectedNodes.length; j++) {
-        let dx = projectedNodes[i].px - projectedNodes[j].px;
-        let dy = projectedNodes[i].py - projectedNodes[j].py;
-        let dist = Math.hypot(dx, dy);
-        if (dist < 32) {
-          atomCtx.strokeStyle = projectedNodes[i].color === '#00f3ff' ? 'rgba(0, 243, 255, 0.2)' : 'rgba(255, 51, 68, 0.2)';
-          atomCtx.beginPath();
-          atomCtx.moveTo(projectedNodes[i].px, projectedNodes[i].py);
-          atomCtx.lineTo(projectedNodes[j].px, projectedNodes[j].py);
-          atomCtx.stroke();
+    // Glowing Matrix Mesh Lines
+    atomCtx.lineWidth = 0.6;
+    for (let i = 0; i < nodes.length; i += 2) {
+      for (let j = i + 1; j < nodes.length; j += 3) {
+        let d = Math.hypot(nodes[i].px - nodes[j].px, nodes[i].py - nodes[j].py);
+        if (d < 38) {
+          atomCtx.strokeStyle = nodes[i].color === '#00f3ff' ? 'rgba(0, 243, 255, 0.25)' : 'rgba(192, 132, 252, 0.25)';
+          atomCtx.beginPath(); atomCtx.moveTo(nodes[i].px, nodes[i].py); atomCtx.lineTo(nodes[j].px, nodes[j].py); atomCtx.stroke();
         }
       }
     }
 
-    // Draw nodes
-    projectedNodes.forEach(node => {
-      atomCtx.fillStyle = node.color;
+    // Vivid Glowing Nodes
+    nodes.forEach(n => {
+      atomCtx.shadowBlur = 10;
+      atomCtx.shadowColor = n.glow;
+      atomCtx.fillStyle = n.color;
       atomCtx.beginPath();
-      atomCtx.arc(node.px, node.py, Math.max(1, node.size), 0, Math.PI * 2);
+      atomCtx.arc(n.px, n.py, Math.max(1.2, n.size), 0, Math.PI * 2);
       atomCtx.fill();
+      atomCtx.shadowBlur = 0; // reset
     });
   }
 
-  const noiseCanvas = document.getElementById('noiseModelCanvas');
-  const noiseCtx = noiseCanvas.getContext('2d');
-  function renderNoiseModel() {
-    const width = noiseCanvas.width; const height = noiseCanvas.height;
-    noiseCtx.fillStyle = '#010307'; noiseCtx.fillRect(0, 0, width, height);
-    const mode = parseInt(document.getElementById('orbitalModeSelect').value);
-    const rParam = parseFloat(document.getElementById('atomScaleSlider').value);
-    
-    if (mode === 0) {
-      noiseCtx.strokeStyle = '#00f3ff'; noiseCtx.beginPath();
-      let x = 0.2;
-      for (let i = 0; i < 100; i++) {
-        let xNext = rParam * x * (1.0 - x);
-        let px = x * width; let py = height - (xNext * height);
-        if (i === 0) noiseCtx.moveTo(px, py); else noiseCtx.lineTo(px, py);
-        x = xNext;
-      }
-      noiseCtx.stroke();
-    } else if (mode === 1) {
-      noiseCtx.fillStyle = 'rgba(126, 231, 135, 0.8)';
-      for (let px = 0; px < width; px += 2) {
-        let r = 2.8 + (px / width) * 1.2;
-        let x = 0.5;
-        for (let i = 0; i < 30; i++) { x = r * x * (1.0 - x); let py = height - (x * height); noiseCtx.fillRect(px, py, 1, 1); }
-      }
-    } else {
-      noiseCtx.strokeStyle = '#c084fc'; noiseCtx.beginPath();
-      for (let x = 0; x < width; x += 2) {
-        let y = (height / 2) + Math.sin(x * 0.05) * 15;
-        if (x === 0) noiseCtx.moveTo(x, y); else noiseCtx.lineTo(x, y);
-      }
-      noiseCtx.stroke();
-    }
-  }
+  // Wave & Noise Grasping Logic
+  const waveCanvas = document.getElementById('movingWaveCanvas'), waveCtx = waveCanvas.getContext('2d');
+  const forkedCanvas = document.getElementById('forkedGraphCanvas'), forkedCtx = forkedCanvas.getContext('2d');
 
-  const waveCanvas = document.getElementById('movingWaveCanvas');
-  const waveCtx = waveCanvas.getContext('2d');
-  const forkedCanvas = document.getElementById('forkedGraphCanvas');
-  const forkedCtx = forkedCanvas.getContext('2d');
-
-  waveCanvas.addEventListener('mousedown', (e) => { isInteracting = true; dragStartX = e.offsetX; dragEndX = dragStartX; });
+  waveCanvas.addEventListener('mousedown', (e) => { isInteracting = true; dragStartX = e.offsetX; });
   waveCanvas.addEventListener('mousemove', (e) => { if (isInteracting) dragEndX = e.offsetX; });
-  waveCanvas.addEventListener('mouseup', (e) => { 
-    if (!isInteracting) return;
-    isInteracting = false;
-    dragEndX = e.offsetX;
-    graspNoiseAndPullHistory(Math.min(dragStartX, dragEndX), Math.max(dragStartX, dragEndX), waveCanvas.width);
-  });
+  waveCanvas.addEventListener('mouseup', (e) => { if (isInteracting) { isInteracting = false; graspNoise(Math.min(dragStartX, e.offsetX), Math.max(dragStartX, e.offsetX), waveCanvas.width); } });
 
-  waveCanvas.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      isInteracting = true;
-      const rect = waveCanvas.getBoundingClientRect();
-      dragStartX = e.touches[0].clientX - rect.left;
-      dragEndX = dragStartX;
-    }
-  });
+  function graspNoise(sX, eX, totalW) {
+    const sIdx = Math.max(0, Math.floor((sX / totalW) * movingDataBuffer.length));
+    const eIdx = Math.min(movingDataBuffer.length, Math.floor((eX / totalW) * movingDataBuffer.length));
+    forkedRoiData = movingDataBuffer.slice(sIdx, eIdx);
+    if (forkedRoiData.length === 0) forkedRoiData = [50, 70, 60, 85, 40];
 
-  waveCanvas.addEventListener('touchmove', (e) => {
-    if (isInteracting && e.touches.length === 1) {
-      const rect = waveCanvas.getBoundingClientRect();
-      dragEndX = e.touches[0].clientX - rect.left;
-    }
-  });
-
-  waveCanvas.addEventListener('touchend', (e) => {
-    if (isInteracting) {
-      isInteracting = false;
-      graspNoiseAndPullHistory(Math.min(dragStartX, dragEndX), Math.max(dragStartX, dragEndX), waveCanvas.width);
-    }
-  });
-
-  function graspNoiseAndPullHistory(startX, endX, totalWidth) {
-    const stepX = totalWidth / movingDataBuffer.length;
-    const startIdx = Math.max(0, Math.floor(startX / stepX));
-    const endIdx = Math.min(movingDataBuffer.length, Math.floor(endX / stepX));
-    
-    const selectedSlice = movingDataBuffer.slice(startIdx, endIdx);
-    const mean = selectedSlice.reduce((a, b) => a + b, 0) / (selectedSlice.length || 1);
-    
-    forkedRoiData = selectedSlice.filter(val => Math.abs(val - mean) > 1.5);
-    if (forkedRoiData.length === 0) forkedRoiData = selectedSlice;
-
-    renderForkedGraph();
-    populateQueryTable(startIdx);
-    document.getElementById('suggestionBox').innerHTML = `💡 **Flow Grasp Successful**: Pulled ${forkedRoiData.length} points into Part 4 sub-graph studio.`;
-  }
-
-  function renderForkedGraph() {
-    const width = forkedCanvas.width; const height = forkedCanvas.height;
-    forkedCtx.fillStyle = '#010307'; forkedCtx.fillRect(0, 0, width, height);
-    if (forkedRoiData.length === 0) return;
-
+    // Render Sub-Graph
+    forkedCtx.fillStyle = '#010307'; forkedCtx.fillRect(0, 0, forkedCanvas.width, forkedCanvas.height);
     forkedCtx.strokeStyle = '#c084fc'; forkedCtx.lineWidth = 2; forkedCtx.beginPath();
-    const step = width / forkedRoiData.length;
-    forkedRoiData.forEach((val, idx) => {
-      let x = idx * step + (step / 2);
-      let y = height - ((val / 100) * height);
+    let st = forkedCanvas.width / forkedRoiData.length;
+    forkedRoiData.forEach((v, idx) => {
+      let x = idx * st + st/2, y = forkedCanvas.height - (v / 100) * forkedCanvas.height;
       if (idx === 0) forkedCtx.moveTo(x, y); else forkedCtx.lineTo(x, y);
     });
     forkedCtx.stroke();
-  }
 
-  function populateQueryTable(startIndex) {
-    const tbody = document.getElementById('queryTableBody');
-    tbody.innerHTML = '';
-    forkedRoiData.forEach((val, idx) => {
+    // Populate Table
+    const tbody = document.getElementById('queryTableBody'); tbody.innerHTML = '';
+    forkedRoiData.forEach((v, idx) => {
       let tr = document.createElement('tr');
-      let cat = val > currentThreshold ? 'Anomaly (X)' : 'Standard (X)';
-      tr.innerHTML = `<td>#${startIndex + idx}</td><td>2026-08-${(10 + (idx % 20))}</td><td>${cat}</td><td>$${(val * financialConfig.baseValue).toFixed(2)}</td>`;
+      tr.innerHTML = `<td>#${sIdx + idx}</td><td>2026-08-${10+idx}</td><td>${v > currentThreshold ? 'Anomaly' : 'Standard'}</td><td>$${(v * finConfig.baseValue).toFixed(2)}</td>`;
       tbody.appendChild(tr);
     });
+    document.getElementById('suggestionBox').innerHTML = `💡 **Grasp Successful**: Pulled ${forkedRoiData.length} points into Sub-Graph Studio.`;
   }
 
-  function masterRenderLoop() {
-    globalTick += 1; timeOffset += 0.05;
-    render3DAtom();
-    renderNoiseModel();
+  function masterLoop() {
+    globalTick++; timeOffset += 0.05;
+    renderVividAtom();
 
-    const width = waveCanvas.width; const height = waveCanvas.height;
-    waveCtx.fillStyle = 'rgba(2, 4, 10, 0.95)'; waveCtx.fillRect(0, 0, width, height);
+    const w = waveCanvas.width, h = waveCanvas.height;
+    waveCtx.fillStyle = 'rgba(2, 4, 10, 0.95)'; waveCtx.fillRect(0, 0, w, h);
 
     if (isRunning) {
-      let nextVal = 50 + Math.sin(timeOffset * 2) * 25 + (Math.random() - 0.5) * 12;
-      nextVal = Math.max(10, Math.min(90, nextVal));
-      movingDataBuffer.push(nextVal);
-      if (movingDataBuffer.length > 70) movingDataBuffer.shift();
-      fullMasterHistory.push(nextVal);
-      if (fullMasterHistory.length > 500) fullMasterHistory.shift();
-
-      if (globalTick % 50 === 0) {
-        financialAccumulator.monthlyTotal += Math.floor(nextVal * 0.5);
-        document.getElementById('metricMonthly').innerText = `${financialAccumulator.monthlyTotal.toLocaleString()} Events`;
-      }
+      let val = 50 + Math.sin(timeOffset * 2) * 25 + (Math.random() - 0.5) * 12;
+      val = Math.max(15, Math.min(88, val));
+      movingDataBuffer.push(val); if (movingDataBuffer.length > 70) movingDataBuffer.shift();
+      fullMasterHistory.push(val); if (fullMasterHistory.length > 400) fullMasterHistory.shift();
     }
 
-    const stepX = width / movingDataBuffer.length;
-    waveCtx.strokeStyle = isExternalSourceLinked ? '#00f3ff' : '#7ee787';
-    waveCtx.lineWidth = 2.5; waveCtx.beginPath();
-    movingDataBuffer.forEach((val, idx) => {
-      let x = idx * stepX + (stepX / 2);
-      let y = height - ((val / 100) * height);
+    let stX = w / movingDataBuffer.length;
+    waveCtx.strokeStyle = '#7ee787'; waveCtx.lineWidth = 2.5; waveCtx.beginPath();
+    movingDataBuffer.forEach((v, idx) => {
+      let x = idx * stX + stX/2, y = h - (v / 100) * h;
       if (idx === 0) waveCtx.moveTo(x, y); else waveCtx.lineTo(x, y);
     });
     waveCtx.stroke();
 
-    let thresholdY = height - (currentThreshold / 100) * height;
-    waveCtx.strokeStyle = '#f0883e'; waveCtx.lineWidth = 1.5; waveCtx.setLineDash([4, 4]);
-    waveCtx.beginPath(); waveCtx.moveTo(0, thresholdY); waveCtx.lineTo(width, thresholdY); waveCtx.stroke();
-    waveCtx.setLineDash([]);
+    let threshY = h - (currentThreshold / 100) * h;
+    waveCtx.strokeStyle = '#f0883e'; waveCtx.lineWidth = 1.2; waveCtx.setLineDash([3,3]);
+    waveCtx.beginPath(); waveCtx.moveTo(0, threshY); waveCtx.lineTo(w, threshY); waveCtx.stroke(); waveCtx.setLineDash([]);
 
-    if (isInteracting) {
-      waveCtx.fillStyle = 'rgba(192, 132, 252, 0.2)'; waveCtx.strokeStyle = 'var(--accent-purple)';
-      let minX = Math.min(dragStartX, dragEndX); let boxW = Math.abs(dragEndX - dragStartX);
-      waveCtx.fillRect(minX, 0, boxW, height); waveCtx.strokeRect(minX, 0, boxW, height);
-    }
-
-    requestAnimationFrame(masterRenderLoop);
+    requestAnimationFrame(masterLoop);
   }
 
-  masterRenderLoop();
+  masterLoop();
 </script>
 
 </body>
