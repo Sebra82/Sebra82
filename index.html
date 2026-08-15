@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v6.1 - Fully Interactive Noise Graph Suite</title>
+  <title>SEBRA82 v6.2 - Ultimate Interactive Master Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -134,10 +134,17 @@
 
     .hud-tag { position: absolute; top: 2px; left: 3px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 3px; border-radius: 2px; font-size: 0.44rem; color: var(--neon-cyan); font-family: var(--font-mono); z-index: 5; pointer-events: none; text-shadow: 0 0 6px var(--cyan-glow); }
 
-    /* Interactive Graph Toolbar overlay */
     .graph-toolbar { position: absolute; bottom: 3px; right: 4px; display: flex; gap: 3px; z-index: 6; }
     .graph-tool-btn { font-size: 0.4rem; font-family: var(--font-mono); background: rgba(0, 243, 255, 0.2); color: var(--neon-cyan); border: 1px solid rgba(0, 243, 255, 0.4); padding: 1px 4px; border-radius: 2px; cursor: pointer; }
     .graph-tool-btn:hover { background: rgba(0, 243, 255, 0.4); color: #fff; }
+
+    /* Interactive Math Studio Dashboard Enhancements */
+    .math-dashboard { display: grid; grid-template-columns: 1fr; gap: 4px; }
+    .math-interactive-card { background: rgba(10, 14, 22, 0.95); border: 1px solid rgba(0, 243, 255, 0.25); border-radius: 4px; padding: 5px; display: flex; flex-direction: column; gap: 3px; }
+    .math-live-readout { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 0.5rem; background: rgba(0, 243, 255, 0.06); border: 1px solid rgba(0, 243, 255, 0.2); padding: 3px 5px; border-radius: 3px; color: var(--neon-cyan); }
+    .math-toggle-row { display: flex; gap: 3px; }
+    .math-mode-btn { flex: 1; font-size: 0.42rem; font-family: var(--font-mono); padding: 2px 4px; background: #1e2a40; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 3px; cursor: pointer; text-align: center; }
+    .math-mode-btn.active { background: rgba(0, 243, 255, 0.2); color: var(--neon-cyan); border-color: var(--neon-cyan); font-weight: bold; }
 
     .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
     .metric-box { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 4px; border-radius: 3px; display: flex; flex-direction: column; gap: 1px; text-align: center; }
@@ -182,7 +189,7 @@
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v6.1</span> Master Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v6.2</span> Master Suite</div>
     <div class="header-actions">
       <button class="gen-rand-btn" onclick="generateRandomDataEpoch()">🎲 Random Data</button>
       <button class="saved-view-btn" onclick="saveCustomView()">💾 Save View</button>
@@ -220,7 +227,7 @@
       </div>
     </div>
 
-    <!-- Step 2: Maths, Calculations & 6-12 Month Summaries -->
+    <!-- Step 2: Ultra-Intuitive & Interactive Maths, Calculations & 6-12M Suite -->
     <div class="panel-card" id="cardFin">
       <div class="section-category-bar">
         <span class="cat-chip cat-calc">Calculation</span>
@@ -229,10 +236,25 @@
         <span class="cat-chip cat-sci">Science</span>
       </div>
       <div class="panel-title">
-        <span onclick="toggleSec('secFin')">2. Maths, Calculations & 6-12M Summaries ▾</span>
+        <span onclick="toggleSec('secFin')">2. Interactive Maths, Calculations & Modeling Studio ▾</span>
         <button class="pin-btn" id="pinBtn_cardFin" onclick="toggleMax('cardFin')">⚡ Maximize</button>
       </div>
       <div class="collapsible-body collapsed" id="secFin">
+        <div class="math-dashboard">
+          <div class="math-interactive-card">
+            <div class="control-label"><span>Select Calculation Model Mode:</span></div>
+            <div class="math-toggle-row">
+              <button class="math-mode-btn active" id="modeBtnQuantum" onclick="setMathMode('quantum')">⚛ Quantum Wave Tensor</button>
+              <button class="math-mode-btn" id="modeBtnFinancial" onclick="setMathMode('financial')">📈 Financial Alpha Forecast</button>
+            </div>
+          </div>
+          <div class="math-interactive-card">
+            <div class="math-live-readout">
+              <span id="mathLiveTitle">Tensor State Vector (&Psi;):</span>
+              <span id="mathLiveResult" style="color: var(--accent-green);">|00&gt; + 0.88|01&gt;</span>
+            </div>
+          </div>
+        </div>
         <div class="metrics-grid">
           <div class="metric-box">
             <div class="metric-label" id="labelM6">Month -6</div>
@@ -248,8 +270,12 @@
           </div>
         </div>
         <div class="control-item">
-          <div class="control-label">Base Value ($): <span id="baseValueReadout">10.00</span></div>
+          <div class="control-label">Base Value / Planck Magnitude ($): <span id="baseValueReadout">10.00</span></div>
           <input type="range" id="baseValueSlider" min="1.0" max="50.0" step="0.5" value="10.0" oninput="updateFin()">
+        </div>
+        <div class="control-item">
+          <div class="control-label">Non-Linear Damping Factor (&gamma;): <span id="dampingReadout">1.45</span></div>
+          <input type="range" id="dampingSlider" min="0.1" max="3.0" step="0.05" value="1.45" oninput="updateDamping(this.value)">
         </div>
       </div>
     </div>
@@ -277,7 +303,6 @@
           </div>
         </div>
         
-        <!-- Isolated Extracted Spikes & Anomalies Sub-Graph with Predictive Next Steps -->
         <div class="expanded-graph-suite" id="expandedGraphSuite" style="display: flex; flex-direction:column; gap:4px; background: rgba(0, 243, 255, 0.04); border: 1px solid rgba(0, 243, 255, 0.3); padding: 5px; border-radius: 5px;">
           <div style="font-size: 0.5rem; color: var(--neon-cyan); font-family: var(--font-mono); font-weight:700;">⚡ PULLED SUBSET: SPIKES, ANOMALIES & PREDICTIVE FORECAST</div>
           <div class="canvas-box" style="height: 100px; border-color: rgba(255, 51, 68, 0.5);">
@@ -400,7 +425,7 @@
   let isSelecting = false, selectStartX = 0, selectEndX = 0;
   let isStreamPaused = false, zoomLevel = 1.0, panOffset = 0;
   let hoverIndex = -1, burstMultiplier = 1.0;
-  let finConfig = { baseValue: 10.0 };
+  let finConfig = { baseValue: 10.0, damping: 1.45, mathMode: 'quantum' };
 
   const R_LOOKUP_F32 = new Float32Array(296);
   const PLANCK_L = 1.616255e-35, PHI = 1.61803398875;
@@ -435,9 +460,35 @@
     document.getElementById('atomDepthVal').innerText = atomDepth.toFixed(2) + 'x';
   }
 
+  function setMathMode(mode) {
+    finConfig.mathMode = mode;
+    document.getElementById('modeBtnQuantum').classList.toggle('active', mode === 'quantum');
+    document.getElementById('modeBtnFinancial').classList.toggle('active', mode === 'financial');
+    document.getElementById('mathLiveTitle').innerText = mode === 'quantum' ? 'Tensor State Vector (&Psi;):' : 'Alpha Projected ROI:';
+    updateInteractiveMathReadout();
+  }
+
   function updateFin() {
     finConfig.baseValue = parseFloat(document.getElementById('baseValueSlider').value);
     document.getElementById('baseValueReadout').innerText = finConfig.baseValue.toFixed(2);
+    updateInteractiveMathReadout();
+  }
+
+  function updateDamping(val) {
+    finConfig.damping = parseFloat(val);
+    document.getElementById('dampingReadout').innerText = finConfig.damping.toFixed(2);
+    updateInteractiveMathReadout();
+  }
+
+  function updateInteractiveMathReadout() {
+    let resElem = document.getElementById('mathLiveResult');
+    if (finConfig.mathMode === 'quantum') {
+      let amp = (0.75 + (finConfig.baseValue / 50) * 0.25 * finConfig.damping).toFixed(2);
+      resElem.innerText = `|00> + ${amp}|01> (Phase: ${(finConfig.damping * 1.618).toFixed(3)} rad)`;
+    } else {
+      let roi = (finConfig.baseValue * finConfig.damping * 14.8).toFixed(2);
+      resElem.innerText = `+$${roi} / Mo (Alpha Confidence: ${(92 + finConfig.damping).toFixed(1)}%)`;
+    }
   }
 
   function toggleSec(id) { document.getElementById(id).classList.toggle('collapsed'); }
@@ -512,7 +563,7 @@
     document.getElementById('metricM6').innerText = (Math.floor(Math.random() * 3000) + 800).toLocaleString() + " X";
     document.getElementById('metricM3').innerText = (Math.floor(Math.random() * 4000) + 1200).toLocaleString() + " X";
     document.getElementById('metricCurrent').innerText = (Math.floor(Math.random() * 10000) + 10000).toLocaleString() + " X";
-    alert("🎲 Random 6-12 month streaming epoch generated successfully across all interactive graphs!");
+    alert("🎲 Random 6-12 month streaming epoch generated successfully across all interactive graphs & math models!");
   }
 
   function openFolder(path) {
@@ -624,7 +675,6 @@
     setTimeout(() => { burstMultiplier = 1.0; }, 1200);
   }
 
-  // Mouse / Pointer interactions for Noise Graph (Hover Inspector, Zoom, Pan, Drag Selection)
   waveCanvas.addEventListener('pointerdown', (e) => {
     isSelecting = true;
     selectStartX = e.offsetX;
@@ -747,10 +797,10 @@
     extractedSubset.forEach((v, idx) => {
       let tr = document.createElement('tr');
       let isAnom = v > threshold;
-      tr.innerHTML = `<td>#${4000 + idx}</td><td>2026-0${(idx % 6) + 1}-${10+idx}</td><td>${isAnom ? '⚠️ Spike / Anomaly' : 'Standard Wave'}</td><td>$${(v * finConfig.baseValue).toFixed(2)}</td>`;
+      tr.innerHTML = `<td>#${4000 + idx}</td><td>2026-0${(idx % 6) + 1}-${10+idx}</td><td>${isAnom ? '⚠️ Spike / Anomaly' : 'Standard Wave'}</td><td>$${(v * finConfig.baseValue * finConfig.damping).toFixed(2)}</td>`;
       tbody.appendChild(tr);
     });
-    document.getElementById('suggestionBox').innerHTML = `💡 **Query Studio Active**: Successfully queried ${extractedSubset.length} historical points from live noise stream. IDs, Dates, and Categories mapped.`;
+    document.getElementById('suggestionBox').innerHTML = `💡 **Query Studio Active**: Successfully queried ${extractedSubset.length} historical points from live noise stream with active damping coefficient (&gamma;=${finConfig.damping}).`;
   }
 
   function updateWaveOptics() {
@@ -777,7 +827,7 @@
       const phase_diffract = (Math.PI * a * raw_x) / (r_n * L + 1e-35);
       const interf = Math.cos(phase_interf + timeOffset) ** 2;
       const diffract = phase_diffract === 0 ? 1.0 : (Math.sin(phase_diffract) / phase_diffract) ** 2;
-      const val = Math.min(95, Math.max(15, interf * diffract * 75.0 * burstMultiplier + Math.sin(xPos * 0.15 + timeOffset) * 6));
+      const val = Math.min(95, Math.max(15, interf * diffract * 75.0 * burstMultiplier * (finConfig.damping / 1.45) + Math.sin(xPos * 0.15 + timeOffset) * 6));
       waveBuffer.push(val);
 
       const yPos = h - (val * (h / 100));
@@ -785,7 +835,6 @@
     }
     waveCtx.stroke();
 
-    // Hover Inspector HUD Feedback
     if (hoverIndex >= 0 && hoverIndex < waveBuffer.length) {
       let hVal = waveBuffer[hoverIndex];
       let hX = (hoverIndex / waveBuffer.length) * w;
@@ -819,6 +868,7 @@
     extractedSubset = waveBuffer.slice(25, 85);
     renderSubsetSpikes();
     populateAnomalyTable();
+    updateInteractiveMathReadout();
   };
 </script>
 
