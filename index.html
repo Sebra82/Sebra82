@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v5.6 - True Interactive 3D Quantum Atom Master Suite</title>
+  <title>SEBRA82 v5.6 - Fully Responsive Interactive 3D Atom Master Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -22,7 +22,7 @@
       --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-ui); touch-action: none; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-ui); }
 
     body {
       background-color: var(--bg-deep);
@@ -118,7 +118,8 @@
 
     .canvas-box { position: relative; width: 100%; background: radial-gradient(circle at center, #0a1128 0%, #000000 100%); border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.4); overflow: hidden; }
     
-    canvas { display: block; width: 100%; height: 100%; cursor: grab; pointer-events: auto !important; }
+    /* Enabled explicit pointer handling so touch and mouse move handlers trigger immediately */
+    canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; pointer-events: auto !important; }
     canvas:active { cursor: grabbing; }
 
     .hud-tag { position: absolute; top: 2px; left: 3px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 3px; border-radius: 2px; font-size: 0.44rem; color: var(--neon-cyan); font-family: var(--font-mono); z-index: 5; pointer-events: none; text-shadow: 0 0 6px var(--cyan-glow); }
@@ -176,7 +177,7 @@
 
   <div class="mobile-stack" id="mobileStack">
 
-    <!-- Step 1: True Interactive SEBRA82 3D Quantum Atom Matrix -->
+    <!-- Step 1: Fully Interactive 3D Quantum Atom Matrix -->
     <div class="panel-card" id="cardAtom">
       <div class="section-category-bar">
         <span class="cat-chip cat-calc">Calculation</span>
@@ -185,16 +186,16 @@
         <span class="cat-chip cat-fin">Finance</span>
       </div>
       <div class="panel-title">
-        <span onclick="toggleSec('secAtom')">1. SEBRA82 3D Quantum Atom Matrix ▾</span>
+        <span onclick="toggleSec('secAtom')">1. Interactive 3D Quantum Atom Matrix ▾</span>
         <button class="pin-btn" id="pinBtn_cardAtom" onclick="toggleMax('cardAtom')">⚡ Maximize</button>
       </div>
       <div class="collapsible-body" id="secAtom">
         <div class="canvas-box" style="height: 220px;" id="atomBox">
           <canvas id="atom3DCanvas" width="400" height="220"></canvas>
-          <div class="hud-tag">✨ SEBRA82 M4P MODEL | Drag to Rotate, Scroll/Pinch to Zoom & Look Inside</div>
+          <div class="hud-tag">✨ FULLY INTERACTIVE | Drag to Rotate, Scroll/Pinch to Zoom & Look Inside</div>
         </div>
         <div class="control-item">
-          <div class="control-label">Look Inside / Core Expansion (Depth): <span id="atomDepthVal">1.00x</span></div>
+          <div class="control-label">Core Expansion / Look Inside (Depth): <span id="atomDepthVal">1.00x</span></div>
           <input type="range" id="atomDepthSlider" min="0.1" max="4.0" step="0.05" value="1.0" oninput="updateAtomDepth(this.value)">
         </div>
       </div>
@@ -426,7 +427,7 @@
     }
   }
 
-  // Fully Responsive Mouse & Touch Listeners directly on the Atom Canvas
+  // Robust Direct Mouse & Touch Interaction Bindings for Atom Canvas
   atomCanvas.addEventListener('mousedown', (e) => {
     isDraggingAtom = true;
     lastX = e.clientX;
@@ -436,8 +437,8 @@
 
   window.addEventListener('mousemove', (e) => {
     if (!isDraggingAtom) return;
-    atomRotY += (e.clientX - lastX) * 0.015;
-    atomRotX -= (e.clientY - lastY) * 0.015;
+    atomRotY += (e.clientX - lastX) * 0.02;
+    atomRotX -= (e.clientY - lastY) * 0.02;
     lastX = e.clientX;
     lastY = e.clientY;
   });
@@ -446,7 +447,7 @@
 
   atomCanvas.addEventListener('wheel', (e) => {
     e.preventDefault();
-    atomZoom = Math.max(0.4, Math.min(4.5, atomZoom + e.deltaY * -0.002));
+    atomZoom = Math.max(0.4, Math.min(5.0, atomZoom + e.deltaY * -0.002));
   }, { passive: false });
 
   atomCanvas.addEventListener('touchstart', (e) => {
@@ -462,13 +463,13 @@
 
   atomCanvas.addEventListener('touchmove', (e) => {
     if (isDraggingAtom && e.touches.length === 1) {
-      atomRotY += (e.touches[0].clientX - lastX) * 0.015;
-      atomRotX -= (e.touches[0].clientY - lastY) * 0.015;
+      atomRotY += (e.touches[0].clientX - lastX) * 0.02;
+      atomRotX -= (e.touches[0].clientY - lastY) * 0.02;
       lastX = e.touches[0].clientX;
       lastY = e.touches[0].clientY;
     } else if (e.touches.length === 2) {
       let d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-      atomZoom = Math.max(0.4, Math.min(4.5, atomZoom * (d / touchStartDist)));
+      atomZoom = Math.max(0.4, Math.min(5.0, atomZoom * (d / touchStartDist)));
       touchStartDist = d;
     }
     e.stopPropagation();
@@ -482,12 +483,10 @@
     atomCtx.fillRect(0, 0, w, h);
 
     let cx = w / 2, cy = h / 2;
-    // Organic breathing scale factor using sine wave oscillation over timeOffset
     let breathFactor = 1.0 + Math.sin(timeOffset * 2.2) * 0.15;
 
     let nodes = atomNodes.map(n => {
       let pulse = 1.0 + Math.sin(globalTick * 0.05 * n.pulseSpeed + n.pulseOffset) * 0.1;
-      // Multiplying by atomDepth allows zooming / looking inside the core lattice
       let effectiveDepth = atomDepth * breathFactor * pulse;
       let x = n.ox * effectiveDepth, y = n.oy * effectiveDepth, z = n.oz * effectiveDepth;
       
@@ -503,7 +502,6 @@
 
     nodes.sort((a, b) => a.z - b.z);
 
-    // Draw connecting matrix mesh lines
     atomCtx.lineWidth = 0.6;
     for (let i = 0; i < nodes.length; i += 2) {
       for (let j = i + 1; j < nodes.length; j += 4) {
