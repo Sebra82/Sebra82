@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v5.8 - Advanced Predictive & Interactive Master Suite</title>
+  <title>SEBRA82 v5.9 - Ultimate Master Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -68,6 +68,7 @@
     .header-actions { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
     .core-reset-btn { font-size: 0.46rem; background: rgba(255, 51, 68, 0.2); color: var(--crimson-red); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255, 51, 68, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
     .saved-view-btn { font-size: 0.46rem; background: rgba(126, 231, 135, 0.2); color: var(--accent-green); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(126, 231, 135, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
+    .gen-rand-btn { font-size: 0.46rem; background: rgba(0, 243, 255, 0.2); color: var(--neon-cyan); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
 
     .saved-tabs-bar { display: flex; gap: 4px; width: 100%; overflow-x: auto; padding: 2px 0; align-items: center; }
     .saved-tab-chip { font-size: 0.44rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); border: 1px solid rgba(192, 132, 252, 0.3); padding: 2px 6px; border-radius: 3px; font-family: var(--font-mono); cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; }
@@ -83,7 +84,7 @@
       font-family: var(--font-mono);
     }
 
-    .mobile-stack { display: flex; flex-direction: column; gap: 0.45rem; }
+    .mobile-stack { display: flex; flex-direction: column; gap: 0.45rem; flex: 1; position: relative; }
 
     .panel-card {
       background: rgba(3, 7, 15, 0.98);
@@ -98,15 +99,25 @@
 
     .panel-card.fluid-maximized {
       flex: 1;
-      min-height: 82vh;
+      min-height: 65vh;
       border-color: var(--neon-cyan);
       box-shadow: 0 0 35px rgba(0,243,255,0.5);
       order: -99;
     }
     .panel-card.fluid-maximized .collapsible-body { max-height: 1600px !important; display: flex !important; }
     .panel-card.fluid-maximized .expanded-graph-suite { display: flex !important; }
-    .panel-card.dropped-tab { order: 99; padding: 0.2rem 0.4rem; opacity: 0.65; border-style: dashed; }
-    .panel-card.dropped-tab .collapsible-body { display: none !important; }
+
+    /* Minimized bottom dock styling when a tab is maximized */
+    .panel-card.minimized-dock-item {
+      order: 100;
+      flex: 0 0 auto;
+      padding: 0.3rem 0.5rem;
+      opacity: 0.75;
+      border-style: dashed;
+      background: rgba(10, 14, 22, 0.9);
+    }
+    .panel-card.minimized-dock-item .collapsible-body { display: none !important; }
+    .panel-card.minimized-dock-item .panel-title { cursor: pointer; font-size: 0.5rem; color: var(--accent-purple); }
 
     .section-category-bar { display: flex; gap: 4px; margin-bottom: 2px; }
     .cat-chip { font-size: 0.42rem; font-family: var(--font-mono); font-weight: 700; padding: 1px 4px; border-radius: 3px; border: 1px solid; text-transform: uppercase; }
@@ -151,6 +162,12 @@
     .pin-btn { background: var(--accent-purple); color: #fff; font-size: 0.48rem; padding: 2px 5px; border-radius: 3px; border: none; cursor: pointer; font-family: var(--font-mono); }
     .pin-btn:hover { background: #b060f0; }
 
+    /* Embedded Folder Structure Tree in Step 5 */
+    .folder-tree { background: #010307; border: 1px solid var(--border-color); border-radius: 4px; padding: 4px; font-family: var(--font-mono); font-size: 0.46rem; color: var(--accent-green); display: flex; flex-direction: column; gap: 2px; max-height: 110px; overflow-y: auto; }
+    .folder-item { display: flex; align-items: center; gap: 4px; cursor: pointer; padding: 1px 2px; border-radius: 2px; }
+    .folder-item:hover { background: rgba(0, 243, 255, 0.1); color: var(--neon-cyan); }
+    .folder-sub { margin-left: 12px; display: flex; flex-direction: column; gap: 2px; border-left: 1px dashed rgba(0, 243, 255, 0.3); padding-left: 6px; }
+
     .collapsible-body { display: flex; flex-direction: column; gap: 0.3rem; transition: max-height 0.3s ease; overflow: hidden; max-height: 900px; }
     .collapsible-body.collapsed { max-height: 0px; padding: 0; margin: 0; }
   </style>
@@ -159,8 +176,9 @@
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v5.8</span> Master Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v5.9</span> Master Suite</div>
     <div class="header-actions">
+      <button class="gen-rand-btn" onclick="generateRandomDataEpoch()">🎲 Random Data</button>
       <button class="saved-view-btn" onclick="saveCustomView()">💾 Save View</button>
       <button class="core-reset-btn" onclick="resetStandardView()">↺ Standard</button>
     </div>
@@ -196,7 +214,7 @@
       </div>
     </div>
 
-    <!-- Step 2: Maths, Calculations & Monthly Summaries -->
+    <!-- Step 2: Maths, Calculations & 6-12 Month Summaries -->
     <div class="panel-card" id="cardFin">
       <div class="section-category-bar">
         <span class="cat-chip cat-calc">Calculation</span>
@@ -205,22 +223,22 @@
         <span class="cat-chip cat-sci">Science</span>
       </div>
       <div class="panel-title">
-        <span onclick="toggleSec('secFin')">2. Maths, Calculations & Monthly X ▾</span>
+        <span onclick="toggleSec('secFin')">2. Maths, Calculations & 6-12M Summaries ▾</span>
         <button class="pin-btn" id="pinBtn_cardFin" onclick="toggleMax('cardFin')">⚡ Maximize</button>
       </div>
       <div class="collapsible-body collapsed" id="secFin">
         <div class="metrics-grid">
           <div class="metric-box">
-            <div class="metric-label">Monthly X</div>
-            <div class="metric-value" id="metricMonthly">1,245 Events</div>
+            <div class="metric-label" id="labelM6">Month -6</div>
+            <div class="metric-value" id="metricM6">1,024 X</div>
           </div>
           <div class="metric-box">
-            <div class="metric-label">Quarterly</div>
-            <div class="metric-value" id="metricQuarterly">3,892 Events</div>
+            <div class="metric-label" id="labelM3">Month -3</div>
+            <div class="metric-value" id="metricM3">1,410 X</div>
           </div>
           <div class="metric-box">
-            <div class="metric-label">Annually</div>
-            <div class="metric-value" id="metricAnnually">15,480 Events</div>
+            <div class="metric-label" id="labelCurrent">Current (12M)</div>
+            <div class="metric-value" id="metricCurrent">15,480 X</div>
           </div>
         </div>
         <div class="control-item">
@@ -245,7 +263,7 @@
       <div class="collapsible-body collapsed" id="secWave">
         <div class="canvas-box" style="height: 130px;">
           <canvas id="secureSimCanvas" width="400" height="130"></canvas>
-          <div class="hud-tag">🖱️ Drag across noise to pull subset slice & analyze spikes</div>
+          <div class="hud-tag">🖱️ Drag across noise to pull subset slice & analyze spikes (6-12M Span)</div>
         </div>
         
         <!-- Isolated Extracted Spikes & Anomalies Sub-Graph with Predictive Next Steps -->
@@ -282,7 +300,7 @@
       </div>
       <div class="collapsible-body collapsed" id="secQuery">
         <div class="suggestion-box" id="suggestionBox">
-          💡 **AI Suggestion**: Drag and pull a selection across the noise graph in Step 3 to instantly filter anomalies. Columns, Dates, and IDs are automatically mapped.
+          💡 **AI Suggestion**: Drag and pull a selection across the noise graph in Step 3 to instantly filter anomalies across 6-12 months of historical records.
         </div>
         <div class="data-table-container">
           <table class="data-table" id="queryDataTable">
@@ -297,7 +315,7 @@
       </div>
     </div>
 
-    <!-- Step 5: Upload & Downloads -->
+    <!-- Step 5: Upload, Downloads & Embedded Folder Structure -->
     <div class="panel-card" id="cardTools">
       <div class="section-category-bar">
         <span class="cat-chip cat-world">World</span>
@@ -306,10 +324,27 @@
         <span class="cat-chip cat-sci">Science</span>
       </div>
       <div class="panel-title">
-        <span onclick="toggleSec('secTools')">5. Upload & Downloads ▾</span>
+        <span onclick="toggleSec('secTools')">5. Upload, Downloads & Folder Structure ▾</span>
         <button class="pin-btn" id="pinBtn_cardTools" onclick="toggleMax('cardTools')">⚡ Maximize</button>
       </div>
       <div class="collapsible-body collapsed" id="secTools">
+        <div class="control-item">
+          <div class="control-label"><span>Embedded Vault / Workspace Folder Structure:</span></div>
+          <div class="folder-tree" id="folderTreeContainer">
+            <div class="folder-item" onclick="selectFolder('/root')">📁 /root (SEBRA82_Master)</div>
+            <div class="folder-sub">
+              <div class="folder-item" onclick="selectFolder('/root/datasets')">📁 /datasets (6-12M Historical Epochs)</div>
+              <div class="folder-sub">
+                <div class="folder-item" onclick="loadFolderFile('epoch_12m.csv')">📄 epoch_12m.csv</div>
+                <div class="folder-item" onclick="loadFolderFile('quantum_noise_q64.json')">📄 quantum_noise_q64.json</div>
+              </div>
+              <div class="folder-item" onclick="selectFolder('/root/exports')">📁 /exports & Reports</div>
+              <div class="folder-sub">
+                <div class="folder-item" onclick="loadFolderFile('spike_summary_report.pdf')">📄 spike_summary_report.pdf</div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="control-item">
           <div class="control-label"><span>SharePoint / Live Moving Data Stream URL:</span></div>
           <input type="text" id="dataSourceUrlInput" placeholder="wss://company.sharepoint.com/stream" value="wss://company.sharepoint.com/stream">
@@ -391,7 +426,7 @@
   function resetStandardView() {
     activeMaxId = null;
     document.querySelectorAll('.panel-card').forEach(c => {
-      c.classList.remove('fluid-maximized', 'dropped-tab');
+      c.classList.remove('fluid-maximized', 'minimized-dock-item');
       c.querySelector('.collapsible-body').classList.add('collapsed');
       c.querySelector('.pin-btn').innerText = "⚡ Maximize";
     });
@@ -426,31 +461,49 @@
     if (v.max) toggleMax(v.max);
   }
 
+  // Maximizing a tab now automatically minimizes all other tabs at the bottom dock
   function toggleMax(cardId) {
     const card = document.getElementById(cardId);
     const pinBtn = document.getElementById(`pinBtn_${cardId}`);
     if (activeMaxId === cardId) {
       resetStandardView();
     } else {
-      if (activeMaxId) {
-        document.getElementById(activeMaxId).classList.remove('fluid-maximized');
-        document.getElementById(`pinBtn_${activeMaxId}`).innerText = "⚡ Maximize";
-      }
       activeMaxId = cardId;
-      card.classList.add('fluid-maximized');
-      card.classList.remove('dropped-tab');
-      card.querySelector('.collapsible-body').classList.remove('collapsed');
-      pinBtn.innerText = "↩ Standard";
-
       document.querySelectorAll('.panel-card').forEach(c => {
-        if (c.id !== cardId) {
-          c.classList.add('dropped-tab');
+        if (c.id === cardId) {
+          c.classList.add('fluid-maximized');
+          c.classList.remove('minimized-dock-item', 'dropped-tab');
+          c.querySelector('.collapsible-body').classList.remove('collapsed');
+          document.getElementById(`pinBtn_${c.id}`).innerText = "↩ Standard";
+        } else {
           c.classList.remove('fluid-maximized');
-          document.getElementById(`pinBtn_${c.id}`).innerText = "⚡ Maximize";
+          c.classList.add('minimized-dock-item');
           c.querySelector('.collapsible-body').classList.add('collapsed');
+          document.getElementById(`pinBtn_${c.id}`).innerText = "⚡ Maximize";
         }
       });
     }
+  }
+
+  function generateRandomDataEpoch() {
+    waveBuffer = waveBuffer.map(() => Math.floor(Math.random() * 75) + 15);
+    extractedSubset = waveBuffer.slice(20, 80);
+    renderSubsetSpikes();
+    populateAnomalyTable();
+    
+    // Randomize 6-12 Month Metrics
+    document.getElementById('metricM6').innerText = (Math.floor(Math.random() * 3000) + 800).toLocaleString() + " X";
+    document.getElementById('metricM3').innerText = (Math.floor(Math.random() * 4000) + 1200).toLocaleString() + " X";
+    document.getElementById('metricCurrent').innerText = (Math.floor(Math.random() * 10000) + 10000).toLocaleString() + " X";
+    alert("🎲 Random 6-12 month data epoch generated successfully across all graphs and summaries!");
+  }
+
+  function selectFolder(path) {
+    alert(`Selected workspace folder: ${path}`);
+  }
+
+  function loadFolderFile(filename) {
+    alert(`Loaded file from vault workspace: ${filename}. Parsing 6-12M historical records...`);
   }
 
   // Interactive Atom Canvas Bindings
@@ -574,7 +627,7 @@
 
     // Draw actual pulled subset line (Cyan)
     subsetCtx.strokeStyle = '#00f3ff'; subsetCtx.lineWidth = 2; subsetCtx.beginPath();
-    let st = w / (extractedSubset.length + 8); // Leave room for predictive steps
+    let st = w / (extractedSubset.length + 8);
     extractedSubset.forEach((v, idx) => {
       let x = idx * st + 5, y = h - (v / 100) * h;
       if (idx === 0) subsetCtx.moveTo(x, y); else subsetCtx.lineTo(x, y);
@@ -627,7 +680,7 @@
   function handleFileUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
-    alert(`File "${file.name}" uploaded. Automatically parsing columns, IDs, dates, and categorizing monthly data summaries.`);
+    alert(`File "${file.name}" uploaded. Automatically parsing columns, IDs, dates, and categorizing monthly data summaries (6-12M span).`);
   }
 
   function populateAnomalyTable() {
@@ -637,10 +690,10 @@
     extractedSubset.forEach((v, idx) => {
       let tr = document.createElement('tr');
       let isAnom = v > threshold;
-      tr.innerHTML = `<td>#${2000 + idx}</td><td>2026-08-${10+idx}</td><td>${isAnom ? '⚠️ Spike / Anomaly' : 'Standard Wave'}</td><td>$${(v * finConfig.baseValue).toFixed(2)}</td>`;
+      tr.innerHTML = `<td>#${3000 + idx}</td><td>2026-0${(idx % 6) + 1}-${10+idx}</td><td>${isAnom ? '⚠️ Spike / Anomaly' : 'Standard Wave'}</td><td>$${(v * finConfig.baseValue).toFixed(2)}</td>`;
       tbody.appendChild(tr);
     });
-    document.getElementById('suggestionBox').innerHTML = `💡 **Subset Pulled**: Extracted ${extractedSubset.length} points. Automatically identified IDs, Dates, and flagged anomalies above threshold.`;
+    document.getElementById('suggestionBox').innerHTML = `💡 **Subset Pulled (6-12M span)**: Extracted ${extractedSubset.length} points. Automatically identified IDs, Dates, and flagged anomalies above threshold.`;
   }
 
   function updateWaveOptics() {
@@ -667,7 +720,6 @@
     }
     waveCtx.stroke();
 
-    // Draw selection box if dragging
     if (isSelecting) {
       waveCtx.fillStyle = 'rgba(0, 243, 255, 0.2)';
       waveCtx.strokeStyle = '#00f3ff';
@@ -688,8 +740,7 @@
 
   window.onload = () => {
     masterLoop();
-    // Pre-seed initial default subset
-    extractedSubset = waveBuffer.slice(20, 70);
+    extractedSubset = waveBuffer.slice(20, 80);
     renderSubsetSpikes();
     populateAnomalyTable();
   };
