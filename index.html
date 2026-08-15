@@ -1,12 +1,10 @@
-Here is QuantEngine v6.4.9. It introduces your exact request: Drag-to-Spawn Noise & Anomaly Extraction.
-When you click and drag across any section of the live moving wave graph, the system now automatically filters out the stable baseline data and only extracts, isolates, and graphs the noise and anomalies into a brand new dedicated sub-graph and itemized table!
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v6.4.9 - Noise & Anomaly Drag-Spawn Matrix</title>
+  <title>QuantEngine v6.5.0 - Maximized Dashboard & Fold-Down Matrix</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -54,6 +52,7 @@ When you click and drag across any section of the live moving wave graph, the sy
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      transition: all 0.3s ease;
     }
 
     .widget-header {
@@ -77,15 +76,17 @@ When you click and drag across any section of the live moving wave graph, the sy
       grid-template-columns: 1fr 1.6fr 1fr;
       gap: 0.6rem;
       flex: 1;
+      transition: all 0.3s ease;
     }
 
-    .platform-grid.dashboard-mode {
-      grid-template-columns: 1fr 1fr;
+    /* Maximized Dashboard Mode - Folds down secondary workbench columns into compact summary bars */
+    .platform-grid.maximized-dashboard {
+      grid-template-columns: 280px 1fr;
     }
 
-    .column { display: flex; flex-direction: column; gap: 0.6rem; }
+    .column { display: flex; flex-direction: column; gap: 0.6rem; transition: all 0.3s ease; }
     
-    .panel-card { background: rgba(3, 7, 15, 0.98); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; box-shadow: 0 8px 25px rgba(0,0,0,0.7); }
+    .panel-card { background: rgba(3, 7, 15, 0.98); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; box-shadow: 0 8px 25px rgba(0,0,0,0.7); transition: all 0.3s ease; }
     .panel-title { font-size: 0.68rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; text-transform: uppercase; }
 
     .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
@@ -98,7 +99,7 @@ When you click and drag across any section of the live moving wave graph, the sy
     .hud-tag { position: absolute; top: 3px; left: 5px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 5px; border-radius: 3px; font-size: 0.52rem; color: var(--text-muted); font-family: var(--font-mono); z-index: 5; pointer-events: none; }
     .hud-tag span { color: var(--neon-cyan); font-weight: 600; }
 
-    .data-table-container { background: #010409; border: 1px solid rgba(255, 51, 68, 0.3); border-radius: 5px; padding: 4px; max-height: 105px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.54rem; color: var(--crimson-red); }
+    .data-table-container { background: #010409; border: 1px solid rgba(255, 51, 68, 0.3); border-radius: 5px; padding: 4px; max-height: 110px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.54rem; color: var(--crimson-red); }
     .data-table { width: 100%; border-collapse: collapse; text-align: left; }
     .data-table th, .data-table td { padding: 3px 5px; border-bottom: 1px solid rgba(255, 51, 68, 0.15); }
     .data-table th { color: var(--warning-amber); font-weight: 600; }
@@ -111,6 +112,14 @@ When you click and drag across any section of the live moving wave graph, the sy
     .btn-dashboard-toggle.active { background: var(--accent-green); box-shadow: 0 0 12px rgba(126, 231, 135, 0.5); }
     .live-status-pill { font-size: 0.55rem; font-family: var(--font-mono); padding: 2px 6px; border-radius: 4px; background: rgba(255, 51, 68, 0.2); color: var(--crimson-red); border: 1px solid rgba(255, 51, 68, 0.4); }
 
+    /* Collapsible fold-down utility class */
+    .folded-down {
+      max-height: 45px;
+      overflow: hidden;
+      opacity: 0.6;
+    }
+    .folded-down:hover { opacity: 1; }
+
     @media (max-width: 1024px) {
       body { overflow-y: auto; height: auto; }
       .platform-container { height: auto; width: 100vw; border-radius: 0; padding: 0.5rem; }
@@ -120,18 +129,18 @@ When you click and drag across any section of the live moving wave graph, the sy
 </head>
 <body>
 
-<div class="platform-container">
+<div class="platform-container" id="platformContainer">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v6.4.9</span> Noise & Anomaly Extraction Matrix</div>
+    <div class="brand-title">⚡ <span>QuantEngine v6.5.0</span> Maximized Dashboard & Fold-Down Matrix</div>
     <div class="status-badges">
-      <button onclick="playClickSound(); toggleDashboardMode()" class="action-btn btn-dashboard-toggle" id="dashboardToggleBtn" style="padding: 3px 8px; font-size: 0.6rem;">📊 Toggle Dashboard Summary</button>
+      <button onclick="playClickSound(); toggleMaximizedDashboard()" class="action-btn btn-dashboard-toggle" id="dashboardToggleBtn" style="padding: 3px 8px; font-size: 0.6rem;">📊 Maximize Executive Dashboard</button>
       <div class="compliance-badge" id="viewModeBadge">WORKBENCH MODE</div>
     </div>
   </div>
 
   <div class="platform-grid" id="mainPlatformGrid">
     
-    <!-- Left Column: Financials & Office Export Tools -->
+    <!-- Left Column: Financials & Foldable Controls -->
     <div class="column" id="colLeft">
       <div class="panel-card">
         <div class="panel-title">
@@ -154,7 +163,7 @@ When you click and drag across any section of the live moving wave graph, the sy
         </div>
       </div>
 
-      <div class="panel-card">
+      <div class="panel-card" id="foldableControlsCard">
         <div class="panel-title">
           <span>Office & Presentation Export</span>
           <span style="color:var(--accent-purple); font-size:0.58rem; font-family:var(--font-mono);">Word / PPT</span>
@@ -169,13 +178,13 @@ When you click and drag across any section of the live moving wave graph, the sy
           <span>Pinned Dashboard Summaries</span>
           <span style="color:var(--neon-cyan); font-size:0.58rem; font-family:var(--font-mono);">Executive Cards</span>
         </div>
-        <div class="data-table-container" id="dashboardPinnedSummaries" style="max-height: 110px; border-color: rgba(0,243,255,0.3); color: var(--neon-cyan);">
+        <div class="data-table-container" id="dashboardPinnedSummaries" style="max-height: 120px; border-color: rgba(0,243,255,0.3); color: var(--neon-cyan);">
           <div style="color: var(--text-muted); text-align: center; padding: 10px;">No anomaly snapshots pinned yet. Drag across graph to isolate noise.</div>
         </div>
       </div>
     </div>
 
-    <!-- Central Column: Moving Wave & Noise/Anomaly Spawn Sub-Graph -->
+    <!-- Central Column: Maximized Moving Wave & Anomaly Extraction Graph -->
     <div class="column" id="colCenter">
       <div class="panel-card" style="flex:1;">
         <div class="panel-title">
@@ -183,19 +192,18 @@ When you click and drag across any section of the live moving wave graph, the sy
           <span class="live-status-pill">DRAG TO EXTRACT NOISE</span>
         </div>
         
-        <div class="canvas-box" style="height: 155px; border-color: rgba(0, 243, 255, 0.45);">
-          <canvas id="movingWaveCanvas" width="700" height="155"></canvas>
+        <div class="canvas-box" style="height: 180px; border-color: rgba(0, 243, 255, 0.45);">
+          <canvas id="movingWaveCanvas" width="700" height="180"></canvas>
           <div class="hud-tag">Drag mouse/touch across wave to isolate anomalies</div>
         </div>
 
-        <!-- Anomaly Extraction Sub-Graph Card -->
         <div class="panel-card" style="background: rgba(1, 4, 10, 0.98); border-color: rgba(255, 51, 68, 0.4); padding: 5px;">
           <div class="panel-title" style="color: var(--crimson-red); font-size: 0.6rem; margin-bottom: 3px;">
             <span>Isolated Noise & Anomaly Sub-Graph</span>
             <button onclick="playClickSound(); pinToDashboardSummary()" class="action-btn" style="width: auto; padding: 2px 6px; font-size: 0.52rem; background: var(--accent-green); color: #020408;">📌 Pin to Dashboard</button>
           </div>
-          <div class="canvas-box" style="height: 60px; border-color: rgba(255, 51, 68, 0.3); margin-bottom: 4px;">
-            <canvas id="anomalyGraphCanvas" width="700" height="60"></canvas>
+          <div class="canvas-box" style="height: 70px; border-color: rgba(255, 51, 68, 0.3); margin-bottom: 4px;">
+            <canvas id="anomalyGraphCanvas" width="700" height="70"></canvas>
             <div class="hud-tag">Noise & Anomaly Only</div>
           </div>
           <div class="data-table-container">
@@ -212,9 +220,9 @@ When you click and drag across any section of the live moving wave graph, the sy
       </div>
     </div>
 
-    <!-- Right Column: System Logs & Ingestion (Hidden in Dashboard Mode) -->
+    <!-- Right Column: Foldable System Logs & Ingestion -->
     <div class="column" id="colRight">
-      <div class="panel-card">
+      <div class="panel-card" id="foldableIngestCard">
         <div class="panel-title">
           <span>Data Ingestion & Controls</span>
           <span style="color:var(--neon-cyan); font-size:0.58rem; font-family:var(--font-mono);">Batch</span>
@@ -224,10 +232,10 @@ When you click and drag across any section of the live moving wave graph, the sy
         </div>
       </div>
 
-      <div class="panel-card" style="flex:1;">
+      <div class="panel-card" style="flex:1;" id="foldableLogsCard">
         <div class="panel-title">System Telemetry Logs</div>
-        <div style="background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.6rem; color: var(--accent-green); height: 160px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.3;" id="mathTerminal">
-          [INIT] QuantEngine v6.4.9 online. Anomaly extraction filter active...<br>
+        <div style="background: #010409; border: 1px solid var(--border-color); border-radius: 5px; padding: 6px; font-size: 0.6rem; color: var(--accent-green); height: 170px; overflow-y: auto; font-family: var(--font-mono); line-height: 1.3;" id="mathTerminal">
+          [INIT] QuantEngine v6.5.0 online. Maximized dashboard matrix ready...<br>
         </div>
       </div>
     </div>
@@ -242,34 +250,42 @@ When you click and drag across any section of the live moving wave graph, the sy
   let timeOffset = 0;
   let isolatedAnomalies = [];
   let pinnedDashboardCards = [];
-  let isDashboardModeActive = false;
+  let isMaximizedDashboardActive = false;
 
   let financialAccumulator = { monthlyTotal: 12450.0, quarterlyTotal: 37350.0, annualTotal: 149400.0 };
   let isInteracting = false;
   let dragStartX = 0;
   let dragEndX = 0;
 
-  function toggleDashboardMode() {
-    isDashboardModeActive = !isDashboardModeActive;
+  function toggleMaximizedDashboard() {
+    isMaximizedDashboardActive = !isMaximizedDashboardActive;
     const grid = document.getElementById('mainPlatformGrid');
     const badge = document.getElementById('viewModeBadge');
     const btn = document.getElementById('dashboardToggleBtn');
-    const colRight = document.getElementById('colRight');
+    const foldableIngest = document.getElementById('foldableIngestCard');
+    const foldableControls = document.getElementById('foldableControlsCard');
+    const foldableLogs = document.getElementById('foldableLogsCard');
 
-    if (isDashboardModeActive) {
-      grid.classList.add('dashboard-mode');
-      colRight.style.display = 'none';
-      badge.innerText = "EXECUTIVE DASHBOARD VIEW";
+    if (isMaximizedDashboardActive) {
+      grid.classList.add('maximized-dashboard');
+      foldableIngest.classList.add('folded-down');
+      foldableControls.classList.add('folded-down');
+      foldableLogs.classList.add('folded-down');
+      badge.innerText = "MAXIMIZED EXECUTIVE DASHBOARD";
       badge.style.color = "var(--accent-green)";
       btn.classList.add('active');
-      btn.innerText = "📊 Return to Workbench";
+      btn.innerText = "📊 Restore Workbench View";
+      logPlatform("[DASHBOARD] Maximized executive view active. Secondary workbench panels folded down.");
     } else {
-      grid.classList.remove('dashboard-mode');
-      colRight.style.display = 'flex';
+      grid.classList.remove('maximized-dashboard');
+      foldableIngest.classList.remove('folded-down');
+      foldableControls.classList.remove('folded-down');
+      foldableLogs.classList.remove('folded-down');
       badge.innerText = "WORKBENCH MODE";
       badge.style.color = "var(--neon-cyan)";
       btn.classList.remove('active');
-      btn.innerText = "📊 Toggle Dashboard Summary";
+      btn.innerText = "📊 Maximize Executive Dashboard";
+      logPlatform("[DASHBOARD] Restored standard workbench view.");
     }
   }
 
@@ -325,23 +341,20 @@ When you click and drag across any section of the live moving wave graph, the sy
     const stepX = totalWidth / movingDataBuffer.length;
     const startIdx = Math.max(0, Math.floor(startX / stepX));
     const endIdx = Math.min(movingDataBuffer.length, Math.floor(endX / stepX));
-
     const selectedSlice = movingDataBuffer.slice(startIdx, endIdx);
     
-    // Calculate baseline mean to subtract and isolate only noise/anomalies
     const mean = selectedSlice.reduce((a, b) => a + b, 0) / (selectedSlice.length || 1);
     
-    // Filter to keep ONLY variance deviations (noise & anomalies)
     isolatedAnomalies = selectedSlice.map(val => ({
       index: startIdx + selectedSlice.indexOf(val),
       raw: val,
       anomalyDelta: parseFloat((val - mean).toFixed(2))
-    })).filter(item => Math.abs(item.anomalyDelta) > 3.0); // Threshold filter for noise/anomalies
+    })).filter(item => Math.abs(item.anomalyDelta) > 3.0);
 
     if (isolatedAnomalies.length > 0) {
       renderAnomalyGraph();
       populateAnomalyTable();
-      logPlatform(`[ANOMALY] Extracted ${isolatedAnomalies.length} noise/anomaly points from dragged window.`);
+      logPlatform(`[ANOMALY] Extracted ${isolatedAnomalies.length} noise/anomaly points.`);
     } else {
       alert("Selected region was too stable. Drag across a volatile or spiking region to isolate noise.");
     }
@@ -360,7 +373,7 @@ When you click and drag across any section of the live moving wave graph, the sy
     const step = width / isolatedAnomalies.length;
     isolatedAnomalies.forEach((item, idx) => {
       let x = idx * step + (step / 2);
-      let y = (height / 2) - (item.anomalyDelta * 2); // Center around zero baseline
+      let y = (height / 2) - (item.anomalyDelta * 2);
       if (idx === 0) anomalyCtx.moveTo(x, y); else anomalyCtx.lineTo(x, y);
     });
     anomalyCtx.stroke();
@@ -371,7 +384,7 @@ When you click and drag across any section of the live moving wave graph, the sy
     tbody.innerHTML = '';
     isolatedAnomalies.forEach((item, idx) => {
       let tr = document.createElement('tr');
-      tr.innerHTML = `<td>#${item.index}</td><td>10:28:${(idx * 15).toFixed(0)}</td><td>+${item.anomalyDelta}</td><td>⚠️ Anomaly Variance</td>`;
+      tr.innerHTML = `<td>#${item.index}</td><td>10:30:${(idx * 15).toFixed(0)}</td><td>+${item.anomalyDelta}</td><td>⚠️ Anomaly Variance</td>`;
       tbody.appendChild(tr);
     });
   }
@@ -395,7 +408,7 @@ When you click and drag across any section of the live moving wave graph, the sy
   }
 
   function exportForWordAndPPT() {
-    if (pinnedDashboardCards.length === 0) { alert("Pin at least one anomaly snapshot to the dashboard summary before exporting."); return; }
+    if (pinnedDashboardCards.length === 0) { alert("Pin at least one anomaly snapshot before exporting."); return; }
     
     let htmlContent = `<html><head><title>QuantEngine Anomaly Report</title><style>body{font-family:sans-serif;padding:20px;}table{width:100%;border-collapse:collapse;margin-top:10px;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#ff3344;color:#fff;}</style></head><body>`;
     htmlContent += `<h1>QuantEngine Noise & Anomaly Executive Report</h1><p>Generated: ${new Date().toLocaleString()}</p><hr>`;
@@ -455,4 +468,3 @@ When you click and drag across any section of the live moving wave graph, the sy
 
 </body>
 </html>
-
