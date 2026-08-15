@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v6.8 - Smart AI Navigator Suite</title>
+  <title>SEBRA82 v6.9 - Smart AI Navigator & Tool Tutor Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -102,8 +102,8 @@
       padding: 5px;
       font-size: 0.45rem;
       color: var(--accent-purple);
-      min-height: 45px;
-      max-height: 85px;
+      min-height: 50px;
+      max-height: 95px;
       overflow-y: auto;
       line-height: 1.35;
       display: flex;
@@ -112,6 +112,7 @@
     }
     .chat-msg-ai { color: var(--accent-purple); }
     .chat-msg-user { color: var(--neon-cyan); text-align: right; }
+    .tutor-box { background: rgba(0, 243, 255, 0.06); border-left: 2px solid var(--neon-cyan); padding: 4px 6px; margin-top: 2px; font-size: 0.44rem; color: #fff; }
 
     /* Predictive Next-Word Prompt Bar */
     .predictive-prompt-bar {
@@ -305,39 +306,39 @@
 <body>
 
 <div class="platform-container">
-  <!-- AI-Powered Smart Navigator & Chat Guide -->
+  <!-- AI-Powered Smart Navigator & Tool Tutor -->
   <div class="quick-guide-box">
     <div class="quick-guide-header" onclick="toggleQuickGuide()">
-      <span>🤖 SEBRA82 Smart AI Navigator</span>
+      <span>🤖 SEBRA82 Smart AI Tutor & Navigator</span>
       <span id="guideToggleSign">[-]</span>
     </div>
     <div class="quick-guide-content" id="quickGuideBody">
-      <span>• <strong>Smart Navigation:</strong> Ask me to take you anywhere, and I will auto-expand and highlight that section!</span>
+      <span>• <strong>Interactive Guidance:</strong> Click any prompt below to learn what the tool is, how to use it, and navigate directly to it!</span>
       
       <!-- AI Chat Box -->
       <div class="ai-guide-chat">
         <div class="ai-chat-stream" id="aiChatStream">
-          <div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Hello! Tell me what you'd like to do, and I'll navigate you right to it.</div>
+          <div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Welcome! Click a topic below or ask me how to use any section.</div>
         </div>
-        <!-- Predictive Next-Word / Next-Topic Chips -->
+        <!-- Predictive Tool Tutor Chips -->
         <div class="predictive-prompt-bar" id="predictiveBar">
-          <span style="font-size: 0.4rem; color: var(--text-muted);">Jump to:</span>
-          <span class="predictive-chip" onclick="sendPrompt('Show me the 3D atom matrix')">Show Atom Matrix</span>
-          <span class="predictive-chip" onclick="sendPrompt('Open math studio')">Open Math Studio</span>
-          <span class="predictive-chip" onclick="sendPrompt('Go to noise graph')">Go to Noise Graph</span>
-          <span class="predictive-chip" onclick="sendPrompt('View query table')">View Query Table</span>
-          <span class="predictive-chip" onclick="sendPrompt('Open workspace explorer')">Workspace Explorer</span>
+          <span style="font-size: 0.4rem; color: var(--text-muted);">Learn & Go:</span>
+          <span class="predictive-chip" onclick="teachAndNavigate('atom')">3D Atom Matrix</span>
+          <span class="predictive-chip" onclick="teachAndNavigate('math')">Math Studio</span>
+          <span class="predictive-chip" onclick="teachAndNavigate('noise')">Noise Graph</span>
+          <span class="predictive-chip" onclick="teachAndNavigate('query')">Query Table</span>
+          <span class="predictive-chip" onclick="teachAndNavigate('tools')">Workspace Explorer</span>
         </div>
         <div class="ai-chat-input-row">
-          <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Where would you like to go?" onkeypress="if(event.key==='Enter') submitAIChat()">
-          <button class="ai-chat-btn" onclick="submitAIChat()">Go</button>
+          <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Ask AI how to use a tool..." onkeypress="if(event.key==='Enter') submitAIChat()">
+          <button class="ai-chat-btn" onclick="submitAIChat()">Ask</button>
         </div>
       </div>
     </div>
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v6.8</span> Executive Master Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v6.9</span> Executive Master Suite</div>
     <div class="header-actions">
       <button class="gen-rand-btn" onclick="generateRandomDataEpoch()">🎲 Random Data</button>
       <button class="saved-view-btn" onclick="saveCustomView()">💾 Save View</button>
@@ -625,7 +626,7 @@
 </div>
 
 <script>
-  // AI Smart Navigator & Predictive Prompting Logic
+  // AI Tool Tutor & Smart Navigator Logic
   function toggleQuickGuide() {
     const body = document.getElementById('quickGuideBody');
     const sign = document.getElementById('guideToggleSign');
@@ -633,18 +634,11 @@
     sign.innerText = body.classList.contains('collapsed') ? '[+]' : '[-]';
   }
 
-  function sendPrompt(text) {
-    document.getElementById('aiChatInput').value = text;
-    submitAIChat();
-  }
-
   function scrollToSection(cardId, sectionId) {
-    // Uncollapse target section
     const sec = document.getElementById(sectionId);
     if (sec && sec.classList.contains('collapsed')) {
       sec.classList.remove('collapsed');
     }
-    // Scroll and pulse highlight
     const card = document.getElementById(cardId);
     if (card) {
       card.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -653,54 +647,64 @@
     }
   }
 
+  function teachAndNavigate(toolKey) {
+    const streamBox = document.getElementById('aiChatStream');
+    let explanation = "";
+    let cardId = "";
+    let secId = "";
+
+    switch(toolKey) {
+      case 'atom':
+        explanation = "<strong>3D Quantum Atom Matrix</strong>: Displays a breathing multi-shell quantum particle lattice. <em>How to use:</em> Click and drag on the 3D sphere to rotate viewing angles; scroll or pinch to zoom and look inside.";
+        cardId = 'cardAtom'; secId = 'secAtom';
+        break;
+      case 'math':
+        explanation = "<strong>Maths Studio</strong>: A high-precision tensor and alpha modeling engine. <em>How to use:</em> Toggle between Quantum Tensors and Alpha Forecasts, then adjust base magnitude and non-linear damping (&gamma;) sliders.";
+        cardId = 'cardFin'; secId = 'secFin';
+        break;
+      case 'noise':
+        explanation = "<strong>Live Noise Graph</strong>: A real-time spectral monitoring stream. <em>How to use:</em> Click and drag horizontally across the wave stream to 'pull' a historical data subset and view predictive trajectory projections.";
+        cardId = 'cardWave'; secId = 'secWave';
+        break;
+      case 'query':
+        explanation = "<strong>Query Table Studio</strong>: Automated data mapping interface. <em>How to use:</em> Automatically populates IDs, dates, and categorized anomalies whenever you pull a subset from the live noise graph.";
+        cardId = 'cardQuery'; secId = 'secQuery';
+        break;
+      case 'tools':
+        explanation = "<strong>Workspace Folder Explorer</strong>: Local vault directory manager. <em>How to use:</em> Browse embedded 6-12 month epochs, load datasets, link live SharePoint streams, or trigger local package downloads.";
+        cardId = 'cardTools'; secId = 'secTools';
+        break;
+    }
+
+    streamBox.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI Tutor</strong>: <div class="tutor-box">${explanation}</div></div>`;
+    streamBox.scrollTop = streamBox.scrollHeight;
+
+    scrollToSection(cardId, secId);
+  }
+
   function submitAIChat() {
     const inputField = document.getElementById('aiChatInput');
     const streamBox = document.getElementById('aiChatStream');
-    const promptBar = document.getElementById('predictiveBar');
-    const query = inputField.value.trim();
+    const query = inputField.value.trim().toLowerCase();
     if (!query) return;
 
-    streamBox.innerHTML += `<div class="chat-msg-user">You: ${query}</div>`;
+    streamBox.innerHTML += `<div class="chat-msg-user">You: ${inputField.value}</div>`;
     inputField.value = "";
 
-    let response = "I'm navigating you to the requested suite.";
-    let nextPrompts = [];
-    let qLower = query.toLowerCase();
-
-    if (qLower.includes('atom') || qLower.includes('3d') || qLower.includes('matrix')) {
-      response = "Navigating to Step 1: Quantum Atom Matrix.";
-      scrollToSection('cardAtom', 'secAtom');
-      nextPrompts = ["Open math studio", "Go to noise graph", "Executive summary"];
-    } else if (qLower.includes('math') || qLower.includes('tensor') || qLower.includes('model') || qLower.includes('forecast')) {
-      response = "Navigating to Step 2: Maths & Modeling Studio.";
-      scrollToSection('cardFin', 'secFin');
-      nextPrompts = ["Pull noise subset", "Random data", "View table"];
-    } else if (qLower.includes('noise') || qLower.includes('graph') || qLower.includes('subset') || qLower.includes('stream')) {
-      response = "Navigating to Step 3: Live Noise Graph & Streaming Studio.";
-      scrollToSection('cardWave', 'secWave');
-      nextPrompts = ["View query table", "Export report", "Atom matrix"];
-    } else if (qLower.includes('table') || qLower.includes('query') || qLower.includes('export')) {
-      response = "Navigating to Step 4: Export Query & Table Studio.";
-      scrollToSection('cardQuery', 'secQuery');
-      nextPrompts = ["Workspace explorer", "Noise graph", "Random data"];
-    } else if (qLower.includes('explorer') || qLower.includes('folder') || qLower.includes('upload') || qLower.includes('workspace')) {
-      response = "Navigating to Step 5: Workspace Folder Explorer.";
-      scrollToSection('cardTools', 'secTools');
-      nextPrompts = ["Executive summary", "Math studio", "Atom matrix"];
+    if (query.includes('atom') || query.includes('3d')) {
+      teachAndNavigate('atom');
+    } else if (query.includes('math') || query.includes('tensor') || query.includes('forecast')) {
+      teachAndNavigate('math');
+    } else if (query.includes('noise') || query.includes('graph') || query.includes('subset')) {
+      teachAndNavigate('noise');
+    } else if (query.includes('table') || query.includes('query')) {
+      teachAndNavigate('query');
+    } else if (query.includes('tool') || query.includes('folder') || query.includes('explorer')) {
+      teachAndNavigate('tools');
     } else {
-      response = `Navigated to Executive Summary dashboard based on query "${query}".`;
-      scrollToSection('cardSummary', 'secSummary');
-      nextPrompts = ["Open math studio", "Noise graph", "Workspace explorer"];
+      streamBox.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: I can teach you about the Atom Matrix, Math Studio, Noise Graph, Query Table, or Workspace Explorer. Just ask!</div>`;
     }
-
-    streamBox.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: ${response}</div>`;
     streamBox.scrollTop = streamBox.scrollHeight;
-
-    let chipsHtml = `<span style="font-size: 0.4rem; color: var(--text-muted);">Jump to:</span>`;
-    nextPrompts.forEach(p => {
-      chipsHtml += `<span class="predictive-chip" onclick="sendPrompt('${p}')">${p}</span>`;
-    });
-    promptBar.innerHTML = chipsHtml;
   }
 
   // Anti-Copy & Hardened Security Wrappers
@@ -1181,3 +1185,4 @@
 
 </body>
 </html>
+
