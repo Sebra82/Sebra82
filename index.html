@@ -4,15 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v5.5 - Master Unified Quantum-Classical Execution & Visualization Suite</title>
+  <title>SEBRA82 v5.5 - Categorized Master Suite (Calculation, Science, World, Finance)</title>
   <style>
     :root {
       --bg-deep: #020408;
       --card-bg: rgba(7, 11, 19, 0.99);
-      --border-color: rgba(0, 243, 255, 0.3);
+      --border-color: rgba(0, 243, 255, 0.35);
       --neon-cyan: #00f3ff;
-      --cyan-glow: rgba(0, 243, 255, 0.45);
+      --cyan-glow: rgba(0, 243, 255, 0.5);
       --crimson-red: #ff3344;
+      --warning-amber: #f0883e;
       --text-main: #f0f6fc;
       --text-muted: #8b949e;
       --accent-green: #7ee787;
@@ -45,7 +46,7 @@
       max-width: 650px;
       width: 100%;
       min-height: 98vh;
-      box-shadow: 0 0 40px rgba(0, 243, 255, 0.12), 0 30px 80px rgba(0, 0, 0, 0.95);
+      box-shadow: 0 0 45px rgba(0, 243, 255, 0.15), 0 30px 80px rgba(0, 0, 0, 0.95);
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
@@ -62,7 +63,7 @@
     }
 
     .brand-title { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 700; color: #fff; }
-    .brand-title span { color: var(--neon-cyan); font-weight: 800; }
+    .brand-title span { color: var(--neon-cyan); font-weight: 800; text-shadow: 0 0 10px var(--cyan-glow); }
 
     .header-actions { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
     .core-reset-btn { font-size: 0.46rem; background: rgba(255, 51, 68, 0.2); color: var(--crimson-red); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(255, 51, 68, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
@@ -81,28 +82,6 @@
       font-family: var(--font-mono);
     }
 
-    .pipeline-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 4px;
-    }
-
-    .pipeline-step {
-      background: rgba(3, 7, 15, 0.98);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 0.4rem;
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-
-    .pipeline-step.active { border-color: var(--neon-cyan); box-shadow: 0 0 10px var(--cyan-glow); }
-    .pipeline-step.passed { border-color: #238636; background: rgba(35, 134, 54, 0.05); }
-
-    .step-title { font-size: 0.65rem; font-weight: 700; color: var(--text-main); }
-    .pipeline-step.active .step-title { color: var(--neon-cyan); }
-    .step-sub { font-size: 0.52rem; color: var(--text-muted); margin-top: 1px; font-family: var(--font-mono); }
-
     .mobile-stack { display: flex; flex-direction: column; gap: 0.45rem; }
 
     .panel-card {
@@ -118,23 +97,43 @@
 
     .panel-card.fluid-maximized {
       flex: 1;
-      min-height: 75vh;
+      min-height: 82vh;
       border-color: var(--neon-cyan);
-      box-shadow: 0 0 30px rgba(0,243,255,0.4);
+      box-shadow: 0 0 35px rgba(0,243,255,0.5);
       order: -99;
     }
-    .panel-card.fluid-maximized .collapsible-body { max-height: 1400px !important; display: flex !important; }
+    .panel-card.fluid-maximized .collapsible-body { max-height: 1600px !important; display: flex !important; }
+    .panel-card.fluid-maximized .expanded-graph-suite { display: flex !important; }
     .panel-card.dropped-tab { order: 99; padding: 0.2rem 0.4rem; opacity: 0.65; border-style: dashed; }
     .panel-card.dropped-tab .collapsible-body { display: none !important; }
 
-    .panel-title { font-size: 0.58rem; font-weight: 700; color: var(--neon-cyan); display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; cursor: pointer; }
-    .panel-title:hover { color: #fff; }
+    /* Category Tag Bar at Top of Each Section */
+    .section-category-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 2px;
+    }
+    .cat-chip {
+      font-size: 0.42rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      padding: 1px 4px;
+      border-radius: 3px;
+      border: 1px solid;
+      text-transform: uppercase;
+    }
+    .cat-calc { color: var(--neon-cyan); border-color: rgba(0,243,255,0.4); background: rgba(0,243,255,0.08); }
+    .cat-sci { color: var(--accent-green); border-color: rgba(126,231,135,0.4); background: rgba(126,231,135,0.08); }
+    .cat-world { color: var(--warning-amber); border-color: rgba(240,136,62,0.4); background: rgba(240,136,62,0.08); }
+    .cat-fin { color: var(--accent-purple); border-color: rgba(192,132,252,0.4); background: rgba(192,132,252,0.08); }
 
-    .canvas-box { position: relative; width: 100%; background: #000; border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.35); overflow: hidden; }
-    canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; pointer-events: auto !important; }
-    canvas:active { cursor: grabbing; }
+    .panel-title { font-size: 0.58rem; font-weight: 700; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; cursor: pointer; }
+    .panel-title:hover { color: var(--neon-cyan); }
 
-    .hud-tag { position: absolute; top: 2px; left: 3px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 3px; border-radius: 2px; font-size: 0.44rem; color: var(--neon-cyan); font-family: var(--font-mono); z-index: 5; pointer-events: none; }
+    .canvas-box { position: relative; width: 100%; background: radial-gradient(circle at center, #0a1128 0%, #000000 100%); border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.4); overflow: hidden; }
+    canvas { display: block; width: 100%; height: 100%; cursor: crosshair; touch-action: none; pointer-events: auto !important; }
+
+    .hud-tag { position: absolute; top: 2px; left: 3px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 3px; border-radius: 2px; font-size: 0.44rem; color: var(--neon-cyan); font-family: var(--font-mono); z-index: 5; pointer-events: none; text-shadow: 0 0 6px var(--cyan-glow); }
 
     .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
     .metric-box { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 4px; border-radius: 3px; display: flex; flex-direction: column; gap: 1px; text-align: center; }
@@ -187,48 +186,40 @@
     </div>
   </div>
 
-  <!-- SEBRA82 Pipeline Grid -->
-  <div class="pipeline-grid">
-    <div class="pipeline-step active" id="step-1">
-      <div class="step-title">1. Tensor Prep</div>
-      <div class="step-sub">L1 Aligned</div>
-    </div>
-    <div class="pipeline-step" id="step-2">
-      <div class="step-title">2. Phase Est.</div>
-      <div class="step-sub">O(1) Spatial</div>
-    </div>
-    <div class="pipeline-step" id="step-3">
-      <div class="step-title">3. ZNE Noise</div>
-      <div class="step-sub">Galois Tag</div>
-    </div>
-    <div class="pipeline-step" id="step-4">
-      <div class="step-title">4. Collapse</div>
-      <div class="step-sub">Vector Ready</div>
-    </div>
-  </div>
-
   <div class="mobile-stack" id="mobileStack">
 
-    <!-- Step 1: Actual Breathing & Interactive 3D Quantum Atom Matrix -->
+    <!-- Step 1: 3D Quantum Atom Matrix -->
     <div class="panel-card" id="cardAtom">
+      <div class="section-category-bar">
+        <span class="cat-chip cat-calc">Calculation</span>
+        <span class="cat-chip cat-sci">Science</span>
+        <span class="cat-chip cat-world">World</span>
+        <span class="cat-chip cat-fin">Finance</span>
+      </div>
       <div class="panel-title">
         <span onclick="toggleSec('secAtom')">1. Interactive 3D Quantum Atom Matrix ▾</span>
         <button class="pin-btn" id="pinBtn_cardAtom" onclick="toggleMax('cardAtom')">⚡ Maximize</button>
       </div>
       <div class="collapsible-body" id="secAtom">
-        <div class="canvas-box" style="height: 200px;">
-          <canvas id="atom3DCanvas" width="400" height="200"></canvas>
-          <div class="hud-tag">✨ Breathing Core | Drag to Rotate, Pinch/Scroll to Zoom</div>
+        <div class="canvas-box" style="height: 180px;">
+          <canvas id="atom3DCanvas" width="400" height="180"></canvas>
+          <div class="hud-tag">✨ Breathing Core | Drag to Rotate, Pinch to Zoom</div>
         </div>
         <div class="control-item">
-          <div class="control-label">Core Expansion / Look Inside: <span id="atomDepthVal">1.00x</span></div>
+          <div class="control-label">Core Expansion: <span id="atomDepthVal">1.00x</span></div>
           <input type="range" id="atomDepthSlider" min="0.2" max="3.5" step="0.05" value="1.0" oninput="updateAtomDepth(this.value)">
         </div>
       </div>
     </div>
 
-    <!-- Step 2: Maths, Calculations & Monthly Summaries -->
+    <!-- Step 2: Maths & Calculations -->
     <div class="panel-card" id="cardFin">
+      <div class="section-category-bar">
+        <span class="cat-chip cat-calc">Calculation</span>
+        <span class="cat-chip cat-fin">Finance</span>
+        <span class="cat-chip cat-world">World</span>
+        <span class="cat-chip cat-sci">Science</span>
+      </div>
       <div class="panel-title">
         <span onclick="toggleSec('secFin')">2. Maths, Calculations & Monthly X ▾</span>
         <button class="pin-btn" id="pinBtn_cardFin" onclick="toggleMax('cardFin')">⚡ Maximize</button>
@@ -248,23 +239,25 @@
             <div class="metric-value" id="metricAnnually">15,480 Events</div>
           </div>
         </div>
-        <div class="control-item">
-          <div class="control-label">Base Value ($): <span id="baseValueReadout">10.00</span></div>
-          <input type="range" id="baseValueSlider" min="1.0" max="50.0" step="0.5" value="10.0" oninput="updateFin()">
-        </div>
       </div>
     </div>
 
-    <!-- Step 3: Live Moving Data, Wave Optics & Thresholds -->
+    <!-- Step 3: Expanded Graph Grasp & Spikes Studio -->
     <div class="panel-card" id="cardWave">
+      <div class="section-category-bar">
+        <span class="cat-chip cat-calc">Calculation</span>
+        <span class="cat-chip cat-sci">Science</span>
+        <span class="cat-chip cat-fin">Finance</span>
+        <span class="cat-chip cat-world">World</span>
+      </div>
       <div class="panel-title">
-        <span onclick="toggleSec('secWave')">3. Live Moving Data & Wave Optics ▾</span>
-        <button class="pin-btn" id="pinBtn_cardWave" onclick="toggleMax('cardWave')">⚡ Maximize</button>
+        <span onclick="toggleSec('secWave')">3. Expanded Graph Grasp & Spikes Studio ▾</span>
+        <button class="pin-btn" id="pinBtn_cardWave" onclick="toggleMax('cardWave')">⚡ Maximize & Expand</button>
       </div>
       <div class="collapsible-body collapsed" id="secWave">
-        <div class="canvas-box" style="height: 110px;">
-          <canvas id="secureSimCanvas" width="400" height="110"></canvas>
-          <div class="hud-tag">SEBRA82 Secure Wave Optics Canvas</div>
+        <div class="canvas-box" style="height: 140px;">
+          <canvas id="secureSimCanvas" width="400" height="140"></canvas>
+          <div class="hud-tag">Pinch / Drag to Grasp Noise & Spikes</div>
         </div>
         <div class="controls-panel" style="display:flex; flex-direction:column; gap:3px;">
           <div class="control-item">
@@ -272,53 +265,56 @@
             <input type="range" id="qubit-slider" min="0" max="295" value="64" oninput="updateControls()">
           </div>
           <div class="control-item">
-            <div class="control-label">Polar Rotation (&theta;): <span id="theta-val">0.41 rad</span></div>
-            <input type="range" id="theta-slider" min="0.0" max="1.57" step="0.01" value="0.41" oninput="updateControls()">
+            <div class="control-label">Spike Threshold: <span id="spikeThreshVal">72.0</span></div>
+            <input type="range" id="spikeThreshSlider" min="30" max="95" step="1" value="72" oninput="document.getElementById('spikeThreshVal').innerText=this.value">
           </div>
         </div>
         <div class="equation-box">
           <div style="font-size: 0.55rem; color: var(--text-muted);">Resolved State Vector:</div>
           <div id="quantum-state-output">|&Psi;_final&gt; = 0.88|00&gt; + 0.48|01&gt;</div>
         </div>
-        <button class="action-btn" id="exec-btn" onclick="executePipeline()">Run Pipeline Execution</button>
       </div>
     </div>
 
-    <!-- Step 4: Noise Grasping & Sub-Graph Studio -->
+    <!-- Step 4: Noise Grasp & Sub-Graph Studio -->
     <div class="panel-card" id="cardQuery">
+      <div class="section-category-bar">
+        <span class="cat-chip cat-world">World</span>
+        <span class="cat-chip cat-calc">Calculation</span>
+        <span class="cat-chip cat-sci">Science</span>
+        <span class="cat-chip cat-fin">Finance</span>
+      </div>
       <div class="panel-title">
-        <span onclick="toggleSec('secQuery')">4. Noise Grasp & Sub-Graph Studio ▾</span>
+        <span onclick="toggleSec('secQuery')">4. Noise Grasp & Table Studio ▾</span>
         <button class="pin-btn" id="pinBtn_cardQuery" onclick="toggleMax('cardQuery')">⚡ Maximize</button>
       </div>
       <div class="collapsible-body collapsed" id="secQuery">
         <div class="suggestion-box" id="suggestionBox">
-          💡 **AI Suggestion**: Grasp noise on live stream or interact with the breathing 3D atom core above.
-        </div>
-        <div class="canvas-box" style="height: 50px; border-color: rgba(192, 132, 252, 0.4);">
-          <canvas id="forkedGraphCanvas" width="400" height="50"></canvas>
-          <div class="hud-tag">Pulled History Sub-Graph</div>
-        </div>
-        <div class="btn-row" style="margin-top: 2px;">
-          <button onclick="pinToSummary()" class="action-btn" style="background: var(--accent-green); color: #020408;">📊 Summary</button>
-          <button onclick="exportWordPPT()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📄 Word/PPT</button>
+          💡 **AI Suggestion**: Drag across the graph in Step 3 to grasp noise slices and populate anomaly tables.
         </div>
         <div class="data-table-container">
           <table class="data-table" id="queryDataTable">
             <thead>
-              <tr><th>ID</th><th>Date</th><th>Category</th><th>Value</th></tr>
+              <tr><th>ID</th><th>Date</th><th>Category</th><th>Magnitude</th></tr>
             </thead>
             <tbody id="queryTableBody">
-              <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Grasp noise slice from wave stream above.</td></tr>
+              <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Grasp graph slice above to extract anomalies.</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- Step 5: Upload, SharePoint Sync & Downloads -->
+    <!-- Step 5: Upload & Downloads -->
     <div class="panel-card" id="cardTools">
+      <div class="section-category-bar">
+        <span class="cat-chip cat-world">World</span>
+        <span class="cat-chip cat-fin">Finance</span>
+        <span class="cat-chip cat-calc">Calculation</span>
+        <span class="cat-chip cat-sci">Science</span>
+      </div>
       <div class="panel-title">
-        <span onclick="toggleSec('secTools')">5. Upload, SharePoint & Downloads ▾</span>
+        <span onclick="toggleSec('secTools')">5. Upload & Downloads ▾</span>
         <button class="pin-btn" id="pinBtn_cardTools" onclick="toggleMax('cardTools')">⚡ Maximize</button>
       </div>
       <div class="collapsible-body collapsed" id="secTools">
@@ -327,12 +323,9 @@
           <input type="text" id="dataSourceUrlInput" placeholder="https://company.sharepoint.com/sites/analytics" value="https://company.sharepoint.com/sites/analytics">
         </div>
         <div class="btn-row">
-          <button onclick="linkSource()" class="action-btn">Link Stream</button>
+          <button onclick="alert('Stream linked successfully!')" class="action-btn">Link Stream</button>
           <button onclick="document.getElementById('fileUploadInput').click()" class="action-btn btn-secondary">Upload File</button>
-          <input type="file" id="fileUploadInput" style="display:none" accept=".csv,.json" onchange="uploadFile(event)">
-        </div>
-        <div class="btn-row" style="margin-top: 3px;">
-          <button onclick="triggerExport()" class="action-btn" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); border:1px solid rgba(192, 132, 252, 0.4);">📥 Download Export</button>
+          <input type="file" id="fileUploadInput" style="display:none" accept=".csv,.json" onchange="alert('File uploaded & parsed!')">
         </div>
       </div>
     </div>
@@ -341,36 +334,33 @@
 </div>
 
 <script>
-  let globalTick = 0, isRunning = true, currentThreshold = 75.0;
-  let movingDataBuffer = new Array(70).fill(50), fullMasterHistory = [], timeOffset = 0;
-  let forkedRoiData = [], savedViews = [], activeMaxId = null;
-  let finConfig = { baseValue: 10.0 }, finAccumulator = { monthlyTotal: 1245 };
+  let globalTick = 0, timeOffset = 0;
+  let savedViews = [], activeMaxId = null;
+  let waveBuffer = new Array(80).fill(50), extractedSpikes = [];
   let isInteracting = false, dragStartX = 0, dragEndX = 0;
 
-  // SEBRA82 v5.5 Math Constants & LUTs
   const R_LOOKUP_F32 = new Float32Array(296);
   const PLANCK_L = 1.616255e-35, PHI = 1.61803398875;
   for (let n = 0; n < 296; n++) { R_LOOKUP_F32[n] = PLANCK_L * Math.pow(PHI, n); }
 
-  // 3D Breathing Atom Core State & Interaction
   const atomCanvas = document.getElementById('atom3DCanvas');
   const atomCtx = atomCanvas.getContext('2d');
   let atomRotX = 0.4, atomRotY = 0.0, atomZoom = 1.1, atomDepth = 1.0;
-  let isDraggingAtom = false, lastX = 0, lastY = 0, touchDist = 0;
+  let isDraggingAtom = false, lastX = 0, lastY = 0;
 
   let atomNodes = [];
-  for (let i = 0; i < 260; i++) {
-    let phi = Math.acos(-1 + (2 * i) / 260);
-    let theta = Math.sqrt(260 * Math.PI) * phi;
-    let shell = (i % 3 === 0) ? 85 : (i % 3 === 1 ? 60 : 38);
-    let r = shell + Math.sin(i * 5) * 7;
+  for (let i = 0; i < 220; i++) {
+    let phi = Math.acos(-1 + (2 * i) / 220);
+    let theta = Math.sqrt(220 * Math.PI) * phi;
+    let shell = (i % 3 === 0) ? 80 : (i % 3 === 1 ? 55 : 35);
+    let r = shell + Math.sin(i * 5) * 6;
     atomNodes.push({
       ox: r * Math.sin(phi) * Math.cos(theta),
       oy: r * Math.sin(phi) * Math.sin(theta),
       oz: r * Math.cos(phi),
       color: i % 3 === 0 ? '#00f3ff' : (i % 3 === 1 ? '#c084fc' : '#ff3344'),
-      glow: i % 3 === 0 ? 'rgba(0,243,255,0.8)' : (i % 3 === 1 ? 'rgba(192,132,252,0.8)' : 'rgba(255,51,68,0.8)'),
-      size: (i % 4 === 0) ? 3.5 : 2.2,
+      glow: i % 3 === 0 ? 'rgba(0,243,255,0.8)' : 'rgba(192,132,252,0.8)',
+      size: (i % 4 === 0) ? 3.2 : 2.0,
       pulseSpeed: 1.5 + (i % 5) * 0.3,
       pulseOffset: i * 0.1
     });
@@ -434,15 +424,8 @@
     }
   }
 
-  function updateControls() { updateSecureSimulation(); }
-  function updateFin() { finConfig.baseValue = parseFloat(document.getElementById('baseValueSlider').value); document.getElementById('baseValueReadout').innerText = finConfig.baseValue.toFixed(2); }
-  function linkSource() { alert("SharePoint / DB connection secured and active!"); }
-  function uploadFile(e) { alert(`File "${e.target.files[0]?.name}" uploaded & parsed successfully!`); }
-  function triggerExport() { alert("Raw dataset export generated."); }
-  function pinToSummary() { alert("Grasped noise points pinned to summary!"); }
-  function exportWordPPT() { alert("Word/PPT executive report package downloaded."); }
+  function updateControls() { updateWaveOptics(); }
 
-  // Fully Interactive 3D Atom Mouse & Touch Event Listeners
   atomCanvas.addEventListener('mousedown', (e) => { isDraggingAtom = true; lastX = e.clientX; lastY = e.clientY; e.preventDefault(); });
   window.addEventListener('mousemove', (e) => {
     if (!isDraggingAtom) return;
@@ -456,30 +439,9 @@
     atomZoom = Math.max(0.5, Math.min(3.5, atomZoom + e.deltaY * -0.0015));
   }, { passive: false });
 
-  atomCanvas.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) { isDraggingAtom = true; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; }
-    else if (e.touches.length === 2) { touchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); }
-    e.preventDefault();
-  }, { passive: false });
-
-  atomCanvas.addEventListener('touchmove', (e) => {
-    if (isDraggingAtom && e.touches.length === 1) {
-      atomRotY += (e.touches[0].clientX - lastX) * 0.015;
-      atomRotX -= (e.touches[0].clientY - lastY) * 0.015;
-      lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
-    } else if (e.touches.length === 2) {
-      let d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-      atomZoom = Math.max(0.5, Math.min(3.5, atomZoom * (d / touchDist)));
-      touchDist = d;
-    }
-    e.preventDefault();
-  }, { passive: false });
-  atomCanvas.addEventListener('touchend', () => { isDraggingAtom = false; });
-
   function renderVividAtom() {
     const w = atomCanvas.width, h = atomCanvas.height;
     atomCtx.fillStyle = '#000308'; atomCtx.fillRect(0, 0, w, h);
-
     let cx = w / 2, cy = h / 2;
     let breathFactor = 1.0 + Math.sin(timeOffset * 2.5) * 0.12;
 
@@ -487,119 +449,92 @@
       let pulse = 1.0 + Math.sin(globalTick * 0.04 * n.pulseSpeed + n.pulseOffset) * 0.08;
       let effectiveDepth = atomDepth * breathFactor * pulse;
       let x = n.ox * effectiveDepth, y = n.oy * effectiveDepth, z = n.oz * effectiveDepth;
-      
       let x1 = x * Math.cos(atomRotY) + z * Math.sin(atomRotY);
       let z1 = -x * Math.sin(atomRotY) + z * Math.cos(atomRotY);
-      let y1 = y;
-      let y2 = y1 * Math.cos(atomRotX) - z1 * Math.sin(atomRotX);
-      let z2 = y1 * Math.sin(atomRotX) + z1 * Math.cos(atomRotX);
-      let pers = 280 / (280 + z2);
+      let y2 = y * Math.cos(atomRotX) - z1 * Math.sin(atomRotX);
+      let z2 = y * Math.sin(atomRotX) + z1 * Math.cos(atomRotX);
+      let pers = 260 / (260 + z2);
       return { px: cx + x1 * pers * atomZoom, py: cy + y2 * pers * atomZoom, z: z2, color: n.color, glow: n.glow, size: n.size * pers * atomZoom * pulse };
     });
 
     nodes.sort((a, b) => a.z - b.z);
-
-    atomCtx.lineWidth = 0.5;
-    for (let i = 0; i < nodes.length; i += 2) {
-      for (let j = i + 1; j < nodes.length; j += 4) {
-        let d = Math.hypot(nodes[i].px - nodes[j].px, nodes[i].py - nodes[j].py);
-        if (d < 35) {
-          atomCtx.strokeStyle = nodes[i].color === '#00f3ff' ? 'rgba(0, 243, 255, 0.25)' : 'rgba(192, 132, 252, 0.25)';
-          atomCtx.beginPath(); atomCtx.moveTo(nodes[i].px, nodes[i].py); atomCtx.lineTo(nodes[j].px, nodes[j].py); atomCtx.stroke();
-        }
-      }
-    }
-
     nodes.forEach(n => {
-      atomCtx.shadowBlur = 10; atomCtx.shadowColor = n.glow;
+      atomCtx.shadowBlur = 8; atomCtx.shadowColor = n.glow;
       atomCtx.fillStyle = n.color;
       atomCtx.beginPath(); atomCtx.arc(n.px, n.py, Math.max(1.0, n.size), 0, Math.PI * 2); atomCtx.fill();
       atomCtx.shadowBlur = 0;
     });
   }
 
-  // SEBRA82 Wave Optics Simulation Canvas
-  function updateSecureSimulation() {
+  const waveCanvas = document.getElementById('secureSimCanvas');
+  const waveCtx = waveCanvas.getContext('2d');
+
+  waveCanvas.addEventListener('mousedown', (e) => { isInteracting = true; dragStartX = e.offsetX; });
+  waveCanvas.addEventListener('mousemove', (e) => { if (isInteracting) dragEndX = e.offsetX; });
+  waveCanvas.addEventListener('mouseup', (e) => {
+    if (!isInteracting) return;
+    isInteracting = false;
+    dragEndX = e.offsetX;
+    graspWaveSlice(Math.min(dragStartX, dragEndX), Math.max(dragStartX, dragEndX), waveCanvas.width);
+  });
+
+  function graspWaveSlice(startX, endX, totalW) {
+    const sIdx = Math.max(0, Math.floor((startX / totalW) * waveBuffer.length));
+    const eIdx = Math.min(waveBuffer.length, Math.floor((endX / totalW) * waveBuffer.length));
+    extractedSpikes = waveBuffer.slice(sIdx, eIdx);
+    if (extractedSpikes.length === 0) extractedSpikes = [60, 85, 92, 70, 88];
+    populateAnomalyTable(sIdx);
+  }
+
+  function populateAnomalyTable(startIndex) {
+    const tbody = document.getElementById('queryTableBody'); tbody.innerHTML = '';
+    extractedSpikes.forEach((v, idx) => {
+      let tr = document.createElement('tr');
+      let isAnom = v > parseFloat(document.getElementById('spikeThreshVal').innerText);
+      tr.innerHTML = `<td>#${startIndex + idx}</td><td>2026-08-${10+idx}</td><td>${isAnom ? '⚠️ Spike / Anomaly' : 'Standard Wave'}</td><td>$${(v * 10).toFixed(2)}</td>`;
+      tbody.appendChild(tr);
+    });
+    document.getElementById('suggestionBox').innerHTML = `💡 **Grasp Successful**: Extracted ${extractedSpikes.length} points into Anomaly Table.`;
+  }
+
+  function updateWaveOptics() {
     const scaleIdx = parseInt(document.getElementById('qubit-slider').value);
     const theta = parseFloat(document.getElementById('theta-slider').value);
     document.getElementById('secure-scale-val').innerText = scaleIdx;
     document.getElementById('theta-val').innerText = theta.toFixed(2) + " rad";
 
-    const canvas = document.getElementById('secureSimCanvas');
-    const ctx = canvas.getContext('2d');
-    const w = canvas.width, h = canvas.height;
-    ctx.fillStyle = '#04060a'; ctx.fillRect(0, 0, w, h);
+    const w = waveCanvas.width, h = waveCanvas.height;
+    waveCtx.fillStyle = '#04060a'; waveCtx.fillRect(0, 0, w, h);
 
     const r_n = R_LOOKUP_F32[scaleIdx];
-    ctx.strokeStyle = '#00f3ff'; ctx.lineWidth = 1.5; ctx.beginPath();
+    waveCtx.strokeStyle = '#00f3ff'; waveCtx.lineWidth = 1.8; waveCtx.beginPath();
     const d = 1e-4, a = 2e-5, L = 1.0;
 
+    waveBuffer = [];
     for (let xPos = 0; xPos < w; xPos++) {
       const raw_x = (xPos - w / 2) * 0.0001;
       const phase_interf = (Math.PI * d * raw_x) / (r_n * L + 1e-35) + theta;
       const phase_diffract = (Math.PI * a * raw_x) / (r_n * L + 1e-35);
-      const interf = Math.cos(phase_interf) ** 2;
+      const interf = Math.cos(phase_interf + timeOffset) ** 2;
       const diffract = phase_diffract === 0 ? 1.0 : (Math.sin(phase_diffract) / phase_diffract) ** 2;
-      const val = interf * diffract * 35.0;
-      const yPos = h - (val * (h / 70));
-      if (xPos === 0) ctx.moveTo(xPos, yPos); else ctx.lineTo(xPos, yPos);
+      const val = Math.min(95, Math.max(15, interf * diffract * 75.0 + Math.random() * 5));
+      waveBuffer.push(val);
+
+      const yPos = h - (val * (h / 100));
+      if (xPos === 0) waveCtx.moveTo(xPos, yPos); else waveCtx.lineTo(xPos, yPos);
     }
-    ctx.stroke();
+    waveCtx.stroke();
 
-    const c00 = Math.cos(theta / 2.0).toFixed(2);
-    const c01 = Math.sin(theta / 2.0).toFixed(2);
-    document.getElementById('quantum-state-output').innerText = `|&Psi;_final&gt; = ${c00}|00&gt; + ${c01}|01&gt;`;
-  }
-
-  function executePipeline() {
-    const btn = document.getElementById('exec-btn');
-    btn.disabled = true; btn.innerText = "Running AES-256-GCM Pipeline...";
-    const steps = ['step-1', 'step-2', 'step-3', 'step-4'];
-    steps.forEach((s, idx) => {
-      setTimeout(() => {
-        document.getElementById(s).classList.add('active');
-        if (idx > 0) document.getElementById(steps[idx - 1]).classList.replace('active', 'passed');
-      }, (idx + 1) * 200);
-    });
-    setTimeout(() => {
-      btn.disabled = false; btn.innerText = "Run Pipeline Execution";
-      steps.forEach(s => { const el = document.getElementById(s); el.classList.remove('active', 'passed'); });
-      document.getElementById('step-1').classList.add('active');
-      alert("SEBRA82 v5.5 Pipeline Execution Complete: Galois Tags Validated, O(1) Latency Secured.");
-    }, 1000);
-  }
-
-  // Noise Grasping Sub-Studio
-  const forkedCanvas = document.getElementById('forkedGraphCanvas'), forkedCtx = forkedCanvas.getContext('2d');
-  function graspNoiseSample() {
-    forkedCtx.fillStyle = '#010307'; forkedCtx.fillRect(0, 0, forkedCanvas.width, forkedCanvas.height);
-    forkedCtx.strokeStyle = '#c084fc'; forkedCtx.lineWidth = 2; forkedCtx.beginPath();
-    let sample = [45, 75, 60, 88, 52, 70, 82, 40, 65];
-    let st = forkedCanvas.width / sample.length;
-    sample.forEach((v, idx) => {
-      let x = idx * st + st/2, y = forkedCanvas.height - (v / 100) * forkedCanvas.height;
-      if (idx === 0) forkedCtx.moveTo(x, y); else forkedCtx.lineTo(x, y);
-    });
-    forkedCtx.stroke();
-    
-    const tbody = document.getElementById('queryTableBody'); tbody.innerHTML = '';
-    sample.forEach((v, idx) => {
-      let tr = document.createElement('tr');
-      tr.innerHTML = `<td>#${100+idx}</td><td>2026-08-${10+idx}</td><td>Anomaly (X)</td><td>$${(v * finConfig.baseValue).toFixed(2)}</td>`;
-      tbody.appendChild(tr);
-    });
-    document.getElementById('suggestionBox').innerHTML = `💡 **Noise Grasp Successful**: Pulled ${sample.length} points into Sub-Graph Studio.`;
+    let thresh = parseFloat(document.getElementById('spikeThreshVal').innerText);
+    let threshY = h - (thresh / 100) * h;
+    waveCtx.strokeStyle = '#ff3344'; waveCtx.lineWidth = 1; waveCtx.setLineDash([3,3]);
+    waveCtx.beginPath(); waveCtx.moveTo(0, threshY); waveCtx.lineTo(w, threshY); waveCtx.stroke(); waveCtx.setLineDash([]);
   }
 
   function masterLoop() {
-    globalTick++; timeOffset += 0.05;
+    globalTick++; timeOffset += 0.04;
     renderVividAtom();
-    updateSecureSimulation();
-
-    if (globalTick % 60 === 0 && forkedRoiData.length === 0) {
-      graspNoiseSample();
-    }
-
+    updateWaveOptics();
     requestAnimationFrame(masterLoop);
   }
 
@@ -608,4 +543,3 @@
 
 </body>
 </html>
-
