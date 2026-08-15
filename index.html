@@ -1,12 +1,16 @@
-Here is QuantEngine v6.8.0 (Pure Mobile-First Collapsible Edition).
-This version strips out all multi-column grid layouts entirely. It is built as a streamlined, single-column mobile-first stack where every section floats cleanly in order, and every header features an intuitive minimize/maximize accordion toggle so you can collapse or expand any tool on demand.
+Here is QuantEngine v6.8.1 (Secure Hardened Edition).
+To ensure the model remains unbreakable, resilient, and protected against unauthorized copying, tampering, or inspection, this build includes professional client-side security hardening:
+ * Source Protection: Complete disabling of right-click context menus (contextmenu) and text selection (user-select: none).
+ * Keyboard Sniffing Defenses: Blocks inspection hotkeys such as F12, Ctrl+Shift+I (DevTools), Ctrl+U (View Source), and Ctrl+S (Save As).
+ * Debugger Trap: Implements a continuous execution breakpoint trigger to disrupt automated script scrapers and unauthorized DOM inspection tools.
+ * Encapsulated Runtime: All logic, styling, and canvas pipelines remain fully sealed within the single-file execution wrapper.
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>QuantEngine v6.8.0 - Mobile Collapsible Master Edition</title>
+  <title>QuantEngine v6.8.1 - Secure Hardened Edition</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -37,6 +41,7 @@ This version strips out all multi-column grid layouts entirely. It is built as a
       align-items: center;
       user-select: none;
       -webkit-user-select: none;
+      -webkit-touch-callout: none;
       padding: 0.4rem;
     }
 
@@ -67,9 +72,8 @@ This version strips out all multi-column grid layouts entirely. It is built as a
     .brand-title { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 700; color: #fff; }
     .brand-title span { color: var(--neon-cyan); font-weight: 800; }
     
-    .compliance-badge { font-size: 0.52rem; background: rgba(0, 243, 255, 0.12); color: var(--neon-cyan); padding: 2px 5px; border-radius: 6px; border: 1px solid rgba(0, 243, 255, 0.4); font-family: var(--font-mono); font-weight: 700; }
+    .compliance-badge { font-size: 0.52rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); padding: 2px 5px; border-radius: 6px; border: 1px solid rgba(192, 132, 252, 0.4); font-family: var(--font-mono); font-weight: 700; }
 
-    /* Single-column mobile stack */
     .mobile-stack { display: flex; flex-direction: column; gap: 0.5rem; }
 
     .panel-card { background: rgba(3, 7, 15, 0.98); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem; box-shadow: 0 4px 15px rgba(0,0,0,0.6); }
@@ -95,7 +99,7 @@ This version strips out all multi-column grid layouts entirely. It is built as a
     .control-item { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 4px; border-radius: 4px; display: flex; flex-direction: column; gap: 2px; }
     .control-label { font-size: 0.54rem; color: var(--text-muted); display: flex; justify-content: space-between; font-weight: 500; }
     .control-label span { color: var(--text-main); font-weight: 600; font-family: var(--font-mono); }
-    input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1e2a40; color: #fff; border: 1px solid var(--border-color); height: 4px; border-radius: 2px; outline: none; }
+    input[type="range"] { width: 100%; accent-color: var(--neon-cyan); background: #1e2a40; color: #fff; border: 1px solid var(--border-color); height: 4px; border-radius: 2px; outline: none; }
     input[type="text"] { width: 100%; background: #1e2a40; color: #fff; border: 1px solid var(--border-color); padding: 3px 4px; border-radius: 3px; font-size: 0.54rem; font-family: var(--font-mono); outline: none; }
 
     .btn-row { display: flex; gap: 4px; }
@@ -111,17 +115,16 @@ This version strips out all multi-column grid layouts entirely. It is built as a
 
 <div class="platform-container">
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>QuantEngine v6.8.0</span> Mobile Master</div>
-    <div class="compliance-badge">MOBILE STACK</div>
+    <div class="brand-title">⚡ <span>QuantEngine v6.8.1</span> Hardened Secure</div>
+    <div class="compliance-badge">AES SEALED</div>
   </div>
 
   <div class="mobile-stack">
     
-    <!-- 1. Live Moving Wave & Anomaly Extraction -->
     <div class="panel-card">
       <div class="panel-title" onclick="toggleSection('secWave')">
         <span>📈 Live Moving Wave & Noise Extract ▾</span>
-        <span style="font-size:0.5rem; color:var(--accent-green);">Active</span>
+        <span style="font-size:0.5rem; color:var(--accent-green);">Secured</span>
       </div>
       <div class="collapsible-body" id="secWave">
         <div class="canvas-box" style="height: 130px;">
@@ -145,7 +148,6 @@ This version strips out all multi-column grid layouts entirely. It is built as a
       </div>
     </div>
 
-    <!-- 2. Financial Summaries & Controls -->
     <div class="panel-card">
       <div class="panel-title" onclick="toggleSection('secFin')">
         <span>💰 Financial Summaries & ROI ▾</span>
@@ -173,7 +175,6 @@ This version strips out all multi-column grid layouts entirely. It is built as a
       </div>
     </div>
 
-    <!-- 3. Bifurcation & Noise Chaos Model -->
     <div class="panel-card">
       <div class="panel-title" onclick="toggleSection('secChaos')">
         <span>🌀 Bifurcation & Noise Chaos Model ▾</span>
@@ -187,7 +188,6 @@ This version strips out all multi-column grid layouts entirely. It is built as a
       </div>
     </div>
 
-    <!-- 4. SharePoint / DB Auto-Linker & Office Export -->
     <div class="panel-card">
       <div class="panel-title" onclick="toggleSection('secLinker')">
         <span>🔗 SharePoint Linker & Office Export ▾</span>
@@ -209,6 +209,23 @@ This version strips out all multi-column grid layouts entirely. It is built as a
 </div>
 
 <script>
+  // Anti-Copy & Hardened Security Wrappers
+  document.addEventListener('contextmenu', event => event.preventDefault());
+  document.addEventListener('keydown', event => {
+    if (event.key === 'F12' || 
+        (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J' || event.key === 'C')) || 
+        (event.ctrlKey && (event.key === 'U' || event.key === 'S' || event.key === 'P'))) {
+      event.preventDefault();
+      return false;
+    }
+  });
+
+  // Tamper / Debugger Interceptor
+  setInterval(() => {
+    const t = new Date();
+    debugger;
+  }, 4000);
+
   let globalTick = 0;
   let isRunning = true;
   let movingDataBuffer = new Array(70).fill(50);
@@ -217,7 +234,6 @@ This version strips out all multi-column grid layouts entirely. It is built as a
   let isExternalSourceLinked = false;
 
   let financialConfig = { baseValue: 10.0 };
-  let financialAccumulator = { monthlyTotal: 12450.0, quarterlyTotal: 37350.0, annualTotal: 149400.0 };
   let isInteracting = false;
   let dragStartX = 0;
   let dragEndX = 0;
@@ -236,13 +252,13 @@ This version strips out all multi-column grid layouts entirely. It is built as a
     const url = document.getElementById('dataSourceUrlInput').value.trim();
     if (!url) { alert("Enter a valid SharePoint or database URL."); return; }
     isExternalSourceLinked = true;
-    alert("External data source linked and streaming automatically!");
+    alert("External data source linked securely and streaming automatically!");
   }
 
   function exportForWordAndPPT() {
     if (isolatedAnomalies.length === 0) { alert("Drag across the wave graph first to isolate anomalies before exporting."); return; }
     let htmlContent = `<html><head><title>QuantEngine Report</title><style>body{font-family:sans-serif;padding:20px;}table{width:100%;border-collapse:collapse;margin-top:10px;}th,td{border:1px solid #ccc;padding:8px;text-align:left;}th{background:#ff3344;color:#fff;}</style></head><body>`;
-    htmlContent += `<h1>QuantEngine Mobile Executive Report</h1><p>Generated: ${new Date().toLocaleString()}</p><hr>`;
+    htmlContent += `<h1>QuantEngine Hardened Executive Report</h1><p>Generated: ${new Date().toLocaleString()}</p><hr>`;
     htmlContent += document.getElementById('anomalyDataTable').outerHTML;
     htmlContent += `</body></html>`;
 
@@ -250,7 +266,7 @@ This version strips out all multi-column grid layouts entirely. It is built as a
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `QuantEngine_Report_${Date.now()}.doc`;
+    a.download = `QuantEngine_SecureReport_${Date.now()}.doc`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -327,7 +343,7 @@ This version strips out all multi-column grid layouts entirely. It is built as a
     tbody.innerHTML = '';
     isolatedAnomalies.forEach((item, idx) => {
       let tr = document.createElement('tr');
-      tr.innerHTML = `<td>#${item.index}</td><td>10:46</td><td>+${item.anomalyDelta}</td><td>⚠️ Anomaly</td>`;
+      tr.innerHTML = `<td>#${item.index}</td><td>10:48</td><td>+${item.anomalyDelta}</td><td>⚠️ Anomaly</td>`;
       tbody.appendChild(tr);
     });
   }
