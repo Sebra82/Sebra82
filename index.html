@@ -126,6 +126,27 @@
     .chat-msg-user { color: var(--neon-cyan); text-align: right; }
     .tutor-box { background: rgba(0, 243, 255, 0.06); border-left: 2px solid var(--neon-cyan); padding: 4px 6px; margin-top: 2px; font-size: 0.44rem; color: #fff; }
 
+    /* Predictive Next-Word Prompt Bar */
+    .predictive-prompt-bar {
+      display: flex;
+      gap: 3px;
+      align-items: center;
+      overflow-x: auto;
+      padding: 1px 0;
+    }
+    .predictive-chip {
+      font-size: 0.4rem;
+      font-family: var(--font-mono);
+      background: rgba(0, 243, 255, 0.12);
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      padding: 2px 5px;
+      border-radius: 3px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .predictive-chip:hover { background: rgba(0, 243, 255, 0.3); color: #fff; }
+
     /* Inline Ghost Text Input Wrapper */
     .ai-chat-input-row { display: flex; gap: 3px; position: relative; }
     .input-ghost-container {
@@ -750,14 +771,15 @@
     setTimeout(() => { tutor.style.display = 'none'; }, 10000);
   }
 
-  // --- Inline Ghost Text Prediction Engine ---
+  // --- Inline Ghost Text Prediction Engine (Auto-accept on typing next letter or Tab) ---
   let currentPrediction = "";
 
   function getPredictionMatch(val) {
-    const text = val.trim().toLowerCase();
+    const text = val.toLowerCase();
     if (!text) return "";
     
     const dictionary = [
+      "how to navigate model",
       "how to configure atom matrix",
       "how to run quantum simulation",
       "how to analyze noise graph spikes",
@@ -787,8 +809,7 @@
     currentPrediction = getPredictionMatch(val);
     
     const overlay = document.getElementById('ghostOverlay');
-    // Align ghost overlay text with user input length
-    overlay.innerHTML = escapeHtml(val) + `<span style="color: rgba(0, 243, 255, 0.45); font-weight: bold;">${escapeHtml(currentPrediction)}</span>`;
+    overlay.innerHTML = escapeHtml(val) + `<span style="color: rgba(139, 148, 158, 0.55);">${escapeHtml(currentPrediction)}</span>`;
   }
 
   function handleGhostKeyDown(e) {
@@ -799,14 +820,14 @@
       currentPrediction = "";
       document.getElementById('ghostOverlay').innerHTML = escapeHtml(input.value);
     } else if (currentPrediction.length > 0 && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-      // If user types the exact next letter of the prediction, accept it automatically!
+      // Automatically accept and consume the typed letter if it matches the next predicted character
       const nextExpectedLetter = currentPrediction[0].toLowerCase();
       if (e.key.toLowerCase() === nextExpectedLetter) {
         e.preventDefault();
         input.value += currentPrediction[0];
         currentPrediction = currentPrediction.slice(1);
         const overlay = document.getElementById('ghostOverlay');
-        overlay.innerHTML = escapeHtml(input.value) + `<span style="color: rgba(0, 243, 255, 0.45); font-weight: bold;">${escapeHtml(currentPrediction)}</span>`;
+        overlay.innerHTML = escapeHtml(input.value) + `<span style="color: rgba(139, 148, 158, 0.55);">${escapeHtml(currentPrediction)}</span>`;
       }
     }
   }
