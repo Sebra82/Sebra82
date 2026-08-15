@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v5.6 - Fully Interactive Master Suite</title>
+  <title>SEBRA82 v5.6 - Fully Interactive 3D Atom Master Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -436,12 +436,12 @@
     }
   }
 
-  // Fully Interactive Mouse & Touch Bindings for Atom Canvas
+  // Interactive Mouse & Touch Bindings attached directly to window/document for full drag tracking
   atomCanvas.addEventListener('mousedown', (e) => {
     isDraggingAtom = true;
     lastX = e.clientX;
     lastY = e.clientY;
-    e.stopPropagation();
+    e.preventDefault();
   });
 
   window.addEventListener('mousemove', (e) => {
@@ -467,7 +467,7 @@
     } else if (e.touches.length === 2) {
       touchStartDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
     }
-    e.stopPropagation();
+    e.preventDefault();
   }, { passive: false });
 
   atomCanvas.addEventListener('touchmove', (e) => {
@@ -481,7 +481,7 @@
       atomZoom = Math.max(0.4, Math.min(5.0, atomZoom * (d / touchStartDist)));
       touchStartDist = d;
     }
-    e.stopPropagation();
+    e.preventDefault();
   }, { passive: false });
 
   atomCanvas.addEventListener('touchend', () => { isDraggingAtom = false; });
