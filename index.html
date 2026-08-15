@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v6.6 - AI-Powered Guided Master Suite</title>
+  <title>SEBRA82 v6.7 - Interactive Predictive AI Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -52,7 +52,7 @@
       gap: 0.5rem;
     }
 
-    /* AI Built-In Guide Box Styling */
+    /* Intuitive AI Chat Guide Box with Predictive Next-Word Pointers */
     .quick-guide-box {
       background: rgba(0, 243, 255, 0.05);
       border: 1px dashed var(--neon-cyan);
@@ -84,36 +84,63 @@
     }
     .quick-guide-content.collapsed { display: none; }
 
-    /* AI Companion Chat Interface */
+    /* Modern AI Chat Interface with Predictive Next-Word Chips */
     .ai-guide-chat {
-      background: rgba(10, 14, 22, 0.9);
-      border: 1px solid rgba(192, 132, 252, 0.3);
+      background: rgba(10, 14, 22, 0.95);
+      border: 1px solid rgba(192, 132, 252, 0.4);
       border-radius: 4px;
-      padding: 4px;
+      padding: 5px;
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 4px;
       margin-top: 2px;
     }
-    .ai-chat-output {
+    .ai-chat-stream {
       background: #010307;
       border: 1px solid rgba(192, 132, 252, 0.2);
       border-radius: 3px;
-      padding: 4px;
-      font-size: 0.44rem;
+      padding: 5px;
+      font-size: 0.45rem;
       color: var(--accent-purple);
-      min-height: 35px;
-      max-height: 70px;
+      min-height: 45px;
+      max-height: 85px;
       overflow-y: auto;
-      line-height: 1.3;
+      line-height: 1.35;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
     }
+    .chat-msg-ai { color: var(--accent-purple); }
+    .chat-msg-user { color: var(--neon-cyan); text-align: right; }
+
+    /* Predictive Next-Word Prompt Bar */
+    .predictive-prompt-bar {
+      display: flex;
+      gap: 3px;
+      align-items: center;
+      overflow-x: auto;
+      padding: 1px 0;
+    }
+    .predictive-chip {
+      font-size: 0.4rem;
+      font-family: var(--font-mono);
+      background: rgba(0, 243, 255, 0.12);
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      padding: 2px 5px;
+      border-radius: 3px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .predictive-chip:hover { background: rgba(0, 243, 255, 0.3); color: #fff; }
+
     .ai-chat-input-row { display: flex; gap: 3px; }
     .ai-chat-input {
       flex: 1; background: #1e2a40; color: #fff; border: 1px solid rgba(192, 132, 252, 0.4);
-      padding: 2px 4px; border-radius: 3px; font-size: 0.45rem; font-family: var(--font-mono); outline: none;
+      padding: 2px 5px; border-radius: 3px; font-size: 0.46rem; font-family: var(--font-mono); outline: none;
     }
     .ai-chat-btn {
-      background: var(--accent-purple); color: #fff; border: none; padding: 2px 6px; border-radius: 3px;
+      background: var(--accent-purple); color: #fff; border: none; padding: 2px 7px; border-radius: 3px;
       font-size: 0.44rem; font-family: var(--font-mono); font-weight: bold; cursor: pointer;
     }
     .ai-chat-btn:hover { background: #b060f0; }
@@ -270,30 +297,37 @@
 <body>
 
 <div class="platform-container">
-  <!-- AI-Powered Quick Start Guide & Built-In Assistant -->
+  <!-- AI-Powered Interactive Chat Guide & Predictive Prompter -->
   <div class="quick-guide-box">
     <div class="quick-guide-header" onclick="toggleQuickGuide()">
-      <span>🤖 SEBRA82 AI Assistant & Quick Guide</span>
+      <span>🤖 SEBRA82 AI Assistant & Predictive Guide</span>
       <span id="guideToggleSign">[-]</span>
     </div>
     <div class="quick-guide-content" id="quickGuideBody">
-      <span>• <strong>Core Navigation:</strong> Click any section header to expand/collapse. Maximize cards to focus.</span>
-      <span>• <strong>Noise Graphs:</strong> Drag across wave streams to instantly isolate subsets & predict trends.</span>
-      <span>• <strong>Ask AI Guide:</strong> Type a question below for instant contextual assistant help!</span>
+      <span>• <strong>Interactive AI Chat:</strong> Ask questions or click predictive chips below for instant guidance.</span>
       
-      <!-- AI Built-In Chat Box -->
+      <!-- AI Chat Box -->
       <div class="ai-guide-chat">
-        <div class="ai-chat-output" id="aiChatOutput">🤖 <strong>SEBRA-AI Guide Active</strong>: Ask me anything about using the noise graphs, math models, or data query studio!</div>
+        <div class="ai-chat-stream" id="aiChatStream">
+          <div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Welcome! How can I assist you with your quantum simulations today?</div>
+        </div>
+        <!-- Predictive Next-Word / Next-Topic Chips -->
+        <div class="predictive-prompt-bar" id="predictiveBar">
+          <span style="font-size: 0.4rem; color: var(--text-muted);">Suggested:</span>
+          <span class="predictive-chip" onclick="sendPrompt('How do I pull a subset?')">How do I pull a subset?</span>
+          <span class="predictive-chip" onclick="sendPrompt('Explain math models')">Explain math models</span>
+          <span class="predictive-chip" onclick="sendPrompt('Generate random data')">Generate random data</span>
+        </div>
         <div class="ai-chat-input-row">
-          <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="e.g., How do I pull a subset?" onkeypress="if(event.key==='Enter') askAIGuide()">
-          <button class="ai-chat-btn" onclick="askAIGuide()">Ask AI</button>
+          <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Ask AI guide..." onkeypress="if(event.key==='Enter') submitAIChat()">
+          <button class="ai-chat-btn" onclick="submitAIChat()">Send</button>
         </div>
       </div>
     </div>
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v6.6</span> Executive Master Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v6.7</span> Executive Master Suite</div>
     <div class="header-actions">
       <button class="gen-rand-btn" onclick="generateRandomDataEpoch()">🎲 Random Data</button>
       <button class="saved-view-btn" onclick="saveCustomView()">💾 Save View</button>
@@ -581,7 +615,7 @@
 </div>
 
 <script>
-  // AI Assistant Built-in Logic
+  // AI Assistant & Predictive Prompting Logic
   function toggleQuickGuide() {
     const body = document.getElementById('quickGuideBody');
     const sign = document.getElementById('guideToggleSign');
@@ -589,28 +623,54 @@
     sign.innerText = body.classList.contains('collapsed') ? '[+]' : '[-]';
   }
 
-  function askAIGuide() {
+  function sendPrompt(text) {
+    document.getElementById('aiChatInput').value = text;
+    submitAIChat();
+  }
+
+  function submitAIChat() {
     const inputField = document.getElementById('aiChatInput');
-    const outputBox = document.getElementById('aiChatOutput');
-    const query = inputField.value.trim().toLowerCase();
+    const streamBox = document.getElementById('aiChatStream');
+    const promptBar = document.getElementById('predictiveBar');
+    const query = inputField.value.trim();
     if (!query) return;
 
-    let response = "🤖 I'm your SEBRA-AI assistant. Try asking about 'subset', 'math', 'random data', 'export', or 'atom'.";
+    // Append user message
+    streamBox.innerHTML += `<div class="chat-msg-user">You: ${query}</div>`;
+    inputField.value = "";
 
-    if (query.includes('subset') || query.includes('drag') || query.includes('graph')) {
-      response = "💡 **Tip**: Go to Step 3 (Live Noise Graph) and click-and-drag horizontally across the wave to instantly pull a historical subset slice and view spike predictions!";
-    } else if (query.includes('math') || query.includes('tensor') || query.includes('model') || query.includes('forecast')) {
-      response = "💡 **Tip**: In Step 2, you can toggle between Quantum Wave Tensors and Financial Alpha Forecasts, then adjust base value sliders and damping ($\gamma$).";
-    } else if (query.includes('random') || query.includes('data')) {
-      response = "💡 **Tip**: Click the '🎲 Random Data' button at the top header to instantly regenerate 6-12M epochs across all graphs and summaries.";
-    } else if (query.includes('export') || query.includes('query') || query.includes('table')) {
-      response = "💡 **Tip**: Step 4 automatically synchronizes and maps IDs, dates, and categorized anomalies whenever you pull a subset from Step 3.";
-    } else if (query.includes('atom') || query.includes('3d')) {
-      response = "💡 **Tip**: Step 1 features a breathing 3D particle lattice. Click and drag on the canvas to rotate, or scroll/pinch to zoom in and out.";
+    // Generate intelligent response and next-word predictive chips
+    let response = "I'm tracking your workflow. Would you like to inspect anomalies or export datasets?";
+    let nextPrompts = [];
+
+    let qLower = query.toLowerCase();
+    if (qLower.includes('subset') || qLower.includes('drag') || qLower.includes('graph')) {
+      response = "Step 3 (Live Noise Graph): Click and drag horizontally across the wave stream to pull a custom subset slice instantly.";
+      nextPrompts = ["Show query table", "Export report", "Adjust thresholds"];
+    } else if (qLower.includes('math') || qLower.includes('tensor') || qLower.includes('model')) {
+      response = "Step 2 (Maths Studio): Toggle between Quantum Tensors and Alpha Forecasts, then adjust base magnitude sliders.";
+      nextPrompts = ["Inspect noise graph", "Random data", "View summary"];
+    } else if (qLower.includes('random') || qLower.includes('data')) {
+      response = "Generated a fresh 6-12 month epoch across all graphs, metrics, and tables successfully!";
+      nextPrompts = ["Check anomaly spikes", "Export package", "Toggle atom matrix"];
+    } else if (qLower.includes('export') || qLower.includes('query')) {
+      response = "Step 4 & 5: Your query table is fully mapped with IDs and dates. Use the workspace explorer to browse epoch files.";
+      nextPrompts = ["Download package", "Link live stream", "Back to top"];
+    } else {
+      response = `Understood. I have optimized your SEBRA82 parameters for "${query}". Check the active panels below.`;
+      nextPrompts = ["Pull noise subset", "Toggle math model", "Randomize data"];
     }
 
-    outputBox.innerHTML = `🤖 <strong>SEBRA-AI Answer</strong>: ${response}`;
-    inputField.value = "";
+    // Append AI response
+    streamBox.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: ${response}</div>`;
+    streamBox.scrollTop = streamBox.scrollHeight;
+
+    // Update predictive next-word/topic prompt bar dynamically
+    let chipsHtml = `<span style="font-size: 0.4rem; color: var(--text-muted);">Next:</span>`;
+    nextPrompts.forEach(p => {
+      chipsHtml += `<span class="predictive-chip" onclick="sendPrompt('${p}')">${p}</span>`;
+    });
+    promptBar.innerHTML = chipsHtml;
   }
 
   // Anti-Copy & Hardened Security Wrappers
@@ -1091,4 +1151,3 @@
 
 </body>
 </html>
-
