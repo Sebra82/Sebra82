@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v6.7 - Interactive Predictive AI Suite</title>
+  <title>SEBRA82 v6.8 - Smart AI Navigator Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -52,7 +52,7 @@
       gap: 0.5rem;
     }
 
-    /* Intuitive AI Chat Guide Box with Predictive Next-Word Pointers */
+    /* Smart AI Navigator Guide Box */
     .quick-guide-box {
       background: rgba(0, 243, 255, 0.05);
       border: 1px dashed var(--neon-cyan);
@@ -84,7 +84,7 @@
     }
     .quick-guide-content.collapsed { display: none; }
 
-    /* Modern AI Chat Interface with Predictive Next-Word Chips */
+    /* AI Chat & Smart Navigator Interface */
     .ai-guide-chat {
       background: rgba(10, 14, 22, 0.95);
       border: 1px solid rgba(192, 132, 252, 0.4);
@@ -179,7 +179,7 @@
 
     .mobile-stack { display: flex; flex-direction: column; gap: 0.45rem; flex: 1; position: relative; }
 
-    /* Base Panel Card with Subtle Differentiated Color Tints */
+    /* Base Panel Card with Subtle Differentiated Color Tints & Pulse Highlight */
     .panel-card {
       background: rgba(5, 9, 18, 0.98);
       border-radius: 8px;
@@ -191,7 +191,15 @@
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Distinct Differentiated Color Shades for Each Section */
+    @keyframes navPulse {
+      0% { border-color: var(--neon-cyan); box-shadow: 0 0 25px var(--neon-cyan); }
+      50% { border-color: #fff; box-shadow: 0 0 45px var(--neon-cyan); }
+      100% { border-color: var(--neon-cyan); box-shadow: 0 0 25px var(--neon-cyan); }
+    }
+    .panel-card.nav-highlight {
+      animation: navPulse 1s ease-in-out 3;
+    }
+
     #cardAtom { border-left: 3px solid #00f3ff; background: linear-gradient(135deg, rgba(0, 243, 255, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); }
     #cardFin { border-left: 3px solid #c084fc; background: linear-gradient(135deg, rgba(192, 132, 252, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); }
     #cardWave { border-left: 3px solid #7ee787; background: linear-gradient(135deg, rgba(126, 231, 135, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); }
@@ -297,37 +305,39 @@
 <body>
 
 <div class="platform-container">
-  <!-- AI-Powered Interactive Chat Guide & Predictive Prompter -->
+  <!-- AI-Powered Smart Navigator & Chat Guide -->
   <div class="quick-guide-box">
     <div class="quick-guide-header" onclick="toggleQuickGuide()">
-      <span>🤖 SEBRA82 AI Assistant & Predictive Guide</span>
+      <span>🤖 SEBRA82 Smart AI Navigator</span>
       <span id="guideToggleSign">[-]</span>
     </div>
     <div class="quick-guide-content" id="quickGuideBody">
-      <span>• <strong>Interactive AI Chat:</strong> Ask questions or click predictive chips below for instant guidance.</span>
+      <span>• <strong>Smart Navigation:</strong> Ask me to take you anywhere, and I will auto-expand and highlight that section!</span>
       
       <!-- AI Chat Box -->
       <div class="ai-guide-chat">
         <div class="ai-chat-stream" id="aiChatStream">
-          <div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Welcome! How can I assist you with your quantum simulations today?</div>
+          <div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Hello! Tell me what you'd like to do, and I'll navigate you right to it.</div>
         </div>
         <!-- Predictive Next-Word / Next-Topic Chips -->
         <div class="predictive-prompt-bar" id="predictiveBar">
-          <span style="font-size: 0.4rem; color: var(--text-muted);">Suggested:</span>
-          <span class="predictive-chip" onclick="sendPrompt('How do I pull a subset?')">How do I pull a subset?</span>
-          <span class="predictive-chip" onclick="sendPrompt('Explain math models')">Explain math models</span>
-          <span class="predictive-chip" onclick="sendPrompt('Generate random data')">Generate random data</span>
+          <span style="font-size: 0.4rem; color: var(--text-muted);">Jump to:</span>
+          <span class="predictive-chip" onclick="sendPrompt('Show me the 3D atom matrix')">Show Atom Matrix</span>
+          <span class="predictive-chip" onclick="sendPrompt('Open math studio')">Open Math Studio</span>
+          <span class="predictive-chip" onclick="sendPrompt('Go to noise graph')">Go to Noise Graph</span>
+          <span class="predictive-chip" onclick="sendPrompt('View query table')">View Query Table</span>
+          <span class="predictive-chip" onclick="sendPrompt('Open workspace explorer')">Workspace Explorer</span>
         </div>
         <div class="ai-chat-input-row">
-          <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Ask AI guide..." onkeypress="if(event.key==='Enter') submitAIChat()">
-          <button class="ai-chat-btn" onclick="submitAIChat()">Send</button>
+          <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Where would you like to go?" onkeypress="if(event.key==='Enter') submitAIChat()">
+          <button class="ai-chat-btn" onclick="submitAIChat()">Go</button>
         </div>
       </div>
     </div>
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v6.7</span> Executive Master Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v6.8</span> Executive Master Suite</div>
     <div class="header-actions">
       <button class="gen-rand-btn" onclick="generateRandomDataEpoch()">🎲 Random Data</button>
       <button class="saved-view-btn" onclick="saveCustomView()">💾 Save View</button>
@@ -615,7 +625,7 @@
 </div>
 
 <script>
-  // AI Assistant & Predictive Prompting Logic
+  // AI Smart Navigator & Predictive Prompting Logic
   function toggleQuickGuide() {
     const body = document.getElementById('quickGuideBody');
     const sign = document.getElementById('guideToggleSign');
@@ -628,6 +638,21 @@
     submitAIChat();
   }
 
+  function scrollToSection(cardId, sectionId) {
+    // Uncollapse target section
+    const sec = document.getElementById(sectionId);
+    if (sec && sec.classList.contains('collapsed')) {
+      sec.classList.remove('collapsed');
+    }
+    // Scroll and pulse highlight
+    const card = document.getElementById(cardId);
+    if (card) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.classList.add('nav-highlight');
+      setTimeout(() => card.classList.remove('nav-highlight'), 3000);
+    }
+  }
+
   function submitAIChat() {
     const inputField = document.getElementById('aiChatInput');
     const streamBox = document.getElementById('aiChatStream');
@@ -635,38 +660,43 @@
     const query = inputField.value.trim();
     if (!query) return;
 
-    // Append user message
     streamBox.innerHTML += `<div class="chat-msg-user">You: ${query}</div>`;
     inputField.value = "";
 
-    // Generate intelligent response and next-word predictive chips
-    let response = "I'm tracking your workflow. Would you like to inspect anomalies or export datasets?";
+    let response = "I'm navigating you to the requested suite.";
     let nextPrompts = [];
-
     let qLower = query.toLowerCase();
-    if (qLower.includes('subset') || qLower.includes('drag') || qLower.includes('graph')) {
-      response = "Step 3 (Live Noise Graph): Click and drag horizontally across the wave stream to pull a custom subset slice instantly.";
-      nextPrompts = ["Show query table", "Export report", "Adjust thresholds"];
-    } else if (qLower.includes('math') || qLower.includes('tensor') || qLower.includes('model')) {
-      response = "Step 2 (Maths Studio): Toggle between Quantum Tensors and Alpha Forecasts, then adjust base magnitude sliders.";
-      nextPrompts = ["Inspect noise graph", "Random data", "View summary"];
-    } else if (qLower.includes('random') || qLower.includes('data')) {
-      response = "Generated a fresh 6-12 month epoch across all graphs, metrics, and tables successfully!";
-      nextPrompts = ["Check anomaly spikes", "Export package", "Toggle atom matrix"];
-    } else if (qLower.includes('export') || qLower.includes('query')) {
-      response = "Step 4 & 5: Your query table is fully mapped with IDs and dates. Use the workspace explorer to browse epoch files.";
-      nextPrompts = ["Download package", "Link live stream", "Back to top"];
+
+    if (qLower.includes('atom') || qLower.includes('3d') || qLower.includes('matrix')) {
+      response = "Navigating to Step 1: Quantum Atom Matrix.";
+      scrollToSection('cardAtom', 'secAtom');
+      nextPrompts = ["Open math studio", "Go to noise graph", "Executive summary"];
+    } else if (qLower.includes('math') || qLower.includes('tensor') || qLower.includes('model') || qLower.includes('forecast')) {
+      response = "Navigating to Step 2: Maths & Modeling Studio.";
+      scrollToSection('cardFin', 'secFin');
+      nextPrompts = ["Pull noise subset", "Random data", "View table"];
+    } else if (qLower.includes('noise') || qLower.includes('graph') || qLower.includes('subset') || qLower.includes('stream')) {
+      response = "Navigating to Step 3: Live Noise Graph & Streaming Studio.";
+      scrollToSection('cardWave', 'secWave');
+      nextPrompts = ["View query table", "Export report", "Atom matrix"];
+    } else if (qLower.includes('table') || qLower.includes('query') || qLower.includes('export')) {
+      response = "Navigating to Step 4: Export Query & Table Studio.";
+      scrollToSection('cardQuery', 'secQuery');
+      nextPrompts = ["Workspace explorer", "Noise graph", "Random data"];
+    } else if (qLower.includes('explorer') || qLower.includes('folder') || qLower.includes('upload') || qLower.includes('workspace')) {
+      response = "Navigating to Step 5: Workspace Folder Explorer.";
+      scrollToSection('cardTools', 'secTools');
+      nextPrompts = ["Executive summary", "Math studio", "Atom matrix"];
     } else {
-      response = `Understood. I have optimized your SEBRA82 parameters for "${query}". Check the active panels below.`;
-      nextPrompts = ["Pull noise subset", "Toggle math model", "Randomize data"];
+      response = `Navigated to Executive Summary dashboard based on query "${query}".`;
+      scrollToSection('cardSummary', 'secSummary');
+      nextPrompts = ["Open math studio", "Noise graph", "Workspace explorer"];
     }
 
-    // Append AI response
     streamBox.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: ${response}</div>`;
     streamBox.scrollTop = streamBox.scrollHeight;
 
-    // Update predictive next-word/topic prompt bar dynamically
-    let chipsHtml = `<span style="font-size: 0.4rem; color: var(--text-muted);">Next:</span>`;
+    let chipsHtml = `<span style="font-size: 0.4rem; color: var(--text-muted);">Jump to:</span>`;
     nextPrompts.forEach(p => {
       chipsHtml += `<span class="predictive-chip" onclick="sendPrompt('${p}')">${p}</span>`;
     });
@@ -763,7 +793,7 @@
   function resetStandardView() {
     activeMaxId = null;
     document.querySelectorAll('.panel-card').forEach(c => {
-      c.classList.remove('fluid-maximized', 'minimized-dock-item');
+      c.classList.remove('fluid-maximized', 'minimized-dock-item', 'nav-highlight');
       c.querySelector('.collapsible-body').classList.add('collapsed');
       c.querySelector('.pin-btn').innerText = "⚡ Maximize";
     });
