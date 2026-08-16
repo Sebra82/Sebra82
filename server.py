@@ -7,6 +7,10 @@ import os
 import statistics
 import http
 import urllib.parse
+import time
+import base64
+import hashlib
+from cryptography.fernet import Fernet
 
 class SebraAtomicMatrixEngine:
     """
@@ -57,6 +61,16 @@ class SebraAtomicMatrixEngine:
 SEBRA_ATOMIC_ENGINE = SebraAtomicMatrixEngine()
 R_N = SEBRA_ATOMIC_ENGINE.R_MATRIX_CACHE[64]
 
+# Rate Limiting In-Memory Store
+connection_attempts = {}
+RATE_LIMIT_WINDOW = 60  # Seconds window
+MAX_CONNECTIONS = 10    # Max connection attempts per window per IP
+
+def get_fernet_from_hash(hash_str):
+    """Derives a deterministic 32-byte encryption key from the client's auth hash."""
+    digest = hashlib.sha256(hash_str.encode('utf-8')).digest()
+    return Fernet(base64.urlsafe_b64encode(digest))
+
 def calculate_crypto_offset(hash_hex):
     if not hash_hex or len(hash_hex) != 64: return math.pi
     left_half, right_half = hash_hex[:32], hash_hex[32:]
@@ -89,17 +103,28 @@ def generate_proprietary_matrix(global_tick, time_offset):
 
 async def process_request(path, request_headers):
     """
-    Intercepts the initial HTTP connection request. 
-    Rejects unauthorized clients with HTTP 401 before upgrading to WebSocket.
+    HTTP Handshake Interceptor: Enforces IP Rate Limiting and Token Validation
+    before allocating memory for the WebSocket connection.
     """
+    # Extract client IP (Respecting Render proxy headers)
+    client_ip = request_headers.get("X-Forwarded-For", "127.0.0.1").split(",")[0]
+    current_time = time.time()
+    
+    # Prune stale timestamps
+    connection_attempts[client_ip] = [t for t in connection_attempts.get(client_ip, []) if current_time - t < RATE_LIMIT_WINDOW]
+    
+    if len(connection_attempts[client_ip]) >= MAX_CONNECTIONS:
+        return (http.HTTPStatus.TOO_MANY_REQUESTS, [], b"Rate limit exceeded. Connection dropped.\n")
+        
+    connection_attempts[client_ip].append(current_time)
+    
+    # Parse query parameters
     query = urllib.parse.urlparse(path).query
     params = urllib.parse.parse_qs(query)
     
-    # Check if the connection request includes our required hash parameter
     if "hash" not in params:
         return (http.HTTPStatus.UNAUTHORIZED, [], b"Unauthorized: Missing Handshake Token\n")
-    
-    # Allow the handshake to proceed safely
+        
     return None
 
 async def sebra_engine(websocket):
@@ -110,6 +135,9 @@ async def sebra_engine(websocket):
         
         key = params.get("hash", [""])[0]
         is_decoy = params.get("is_decoy", ["false"])[0].lower() == "true"
+        
+        # Initialize encryption cipher bound to this session's hash token
+        fernet = get_fernet_from_hash(key)
         
         session_crypto_offset = 0 if is_decoy else calculate_crypto_offset(key)
         
@@ -159,7 +187,11 @@ async def sebra_engine(websocket):
                 "matrix": atomic_matrix
             }
             
-            await websocket.send(json.dumps(packet))
+            # Serialize and encrypt payload prior to transmission
+            raw_payload = json.dumps(packet).encode('utf-8')
+            encrypted_payload = fernet.encrypt(raw_payload)
+            
+            await websocket.send(encrypted_payload)
             await asyncio.sleep(0.016)
             
     except websockets.exceptions.ConnectionClosed:
@@ -167,7 +199,6 @@ async def sebra_engine(websocket):
 
 async def main():
     port = int(os.environ.get("PORT", 8767))
-    # Pass process_request into websockets.serve to intercept connections at the protocol layer
     server = await websockets.serve(sebra_engine, "0.0.0.0", port, process_request=process_request)
     print(f"⚡ SEBRA82 Vault Engine Online on port {port}")
     await server.wait_closed()
