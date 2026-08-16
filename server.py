@@ -24,6 +24,29 @@ def calculate_crypto_offset(hash_hex):
         offset += ord(left_half[i]) ^ ord(mirrored_right[i])
     return (offset % 256) / 256.0
 
+def generate_noise_structure(global_tick, time_offset):
+    """Calculates 3D coordinates for the quantum noise structure."""
+    points = []
+    # Generating a dynamic 50-node subset per tick for payload efficiency
+    for i in range(50): 
+        phi = math.acos(-1 + (2 * i) / 50)
+        theta = math.sqrt(50 * math.pi) * phi
+        
+        # Base spherical lattice 
+        r = 90 + math.sin(i * 4 + time_offset) * 9
+        
+        # Apply quantum noise anomalies to the physical coordinates
+        noise_x = math.sin(global_tick * 0.02 + i) * 5.0
+        noise_y = math.cos(global_tick * 0.03 - i) * 5.0
+        noise_z = math.sin(global_tick * 0.01 + i * 2) * 5.0
+        
+        x = r * math.sin(phi) * math.cos(theta) + noise_x
+        y = r * math.sin(phi) * math.sin(theta) + noise_y
+        z = r * math.cos(phi) + noise_z
+        
+        points.append({"x": round(x, 4), "y": round(y, 4), "z": round(z, 4)})
+    return points
+
 async def sebra_engine(websocket):
     print("🔒 Secure SEBRA82 Vault Engine Connected.")
     try:
@@ -41,7 +64,7 @@ async def sebra_engine(websocket):
         time_offset = 0.0
         wave_buffer = [50.0] * 160
         
-        # Client Configuration Variables (Can be dynamically mapped later)
+        # Client Configuration Variables
         base_value = 10.0
         damping = 1.45
         spike_threshold = 2.0
@@ -59,7 +82,6 @@ async def sebra_engine(websocket):
             burst_active = math.sin(global_tick * 0.01 + time_offset * 0.6) > 0.80
             quantum_burst = random.uniform(0, 30.0) if burst_active else random.uniform(0, 6.0)
             
-            # Decoy drifting accumulator
             if is_decoy:
                 session_crypto_offset += 0.05
                 
@@ -86,6 +108,9 @@ async def sebra_engine(websocket):
             roi = base_value * damping * 14.8
             alpha_confidence = 92.0 + damping
             
+            # --- MATH LAYER 5: Coordinate Generation ---
+            current_noise_structure = generate_noise_structure(global_tick, time_offset)
+            
             # --- PACKET COMPILATION ---
             packet = {
                 "system": {
@@ -101,15 +126,16 @@ async def sebra_engine(websocket):
                 "quantum": {
                     "alpha": alpha,
                     "beta": beta,
-                    "norm": 1.0 # Guaranteed by math
+                    "norm": 1.0 
                 },
                 "finance": {
                     "projected_roi": roi,
                     "confidence": alpha_confidence
-                }
+                },
+                "noise_structure": current_noise_structure
             }
             
-            # Stream payload to connected frontend at ~60Hz
+            # Stream payload to connected frontend
             await websocket.send(json.dumps(packet))
             await asyncio.sleep(0.016)
             
