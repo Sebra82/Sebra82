@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.nasa.gov https://*.usgs.gov; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v9.6 - Secure Gateway & 256-Bit Encrypted Master Suite</title>
+  <title>SEBRA82 v9.7 - Secure Gateway & 256-Bit Encrypted Master Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -394,10 +394,10 @@
   <div class="gateway-card">
     <div class="gateway-title">⚡ <span>SEBRA82 v9.6</span> SECURE GATEWAY</div>
     <div class="gateway-desc">
-      Choose your access tier. Enter password <strong>Quantum</strong> for the secure demo sandbox (randomized feeds), or generate a 256-bit SHA-256 encrypted license key (which provides your short code and waits for you to copy it before entering).
+      Choose your access tier. Enter password <strong>Quantum</strong> for the secure demo sandbox (randomized feeds), or generate a 256-bit SHA-256 encrypted license key.
     </div>
 
-    <input type="password" id="gatewayPasswordInput" class="gateway-input" placeholder="Enter Password ('Quantum')..." onkeypress="if(event.key==='Enter') verifyGatewayPassword()">
+    <input type="password" id="gatewayPasswordInput" class="gateway-input" placeholder="Enter Password ('Quantum') or Short Code..." onkeypress="if(event.key==='Enter') verifyGatewayPassword()">
     <div class="gateway-error" id="gatewayErrorMsg"></div>
 
     <div class="gateway-btn-row">
@@ -408,7 +408,7 @@
     <div class="key-output-box" id="encryptedKeyBox">
       <span>🔑 Generated 256-Bit SHA-256 Key & Short Code:</span>
       <div class="key-string" id="generatedKeyVal">Generating 256-bit hash...</div>
-      <button class="gateway-btn btn-demo" style="margin-top: 4px;" onclick="enterAppWithGeneratedKey()">🚀 Enter Suite Now</button>
+      <div style="font-size: 0.38rem; color: var(--text-muted); margin-top: 2px;">Your short code has been automatically saved to this browser. You can now use it to log in anytime!</div>
     </div>
   </div>
 </div>
@@ -856,7 +856,7 @@
     if (pass === "Quantum" || authorizedCodes.includes(pass.toUpperCase())) {
       document.getElementById('gatewayPortal').classList.add('hidden');
       document.getElementById('mainPlatformContainer').style.display = 'flex';
-      document.getElementById('vault-status').innerText = pass === "Quantum" ? "VAULT: SECURE DEMO MODE [v9.5]" : "VAULT: 256-BIT ENCRYPTED LICENSE ACTIVE";
+      document.getElementById('vault-status').innerText = pass === "Quantum" ? "VAULT: SECURE DEMO MODE [v9.6]" : "VAULT: 256-BIT ENCRYPTED LICENSE ACTIVE";
     } else {
       err.innerText = "Access Denied. Enter password 'Quantum' or a valid short code.";
       document.getElementById('gatewayPasswordInput').value = "";
@@ -871,7 +871,7 @@
     const rawSegment = hash256.substring(0, 12).toUpperCase();
     const shortCode = `SEBRA-${rawSegment.substring(0, 4)}-${rawSegment.substring(4, 8)}-${rawSegment.substring(8, 12)}`;
 
-    // Save to localStorage
+    // Save to localStorage automatically so it can be used to log in
     let authorizedCodes = JSON.parse(localStorage.getItem('sebra_licenses') || '[]');
     authorizedCodes.push(shortCode);
     localStorage.setItem('sebra_licenses', JSON.stringify(authorizedCodes));
@@ -879,13 +879,7 @@
     const box = document.getElementById('encryptedKeyBox');
     const val = document.getElementById('generatedKeyVal');
     box.style.display = 'flex';
-    val.innerHTML = `<strong>Short Code:</strong> <span style="color:var(--neon-cyan);">${shortCode}</span><br><strong>256-Bit Hash:</strong> ${hash256}<br><br><em style="color:var(--text-muted);">Copy your short code above, then click the button below to enter.</em>`;
-  }
-
-  function enterAppWithGeneratedKey() {
-    document.getElementById('gatewayPortal').classList.add('hidden');
-    document.getElementById('mainPlatformContainer').style.display = 'flex';
-    document.getElementById('vault-status').innerText = "VAULT: 256-BIT ENCRYPTED LICENSE ACTIVE";
+    val.innerHTML = `<strong>Short Code:</strong> <span style="color:var(--neon-cyan);">${shortCode}</span><br><strong>256-Bit Hash:</strong> ${hash256}`;
   }
 
   function returnToGateway() {
@@ -1498,4 +1492,3 @@
 
 </body>
 </html>
-
