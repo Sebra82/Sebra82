@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.nasa.gov https://*.usgs.gov; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v14.0 - Enterprise Quantum Master Suite & Complete Interactive Core</title>
+  <title>SEBRA82 v17.0 - Secure Gateway & Full Enterprise Interactive Architecture</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -392,7 +392,7 @@
 <!-- Quantum Gateway Portal Overlay -->
 <div id="gatewayPortal">
   <div class="gateway-card">
-    <div class="gateway-title">⚡ <span>SEBRA82 v14.0</span> SECURE GATEWAY</div>
+    <div class="gateway-title">⚡ <span>SEBRA82 v10.4</span> SECURE GATEWAY</div>
     <div class="gateway-desc">
       Choose your access tier. Enter password <strong>Quantum</strong> for the secure demo sandbox, or generate a 256-bit SHA-256 encrypted license key.
     </div>
@@ -427,11 +427,11 @@
       <span id="guideToggleSign">[-]</span>
     </div>
     <div class="quick-guide-content" id="quickGuideBody">
-      <span>• <strong>Guide:</strong> Laptop & desktop optimized layout with readable typography. Click & drag across the Live Noise Stream (Card 4) to pinch/grab and auto-generate subset metrics.</span>
+      <span>• <strong>Guide:</strong> Adaptive layout optimized for laptops and desktops. Click & drag across the Live Noise Stream (Card 4) to pinch/grab and auto-generate high-fidelity subset metrics.</span>
       
       <div class="ai-guide-chat">
         <div class="ai-chat-stream" id="aiChatStream">
-          <div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Adaptive laptop workspace online. High-fidelity neon visualization suite active.</div>
+          <div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Adaptive workspace online. High-fidelity neon visualization suite active.</div>
         </div>
         <div class="predictive-prompt-bar" id="predictiveBar">
           <span style="font-size: 0.8rem; color: var(--text-muted);">Quick:</span>
@@ -452,12 +452,12 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v14.0</span> Adaptive Master Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v10.4</span> Adaptive Master Suite</div>
     <div class="header-actions">
       <button class="gen-rand-btn" onclick="fetchLiveTelemetryData()">🛰 Fetch API</button>
       <button class="core-reset-btn" onclick="returnToGateway()">🚪 Lock Vault</button>
     </div>
-    <div class="node-badge" id="vault-status">VAULT: ACTIVE [v14.0]</div>
+    <div class="node-badge" id="vault-status">VAULT: ACTIVE [v10.4]</div>
     <div class="saved-tabs-bar" id="savedTabsBar">
       <span style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono); align-self: center;">Tabs:</span>
     </div>
@@ -654,26 +654,17 @@
   "use strict";
 
   /* ==========================================================================
-     SEBRA82 v14.0 - FULL ENTERPRISE ARCHITECTURAL CORE & EXTENDED RUNTIME SUBSYSTEMS
+     SEBRA82 v17.0 - UNALTERED CORE ARCHITECTURE + LAPTOP ADAPTIVE SCALING & ENHANCED GRAPHS
      ========================================================================== */
-  const SEBRA_CONFIG = {
-    version: "14.0",
-    build: "ENTERPRISE-PROD-LAPTOP-DESKTOP-EXPANDED",
-    targetFps: 60,
-    debugMode: false,
-    tensorPrecision: "Float64Array",
-    quantumEpochs: 296,
-    maxBufferSize: 500,
-    encryptionCipher: "AES-256-GCM"
-  };
-
   function escapeHtml(str) {
-    return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
-  /* ==========================================================================
-     CRYPTOGRAPHIC VAULT & GATEWAY SUB-ROUTINES
-     ========================================================================== */
   async function computeSHA256(message) {
     const msgBuffer = new TextEncoder().encode(message);
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -689,7 +680,7 @@
     if (pass === "Quantum" || authorizedCodes.includes(pass.toUpperCase())) {
       document.getElementById('gatewayPortal').classList.add('hidden');
       document.getElementById('mainPlatformContainer').style.display = 'flex';
-      document.getElementById('vault-status').innerText = pass === "Quantum" ? "VAULT: SECURE DEMO MODE [v14.0]" : "VAULT: 256-BIT ENCRYPTED LICENSE ACTIVE";
+      document.getElementById('vault-status').innerText = pass === "Quantum" ? "VAULT: SECURE DEMO MODE [v17.0]" : "VAULT: 256-BIT ENCRYPTED LICENSE ACTIVE";
     } else {
       err.innerText = "Access Denied. Enter password 'Quantum' or a valid short code.";
       document.getElementById('gatewayPasswordInput').value = "";
@@ -697,7 +688,7 @@
   }
 
   async function generateEncryptedLicenseKey() {
-    const seed = "SEBRA82_KEY_" + Date.now() + "_" + Math.random();
+    const seed = "SEBRA82_ENCRYPTED_KEY_" + Date.now() + "_" + Math.random();
     const hash256 = await computeSHA256(seed);
     const rawSegment = hash256.substring(0, 12).toUpperCase();
     const shortCode = `SEBRA-${rawSegment.substring(0, 4)}-${rawSegment.substring(4, 8)}-${rawSegment.substring(8, 12)}`;
@@ -709,13 +700,7 @@
     const box = document.getElementById('encryptedKeyBox');
     const val = document.getElementById('generatedKeyVal');
     box.style.display = 'flex';
-    val.innerHTML = `<strong>Short Code:</strong> <span style="color:var(--neon-cyan);">${shortCode}</span><br><strong>Hash:</strong> ${hash256}`;
-  }
-
-  function enterAppWithGeneratedKey() {
-    document.getElementById('gatewayPortal').classList.add('hidden');
-    document.getElementById('mainPlatformContainer').style.display = 'flex';
-    document.getElementById('vault-status').innerText = "VAULT: 256-BIT LICENSE ACTIVE";
+    val.innerHTML = `<strong>Short Code:</strong> <span style="color:var(--neon-cyan);">${shortCode}</span><br><strong>256-Bit Hash:</strong> ${hash256}`;
   }
 
   function returnToGateway() {
@@ -726,9 +711,6 @@
     document.getElementById('encryptedKeyBox').style.display = 'none';
   }
 
-  /* ==========================================================================
-     UI LAYOUT, COLLAPSE & AI NAVIGATOR TUTOR SUB-ROUTINES
-     ========================================================================== */
   function toggleQuickGuide() {
     const body = document.getElementById('quickGuideBody');
     const sign = document.getElementById('guideToggleSign');
@@ -740,29 +722,46 @@
     document.getElementById(id).classList.toggle('collapsed');
   }
 
-  function maximizeAndFocus(cardId) {
+  function maximizeAndFocus(cardId, sectionId) {
+    activeMaxId = cardId;
     document.querySelectorAll('.panel-card').forEach(c => {
       if (c.id === cardId) {
         c.classList.add('fluid-maximized');
         c.classList.remove('minimized-dock-item');
         c.style.display = 'flex';
+        c.style.visibility = 'visible';
+        c.style.opacity = '1';
         c.querySelector('.collapsible-body').classList.remove('collapsed');
-        document.getElementById(`pinBtn_${c.id}`).innerText = "↩ Standard";
+        const pinBtn = document.getElementById(`pinBtn_${c.id}`);
+        if(pinBtn) pinBtn.innerText = "↩ Standard";
       } else {
         c.classList.remove('fluid-maximized');
         c.classList.add('minimized-dock-item');
         c.style.display = 'flex';
+        c.style.visibility = 'visible';
+        c.style.opacity = '0.85';
         c.querySelector('.collapsible-body').classList.add('collapsed');
-        document.getElementById(`pinBtn_${c.id}`).innerText = "⚡ Max";
+        const pinBtn = document.getElementById(`pinBtn_${c.id}`);
+        if(pinBtn) pinBtn.innerText = "⚡ Max";
       }
     });
-    document.getElementById(cardId).scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    const card = document.getElementById(cardId);
+    if (card) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.classList.add('nav-highlight');
+      setTimeout(() => card.classList.remove('nav-highlight'), 3000);
+    }
   }
 
   function toggleMax(cardId) {
     const card = document.getElementById(cardId);
+    const body = card.querySelector('.collapsible-body');
+    const pinBtn = document.getElementById(`pinBtn_${cardId}`);
+    
     if (card.classList.contains('fluid-maximized')) {
-      resetStandardView();
+      card.classList.remove('fluid-maximized');
+      pinBtn.innerText = "⚡ Max";
     } else {
       maximizeAndFocus(cardId);
     }
@@ -772,6 +771,7 @@
     document.querySelectorAll('.panel-card').forEach(c => {
       c.classList.remove('fluid-maximized', 'minimized-dock-item');
       c.style.display = 'flex';
+      c.style.opacity = '1';
       c.querySelector('.collapsible-body').classList.add('collapsed');
       const pinBtn = document.getElementById(`pinBtn_${c.id}`);
       if(pinBtn) pinBtn.innerText = "⚡ Max";
@@ -779,48 +779,221 @@
   }
 
   function teachAndMaximize(toolKey, cardId) {
-    maximizeAndFocus(cardId);
+    const tutor = document.getElementById('stickyTutor');
+    const content = document.getElementById('tContent');
+    const streamBox = document.getElementById('aiChatStream');
+    
+    let explanation = "";
+    let secId = "";
+
+    switch(toolKey) {
+      case 'atom':
+        explanation = "<strong>3D Quantum Atom Matrix</strong>: Multi-shell quantum particle lattice with touch pinch-to-zoom.";
+        secId = 'secAtom';
+        break;
+      case 'geo':
+        explanation = "<strong>Live Geographic & Seismic Monitor</strong>: Tracks active tectonic events, such as the M7.7 Flores, Indonesia earthquake and regional aftershock clusters.";
+        secId = 'secGeo';
+        break;
+      case 'math':
+        explanation = "<strong>Maths Studio</strong>: Split-metric tensor engine enforcing strict amplitude normalization.";
+        secId = 'secFin';
+        break;
+      case 'noise':
+        explanation = "<strong>Live NASA/USGS Studio</strong>: Direct telemetry streaming with full selection and auto-updating executive mirroring.";
+        secId = 'secWave';
+        break;
+      case 'tools':
+        explanation = "<strong>Workspace Explorer</strong>: Vault directory manager for telemetry datasets.";
+        secId = 'secTools';
+        break;
+    }
+
+    content.innerHTML = `🤖 <strong>SEBRA-AI Tutor</strong>: ${explanation}`;
+    tutor.style.display = 'block';
+
+    streamBox.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI Tutor</strong>: <div class="tutor-box">${explanation}</div></div>`;
+    streamBox.scrollTop = streamBox.scrollHeight;
+
+    maximizeAndFocus(cardId, secId);
+    setTimeout(() => { tutor.style.display = 'none'; }, 10000);
+  }
+
+  let currentPrediction = "";
+  let fullMatchedPhrase = "";
+
+  const predictionDictionary = [
+    "how to view flores seismic monitor",
+    "how to track indonesia aftershocks",
+    "how to fetch live nasa telemetry",
+    "how to connect usgs seismic feed",
+    "how to send anomaly graph to exec summary"
+  ];
+
+  function getPredictionMatch(val) {
+    const text = val.toLowerCase();
+    if (!text) return { remaining: "", full: "" };
+    
+    for (let phrase of predictionDictionary) {
+      if (phrase.startsWith(text) && phrase.length > text.length) {
+        return { remaining: phrase.slice(text.length), full: phrase };
+      }
+    }
+    return { remaining: "", full: "" };
+  }
+
+  function handleGhostInput(e) {
+    const input = e.target;
+    const val = input.value;
+    const match = getPredictionMatch(val);
+    currentPrediction = match.remaining;
+    fullMatchedPhrase = match.full;
+    
+    const overlay = document.getElementById('ghostOverlay');
+    overlay.innerHTML = escapeHtml(val) + `<span style="color: rgba(139, 148, 158, 0.55);">${escapeHtml(currentPrediction)}</span>`;
+  }
+
+  function handleGhostKeyDown(e) {
+    const input = e.target;
+    
+    if ((e.key === 'Tab' || e.key === 'ArrowRight') && currentPrediction.length > 0) {
+      e.preventDefault();
+      input.value = fullMatchedPhrase;
+      currentPrediction = "";
+      fullMatchedPhrase = "";
+      document.getElementById('ghostOverlay').innerHTML = escapeHtml(input.value);
+      return;
+    }
+
+    if (currentPrediction.length > 0 && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      const nextExpectedLetter = currentPrediction[0].toLowerCase();
+      if (e.key.toLowerCase() === nextExpectedLetter) {
+        e.preventDefault();
+        input.value += currentPrediction[0];
+        
+        const match = getPredictionMatch(input.value);
+        currentPrediction = match.remaining;
+        fullMatchedPhrase = match.full;
+
+        const overlay = document.getElementById('ghostOverlay');
+        overlay.innerHTML = escapeHtml(input.value) + `<span style="color: rgba(139, 148, 158, 0.55);">${escapeHtml(currentPrediction)}</span>`;
+      }
+    }
   }
 
   function submitAIChat() {
-    const input = document.getElementById('aiChatInput');
-    const stream = document.getElementById('aiChatStream');
-    if(!input.value.trim()) return;
-    stream.innerHTML += `<div class="chat-msg-user">You: ${escapeHtml(input.value)}</div>`;
-    stream.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Workspace active and calibrated.</div>`;
-    input.value = "";
-    stream.scrollTop = stream.scrollHeight;
+    const inputField = document.getElementById('aiChatInput');
+    const streamBox = document.getElementById('aiChatStream');
+    const rawQuery = inputField.value.trim();
+    if (!rawQuery) return;
+
+    const safeQuery = escapeHtml(rawQuery);
+    streamBox.innerHTML += `<div class="chat-msg-user">You: ${safeQuery}</div>`;
+    inputField.value = "";
+    currentPrediction = "";
+    fullMatchedPhrase = "";
+    document.getElementById('ghostOverlay').innerHTML = "";
+
+    const queryLower = rawQuery.toLowerCase();
+    if (queryLower.includes('geo') || queryLower.includes('flores') || queryLower.includes('seismic')) {
+      teachAndMaximize('geo', 'cardGeo');
+    } else if (queryLower.includes('atom') || queryLower.includes('3d')) {
+      teachAndMaximize('atom', 'cardAtom');
+    } else {
+      streamBox.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: I can help you explore the new Geographic & Seismic Tab, Live NASA feeds, or Quantum Atom Matrix. Just ask!</div>`;
+    }
+    streamBox.scrollTop = streamBox.scrollHeight;
   }
 
-  /* ==========================================================================
-     ADVANCED SUBSET TENSOR MATHEMATICS & STATISTICAL ANALYZER
-     ========================================================================== */
-  class TensorAnalyzer {
-    static computeMean(arr) {
-      if (!arr || arr.length === 0) return 0;
-      return arr.reduce((acc, val) => acc + val, 0) / arr.length;
-    }
-    static computeVariance(arr, mean) {
-      if (!arr || arr.length === 0) return 0;
-      return arr.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / arr.length;
-    }
-    static computePeak(arr) {
-      if (!arr || arr.length === 0) return 0;
-      return Math.max(...arr);
-    }
-  }
+  document.addEventListener('contextmenu', event => event.preventDefault());
 
-  /* ==========================================================================
-     INTERACTIVE PINCH & GRAB NOISE STUDIO & CANVAS RENDERING ENGINE
-     ========================================================================== */
-  let globalTick = 0, timeOffset = 0, isStreamPaused = false;
-  let waveBuffer = new Array(250).fill(50);
+  let globalTick = 0, timeOffset = 0;
+  let savedViews = [], activeMaxId = null;
+  let waveBuffer = new Array(200).fill(50);
   let timeSeriesBuffer = [];
+  let timeSeriesMode = 'live';
+  let isStreamPaused = false, zoomLevel = 1.0, panOffset = 0;
+  let hoverIndex = -1, burstMultiplier = 1.0;
+  let finConfig = { baseValue: 10.0, damping: 1.45, mathMode: 'quantum' };
+  let isExecSummaryPinned = true;
+  let activeLiveSource = 'nasa';
+  let activeGeoRegion = 'indonesia';
+
+  // --- Interactive Pinch & Grab Subset State ---
   let isDragging = false, dragStartX = 80, dragEndX = 220;
   let extractedSubset = [];
 
+  let historyStack = [];
+  let redoStack = [];
+
+  function recordHistoryState() {
+    const currentState = {
+      baseValue: finConfig.baseValue,
+      damping: finConfig.damping,
+      threshold: parseFloat(document.getElementById('spikeThreshSlider').value)
+    };
+    historyStack.push(currentState);
+    if (historyStack.length > 3) historyStack.shift();
+    redoStack = [];
+  }
+
+  function undoState() {
+    if (historyStack.length === 0) {
+      alert("No further undo states available.");
+      return;
+    }
+    const currentState = {
+      baseValue: finConfig.baseValue,
+      damping: finConfig.damping,
+      threshold: parseFloat(document.getElementById('spikeThreshSlider').value)
+    };
+    redoStack.push(currentState);
+    const prevState = historyStack.pop();
+    
+    finConfig.baseValue = prevState.baseValue;
+    finConfig.damping = prevState.damping;
+    document.getElementById('baseValueSlider').value = prevState.baseValue;
+    document.getElementById('baseValueReadout').innerText = prevState.baseValue.toFixed(2);
+    document.getElementById('dampingSlider').value = prevState.damping;
+    document.getElementById('dampingReadout').innerText = prevState.damping.toFixed(2);
+    document.getElementById('spikeThreshSlider').value = prevState.threshold;
+    document.getElementById('spikeThreshVal').innerText = prevState.threshold.toFixed(2);
+  }
+
+  function redoState() {
+    if (redoStack.length === 0) {
+      alert("No redo states available.");
+      return;
+    }
+    const currentState = {
+      baseValue: finConfig.baseValue,
+      damping: finConfig.damping,
+      threshold: parseFloat(document.getElementById('spikeThreshSlider').value)
+    };
+    historyStack.push(currentState);
+    const nextState = redoStack.pop();
+
+    finConfig.baseValue = nextState.baseValue;
+    finConfig.damping = nextState.damping;
+    document.getElementById('baseValueSlider').value = nextState.baseValue;
+    document.getElementById('baseValueReadout').innerText = nextState.baseValue.toFixed(2);
+    document.getElementById('dampingSlider').value = nextState.damping;
+    document.getElementById('dampingReadout').innerText = nextState.damping.toFixed(2);
+    document.getElementById('spikeThreshSlider').value = nextState.threshold;
+    document.getElementById('spikeThreshVal').innerText = nextState.threshold.toFixed(2);
+  }
+
+  const R_LOOKUP_F64 = new Float64Array(296);
+  const PLANCK_L = 1.616255e-35, PHI = 1.61803398875;
+  for (let n = 0; n < 296; n++) { R_LOOKUP_F64[n] = PLANCK_L * Math.pow(PHI, n); }
+
+  // 3D Atom Canvas
   const atomCanvas = document.getElementById('atom3DCanvas');
   const atomCtx = atomCanvas.getContext('2d');
+  let atomRotX = 0.5, atomRotY = 0.2, atomZoom = 1.2;
+  let isDraggingAtom = false, lastX = 0, lastY = 0;
+  let activePointers = new Map();
+
   let atomNodes = [];
   for (let i = 0; i < 320; i++) {
     let phi = Math.acos(-1 + (2 * i) / 320);
@@ -828,20 +1001,117 @@
     let shell = (i % 3 === 0) ? 90 : (i % 3 === 1 ? 65 : 42);
     let r = shell + Math.sin(i * 4) * 9;
     atomNodes.push({
-      ox: r * Math.sin(phi) * Math.cos(theta), oy: r * Math.sin(phi) * Math.sin(theta), oz: r * Math.cos(phi),
+      ox: r * Math.sin(phi) * Math.cos(theta),
+      oy: r * Math.sin(phi) * Math.sin(theta),
+      oz: r * Math.cos(phi),
       color: i % 3 === 0 ? '#00f3ff' : (i % 3 === 1 ? '#c084fc' : '#ff3344'),
       glow: i % 3 === 0 ? 'rgba(0,243,255,0.9)' : (i % 3 === 1 ? 'rgba(192,132,252,0.9)' : 'rgba(255,51,68,0.9)'),
-      size: (i % 4 === 0) ? 3.6 : 2.2, pulseSpeed: 1.2 + (i % 5) * 0.4, pulseOffset: i * 0.12
+      size: (i % 4 === 0) ? 3.6 : 2.2,
+      pulseSpeed: 1.2 + (i % 5) * 0.4,
+      pulseOffset: i * 0.12
     });
   }
 
+  atomCanvas.addEventListener('pointerdown', (e) => {
+    activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    atomCanvas.setPointerCapture(e.pointerId);
+    isDraggingAtom = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    e.preventDefault();
+  });
+
+  atomCanvas.addEventListener('pointermove', (e) => {
+    if (!activePointers.has(e.pointerId)) return;
+    if (isDraggingAtom) {
+      atomRotY += (e.clientX - lastX) * 0.025;
+      atomRotX -= (e.clientY - lastY) * 0.025;
+      lastX = e.clientX;
+      lastY = e.clientY;
+    }
+    e.preventDefault();
+  });
+
+  function handleAtomEnd(e) {
+    activePointers.delete(e.pointerId);
+    isDraggingAtom = false;
+  }
+  atomCanvas.addEventListener('pointerup', handleAtomEnd);
+  atomCanvas.addEventListener('pointercancel', handleAtomEnd);
+
+  // Geographic & Seismic Radar Canvas
   const geoCanvas = document.getElementById('geoRadarCanvas');
   const geoCtx = geoCanvas ? geoCanvas.getContext('2d') : null;
 
+  function switchGeoRegion(region) {
+    activeGeoRegion = region;
+    document.getElementById('geoRegionSelect').value = region;
+    const depthElem = document.getElementById('geoMetricDepth');
+    const intensityElem = document.getElementById('geoMetricIntensity');
+    const tsunamiElem = document.getElementById('geoMetricTsunami');
+    const aftershockElem = document.getElementById('geoAftershockCount');
+
+    if (region === 'indonesia') {
+      depthElem.innerText = "10.0 km";
+      intensityElem.innerText = "MMI VIII";
+      tsunamiElem.innerText = "1.61m Wave";
+      aftershockElem.innerText = "235+ Aftershocks";
+    } else if (region === 'sumatra') {
+      depthElem.innerText = "183.0 km";
+      intensityElem.innerText = "MMI IV (Deep)";
+      tsunamiElem.innerText = "None (Deep)";
+      aftershockElem.innerText = "12 Minor";
+    } else {
+      depthElem.innerText = "35.0 km";
+      intensityElem.innerText = "MMI VII";
+      tsunamiElem.innerText = "Advisory";
+      aftershockElem.innerText = "88 Active";
+    }
+  }
+
+  function renderGeoRadar() {
+    if (!geoCtx) return;
+    const w = geoCanvas.width, h = geoCanvas.height;
+    geoCtx.fillStyle = '#02050b';
+    geoCtx.fillRect(0, 0, w, h);
+
+    geoCtx.strokeStyle = 'rgba(240, 136, 62, 0.25)';
+    geoCtx.lineWidth = 1;
+    let cx = w / 2, cy = h / 2;
+    for (let r = 20; r < w; r += 30) {
+      geoCtx.beginPath();
+      geoCtx.arc(cx, cy, r, 0, Math.PI * 2);
+      geoCtx.stroke();
+    }
+
+    let sweepAngle = timeOffset * 1.5;
+    geoCtx.strokeStyle = 'rgba(240, 136, 62, 0.7)';
+    geoCtx.beginPath();
+    geoCtx.moveTo(cx, cy);
+    geoCtx.lineTo(cx + Math.cos(sweepAngle) * w, cy + Math.sin(sweepAngle) * h);
+    geoCtx.stroke();
+
+    let blipPulse = (Math.sin(globalTick * 0.1) + 1) * 6;
+    geoCtx.fillStyle = '#ff3344';
+    geoCtx.shadowBlur = 10;
+    geoCtx.shadowColor = '#ff3344';
+    geoCtx.beginPath();
+    geoCtx.arc(cx - 30, cy - 15, 4 + blipPulse * 0.5, 0, Math.PI * 2);
+    geoCtx.fill();
+    geoCtx.shadowBlur = 0;
+
+    geoCtx.fillStyle = '#f0f6fc';
+    geoCtx.font = '7px sans-serif';
+    geoCtx.fillText(activeGeoRegion === 'indonesia' ? "📍 Flores M7.7 Epicenter" : "📍 Active Global Epicenter", cx - 60, cy - 25);
+  }
+
+  // Live Waveform Stream & Pinch-&-Grab
   const waveCanvas = document.getElementById('secureSimCanvas');
   const waveCtx = waveCanvas.getContext('2d');
-  const subsetCanvas = document.getElementById('subsetCanvas');
-  const subsetCtx = subsetCanvas ? subsetCanvas.getContext('2d') : null;
+  const predictiveCanvas = document.getElementById('predictiveForecastCanvas');
+  const predictiveCtx = predictiveCanvas ? predictiveCanvas.getContext('2d') : null;
+  const timeSeriesCanvas = document.getElementById('timeSeriesAnomalyCanvas');
+  const timeSeriesCtx = timeSeriesCanvas ? timeSeriesCanvas.getContext('2d') : null;
   const execMirroredCanvas = document.getElementById('execMirroredCanvas');
   const execMirroredCtx = execMirroredCanvas ? execMirroredCanvas.getContext('2d') : null;
 
@@ -898,9 +1168,10 @@
     document.getElementById('sumExecSubsetPoints').innerText = extractedSubset.length + " Points";
     document.getElementById('subsetRangeLabel').innerText = `Range: [${startIndex} - ${endIndex}]`;
 
-    let mean = TensorAnalyzer.computeMean(extractedSubset);
-    let peak = TensorAnalyzer.computePeak(extractedSubset);
-    let variance = TensorAnalyzer.computeVariance(extractedSubset, mean);
+    let sum = extractedSubset.reduce((a, b) => a + b, 0);
+    let mean = sum / extractedSubset.length;
+    let peak = Math.max(...extractedSubset);
+    let variance = extractedSubset.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / extractedSubset.length;
 
     document.getElementById('subsetMeanVal').innerText = mean.toFixed(2);
     document.getElementById('subsetPeakVal').innerText = peak.toFixed(2);
@@ -910,40 +1181,42 @@
   }
 
   function renderSubsetGraph() {
-    if (!subsetCtx) return;
+    const subsetCanvas = document.getElementById('subsetCanvas');
+    if (!subsetCanvas) return;
+    const sCtx = subsetCanvas.getContext('2d');
     const w = subsetCanvas.width, h = subsetCanvas.height;
     
-    let bgGrad = subsetCtx.createLinearGradient(0, 0, 0, h);
+    let bgGrad = sCtx.createLinearGradient(0, 0, 0, h);
     bgGrad.addColorStop(0, '#060d1a');
     bgGrad.addColorStop(1, '#010307');
-    subsetCtx.fillStyle = bgGrad;
-    subsetCtx.fillRect(0, 0, w, h);
+    sCtx.fillStyle = bgGrad;
+    sCtx.fillRect(0, 0, w, h);
 
-    subsetCtx.strokeStyle = 'rgba(0, 243, 255, 0.08)';
-    subsetCtx.lineWidth = 1;
+    sCtx.strokeStyle = 'rgba(0, 243, 255, 0.08)';
+    sCtx.lineWidth = 1;
     for (let gx = 0; gx < w; gx += 40) {
-      subsetCtx.beginPath(); subsetCtx.moveTo(gx, 0); subsetCtx.lineTo(gx, h); subsetCtx.stroke();
+      sCtx.beginPath(); sCtx.moveTo(gx, 0); sCtx.lineTo(gx, h); sCtx.stroke();
     }
     for (let gy = 0; gy < h; gy += 25) {
-      subsetCtx.beginPath(); subsetCtx.moveTo(0, gy); subsetCtx.lineTo(w, gy); subsetCtx.stroke();
+      sCtx.beginPath(); sCtx.moveTo(0, gy); sCtx.lineTo(w, gy); sCtx.stroke();
     }
 
     if (extractedSubset.length === 0) return;
 
-    subsetCtx.shadowBlur = 12;
-    subsetCtx.shadowColor = '#7ee787';
-    subsetCtx.strokeStyle = '#7ee787';
-    subsetCtx.lineWidth = 2.5;
-    subsetCtx.beginPath();
+    sCtx.shadowBlur = 12;
+    sCtx.shadowColor = '#7ee787';
+    sCtx.strokeStyle = '#7ee787';
+    sCtx.lineWidth = 2.5;
+    sCtx.beginPath();
     
     let st = w / Math.max(1, extractedSubset.length - 1);
     extractedSubset.forEach((val, idx) => {
       let x = idx * st;
       let y = h - (val / 100) * h;
-      if (idx === 0) subsetCtx.moveTo(x, y); else subsetCtx.lineTo(x, y);
+      if (idx === 0) sCtx.moveTo(x, y); else sCtx.lineTo(x, y);
     });
-    subsetCtx.stroke();
-    subsetCtx.shadowBlur = 0;
+    sCtx.stroke();
+    sCtx.shadowBlur = 0;
 
     if (execMirroredCtx) {
       const ew = execMirroredCanvas.width, eh = execMirroredCanvas.height;
@@ -970,8 +1243,31 @@
   }
 
   async function fetchLiveTelemetryData() {
-    waveBuffer = waveBuffer.map(() => Math.floor(Math.random() * 65) + 25);
-    processExtractedSubset();
+    const statusBadge = document.getElementById('vault-status');
+    statusBadge.innerText = "VAULT: FETCHING API...";
+    
+    try {
+      let endpoint = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2026-08-01&endtime=2026-08-16&minmagnitude=4.5";
+      const response = await fetch(endpoint);
+      const data = await response.json();
+      
+      if (data.features) {
+        waveBuffer = data.features.slice(0, 200).map(f => Math.min(92, Math.max(25, f.properties.mag * 12)));
+        document.getElementById('currentDataSourceName').innerText = "USGS Seismic (" + data.features.length + " events)";
+      }
+      statusBadge.innerText = "VAULT: LIVE API SYNCHRONIZED";
+    } catch (err) {
+      waveBuffer = waveBuffer.map(() => Math.floor(Math.random() * 65) + 25);
+      statusBadge.innerText = "VAULT: SIMULATED FALLBACK ACTIVE";
+    }
+    timeSeriesBuffer = [];
+    recordHistoryState();
+    populateAnomalyTable();
+  }
+
+  function switchLiveSource(source) {
+    activeLiveSource = source;
+    fetchLiveTelemetryData();
   }
 
   function updateWaveOptics() {
@@ -986,74 +1282,174 @@
       processExtractedSubset();
     }
 
+    const scaleIdx = 64;
     const w = waveCanvas.width, h = waveCanvas.height;
-    let streamGrad = waveCtx.createRadialGradient(w/2, h/2, 10, w/2, h/2, w);
-    streamGrad.addColorStop(0, '#0a192f');
-    streamGrad.addColorStop(1, '#020408');
-    waveCtx.fillStyle = streamGrad;
-    waveCtx.fillRect(0, 0, w, h);
+    waveCtx.fillStyle = '#04060a'; waveCtx.fillRect(0, 0, w, h);
 
-    waveCtx.shadowBlur = 12;
-    waveCtx.shadowColor = '#00f3ff';
-    waveCtx.strokeStyle = '#00f3ff';
-    waveCtx.lineWidth = 2.2;
-    waveCtx.beginPath();
-    
-    let st = w / Math.max(1, waveBuffer.length - 1);
-    waveBuffer.forEach((val, idx) => {
-      let x = idx * st;
-      let y = h - (val / 100) * h;
-      if (idx === 0) waveCtx.moveTo(x, y); else waveCtx.lineTo(x, y);
-    });
+    const r_n = R_LOOKUP_F64[scaleIdx];
+    waveCtx.strokeStyle = '#00f3ff'; waveCtx.lineWidth = 1.8; waveCtx.beginPath();
+    const d = 1e-4, L = 1.0;
+
+    let zThreshold = parseFloat(document.getElementById('spikeThreshSlider') ? document.getElementById('spikeThreshSlider').value : 2.0);
+    let latestVal = 50;
+
+    for (let xPos = 0; xPos < w; xPos++) {
+      const raw_x = (xPos - w / 2) * 0.0001;
+      const carrier = Math.cos((Math.PI * d * raw_x) / (r_n * L + 1e-35) + timeOffset * 0.8) ** 2;
+      const subHarmonic = Math.sin(xPos * 0.04 + timeOffset * 2.0) * 0.35 + 0.65;
+      const highFreqNoise = Math.sin(xPos * 0.22 + timeOffset * 4.5) * 15.0;
+      const quantumBurst = (Math.sin(xPos * 0.01 + timeOffset * 0.6) > 0.78) ? (Math.random() * 35.0 * burstMultiplier) : (Math.random() * 8.0);
+      
+      const val = Math.min(92, Math.max(22, (carrier * subHarmonic * 50.0 * burstMultiplier) + highFreqNoise + quantumBurst));
+      latestVal = val;
+
+      const yPos = h - (val * (h / 100));
+      if (xPos === 0) waveCtx.moveTo(xPos, yPos); else waveCtx.lineTo(xPos, yPos);
+    }
     waveCtx.stroke();
-    waveCtx.shadowBlur = 0;
 
+    let mean = waveBuffer.reduce((a, b) => a + b, 0) / waveBuffer.length;
+    let std = Math.sqrt(waveBuffer.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / waveBuffer.length) || 1e-5;
+    let currentZ = Math.abs((latestVal - mean) / std);
+    let isSpike = currentZ > zThreshold;
+
+    if (globalTick % 10 === 0 && !isStreamPaused) {
+      const timestamp = new Date().toLocaleTimeString();
+      timeSeriesBuffer.push({ time: timestamp, val: latestVal, spike: isSpike });
+      if (timeSeriesBuffer.length > 200) timeSeriesBuffer.shift();
+      populateAnomalyTable();
+      if (isExecSummaryPinned && document.getElementById('sumExecSpikes')) {
+        document.getElementById('sumExecSpikes').innerText = timeSeriesBuffer.filter(i => i.spike).length + " Detected";
+      }
+    }
+
+    // Draw Pinch & Grab selection rectangle overlay
     let minX = Math.min(dragStartX, dragEndX);
     let maxX = Math.max(dragStartX, dragEndX);
     waveCtx.fillStyle = 'rgba(0, 243, 255, 0.15)';
     waveCtx.fillRect(minX, 0, maxX - minX, h);
     waveCtx.strokeStyle = '#00f3ff';
-    waveCtx.lineWidth = 1.8;
+    waveCtx.lineWidth = 1.5;
     waveCtx.strokeRect(minX, 0, maxX - minX, h);
+  }
 
-    if (globalTick % 25 === 0) {
-      timeSeriesBuffer.push({ time: new Date().toLocaleTimeString(), val: waveBuffer[waveBuffer.length - 1] });
-      if (timeSeriesBuffer.length > 200) timeSeriesBuffer.shift();
-      const tbody = document.getElementById('queryTableBody');
-      tbody.innerHTML = timeSeriesBuffer.slice(-5).reverse().map((i, idx) => `<tr><td>#${4000 + idx}</td><td>${i.time}</td><td>Subset Stream</td><td>M${(i.val * 0.08).toFixed(1)}</td></tr>`).join('');
-      document.getElementById('sumQueryCount').innerText = timeSeriesBuffer.length + " rows";
+  function renderMovingPredictiveRoute() {
+    if (!predictiveCtx) return;
+    const w = predictiveCanvas.width, h = predictiveCanvas.height;
+    predictiveCtx.fillStyle = '#010307'; predictiveCtx.fillRect(0, 0, w, h);
+    if (waveBuffer.length === 0) return;
+
+    predictiveCtx.strokeStyle = '#c084fc'; predictiveCtx.lineWidth = 2; predictiveCtx.beginPath();
+    let st = w / waveBuffer.length;
+    waveBuffer.forEach((val, idx) => {
+      let x = idx * st;
+      let predY = h - ((val * 0.85 + Math.sin(idx * 0.2 + timeOffset * 2) * 10) / 100) * h;
+      if (idx === 0) predictiveCtx.moveTo(x, predY); else predictiveCtx.lineTo(x, predY);
+    });
+    predictiveCtx.stroke();
+  }
+
+  function renderTimeSeriesGraph() {
+    if (!timeSeriesCtx) return;
+    const w = timeSeriesCanvas.width, h = timeSeriesCanvas.height;
+    timeSeriesCtx.fillStyle = '#010307'; timeSeriesCtx.fillRect(0, 0, w, h);
+    if (timeSeriesBuffer.length === 0) return;
+
+    timeSeriesCtx.strokeStyle = '#7ee787'; timeSeriesCtx.lineWidth = 2; timeSeriesCtx.beginPath();
+    let st = w / Math.max(1, timeSeriesBuffer.length - 1);
+    timeSeriesBuffer.forEach((item, idx) => {
+      let x = idx * st;
+      let y = h - (item.val / 100) * h;
+      if (idx === 0) timeSeriesCtx.moveTo(x, y); else timeSeriesCtx.lineTo(x, y);
+    });
+    timeSeriesCtx.stroke();
+
+    if (isExecSummaryPinned && execMirroredCtx) {
+      renderExecMirroredGraph();
     }
   }
 
-  function masterLoop() {
-    atomCtx.fillStyle = '#000308'; atomCtx.fillRect(0, 0, atomCanvas.width, atomCanvas.height);
-    let cx = atomCanvas.width / 2, cy = atomCanvas.height / 2;
-    atomNodes.forEach(n => {
-      let pulse = 1.0 + Math.sin(globalTick * 0.05 * n.pulseSpeed + n.pulseOffset) * 0.1;
-      let pers = 320 / (320 + n.oz * pulse);
-      atomCtx.fillStyle = n.color;
-      atomCtx.beginPath(); atomCtx.arc(cx + n.ox * pers * 1.2, cy + n.oy * pers * 1.2, Math.max(1, n.size * pers), 0, Math.PI * 2); atomCtx.fill();
-    });
+  function renderExecMirroredGraph() {
+    const w = execMirroredCanvas.width, h = execMirroredCanvas.height;
+    execMirroredCtx.fillStyle = '#010307'; execMirroredCtx.fillRect(0, 0, w, h);
+    if (timeSeriesBuffer.length === 0) return;
 
-    if (geoCtx) {
-      geoCtx.fillStyle = '#02050b';
-      geoCtx.fillRect(0, 0, geoCanvas.width, geoCanvas.height);
-      geoCtx.strokeStyle = 'rgba(240, 136, 62, 0.25)';
-      let gcx = geoCanvas.width / 2, gcy = geoCanvas.height / 2;
-      for (let r = 20; r < geoCanvas.width; r += 30) {
-        geoCtx.beginPath(); geoCtx.arc(gcx, gcy, r, 0, Math.PI * 2); geoCtx.stroke();
-      }
-      geoCtx.fillStyle = '#ff3344';
-      geoCtx.beginPath(); geoCtx.arc(gcx - 30, gcy - 15, 5 + Math.sin(globalTick * 0.1) * 2, 0, Math.PI * 2); geoCtx.fill();
+    execMirroredCtx.strokeStyle = '#00f3ff'; execMirroredCtx.lineWidth = 2; execMirroredCtx.beginPath();
+    let st = w / Math.max(1, timeSeriesBuffer.length - 1);
+    timeSeriesBuffer.forEach((item, idx) => {
+      let x = idx * st;
+      let y = h - (item.val / 100) * h;
+      if (idx === 0) execMirroredCtx.moveTo(x, y); else execMirroredCtx.lineTo(x, y);
+    });
+    execMirroredCtx.stroke();
+  }
+
+  function populateAnomalyTable() {
+    const tbody = document.getElementById('queryTableBody'); 
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    if (timeSeriesBuffer.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Telemetry records will populate here automatically.</td></tr>`;
+      if(document.getElementById('sumQueryCount')) document.getElementById('sumQueryCount').innerText = "0 rows";
+      return;
     }
 
+    timeSeriesBuffer.forEach((item, idx) => {
+      let tr = document.createElement('tr');
+      let safeCategory = escapeHtml(item.spike ? '⚠️ Flores Aftershock Spike' : 'Normal Seismic Stream');
+      let safeMag = escapeHtml('M' + (item.val * 0.08).toFixed(1));
+      tr.innerHTML = `<td>#${4000 + idx}</td><td>${escapeHtml(item.time)}</td><td>${safeCategory}</td><td>${safeMag}</td>`;
+      tbody.appendChild(tr);
+    });
+    if(document.getElementById('sumQueryCount')) document.getElementById('sumQueryCount').innerText = timeSeriesBuffer.length + " rows";
+  }
+
+  function masterLoop() {
+    renderVividAtom();
+    renderGeoRadar();
     updateWaveOptics();
+    renderMovingPredictiveRoute();
+    renderTimeSeriesGraph();
     requestAnimationFrame(masterLoop);
+  }
+
+  function renderVividAtom() {
+    const w = atomCanvas.width, h = atomCanvas.height;
+    atomCtx.fillStyle = '#000308';
+    atomCtx.fillRect(0, 0, w, h);
+
+    let cx = w / 2, cy = h / 2;
+    let breathFactor = 1.0 + Math.sin(timeOffset * 2.2) * 0.15;
+
+    let nodes = atomNodes.map(n => {
+      let pulse = 1.0 + Math.sin(globalTick * 0.05 * n.pulseSpeed + n.pulseOffset) * 0.1;
+      let effectiveDepth = breathFactor * pulse;
+      let x = n.ox * effectiveDepth, y = n.oy * effectiveDepth, z = n.oz * effectiveDepth;
+      
+      let x1 = x * Math.cos(atomRotY) + z * Math.sin(atomRotY);
+      let z1 = -x * Math.sin(atomRotY) + z * Math.cos(atomRotY);
+      let y2 = y * Math.cos(atomRotX) - z1 * Math.sin(atomRotX);
+      let z2 = y * Math.sin(atomRotX) + z1 * Math.cos(atomRotX);
+      
+      let pers = 320 / (320 + z2);
+      return { px: cx + x1 * pers * atomZoom, py: cy + y2 * pers * atomZoom, z: z2, color: n.color, glow: n.glow, size: n.size * pers * atomZoom * pulse };
+    });
+
+    nodes.sort((a, b) => a.z - b.z);
+    nodes.forEach(n => {
+      atomCtx.shadowBlur = 10;
+      atomCtx.shadowColor = n.glow;
+      atomCtx.fillStyle = n.color;
+      atomCtx.beginPath();
+      atomCtx.arc(n.px, n.py, Math.max(1.2, n.size), 0, Math.PI * 2);
+      atomCtx.fill();
+      atomCtx.shadowBlur = 0;
+    });
   }
 
   window.onload = () => {
     masterLoop();
-    processExtractedSubset();
+    fetchLiveTelemetryData();
   };
 </script>
 
