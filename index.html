@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.nasa.gov https://*.usgs.gov; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v11.0 - Complete Enterprise Quantum Master Suite & Adaptive Workspace</title>
+  <title>SEBRA82 v12.0 - Enterprise Quantum Master Suite & Interactive Studio (Fully Expanded Architecture)</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -391,7 +391,7 @@
 <!-- Quantum Gateway Portal Overlay -->
 <div id="gatewayPortal">
   <div class="gateway-card">
-    <div class="gateway-title">⚡ <span>SEBRA82 v11.0</span> SECURE GATEWAY</div>
+    <div class="gateway-title">⚡ <span>SEBRA82 v12.0</span> SECURE GATEWAY</div>
     <div class="gateway-desc">
       Choose your access tier. Enter password <strong>Quantum</strong> for the secure demo sandbox, or generate a 256-bit SHA-256 encrypted license key.
     </div>
@@ -426,11 +426,11 @@
       <span id="guideToggleSign">[-]</span>
     </div>
     <div class="quick-guide-content" id="quickGuideBody">
-      <span>• <strong>Guide:</strong> Adaptive enterprise layout. Click & drag across the Live Noise Stream (Card 4) to pinch/grab and auto-generate subset metrics with neon gradients.</span>
+      <span>• <strong>Guide:</strong> Adaptive enterprise layout optimized for laptops and desktops. Click & drag across the Live Noise Stream (Card 4) to pinch/grab and auto-generate high-fidelity subset metrics.</span>
       
       <div class="ai-guide-chat">
         <div class="ai-chat-stream" id="aiChatStream">
-          <div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Adaptive enterprise workspace active. High-fidelity neon visualization suite online.</div>
+          <div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Adaptive workspace online. High-fidelity neon visualization suite active.</div>
         </div>
         <div class="predictive-prompt-bar" id="predictiveBar">
           <span style="font-size: 0.4rem; color: var(--text-muted);">Quick:</span>
@@ -451,12 +451,12 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v11.0</span> Enterprise Master Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v12.0</span> Adaptive Master Suite</div>
     <div class="header-actions">
       <button class="gen-rand-btn" onclick="fetchLiveTelemetryData()">🛰 Fetch API</button>
       <button class="core-reset-btn" onclick="returnToGateway()">🚪 Lock Vault</button>
     </div>
-    <div class="node-badge" id="vault-status">VAULT: ACTIVE [v11.0]</div>
+    <div class="node-badge" id="vault-status">VAULT: ACTIVE [v12.0]</div>
     <div class="saved-tabs-bar" id="savedTabsBar">
       <span style="font-size: 0.4rem; color: var(--text-muted); font-family: var(--font-mono); align-self: center;">Tabs:</span>
     </div>
@@ -653,11 +653,11 @@
   "use strict";
 
   /* ==========================================================================
-     SEBRA82 v11.0 - COMPREHENSIVE ENTERPRISE SCRIPT CORE & ARCHITECTURAL LOGIC
+     SEBRA82 v12.0 - FULL ENTERPRISE ARCHITECTURAL CORE & STATE MANAGER
      ========================================================================== */
   const SEBRA_CONFIG = {
-    version: "11.0",
-    build: "ENTERPRISE-PROD-FULL",
+    version: "12.0",
+    build: "ENTERPRISE-PROD-ADAPTIVE-EXPANDED",
     targetFps: 60,
     debugMode: false,
     tensorPrecision: "Float64Array",
@@ -669,7 +669,7 @@
   }
 
   /* ==========================================================================
-     CRYPTO VAULT & GATEWAY SUB-ROUTINES
+     CRYPTOGRAPHIC VAULT & GATEWAY SUB-ROUTINES
      ========================================================================== */
   async function computeSHA256(message) {
     const msgBuffer = new TextEncoder().encode(message);
@@ -686,7 +686,7 @@
     if (pass === "Quantum" || authorizedCodes.includes(pass.toUpperCase())) {
       document.getElementById('gatewayPortal').classList.add('hidden');
       document.getElementById('mainPlatformContainer').style.display = 'flex';
-      document.getElementById('vault-status').innerText = pass === "Quantum" ? "VAULT: SECURE DEMO MODE [v11.0]" : "VAULT: 256-BIT ENCRYPTED LICENSE ACTIVE";
+      document.getElementById('vault-status').innerText = pass === "Quantum" ? "VAULT: SECURE DEMO MODE [v12.0]" : "VAULT: 256-BIT ENCRYPTED LICENSE ACTIVE";
     } else {
       err.innerText = "Access Denied. Enter password 'Quantum' or a valid short code.";
       document.getElementById('gatewayPasswordInput').value = "";
@@ -784,7 +784,7 @@
     const stream = document.getElementById('aiChatStream');
     if(!input.value.trim()) return;
     stream.innerHTML += `<div class="chat-msg-user">You: ${escapeHtml(input.value)}</div>`;
-    stream.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Adaptive viewport and subset calibrated successfully.</div>`;
+    stream.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Processed successfully within adaptive workspace parameters.</div>`;
     input.value = "";
     stream.scrollTop = stream.scrollHeight;
   }
@@ -812,6 +812,7 @@
      ========================================================================== */
   let globalTick = 0, timeOffset = 0, isStreamPaused = false;
   let waveBuffer = new Array(250).fill(50);
+  let timeSeriesBuffer = [];
   let isDragging = false, dragStartX = 60, dragEndX = 190;
   let extractedSubset = [];
 
@@ -1011,16 +1012,21 @@
     waveCtx.strokeStyle = '#00f3ff';
     waveCtx.lineWidth = 1.5;
     waveCtx.strokeRect(minX, 0, maxX - minX, h);
+
+    // Update Query Table Log
+    if (globalTick % 25 === 0) {
+      timeSeriesBuffer.push({ time: new Date().toLocaleTimeString(), val: waveBuffer[waveBuffer.length - 1] });
+      if (timeSeriesBuffer.length > 200) timeSeriesBuffer.shift();
+      const tbody = document.getElementById('queryTableBody');
+      tbody.innerHTML = timeSeriesBuffer.slice(-5).reverse().map((i, idx) => `<tr><td>#${4000 + idx}</td><td>${i.time}</td><td>Subset Stream</td><td>M${(i.val * 0.08).toFixed(1)}</td></tr>`).join('');
+      document.getElementById('sumQueryCount').innerText = timeSeriesBuffer.length + " rows";
+    }
   }
 
   function masterLoop() {
     atomCtx.fillStyle = '#000308'; atomCtx.fillRect(0, 0, atomCanvas.width, atomCanvas.height);
     let cx = atomCanvas.width / 2, cy = atomCanvas.height / 2;
-    atomNodes.push({});
-    if(atomNodes.length > 320) atomNodes.shift();
-
     atomNodes.forEach(n => {
-      if(!n.ox) return;
       let pulse = 1.0 + Math.sin(globalTick * 0.05 * n.pulseSpeed + n.pulseOffset) * 0.1;
       let pers = 320 / (320 + n.oz * pulse);
       atomCtx.fillStyle = n.color;
