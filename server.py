@@ -5,6 +5,8 @@ import math
 import random
 import os
 import statistics
+import http
+import urllib.parse
 
 class SebraAtomicMatrixEngine:
     """
@@ -64,7 +66,6 @@ def calculate_crypto_offset(hash_hex):
     return (offset % 256) / 256.0
 
 def generate_proprietary_matrix(global_tick, time_offset):
-    """Maps the proprietary JS probability density onto the 3D spherical layout."""
     points = []
     for i in range(320): 
         phi = math.acos(-1.0 + (2.0 * i) / 320.0)
@@ -73,7 +74,6 @@ def generate_proprietary_matrix(global_tick, time_offset):
         scale_idx = (i + global_tick) % 296
         state = SEBRA_ATOMIC_ENGINE.evaluate_atomic_state(scale_idx, theta, phi)
         
-        # Base spherical layout manipulated by proprietary probability density
         base_shell = 90 if (i % 3 == 0) else (65 if i % 3 == 1 else 42)
         dynamic_radius = base_shell + (state["probability"] * 50.0) + math.sin(i * 4 + time_offset) * 9
         
@@ -87,14 +87,28 @@ def generate_proprietary_matrix(global_tick, time_offset):
         })
     return points
 
+async def process_request(path, request_headers):
+    """
+    HTTP Handshake Authentication.
+    Drops unauthorized connections before establishing the WebSocket.
+    """
+    query = urllib.parse.urlparse(path).query
+    params = urllib.parse.parse_qs(query)
+    
+    if "hash" not in params:
+        # Return HTTP 401 Unauthorized instantly
+        return (http.HTTPStatus.UNAUTHORIZED, [], b"Unauthorized: Missing Handshake Token\n")
+    return None
+
 async def sebra_engine(websocket):
     print("🔒 Secure SEBRA82 Vault Engine Connected.")
     try:
-        auth_message = await websocket.recv()
-        auth_data = json.loads(auth_message)
+        query = urllib.parse.urlparse(websocket.path).query
+        params = urllib.parse.parse_qs(query)
         
-        key = auth_data.get("hash", "")
-        is_decoy = auth_data.get("is_decoy", False)
+        key = params.get("hash", [""])[0]
+        is_decoy = params.get("is_decoy", ["false"])[0].lower() == "true"
+        
         session_crypto_offset = 0 if is_decoy else calculate_crypto_offset(key)
         
         global_tick, time_offset = 0, 0.0
@@ -105,7 +119,6 @@ async def sebra_engine(websocket):
             global_tick += 1
             time_offset += 0.05
             
-            # Matrix Map Generation
             atomic_matrix = generate_proprietary_matrix(global_tick, time_offset)
             
             raw_x = (global_tick % 400 - 200) * 0.0001
@@ -116,6 +129,9 @@ async def sebra_engine(websocket):
             burst_active = math.sin(global_tick * 0.01 + time_offset * 0.6) > 0.80
             quantum_burst = random.uniform(0, 30.0) if burst_active else random.uniform(0, 6.0)
             
+            if is_decoy:
+                session_crypto_offset += 0.05
+                
             val = min(92.0, max(22.0, (carrier * sub_harmonic * 50.0) + high_freq_noise + quantum_burst))
             
             wave_buffer.pop(0)
@@ -126,7 +142,6 @@ async def sebra_engine(websocket):
             z_score = abs((val - mean) / std)
             is_spike = bool(z_score > spike_threshold)
             
-            # Tensor Math & Financial Forecasting
             raw_alpha = 0.75 + (base_value / 50.0) * 0.25 * damping
             norm_factor = math.sqrt(raw_alpha**2 + 0.5**2)
             alpha, beta = raw_alpha / norm_factor, 0.5 / norm_factor
@@ -135,7 +150,7 @@ async def sebra_engine(websocket):
             alpha_confidence = 92.0 + damping
             
             packet = {
-                "system": {"tick": global_tick, "time": time_offset},
+                "system": {"tick": global_tick, "time": time_offset, "crypto_offset": session_crypto_offset},
                 "wave": {"value": val, "z_score": z_score, "is_spike": is_spike},
                 "quantum": {"alpha": alpha, "beta": beta, "norm": 1.0},
                 "finance": {"projected_roi": roi, "confidence": alpha_confidence},
@@ -150,7 +165,7 @@ async def sebra_engine(websocket):
 
 async def main():
     port = int(os.environ.get("PORT", 8767))
-    server = await websockets.serve(sebra_engine, "0.0.0.0", port)
+    server = await websockets.serve(sebra_engine, "0.0.0.0", port, process_request=process_request)
     print(f"⚡ SEBRA82 Vault Engine Online on port {port}")
     await server.wait_closed()
 
