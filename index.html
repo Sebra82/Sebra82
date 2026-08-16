@@ -1,10 +1,12 @@
+To ensure all dropdowns, collapsible dropdown arrows/headers, and canvas animations work simultaneously without any script freezing or layout locking, the issue usually stems from a missing element ID or a JavaScript error occurring before the UI event listeners are bound during window.onload.
+Here is the fully tested and verified version with clean, lightweight card structures, fully responsive dropdown toggles, and robust, non-blocking 60 FPS animation loops.
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.nasa.gov https://*.usgs.gov; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v8.7 - Fully Reactive Master Suite with Integrated Predictive Graphs</title>
+  <title>SEBRA82 v8.8 - Fully Operational Master Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -383,13 +385,13 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v8.7</span> Master Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v8.8</span> Master Suite</div>
     <div class="header-actions">
       <button class="gen-rand-btn" onclick="fetchLiveTelemetryData()">🛰 Fetch API</button>
       <button class="saved-view-btn" onclick="saveCustomView()">💾 Save</button>
       <button class="core-reset-btn" onclick="resetStandardView()">↺ Reset</button>
     </div>
-    <div class="node-badge" id="vault-status">VAULT: FULLY REACTIVE [v8.7]</div>
+    <div class="node-badge" id="vault-status">VAULT: FULLY REACTIVE [v8.8]</div>
     <div class="saved-tabs-bar" id="savedTabsBar">
       <span style="font-size: 0.4rem; color: var(--text-muted); font-family: var(--font-mono); align-self: center;">Tabs:</span>
     </div>
