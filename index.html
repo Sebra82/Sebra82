@@ -72,35 +72,35 @@
     const pass = document.getElementById('passInput').value.trim();
     if (!pass) return;
 
-    // Connect to the Python background server we just set up on port 8766
-    // Note: For raw TCP sockets in browser, standard WebSocket requires ws:// protocol.
-    // Ensure your Python server matches protocol type.
     try {
-      socket = new WebSocket("ws://127.0.0.1:8766");
+      // Updated to port 8767 matching the active zero-install Python server
+      socket = new WebSocket("ws://127.0.0.1:8767");
       
       socket.onopen = () => {
-        // Send handshake credentials to Python backend
         const payload = {
           hash: pass === "Quantum" ? "" : pass,
           is_decoy: (pass === "Quantum")
         };
         socket.send(JSON.stringify(payload));
 
-        // Hide gateway, show dashboard
         document.getElementById('gatewayPortal').classList.add('hidden');
         document.getElementById('mainContainer').style.display = 'flex';
         startRenderLoop();
       };
 
       socket.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        waveBuffer.shift();
-        waveBuffer.push(data.value);
-        document.getElementById('hudTick').innerText = `Tick: ${data.tick} | Value: ${data.value.toFixed(2)}`;
+        try {
+          const data = JSON.parse(event.data);
+          waveBuffer.shift();
+          waveBuffer.push(data.value);
+          document.getElementById('hudTick').innerText = `Tick: ${data.tick} | Value: ${data.value.toFixed(2)}`;
+        } catch(err) {
+          console.error("Malformed data packet received");
+        }
       };
 
       socket.onerror = (err) => {
-        document.getElementById('errorMsg').innerText = "Connection failed. Ensure Python server is running on port 8766.";
+        document.getElementById('errorMsg').innerText = "Connection failed. Ensure Python server is running on port 8767.";
       };
     } catch(e) {
       document.getElementById('errorMsg').innerText = "Error establishing socket connection.";
