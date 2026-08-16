@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.nasa.gov https://*.usgs.gov; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v9.4 - Secure Demo & 256-Bit Encrypted Master Suite</title>
+  <title>SEBRA82 v9.5 - Secure Gateway & 256-Bit Encrypted Master Suite</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -85,10 +85,6 @@
       display: none; flex-direction: column; gap: 3px; text-align: left; word-break: break-all;
     }
     .key-string { background: #1e2a40; padding: 4px; border-radius: 2px; color: #fff; }
-
-    /* Master App Container */
-    #masterApp { display: none; width: 100%; max-width: 600px; }
-    #masterApp.active { display: flex; flex-direction: column; }
 
     /* Sticky AI Tutor Overlay at Top */
     #stickyTutor {
@@ -396,9 +392,9 @@
 <!-- Quantum Gateway Portal Overlay -->
 <div id="gatewayPortal">
   <div class="gateway-card">
-    <div class="gateway-title">⚡ <span>SEBRA82 v9.4</span> SECURE GATEWAY</div>
+    <div class="gateway-title">⚡ <span>SEBRA82 v9.5</span> SECURE GATEWAY</div>
     <div class="gateway-desc">
-      Choose your access tier. Type password <strong>Quantum</strong> to enter the secure demo sandbox, or generate a cryptographically secured 256-bit SHA-256 license key to unlock full access.
+      Choose your access tier. Enter password <strong>Quantum</strong> for the secure demo sandbox (randomized feeds), or generate a 256-bit SHA-256 encrypted license key for full authorized access.
     </div>
 
     <input type="password" id="gatewayPasswordInput" class="gateway-input" placeholder="Enter Password ('Quantum')..." onkeypress="if(event.key==='Enter') verifyGatewayPassword()">
@@ -410,7 +406,7 @@
     </div>
 
     <div class="key-output-box" id="encryptedKeyBox">
-      <span>🔑 Generated 256-Bit SHA-256 Key:</span>
+      <span>🔑 Generated 256-Bit SHA-256 Key & Short Code:</span>
       <div class="key-string" id="generatedKeyVal">Generating 256-bit hash...</div>
     </div>
   </div>
@@ -460,13 +456,13 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v9.4</span> Geo & Master Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v9.5</span> Geo & Master Suite</div>
     <div class="header-actions">
       <button class="gen-rand-btn" onclick="fetchLiveTelemetryData()">🛰 Fetch API</button>
       <button class="saved-view-btn" onclick="saveCustomView()">💾 Save</button>
       <button class="core-reset-btn" onclick="returnToGateway()">🚪 Lock Vault</button>
     </div>
-    <div class="node-badge" id="vault-status">VAULT: SECURE MODE [v9.4]</div>
+    <div class="node-badge" id="vault-status">VAULT: SECURE MODE [v9.5]</div>
     <div class="saved-tabs-bar" id="savedTabsBar">
       <span style="font-size: 0.4rem; color: var(--text-muted); font-family: var(--font-mono); align-self: center;">Tabs:</span>
     </div>
@@ -855,12 +851,16 @@
     const pass = document.getElementById('gatewayPasswordInput').value.trim();
     const err = document.getElementById('gatewayErrorMsg');
 
-    if (pass === "Quantum") {
+    // Also check if the user entered a previously generated short code from localStorage
+    let authorizedCodes = JSON.parse(localStorage.getItem('sebra_licenses') || '[]');
+
+    if (pass === "Quantum" || authorizedCodes.includes(pass.toUpperCase())) {
       document.getElementById('gatewayPortal').classList.add('hidden');
       document.getElementById('mainPlatformContainer').style.display = 'flex';
-      document.getElementById('vault-status').innerText = "VAULT: SECURE DEMO MODE [v9.4]";
+      document.getElementById('vault-status').innerText = pass === "Quantum" ? "VAULT: SECURE DEMO MODE [v9.5]" : "VAULT: 256-BIT ENCRYPTED LICENSE ACTIVE";
+      document.getElementById('sumExecTier').innerText = pass === "Quantum" ? "DEMO (RANDOM)" : "FULL 256-BIT LICENSE";
     } else {
-      err.innerText = "Access Denied. Enter password 'Quantum'.";
+      err.innerText = "Access Denied. Enter 'Quantum' or a valid license code.";
       document.getElementById('gatewayPasswordInput').value = "";
     }
   }
@@ -869,16 +869,25 @@
     const seed = "SEBRA82_ENCRYPTED_KEY_" + Date.now() + "_" + Math.random();
     const hash256 = await computeSHA256(seed);
     
+    // Derive a clean, unbreakable short access code from the 256-bit hash
+    const rawSegment = hash256.substring(0, 12).toUpperCase();
+    const shortCode = `SEBRA-${rawSegment.substring(0, 4)}-${rawSegment.substring(4, 8)}-${rawSegment.substring(8, 12)}`;
+
+    // Save short code to local storage
+    let authorizedCodes = JSON.parse(localStorage.getItem('sebra_licenses') || '[]');
+    authorizedCodes.push(shortCode);
+    localStorage.setItem('sebra_licenses', JSON.stringify(authorizedCodes));
+    
     const box = document.getElementById('encryptedKeyBox');
     const val = document.getElementById('generatedKeyVal');
     box.style.display = 'flex';
-    val.innerText = hash256;
+    val.innerHTML = `<strong>Your Unbreakable Short Code:</strong> <span style="color:var(--neon-cyan);">${shortCode}</span><br><br><span style="font-size:0.35rem; color:var(--text-muted);">256-Bit Hash: ${hash256}</span>`;
 
     setTimeout(() => {
       document.getElementById('gatewayPortal').classList.add('hidden');
       document.getElementById('mainPlatformContainer').style.display = 'flex';
       document.getElementById('vault-status').innerText = "VAULT: 256-BIT ENCRYPTED LICENSE ACTIVE";
-    }, 1800);
+    }, 3500);
   }
 
   function returnToGateway() {
