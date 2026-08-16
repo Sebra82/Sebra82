@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.nasa.gov https://*.usgs.gov; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v12.0 - Enterprise Quantum Master Suite & Interactive Studio (Fully Expanded Architecture)</title>
+  <title>SEBRA82 v13.0 - Enterprise Quantum Master Suite & Interactive Studio (Fully Expanded Architecture)</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -35,6 +35,7 @@
       justify-content: center;
       align-items: center;
       padding: 0.5rem;
+      font-size: 16px;
     }
 
     /* Portal Gateway Layer */
@@ -104,28 +105,28 @@
       background: var(--card-bg);
       border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 1rem;
+      padding: 1.2rem;
       max-width: 1400px;
       width: 100%;
       min-height: 94vh;
       box-shadow: 0 0 40px rgba(0, 243, 255, 0.12), 0 25px 70px rgba(0, 0, 0, 0.9);
       display: flex;
       flex-direction: column;
-      gap: 0.8rem;
+      gap: 1rem;
     }
 
     /* Smart AI Navigator Guide Box */
     .quick-guide-box {
       background: rgba(0, 243, 255, 0.05);
       border: 1px dashed var(--neon-cyan);
-      border-radius: 6px;
-      padding: 8px 10px;
+      border-radius: 8px;
+      padding: 10px 12px;
       font-family: var(--font-mono);
-      font-size: 0.5rem;
+      font-size: 0.85rem;
       color: var(--text-main);
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 6px;
     }
     .quick-guide-header {
       display: flex;
@@ -139,10 +140,10 @@
     .quick-guide-content {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 6px;
       color: var(--text-muted);
       border-top: 1px dashed rgba(0,243,255,0.2);
-      padding-top: 6px;
+      padding-top: 8px;
     }
     .quick-guide-content.collapsed { display: none; }
 
@@ -150,56 +151,56 @@
     .ai-guide-chat {
       background: rgba(10, 14, 22, 0.95);
       border: 1px solid rgba(192, 132, 252, 0.4);
-      border-radius: 4px;
-      padding: 6px;
+      border-radius: 6px;
+      padding: 8px;
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 6px;
     }
     .ai-chat-stream {
       background: #010307;
       border: 1px solid rgba(192, 132, 252, 0.2);
       border-radius: 4px;
-      padding: 6px;
-      font-size: 0.48rem;
+      padding: 8px;
+      font-size: 0.85rem;
       color: var(--accent-purple);
-      min-height: 50px;
-      max-height: 95px;
+      min-height: 60px;
+      max-height: 120px;
       overflow-y: auto;
       line-height: 1.4;
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 4px;
     }
     .chat-msg-ai { color: var(--accent-purple); }
     .chat-msg-user { color: var(--neon-cyan); text-align: right; }
-    .tutor-box { background: rgba(0, 243, 255, 0.06); border-left: 2px solid var(--neon-cyan); padding: 4px 8px; font-size: 0.45rem; color: #fff; }
+    .tutor-box { background: rgba(0, 243, 255, 0.06); border-left: 2px solid var(--neon-cyan); padding: 4px 8px; font-size: 0.8rem; color: #fff; }
 
     .predictive-prompt-bar {
       display: flex;
-      gap: 4px;
+      gap: 6px;
       align-items: center;
       overflow-x: auto;
-      padding: 2px 0;
+      padding: 3px 0;
     }
     .predictive-chip {
-      font-size: 0.44rem;
+      font-size: 0.8rem;
       font-family: var(--font-mono);
       background: rgba(0, 243, 255, 0.12);
       color: var(--neon-cyan);
       border: 1px solid rgba(0, 243, 255, 0.3);
-      padding: 2px 6px;
+      padding: 3px 8px;
       border-radius: 4px;
       cursor: pointer;
       white-space: nowrap;
     }
     .predictive-chip:hover { background: rgba(0, 243, 255, 0.3); color: #fff; }
 
-    .ai-chat-input-row { display: flex; gap: 4px; position: relative; }
+    .ai-chat-input-row { display: flex; gap: 6px; position: relative; }
     .input-ghost-container {
       position: relative;
       flex: 1;
-      height: 24px;
+      height: 28px;
       background: #1e2a40;
       border: 1px solid rgba(192, 132, 252, 0.4);
       border-radius: 4px;
@@ -209,20 +210,20 @@
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
       background: transparent; color: #fff; border: none;
-      padding: 2px 6px; font-size: 0.48rem; font-family: var(--font-mono); outline: none;
+      padding: 2px 8px; font-size: 0.85rem; font-family: var(--font-mono); outline: none;
       z-index: 2;
     }
     .ghost-input-overlay {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
       background: transparent; color: rgba(139, 148, 158, 0.55);
-      padding: 2px 6px; font-size: 0.48rem; font-family: var(--font-mono);
+      padding: 2px 8px; font-size: 0.85rem; font-family: var(--font-mono);
       pointer-events: none; z-index: 1; white-space: pre; overflow: hidden;
       display: flex; align-items: center;
     }
     .ai-chat-btn {
-      background: var(--accent-purple); color: #fff; border: none; padding: 2px 10px; border-radius: 4px;
-      font-size: 0.45rem; font-family: var(--font-mono); font-weight: bold; cursor: pointer;
+      background: var(--accent-purple); color: #fff; border: none; padding: 2px 12px; border-radius: 4px;
+      font-size: 0.8rem; font-family: var(--font-mono); font-weight: bold; cursor: pointer;
     }
     .ai-chat-btn:hover { background: #b060f0; }
 
@@ -230,29 +231,29 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 0.5rem;
+      padding-bottom: 0.6rem;
       border-bottom: 1px solid var(--border-color);
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 8px;
     }
 
-    .brand-title { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 700; color: #fff; }
+    .brand-title { display: flex; align-items: center; gap: 8px; font-size: 1.1rem; font-weight: 700; color: #fff; }
     .brand-title span { color: var(--neon-cyan); font-weight: 800; text-shadow: 0 0 10px var(--cyan-glow); }
 
-    .header-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-    .core-reset-btn { font-size: 0.48rem; background: rgba(255, 51, 68, 0.2); color: var(--crimson-red); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255, 51, 68, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
-    .saved-view-btn { font-size: 0.48rem; background: rgba(126, 231, 135, 0.2); color: var(--accent-green); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(126, 231, 135, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
-    .gen-rand-btn { font-size: 0.48rem; background: rgba(0, 243, 255, 0.2); color: var(--neon-cyan); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
+    .header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .core-reset-btn { font-size: 0.8rem; background: rgba(255, 51, 68, 0.2); color: var(--crimson-red); padding: 5px 10px; border-radius: 4px; border: 1px solid rgba(255, 51, 68, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
+    .saved-view-btn { font-size: 0.8rem; background: rgba(126, 231, 135, 0.2); color: var(--accent-green); padding: 5px 10px; border-radius: 4px; border: 1px solid rgba(126, 231, 135, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
+    .gen-rand-btn { font-size: 0.8rem; background: rgba(0, 243, 255, 0.2); color: var(--neon-cyan); padding: 5px 10px; border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
 
-    .saved-tabs-bar { display: flex; gap: 4px; width: 100%; overflow-x: auto; padding: 2px 0; align-items: center; }
-    .saved-tab-chip { font-size: 0.45rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); border: 1px solid rgba(192, 132, 252, 0.3); padding: 2px 6px; border-radius: 3px; font-family: var(--font-mono); cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; }
-    .saved-tab-chip .close-chip { color: var(--crimson-red); font-weight: 700; font-size: 0.5rem; cursor: pointer; }
+    .saved-tabs-bar { display: flex; gap: 6px; width: 100%; overflow-x: auto; padding: 4px 0; align-items: center; }
+    .saved-tab-chip { font-size: 0.8rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); border: 1px solid rgba(192, 132, 252, 0.3); padding: 3px 8px; border-radius: 4px; font-family: var(--font-mono); cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
+    .saved-tab-chip .close-chip { color: var(--crimson-red); font-weight: 700; font-size: 0.85rem; cursor: pointer; }
 
     .node-badge {
-      font-size: 0.6rem;
+      font-size: 0.85rem;
       background: rgba(31, 41, 61, 0.6);
       color: var(--text-muted);
-      padding: 3px 8px;
+      padding: 4px 10px;
       border-radius: 10px;
       border: 1px solid var(--border-color);
       font-family: var(--font-mono);
@@ -262,7 +263,7 @@
     .mobile-stack {
       display: grid;
       grid-template-columns: repeat(1, 1fr);
-      gap: 0.6rem;
+      gap: 1rem;
       flex: 1;
       position: relative;
     }
@@ -287,12 +288,12 @@
 
     .panel-card {
       background: rgba(5, 9, 18, 0.98);
-      border-radius: 8px;
+      border-radius: 10px;
       border: 1px solid var(--border-color);
-      padding: 0.6rem;
+      padding: 1rem;
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      gap: 0.6rem;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
@@ -303,86 +304,86 @@
     }
     .panel-card.nav-highlight { animation: navPulse 1s ease-in-out 3; }
 
-    #cardAtom { border-left: 3px solid #00f3ff; background: linear-gradient(135deg, rgba(0, 243, 255, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); }
-    #cardFin { border-left: 3px solid #c084fc; background: linear-gradient(135deg, rgba(192, 132, 252, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); }
-    #cardGeo { border-left: 3px solid #f0883e; background: linear-gradient(135deg, rgba(240, 136, 62, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); }
-    #cardWave { border-left: 3px solid #7ee787; background: linear-gradient(135deg, rgba(126, 231, 135, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); }
-    #cardQuery { border-left: 3px solid #f0883e; background: linear-gradient(135deg, rgba(240, 136, 62, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); }
-    #cardTools { border-left: 3px solid #38bdf8; background: linear-gradient(135deg, rgba(56, 189, 248, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); }
+    #cardAtom { border-left: 4px solid #00f3ff; background: linear-gradient(135deg, rgba(0, 243, 255, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); }
+    #cardFin { border-left: 4px solid #c084fc; background: linear-gradient(135deg, rgba(192, 132, 252, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); }
+    #cardGeo { border-left: 4px solid #f0883e; background: linear-gradient(135deg, rgba(240, 136, 62, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); }
+    #cardWave { border-left: 4px solid #7ee787; background: linear-gradient(135deg, rgba(126, 231, 135, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); }
+    #cardQuery { border-left: 4px solid #f0883e; background: linear-gradient(135deg, rgba(240, 136, 62, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); }
+    #cardTools { border-left: 4px solid #38bdf8; background: linear-gradient(135deg, rgba(56, 189, 248, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); }
 
     .panel-card.fluid-maximized {
       grid-column: 1 / -1 !important;
-      min-height: 60vh;
+      min-height: 65vh;
       border-color: var(--neon-cyan);
       box-shadow: 0 0 35px rgba(0,243,255,0.4);
       order: -99;
       opacity: 1 !important;
     }
-    .panel-card.fluid-maximized .collapsible-body { max-height: 1200px !important; display: flex !important; opacity: 1 !important; }
+    .panel-card.fluid-maximized .collapsible-body { max-height: 1400px !important; display: flex !important; opacity: 1 !important; }
 
     .panel-card.minimized-dock-item {
       order: 100;
       grid-column: span 1 !important;
-      padding: 0.3rem 0.5rem;
+      padding: 0.4rem 0.6rem;
       opacity: 0.85;
       border-style: dashed;
       background: rgba(10, 14, 22, 0.95);
     }
     .panel-card.minimized-dock-item .collapsible-body { display: none !important; }
 
-    .section-category-bar { display: flex; gap: 4px; margin-bottom: 2px; }
-    .cat-chip { font-size: 0.42rem; font-family: var(--font-mono); font-weight: 700; padding: 2px 4px; border-radius: 3px; border: 1px solid; text-transform: uppercase; }
+    .section-category-bar { display: flex; gap: 6px; margin-bottom: 4px; }
+    .cat-chip { font-size: 0.75rem; font-family: var(--font-mono); font-weight: 700; padding: 2px 6px; border-radius: 4px; border: 1px solid; text-transform: uppercase; }
     .cat-calc { color: var(--neon-cyan); border-color: rgba(0,243,255,0.4); background: rgba(0,243,255,0.08); }
     .cat-sci { color: var(--accent-green); border-color: rgba(126,231,135,0.4); background: rgba(126,231,135,0.08); }
     .cat-world { color: var(--warning-amber); border-color: rgba(240,136,62,0.4); background: rgba(240,136,62,0.08); }
     .cat-fin { color: var(--accent-purple); border-color: rgba(192,132,252,0.4); background: rgba(192,132,252,0.08); }
 
-    .panel-title { font-size: 0.58rem; font-weight: 700; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; cursor: pointer; }
+    .panel-title { font-size: 0.9rem; font-weight: 700; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; cursor: pointer; }
     .panel-title:hover { color: var(--neon-cyan); }
 
-    .section-summary-preview { font-size: 0.45rem; color: var(--text-muted); font-family: var(--font-mono); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 3px 6px; border-radius: 4px; border-left: 2px solid var(--neon-cyan); }
+    .section-summary-preview { font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.35); padding: 6px 10px; border-radius: 6px; border-left: 3px solid var(--neon-cyan); }
     .section-summary-preview span strong { color: var(--accent-green); }
 
-    .canvas-box { position: relative; width: 100%; background: radial-gradient(circle at center, #0a1128 0%, #000000 100%); border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.4); overflow: hidden; }
+    .canvas-box { position: relative; width: 100%; background: radial-gradient(circle at center, #0a1128 0%, #000000 100%); border-radius: 6px; border: 1px solid rgba(0, 243, 255, 0.4); overflow: hidden; }
     canvas { display: block; width: 100%; height: 100%; cursor: crosshair; touch-action: none; pointer-events: auto !important; }
-    .hud-tag { position: absolute; top: 2px; left: 4px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 2px 4px; border-radius: 3px; font-size: 0.42rem; color: var(--neon-cyan); font-family: var(--font-mono); z-index: 5; pointer-events: none; }
-    .graph-toolbar { position: absolute; bottom: 3px; right: 4px; display: flex; gap: 3px; z-index: 6; }
-    .graph-tool-btn { font-size: 0.42rem; font-family: var(--font-mono); background: rgba(0, 243, 255, 0.2); color: var(--neon-cyan); border: 1px solid rgba(0, 243, 255, 0.4); padding: 2px 4px; border-radius: 3px; cursor: pointer; }
+    .hud-tag { position: absolute; top: 4px; left: 8px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; color: var(--neon-cyan); font-family: var(--font-mono); z-index: 5; pointer-events: none; }
+    .graph-toolbar { position: absolute; bottom: 6px; right: 8px; display: flex; gap: 6px; z-index: 6; }
+    .graph-tool-btn { font-size: 0.75rem; font-family: var(--font-mono); background: rgba(0, 243, 255, 0.2); color: var(--neon-cyan); border: 1px solid rgba(0, 243, 255, 0.4); padding: 4px 8px; border-radius: 4px; cursor: pointer; }
 
-    .math-dashboard { display: grid; grid-template-columns: 1fr; gap: 4px; }
-    .math-interactive-card { background: rgba(10, 14, 22, 0.95); border: 1px solid rgba(0, 243, 255, 0.25); border-radius: 4px; padding: 6px; display: flex; flex-direction: column; gap: 3px; }
-    .math-live-readout { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 0.48rem; background: rgba(0, 243, 255, 0.06); border: 1px solid rgba(0, 243, 255, 0.2); padding: 3px 6px; border-radius: 3px; color: var(--neon-cyan); }
-    .math-toggle-row { display: flex; gap: 3px; }
-    .math-mode-btn { flex: 1; font-size: 0.42rem; font-family: var(--font-mono); padding: 3px 4px; background: #1e2a40; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 3px; cursor: pointer; text-align: center; }
+    .math-dashboard { display: grid; grid-template-columns: 1fr; gap: 6px; }
+    .math-interactive-card { background: rgba(10, 14, 22, 0.95); border: 1px solid rgba(0, 243, 255, 0.25); border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 5px; }
+    .math-live-readout { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 0.85rem; background: rgba(0, 243, 255, 0.06); border: 1px solid rgba(0, 243, 255, 0.2); padding: 6px 10px; border-radius: 4px; color: var(--neon-cyan); }
+    .math-toggle-row { display: flex; gap: 6px; }
+    .math-mode-btn { flex: 1; font-size: 0.75rem; font-family: var(--font-mono); padding: 6px 8px; background: #1e2a40; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer; text-align: center; }
     .math-mode-btn.active { background: rgba(0, 243, 255, 0.2); color: var(--neon-cyan); border-color: var(--neon-cyan); font-weight: bold; }
 
-    .metrics-split-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
-    .metric-split-box { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 4px; border-radius: 3px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-    .metric-split-label { font-size: 0.4rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-mono); }
-    .metric-split-val { font-size: 0.58rem; color: var(--accent-green); font-weight: 700; font-family: var(--font-mono); margin-top: 2px; }
+    .metrics-split-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .metric-split-box { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 8px; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .metric-split-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-mono); }
+    .metric-split-val { font-size: 1rem; color: var(--accent-green); font-weight: 700; font-family: var(--font-mono); margin-top: 4px; }
 
-    .data-table-container { background: #010409; border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 3px; padding: 3px; max-height: 95px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.45rem; color: var(--accent-purple); }
+    .data-table-container { background: #010409; border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 6px; padding: 6px; max-height: 140px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.82rem; color: var(--accent-purple); }
     .data-table { width: 100%; border-collapse: collapse; text-align: left; }
-    .data-table th, .data-table td { padding: 3px 4px; border-bottom: 1px solid rgba(192, 132, 252, 0.15); }
+    .data-table th, .data-table td { padding: 6px 8px; border-bottom: 1px solid rgba(192, 132, 252, 0.15); }
     .data-table th { color: var(--neon-cyan); font-weight: 600; background: rgba(0, 243, 255, 0.05); }
 
-    .control-item { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 4px 5px; border-radius: 3px; display: flex; flex-direction: column; gap: 2px; }
-    .control-label { font-size: 0.48rem; color: var(--text-muted); display: flex; justify-content: space-between; font-weight: 500; font-family: var(--font-mono); }
+    .control-item { background: rgba(10, 14, 22, 0.9); border: 1px solid var(--border-color); padding: 8px 10px; border-radius: 6px; display: flex; flex-direction: column; gap: 4px; }
+    .control-label { font-size: 0.85rem; color: var(--text-muted); display: flex; justify-content: space-between; font-weight: 500; font-family: var(--font-mono); }
     .control-label span { color: var(--text-main); font-weight: 600; }
-    input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1e2a40; color: #fff; border: 1px solid var(--border-color); height: 3px; border-radius: 3px; outline: none; }
-    select { height: 22px; font-size: 0.52rem; padding: 0 4px; font-family: var(--font-mono); }
+    input[type="range"], select { width: 100%; accent-color: var(--neon-cyan); background: #1e2a40; color: #fff; border: 1px solid var(--border-color); height: 5px; border-radius: 4px; outline: none; }
+    select { height: 32px; font-size: 0.85rem; padding: 0 8px; font-family: var(--font-mono); }
 
-    .btn-row { display: flex; gap: 3px; }
-    .action-btn { width: 100%; padding: 0.35rem; font-weight: 600; font-size: 0.52rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; text-align: center; }
-    .pin-btn { background: var(--accent-purple); color: #fff; font-size: 0.45rem; padding: 2px 6px; border-radius: 3px; border: none; cursor: pointer; font-family: var(--font-mono); }
+    .btn-row { display: flex; gap: 6px; }
+    .action-btn { width: 100%; padding: 0.6rem; font-weight: 600; font-size: 0.85rem; color: #020408; background: var(--neon-cyan); border: none; border-radius: 6px; cursor: pointer; text-align: center; }
+    .pin-btn { background: var(--accent-purple); color: #fff; font-size: 0.8rem; padding: 4px 10px; border-radius: 4px; border: none; cursor: pointer; font-family: var(--font-mono); }
 
     .summary-dashboard-card { background: linear-gradient(135deg, rgba(0,243,255,0.08) 0%, rgba(192,132,252,0.08) 100%); border: 1px solid var(--neon-cyan); }
-    .summary-split-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; }
-    .summary-split-metric-card { background: rgba(2,4,8,0.8); border: 1px solid rgba(0,243,255,0.3); border-radius: 4px; padding: 6px; text-align: center; font-family: var(--font-mono); }
-    .summary-split-title { font-size: 0.4rem; color: var(--text-muted); text-transform: uppercase; }
-    .summary-split-val { font-size: 0.62rem; color: var(--neon-cyan); font-weight: bold; margin-top: 2px; }
+    .summary-split-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .summary-split-metric-card { background: rgba(2,4,8,0.8); border: 1px solid rgba(0,243,255,0.3); border-radius: 6px; padding: 10px; text-align: center; font-family: var(--font-mono); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .summary-split-title { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; }
+    .summary-split-val { font-size: 1.1rem; color: var(--neon-cyan); font-weight: bold; margin-top: 4px; }
 
-    .collapsible-body { display: flex; flex-direction: column; gap: 0.35rem; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease; overflow: hidden; max-height: 900px; opacity: 1; }
+    .collapsible-body { display: flex; flex-direction: column; gap: 0.6rem; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease; overflow: hidden; max-height: 1200px; opacity: 1; }
     .collapsible-body.collapsed { max-height: 0px; opacity: 0; padding: 0; margin: 0; }
   </style>
 </head>
@@ -391,7 +392,7 @@
 <!-- Quantum Gateway Portal Overlay -->
 <div id="gatewayPortal">
   <div class="gateway-card">
-    <div class="gateway-title">⚡ <span>SEBRA82 v12.0</span> SECURE GATEWAY</div>
+    <div class="gateway-title">⚡ <span>SEBRA82 v13.0</span> SECURE GATEWAY</div>
     <div class="gateway-desc">
       Choose your access tier. Enter password <strong>Quantum</strong> for the secure demo sandbox, or generate a 256-bit SHA-256 encrypted license key.
     </div>
@@ -407,7 +408,7 @@
     <div class="key-output-box" id="encryptedKeyBox">
       <span>🔑 Generated 256-Bit SHA-256 Key & Short Code:</span>
       <div class="key-string" id="generatedKeyVal">Generating 256-bit hash...</div>
-      <button class="gateway-btn btn-demo" style="margin-top: 6px;" onclick="enterAppWithGeneratedKey()">🚀 Enter Suite Now</button>
+      <button class="gateway-btn btn-demo" style="margin-top: 8px;" onclick="enterAppWithGeneratedKey()">🚀 Enter Suite Now</button>
     </div>
   </div>
 </div>
@@ -426,14 +427,14 @@
       <span id="guideToggleSign">[-]</span>
     </div>
     <div class="quick-guide-content" id="quickGuideBody">
-      <span>• <strong>Guide:</strong> Adaptive enterprise layout optimized for laptops and desktops. Click & drag across the Live Noise Stream (Card 4) to pinch/grab and auto-generate high-fidelity subset metrics.</span>
+      <span>• <strong>Guide:</strong> Laptop & desktop optimized layout with readable typography. Click & drag across the Live Noise Stream (Card 4) to pinch/grab and auto-generate subset metrics.</span>
       
       <div class="ai-guide-chat">
         <div class="ai-chat-stream" id="aiChatStream">
-          <div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Adaptive workspace online. High-fidelity neon visualization suite active.</div>
+          <div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Adaptive laptop workspace online. High-fidelity neon visualization suite active.</div>
         </div>
         <div class="predictive-prompt-bar" id="predictiveBar">
-          <span style="font-size: 0.4rem; color: var(--text-muted);">Quick:</span>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Quick:</span>
           <span class="predictive-chip" onclick="teachAndMaximize('atom', 'cardAtom')">3D Atom</span>
           <span class="predictive-chip" onclick="teachAndMaximize('geo', 'cardGeo')">Geo & Seismic</span>
           <span class="predictive-chip" onclick="teachAndMaximize('noise', 'cardWave')">Live Feed</span>
@@ -451,14 +452,14 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v12.0</span> Adaptive Master Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v13.0</span> Adaptive Master Suite</div>
     <div class="header-actions">
       <button class="gen-rand-btn" onclick="fetchLiveTelemetryData()">🛰 Fetch API</button>
       <button class="core-reset-btn" onclick="returnToGateway()">🚪 Lock Vault</button>
     </div>
-    <div class="node-badge" id="vault-status">VAULT: ACTIVE [v12.0]</div>
+    <div class="node-badge" id="vault-status">VAULT: ACTIVE [v13.0]</div>
     <div class="saved-tabs-bar" id="savedTabsBar">
-      <span style="font-size: 0.4rem; color: var(--text-muted); font-family: var(--font-mono); align-self: center;">Tabs:</span>
+      <span style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono); align-self: center;">Tabs:</span>
     </div>
   </div>
 
@@ -479,8 +480,8 @@
         <span>🔍 3D View</span>
       </div>
       <div class="collapsible-body collapsed" id="secAtom">
-        <div class="canvas-box" style="height: 180px;" id="atomBox">
-          <canvas id="atom3DCanvas" width="400" height="180"></canvas>
+        <div class="canvas-box" style="height: 220px;" id="atomBox">
+          <canvas id="atom3DCanvas" width="500" height="220"></canvas>
           <div class="hud-tag">✨ 3D CORE | Drag & Pinch Zoom</div>
         </div>
       </div>
@@ -501,8 +502,8 @@
         <span>🔍 Geo Radar</span>
       </div>
       <div class="collapsible-body collapsed" id="secGeo">
-        <div class="canvas-box" style="height: 140px;" id="geoBox">
-          <canvas id="geoRadarCanvas" width="400" height="140"></canvas>
+        <div class="canvas-box" style="height: 180px;" id="geoBox">
+          <canvas id="geoRadarCanvas" width="500" height="180"></canvas>
           <div class="hud-tag" style="color:var(--warning-amber);">🌐 GLOBAL SEISMIC RADAR MAPPING</div>
         </div>
       </div>
@@ -546,8 +547,8 @@
       </div>
       <div class="collapsible-body collapsed" id="secWave">
         
-        <div class="canvas-box" style="height: 130px;" id="noiseCanvasContainer">
-          <canvas id="secureSimCanvas" width="400" height="130"></canvas>
+        <div class="canvas-box" style="height: 160px;" id="noiseCanvasContainer">
+          <canvas id="secureSimCanvas" width="500" height="160"></canvas>
           <div class="hud-tag" id="waveHudTag">✋ PINCH & GRAB: Drag across neon waveform to isolate subset</div>
           <div class="graph-toolbar">
             <button class="graph-tool-btn" onclick="togglePauseStream()">⏸</button>
@@ -555,14 +556,14 @@
           </div>
         </div>
 
-        <div class="expanded-graph-suite" style="display: flex; flex-direction:column; gap:5px; background: rgba(0, 243, 255, 0.04); border: 1px solid rgba(0, 243, 255, 0.3); padding: 6px; border-radius: 6px;">
+        <div class="expanded-graph-suite" style="display: flex; flex-direction:column; gap:8px; background: rgba(0, 243, 255, 0.04); border: 1px solid rgba(0, 243, 255, 0.3); padding: 10px; border-radius: 8px;">
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div style="font-size: 0.48rem; color: var(--neon-cyan); font-family: var(--font-mono); font-weight:700;">📊 HIGH-FIDELITY SUBSET ANALYZER</div>
-            <div style="font-size: 0.42rem; color: var(--accent-green);" id="subsetRangeLabel">Range: None Selected</div>
+            <div style="font-size: 0.85rem; color: var(--neon-cyan); font-family: var(--font-mono); font-weight:700;">📊 HIGH-FIDELITY SUBSET ANALYZER</div>
+            <div style="font-size: 0.8rem; color: var(--accent-green);" id="subsetRangeLabel">Range: None Selected</div>
           </div>
 
-          <div class="canvas-box" style="height: 105px; border-color: rgba(126, 231, 135, 0.5);">
-            <canvas id="subsetCanvas" width="400" height="105"></canvas>
+          <div class="canvas-box" style="height: 130px; border-color: rgba(126, 231, 135, 0.5);">
+            <canvas id="subsetCanvas" width="500" height="130"></canvas>
             <div class="hud-tag" style="color:var(--accent-green);">Enhanced Neon Subset Waveform</div>
           </div>
 
@@ -604,7 +605,7 @@
         <span>🔍 Table</span>
       </div>
       <div class="collapsible-body collapsed" id="secQuery">
-        <div class="suggestion-box">💡 **AI Suggestion**: Telemetry records and subsets populate tables instantly.</div>
+        <div class="suggestion-box" style="font-size:0.85rem;">💡 **AI Suggestion**: Telemetry records and subsets populate tables instantly.</div>
         <div class="data-table-container">
           <table class="data-table" id="queryDataTable">
             <thead><tr><th>ID</th><th>Time</th><th>Category</th><th>Mag</th></tr></thead>
@@ -626,21 +627,21 @@
         <button class="pin-btn" id="pinBtn_cardSummary" onclick="event.stopPropagation(); toggleMax('cardSummary')">⚡ Max</button>
       </div>
       <div class="collapsible-body" id="secSummary">
-        <div style="font-size: 0.48rem; color: var(--text-muted); font-family: var(--font-mono);" id="execSummaryText">
-          🏆 <strong>Insights</strong>: Adaptive Layout active. High-fidelity neon subset rendering synchronized across laptop and desktop viewports.
+        <div style="font-size: 0.9rem; color: var(--text-muted); font-family: var(--font-mono);" id="execSummaryText">
+          🏆 <strong>Insights</strong>: Adaptive Laptop Layout active. High-fidelity neon subset rendering synchronized across high-resolution displays.
         </div>
-        <div class="canvas-box" style="height: 95px; border-color: rgba(126, 231, 135, 0.5); margin-top: 3px;">
-          <canvas id="execMirroredCanvas" width="400" height="95"></canvas>
+        <div class="canvas-box" style="height: 130px; border-color: rgba(126, 231, 135, 0.5); margin-top: 4px;">
+          <canvas id="execMirroredCanvas" width="500" height="130"></canvas>
           <div class="hud-tag" style="color:var(--accent-green);">Executive Neon Subset Mirror</div>
         </div>
-        <div class="summary-split-grid" style="margin-top: 3px;">
+        <div class="summary-split-grid" style="margin-top: 4px;">
           <div class="summary-split-metric-card">
             <div class="summary-split-title">Active Subset Points</div>
             <div class="summary-split-val" id="sumExecSubsetPoints">0 Points</div>
           </div>
           <div class="summary-split-metric-card">
             <div class="summary-split-title">Status</div>
-            <div class="summary-split-val" id="execStatusVal" style="color: var(--accent-green);">Adaptive High-Fidelity Sync</div>
+            <div class="summary-split-val" id="execStatusVal" style="color: var(--accent-green);">Laptop High-Fidelity Sync</div>
           </div>
         </div>
       </div>
@@ -653,24 +654,23 @@
   "use strict";
 
   /* ==========================================================================
-     SEBRA82 v12.0 - FULL ENTERPRISE ARCHITECTURAL CORE & STATE MANAGER
+     SEBRA82 v13.0 - ENTERPRISE ARCHITECTURAL CORE & EXTENDED RUNTIME SUBSYSTEMS
      ========================================================================== */
   const SEBRA_CONFIG = {
-    version: "12.0",
-    build: "ENTERPRISE-PROD-ADAPTIVE-EXPANDED",
+    version: "13.0",
+    build: "ENTERPRISE-PROD-LAPTOP-DESKTOP-EXPANDED",
     targetFps: 60,
     debugMode: false,
     tensorPrecision: "Float64Array",
-    quantumEpochs: 296
+    quantumEpochs: 296,
+    maxBufferSize: 500,
+    encryptionCipher: "AES-256-GCM"
   };
 
   function escapeHtml(str) {
     return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
   }
 
-  /* ==========================================================================
-     CRYPTOGRAPHIC VAULT & GATEWAY SUB-ROUTINES
-     ========================================================================== */
   async function computeSHA256(message) {
     const msgBuffer = new TextEncoder().encode(message);
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -686,7 +686,7 @@
     if (pass === "Quantum" || authorizedCodes.includes(pass.toUpperCase())) {
       document.getElementById('gatewayPortal').classList.add('hidden');
       document.getElementById('mainPlatformContainer').style.display = 'flex';
-      document.getElementById('vault-status').innerText = pass === "Quantum" ? "VAULT: SECURE DEMO MODE [v12.0]" : "VAULT: 256-BIT ENCRYPTED LICENSE ACTIVE";
+      document.getElementById('vault-status').innerText = pass === "Quantum" ? "VAULT: SECURE DEMO MODE [v13.0]" : "VAULT: 256-BIT ENCRYPTED LICENSE ACTIVE";
     } else {
       err.innerText = "Access Denied. Enter password 'Quantum' or a valid short code.";
       document.getElementById('gatewayPasswordInput').value = "";
@@ -723,9 +723,6 @@
     document.getElementById('encryptedKeyBox').style.display = 'none';
   }
 
-  /* ==========================================================================
-     UI LAYOUT, COLLAPSE & AI NAVIGATOR TUTOR SUB-ROUTINES
-     ========================================================================== */
   function toggleQuickGuide() {
     const body = document.getElementById('quickGuideBody');
     const sign = document.getElementById('guideToggleSign');
@@ -784,14 +781,11 @@
     const stream = document.getElementById('aiChatStream');
     if(!input.value.trim()) return;
     stream.innerHTML += `<div class="chat-msg-user">You: ${escapeHtml(input.value)}</div>`;
-    stream.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Processed successfully within adaptive workspace parameters.</div>`;
+    stream.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Workspace active and calibrated.</div>`;
     input.value = "";
     stream.scrollTop = stream.scrollHeight;
   }
 
-  /* ==========================================================================
-     ADVANCED SUBSET TENSOR MATHEMATICS & STATISTICAL ANALYZER
-     ========================================================================== */
   class TensorAnalyzer {
     static computeMean(arr) {
       if (!arr || arr.length === 0) return 0;
@@ -807,13 +801,10 @@
     }
   }
 
-  /* ==========================================================================
-     INTERACTIVE PINCH & GRAB NOISE STUDIO & CANVAS RENDERING ENGINE
-     ========================================================================== */
   let globalTick = 0, timeOffset = 0, isStreamPaused = false;
   let waveBuffer = new Array(250).fill(50);
   let timeSeriesBuffer = [];
-  let isDragging = false, dragStartX = 60, dragEndX = 190;
+  let isDragging = false, dragStartX = 80, dragEndX = 220;
   let extractedSubset = [];
 
   const atomCanvas = document.getElementById('atom3DCanvas');
@@ -872,7 +863,7 @@
   }
 
   function resetSubsetSelection() {
-    dragStartX = 60; dragEndX = 190;
+    dragStartX = 80; dragEndX = 220;
     isStreamPaused = false;
     document.getElementById('noiseModeStatus').innerText = "Continuous Stream";
     processExtractedSubset();
@@ -930,7 +921,7 @@
     subsetCtx.shadowBlur = 12;
     subsetCtx.shadowColor = '#7ee787';
     subsetCtx.strokeStyle = '#7ee787';
-    subsetCtx.lineWidth = 2.2;
+    subsetCtx.lineWidth = 2.5;
     subsetCtx.beginPath();
     
     let st = w / Math.max(1, extractedSubset.length - 1);
@@ -949,7 +940,7 @@
       execMirroredCtx.shadowBlur = 10;
       execMirroredCtx.shadowColor = '#00f3ff';
       execMirroredCtx.strokeStyle = '#00f3ff';
-      execMirroredCtx.lineWidth = 2;
+      execMirroredCtx.lineWidth = 2.2;
       execMirroredCtx.beginPath();
       let est = ew / Math.max(1, extractedSubset.length - 1);
       extractedSubset.forEach((val, idx) => {
@@ -990,10 +981,10 @@
     waveCtx.fillStyle = streamGrad;
     waveCtx.fillRect(0, 0, w, h);
 
-    waveCtx.shadowBlur = 10;
+    waveCtx.shadowBlur = 12;
     waveCtx.shadowColor = '#00f3ff';
     waveCtx.strokeStyle = '#00f3ff';
-    waveCtx.lineWidth = 2;
+    waveCtx.lineWidth = 2.2;
     waveCtx.beginPath();
     
     let st = w / Math.max(1, waveBuffer.length - 1);
@@ -1010,10 +1001,9 @@
     waveCtx.fillStyle = 'rgba(0, 243, 255, 0.15)';
     waveCtx.fillRect(minX, 0, maxX - minX, h);
     waveCtx.strokeStyle = '#00f3ff';
-    waveCtx.lineWidth = 1.5;
+    waveCtx.lineWidth = 1.8;
     waveCtx.strokeRect(minX, 0, maxX - minX, h);
 
-    // Update Query Table Log
     if (globalTick % 25 === 0) {
       timeSeriesBuffer.push({ time: new Date().toLocaleTimeString(), val: waveBuffer[waveBuffer.length - 1] });
       if (timeSeriesBuffer.length > 200) timeSeriesBuffer.shift();
