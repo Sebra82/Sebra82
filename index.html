@@ -1,12 +1,10 @@
-Here is the complete, production-ready code for SEBRA82 v10.6.
-This version incorporates the Adaptive Enterprise Layout (featuring a responsive CSS grid that automatically reflows across laptops, tablets, and desktop screens) and integrates the interactive Pinch-&-Grab Noise Studio with high-fidelity neon gradient graphs and subset metric generation.
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.nasa.gov https://*.usgs.gov; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v10.6 - Adaptive Enterprise Master Suite & Pinch-&-Grab Studio</title>
+  <title>SEBRA82 v10.7 - Adaptive Enterprise Master Suite & Pinch-&-Grab Studio</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -99,7 +97,7 @@ This version incorporates the Adaptive Enterprise Layout (featuring a responsive
     .tutor-close { float: right; cursor: pointer; color: var(--neon-cyan); font-weight: bold; font-size: 0.45rem; font-family: var(--font-mono); }
     .tutor-text { font-size: 0.48rem; color: #fff; font-family: var(--font-mono); line-height: 1.4; }
 
-    /* Fully Adaptive Platform Layout for Laptops & Desktops */
+    /* Adaptive Platform Layout: Responsive for Laptops & Desktops */
     .platform-container {
       position: relative;
       z-index: 10;
@@ -107,7 +105,7 @@ This version incorporates the Adaptive Enterprise Layout (featuring a responsive
       border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 1rem;
-      max-width: 1400px;
+      max-width: 1280px;
       width: 100%;
       min-height: 94vh;
       box-shadow: 0 0 40px rgba(0, 243, 255, 0.12), 0 25px 70px rgba(0, 0, 0, 0.9);
@@ -278,7 +276,7 @@ This version incorporates the Adaptive Enterprise Layout (featuring a responsive
       }
     }
 
-    @media (min-width: 1100px) {
+    @media (min-width: 1024px) {
       .mobile-stack {
         grid-template-columns: repeat(3, 1fr);
       }
@@ -393,7 +391,7 @@ This version incorporates the Adaptive Enterprise Layout (featuring a responsive
 <!-- Quantum Gateway Portal Overlay -->
 <div id="gatewayPortal">
   <div class="gateway-card">
-    <div class="gateway-title">⚡ <span>SEBRA82 v10.6</span> SECURE GATEWAY</div>
+    <div class="gateway-title">⚡ <span>SEBRA82 v10.7</span> SECURE GATEWAY</div>
     <div class="gateway-desc">
       Choose your access tier. Enter password <strong>Quantum</strong> for the secure demo sandbox, or generate a 256-bit SHA-256 encrypted license key.
     </div>
@@ -453,12 +451,12 @@ This version incorporates the Adaptive Enterprise Layout (featuring a responsive
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v10.6</span> Adaptive Master Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v10.7</span> Adaptive Master Suite</div>
     <div class="header-actions">
       <button class="gen-rand-btn" onclick="fetchLiveTelemetryData()">🛰 Fetch API</button>
       <button class="core-reset-btn" onclick="returnToGateway()">🚪 Lock Vault</button>
     </div>
-    <div class="node-badge" id="vault-status">VAULT: ACTIVE [v10.6]</div>
+    <div class="node-badge" id="vault-status">VAULT: ACTIVE [v10.7]</div>
     <div class="saved-tabs-bar" id="savedTabsBar">
       <span style="font-size: 0.4rem; color: var(--text-muted); font-family: var(--font-mono); align-self: center;">Tabs:</span>
     </div>
@@ -646,7 +644,7 @@ This version incorporates the Adaptive Enterprise Layout (featuring a responsive
     if (pass === "Quantum" || authorizedCodes.includes(pass.toUpperCase())) {
       document.getElementById('gatewayPortal').classList.add('hidden');
       document.getElementById('mainPlatformContainer').style.display = 'flex';
-      document.getElementById('vault-status').innerText = pass === "Quantum" ? "VAULT: SECURE DEMO MODE [v10.6]" : "VAULT: 256-BIT ENCRYPTED LICENSE ACTIVE";
+      document.getElementById('vault-status').innerText = pass === "Quantum" ? "VAULT: SECURE DEMO MODE [v10.7]" : "VAULT: 256-BIT ENCRYPTED LICENSE ACTIVE";
     } else {
       err.innerText = "Access Denied. Enter password 'Quantum' or a valid short code.";
       document.getElementById('gatewayPasswordInput').value = "";
@@ -962,7 +960,8 @@ This version incorporates the Adaptive Enterprise Layout (featuring a responsive
     });
 
     if (geoCtx) {
-      geoCtx.fillStyle = '.02050b'; geoCtx.fillRect(0, 0, geoCanvas.width, geoCanvas.height);
+      geoCtx.fillStyle = '#02050b';
+      geoCtx.fillRect(0, 0, geoCanvas.width, geoCanvas.height);
       geoCtx.strokeStyle = 'rgba(240, 136, 62, 0.25)';
       let gcx = geoCanvas.width / 2, gcy = geoCanvas.height / 2;
       for (let r = 20; r < geoCanvas.width; r += 30) {
