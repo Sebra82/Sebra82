@@ -73,8 +73,8 @@
     if (!pass) return;
 
     try {
-      // Updated to port 8767 matching the active zero-install Python server
-      socket = new WebSocket("ws://127.0.0.1:8767");
+      // Updated to connect securely to your live Render cloud backend
+      socket = new WebSocket("wss://sebra82.onrender.com");
       
       socket.onopen = () => {
         const payload = {
@@ -100,7 +100,7 @@
       };
 
       socket.onerror = (err) => {
-        document.getElementById('errorMsg').innerText = "Connection failed. Ensure Python server is running on port 8767.";
+        document.getElementById('errorMsg').innerText = "Connection failed. Check Render server status.";
       };
     } catch(e) {
       document.getElementById('errorMsg').innerText = "Error establishing socket connection.";
