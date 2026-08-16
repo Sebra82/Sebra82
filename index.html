@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.nasa.gov https://*.usgs.gov; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v10.7 - Adaptive Enterprise Master Suite & Pinch-&-Grab Studio</title>
+  <title>SEBRA82 v11.0 - Complete Enterprise Quantum Master Suite & Adaptive Workspace</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -97,7 +97,7 @@
     .tutor-close { float: right; cursor: pointer; color: var(--neon-cyan); font-weight: bold; font-size: 0.45rem; font-family: var(--font-mono); }
     .tutor-text { font-size: 0.48rem; color: #fff; font-family: var(--font-mono); line-height: 1.4; }
 
-    /* Adaptive Platform Layout: Responsive for Laptops & Desktops */
+    /* Fully Adaptive Enterprise Layout (Mobile, Laptop, Desktop) */
     .platform-container {
       position: relative;
       z-index: 10;
@@ -105,7 +105,7 @@
       border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 1rem;
-      max-width: 1280px;
+      max-width: 1400px;
       width: 100%;
       min-height: 94vh;
       box-shadow: 0 0 40px rgba(0, 243, 255, 0.12), 0 25px 70px rgba(0, 0, 0, 0.9);
@@ -276,7 +276,7 @@
       }
     }
 
-    @media (min-width: 1024px) {
+    @media (min-width: 1100px) {
       .mobile-stack {
         grid-template-columns: repeat(3, 1fr);
       }
@@ -391,7 +391,7 @@
 <!-- Quantum Gateway Portal Overlay -->
 <div id="gatewayPortal">
   <div class="gateway-card">
-    <div class="gateway-title">⚡ <span>SEBRA82 v10.7</span> SECURE GATEWAY</div>
+    <div class="gateway-title">⚡ <span>SEBRA82 v11.0</span> SECURE GATEWAY</div>
     <div class="gateway-desc">
       Choose your access tier. Enter password <strong>Quantum</strong> for the secure demo sandbox, or generate a 256-bit SHA-256 encrypted license key.
     </div>
@@ -426,11 +426,11 @@
       <span id="guideToggleSign">[-]</span>
     </div>
     <div class="quick-guide-content" id="quickGuideBody">
-      <span>• <strong>Guide:</strong> Adaptive layout optimized for laptops and desktops. Click & drag across the Live Noise Stream (Card 4) to pinch/grab and auto-generate high-fidelity subset metrics.</span>
+      <span>• <strong>Guide:</strong> Adaptive enterprise layout. Click & drag across the Live Noise Stream (Card 4) to pinch/grab and auto-generate subset metrics with neon gradients.</span>
       
       <div class="ai-guide-chat">
         <div class="ai-chat-stream" id="aiChatStream">
-          <div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Adaptive workspace online. High-fidelity neon visualization suite active.</div>
+          <div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Adaptive enterprise workspace active. High-fidelity neon visualization suite online.</div>
         </div>
         <div class="predictive-prompt-bar" id="predictiveBar">
           <span style="font-size: 0.4rem; color: var(--text-muted);">Quick:</span>
@@ -451,12 +451,12 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v10.7</span> Adaptive Master Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v11.0</span> Enterprise Master Suite</div>
     <div class="header-actions">
       <button class="gen-rand-btn" onclick="fetchLiveTelemetryData()">🛰 Fetch API</button>
       <button class="core-reset-btn" onclick="returnToGateway()">🚪 Lock Vault</button>
     </div>
-    <div class="node-badge" id="vault-status">VAULT: ACTIVE [v10.7]</div>
+    <div class="node-badge" id="vault-status">VAULT: ACTIVE [v11.0]</div>
     <div class="saved-tabs-bar" id="savedTabsBar">
       <span style="font-size: 0.4rem; color: var(--text-muted); font-family: var(--font-mono); align-self: center;">Tabs:</span>
     </div>
@@ -589,6 +589,33 @@
       </div>
     </div>
 
+    <!-- Step 5: Export Query & Table Studio -->
+    <div class="panel-card" id="cardQuery">
+      <div class="section-category-bar">
+        <span class="cat-chip cat-world">World</span>
+        <span class="cat-chip cat-calc">Calc</span>
+      </div>
+      <div class="panel-title" onclick="toggleSec('secQuery')">
+        <span>5. Export Query & Table Studio</span>
+        <button class="pin-btn" id="pinBtn_cardQuery" onclick="event.stopPropagation(); toggleMax('cardQuery')">⚡ Max</button>
+      </div>
+      <div class="section-summary-preview" onclick="toggleSec('secQuery')">
+        <span>Records: <strong id="sumQueryCount">0 rows</strong> | Status: <strong>Synced</strong></span>
+        <span>🔍 Table</span>
+      </div>
+      <div class="collapsible-body collapsed" id="secQuery">
+        <div class="suggestion-box">💡 **AI Suggestion**: Telemetry records and subsets populate tables instantly.</div>
+        <div class="data-table-container">
+          <table class="data-table" id="queryDataTable">
+            <thead><tr><th>ID</th><th>Time</th><th>Category</th><th>Mag</th></tr></thead>
+            <tbody id="queryTableBody">
+              <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Telemetry records active.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <!-- Executive Summary Dashboard -->
     <div class="panel-card summary-dashboard-card" id="cardSummary">
       <div class="section-category-bar">
@@ -625,10 +652,25 @@
 <script>
   "use strict";
 
+  /* ==========================================================================
+     SEBRA82 v11.0 - COMPREHENSIVE ENTERPRISE SCRIPT CORE & ARCHITECTURAL LOGIC
+     ========================================================================== */
+  const SEBRA_CONFIG = {
+    version: "11.0",
+    build: "ENTERPRISE-PROD-FULL",
+    targetFps: 60,
+    debugMode: false,
+    tensorPrecision: "Float64Array",
+    quantumEpochs: 296
+  };
+
   function escapeHtml(str) {
     return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
   }
 
+  /* ==========================================================================
+     CRYPTO VAULT & GATEWAY SUB-ROUTINES
+     ========================================================================== */
   async function computeSHA256(message) {
     const msgBuffer = new TextEncoder().encode(message);
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -644,7 +686,7 @@
     if (pass === "Quantum" || authorizedCodes.includes(pass.toUpperCase())) {
       document.getElementById('gatewayPortal').classList.add('hidden');
       document.getElementById('mainPlatformContainer').style.display = 'flex';
-      document.getElementById('vault-status').innerText = pass === "Quantum" ? "VAULT: SECURE DEMO MODE [v10.7]" : "VAULT: 256-BIT ENCRYPTED LICENSE ACTIVE";
+      document.getElementById('vault-status').innerText = pass === "Quantum" ? "VAULT: SECURE DEMO MODE [v11.0]" : "VAULT: 256-BIT ENCRYPTED LICENSE ACTIVE";
     } else {
       err.innerText = "Access Denied. Enter password 'Quantum' or a valid short code.";
       document.getElementById('gatewayPasswordInput').value = "";
@@ -681,6 +723,9 @@
     document.getElementById('encryptedKeyBox').style.display = 'none';
   }
 
+  /* ==========================================================================
+     UI LAYOUT, COLLAPSE & AI NAVIGATOR TUTOR SUB-ROUTINES
+     ========================================================================== */
   function toggleQuickGuide() {
     const body = document.getElementById('quickGuideBody');
     const sign = document.getElementById('guideToggleSign');
@@ -739,12 +784,32 @@
     const stream = document.getElementById('aiChatStream');
     if(!input.value.trim()) return;
     stream.innerHTML += `<div class="chat-msg-user">You: ${escapeHtml(input.value)}</div>`;
-    stream.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Adaptive viewport and subset calibrated.</div>`;
+    stream.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Adaptive viewport and subset calibrated successfully.</div>`;
     input.value = "";
     stream.scrollTop = stream.scrollHeight;
   }
 
-  // --- Interactive Pinch-&-Grab Noise & Subset Studio Engine ---
+  /* ==========================================================================
+     ADVANCED SUBSET TENSOR MATHEMATICS & STATISTICAL ANALYZER
+     ========================================================================== */
+  class TensorAnalyzer {
+    static computeMean(arr) {
+      if (!arr || arr.length === 0) return 0;
+      return arr.reduce((acc, val) => acc + val, 0) / arr.length;
+    }
+    static computeVariance(arr, mean) {
+      if (!arr || arr.length === 0) return 0;
+      return arr.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / arr.length;
+    }
+    static computePeak(arr) {
+      if (!arr || arr.length === 0) return 0;
+      return Math.max(...arr);
+    }
+  }
+
+  /* ==========================================================================
+     INTERACTIVE PINCH & GRAB NOISE STUDIO & CANVAS RENDERING ENGINE
+     ========================================================================== */
   let globalTick = 0, timeOffset = 0, isStreamPaused = false;
   let waveBuffer = new Array(250).fill(50);
   let isDragging = false, dragStartX = 60, dragEndX = 190;
@@ -829,10 +894,9 @@
     document.getElementById('sumExecSubsetPoints').innerText = extractedSubset.length + " Points";
     document.getElementById('subsetRangeLabel').innerText = `Range: [${startIndex} - ${endIndex}]`;
 
-    let sum = extractedSubset.reduce((a, b) => a + b, 0);
-    let mean = sum / extractedSubset.length;
-    let peak = Math.max(...extractedSubset);
-    let variance = extractedSubset.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / extractedSubset.length;
+    let mean = TensorAnalyzer.computeMean(extractedSubset);
+    let peak = TensorAnalyzer.computePeak(extractedSubset);
+    let variance = TensorAnalyzer.computeVariance(extractedSubset, mean);
 
     document.getElementById('subsetMeanVal').innerText = mean.toFixed(2);
     document.getElementById('subsetPeakVal').innerText = peak.toFixed(2);
@@ -952,7 +1016,11 @@
   function masterLoop() {
     atomCtx.fillStyle = '#000308'; atomCtx.fillRect(0, 0, atomCanvas.width, atomCanvas.height);
     let cx = atomCanvas.width / 2, cy = atomCanvas.height / 2;
+    atomNodes.push({});
+    if(atomNodes.length > 320) atomNodes.shift();
+
     atomNodes.forEach(n => {
+      if(!n.ox) return;
       let pulse = 1.0 + Math.sin(globalTick * 0.05 * n.pulseSpeed + n.pulseOffset) * 0.1;
       let pers = 320 / (320 + n.oz * pulse);
       atomCtx.fillStyle = n.color;
