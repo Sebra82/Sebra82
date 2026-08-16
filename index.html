@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.nasa.gov https://*.usgs.gov; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v13.0 - Enterprise Quantum Master Suite & Interactive Studio (Fully Expanded Architecture)</title>
+  <title>SEBRA82 v14.0 - Enterprise Quantum Master Suite & Complete Interactive Core</title>
   <style>
     :root {
       --bg-deep: #020408;
@@ -34,7 +34,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 0.5rem;
+      padding: 0.8rem;
       font-size: 16px;
     }
 
@@ -43,7 +43,7 @@
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999;
       background: radial-gradient(circle at center, #0a1128 0%, #010307 100%);
       display: flex; flex-direction: column; justify-content: center; align-items: center;
-      padding: 1rem; gap: 1rem; transition: opacity 0.4s ease;
+      padding: 1.5rem; gap: 1.2rem; transition: opacity 0.4s ease;
     }
     #gatewayPortal.hidden { opacity: 0; pointer-events: none; display: none; }
 
@@ -51,68 +51,68 @@
       background: rgba(10, 14, 22, 0.98);
       border: 1px solid var(--neon-cyan);
       border-radius: 12px;
-      padding: 1.5rem;
-      max-width: 460px;
+      padding: 2rem;
+      max-width: 520px;
       width: 100%;
-      box-shadow: 0 0 45px rgba(0,243,255,0.3);
-      display: flex; flex-direction: column; gap: 1rem;
+      box-shadow: 0 0 50px rgba(0,243,255,0.35);
+      display: flex; flex-direction: column; gap: 1.2rem;
       text-align: center;
     }
-    .gateway-title { font-size: 1rem; font-weight: 800; color: #fff; font-family: var(--font-mono); }
-    .gateway-title span { color: var(--neon-cyan); text-shadow: 0 0 10px var(--cyan-glow); }
-    .gateway-desc { font-size: 0.55rem; color: var(--text-muted); font-family: var(--font-mono); line-height: 1.5; }
+    .gateway-title { font-size: 1.3rem; font-weight: 800; color: #fff; font-family: var(--font-mono); }
+    .gateway-title span { color: var(--neon-cyan); text-shadow: 0 0 12px var(--cyan-glow); }
+    .gateway-desc { font-size: 0.9rem; color: var(--text-muted); font-family: var(--font-mono); line-height: 1.6; }
 
     .gateway-input {
       width: 100%; background: #1e2a40; border: 1px solid var(--border-color);
-      border-radius: 6px; padding: 0.6rem; color: #fff; font-size: 0.6rem;
+      border-radius: 6px; padding: 0.8rem; color: #fff; font-size: 1rem;
       font-family: var(--font-mono); text-align: center; outline: none;
     }
-    .gateway-input:focus { border-color: var(--neon-cyan); box-shadow: 0 0 12px var(--cyan-glow); }
+    .gateway-input:focus { border-color: var(--neon-cyan); box-shadow: 0 0 15px var(--cyan-glow); }
 
-    .gateway-btn-row { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem; }
+    .gateway-btn-row { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 0.8rem; }
     .gateway-btn {
-      width: 100%; padding: 0.6rem; font-weight: bold; font-size: 0.55rem; font-family: var(--font-mono);
+      width: 100%; padding: 0.8rem; font-weight: bold; font-size: 0.9rem; font-family: var(--font-mono);
       border-radius: 6px; cursor: pointer; text-transform: uppercase; transition: all 0.2s ease;
     }
     .btn-demo { background: rgba(0, 243, 255, 0.15); color: var(--neon-cyan); border: 1px solid var(--neon-cyan); }
-    .btn-demo:hover { background: var(--neon-cyan); color: #020408; box-shadow: 0 0 15px var(--neon-cyan); }
+    .btn-demo:hover { background: var(--neon-cyan); color: #020408; box-shadow: 0 0 18px var(--neon-cyan); }
     .btn-encrypt { background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); border: 1px solid var(--accent-purple); }
-    .btn-encrypt:hover { background: var(--accent-purple); color: #fff; box-shadow: 0 0 15px var(--accent-purple); }
-    .gateway-error { color: var(--crimson-red); font-size: 0.5rem; font-family: var(--font-mono); min-height: 14px; }
+    .btn-encrypt:hover { background: var(--accent-purple); color: #fff; box-shadow: 0 0 18px var(--accent-purple); }
+    .gateway-error { color: var(--crimson-red); font-size: 0.85rem; font-family: var(--font-mono); min-height: 18px; }
 
     .key-output-box {
       background: rgba(1, 3, 7, 0.9); border: 1px dashed var(--accent-purple); border-radius: 6px;
-      padding: 10px; font-family: var(--font-mono); font-size: 0.48rem; color: var(--accent-purple);
-      display: none; flex-direction: column; gap: 6px; text-align: left; word-break: break-all;
+      padding: 12px; font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-purple);
+      display: none; flex-direction: column; gap: 8px; text-align: left; word-break: break-all;
     }
-    .key-string { background: #1e2a40; padding: 6px; border-radius: 4px; color: #fff; font-size: 0.5rem; }
+    .key-string { background: #1e2a40; padding: 8px; border-radius: 4px; color: #fff; font-size: 0.9rem; }
 
     /* Sticky AI Tutor Overlay at Top */
     #stickyTutor {
-      position: fixed; top: 8px; left: 5%; width: 90%; z-index: 1000;
-      background: rgba(10, 14, 22, 0.98); border: 1px solid var(--neon-cyan); border-radius: 6px;
-      padding: 8px 12px; display: none; box-shadow: 0 10px 30px rgba(0,243,255,0.3);
+      position: fixed; top: 12px; left: 5%; width: 90%; z-index: 1000;
+      background: rgba(10, 14, 22, 0.98); border: 1px solid var(--neon-cyan); border-radius: 8px;
+      padding: 12px 16px; display: none; box-shadow: 0 10px 35px rgba(0,243,255,0.4);
       animation: slideDown .3s ease-out;
     }
-    @keyframes slideDown { from { transform: translateY(-15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    .tutor-close { float: right; cursor: pointer; color: var(--neon-cyan); font-weight: bold; font-size: 0.45rem; font-family: var(--font-mono); }
-    .tutor-text { font-size: 0.48rem; color: #fff; font-family: var(--font-mono); line-height: 1.4; }
+    @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .tutor-close { float: right; cursor: pointer; color: var(--neon-cyan); font-weight: bold; font-size: 0.85rem; font-family: var(--font-mono); }
+    .tutor-text { font-size: 0.9rem; color: #fff; font-family: var(--font-mono); line-height: 1.5; }
 
-    /* Fully Adaptive Enterprise Layout (Mobile, Laptop, Desktop) */
+    /* Fully Adaptive Enterprise Layout Optimized for Laptops & Desktops */
     .platform-container {
       position: relative;
       z-index: 10;
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 1.2rem;
-      max-width: 1400px;
+      border-radius: 14px;
+      padding: 1.5rem;
+      max-width: 1440px;
       width: 100%;
       min-height: 94vh;
-      box-shadow: 0 0 40px rgba(0, 243, 255, 0.12), 0 25px 70px rgba(0, 0, 0, 0.9);
+      box-shadow: 0 0 50px rgba(0, 243, 255, 0.15), 0 30px 80px rgba(0, 0, 0, 0.95);
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 1.2rem;
     }
 
     /* Smart AI Navigator Guide Box */
@@ -120,13 +120,13 @@
       background: rgba(0, 243, 255, 0.05);
       border: 1px dashed var(--neon-cyan);
       border-radius: 8px;
-      padding: 10px 12px;
+      padding: 12px 14px;
       font-family: var(--font-mono);
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       color: var(--text-main);
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
     }
     .quick-guide-header {
       display: flex;
@@ -140,9 +140,9 @@
     .quick-guide-content {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
       color: var(--text-muted);
-      border-top: 1px dashed rgba(0,243,255,0.2);
+      border-top: 1px dashed rgba(0,243,255,0.25);
       padding-top: 8px;
     }
     .quick-guide-content.collapsed { display: none; }
@@ -152,78 +152,78 @@
       background: rgba(10, 14, 22, 0.95);
       border: 1px solid rgba(192, 132, 252, 0.4);
       border-radius: 6px;
-      padding: 8px;
+      padding: 10px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
     }
     .ai-chat-stream {
       background: #010307;
-      border: 1px solid rgba(192, 132, 252, 0.2);
-      border-radius: 4px;
-      padding: 8px;
-      font-size: 0.85rem;
+      border: 1px solid rgba(192, 132, 252, 0.25);
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 0.9rem;
       color: var(--accent-purple);
-      min-height: 60px;
-      max-height: 120px;
+      min-height: 70px;
+      max-height: 140px;
       overflow-y: auto;
-      line-height: 1.4;
+      line-height: 1.5;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 5px;
     }
     .chat-msg-ai { color: var(--accent-purple); }
     .chat-msg-user { color: var(--neon-cyan); text-align: right; }
-    .tutor-box { background: rgba(0, 243, 255, 0.06); border-left: 2px solid var(--neon-cyan); padding: 4px 8px; font-size: 0.8rem; color: #fff; }
+    .tutor-box { background: rgba(0, 243, 255, 0.06); border-left: 3px solid var(--neon-cyan); padding: 6px 10px; font-size: 0.85rem; color: #fff; }
 
     .predictive-prompt-bar {
       display: flex;
       gap: 6px;
       align-items: center;
       overflow-x: auto;
-      padding: 3px 0;
+      padding: 4px 0;
     }
     .predictive-chip {
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-family: var(--font-mono);
       background: rgba(0, 243, 255, 0.12);
       color: var(--neon-cyan);
-      border: 1px solid rgba(0, 243, 255, 0.3);
-      padding: 3px 8px;
-      border-radius: 4px;
+      border: 1px solid rgba(0, 243, 255, 0.35);
+      padding: 4px 10px;
+      border-radius: 6px;
       cursor: pointer;
       white-space: nowrap;
     }
     .predictive-chip:hover { background: rgba(0, 243, 255, 0.3); color: #fff; }
 
-    .ai-chat-input-row { display: flex; gap: 6px; position: relative; }
+    .ai-chat-input-row { display: flex; gap: 8px; position: relative; }
     .input-ghost-container {
       position: relative;
       flex: 1;
-      height: 28px;
+      height: 34px;
       background: #1e2a40;
       border: 1px solid rgba(192, 132, 252, 0.4);
-      border-radius: 4px;
+      border-radius: 6px;
       overflow: hidden;
     }
     .ai-chat-input {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
       background: transparent; color: #fff; border: none;
-      padding: 2px 8px; font-size: 0.85rem; font-family: var(--font-mono); outline: none;
+      padding: 4px 10px; font-size: 0.9rem; font-family: var(--font-mono); outline: none;
       z-index: 2;
     }
     .ghost-input-overlay {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
       background: transparent; color: rgba(139, 148, 158, 0.55);
-      padding: 2px 8px; font-size: 0.85rem; font-family: var(--font-mono);
+      padding: 4px 10px; font-size: 0.9rem; font-family: var(--font-mono);
       pointer-events: none; z-index: 1; white-space: pre; overflow: hidden;
       display: flex; align-items: center;
     }
     .ai-chat-btn {
-      background: var(--accent-purple); color: #fff; border: none; padding: 2px 12px; border-radius: 4px;
-      font-size: 0.8rem; font-family: var(--font-mono); font-weight: bold; cursor: pointer;
+      background: var(--accent-purple); color: #fff; border: none; padding: 4px 14px; border-radius: 6px;
+      font-size: 0.85rem; font-family: var(--font-mono); font-weight: bold; cursor: pointer;
     }
     .ai-chat-btn:hover { background: #b060f0; }
 
@@ -231,35 +231,35 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 0.6rem;
+      padding-bottom: 0.8rem;
       border-bottom: 1px solid var(--border-color);
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 10px;
     }
 
-    .brand-title { display: flex; align-items: center; gap: 8px; font-size: 1.1rem; font-weight: 700; color: #fff; }
-    .brand-title span { color: var(--neon-cyan); font-weight: 800; text-shadow: 0 0 10px var(--cyan-glow); }
+    .brand-title { display: flex; align-items: center; gap: 10px; font-size: 1.25rem; font-weight: 700; color: #fff; }
+    .brand-title span { color: var(--neon-cyan); font-weight: 800; text-shadow: 0 0 12px var(--cyan-glow); }
 
-    .header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-    .core-reset-btn { font-size: 0.8rem; background: rgba(255, 51, 68, 0.2); color: var(--crimson-red); padding: 5px 10px; border-radius: 4px; border: 1px solid rgba(255, 51, 68, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
-    .saved-view-btn { font-size: 0.8rem; background: rgba(126, 231, 135, 0.2); color: var(--accent-green); padding: 5px 10px; border-radius: 4px; border: 1px solid rgba(126, 231, 135, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
-    .gen-rand-btn { font-size: 0.8rem; background: rgba(0, 243, 255, 0.2); color: var(--neon-cyan); padding: 5px 10px; border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
+    .header-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .core-reset-btn { font-size: 0.85rem; background: rgba(255, 51, 68, 0.2); color: var(--crimson-red); padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(255, 51, 68, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
+    .saved-view-btn { font-size: 0.85rem; background: rgba(126, 231, 135, 0.2); color: var(--accent-green); padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(126, 231, 135, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
+    .gen-rand-btn { font-size: 0.85rem; background: rgba(0, 243, 255, 0.2); color: var(--neon-cyan); padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(0, 243, 255, 0.4); font-family: var(--font-mono); font-weight: 700; cursor: pointer; }
 
     .saved-tabs-bar { display: flex; gap: 6px; width: 100%; overflow-x: auto; padding: 4px 0; align-items: center; }
-    .saved-tab-chip { font-size: 0.8rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); border: 1px solid rgba(192, 132, 252, 0.3); padding: 3px 8px; border-radius: 4px; font-family: var(--font-mono); cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
+    .saved-tab-chip { font-size: 0.8rem; background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); border: 1px solid rgba(192, 132, 252, 0.3); padding: 4px 10px; border-radius: 4px; font-family: var(--font-mono); cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
     .saved-tab-chip .close-chip { color: var(--crimson-red); font-weight: 700; font-size: 0.85rem; cursor: pointer; }
 
     .node-badge {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       background: rgba(31, 41, 61, 0.6);
       color: var(--text-muted);
-      padding: 4px 10px;
-      border-radius: 10px;
+      padding: 5px 12px;
+      border-radius: 12px;
       border: 1px solid var(--border-color);
       font-family: var(--font-mono);
     }
 
-    /* ADAPTIVE GRID FOR LAPTOPS & DESKTOPS */
+    /* ADAPTIVE MULTI-COLUMN GRID FOR LAPTOPS & DESKTOPS */
     .mobile-stack {
       display: grid;
       grid-template-columns: repeat(1, 1fr);
@@ -315,7 +315,7 @@
       grid-column: 1 / -1 !important;
       min-height: 65vh;
       border-color: var(--neon-cyan);
-      box-shadow: 0 0 35px rgba(0,243,255,0.4);
+      box-shadow: 0 0 40px rgba(0,243,255,0.45);
       order: -99;
       opacity: 1 !important;
     }
@@ -324,7 +324,7 @@
     .panel-card.minimized-dock-item {
       order: 100;
       grid-column: span 1 !important;
-      padding: 0.4rem 0.6rem;
+      padding: 0.5rem 0.8rem;
       opacity: 0.85;
       border-style: dashed;
       background: rgba(10, 14, 22, 0.95);
@@ -392,7 +392,7 @@
 <!-- Quantum Gateway Portal Overlay -->
 <div id="gatewayPortal">
   <div class="gateway-card">
-    <div class="gateway-title">⚡ <span>SEBRA82 v13.0</span> SECURE GATEWAY</div>
+    <div class="gateway-title">⚡ <span>SEBRA82 v14.0</span> SECURE GATEWAY</div>
     <div class="gateway-desc">
       Choose your access tier. Enter password <strong>Quantum</strong> for the secure demo sandbox, or generate a 256-bit SHA-256 encrypted license key.
     </div>
@@ -452,12 +452,12 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v13.0</span> Adaptive Master Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v14.0</span> Adaptive Master Suite</div>
     <div class="header-actions">
       <button class="gen-rand-btn" onclick="fetchLiveTelemetryData()">🛰 Fetch API</button>
       <button class="core-reset-btn" onclick="returnToGateway()">🚪 Lock Vault</button>
     </div>
-    <div class="node-badge" id="vault-status">VAULT: ACTIVE [v13.0]</div>
+    <div class="node-badge" id="vault-status">VAULT: ACTIVE [v14.0]</div>
     <div class="saved-tabs-bar" id="savedTabsBar">
       <span style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono); align-self: center;">Tabs:</span>
     </div>
@@ -654,10 +654,10 @@
   "use strict";
 
   /* ==========================================================================
-     SEBRA82 v13.0 - ENTERPRISE ARCHITECTURAL CORE & EXTENDED RUNTIME SUBSYSTEMS
+     SEBRA82 v14.0 - FULL ENTERPRISE ARCHITECTURAL CORE & EXTENDED RUNTIME SUBSYSTEMS
      ========================================================================== */
   const SEBRA_CONFIG = {
-    version: "13.0",
+    version: "14.0",
     build: "ENTERPRISE-PROD-LAPTOP-DESKTOP-EXPANDED",
     targetFps: 60,
     debugMode: false,
@@ -671,6 +671,9 @@
     return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
   }
 
+  /* ==========================================================================
+     CRYPTOGRAPHIC VAULT & GATEWAY SUB-ROUTINES
+     ========================================================================== */
   async function computeSHA256(message) {
     const msgBuffer = new TextEncoder().encode(message);
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -686,7 +689,7 @@
     if (pass === "Quantum" || authorizedCodes.includes(pass.toUpperCase())) {
       document.getElementById('gatewayPortal').classList.add('hidden');
       document.getElementById('mainPlatformContainer').style.display = 'flex';
-      document.getElementById('vault-status').innerText = pass === "Quantum" ? "VAULT: SECURE DEMO MODE [v13.0]" : "VAULT: 256-BIT ENCRYPTED LICENSE ACTIVE";
+      document.getElementById('vault-status').innerText = pass === "Quantum" ? "VAULT: SECURE DEMO MODE [v14.0]" : "VAULT: 256-BIT ENCRYPTED LICENSE ACTIVE";
     } else {
       err.innerText = "Access Denied. Enter password 'Quantum' or a valid short code.";
       document.getElementById('gatewayPasswordInput').value = "";
@@ -723,6 +726,9 @@
     document.getElementById('encryptedKeyBox').style.display = 'none';
   }
 
+  /* ==========================================================================
+     UI LAYOUT, COLLAPSE & AI NAVIGATOR TUTOR SUB-ROUTINES
+     ========================================================================== */
   function toggleQuickGuide() {
     const body = document.getElementById('quickGuideBody');
     const sign = document.getElementById('guideToggleSign');
@@ -786,6 +792,9 @@
     stream.scrollTop = stream.scrollHeight;
   }
 
+  /* ==========================================================================
+     ADVANCED SUBSET TENSOR MATHEMATICS & STATISTICAL ANALYZER
+     ========================================================================== */
   class TensorAnalyzer {
     static computeMean(arr) {
       if (!arr || arr.length === 0) return 0;
@@ -801,6 +810,9 @@
     }
   }
 
+  /* ==========================================================================
+     INTERACTIVE PINCH & GRAB NOISE STUDIO & CANVAS RENDERING ENGINE
+     ========================================================================== */
   let globalTick = 0, timeOffset = 0, isStreamPaused = false;
   let waveBuffer = new Array(250).fill(50);
   let timeSeriesBuffer = [];
