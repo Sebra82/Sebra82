@@ -1,1 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://api.nasa.gov https://*.usgs.gov; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
+  <title>SEBRA82 v10.4 - Adaptive Enterprise Master Suite & Pinch-&-Grab Studio</title>
+  <style>
+    /** 
+     * ============================================================================
+     * SEBRA82 ENTERPRISE STYLESHEET CORE
+     * ============================================================================
+     */
+    :root {
+      --bg-deep: #020408;
+      --card-bg: rgba(7, 11, 19, 0.99);
+      --border-color: rgba(0, 243, 255, 0.35);
+      --neon-cyan: #00f3ff;
+      --cyan-glow: rgba(0, 243, 255, 0.5);
+      --crimson-red: #ff3344;
+      --warning-amber: #f0883e;
+      --text-main: #f0f6fc;
+      --text-muted: #8b949e;
+      --accent-green: #7ee787;
+      --accent-purple: #c084fc;
+      --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: var(--font-ui); 
+      -webkit-user-select: none; 
+      user-select: none; 
+    }
+
+    input, 
+    textarea, 
+    select { 
+      -webkit-user-select: text; 
+      user-select: text; 
+    }
+
+    body {
+      background-color: var(--bg-deep);
+      color: var(--text-main);
+      min-height: 100vh;
+      width: 100vw;
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0.5rem;
+    }
+
+    /* 
+     * ----------------------------------------------------------------------------
+     * Portal Gateway Layer 
+     * ----------------------------------------------------------------------------
+     */
+    #gatewayPortal {
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100vw; 
+      height: 100vh; 
+      z-index: 9999;
+      background: radial-gradient(circle at center, #0a1128 0%, #010307 100%);
+      display: flex; 
+      flex-direction: column; 
+      justify-content: center; 
+      align-items: center;
+      padding: 1rem; 
+      gap: 1rem; 
+      transition: opacity 0.4s ease;
+    }
+
+    #gatewayPortal.hidden { 
+      opacity: 0; 
+      pointer-events: none; 
+      display: none; 
+    }
+
+    .gateway-card {
+      background: rgba(10, 14, 22, 0.98);
+      border: 1px solid var(--neon-cyan);
+      border-radius: 12px;
+      padding: 1.5rem;
+      max-width: 460px;
+      width: 100%;
+      box-shadow: 0 0 45px rgba(0,243,255,0.3);
+      display: flex; 
+      flex-direction: column; 
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .gateway-title { 
+      font-size: 1rem; 
+      font-weight: 800; 
+      color: #fff; 
+      font-family: var(--font-mono); 
+    }
+
+    .gateway-title span { 
+      color: var(--neon-cyan); 
+      text-shadow: 0 0 10px var(--cyan-glow); 
+    }
+
+    .gateway-desc { 
+      font-size: 0.55rem; 
+      color: var(--text-muted); 
+      font-family: var(--font-mono); 
+      line-height: 1.5; 
+    }
+
+    .gateway-input {
+      width: 100%; 
+      background: #1e2a40; 
+      border: 1px solid var(--border-color);
+      border-radius: 6px; 
+      padding: 0.6rem; 
+      color: #fff; 
+      font-size: 0.6rem;
+      font-family: var(--font-mono); 
+      text-align: center; 
+      outline: none;
+    }
+
+    .gateway-input:focus { 
+      border-color: var(--neon-cyan); 
+      box-shadow: 0 0 12px var(--cyan-glow); 
+    }
+
+    .gateway-btn-row { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 0.5rem; 
+      margin-top: 0.5rem; 
+    }
+
+    .gateway-btn {
+      width: 100%; 
+      padding: 0.6rem; 
+      font-weight: bold; 
+      font-size: 0.55rem; 
+      font-family: var(--font-mono);
+      border-radius: 6px; 
+      cursor: pointer; 
+      text-transform: uppercase; 
+      transition: all 0.2s ease;
+    }
+
+    .btn-demo { 
+      background: rgba(0, 243, 255, 0.15); 
+      color: var(--neon-cyan); 
+      border: 1px solid var(--neon-cyan); 
+    }
+
+    .btn-demo:hover { 
+      background: var(--neon-cyan); 
+      color: #020408; 
+      box-shadow: 0 0 15px var(--neon-cyan); 
+    }
+
+    .btn-encrypt { 
+      background: rgba(192, 132, 252, 0.15); 
+      color: var(--accent-purple); 
+      border: 1px solid var(--accent-purple); 
+    }
+
+    .btn-encrypt:hover { 
+      background: var(--accent-purple); 
+      color: #fff; 
+      box-shadow: 0 0 15px var(--accent-purple); 
+    }
+
+    .gateway-error { 
+      color: var(--crimson-red); 
+      font-size: 0.5rem; 
+      font-family: var(--font-mono); 
+      min-height: 14px; 
+    }
+
+    .key-output-box {
+      background: rgba(1, 3, 7, 0.9); 
+      border: 1px dashed var(--accent-purple); 
+      border-radius: 6px;
+      padding: 10px; 
+      font-family: var(--font-mono); 
+      font-size: 0.48rem; 
+      color: var(--accent-purple);
+      display: none; 
+      flex-direction: column; 
+      gap: 6px; 
+      text-align: left; 
+      word-break: break-all;
+    }
+
+    .key-string { 
+      background: #1e2a40; 
+      padding: 6px; 
+      border-radius: 4px; 
+      color: #fff; 
+      font-size: 0.5rem; 
+    }
+
+    /* 
+     * ----------------------------------------------------------------------------
+     * Sticky AI Tutor Overlay at Top 
+     * ----------------------------------------------------------------------------
+     */
+    #stickyTutor {
+      position: fixed; 
+      top: 8px; 
+      left: 5%; 
+      width: 90%; 
+      z-index: 1000;
+      background: rgba(10, 14, 22, 0.98); 
+      border: 1px solid var(--neon-cyan); 
+      border-radius: 6px;
+      padding: 8px 12px; 
+      display: none; 
+      box-shadow: 0 10px 30px rgba(0,243,255,0.3);
+      animation: slideDown .3s ease-out;
+    }
+
+    @keyframes slideDown { 
+      from { 
+        transform: translateY(-15px); 
+        opacity: 0; 
+      } 
+      to { 
+        transform: translateY(0); 
+        opacity: 1; 
+      } 
+    }
+
+    .tutor-close { 
+      float: right; 
+      cursor: pointer; 
+      color: var(--neon-cyan); 
+      font-weight: bold; 
+      font-size: 0.45rem; 
+      font-family: var(--font-mono); 
+    }
+
+    .tutor-text { 
+      font-size: 0.48rem; 
+      color: #fff; 
+      font-family: var(--font-mono); 
+      line-height: 1.4; 
+    }
+
+    /* 
+     * ----------------------------------------------------------------------------
+     * Adaptive Platform Layout: Responsive for Laptops & Desktops 
+     * ----------------------------------------------------------------------------
+     */
+    .platform-container {
+      position: relative;
+      z-index: 10;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1rem;
+      max-width: 1280px;
+      width: 100%;
+      min-height: 94vh;
+      box-shadow: 0 0 40px rgba(0, 243, 255, 0.12), 0 25px 70px rgba(0, 0, 0, 0.9);
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    /* 
+     * ----------------------------------------------------------------------------
+     * Smart AI Navigator Guide Box 
+     * ----------------------------------------------------------------------------
+     */
+    .quick-guide-box {
+      background: rgba(0, 243, 255, 0.05);
+      border: 1px dashed var(--neon-cyan);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-family: var(--font-mono);
+      font-size: 0.5rem;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .quick-guide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--neon-cyan);
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .quick-guide-content {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      color: var(--text-muted);
+      border-top: 1px dashed rgba(0,243,255,0.2);
+      padding-top: 6px;
+    }
+
+    .quick-guide-content.collapsed { 
+      display: none; 
+    }
+
+    /* 
+     * ----------------------------------------------------------------------------
+     * AI Chat & Smart Navigator Interface 
+     * ----------------------------------------------------------------------------
+     */
+    .ai-guide-chat {
+      background: rgba(10, 14, 22, 0.95);
+      border: 1px solid rgba(192, 132, 252, 0.4);
+      border-radius: 4px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .ai-chat-stream {
+      background: #010307;
+      border: 1px solid rgba(192, 132, 252, 0.2);
+      border-radius: 4px;
+      padding: 6px;
+      font-size: 0.48rem;
+      color: var(--accent-purple);
+      min-height: 50px;
+      max-height: 95px;
+      overflow-y: auto;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .chat-msg-ai { 
+      color: var(--accent-purple); 
+    }
+
+    .chat-msg-user { 
+      color: var(--neon-cyan); 
+      text-align: right; 
+    }
+
+    .tutor-box { 
+      background: rgba(0, 243, 255, 0.06); 
+      border-left: 2px solid var(--neon-cyan); 
+      padding: 4px 8px; 
+      font-size: 0.45rem; 
+      color: #fff; 
+    }
+
+    .predictive-prompt-bar {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      overflow-x: auto;
+      padding: 2px 0;
+    }
+
+    .predictive-chip {
+      font-size: 0.44rem;
+      font-family: var(--font-mono);
+      background: rgba(0, 243, 255, 0.12);
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .predictive-chip:hover { 
+      background: rgba(0, 243, 255, 0.3); 
+      color: #fff; 
+    }
+
+    .ai-chat-input-row { 
+      display: flex; 
+      gap: 4px; 
+      position: relative; 
+    }
+
+    .input-ghost-container {
+      position: relative;
+      flex: 1;
+      height: 24px;
+      background: #1e2a40;
+      border: 1px solid rgba(192, 132, 252, 0.4);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .ai-chat-input {
+      position: absolute;
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%;
+      background: transparent; 
+      color: #fff; 
+      border: none;
+      padding: 2px 6px; 
+      font-size: 0.48rem; 
+      font-family: var(--font-mono); 
+      outline: none;
+      z-index: 2;
+    }
+
+    .ghost-input-overlay {
+      position: absolute;
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%;
+      background: transparent; 
+      color: rgba(139, 148, 158, 0.55);
+      padding: 2px 6px; 
+      font-size: 0.48rem; 
+      font-family: var(--font-mono);
+      pointer-events: none; 
+      z-index: 1; 
+      white-space: pre; 
+      overflow: hidden;
+      display: flex; 
+      align-items: center;
+    }
+
+    .ai-chat-btn {
+      background: var(--accent-purple); 
+      color: #fff; 
+      border: none; 
+      padding: 2px 10px; 
+      border-radius: 4px;
+      font-size: 0.45rem; 
+      font-family: var(--font-mono); 
+      font-weight: bold; 
+      cursor: pointer;
+    }
+
+    .ai-chat-btn:hover { 
+      background: #b060f0; 
+    }
+
+    /* 
+     * ----------------------------------------------------------------------------
+     * Widget Headers & Actions
+     * ----------------------------------------------------------------------------
+     */
+    .widget-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .brand-title { 
+      display: flex; 
+      align-items: center; 
+      gap: 8px; 
+      font-size: 0.9rem; 
+      font-weight: 700; 
+      color: #fff; 
+    }
+
+    .brand-title span { 
+      color: var(--neon-cyan); 
+      font-weight: 800; 
+      text-shadow: 0 0 10px var(--cyan-glow); 
+    }
+
+    .header-actions { 
+      display: flex; 
+      gap: 6px; 
+      align-items: center; 
+      flex-wrap: wrap; 
+    }
+
+    .core-reset-btn { 
+      font-size: 0.48rem; 
+      background: rgba(255, 51, 68, 0.2); 
+      color: var(--crimson-red); 
+      padding: 4px 8px; 
+      border-radius: 4px; 
+      border: 1px solid rgba(255, 51, 68, 0.4); 
+      font-family: var(--font-mono); 
+      font-weight: 700; 
+      cursor: pointer; 
+    }
+
+    .saved-view-btn { 
+      font-size: 0.48rem; 
+      background: rgba(126, 231, 135, 0.2); 
+      color: var(--accent-green); 
+      padding: 4px 8px; 
+      border-radius: 4px; 
+      border: 1px solid rgba(126, 231, 135, 0.4); 
+      font-family: var(--font-mono); 
+      font-weight: 700; 
+      cursor: pointer; 
+    }
+
+    .gen-rand-btn { 
+      font-size: 0.48rem; 
+      background: rgba(0, 243, 255, 0.2); 
+      color: var(--neon-cyan); 
+      padding: 4px 8px; 
+      border-radius: 4px; 
+      border: 1px solid rgba(0, 243, 255, 0.4); 
+      font-family: var(--font-mono); 
+      font-weight: 700; 
+      cursor: pointer; 
+    }
+
+    .saved-tabs-bar { 
+      display: flex; 
+      gap: 4px; 
+      width: 100%; 
+      overflow-x: auto; 
+      padding: 2px 0; 
+      align-items: center; 
+    }
+
+    .saved-tab-chip { 
+      font-size: 0.45rem; 
+      background: rgba(192, 132, 252, 0.15); 
+      color: var(--accent-purple); 
+      border: 1px solid rgba(192, 132, 252, 0.3); 
+      padding: 2px 6px; 
+      border-radius: 3px; 
+      font-family: var(--font-mono); 
+      cursor: pointer; 
+      white-space: nowrap; 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 4px; 
+    }
+
+    .saved-tab-chip .close-chip { 
+      color: var(--crimson-red); 
+      font-weight: 700; 
+      font-size: 0.5rem; 
+      cursor: pointer; 
+    }
+
+    .node-badge {
+      font-size: 0.6rem;
+      background: rgba(31, 41, 61, 0.6);
+      color: var(--text-muted);
+      padding: 3px 8px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      font-family: var(--font-mono);
+    }
+
+    /* 
+     * ----------------------------------------------------------------------------
+     * ADAPTIVE GRID FOR LAPTOPS & DESKTOPS 
+     * ----------------------------------------------------------------------------
+     */
+    .mobile-stack {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 0.6rem;
+      flex: 1;
+      position: relative;
+    }
+
+    @media (min-width: 768px) {
+      .mobile-stack {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .summary-dashboard-card {
+        grid-column: span 2;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .mobile-stack {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .summary-dashboard-card {
+        grid-column: span 3;
+      }
+    }
+
+    .panel-card {
+      background: rgba(5, 9, 18, 0.98);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      padding: 0.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes navPulse {
+      0% { 
+        border-color: var(--neon-cyan); 
+        box-shadow: 0 0 20px var(--neon-cyan); 
+      }
+      50% { 
+        border-color: #fff; 
+        box-shadow: 0 0 35px var(--neon-cyan); 
+      }
+      100% { 
+        border-color: var(--neon-cyan); 
+        box-shadow: 0 0 20px var(--neon-cyan); 
+      }
+    }
+
+    .panel-card.nav-highlight { 
+      animation: navPulse 1s ease-in-out 3; 
+    }
+
+    #cardAtom { 
+      border-left: 3px solid #00f3ff; 
+      background: linear-gradient(135deg, rgba(0, 243, 255, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); 
+    }
+    
+    #cardFin { 
+      border-left: 3px solid #c084fc; 
+      background: linear-gradient(135deg, rgba(192, 132, 252, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); 
+    }
+    
+    #cardGeo { 
+      border-left: 3px solid #f0883e; 
+      background: linear-gradient(135deg, rgba(240, 136, 62, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); 
+    }
+    
+    #cardWave { 
+      border-left: 3px solid #7ee787; 
+      background: linear-gradient(135deg, rgba(126, 231, 135, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); 
+    }
+    
+    #cardQuery { 
+      border-left: 3px solid #f0883e; 
+      background: linear-gradient(135deg, rgba(240, 136, 62, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); 
+    }
+    
+    #cardTools { 
+      border-left: 3px solid #38bdf8; 
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.03) 0%, rgba(5, 9, 18, 0.98) 50%); 
+    }
+
+    .panel-card.fluid-maximized {
+      grid-column: 1 / -1 !important;
+      min-height: 60vh;
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 35px rgba(0,243,255,0.4);
+      order: -99;
+      opacity: 1 !important;
+    }
+
+    .panel-card.fluid-maximized .collapsible-body { 
+      max-height: 1200px !important; 
+      display: flex !important; 
+      opacity: 1 !important; 
+    }
+
+    .panel-card.minimized-dock-item {
+      order: 100;
+      grid-column: span 1 !important;
+      padding: 0.3rem 0.5rem;
+      opacity: 0.85;
+      border-style: dashed;
+      background: rgba(10, 14, 22, 0.95);
+    }
+
+    .panel-card.minimized-dock-item .collapsible-body { 
+      display: none !important; 
+    }
+
+    .section-category-bar { 
+      display: flex; 
+      gap: 4px; 
+      margin-bottom: 2px; 
+    }
+
+    .cat-chip { 
+      font-size: 0.42rem; 
+      font-family: var(--font-mono); 
+      font-weight: 700; 
+      padding: 2px 4px; 
+      border-radius: 3px; 
+      border: 1px solid; 
+      text-transform: uppercase; 
+    }
+
+    .cat-calc { 
+      color: var(--neon-cyan); 
+      border-color: rgba(0,243,255,0.4); 
+      background: rgba(0,243,255,0.08); 
+    }
+
+    .cat-sci { 
+      color: var(--accent-green); 
+      border-color: rgba(126,231,135,0.4); 
+      background: rgba(126,231,135,0.08); 
+    }
+
+    .cat-world { 
+      color: var(--warning-amber); 
+      border-color: rgba(240,136,62,0.4); 
+      background: rgba(240,136,62,0.08); 
+    }
+
+    .cat-fin { 
+      color: var(--accent-purple); 
+      border-color: rgba(192,132,252,0.4); 
+      background: rgba(192,132,252,0.08); 
+    }
+
+    .panel-title { 
+      font-size: 0.58rem; 
+      font-weight: 700; 
+      color: var(--text-main); 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      text-transform: uppercase; 
+      cursor: pointer; 
+    }
+
+    .panel-title:hover { 
+      color: var(--neon-cyan); 
+    }
+
+    .section-summary-preview { 
+      font-size: 0.45rem; 
+      color: var(--text-muted); 
+      font-family: var(--font-mono); 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      background: rgba(0,0,0,0.3); 
+      padding: 3px 6px; 
+      border-radius: 4px; 
+      border-left: 2px solid var(--neon-cyan); 
+    }
+
+    .section-summary-preview span strong { 
+      color: var(--accent-green); 
+    }
+
+    /* 
+     * ----------------------------------------------------------------------------
+     * Canvas & Tooling Integrations
+     * ----------------------------------------------------------------------------
+     */
+    .canvas-box { 
+      position: relative; 
+      width: 100%; 
+      background: radial-gradient(circle at center, #0a1128 0%, #000000 100%); 
+      border-radius: 4px; 
+      border: 1px solid rgba(0, 243, 255, 0.4); 
+      overflow: hidden; 
+    }
+
+    canvas { 
+      display: block; 
+      width: 100%; 
+      height: 100%; 
+      cursor: crosshair; 
+      touch-action: none; 
+      pointer-events: auto !important; 
+    }
+
+    .hud-tag { 
+      position: absolute; 
+      top: 2px; 
+      left: 4px; 
+      background: rgba(2, 4, 8, 0.92); 
+      border: 1px solid var(--border-color); 
+      padding: 2px 4px; 
+      border-radius: 3px; 
+      font-size: 0.42rem; 
+      color: var(--neon-cyan); 
+      font-family: var(--font-mono); 
+      z-index: 5; 
+      pointer-events: none; 
+    }
+
+    .graph-toolbar { 
+      position: absolute; 
+      bottom: 3px; 
+      right: 4px; 
+      display: flex; 
+      gap: 3px; 
+      z-index: 6; 
+    }
+
+    .graph-tool-btn { 
+      font-size: 0.42rem; 
+      font-family: var(--font-mono); 
+      background: rgba(0, 243, 255, 0.2); 
+      color: var(--neon-cyan); 
+      border: 1px solid rgba(0, 243, 255, 0.4); 
+      padding: 2px 4px; 
+      border-radius: 3px; 
+      cursor: pointer; 
+    }
+
+    .math-dashboard { 
+      display: grid; 
+      grid-template-columns: 1fr; 
+      gap: 4px; 
+    }
+
+    .math-interactive-card { 
+      background: rgba(10, 14, 22, 0.95); 
+      border: 1px solid rgba(0, 243, 255, 0.25); 
+      border-radius: 4px; 
+      padding: 6px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 3px; 
+    }
+
+    .math-live-readout { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      font-family: var(--font-mono); 
+      font-size: 0.48rem; 
+      background: rgba(0, 243, 255, 0.06); 
+      border: 1px solid rgba(0, 243, 255, 0.2); 
+      padding: 3px 6px; 
+      border-radius: 3px; 
+      color: var(--neon-cyan); 
+    }
+
+    .math-toggle-row { 
+      display: flex; 
+      gap: 3px; 
+    }
+
+    .math-mode-btn { 
+      flex: 1; 
+      font-size: 0.42rem; 
+      font-family: var(--font-mono); 
+      padding: 3px 4px; 
+      background: #1e2a40; 
+      color: var(--text-muted); 
+      border: 1px solid var(--border-color); 
+      border-radius: 3px; 
+      cursor: pointer; 
+      text-align: center; 
+    }
+
+    .math-mode-btn.active { 
+      background: rgba(0, 243, 255, 0.2); 
+      color: var(--neon-cyan); 
+      border-color: var(--neon-cyan); 
+      font-weight: bold; 
+    }
+
+    .metrics-split-grid { 
+      display: grid; 
+      grid-template-columns: repeat(3, 1fr); 
+      gap: 3px; 
+    }
+
+    .metric-split-box { 
+      background: rgba(10, 14, 22, 0.9); 
+      border: 1px solid var(--border-color); 
+      padding: 4px; 
+      border-radius: 3px; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+      text-align: center; 
+    }
+
+    .metric-split-label { 
+      font-size: 0.4rem; 
+      color: var(--text-muted); 
+      text-transform: uppercase; 
+      font-family: var(--font-mono); 
+    }
+
+    .metric-split-val { 
+      font-size: 0.58rem; 
+      color: var(--accent-green); 
+      font-weight: 700; 
+      font-family: var(--font-mono); 
+      margin-top: 2px; 
+    }
+
+    /* 
+     * ----------------------------------------------------------------------------
+     * Data Table & Metrics
+     * ----------------------------------------------------------------------------
+     */
+    .data-table-container { 
+      background: #010409; 
+      border: 1px solid rgba(192, 132, 252, 0.3); 
+      border-radius: 3px; 
+      padding: 3px; 
+      max-height: 95px; 
+      overflow-y: auto; 
+      font-family: var(--font-mono); 
+      font-size: 0.45rem; 
+      color: var(--accent-purple); 
+    }
+
+    .data-table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      text-align: left; 
+    }
+
+    .data-table th, 
+    .data-table td { 
+      padding: 3px 4px; 
+      border-bottom: 1px solid rgba(192, 132, 252, 0.15); 
+    }
+
+    .data-table th { 
+      color: var(--neon-cyan); 
+      font-weight: 600; 
+      background: rgba(0, 243, 255, 0.05); 
+    }
+
+    .control-item { 
+      background: rgba(10, 14, 22, 0.9); 
+      border: 1px solid var(--border-color); 
+      padding: 4px 5px; 
+      border-radius: 3px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 2px; 
+    }
+
+    .control-label { 
+      font-size: 0.48rem; 
+      color: var(--text-muted); 
+      display: flex; 
+      justify-content: space-between; 
+      font-weight: 500; 
+      font-family: var(--font-mono); 
+    }
+
+    .control-label span { 
+      color: var(--text-main); 
+      font-weight: 600; 
+    }
+
+    input[type="range"], 
+    select { 
+      width: 100%; 
+      accent-color: var(--neon-cyan); 
+      background: #1e2a40; 
+      color: #fff; 
+      border: 1px solid var(--border-color); 
+      height: 3px; 
+      border-radius: 3px; 
+      outline: none; 
+    }
+
+    select { 
+      height: 22px; 
+      font-size: 0.52rem; 
+      padding: 0 4px; 
+      font-family: var(--font-mono); 
+    }
+
+    .btn-row { 
+      display: flex; 
+      gap: 3px; 
+    }
+
+    .action-btn { 
+      width: 100%; 
+      padding: 0.35rem; 
+      font-weight: 600; 
+      font-size: 0.52rem; 
+      color: #020408; 
+      background: var(--neon-cyan); 
+      border: none; 
+      border-radius: 4px; 
+      cursor: pointer; 
+      text-align: center; 
+    }
+
+    .pin-btn { 
+      background: var(--accent-purple); 
+      color: #fff; 
+      font-size: 0.45rem; 
+      padding: 2px 6px; 
+      border-radius: 3px; 
+      border: none; 
+      cursor: pointer; 
+      font-family: var(--font-mono); 
+    }
+
+    .summary-dashboard-card { 
+      background: linear-gradient(135deg, rgba(0,243,255,0.08) 0%, rgba(192,132,252,0.08) 100%); 
+      border: 1px solid var(--neon-cyan); 
+    }
+
+    .summary-split-grid { 
+      display: grid; 
+      grid-template-columns: repeat(2, 1fr); 
+      gap: 4px; 
+    }
+
+    .summary-split-metric-card { 
+      background: rgba(2,4,8,0.8); 
+      border: 1px solid rgba(0,243,255,0.3); 
+      border-radius: 4px; 
+      padding: 6px; 
+      text-align: center; 
+      font-family: var(--font-mono); 
+    }
+
+    .summary-split-title { 
+      font-size: 0.4rem; 
+      color: var(--text-muted); 
+      text-transform: uppercase; 
+    }
+
+    .summary-split-val { 
+      font-size: 0.62rem; 
+      color: var(--neon-cyan); 
+      font-weight: bold; 
+      margin-top: 2px; 
+    }
+
+    .collapsible-body { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 0.35rem; 
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease; 
+      overflow: hidden; 
+      max-height: 900px; 
+      opacity: 1; 
+    }
+
+    .collapsible-body.collapsed { 
+      max-height: 0px; 
+      opacity: 0; 
+      padding: 0; 
+      margin: 0; 
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- Quantum Gateway Portal Overlay -->
+<div id="gatewayPortal">
+  <div class="gateway-card">
+    <div class="gateway-title">
+      ⚡ <span>SEBRA82 v10.4</span> SECURE GATEWAY
+    </div>
+    <div class="gateway-desc">
+      Choose your access tier. Enter password <strong>Quantum</strong> for the secure demo sandbox, or generate a 256-bit SHA-256 encrypted license key.
+    </div>
+
+    <input 
+      type="password" 
+      id="gatewayPasswordInput" 
+      class="gateway-input" 
+      placeholder="Enter Password ('Quantum') or Short Code..." 
+      onkeypress="if(event.key==='Enter') verifyGatewayPassword()"
+    >
+    <div class="gateway-error" id="gatewayErrorMsg"></div>
+
+    <div class="gateway-btn-row">
+      <button class="gateway-btn btn-demo" onclick="verifyGatewayPassword()">
+        ⚛ Enter Secure Demo Mode
+      </button>
+      <button class="gateway-btn btn-encrypt" onclick="generateEncryptedLicenseKey()">
+        🔐 Generate 256-Bit Encrypted License
+      </button>
+    </div>
+
+    <div class="key-output-box" id="encryptedKeyBox">
+      <span>🔑 Generated 256-Bit SHA-256 Key & Short Code:</span>
+      <div class="key-string" id="generatedKeyVal">Generating 256-bit hash...</div>
+      <button class="gateway-btn btn-demo" style="margin-top: 6px;" onclick="enterAppWithGeneratedKey()">
+        🚀 Enter Suite Now
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Sticky AI Tutor HUD -->
+<div id="stickyTutor">
+  <span class="tutor-close" onclick="this.parentElement.style.display='none'">✕ CLOSE</span>
+  <div id="tContent" class="tutor-text"></div>
+</div>
+
+<div class="platform-container" id="mainPlatformContainer" style="display:none;">
+  
+  <div class="quick-guide-box">
+    <div class="quick-guide-header" onclick="toggleQuickGuide()">
+      <span>🤖 SEBRA82 Smart AI Tutor & Navigator</span>
+      <span id="guideToggleSign">[-]</span>
+    </div>
+    <div class="quick-guide-content" id="quickGuideBody">
+      <span>
+        • <strong>Guide:</strong> Adaptive layout optimized for laptops and desktops. Click & drag across the Live Noise Stream (Card 4) to pinch/grab and auto-generate high-fidelity subset metrics.
+      </span>
+      
+      <div class="ai-guide-chat">
+        <div class="ai-chat-stream" id="aiChatStream">
+          <div class="chat-msg-ai">
+            🤖 <strong>SEBRA-AI</strong>: Adaptive workspace online. High-fidelity neon visualization suite active.
+          </div>
+        </div>
+        <div class="predictive-prompt-bar" id="predictiveBar">
+          <span style="font-size: 0.4rem; color: var(--text-muted);">Quick:</span>
+          <span class="predictive-chip" onclick="teachAndMaximize('atom', 'cardAtom')">3D Atom</span>
+          <span class="predictive-chip" onclick="teachAndMaximize('geo', 'cardGeo')">Geo & Seismic</span>
+          <span class="predictive-chip" onclick="teachAndMaximize('noise', 'cardWave')">Live Feed</span>
+        </div>
+        
+        <div class="ai-chat-input-row">
+          <div class="input-ghost-container">
+            <div class="ghost-input-overlay" id="ghostOverlay"></div>
+            <input 
+              type="text" 
+              class="ai-chat-input" 
+              id="aiChatInput" 
+              placeholder="Ask AI..." 
+              oninput="handleGhostInput(event)" 
+              onkeydown="handleGhostKeyDown(event)" 
+              onkeypress="if(event.key==='Enter') submitAIChat()"
+            >
+          </div>
+          <button class="ai-chat-btn" onclick="submitAIChat()">Ask</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="widget-header">
+    <div class="brand-title">
+      ⚡ <span>SEBRA82 v10.4</span> Adaptive Master Suite
+    </div>
+    <div class="header-actions">
+      <button class="gen-rand-btn" onclick="fetchLiveTelemetryData()">🛰 Fetch API</button>
+      <button class="core-reset-btn" onclick="returnToGateway()">🚪 Lock Vault</button>
+    </div>
+    <div class="node-badge" id="vault-status">VAULT: ACTIVE [v10.4]</div>
+    <div class="saved-tabs-bar" id="savedTabsBar">
+      <span style="font-size: 0.4rem; color: var(--text-muted); font-family: var(--font-mono); align-self: center;">Tabs:</span>
+    </div>
+  </div>
+
+  <div class="mobile-stack" id="mobileStack">
+
+    <!-- Card 1: 3D Quantum Atom Matrix -->
+    <div class="panel-card" id="cardAtom">
+      <div class="section-category-bar">
+        <span class="cat-chip cat-calc">Calc</span>
+        <span class="cat-chip cat-sci">Sci</span>
+      </div>
+      <div class="panel-title" onclick="toggleSec('secAtom')">
+        <span>1. Breathing 3D Quantum Atom Matrix</span>
+        <button class="pin-btn" id="pinBtn_cardAtom" onclick="event.stopPropagation(); toggleMax('cardAtom')">⚡ Max</button>
+      </div>
+      <div class="section-summary-preview" onclick="toggleSec('secAtom')">
+        <span>Status: <strong>Active Lattice</strong> | Nodes: <strong>320</strong></span>
+        <span>🔍 3D View</span>
+      </div>
+      <div class="collapsible-body collapsed" id="secAtom">
+        <div class="canvas-box" style="height: 180px;" id="atomBox">
+          <canvas id="atom3DCanvas" width="400" height="180"></canvas>
+          <div class="hud-tag">✨ 3D CORE | Drag & Pinch Zoom</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Geo & Seismic Monitor -->
+    <div class="panel-card" id="cardGeo">
+      <div class="section-category-bar">
+        <span class="cat-chip cat-world">Geo</span>
+        <span class="cat-chip cat-sci">Seismic</span>
+      </div>
+      <div class="panel-title" onclick="toggleSec('secGeo')">
+        <span>2. Live Geographic & Seismic Monitor</span>
+        <button class="pin-btn" id="pinBtn_cardGeo" onclick="event.stopPropagation(); toggleMax('cardGeo')">⚡ Max</button>
+      </div>
+      <div class="section-summary-preview" onclick="toggleSec('secGeo')">
+        <span>Region: <strong>Flores, Indonesia (M7.7)</strong></span>
+        <span>🔍 Geo Radar</span>
+      </div>
+      <div class="collapsible-body collapsed" id="secGeo">
+        <div class="canvas-box" style="height: 140px;" id="geoBox">
+          <canvas id="geoRadarCanvas" width="400" height="140"></canvas>
+          <div class="hud-tag" style="color:var(--warning-amber);">🌐 GLOBAL SEISMIC RADAR MAPPING</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Maths & Modeling Studio -->
+    <div class="panel-card" id="cardFin">
+      <div class="section-category-bar">
+        <span class="cat-chip cat-calc">Calc</span>
+        <span class="cat-chip cat-fin">Fin</span>
+      </div>
+      <div class="panel-title" onclick="toggleSec('secFin')">
+        <span>3. Maths & Modeling Studio</span>
+        <button class="pin-btn" id="pinBtn_cardFin" onclick="event.stopPropagation(); toggleMax('cardFin')">⚡ Max</button>
+      </div>
+      <div class="section-summary-preview" onclick="toggleSec('secFin')">
+        <span>Model: <strong>Quantum Tensor</strong></span>
+        <span>🔍 Dashboard</span>
+      </div>
+      <div class="collapsible-body collapsed" id="secFin">
+        <div class="control-item">
+          <div class="control-label">Planck Magnitude ($): <span id="baseValueReadout">10.00</span></div>
+          <input 
+            type="range" 
+            id="baseValueSlider" 
+            min="1.0" 
+            max="50.0" 
+            step="0.5" 
+            value="10.0" 
+            oninput="document.getElementById('baseValueReadout').innerText=parseFloat(this.value).toFixed(2);"
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4: Interactive Pinch-&-Grab Noise & Subset Studio (Enhanced Graphs) -->
+    <div class="panel-card" id="cardWave">
+      <div class="section-category-bar">
+        <span class="cat-chip cat-calc">Calc</span>
+        <span class="cat-chip cat-sci">Sci</span>
+      </div>
+      <div class="panel-title" onclick="toggleSec('secWave')">
+        <span>4. Enhanced Pinch & Grab Noise Studio</span>
+        <button class="pin-btn" id="pinBtn_cardWave" onclick="event.stopPropagation(); toggleMax('cardWave')">⚡ Max & Expand</button>
+      </div>
+      <div class="section-summary-preview" onclick="toggleSec('secWave')">
+        <span>Mode: <strong id="noiseModeStatus">Continuous Stream</strong> | Points: <strong id="subsetCount">0</strong></span>
+        <span>🔍 Stream View</span>
+      </div>
+      <div class="collapsible-body collapsed" id="secWave">
+        
+        <div class="canvas-box" style="height: 130px;" id="noiseCanvasContainer">
+          <canvas id="secureSimCanvas" width="400" height="130"></canvas>
+          <div class="hud-tag" id="waveHudTag">✋ PINCH & GRAB: Drag across neon waveform to isolate subset</div>
+          <div class="graph-toolbar">
+            <button class="graph-tool-btn" onclick="togglePauseStream()">⏸</button>
+            <button class="graph-tool-btn" onclick="resetSubsetSelection()">🔄 Reset</button>
+          </div>
+        </div>
+
+        <div class="expanded-graph-suite" style="display: flex; flex-direction:column; gap:5px; background: rgba(0, 243, 255, 0.04); border: 1px solid rgba(0, 243, 255, 0.3); padding: 6px; border-radius: 6px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-size: 0.48rem; color: var(--neon-cyan); font-family: var(--font-mono); font-weight:700;">
+              📊 HIGH-FIDELITY SUBSET ANALYZER
+            </div>
+            <div style="font-size: 0.42rem; color: var(--accent-green);" id="subsetRangeLabel">
+              Range: None Selected
+            </div>
+          </div>
+
+          <div class="canvas-box" style="height: 105px; border-color: rgba(126, 231, 135, 0.5);">
+            <canvas id="subsetCanvas" width="400" height="105"></canvas>
+            <div class="hud-tag" style="color:var(--accent-green);">Enhanced Neon Subset Waveform</div>
+          </div>
+
+          <div class="metrics-split-grid">
+            <div class="metric-split-box">
+              <div class="metric-split-label">Subset Mean</div>
+              <div class="metric-split-val" id="subsetMeanVal">0.00</div>
+            </div>
+            <div class="metric-split-box">
+              <div class="metric-split-label">Peak Amplitude</div>
+              <div class="metric-split-val" id="subsetPeakVal">0.00</div>
+            </div>
+            <div class="metric-split-box">
+              <div class="metric-split-label">Variance (&sigma;<sup>2</sup>)</div>
+              <div class="metric-split-val" id="subsetVarVal">0.00</div>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button onclick="sendSubsetToExecutive()" class="action-btn" style="background:var(--accent-green); color:#020408; font-weight:bold;">
+              ⭐ Synchronize Subset with Executive Summary
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Executive Summary Dashboard -->
+    <div class="panel-card summary-dashboard-card" id="cardSummary">
+      <div class="section-category-bar">
+        <span class="cat-chip cat-calc">Exec Summary</span>
+      </div>
+      <div class="panel-title" onclick="toggleSec('secSummary')">
+        <span>⭐ Executive Insights & Live Mirroring ▾</span>
+        <button class="pin-btn" id="pinBtn_cardSummary" onclick="event.stopPropagation(); toggleMax('cardSummary')">⚡ Max</button>
+      </div>
+      <div class="collapsible-body" id="secSummary">
+        <div style="font-size: 0.48rem; color: var(--text-muted); font-family: var(--font-mono);" id="execSummaryText">
+          🏆 <strong>Insights</strong>: Adaptive Layout active. High-fidelity neon subset rendering synchronized across laptop and desktop viewports.
+        </div>
+        <div class="canvas-box" style="height: 95px; border-color: rgba(126, 231, 135, 0.5); margin-top: 3px;">
+          <canvas id="execMirroredCanvas" width="400" height="95"></canvas>
+          <div class="hud-tag" style="color:var(--accent-green);">Executive Neon Subset Mirror</div>
+        </div>
+        <div class="summary-split-grid" style="margin-top: 3px;">
+          <div class="summary-split-metric-card">
+            <div class="summary-split-title">Active Subset Points</div>
+            <div class="summary-split-val" id="sumExecSubsetPoints">0 Points</div>
+          </div>
+          <div class="summary-split-metric-card">
+            <div class="summary-split-title">Status</div>
+            <div class="summary-split-val" id="execStatusVal" style="color: var(--accent-green);">Adaptive High-Fidelity Sync</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
 
