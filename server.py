@@ -89,15 +89,17 @@ def generate_proprietary_matrix(global_tick, time_offset):
 
 async def process_request(path, request_headers):
     """
-    HTTP Handshake Authentication.
-    Drops unauthorized connections before establishing the WebSocket.
+    Intercepts the initial HTTP connection request. 
+    Rejects unauthorized clients with HTTP 401 before upgrading to WebSocket.
     """
     query = urllib.parse.urlparse(path).query
     params = urllib.parse.parse_qs(query)
     
+    # Check if the connection request includes our required hash parameter
     if "hash" not in params:
-        # Return HTTP 401 Unauthorized instantly
         return (http.HTTPStatus.UNAUTHORIZED, [], b"Unauthorized: Missing Handshake Token\n")
+    
+    # Allow the handshake to proceed safely
     return None
 
 async def sebra_engine(websocket):
@@ -165,6 +167,7 @@ async def sebra_engine(websocket):
 
 async def main():
     port = int(os.environ.get("PORT", 8767))
+    # Pass process_request into websockets.serve to intercept connections at the protocol layer
     server = await websockets.serve(sebra_engine, "0.0.0.0", port, process_request=process_request)
     print(f"⚡ SEBRA82 Vault Engine Online on port {port}")
     await server.wait_closed()
