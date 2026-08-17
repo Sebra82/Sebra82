@@ -1,8 +1,3 @@
-Here is server.py (v5.8), featuring a Dual-Mode Pipeline.
-To immediately unfreeze the frontend shown in your screenshot without requiring you to rewrite any JavaScript right now, this version automatically detects what your client can handle.
- * Encryption is bypassed by default (USE_ENCRYPTION = False) to prevent the browser from silently dropping AES-CBC encrypted packets.
- * Legacy JSON Fallback: If your frontend connects without specifically requesting binary (e.g., ws://localhost:8767/?hash=...), the server automatically reverts to sending JSON dictionaries ({"x": 10.5, "y": ...}). Your UI will instantly light up and graph data again.
- * High-Performance Binary Path: Once you update your frontend to handle binary arrays, simply connect using ws://localhost:8767/?hash=...&format=msgpack. The server will dynamically shift back to the ultra-fast compact tuples.
 import asyncio
 import websockets
 import msgpack
@@ -30,7 +25,7 @@ USE_ENCRYPTION = False
 
 class SebraAtomicMatrixEngine:
     """
-    IP Classification: SEBRA82 v5.8 Dual-Mode Cached Geometry Engine
+    IP Classification: SEBRA82 v5.9 Flat Memory Geometry Engine
     Watermark Identifier: SEBRA82-PROPRIETARY-ATOMIC-MATRIX-KERNEL-44019-TX
     """
     def __init__(self):
@@ -102,47 +97,44 @@ def calculate_crypto_offset(hash_hex):
     return (offset % 256) / 256.0
 
 def generate_cached_proprietary_matrix(global_tick, time_offset, is_demo=False, as_dict=False):
-    """
-    Generates matrix geometry. Returns dictionaries for JSON fallback, or tuples for MessagePack speed.
-    """
     lattice = ENGINE.static_lattice_120 if is_demo else ENGINE.static_lattice_320
-    points = []
-    
     m_sin = math.sin
     r_func = round
     
-    for node in lattice:
-        i = node["i"]
-        scale_idx = (i + global_tick) % 296
-        
-        state = ENGINE.evaluate_atomic_state(scale_idx, node["theta"], node["phi"])
-        prob = state["probability"]
-        
-        dynamic_radius = node["base_shell"] + (prob * 50.0) + m_sin(i * 4 + time_offset) * 9
-        
-        x = dynamic_radius * node["sin_phi"] * node["cos_theta"]
-        y = dynamic_radius * node["sin_phi"] * node["sin_theta"]
-        z = dynamic_radius * node["cos_phi"]
-        
-        if as_dict:
+    if as_dict:
+        points = []
+        for node in lattice:
+            i = node["i"]
+            scale_idx = (i + global_tick) % 296
+            state = ENGINE.evaluate_atomic_state(scale_idx, node["theta"], node["phi"])
+            prob = state["probability"]
+            dynamic_radius = node["base_shell"] + (prob * 50.0) + m_sin(i * 4 + time_offset) * 9
+            x = dynamic_radius * node["sin_phi"] * node["cos_theta"]
+            y = dynamic_radius * node["sin_phi"] * node["sin_theta"]
+            z = dynamic_radius * node["cos_phi"]
             points.append({
-                "id": i, 
-                "x": r_func(x, 4), 
-                "y": r_func(y, 4), 
-                "z": r_func(z, 4), 
-                "prob": r_func(prob, 4), 
-                "energy": r_func(state["energyEigenvalue"], 4)
+                "id": i, "x": r_func(x, 4), "y": r_func(y, 4), "z": r_func(z, 4), 
+                "prob": r_func(prob, 4), "energy": r_func(state["energyEigenvalue"], 4)
             })
-        else:
-            points.append((
-                i, 
-                r_func(x, 4), 
-                r_func(y, 4), 
-                r_func(z, 4), 
-                r_func(prob, 4), 
-                r_func(state["energyEigenvalue"], 4)
+        return points
+    else:
+        # v5.9 Flat Memory Architecture for maximum MessagePack performance
+        flat_points = []
+        for node in lattice:
+            i = node["i"]
+            scale_idx = (i + global_tick) % 296
+            state = ENGINE.evaluate_atomic_state(scale_idx, node["theta"], node["phi"])
+            prob = state["probability"]
+            dynamic_radius = node["base_shell"] + (prob * 50.0) + m_sin(i * 4 + time_offset) * 9
+            x = dynamic_radius * node["sin_phi"] * node["cos_theta"]
+            y = dynamic_radius * node["sin_phi"] * node["sin_theta"]
+            z = dynamic_radius * node["cos_phi"]
+            # Append elements sequentially as a flat 1D array
+            flat_points.extend((
+                i, r_func(x, 4), r_func(y, 4), r_func(z, 4), 
+                r_func(prob, 4), r_func(state["energyEigenvalue"], 4)
             ))
-    return points
+        return flat_points
 
 class RollingStats:
     def __init__(self, window_size=160):
@@ -156,7 +148,6 @@ class RollingStats:
             old_val = self.buffer.pop(0)
             self.sum -= old_val
             self.sum_sq -= (old_val ** 2)
-        
         self.buffer.append(val)
         self.sum += val
         self.sum_sq += (val ** 2)
@@ -180,10 +171,8 @@ async def process_request(path, request_headers):
     
     query = urllib.parse.urlparse(path).query
     params = urllib.parse.parse_qs(query)
-    
     if "hash" not in params:
         return (http.HTTPStatus.UNAUTHORIZED, [], b"Unauthorized: Missing Handshake Token\n")
-        
     return None
 
 async def sebra_engine(websocket):
@@ -200,7 +189,7 @@ async def sebra_engine(websocket):
         
         key = params.get("hash", [""])[0]
         tier = params.get("tier", ["demo"])[0]
-        data_format = params.get("format", ["json"])[0].lower() # Default to JSON for UI compatibility
+        data_format = params.get("format", ["json"])[0].lower()
         is_decoy = params.get("is_decoy", ["false"])[0].lower() == "true"
         is_demo = (tier == "demo")
         
@@ -211,7 +200,6 @@ async def sebra_engine(websocket):
         
         global_tick, time_offset = 0, 0.0
         stats_tracker = RollingStats(window_size=160)
-        
         for _ in range(160):
             stats_tracker.update(50.0)
 
@@ -245,7 +233,6 @@ async def sebra_engine(websocket):
             roi = 0.0 if is_demo else (base_value * damping * 14.8)
             alpha_confidence = 80.0 if is_demo else (92.0 + damping)
             
-            # Format Router: JSON vs MessagePack
             if data_format == "msgpack":
                 packet = [
                     tier,
@@ -286,9 +273,8 @@ async def main():
         ping_interval=20,
         ping_timeout=20
     ):
-        print(f"⚡ SEBRA82 v5.8 Dual-Mode Engine Online on port {port}")
+        print(f"⚡ SEBRA82 v5.9 Flat Memory Engine Online on port {port}")
         await asyncio.Future()
 
 if __name__ == "__main__":
     asyncio.run(main())
-
