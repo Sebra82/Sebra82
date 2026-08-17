@@ -1,10 +1,3 @@
-Yes, the provided server.py file needs updating to remain fully compatible with the modern frontend architecture we just built and to prevent Python runtime errors.
-Why it needs updating:
- * WebSocket Protocol Versioning (websockets library): Modern versions of the websockets library expect connection handlers to loop cleanly over async for message in websocket: or handle disconnections explicitly without calling deprecated attributes like websocket.remote_address[0] directly on newer proxy routing configurations (like Render or local tunnels).
- * Dynamic Query Extraction (?hash= and ?tier=): The frontend connects with a license hash and tier parameter (wss://.../?hash=...&tier=...). The current ws_handler(websocket) signature only accepts the connection object, meaning it misses inspecting incoming security handshakes during upgrade.
- * Payload Synchronization: Ensuring the binary packaging via msgpack precisely matches the 320-node calculated matrix structure demanded by the client canvas loop.
-Updated server.py Script
-Here is the fully hardened, production-ready server.py backend configured for zero-copy serialization, high-performance WebGPU/CPU matrix projection, and clean client pool management:
 import asyncio
 import msgpack
 import time
@@ -12,9 +5,6 @@ import os
 import struct
 import math
 import random
-import base64
-import hashlib
-from cryptography.fernet import Fernet
 from urllib.parse import parse_qs, urlparse
 
 # --- 1. RUST-ACCELERATED WEBSOCKETS ---
@@ -251,10 +241,11 @@ async def centralized_broadcast_loop():
         await asyncio.sleep(max(0.0, 0.016 - elapsed))
 
 async def ws_handler(websocket):
-    # Extract query parameters safely from connection path
+    # Extract query parameters safely from connection path compatible with modern websockets
     query_params = {}
     try:
-        parsed_url = urlparse(websocket.request.path if hasattr(websocket, 'request') else "")
+        path_str = websocket.path if hasattr(websocket, 'path') else (websocket.request.path if hasattr(websocket, 'request') else "")
+        parsed_url = urlparse(path_str)
         query_params = parse_qs(parsed_url.query)
     except Exception:
         pass
@@ -263,12 +254,20 @@ async def ws_handler(websocket):
     tier_mode = query_params.get("tier", ["demo"])[0]
 
     CONNECTED_CLIENTS.add(websocket)
-    client_ip = websocket.remote_address[0] if hasattr(websocket, 'remote_address') and websocket.remote_address else "unknown"
+    
+    client_ip = "unknown"
+    try:
+        if hasattr(websocket, 'remote_address') and websocket.remote_address:
+            client_ip = websocket.remote_address[0]
+        elif hasattr(websocket, 'request') and hasattr(websocket.request, 'remote_address'):
+            client_ip = websocket.request.remote_address[0]
+    except Exception:
+        pass
+
     print(f"⚡ Secured Tunnel [{client_ip}] | Tier: {tier_mode.upper()} | Hash: {auth_hash[:6]}... Active Pool: {len(CONNECTED_CLIENTS)}")
     
     try:
         async for message in websocket:
-            # Handle any client-bound telemetry pings or echo commands if needed
             pass
     except Exception:
         pass
