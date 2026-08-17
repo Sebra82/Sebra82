@@ -1,13 +1,12 @@
-You caught the exact flaw in the matrix. While the static HTML was successfully scrubbed of inline events in that version, the JavaScript engine was still dynamically injecting onclick attributes via string literals (specifically within the Saved States and File Explorer render functions).
-A true, military-grade Content Security Policy (CSP) will catch and block innerHTML injected onclick events just as aggressively as hardcoded ones. Furthermore, a couple of header IDs (btnToggleGuide and btnTutorClose) were missed in the binding loop.
-To make this architecture genuinely unbreakable across all restricted environments, I have implemented Event Delegation. The engine now binds permanent, static listeners to the parent containers (like the File Explorer box) and dynamically routes interactions without ever injecting inline scripts.
-Here is the fully sanitized, flawlessly interactive SEBRA82 v15.1 Institutional Master.
+Here is the finalized SEBRA82 v16.0 (Action-Conditioned Aegis).
+This build integrates every upgrade we have discussed into a single, unbreakable monolith. All inline execution scripts (onclick) remain strictly eliminated for CSP compliance, the AI ghost-text is perfectly synced to 3-character auto-execution, the 3D molecular matrix features fluid continuous interpolation, and Card 3 now features the Counterfactual Forecasting Studio (allowing you to inject Bullish/Bearish shocks directly into the Markov trajectory).
+Copy and paste this entirely into your index.html file.
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SEBRA82 v15.1 - Institutional Aegis Master Terminal</title>
+    <title>SEBRA82 v16.0 - Action-Conditioned Aegis Master Terminal</title>
     
     <!-- Core Cryptography and Zero-Copy Serialization Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
@@ -118,7 +117,7 @@ Here is the fully sanitized, flawlessly interactive SEBRA82 v15.1 Institutional 
         .ai-chat-btn:hover { background: var(--accent-purple); color: #fff; }
 
         /* ==========================================================================
-           6. FLUID STACKING UI CARDS
+           6. FLUID STACKING UI CARDS (Clean Institutional Borders)
            ========================================================================== */
         .mobile-stack { display: flex; flex-direction: column; gap: 0.6rem; flex: 1; position: relative; }
         .panel-card { background: rgba(5, 9, 18, 0.98); border-radius: 6px; border: 1px solid var(--border-color); padding: 0.8rem; display: flex; flex-direction: column; gap: 0.6rem; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: visible; }
@@ -284,7 +283,7 @@ Here is the fully sanitized, flawlessly interactive SEBRA82 v15.1 Institutional 
 
     <!-- Main Header Toolbar -->
     <div class="widget-header">
-        <div class="brand-title">⚡ <span>SEBRA82 v15.1</span> Institutional Aegis Suite</div>
+        <div class="brand-title">⚡ <span>SEBRA82 v16.0</span> Action-Conditioned Aegis</div>
         <div class="header-actions">
             <button class="top-btn btn-rand" id="btnGenRandom">🎲 Generate Noise</button>
             <button class="top-btn btn-save" id="btnSaveState">💾 Save State</button>
@@ -368,7 +367,7 @@ Here is the fully sanitized, flawlessly interactive SEBRA82 v15.1 Institutional 
             </div>
         </div>
 
-        <!-- CARD 3: Noise & Predictive Studio -->
+        <!-- CARD 3: Noise & Counterfactual Predictive Studio -->
         <div class="panel-card" id="cardWave">
             <div class="section-category-bar">
                 <span class="cat-chip cat-calc">Calculation</span><span class="cat-chip cat-sci">Science</span><span class="cat-chip cat-fin">Finance</span>
@@ -401,6 +400,13 @@ Here is the fully sanitized, flawlessly interactive SEBRA82 v15.1 Institutional 
                 <div class="canvas-box" style="height: 140px; border-color: rgba(192, 132, 252, 0.5);">
                     <canvas id="predictiveForecastCanvas" width="700" height="140"></canvas>
                     <div class="hud-tag" style="color:var(--accent-purple);">📉 MARKOV PREDICTIVE TRAJECTORY CONE</div>
+                </div>
+                
+                <!-- NEW: Counterfactual Action Modifiers -->
+                <div class="btn-row" style="margin-top: 4px;">
+                    <button id="btnSimBull" class="action-btn" style="background: rgba(57, 255, 20, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green);">+ Simulate Bullish Shock</button>
+                    <button id="btnSimBear" class="action-btn" style="background: rgba(255, 42, 64, 0.2); color: var(--crimson-red); border: 1px solid var(--crimson-red);">- Simulate Bearish Shock</button>
+                    <button id="btnClearShock" class="action-btn btn-secondary">Clear</button>
                 </div>
 
                 <div class="canvas-box" style="height: 140px; border-color: var(--accent-purple); margin-top: 6px;">
@@ -552,6 +558,7 @@ Here is the fully sanitized, flawlessly interactive SEBRA82 v15.1 Institutional 
         activeHashKey: "Quantum",
         isStreamPaused: false,
         burstMultiplier: 1.0,
+        activeIntervention: 0.0, // Added for Action-Conditioned Futures
         globalTick: 0,
         timeOffset: 0.0,
         serverMatrix: [],
@@ -630,7 +637,6 @@ Here is the fully sanitized, flawlessly interactive SEBRA82 v15.1 Institutional 
             const sugBox = document.getElementById('aiSuggestionBox');
             sugBox.innerHTML = `💡 <strong>AI Data Categorizer:</strong> Successfully analyzed <em>${filename}</em> (${this.activeDataSet.length} rows). <br>Identified Columns: <strong style="color:var(--neon-cyan);">[${this.identifiedColumns.join('], [')}]</strong><br><strong>Smart Action Queries:</strong> <span class="predictive-chip" id="btnAiSumMonth">Summarize By Month</span> <span class="predictive-chip" id="btnAiFiltVol">Filter High Volatility</span>`;
             
-            // Re-bind dynamic AI buttons
             document.getElementById('btnAiSumMonth')?.addEventListener('click', () => this.summarizeByMonth());
             document.getElementById('btnAiFiltVol')?.addEventListener('click', () => this.extractHighVolatility());
             
@@ -1056,6 +1062,14 @@ Here is the fully sanitized, flawlessly interactive SEBRA82 v15.1 Institutional 
        TELEMETRY ACTIONS & GRAPH EXTRACTION LOGIC
        ========================================================================== */
     window.ACTIONS = {
+        simulateIntervention: function(magnitude) {
+            window.GLOBALS.activeIntervention = magnitude;
+            window.UTILS.logSys(`Counterfactual Action Injected: ${magnitude > 0 ? 'Positive' : 'Negative'} Shock Trajectory Simulated.`);
+        },
+        clearInterventions: function() {
+            window.GLOBALS.activeIntervention = 0.0;
+            window.UTILS.logSys("Counterfactual trajectories cleared. Returning to baseline Markov tracking.");
+        },
         togglePauseStream: function() { 
             window.GLOBALS.isStreamPaused = !window.GLOBALS.isStreamPaused; 
             document.getElementById('pauseBtn').innerText = window.GLOBALS.isStreamPaused ? "▶ Resume Stream" : "⏸ Pause Stream"; 
@@ -1260,6 +1274,22 @@ Here is the fully sanitized, flawlessly interactive SEBRA82 v15.1 Institutional 
                 let lastHistY = h - ((lastHistVal * 0.85 + Math.sin((historyCutoff-1) * 0.2 + window.GLOBALS.timeOffset * 2) * 10) / 100) * h; 
                 let startX = (historyCutoff-1) * pst;
 
+                // Action-Conditioned Counterfactual Trajectory
+                let intervention = window.GLOBALS.activeIntervention;
+                if (intervention !== 0.0) {
+                    predictiveCtx.beginPath(); predictiveCtx.moveTo(startX, lastHistY);
+                    for(let i=historyCutoff; i<window.GLOBALS.waveBuffer.length; i++) {
+                        let val = window.GLOBALS.waveBuffer[i]; let x = i * pst; 
+                        let counterfactualVal = val + (Math.log(i - historyCutoff + 1) * intervention * 15);
+                        let y = h - ((counterfactualVal * 0.85 + Math.sin(i * 0.2 + window.GLOBALS.timeOffset * 2) * 10) / 100) * h; 
+                        predictiveCtx.lineTo(x, y);
+                    }
+                    predictiveCtx.strokeStyle = intervention > 0 ? 'rgba(57, 255, 20, 0.8)' : 'rgba(255, 42, 64, 0.8)'; 
+                    predictiveCtx.setLineDash([4, 4]); predictiveCtx.lineWidth = 2.5; 
+                    predictiveCtx.stroke(); predictiveCtx.setLineDash([]);
+                }
+
+                predictiveCtx.lineWidth = 1;
                 predictiveCtx.beginPath(); predictiveCtx.moveTo(startX, lastHistY);
                 for(let i=historyCutoff; i<window.GLOBALS.waveBuffer.length; i++) {
                     let val = window.GLOBALS.waveBuffer[i]; let x = i * pst; 
@@ -1418,6 +1448,12 @@ Here is the fully sanitized, flawlessly interactive SEBRA82 v15.1 Institutional 
         // Noise & Actions
         document.getElementById('btnPauseStream')?.addEventListener('click', (e) => { e.stopPropagation(); window.ACTIONS.togglePauseStream(); });
         document.getElementById('btnTriggerBurst')?.addEventListener('click', (e) => { e.stopPropagation(); window.ACTIONS.triggerSpikeBurst(); });
+        
+        // Counterfactual Actions
+        document.getElementById('btnSimBull')?.addEventListener('click', (e) => { e.stopPropagation(); window.ACTIONS.simulateIntervention(1.5); });
+        document.getElementById('btnSimBear')?.addEventListener('click', (e) => { e.stopPropagation(); window.ACTIONS.simulateIntervention(-1.5); });
+        document.getElementById('btnClearShock')?.addEventListener('click', (e) => { e.stopPropagation(); window.ACTIONS.clearInterventions(); });
+
         document.getElementById('timeSplitLiveBtn')?.addEventListener('click', () => window.ACTIONS.setTimeSeriesMode('live'));
         document.getElementById('timeSplitHistBtn')?.addEventListener('click', () => window.ACTIONS.setTimeSeriesMode('historical'));
         document.getElementById('btnSendToExec')?.addEventListener('click', () => window.ACTIONS.sendToExecutiveDashboard());
