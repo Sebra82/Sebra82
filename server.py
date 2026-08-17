@@ -64,7 +64,7 @@ R_N = SEBRA_ATOMIC_ENGINE.R_MATRIX_CACHE[64]
 # Rate Limiting In-Memory Store
 connection_attempts = {}
 RATE_LIMIT_WINDOW = 60
-MAX_CONNECTIONS = 15
+MAX_CONNECTIONS = 20
 
 VALID_LICENSE_KEYS = {
     "Quantum", 
@@ -79,14 +79,12 @@ def calculate_crypto_offset(hash_hex):
     if not hash_hex or len(hash_hex) != 64: return math.pi
     left_half, right_half = hash_hex[:32], hash_hex[32:]
     mirrored_right = right_half[::-1]
-    
     offset = sum(ord(left_half[i]) ^ ord(mirrored_right[i]) for i in range(32))
     return (offset % 256) / 256.0
 
 def generate_proprietary_matrix(global_tick, time_offset, node_count=320):
     points = []
     for i in range(node_count): 
-        # Safe domain clamping for acos
         raw_acos_arg = -1.0 + (2.0 * i) / node_count
         safe_arg = max(-1.0, min(1.0, raw_acos_arg))
         phi = math.acos(safe_arg)
@@ -126,7 +124,7 @@ async def process_request(path, request_headers):
     return None
 
 async def sebra_engine(websocket):
-    print("🔒 Secure SEBRA82 Vault Engine Connected.")
+    print(f"🔒 Secure SEBRA82 Vault Session Initialized from {websocket.remote_address[0] if websocket.remote_address else 'Unknown'}")
     try:
         query = urllib.parse.urlparse(websocket.path).query
         params = urllib.parse.parse_qs(query)
@@ -195,18 +193,25 @@ async def sebra_engine(websocket):
                 await asyncio.sleep(0.016)
                 
             except Exception as inner_err:
-                # Catch tick calculation errors without dropping the socket session
-                print(f"⚠️ Tick Exception Handled: {inner_err}")
+                print(f"⚠️ Non-Fatal Tick Exception: {inner_err}")
                 await asyncio.sleep(0.05)
             
     except websockets.exceptions.ConnectionClosed:
-        pass
+        print("🔒 Secure SEBRA82 Vault Session Closed Gracefully.")
 
 async def main():
     port = int(os.environ.get("PORT", 8767))
-    server = await websockets.serve(sebra_engine, "0.0.0.0", port, process_request=process_request)
-    print(f"⚡ SEBRA82 Vault Engine Online on port {port}")
-    await server.wait_closed()
+    # Enforce automated WebSocket ping/pong keepalive every 20 seconds
+    async with websockets.serve(
+        sebra_engine, 
+        "0.0.0.0", 
+        port, 
+        process_request=process_request,
+        ping_interval=20,
+        ping_timeout=20
+    ):
+        print(f"⚡ SEBRA82 Vault Engine Online with Keepalive Heartbeats on port {port}")
+        await asyncio.Future()  # run forever
 
 if __name__ == "__main__":
     asyncio.run(main())
