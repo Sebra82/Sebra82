@@ -1,279 +1,159 @@
 import asyncio
 import websockets
 import msgpack
-import json
-import math
-import random
-import os
-import http
-import urllib.parse
 import time
-import base64
-import hashlib
-from cryptography.fernet import Fernet
+import os
+import struct
+import wgpu
 
-# Optional: Ultra-high performance loop policy for Unix systems
-try:
-    import uvloop
-    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
-    print("🚀 Ultra-High Performance 'uvloop' Active.")
-except ImportError:
-    print("ℹ️ Standard asyncio event loop active.")
+# WGSL Compute Shader implementing SEBRA82 parallel mathematical pipeline
+WGSL_SHADER = """
+struct NodeData {
+    id: u32,
+    x: f32,
+    y: f32,
+    z: f32,
+};
 
-# 🔧 DISABLED by default to allow standard browser JavaScript to read the WebSocket stream
-USE_ENCRYPTION = False
+struct Uniforms {
+    global_tick: u32,
+    time_offset: f32,
+};
 
-class SebraAtomicMatrixEngine:
-    """
-    IP Classification: SEBRA82 v5.9 Flat Memory Geometry Engine
-    Watermark Identifier: SEBRA82-PROPRIETARY-ATOMIC-MATRIX-KERNEL-44019-TX
-    """
-    def __init__(self):
-        self.PLANCK_SCALE = 1.616255e-35
-        self.GOLDEN_RATIO = 1.61803398875
-        self.R_MATRIX_CACHE = [self.PLANCK_SCALE * (self.GOLDEN_RATIO ** n) for n in range(296)]
-        self.ENERGY_EIGEN_CACHE = [-0.5 / (((i % 8) + 1) ** 2) for i in range(64)]
-        self.SPHERICAL_HARMONIC_LUT = [math.cos(i * 0.01227) * math.sin(i * 0.01227) for i in range(512)]
+@group(0) @binding(0) var<storage, read_write> nodes: array<NodeData>;
+@group(0) @binding(1) var<uniform> uniforms: Uniforms;
+
+// O(1) stateless bitwise integer hash for parallel GPU execution
+fn bitwise_hash(node_id: u32, tick: u32) -> f32 {
+    var h = (node_id + tick) ^ ((node_id + tick) >> 15u);
+    h = h * 0x85ebca6bu;
+    h = h ^ (h >> 13u);
+    return f32(h & 0xFFFFFFFFu) / 4294967295.0;
+}
+
+@compute @workgroup_size(64)
+fn main(@builtin(global_invocation_id) id: vec3<u32>) {
+    let index = id.x;
+    if (index >= 320u) {
+        return;
+    }
+
+    let node_id = nodes[index].id;
+    let noise = bitwise_hash(node_id, uniforms.global_tick);
+    
+    // Closed-form wave optics mapping
+    let theta = f32(node_id) * 0.1 + uniforms.time_offset;
+    let wave = 50.0 * pow(cos(theta * 1.5), 2.0);
+    let radius = 65.0 + (wave * 0.5) + (noise * 10.0);
+
+    let phi = f32(node_id) * 0.02;
+    let spatial_theta = f32(node_id) * 0.05;
+
+    // Write evaluated coordinates directly back to GPU storage buffer
+    nodes[index].x = radius * sin(phi) * cos(spatial_theta);
+    nodes[index].y = radius * sin(phi) * sin(spatial_theta);
+    nodes[index].z = radius * cos(phi);
+}
+"""
+
+class WebGPUEngine:
+    def __init__(self, node_count=320):
+        self.node_count = node_count
+        print("⚙️ Initializing WebGPU Adapter & Compute Device...")
         
-        print("⚙️ Precomputing static spatial geometries (320 & 120 nodes)...")
-        self.static_lattice_320 = self._precompute_lattice(320)
-        self.static_lattice_120 = self._precompute_lattice(120)
-        print("✅ Spatial caching complete. Zero per-frame trigonometry active.")
-
-    def _precompute_lattice(self, node_count):
-        lattice = []
+        adapter = wgpu.gpu.request_adapter_sync(power_preference="high-performance")
+        self.device = adapter.request_device_sync()
+        
+        self.shader_module = self.device.create_shader_module(code=WGSL_SHADER)
+        
+        # Allocate persistent GPU storage buffer for 320 nodes (4 floats per node: id, x, y, z)
+        # Size = 320 nodes * 16 bytes = 5120 bytes
+        initial_data = bytearray()
         for i in range(node_count):
-            raw_acos_arg = -1.0 + (2.0 * i) / node_count
-            safe_arg = max(-1.0, min(1.0, raw_acos_arg))
-            phi = math.acos(safe_arg)
-            theta = math.sqrt(node_count * math.pi) * phi
-            base_shell = 90 if (i % 3 == 0) else (65 if i % 3 == 1 else 42)
-            lattice.append({
-                "i": i,
-                "phi": phi,
-                "theta": theta,
-                "base_shell": base_shell,
-                "sin_phi": math.sin(phi),
-                "cos_phi": math.cos(phi),
-                "sin_theta": math.sin(theta),
-                "cos_theta": math.cos(theta)
-            })
-        return lattice
+            initial_data.extend(i.to_bytes(4, 'little', signed=False))
+            initial_data.extend(b'\x00\x00\x00\x00' * 3)
+            
+        self.storage_buffer = self.device.create_buffer_with_data(
+            data=bytes(initial_data),
+            usage=wgpu.BufferUsage.STORAGE | wgpu.BufferUsage.COPY_SRC | wgpu.BufferUsage.COPY_DST
+        )
+        
+        self.uniform_buffer = self.device.create_buffer_with_data(
+            data=bytes(8),
+            usage=wgpu.BufferUsage.UNIFORM | wgpu.BufferUsage.COPY_DST
+        )
+        
+        self.staging_buffer = self.device.create_buffer(
+            size=len(initial_data),
+            usage=wgpu.BufferUsage.MAP_READ | wgpu.BufferUsage.COPY_DST
+        )
+        
+        self.pipeline = self.device.create_compute_pipeline(
+            layout=wgpu.AutoLayoutMode.auto,
+            compute=wgpu.ProgrammableStage(module=self.shader_module, entry_point="main")
+        )
+        
+        self.bind_group = self.device.create_bind_group(
+            layout=self.pipeline.get_bind_group_layout(0),
+            entries=[
+                {"binding": 0, "resource": {"buffer": self.storage_buffer, "offset": 0, "size": len(initial_data)}},
+                {"binding": 1, "resource": {"buffer": self.uniform_buffer, "offset": 0, "size": 8}}
+            ]
+        )
+        print("✅ WebGPU Compute Pipeline successfully compiled and aligned.")
 
-    def evaluate_atomic_state(self, scale_index, theta, phi):
-        r_n = self.R_MATRIX_CACHE[scale_index % 296]
-        lut_idx = int(((theta % (math.pi * 2.0)) / (math.pi * 2.0)) * 512) & 511
-        harmonic_term = self.SPHERICAL_HARMONIC_LUT[lut_idx]
+    def compute_frame(self, global_tick, time_offset):
+        uniform_data = struct.pack('<If', global_tick, time_offset)
+        self.device.queue.write_buffer(self.uniform_buffer, 0, uniform_data)
+        
+        encoder = self.device.create_command_encoder()
+        compute_pass = encoder.begin_compute_pass()
+        compute_pass.set_pipeline(self.pipeline)
+        compute_pass.set_bind_group(0, self.bind_group, [], 0, 999999)
+        compute_pass.dispatch_workgroups(5, 1, 1) # 320 nodes / 64 workgroup size = 5
+        compute_pass.end()
+        
+        encoder.copy_buffer_to_buffer(self.storage_buffer, 0, self.staging_buffer, 0, self.staging_buffer.size)
+        self.device.queue.submit([encoder.finish()])
+        
+        # Synchronous mapping to read back the structured array from GPU memory
+        self.staging_buffer.map_sync(wgpu.MapMode.READ)
+        raw_bytes = self.staging_buffer.read_mapped()
+        flat_matrix = list(memoryview(raw_bytes).cast('f'))
+        self.staging_buffer.unmap()
+        
+        return flat_matrix
 
-        try:
-            radial_decay = math.exp(-r_n * 1e31)
-        except OverflowError:
-            radial_decay = 0.0
+ENGINE = WebGPUEngine(320)
 
-        probability_density = (radial_decay ** 2.0) * abs(1.0 + harmonic_term * math.cos(phi))
-
-        return {
-            "radius": r_n,
-            "probability": probability_density,
-            "energyEigenvalue": self.ENERGY_EIGEN_CACHE[scale_index % 64]
-        }
-
-ENGINE = SebraAtomicMatrixEngine()
-R_N = ENGINE.R_MATRIX_CACHE[64]
-
-connection_attempts = {}
-RATE_LIMIT_WINDOW = 60
-MAX_CONNECTIONS = 25
-
-def get_fernet_from_hash(hash_str):
-    digest = hashlib.sha256(hash_str.encode('utf-8')).digest()
-    return Fernet(base64.urlsafe_b64encode(digest))
-
-def calculate_crypto_offset(hash_hex):
-    if not hash_hex or len(hash_hex) != 64: return math.pi
-    left_half, right_half = hash_hex[:32], hash_hex[32:]
-    mirrored_right = right_half[::-1]
-    offset = sum(ord(left_half[i]) ^ ord(mirrored_right[i]) for i in range(32))
-    return (offset % 256) / 256.0
-
-def generate_cached_proprietary_matrix(global_tick, time_offset, is_demo=False, as_dict=False):
-    lattice = ENGINE.static_lattice_120 if is_demo else ENGINE.static_lattice_320
-    m_sin = math.sin
-    r_func = round
+async def webgpu_server_handler(websocket):
+    global_tick, time_offset = 0, 0.0
+    print("⚡ Client Connected to WebGPU-Accelerated SEBRA82 Server.")
     
-    if as_dict:
-        points = []
-        for node in lattice:
-            i = node["i"]
-            scale_idx = (i + global_tick) % 296
-            state = ENGINE.evaluate_atomic_state(scale_idx, node["theta"], node["phi"])
-            prob = state["probability"]
-            dynamic_radius = node["base_shell"] + (prob * 50.0) + m_sin(i * 4 + time_offset) * 9
-            x = dynamic_radius * node["sin_phi"] * node["cos_theta"]
-            y = dynamic_radius * node["sin_phi"] * node["sin_theta"]
-            z = dynamic_radius * node["cos_phi"]
-            points.append({
-                "id": i, "x": r_func(x, 4), "y": r_func(y, 4), "z": r_func(z, 4), 
-                "prob": r_func(prob, 4), "energy": r_func(state["energyEigenvalue"], 4)
-            })
-        return points
-    else:
-        # v5.9 Flat Memory Architecture for maximum MessagePack performance
-        flat_points = []
-        for node in lattice:
-            i = node["i"]
-            scale_idx = (i + global_tick) % 296
-            state = ENGINE.evaluate_atomic_state(scale_idx, node["theta"], node["phi"])
-            prob = state["probability"]
-            dynamic_radius = node["base_shell"] + (prob * 50.0) + m_sin(i * 4 + time_offset) * 9
-            x = dynamic_radius * node["sin_phi"] * node["cos_theta"]
-            y = dynamic_radius * node["sin_phi"] * node["sin_theta"]
-            z = dynamic_radius * node["cos_phi"]
-            # Append elements sequentially as a flat 1D array
-            flat_points.extend((
-                i, r_func(x, 4), r_func(y, 4), r_func(z, 4), 
-                r_func(prob, 4), r_func(state["energyEigenvalue"], 4)
-            ))
-        return flat_points
-
-class RollingStats:
-    def __init__(self, window_size=160):
-        self.window_size = window_size
-        self.buffer = []
-        self.sum = 0.0
-        self.sum_sq = 0.0
-
-    def update(self, val):
-        if len(self.buffer) >= self.window_size:
-            old_val = self.buffer.pop(0)
-            self.sum -= old_val
-            self.sum_sq -= (old_val ** 2)
-        self.buffer.append(val)
-        self.sum += val
-        self.sum_sq += (val ** 2)
-
-    def get_mean_and_std(self):
-        n = len(self.buffer)
-        if n == 0: return 50.0, 1e-5
-        mean = self.sum / n
-        variance = (self.sum_sq / n) - (mean ** 2)
-        std = math.sqrt(max(0.0, variance))
-        return mean, max(std, 1e-5)
-
-async def process_request(path, request_headers):
-    client_ip = request_headers.get("X-Forwarded-For", "127.0.0.1").split(",")[0]
-    current_time = time.time()
-    
-    connection_attempts[client_ip] = [t for t in connection_attempts.get(client_ip, []) if current_time - t < RATE_LIMIT_WINDOW]
-    if len(connection_attempts[client_ip]) >= MAX_CONNECTIONS:
-        return (http.HTTPStatus.TOO_MANY_REQUESTS, [], b"Rate limit exceeded.\n")
-    connection_attempts[client_ip].append(current_time)
-    
-    query = urllib.parse.urlparse(path).query
-    params = urllib.parse.parse_qs(query)
-    if "hash" not in params:
-        return (http.HTTPStatus.UNAUTHORIZED, [], b"Unauthorized: Missing Handshake Token\n")
-    return None
-
-async def sebra_engine(websocket):
     try:
-        sock = websocket.transport.get_extra_info('socket')
-        if sock is not None:
-            sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-    except Exception:
-        pass
-
-    try:
-        query = urllib.parse.urlparse(websocket.path).query
-        params = urllib.parse.parse_qs(query)
-        
-        key = params.get("hash", [""])[0]
-        tier = params.get("tier", ["demo"])[0]
-        data_format = params.get("format", ["json"])[0].lower()
-        is_decoy = params.get("is_decoy", ["false"])[0].lower() == "true"
-        is_demo = (tier == "demo")
-        
-        fernet = get_fernet_from_hash(key) if USE_ENCRYPTION else None
-        session_crypto_offset = 0 if is_decoy else calculate_crypto_offset(key)
-        
-        print(f"🔒 Session Initialized. Tier: {tier.upper()} | Format: {data_format.upper()} | Encrypted: {USE_ENCRYPTION}")
-        
-        global_tick, time_offset = 0, 0.0
-        stats_tracker = RollingStats(window_size=160)
-        for _ in range(160):
-            stats_tracker.update(50.0)
-
-        base_value, damping, spike_threshold = 10.0, 1.45, 2.0
-        as_dict = (data_format == "json")
-        
         while True:
             loop_start = time.perf_counter()
             global_tick += 1
             time_offset += 0.05
             
-            atomic_matrix = generate_cached_proprietary_matrix(global_tick, time_offset, is_demo=is_demo, as_dict=as_dict)
+            # Execute compute pass directly on the hardware GPU
+            flat_matrix = ENGINE.compute_frame(global_tick, time_offset)
             
-            raw_x = (global_tick % 400 - 200) * 0.0001
-            carrier = math.cos((math.pi * 1e-4 * raw_x) / (R_N * 1.0 + 1e-35) + time_offset * 0.8) ** 2
-            sub_harmonic = math.sin(global_tick * 0.04 + time_offset * 2.0) * 0.35 + 0.65
-            high_freq_noise = math.sin(global_tick * 0.22 + time_offset * 4.5) * 15.0
+            # Package and push binary payload via WebSockets
+            payload = msgpack.packb([global_tick, round(time_offset, 3), flat_matrix], use_bin_type=True)
+            await websocket.send(payload)
             
-            burst_active = math.sin(global_tick * 0.01 + time_offset * 0.6) > 0.80
-            quantum_burst = random.uniform(0, 30.0) if burst_active else random.uniform(0, 6.0)
-            
-            if is_decoy: session_crypto_offset += 0.05
-                
-            val = min(92.0, max(22.0, (carrier * sub_harmonic * 50.0) + high_freq_noise + quantum_burst))
-            
-            stats_tracker.update(val)
-            mean, std = stats_tracker.get_mean_and_std()
-            z_score = abs((val - mean) / std)
-            is_spike = bool(z_score > spike_threshold)
-            
-            roi = 0.0 if is_demo else (base_value * damping * 14.8)
-            alpha_confidence = 80.0 if is_demo else (92.0 + damping)
-            
-            if data_format == "msgpack":
-                packet = [
-                    tier,
-                    [global_tick, round(time_offset, 3), round(session_crypto_offset, 4)],
-                    [round(val, 2), round(z_score, 2), is_spike],
-                    [round(roi, 2), round(alpha_confidence, 2)],
-                    atomic_matrix
-                ]
-                raw_payload = msgpack.packb(packet, use_bin_type=True)
-            else:
-                packet = {
-                    "tier": tier,
-                    "system": {"tick": global_tick, "time": round(time_offset, 3), "crypto_offset": round(session_crypto_offset, 4)},
-                    "wave": {"value": round(val, 2), "z_score": round(z_score, 2), "is_spike": is_spike},
-                    "finance": {"projected_roi": round(roi, 2), "confidence": round(alpha_confidence, 2)},
-                    "matrix": atomic_matrix
-                }
-                raw_payload = json.dumps(packet).encode('utf-8')
-            
-            payload_to_send = fernet.encrypt(raw_payload) if fernet else raw_payload
-            
-            await websocket.send(payload_to_send)
-            
+            # Maintain steady cadence
             elapsed = time.perf_counter() - loop_start
-            sleep_duration = max(0.0, 0.016 - elapsed)
-            await asyncio.sleep(sleep_duration)
-                
+            await asyncio.sleep(max(0.0, 0.016 - elapsed))
+            
     except websockets.exceptions.ConnectionClosed:
-        print("🔒 Secure SEBRA82 Vault Session Closed Gracefully.")
+        print("🔒 Client Disconnected.")
 
 async def main():
     port = int(os.environ.get("PORT", 8767))
-    async with websockets.serve(
-        sebra_engine, 
-        "0.0.0.0", 
-        port, 
-        process_request=process_request,
-        ping_interval=20,
-        ping_timeout=20
-    ):
-        print(f"⚡ SEBRA82 v5.9 Flat Memory Engine Online on port {port}")
+    async with websockets.serve(webgpu_server_handler, "0.0.0.0", port):
+        print(f"🚀 SEBRA82 WebGPU Compute Server Online on port {port}")
         await asyncio.Future()
 
 if __name__ == "__main__":
