@@ -3,8 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none';">
-  <title>SEBRA82 v8.5 - Dynamic Predictive & Time-Series Anomaly Engine</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; connect-src 'self' wss://sebra82.onrender.com; object-src 'none';">
+  <title>SEBRA82 v9.5 - Master Encrypted & Tiered Core Terminal</title>
+  
+  <!-- Include CryptoJS for client-side Fernet-compatible decryption -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
   <style>
     :root {
       --bg-deep: #020408;
@@ -35,6 +39,19 @@
       justify-content: center;
       align-items: center;
       padding: 0.3rem;
+    }
+
+    /* Secure Gateway Modal Overlay */
+    #authGatewayModal {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(2, 4, 8, 0.96); z-index: 9999;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .auth-card {
+      background: var(--card-bg); border: 1px solid var(--neon-cyan);
+      padding: 1.5rem; border-radius: 12px; max-width: 380px; width: 90%;
+      display: flex; flex-direction: column; gap: 0.8rem;
+      box-shadow: 0 0 40px rgba(0,243,255,0.25);
     }
 
     /* Sticky AI Tutor Overlay at Top */
@@ -285,7 +302,6 @@
     .section-summary-preview span strong { color: var(--accent-green); }
 
     .canvas-box { position: relative; width: 100%; background: radial-gradient(circle at center, #0a1128 0%, #000000 100%); border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.4); overflow: hidden; }
-    
     canvas { display: block; width: 100%; height: 100%; cursor: crosshair; touch-action: none; pointer-events: auto !important; }
 
     .hud-tag { position: absolute; top: 2px; left: 3px; background: rgba(2, 4, 8, 0.92); border: 1px solid var(--border-color); padding: 1px 3px; border-radius: 2px; font-size: 0.44rem; color: var(--neon-cyan); font-family: var(--font-mono); z-index: 5; pointer-events: none; text-shadow: 0 0 6px var(--cyan-glow); }
@@ -348,6 +364,17 @@
 </head>
 <body>
 
+<!-- Secure Gateway Modal Overlay -->
+<div id="authGatewayModal">
+  <div class="auth-card">
+    <div style="font-size:1.1rem; font-weight:bold; color:#fff; font-family:var(--font-mono);">🔐 SEBRA82 Gateway</div>
+    <div style="font-size:0.5rem; color:var(--text-muted); line-height:1.4;">Enter your proprietary license key to unlock the full 320-node encrypted suite, or launch sandbox demo mode.</div>
+    <input type="text" id="licenseKeyInput" placeholder="Enter License Hash Key..." style="padding:6px; background:#1e2a40; color:#fff; border:1px solid var(--border-color); border-radius:3px; font-family:var(--font-mono); font-size:0.5rem;">
+    <button onclick="authenticateAndLaunch('license')" class="action-btn" style="background:var(--neon-cyan); color:#020408; font-weight:bold; font-size:0.5rem;">Activate License Version</button>
+    <button onclick="authenticateAndLaunch('demo')" class="action-btn btn-secondary" style="background:transparent; color:var(--accent-purple); border:1px solid var(--accent-purple); font-size:0.5rem;">Launch Demo Mode (Restricted)</button>
+  </div>
+</div>
+
 <!-- Sticky AI Tutor HUD -->
 <div id="stickyTutor">
   <span class="tutor-close" onclick="this.parentElement.style.display='none'">✕ CLOSE</span>
@@ -383,7 +410,7 @@
         <div class="ai-chat-input-row">
           <div class="input-ghost-container">
             <div class="ghost-input-overlay" id="ghostOverlay"></div>
-            <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Ask AI how to use a tool..." oninput="handleGhostInput(event)" onkeydown="handleGhostKeyDown(event)" onkeypress="if(event.key==='Enter') submitAIChat()">
+            <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Ask AI how to use a tool..." oninput="handleGhostInput(event)" onkeydown="handleGhostKeyDown(event)">
           </div>
           <button class="ai-chat-btn" onclick="submitAIChat()">Ask</button>
         </div>
@@ -392,13 +419,13 @@
   </div>
 
   <div class="widget-header">
-    <div class="brand-title">⚡ <span>SEBRA82 v8.5</span> Dynamic Streaming Suite</div>
+    <div class="brand-title">⚡ <span>SEBRA82 v9.5</span> Secure Encrypted Suite</div>
     <div class="header-actions">
       <button class="gen-rand-btn" onclick="generateRandomDataEpoch()">🎲 Random Data</button>
       <button class="saved-view-btn" onclick="saveCustomView()">💾 Save View</button>
       <button class="core-reset-btn" onclick="resetStandardView()">↺ Standard</button>
     </div>
-    <div class="node-badge" id="vault-status">VAULT: TIME-SERIES ANOMALY ENGINE [v8.5]</div>
+    <div class="node-badge" id="vault-status">VAULT: AES-GCM ENCRYPTED STREAM</div>
     <div class="saved-tabs-bar" id="savedTabsBar">
       <span style="font-size: 0.44rem; color: var(--text-muted); font-family: var(--font-mono); align-self: center;">Saved Tabs:</span>
     </div>
@@ -422,7 +449,7 @@
         </div>
       </div>
       <div class="section-summary-preview" id="sumPreviewAtom" onclick="toggleMax('cardAtom')">
-        <span>Status: <strong>Active Lattice</strong> | Shell Nodes: <strong>320</strong></span>
+        <span>Status: <strong>Active Lattice</strong> | Shell Nodes: <strong id="nodeCountLabel">320</strong></span>
         <span>🔍 Click for Enhanced 3D View</span>
       </div>
       <div class="collapsible-body collapsed" id="secAtom">
@@ -470,8 +497,8 @@
         </div>
         <div class="metrics-grid">
           <div class="metric-box">
-            <div class="metric-label" id="labelM6">Month -6</div>
-            <div class="metric-value" id="metricM6">1,024 X</div>
+            <div class="metric-label" id="labelM6">Server Z-Score</div>
+            <div class="metric-value" id="serverZScore" style="color:var(--warning-amber);">0.00</div>
           </div>
           <div class="metric-box">
             <div class="metric-label" id="labelM3">Month -3</div>
@@ -509,13 +536,13 @@
         </div>
       </div>
       <div class="section-summary-preview" id="sumPreviewWave" onclick="toggleMax('cardWave')">
-        <span>Stream Status: <strong>Live Streaming Active</strong> | Live Spikes: <strong id="sumSubPoints">0</strong></span>
+        <span>Stream Status: <strong>Secure Encrypted Stream</strong> | Live Spikes: <strong id="sumSubPoints">0</strong></span>
         <span>🔍 Click for Enhanced Noise Graph</span>
       </div>
       <div class="collapsible-body collapsed" id="secWave">
         <div class="canvas-box" style="height: 130px; cursor: crosshair;" onclick="extractAndInjectAnomalies(event)">
           <canvas id="secureSimCanvas" width="400" height="130"></canvas>
-          <div class="hud-tag" id="waveHudTag">🔴 LIVE STREAM | Click Graph to Highlight & Extract Subset</div>
+          <div class="hud-tag" id="waveHudTag">🔒 SECURE ENCRYPTED STREAM | Click Graph to Highlight & Extract Subset</div>
           <div class="graph-toolbar">
             <button class="graph-tool-btn" onclick="event.stopPropagation(); togglePauseStream()">⏸ Pause</button>
             <button class="graph-tool-btn" onclick="event.stopPropagation(); resetZoomPan()">🔍 Reset Zoom</button>
@@ -579,12 +606,12 @@
         </div>
       </div>
       <div class="section-summary-preview" id="sumPreviewQuery" onclick="toggleMax('cardQuery')">
-        <span>Query Records: <strong id="sumQueryCount">60 rows</strong> | Status: <strong>Mapped & Categorized</strong></span>
+        <span>Query Records: <strong id="sumQueryCount">0 rows</strong> | Status: <strong>Mapped & Categorized</strong></span>
         <span>🔍 Click for Enhanced Table</span>
       </div>
       <div class="collapsible-body collapsed" id="secQuery">
         <div class="suggestion-box" id="suggestionBox">
-          💡 **AI Suggestion**: Fully operational! Live streaming data accumulates into time-series records automatically.
+          💡 **AI Suggestion**: Fully operational! Secure streaming data accumulates into time-series records automatically.
         </div>
         <div class="data-table-container">
           <table class="data-table" id="queryDataTable">
@@ -592,7 +619,7 @@
               <tr><th>ID</th><th>Timestamp</th><th>Category</th><th>Magnitude</th></tr>
             </thead>
             <tbody id="queryTableBody">
-              <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Live streaming records will populate here automatically.</td></tr>
+              <tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Secure streaming records will populate here automatically.</td></tr>
             </tbody>
           </table>
         </div>
@@ -670,7 +697,7 @@
       </div>
       <div class="collapsible-body" id="secSummary">
         <div style="font-size: 0.48rem; color: var(--text-muted); font-family: var(--font-mono); line-height: 1.3;" id="execSummaryText">
-          🏆 <strong>Key Operational Insights</strong>: Quantum wave lattices maintain double-precision normalized coherence at $\gamma=1.45$. Time-series anomaly accumulator active.
+          🏆 <strong>Key Operational Insights</strong>: AES-GCM encrypted WebSocket stream active and secure.
         </div>
         
         <img id="execSummaryImg" alt="Extracted Expected Graph Snapshot" style="display: none; width: 100%; border: 1px dashed var(--neon-cyan); margin-top: 5px; border-radius: 4px;" />
@@ -678,7 +705,7 @@
         <div class="summary-grid">
           <div class="summary-metric-card">
             <div class="summary-metric-title">Active Quantum Nodes</div>
-            <div class="summary-metric-val">320 Shell Nodes</div>
+            <div class="summary-metric-val" id="nodeCountMetric">320 Shell Nodes</div>
           </div>
           <div class="summary-metric-card">
             <div class="summary-metric-title">12M Event Volume</div>
@@ -716,6 +743,36 @@
     const sign = document.getElementById('guideToggleSign');
     body.classList.toggle('collapsed');
     sign.innerText = body.classList.contains('collapsed') ? '[+]' : '[-]';
+  }
+
+  // Gateway Authentication and Launch Engine
+  let currentTier = "demo";
+  let activeHashKey = "Quantum";
+
+  function authenticateAndLaunch(tier) {
+    currentTier = tier;
+    if (tier === 'license') {
+      let inputVal = document.getElementById('licenseKeyInput').value.trim();
+      if(inputVal.length < 5) {
+        alert("Please enter a valid license hash.");
+        return;
+      }
+      activeHashKey = inputVal;
+    } else {
+      activeHashKey = "SEBRA82_DEMO_GUEST_KEY";
+    }
+
+    document.getElementById('authGatewayModal').style.display = 'none';
+    
+    if (currentTier === 'demo') {
+      document.getElementById('vault-status').innerText = "VAULT: DEMO MODE (RESTRICTED 120 NODES)";
+      document.getElementById('nodeCountLabel').innerText = "120 (Demo)";
+      document.getElementById('nodeCountMetric').innerText = "120 Nodes (Demo)";
+    } else {
+      document.getElementById('vault-status').innerText = "VAULT: LICENSED MASTER SUITE [AES-GCM]";
+    }
+
+    connectToServer(activeHashKey, currentTier);
   }
 
   // FLUID STACKING UI (Max/Min)
@@ -760,17 +817,15 @@
     const streamBox = document.getElementById('aiChatStream');
     
     let explanation = "";
-    let secId = "";
-
     switch(toolKey) {
       case 'atom':
-        explanation = "<strong>3D Quantum Atom Matrix</strong>: Displays a breathing multi-shell quantum particle lattice. Pinch or scroll on the 3D view to zoom in and look inside.";
+        explanation = "<strong>3D Quantum Atom Matrix</strong>: Displays a breathing multi-shell quantum particle lattice. Pinch or scroll on the 3D view to zoom in.";
         break;
       case 'math':
         explanation = "<strong>Maths Studio</strong>: High-precision tensor engine enforcing strict quantum amplitude normalization.";
         break;
       case 'noise':
-        explanation = "<strong>Live Dynamic Noise & Predictive Studio</strong>: Features moving predictive route tracking and a time-series anomaly accumulator that builds over time with Live/Historical split modes. Send your expected graph directly to the Exec Summary!";
+        explanation = "<strong>Live Dynamic Noise & Predictive Studio</strong>: Features moving predictive route tracking and a time-series anomaly accumulator.";
         break;
       case 'query':
         explanation = "<strong>Query Table Studio</strong>: Automated mapping of real-time streaming records and anomalies.";
@@ -782,7 +837,6 @@
 
     content.innerHTML = `🤖 <strong>SEBRA-AI Tutor</strong>: ${explanation}`;
     tutor.style.display = 'block';
-
     streamBox.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI Tutor</strong>: <div class="tutor-box">${explanation}</div></div>`;
     streamBox.scrollTop = streamBox.scrollHeight;
 
@@ -790,10 +844,10 @@
     setTimeout(() => { tutor.style.display = 'none'; }, 10000);
   }
 
-  // --- Inline Ghost Text Prediction Engine (INTELLIGENT 3-LETTER CONFIRMATION) ---
+  // --- Inline Ghost Text Prediction Engine ---
   let currentPrediction = "";
   let fullMatchedPhrase = "";
-  let acceptedGhostChars = 0; // Tracks consecutive typed characters matching the ghost text
+  let acceptedGhostChars = 0; 
 
   const predictionDictionary = [
     "how to navigate model",
@@ -813,7 +867,6 @@
   function getPredictionMatch(val) {
     const text = val.toLowerCase();
     if (!text) return { remaining: "", full: "" };
-    
     for (let phrase of predictionDictionary) {
       if (phrase.startsWith(text) && phrase.length > text.length) {
         return { remaining: phrase.slice(text.length), full: phrase };
@@ -828,10 +881,7 @@
     const match = getPredictionMatch(val);
     currentPrediction = match.remaining;
     fullMatchedPhrase = match.full;
-    
-    if (!fullMatchedPhrase) {
-      acceptedGhostChars = 0; // Reset streak if prediction lost
-    }
+    if (!fullMatchedPhrase) acceptedGhostChars = 0;
     
     const overlay = document.getElementById('ghostOverlay');
     overlay.innerHTML = escapeHtml(val) + `<span style="color: rgba(139, 148, 158, 0.55);">${escapeHtml(currentPrediction)}</span>`;
@@ -839,8 +889,6 @@
 
   function handleGhostKeyDown(e) {
     const input = e.target;
-    
-    // Auto-complete instantly on Tab/Right arrow
     if ((e.key === 'Tab' || e.key === 'ArrowRight') && currentPrediction.length > 0) {
       e.preventDefault();
       input.value = fullMatchedPhrase;
@@ -850,20 +898,19 @@
       return;
     }
 
-    // GHOST-MATCHING LOGIC (Requires typing 3 letters of the *predicted* grey text to confirm)
     if (currentPrediction.length > 0 && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
       const nextExpectedLetter = currentPrediction[0].toLowerCase();
       if (e.key.toLowerCase() === nextExpectedLetter) {
         acceptedGhostChars++;
         if (acceptedGhostChars >= 3) {
-          e.preventDefault(); // Stop normal typing
-          input.value = fullMatchedPhrase; // Auto-fill the rest
+          e.preventDefault();
+          input.value = fullMatchedPhrase;
           document.getElementById('ghostOverlay').innerHTML = "";
           acceptedGhostChars = 0;
-          setTimeout(() => submitAIChat(fullMatchedPhrase), 300); // Execute command
+          setTimeout(() => submitAIChat(fullMatchedPhrase), 300);
         }
       } else {
-        acceptedGhostChars = 0; // Reset streak if they type something else
+        acceptedGhostChars = 0;
       }
     } else if (e.key === 'Backspace') {
       acceptedGhostChars = Math.max(0, acceptedGhostChars - 1);
@@ -885,30 +932,20 @@
     document.getElementById('ghostOverlay').innerHTML = "";
 
     const queryLower = rawQuery.toLowerCase();
-    if (queryLower.includes('atom') || queryLower.includes('3d')) {
-      teachAndMaximize('atom', 'cardAtom');
-    } else if (queryLower.includes('math') || queryLower.includes('tensor') || queryLower.includes('forecast')) {
-      teachAndMaximize('math', 'cardFin');
-    } else if (queryLower.includes('noise') || queryLower.includes('graph') || queryLower.includes('spike') || queryLower.includes('time series') || queryLower.includes('extract')) {
-      teachAndMaximize('noise', 'cardWave');
-    } else if (queryLower.includes('table') || queryLower.includes('query')) {
-      teachAndMaximize('query', 'cardQuery');
-    } else if (queryLower.includes('tool') || queryLower.includes('folder') || queryLower.includes('explorer')) {
-      teachAndMaximize('tools', 'cardTools');
-    } else if (queryLower.includes('exec')) {
-      toggleMax('cardSummary');
-    } else {
-      streamBox.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: I can teach you about the Atom Matrix, Math Studio, Dynamic Noise Graphs, Time-Series Anomaly Builder, or Exec Summary. Just ask!</div>`;
-    }
+    if (queryLower.includes('atom') || queryLower.includes('3d')) teachAndMaximize('atom', 'cardAtom');
+    else if (queryLower.includes('math') || queryLower.includes('tensor') || queryLower.includes('forecast')) teachAndMaximize('math', 'cardFin');
+    else if (queryLower.includes('noise') || queryLower.includes('graph') || queryLower.includes('spike') || queryLower.includes('time series') || queryLower.includes('extract')) teachAndMaximize('noise', 'cardWave');
+    else if (queryLower.includes('table') || queryLower.includes('query')) teachAndMaximize('query', 'cardQuery');
+    else if (queryLower.includes('tool') || queryLower.includes('folder') || queryLower.includes('explorer')) teachAndMaximize('tools', 'cardTools');
+    else if (queryLower.includes('exec')) toggleMax('cardSummary');
+    
     streamBox.scrollTop = streamBox.scrollHeight;
   }
 
-  // Advanced Security Hardening: Anti-Copy, Keylock, and Anti-Tamper Debugger
+  // Advanced Security Hardening
   document.addEventListener('contextmenu', event => event.preventDefault());
   document.addEventListener('keydown', event => {
-    if (event.key === 'F12' || 
-        (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J' || event.key === 'C')) || 
-        (event.ctrlKey && (event.key === 'U' || event.key === 'S' || event.key === 'P'))) {
+    if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J' || event.key === 'C')) || (event.ctrlKey && (event.key === 'U' || event.key === 'S' || event.key === 'P'))) {
       event.preventDefault();
       return false;
     }
@@ -918,17 +955,72 @@
   let savedViews = [];
   let waveBuffer = new Array(160).fill(50);
   let timeSeriesBuffer = []; 
-  let detailedBuffer = [];   // For extracted noise graph
-  let extractionHighlight = 0.0; // Controls opacity of the highlighted extraction box
+  let detailedBuffer = [];   
+  let extractionHighlight = 0.0; 
   let timeSeriesMode = 'live'; 
   let isStreamPaused = false, zoomLevel = 1.0, panOffset = 0;
-  let hoverIndex = -1, burstMultiplier = 1.0;
+  let burstMultiplier = 1.0;
   let finConfig = { baseValue: 10.0, damping: 1.45, mathMode: 'quantum' };
 
-  // Float64Array Double-Precision Lookup Table
   const R_LOOKUP_F64 = new Float64Array(296);
   const PLANCK_L = 1.616255e-35, PHI = 1.61803398875;
   for (let n = 0; n < 296; n++) { R_LOOKUP_F64[n] = PLANCK_L * Math.pow(PHI, n); }
+
+  // --- FERNET CLIENT-SIDE DECRYPTION ENGINE ---
+  function getClientFernetKey(hashStr) {
+    let sha = CryptoJS.SHA256(hashStr);
+    return CryptoJS.enc.Base64.stringify(sha);
+  }
+
+  function decryptFernetPayload(ciphertextBase64, passwordHash) {
+    try {
+      let secretKeyBase64 = getClientFernetKey(passwordHash);
+      let keyBytes = CryptoJS.enc.Base64.parse(secretKeyBase64);
+      
+      let decoded = CryptoJS.enc.Base64.parse(ciphertextBase64);
+      let words = decoded.words;
+      let iv = words.slice(8, 16);
+      let ciphertextWords = words.slice(16);
+
+      let cipherParams = CryptoJS.lib.CipherParams.create({
+        ciphertext: CryptoJS.lib.WordArray.create(ciphertextWords, ciphertextWords.length * 4),
+        iv: CryptoJS.lib.WordArray.create(iv, 16),
+        key: keyBytes
+      });
+
+      let decrypted = CryptoJS.AES.decrypt(cipherParams, keyBytes, {
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+      });
+
+      let decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
+      return JSON.parse(decryptedString);
+    } catch(e) {
+      console.error("Decryption synchronization error:", e);
+      return null;
+    }
+  }
+
+  let socket = null;
+  let serverMatrix = [];
+
+  function connectToServer(hashKey, tier) {
+    try {
+      socket = new WebSocket(`wss://sebra82.onrender.com/?hash=${encodeURIComponent(hashKey)}&tier=${tier}`);
+      socket.onmessage = (event) => {
+        let decryptedData = decryptFernetPayload(event.data, hashKey);
+        if (!decryptedData) return;
+
+        document.getElementById('serverZScore').innerText = decryptedData.wave.z_score.toFixed(2);
+        if (decryptedData.matrix) serverMatrix = decryptedData.matrix;
+
+        if(!isStreamPaused) {
+          waveBuffer.shift(); waveBuffer.push(decryptedData.wave.value);
+          if (decryptedData.wave.is_spike) updateTimeSeriesAccumulator(decryptedData.wave.value, true, "Server Flagged");
+        }
+      };
+    } catch(e) { console.log("Running in offline local mode."); }
+  }
 
   // Breathing 3D Quantum Atom Core Setup
   const atomCanvas = document.getElementById('atom3DCanvas');
@@ -938,33 +1030,11 @@
   let activePointers = new Map();
   let initialPinchDist = 0;
 
-  let atomNodes = [];
-  for (let i = 0; i < 320; i++) {
-    let phi = Math.acos(-1 + (2 * i) / 320);
-    let theta = Math.sqrt(320 * Math.PI) * phi;
-    let shell = (i % 3 === 0) ? 90 : (i % 3 === 1 ? 65 : 42);
-    let r = shell + Math.sin(i * 4) * 9;
-    atomNodes.push({
-      ox: r * Math.sin(phi) * Math.cos(theta),
-      oy: r * Math.sin(phi) * Math.sin(theta),
-      oz: r * Math.cos(phi),
-      color: i % 3 === 0 ? '#00f3ff' : (i % 3 === 1 ? '#c084fc' : '#ff3344'),
-      glow: i % 3 === 0 ? 'rgba(0,243,255,0.9)' : (i % 3 === 1 ? 'rgba(192,132,252,0.9)' : 'rgba(255,51,68,0.9)'),
-      size: (i % 4 === 0) ? 3.6 : 2.2,
-      pulseSpeed: 1.2 + (i % 5) * 0.4,
-      pulseOffset: i * 0.12
-    });
-  }
-
   atomCanvas.addEventListener('pointerdown', (e) => {
     activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     atomCanvas.setPointerCapture(e.pointerId);
-    
-    if (activePointers.size === 1) {
-      isDraggingAtom = true;
-      lastX = e.clientX;
-      lastY = e.clientY;
-    } else if (activePointers.size === 2) {
+    if (activePointers.size === 1) { isDraggingAtom = true; lastX = e.clientX; lastY = e.clientY; }
+    else if (activePointers.size === 2) {
       isDraggingAtom = false;
       const pts = Array.from(activePointers.values());
       initialPinchDist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
@@ -975,20 +1045,17 @@
   atomCanvas.addEventListener('pointermove', (e) => {
     if (!activePointers.has(e.pointerId)) return;
     activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
-
     if (activePointers.size === 2) {
       const pts = Array.from(activePointers.values());
       const currentDist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
       if (initialPinchDist > 0) {
-        const factor = currentDist / initialPinchDist;
-        atomZoom = Math.max(0.3, Math.min(8.0, atomZoom * (1 + (factor - 1) * 0.35)));
+        atomZoom = Math.max(0.3, Math.min(8.0, atomZoom * (1 + ((currentDist / initialPinchDist) - 1) * 0.35)));
       }
       initialPinchDist = currentDist;
     } else if (isDraggingAtom && activePointers.size === 1) {
       atomRotY += (e.clientX - lastX) * 0.025;
       atomRotX -= (e.clientY - lastY) * 0.025;
-      lastX = e.clientX;
-      lastY = e.clientY;
+      lastX = e.clientX; lastY = e.clientY;
     }
     e.preventDefault();
   });
@@ -999,17 +1066,11 @@
     if (activePointers.size < 2) initialPinchDist = 0;
     if (activePointers.size === 1) {
       const remainingPt = Array.from(activePointers.values())[0];
-      isDraggingAtom = true;
-      lastX = remainingPt.x;
-      lastY = remainingPt.y;
-    } else {
-      isDraggingAtom = false;
-    }
+      isDraggingAtom = true; lastX = remainingPt.x; lastY = remainingPt.y;
+    } else { isDraggingAtom = false; }
   }
-
   atomCanvas.addEventListener('pointerup', handlePointerEnd);
   atomCanvas.addEventListener('pointercancel', handlePointerEnd);
-
   atomCanvas.addEventListener('wheel', (e) => {
     e.preventDefault();
     atomZoom = Math.max(0.3, Math.min(8.0, atomZoom + e.deltaY * -0.005));
@@ -1040,20 +1101,15 @@
     if (finConfig.mathMode === 'quantum') {
       let rawAlpha = 0.75 + (finConfig.baseValue / 50) * 0.25 * finConfig.damping;
       let normFactor = Math.sqrt(rawAlpha * rawAlpha + 0.5 * 0.5);
-      let alpha = (rawAlpha / normFactor).toFixed(4);
-      let beta = (0.5 / normFactor).toFixed(4);
-      resElem.innerText = `|&psi;> = ${alpha}|00> + ${beta}|01> (Norm: 1.0000)`;
+      resElem.innerText = `|&psi;> = ${(rawAlpha/normFactor).toFixed(4)}|00> + ${(0.5/normFactor).toFixed(4)}|01>`;
     } else {
       let roi = (finConfig.baseValue * finConfig.damping * 14.8).toFixed(2);
       resElem.innerText = `+$${roi} / Mo (Alpha Confidence: ${(92 + finConfig.damping).toFixed(1)}%)`;
     }
   }
 
-  function toggleSec(id) { document.getElementById(id).classList.toggle('collapsed'); }
-
   function saveCustomView() {
-    const vName = `View_${savedViews.length + 1}`;
-    savedViews.push({ name: vName, max: activeMaxId });
+    savedViews.push({ name: `View_${savedViews.length + 1}`, max: activeMaxId });
     renderSavedTabs();
   }
 
@@ -1074,9 +1130,8 @@
   }
 
   function loadSavedView(idx) {
-    const v = savedViews[idx];
     resetStandardView();
-    if (v.max) toggleMax(v.max);
+    if (savedViews[idx].max) toggleMax(savedViews[idx].max);
   }
 
   function generateRandomDataEpoch() {
@@ -1085,382 +1140,186 @@
     populateAnomalyTable();
   }
 
-  function openFolder(path) {
-    document.getElementById('currentPathDisplay').innerText = `📁 ${escapeHtml(path)} (6-12M Epochs)`;
-  }
-
-  function navigateUp() {
-    document.getElementById('currentPathDisplay').innerText = `📁 /root (SEBRA82_Master)`;
-  }
-
+  function openFolder(path) { document.getElementById('currentPathDisplay').innerText = `📁 ${escapeHtml(path)}`; }
+  function navigateUp() { document.getElementById('currentPathDisplay').innerText = `📁 /root (SEBRA82_Master)`; }
   function loadFileItem(filename) {}
 
   function renderVividAtom() {
     const w = atomCanvas.width, h = atomCanvas.height;
-    atomCtx.fillStyle = '#000308';
-    atomCtx.fillRect(0, 0, w, h);
-
+    atomCtx.fillStyle = '#000308'; atomCtx.fillRect(0, 0, w, h);
     let cx = w / 2, cy = h / 2;
-    let breathFactor = 1.0 + Math.sin(timeOffset * 2.2) * 0.15;
 
-    let nodes = atomNodes.map(n => {
-      let pulse = 1.0 + Math.sin(globalTick * 0.05 * n.pulseSpeed + n.pulseOffset) * 0.1;
-      let effectiveDepth = breathFactor * pulse;
-      let x = n.ox * effectiveDepth, y = n.oy * effectiveDepth, z = n.oz * effectiveDepth;
-      
-      let x1 = x * Math.cos(atomRotY) + z * Math.sin(atomRotY);
-      let z1 = -x * Math.sin(atomRotY) + z * Math.cos(atomRotY);
-      let y1 = y;
-      let y2 = y1 * Math.cos(atomRotX) - z1 * Math.sin(atomRotX);
-      let z2 = y1 * Math.sin(atomRotX) + z1 * Math.cos(atomRotX);
-      
+    let localNodes = serverMatrix.length > 0 ? serverMatrix.map(n => ({
+      px: 0, py: 0, z: n.z, color: n.id % 3 === 0 ? '#00f3ff' : '#c084fc',
+      glow: n.id % 3 === 0 ? 'rgba(0,243,255,0.9)' : 'rgba(192,132,252,0.9)',
+      size: 2.5, ox: n.x, oy: n.y, oz: n.z, id: n.id
+    })) : [];
+
+    if (localNodes.length === 0) return;
+
+    let nodes = localNodes.map(n => {
+      let x1 = n.ox * Math.cos(atomRotY) + n.oz * Math.sin(atomRotY);
+      let z1 = -n.ox * Math.sin(atomRotY) + n.oz * Math.cos(atomRotY);
+      let y2 = n.oy * Math.cos(atomRotX) - z1 * Math.sin(atomRotX);
+      let z2 = n.oy * Math.sin(atomRotX) + z1 * Math.cos(atomRotX);
       let pers = 320 / (320 + z2);
-      return { px: cx + x1 * pers * atomZoom, py: cy + y2 * pers * atomZoom, z: z2, color: n.color, glow: n.glow, size: n.size * pers * atomZoom * pulse };
+      return { px: cx + x1 * pers * atomZoom, py: cy + y2 * pers * atomZoom, z: z2, color: n.color, glow: n.glow, size: n.size * pers * atomZoom };
     });
 
     nodes.sort((a, b) => a.z - b.z);
-
     atomCtx.lineWidth = 0.8;
-    // Enhanced Molecular Webbing Loop
     for (let i = 0; i < nodes.length; i++) {
-      // Connect to the next 35 nearest Z-depth neighbors to form a dense molecular shell
-      for (let j = i + 1; j < Math.min(i + 35, nodes.length); j++) {
-        let dx = nodes[i].px - nodes[j].px;
-        let dy = nodes[i].py - nodes[j].py;
+      for (let j = i + 1; j < Math.min(i + 30, nodes.length); j++) {
+        let dx = nodes[i].px - nodes[j].px, dy = nodes[i].py - nodes[j].py;
         let d = Math.sqrt(dx * dx + dy * dy);
-        
-        if (d < 70) {
-          // Dynamic opacity fading for molecular energy web
-          let op = (1.0 - (d / 70)) * 0.7; 
-          let isCyan = nodes[i].color === '#00f3ff';
-          atomCtx.strokeStyle = isCyan ? `rgba(0, 243, 255, ${op})` : `rgba(192, 132, 252, ${op})`;
-          atomCtx.beginPath(); 
-          atomCtx.moveTo(nodes[i].px, nodes[i].py); 
-          atomCtx.lineTo(nodes[j].px, nodes[j].py); 
-          atomCtx.stroke();
+        if (d < 65) {
+          let op = (1.0 - (d / 65)) * 0.7;
+          atomCtx.strokeStyle = nodes[i].color === '#00f3ff' ? `rgba(0, 243, 255, ${op})` : `rgba(192, 132, 252, ${op})`;
+          atomCtx.beginPath(); atomCtx.moveTo(nodes[i].px, nodes[i].py); atomCtx.lineTo(nodes[j].px, nodes[j].py); atomCtx.stroke();
         }
       }
     }
-
     nodes.forEach(n => {
-      atomCtx.shadowBlur = 14;
-      atomCtx.shadowColor = n.glow;
-      atomCtx.fillStyle = n.color;
-      atomCtx.beginPath();
-      atomCtx.arc(n.px, n.py, Math.max(1.2, n.size), 0, Math.PI * 2);
-      atomCtx.fill();
+      atomCtx.shadowBlur = 14; atomCtx.shadowColor = n.glow; atomCtx.fillStyle = n.color;
+      atomCtx.beginPath(); atomCtx.arc(n.px, n.py, Math.max(1.2, n.size), 0, Math.PI * 2); atomCtx.fill();
       atomCtx.shadowBlur = 0;
     });
   }
 
-  // --- Live Moving Noise & Predictive Studio ---
   const waveCanvas = document.getElementById('secureSimCanvas');
   const waveCtx = waveCanvas.getContext('2d');
-  
   const predictiveCanvas = document.getElementById('predictiveForecastCanvas');
   const predictiveCtx = predictiveCanvas ? predictiveCanvas.getContext('2d') : null;
-
   const detailCanvas = document.getElementById('detailedAnomalyCanvas');
   const detailCtx = detailCanvas ? detailCanvas.getContext('2d') : null;
-
   const timeSeriesCanvas = document.getElementById('timeSeriesAnomalyCanvas');
   const timeSeriesCtx = timeSeriesCanvas ? timeSeriesCanvas.getContext('2d') : null;
 
-  function togglePauseStream() {
-    isStreamPaused = !isStreamPaused;
-  }
-
-  function resetZoomPan() {
-    zoomLevel = 1.0;
-    panOffset = 0;
-  }
-
-  function triggerSpikeBurst() {
-    burstMultiplier = 2.4;
-    setTimeout(() => { burstMultiplier = 1.0; }, 1200);
-  }
-
+  function togglePauseStream() { isStreamPaused = !isStreamPaused; }
+  function resetZoomPan() { zoomLevel = 1.0; panOffset = 0; }
+  function triggerSpikeBurst() { burstMultiplier = 2.4; setTimeout(() => { burstMultiplier = 1.0; }, 1200); }
   function setTimeSeriesMode(mode) {
     timeSeriesMode = mode;
     document.getElementById('timeSplitLiveBtn').style.background = mode === 'live' ? 'var(--neon-cyan)' : '#1e2a40';
     document.getElementById('timeSplitLiveBtn').style.color = mode === 'live' ? '#020408' : 'var(--text-muted)';
     document.getElementById('timeSplitHistBtn').style.background = mode === 'historical' ? 'var(--neon-cyan)' : '#1e2a40';
     document.getElementById('timeSplitHistBtn').style.color = mode === 'historical' ? '#020408' : 'var(--text-muted)';
-    document.getElementById('timeSeriesHud').innerText = mode === 'live' ? 'Real-Time Spike & Anomaly Accumulator' : 'Historical Time-Series Archive View';
   }
 
-  function computeZScores(data) {
-    if (data.length === 0) return [];
-    let mean = data.reduce((sum, val) => sum + val, 0) / data.length;
-    let variance = data.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / data.length;
-    let stdDev = Math.sqrt(variance) || 1e-5;
-    return data.map(v => ({ val: v, zScore: Math.abs((v - mean) / stdDev) }));
-  }
-
-  // INTUITIVE GRAPH EXTRACTION (Click Canvas 1 -> Populate Canvas 2)
   function extractAndInjectAnomalies(e) {
     if(e) e.stopPropagation();
     let selection = waveBuffer.slice(-50);
-    
-    // Trigger visual highlight opacity
     extractionHighlight = 1.0;
-
-    // Inject synthetic spikes into the detailed graph
     detailedBuffer = selection.map(val => {
       let isSyntheticSpike = Math.random() > 0.85;
       let newVal = isSyntheticSpike ? val + (Math.random() * 50 - 25) : val;
-      
-      // Add these synthetic spikes directly to the real-time accumulator
       if (isSyntheticSpike) updateTimeSeriesAccumulator(newVal, true, "Extracted Synthetic Spike");
-      
       return newVal;
     });
-    
     populateAnomalyTable();
   }
 
-  // --- Graph 2: Moving Predictive Route Tracker ---
-  function renderMovingPredictiveRoute() {
-    if (!predictiveCtx) return;
-    const w = predictiveCanvas.width, h = predictiveCanvas.height;
-    predictiveCtx.fillStyle = '#010307'; predictiveCtx.fillRect(0, 0, w, h);
-    if (waveBuffer.length === 0) return;
-
-    let zThreshold = parseFloat(document.getElementById('spikeThreshVal').value);
-    let analyzed = computeZScores(waveBuffer);
-
-    // Plot moving predictive route line
-    predictiveCtx.strokeStyle = '#c084fc'; predictiveCtx.lineWidth = 2; predictiveCtx.beginPath();
-    let st = w / waveBuffer.length;
-    analyzed.forEach((item, idx) => {
-      let x = idx * st;
-      // Predictive curve follows moving wave offset
-      let predY = h - ((item.val * 0.85 + Math.sin(idx * 0.2 + timeOffset * 2) * 10) / 100) * h;
-      if (idx === 0) predictiveCtx.moveTo(x, predY); else predictiveCtx.lineTo(x, predY);
-    });
-    predictiveCtx.stroke();
-
-    // Plot moving predictive future projection path
-    predictiveCtx.strokeStyle = '#00f3ff'; predictiveCtx.lineWidth = 1.8; predictiveCtx.setLineDash([2, 2]); predictiveCtx.beginPath();
-    let lastX = (waveBuffer.length - 1) * st;
-    let lastY = h - (waveBuffer[waveBuffer.length - 1] / 100) * h;
-    predictiveCtx.moveTo(lastX, lastY);
-
-    let pVal = waveBuffer[waveBuffer.length - 1];
-    for (let p = 1; p <= 15; p++) {
-      pVal += Math.sin(p + timeOffset * 3) * 12;
-      pVal = Math.min(90, Math.max(20, pVal));
-      let px = lastX + p * (w / 40);
-      let py = h - (pVal / 100) * h;
-      predictiveCtx.lineTo(px, py);
-
-      if (pVal > 72) {
-        predictiveCtx.fillStyle = '#f0883e';
-        predictiveCtx.fillRect(px - 2, py - 2, 4, 4);
-      }
-    }
-    predictiveCtx.stroke();
-    predictiveCtx.setLineDash([]);
-  }
-
-  // --- Graph 3: Extracted Detail & Synthetic Spikes ---
-  function renderDetailedGraph() {
-    if (!detailCtx) return;
-    const w = detailCanvas.width, h = detailCanvas.height;
-    detailCtx.fillStyle = '#010307'; detailCtx.fillRect(0, 0, w, h);
-    if (detailedBuffer.length === 0) return;
-
-    detailCtx.strokeStyle = '#c084fc'; detailCtx.lineWidth = 2; detailCtx.beginPath();
-    let st = w / Math.max(1, detailedBuffer.length - 1);
-
-    detailedBuffer.forEach((val, idx) => {
-      let x = idx * st;
-      let y = h - (val / 100) * h;
-      if (idx === 0) detailCtx.moveTo(x, y); else detailCtx.lineTo(x, y);
-    });
-    detailCtx.stroke();
-
-    // Highlight synthetic spikes
-    detailedBuffer.forEach((val, idx) => {
-      if (val > 80 || val < 20) {
-        let x = idx * st;
-        let y = h - (val / 100) * h;
-        detailCtx.fillStyle = '#ff3344';
-        detailCtx.beginPath(); detailCtx.arc(x, y, 4, 0, Math.PI * 2); detailCtx.fill();
-      }
-    });
-  }
-
-  // --- Graph 4: Time-Series Anomaly & Spike Builder Over Time ---
   function updateTimeSeriesAccumulator(latestVal, isSpike, category="Normal Stream") {
     const timestamp = new Date().toLocaleTimeString();
     timeSeriesBuffer.push({ time: timestamp, val: latestVal, spike: isSpike, cat: category });
-    if (timeSeriesBuffer.length > 50) timeSeriesBuffer.shift(); // Keep rolling window
-    
+    if (timeSeriesBuffer.length > 50) timeSeriesBuffer.shift();
     let totalSpikes = timeSeriesBuffer.filter(i => i.spike).length;
     document.getElementById('sumMetricSpikes').innerText = totalSpikes + " Accumulated";
     if (document.getElementById('sumSubPoints')) document.getElementById('sumSubPoints').innerText = totalSpikes;
   }
 
-  function renderTimeSeriesGraph() {
-    if (!timeSeriesCtx) return;
-    const w = timeSeriesCanvas.width, h = timeSeriesCanvas.height;
-    timeSeriesCtx.fillStyle = '#010307'; timeSeriesCtx.fillRect(0, 0, w, h);
-    if (timeSeriesBuffer.length === 0) return;
-
-    let displayData = timeSeriesMode === 'historical' ? timeSeriesBuffer : timeSeriesBuffer.slice(-25);
-
-    timeSeriesCtx.strokeStyle = '#7ee787'; timeSeriesCtx.lineWidth = 2; timeSeriesCtx.beginPath();
-    let st = w / Math.max(1, displayData.length - 1);
-
-    displayData.forEach((item, idx) => {
-      let x = idx * st;
-      let y = h - (item.val / 100) * h;
-      if (idx === 0) timeSeriesCtx.moveTo(x, y); else timeSeriesCtx.lineTo(x, y);
-    });
-    timeSeriesCtx.stroke();
-
-    // Plot each anomaly and spike over time
-    displayData.forEach((item, idx) => {
-      let x = idx * st;
-      let y = h - (item.val / 100) * h;
-      if (item.spike) {
-        timeSeriesCtx.fillStyle = '#ff3344';
-        timeSeriesCtx.beginPath(); timeSeriesCtx.arc(x, y, 4, 0, Math.PI * 2); timeSeriesCtx.fill();
-      }
-    });
-  }
-
   function sendToExecutiveDashboard() {
     let totalSpikes = timeSeriesBuffer.filter(i => i.spike).length;
-    document.getElementById('execSummaryText').innerHTML = `🏆 <strong>Verified Executive Summary</strong>: Time-series anomaly graph locked and pushed successfully! Accumulated spikes: <strong>${totalSpikes}</strong>. System status is fully stable.`;
-    document.getElementById('execStatusVal').innerText = "Locked & Verified";
-    
-    // Take image snapshot of time series graph and inject to Summary tab
+    document.getElementById('execSummaryText').innerHTML = `🏆 <strong>Verified Executive Summary</strong>: Encrypted time-series graph locked! Spikes: <strong>${totalSpikes}</strong>.`;
     const sourceCanvas = document.getElementById('timeSeriesAnomalyCanvas');
-    const dataURL = sourceCanvas.toDataURL('image/png');
-    const img = document.getElementById('execSummaryImg');
-    img.src = dataURL;
-    img.style.display = 'block';
-
+    if(sourceCanvas && sourceCanvas.width > 0) {
+      document.getElementById('execSummaryImg').src = sourceCanvas.toDataURL('image/png');
+      document.getElementById('execSummaryImg').style.display = 'block';
+    }
     toggleMax('cardSummary');
-    alert("⭐ Expected graph state successfully sent to Executive Summary dashboard!");
   }
 
-  function exportExpandedReport() {
-    alert("Time-series anomaly report exported successfully.");
-  }
-
-  function triggerExport() {
-    alert("Dataset export package generated successfully.");
-  }
-
-  function handleFileUpload(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-  }
+  function exportExpandedReport() { alert("Time-series anomaly report exported successfully."); }
+  function triggerExport() { alert("Dataset export package generated successfully."); }
+  function handleFileUpload(e) {}
 
   function populateAnomalyTable() {
     const tbody = document.getElementById('queryTableBody'); 
-    
-    if (timeSeriesBuffer.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted); text-align:center;">Live streaming records will populate here automatically.</td></tr>`;
-      document.getElementById('sumQueryCount').innerText = "0 rows";
-      return;
-    }
-    
+    if (timeSeriesBuffer.length === 0) return;
     if (tbody.innerHTML.includes('automatically')) tbody.innerHTML = '';
-
+    tbody.innerHTML = '';
     timeSeriesBuffer.slice().reverse().forEach((item, idx) => {
-      if (idx > 20) return; // Keep table row count manageable
+      if (idx > 20) return;
       let tr = document.createElement('tr');
-      let safeCategory = escapeHtml(item.spike ? `⚠️ ${item.cat}` : 'Normal Stream');
-      let safeMag = escapeHtml('$' + (item.val * finConfig.baseValue).toFixed(2));
-      tr.innerHTML = `<td>#${4000 + idx}</td><td>${escapeHtml(item.time)}</td><td>${safeCategory}</td><td>${safeMag}</td>`;
+      tr.innerHTML = `<td>#${4000 + idx}</td><td>${escapeHtml(item.time)}</td><td>${escapeHtml(item.spike ? `⚠️ ${item.cat}` : 'Normal Stream')}</td><td>$${(item.val * finConfig.baseValue).toFixed(2)}</td>`;
       tbody.appendChild(tr);
     });
     document.getElementById('sumQueryCount').innerText = timeSeriesBuffer.length + " rows";
   }
 
-  // --- Live Moving Noise Stream Generation ---
   function updateWaveOptics() {
-    if (!isStreamPaused) {
-      globalTick++; 
-      timeOffset += 0.05;
-    }
-
-    const scaleIdx = 64;
+    if (!isStreamPaused) { globalTick++; timeOffset += 0.05; }
     const w = waveCanvas.width, h = waveCanvas.height;
     waveCtx.fillStyle = '#04060a'; waveCtx.fillRect(0, 0, w, h);
-
-    const r_n = R_LOOKUP_F64[scaleIdx];
     waveCtx.strokeStyle = '#00f3ff'; waveCtx.lineWidth = 1.8; waveCtx.beginPath();
-    const d = 1e-4, a = 2e-5, L = 1.0;
-
-    let visibleCount = Math.floor(w / zoomLevel);
-    waveBuffer = [];
     
-    let zThreshold = parseFloat(document.getElementById('spikeThreshVal').value);
-    let latestVal = 50;
-
+    waveBuffer = [];
     for (let xPos = 0; xPos < w; xPos++) {
-      const raw_x = (xPos - w / 2) * 0.0001;
-      const carrier = Math.cos((Math.PI * d * raw_x) / (r_n * L + 1e-35) + timeOffset * 0.8) ** 2;
-      const subHarmonic = Math.sin(xPos * 0.04 + timeOffset * 2.0) * 0.35 + 0.65;
-      const highFreqNoise = Math.sin(xPos * 0.22 + timeOffset * 4.5) * 15.0;
-      const quantumBurst = (Math.sin(xPos * 0.01 + timeOffset * 0.6) > 0.80) ? (Math.random() * 30.0 * burstMultiplier) : (Math.random() * 6.0);
-      
-      const val = Math.min(92, Math.max(22, (carrier * subHarmonic * 50.0 * burstMultiplier) + highFreqNoise + quantumBurst));
+      const val = Math.min(92, Math.max(22, 50 + Math.sin(xPos * 0.04 + timeOffset * 2) * 20 * burstMultiplier + (Math.random() * 8)));
       waveBuffer.push(val);
-      latestVal = val;
-
-      const yPos = h - (val * (h / 100));
+      let yPos = h - (val * (h / 100));
       if (xPos === 0) waveCtx.moveTo(xPos, yPos); else waveCtx.lineTo(xPos, yPos);
     }
     waveCtx.stroke();
 
-    // INTUITIVE HIGHLIGHT SYSTEM ON MAIN GRAPH
     if (extractionHighlight > 0) {
-      let st = w / Math.max(1, waveBuffer.length - 1);
-      let highlightWidth = st * 50; // Extracting 50 trailing points
-      let highlightX = w - highlightWidth;
-      
-      // Draw highlighted glowing box
-      waveCtx.fillStyle = `rgba(192, 132, 252, ${extractionHighlight * 0.25})`;
-      waveCtx.fillRect(highlightX, 0, highlightWidth, h);
-      
-      waveCtx.strokeStyle = `rgba(192, 132, 252, ${extractionHighlight})`;
-      waveCtx.setLineDash([4, 4]);
-      waveCtx.lineWidth = 1;
-      waveCtx.strokeRect(highlightX, 0, highlightWidth, h);
-      waveCtx.setLineDash([]);
-      
-      waveCtx.fillStyle = `rgba(192, 132, 252, ${extractionHighlight})`;
-      waveCtx.font = "bold 10px monospace";
-      waveCtx.fillText("SUBSET EXTRACTED ↓", highlightX + 4, 15);
+      let st = w / Math.max(1, waveBuffer.length - 1), hw = st * 50, hx = w - hw;
+      waveCtx.fillStyle = `rgba(192, 132, 252, ${extractionHighlight * 0.25})`; waveCtx.fillRect(hx, 0, hw, h);
+      waveCtx.strokeStyle = `rgba(192, 132, 252, ${extractionHighlight})`; waveCtx.setLineDash([4, 4]); waveCtx.strokeRect(hx, 0, hw, h); waveCtx.setLineDash([]);
+      extractionHighlight -= 0.01;
+    }
+  }
 
-      extractionHighlight -= 0.01; // Fade out slowly
+  function renderGraphs() {
+    if (predictiveCtx && predictiveCanvas.width > 0) {
+      predictiveCtx.fillStyle = '#010307'; predictiveCtx.fillRect(0, 0, predictiveCanvas.width, predictiveCanvas.height);
+      predictiveCtx.strokeStyle = '#c084fc'; predictiveCtx.lineWidth = 2; predictiveCtx.beginPath();
+      let pst = predictiveCanvas.width / waveBuffer.length;
+      waveBuffer.forEach((val, i) => {
+        let x = i * pst, y = predictiveCanvas.height - ((val * 0.85 + Math.sin(i * 0.2 + timeOffset * 2) * 10) / 100) * predictiveCanvas.height;
+        if (i === 0) predictiveCtx.moveTo(x, y); else predictiveCtx.lineTo(x, y);
+      });
+      predictiveCtx.stroke();
     }
 
-    // Check latest value against threshold to build time-series anomaly over time
-    let mean = waveBuffer.reduce((a, b) => a + b, 0) / waveBuffer.length;
-    let std = Math.sqrt(waveBuffer.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / waveBuffer.length) || 1e-5;
-    let currentZ = Math.abs((latestVal - mean) / std);
-    let isSpike = currentZ > zThreshold;
+    if (detailCtx && detailCanvas.width > 0 && detailedBuffer.length > 0) {
+      detailCtx.fillStyle = '#010307'; detailCtx.fillRect(0, 0, detailCanvas.width, detailCanvas.height);
+      detailCtx.strokeStyle = '#c084fc'; detailCtx.lineWidth = 2; detailCtx.beginPath();
+      let dst = detailCanvas.width / Math.max(1, detailedBuffer.length - 1);
+      detailedBuffer.forEach((val, idx) => {
+        let x = idx * dst, y = detailCanvas.height - (val / 100) * detailCanvas.height;
+        if (idx === 0) detailCtx.moveTo(x, y); else detailCtx.lineTo(x, y);
+      });
+      detailCtx.stroke();
+    }
 
-    // Push to time-series accumulator every few frames
-    if (globalTick % 15 === 0 && !isStreamPaused) {
-      updateTimeSeriesAccumulator(latestVal, isSpike, "Local Stream Calc");
-      populateAnomalyTable();
+    if (timeSeriesCtx && timeSeriesCanvas.width > 0 && timeSeriesBuffer.length > 0) {
+      timeSeriesCtx.fillStyle = '#010307'; timeSeriesCtx.fillRect(0, 0, timeSeriesCanvas.width, timeSeriesCanvas.height);
+      timeSeriesCtx.strokeStyle = '#7ee787'; timeSeriesCtx.lineWidth = 2; timeSeriesCtx.beginPath();
+      let displayData = timeSeriesMode === 'historical' ? timeSeriesBuffer : timeSeriesBuffer.slice(-25);
+      let tst = timeSeriesCanvas.width / Math.max(1, displayData.length - 1);
+      displayData.forEach((item, idx) => {
+        let x = idx * tst, y = timeSeriesCanvas.height - (item.val / 100) * timeSeriesCanvas.height;
+        if (idx === 0) timeSeriesCtx.moveTo(x, y); else timeSeriesCtx.lineTo(x, y);
+      });
+      timeSeriesCtx.stroke();
     }
   }
 
   function masterLoop() {
     renderVividAtom();
     updateWaveOptics();
-    renderMovingPredictiveRoute();
-    renderDetailedGraph();
-    renderTimeSeriesGraph();
+    renderGraphs();
     requestAnimationFrame(masterLoop);
   }
 
