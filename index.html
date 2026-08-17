@@ -71,14 +71,20 @@
     .ai-chat-btn:hover { background: #b060f0; }
 
     .mobile-stack { display: flex; flex-direction: column; gap: 0.45rem; flex: 1; position: relative; }
-    .panel-card { background: rgba(5, 9, 18, 0.98); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.6rem; display: flex; flex-direction: column; gap: 0.5rem; transition: flex 0.4s cubic-bezier(0.4, 0, 0.2, 1), min-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s ease, box-shadow 0.4s ease, opacity 0.4s ease, background-color 0.4s ease; }
-    .panel-card.fluid-maximized { flex: 1 1 auto; min-height: 65vh; border-color: var(--neon-cyan); box-shadow: 0 0 35px rgba(0,243,255,0.5); order: -99; opacity: 1 !important; }
+    
+    /* Responsive Panel Card & Maximized States */
+    .panel-card { background: rgba(5, 9, 18, 0.98); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.6rem; display: flex; flex-direction: column; gap: 0.5rem; transition: flex 0.4s cubic-bezier(0.4, 0, 0.2, 1), min-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s ease, box-shadow 0.4s ease, opacity 0.4s ease, background-color 0.4s ease; width: 100%; }
+    
+    .panel-card.fluid-maximized { flex: 1 1 auto; min-height: 70vh; border-color: var(--neon-cyan); box-shadow: 0 0 35px rgba(0,243,255,0.5); order: -99; opacity: 1 !important; }
     .panel-card.fluid-maximized .collapsible-body { max-height: 2500px !important; display: flex !important; opacity: 1 !important; padding-top: 0.4rem; }
     .panel-card.fluid-maximized .expanded-graph-suite { display: flex !important; }
-    .panel-card.minimized-dock-item { order: 100; flex: 0 0 auto; padding: 0.4rem 0.6rem; opacity: 0.75; border-style: dashed; background: rgba(10, 14, 22, 0.95); transition: opacity 0.2s; }
+    
+    /* Minimised dock items pushed to the bottom */
+    .panel-card.minimized-dock-item { order: 100; flex: 0 0 auto; padding: 0.35rem 0.6rem; opacity: 0.7; border-style: dashed; background: rgba(10, 14, 22, 0.95); transition: opacity 0.2s; }
     .panel-card.minimized-dock-item:hover { opacity: 1; border-style: solid; border-color: var(--neon-cyan); }
     .panel-card.minimized-dock-item .collapsible-body { display: none !important; }
-    .panel-card.minimized-dock-item .panel-title { cursor: pointer; font-size: 0.55rem; color: var(--accent-purple); }
+    .panel-card.minimized-dock-item .section-summary-preview { display: none !important; }
+    .panel-card.minimized-dock-item .panel-title { cursor: pointer; font-size: 0.5rem; color: var(--accent-purple); margin-bottom: 0; padding-bottom: 0; }
 
     .section-category-bar { display: flex; gap: 4px; margin-bottom: 2px; }
     .cat-chip { font-size: 0.42rem; font-family: var(--font-mono); font-weight: 700; padding: 2px 5px; border-radius: 3px; border: 1px solid; text-transform: uppercase; }
@@ -89,7 +95,9 @@
 
     .panel-title { font-size: 0.62rem; font-weight: 700; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; cursor: pointer; transition: color 0.2s; }
     .panel-title:hover { color: var(--neon-cyan); }
-    .section-summary-preview { font-size: 0.48rem; color: var(--text-muted); font-family: var(--font-mono); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.4); padding: 4px 6px; border-radius: 3px; border-left: 2px solid var(--neon-cyan); cursor: pointer; transition: background 0.2s; }
+    
+    /* 1-liner summary preview to entice user */
+    .section-summary-preview { font-size: 0.46rem; color: var(--text-muted); font-family: var(--font-mono); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.4); padding: 4px 6px; border-radius: 3px; border-left: 2px solid var(--neon-cyan); cursor: pointer; transition: background 0.2s; }
     .section-summary-preview:hover { background: rgba(0,243,255,0.05); }
     .section-summary-preview span strong { color: var(--accent-green); }
 
@@ -113,7 +121,7 @@
     .metric-label { font-size: 0.44rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-mono); }
     .metric-value { font-size: 0.62rem; color: var(--accent-green); font-weight: 700; font-family: var(--font-mono); }
 
-    .data-table-container { background: #010409; border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 4px; padding: 4px; max-height: 200px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.48rem; color: var(--accent-purple); }
+    .data-table-container { background: #010409; border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 4px; padding: 4px; max-height: 250px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.48rem; color: var(--accent-purple); }
     .data-table { width: 100%; border-collapse: collapse; text-align: left; }
     .data-table th, .data-table td { padding: 4px 6px; border-bottom: 1px solid rgba(192, 132, 252, 0.15); }
     .data-table th { color: var(--neon-cyan); font-weight: 600; background: rgba(0, 243, 255, 0.05); position: sticky; top: 0; }
@@ -237,8 +245,9 @@
           <button class="pin-btn" id="pinBtn_cardAtom" onclick="event.stopPropagation(); toggleMax('cardAtom')">⚡ Maximize</button>
         </div>
       </div>
+      <!-- 1-liner summary preview to entice user -->
       <div class="section-summary-preview" id="sumPreviewAtom" onclick="toggleMax('cardAtom')">
-        <span>Status: <strong>Calculated Tensor Lattice</strong> | Shell Nodes: <strong id="nodeCountLabel">320</strong></span>
+        <span>🚀 <em>Immersive 3D quantum lattice simulation driven by your live tensor matrix calculations.</em></span>
         <span>🔍 View 3D Core</span>
       </div>
       <div class="collapsible-body collapsed" id="secAtom">
@@ -249,7 +258,7 @@
       </div>
     </div>
 
-    <!-- CARD 2: Maths & Calculation (Advanced Math Showcase) -->
+    <!-- CARD 2: Maths & Calculation -->
     <div class="panel-card" id="cardFin">
       <div class="section-category-bar">
         <span class="cat-chip cat-calc">Calculation</span><span class="cat-chip cat-fin">Finance</span><span class="cat-chip cat-world">World</span><span class="cat-chip cat-sci">Science</span>
@@ -261,8 +270,9 @@
           <button class="pin-btn" id="pinBtn_cardFin" onclick="event.stopPropagation(); toggleMax('cardFin')">⚡ Maximize</button>
         </div>
       </div>
+      <!-- 1-liner summary preview to entice user -->
       <div class="section-summary-preview" id="sumPreviewFin" onclick="toggleMax('cardFin')">
-        <span>Model: <strong style="color:var(--accent-purple);">Quantum Tensor Engine</strong> | Multiplier: <strong id="sumDamping">1.45x</strong></span>
+        <span>🚀 <em>High-precision tensor analytics, stochastic damping, and Welford alpha pricing engine.</em></span>
         <span>🔍 Configure Math</span>
       </div>
       <div class="collapsible-body collapsed" id="secFin">
@@ -324,8 +334,9 @@
           <button class="pin-btn" id="pinBtn_cardWave" onclick="event.stopPropagation(); toggleMax('cardWave')">⚡ Maximize & Build</button>
         </div>
       </div>
+      <!-- 1-liner summary preview to entice user -->
       <div class="section-summary-preview" id="sumPreviewWave" onclick="toggleMax('cardWave')">
-        <span>Status: <strong id="waveStreamStatus" style="color:var(--neon-cyan);">Awaiting Stream</strong> | Regime Spikes: <strong id="sumSubPoints">0</strong></span>
+        <span>🚀 <em>Interactive history grabbing: click the live encrypted noise graph to instantly isolate and query anomalies.</em></span>
         <span>🔍 View Telemetry</span>
       </div>
       <div class="collapsible-body collapsed" id="secWave">
@@ -391,8 +402,9 @@
           <button class="pin-btn" id="pinBtn_cardQuery" onclick="event.stopPropagation(); toggleMax('cardQuery')">⚡ Maximize</button>
         </div>
       </div>
+      <!-- 1-liner summary preview to entice user -->
       <div class="section-summary-preview" id="sumPreviewQuery" onclick="toggleMax('cardQuery')">
-        <span>Records: <strong id="sumQueryCount">0 rows</strong> | DB Status: <strong id="dbMapStatus">Awaiting Data</strong></span>
+        <span>🚀 <em>Auto-categorizing data lake supporting 1,500 rows, monthly aggregations, and 1-click CSV exports.</em></span>
         <span>🔍 Open Data Ledger</span>
       </div>
       <div class="collapsible-body collapsed" id="secQuery">
@@ -432,8 +444,9 @@
           <button class="pin-btn" id="pinBtn_cardTools" onclick="event.stopPropagation(); toggleMax('cardTools')">⚡ Maximize</button>
         </div>
       </div>
+      <!-- 1-liner summary preview to entice user -->
       <div class="section-summary-preview" id="sumPreviewTools" onclick="toggleMax('cardTools')">
-        <span>Path: <strong id="sumPath">/root/datasets</strong> | Disk: <strong>Optimal</strong></span>
+        <span>🚀 <em>Virtual vault explorer and live WebSocket moving data stream binder.</em></span>
         <span>🔍 Access Files</span>
       </div>
       <div class="collapsible-body collapsed" id="secTools">
@@ -470,7 +483,12 @@
         <span>⭐ Executive Insights Dashboard</span>
         <button class="pin-btn" id="pinBtn_cardSummary" onclick="event.stopPropagation(); toggleMax('cardSummary')">⚡ Maximize</button>
       </div>
-      <div class="collapsible-body" id="secSummary">
+      <!-- 1-liner summary preview to entice user -->
+      <div class="section-summary-preview" id="sumPreviewSummary" onclick="toggleMax('cardSummary')">
+        <span>🚀 <em>Verified audit logs, snapshot renders, and high-level quantum telemetry metrics.</em></span>
+        <span>🔍 View Exec Metrics</span>
+      </div>
+      <div class="collapsible-body collapsed" id="secSummary">
         <div style="font-size: 0.5rem; color: var(--text-muted); font-family: var(--font-mono); line-height: 1.4; border-left: 2px solid var(--accent-green); padding-left: 6px;" id="execSummaryText">
           🏆 <strong>System Initialization</strong>: Awaiting secure connection & graph snapshot push...
         </div>
@@ -570,7 +588,7 @@
             <span class="predictive-chip" onclick="DATA_INSIGHT.extractHighVolatility()">Filter High Volatility</span>
           `;
 
-          // Generate 1500 records buffer as requested
+          // Generate 1500 records buffer
           this.activeDataSet = [];
           const categories = ['Purchase', 'Refund', 'Transfer', 'Fee'];
           for(let i=0; i<1500; i++) {
@@ -626,7 +644,6 @@
               tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No records found.</td></tr>';
               return;
           }
-          // Render chunk or full buffer up to 1500 rows safely
           let frag = document.createDocumentFragment();
           dataArray.forEach(item => {
               let tr = document.createElement('tr');
@@ -755,23 +772,41 @@
   function toggleQuickGuide() { const body = document.getElementById('quickGuideBody'); const sign = document.getElementById('guideToggleSign'); body.classList.toggle('collapsed'); sign.innerText = body.classList.contains('collapsed') ? '[+]' : '[-]'; }
 
   let activeMaxId = null;
+  
+  // Maximizing logic: Expands target section to full screen, collapses others into minimized dock items at the bottom
   function toggleMax(cardId) {
-      if (activeMaxId === cardId) resetStandardView(); 
-      else {
+      if (activeMaxId === cardId) {
+          resetStandardView();
+      } else {
           activeMaxId = cardId;
           document.querySelectorAll('.panel-card').forEach(c => {
               if (c.id === cardId) {
-                  c.classList.add('fluid-maximized'); c.classList.remove('minimized-dock-item'); c.querySelector('.collapsible-body').classList.remove('collapsed');
-                  let pBtn = document.getElementById(`pinBtn_${c.id}`); if(pBtn) pBtn.innerText = "↩ Standardize";
+                  c.classList.add('fluid-maximized'); 
+                  c.classList.remove('minimized-dock-item'); 
+                  c.querySelector('.collapsible-body').classList.remove('collapsed');
+                  let pBtn = document.getElementById(`pinBtn_${c.id}`); 
+                  if(pBtn) pBtn.innerText = "↩ Standardize";
               } else {
-                  c.classList.remove('fluid-maximized'); c.classList.add('minimized-dock-item'); c.querySelector('.collapsible-body').classList.add('collapsed');
-                  let pBtn = document.getElementById(`pinBtn_${c.id}`); if(pBtn) pBtn.innerText = "⚡ Maximize";
+                  c.classList.remove('fluid-maximized'); 
+                  c.classList.add('minimized-dock-item'); 
+                  c.querySelector('.collapsible-body').classList.add('collapsed');
+                  let pBtn = document.getElementById(`pinBtn_${c.id}`); 
+                  if(pBtn) pBtn.innerText = "⚡ Maximize";
               }
           });
           setTimeout(()=> { document.getElementById(cardId).scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
       }
   }
-  function resetStandardView() { activeMaxId = null; document.querySelectorAll('.panel-card').forEach(c => { c.classList.remove('fluid-maximized', 'minimized-dock-item', 'nav-highlight'); c.querySelector('.collapsible-body').classList.add('collapsed'); let pBtn = document.getElementById(`pinBtn_${c.id}`); if(pBtn) pBtn.innerText = "⚡ Maximize"; }); }
+
+  function resetStandardView() { 
+      activeMaxId = null; 
+      document.querySelectorAll('.panel-card').forEach(c => { 
+          c.classList.remove('fluid-maximized', 'minimized-dock-item', 'nav-highlight'); 
+          c.querySelector('.collapsible-body').classList.add('collapsed'); 
+          let pBtn = document.getElementById(`pinBtn_${c.id}`); 
+          if(pBtn) pBtn.innerText = "⚡ Maximize"; 
+      }); 
+  }
 
   function saveCustomView() { GLOBALS.savedViews.push({ name: `View State ${GLOBALS.savedViews.length + 1}`, max: activeMaxId }); renderSavedTabs(); logSys("Custom view state appended to memory."); }
   function removeSavedView(index) { GLOBALS.savedViews.splice(index, 1); renderSavedTabs(); }
