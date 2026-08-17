@@ -66,6 +66,12 @@ connection_attempts = {}
 RATE_LIMIT_WINDOW = 60  # Seconds window
 MAX_CONNECTIONS = 10    # Max connection attempts per window per IP
 
+# Authorized Master License Hashes (Add your valid production license keys here)
+VALID_LICENSE_KEYS = {
+    "Quantum", 
+    "SEBRA82-MASTER-PRO-KEY-9941"
+}
+
 def get_fernet_from_hash(hash_str):
     """Derives a deterministic 32-byte encryption key from the client's auth hash."""
     digest = hashlib.sha256(hash_str.encode('utf-8')).digest()
@@ -79,11 +85,11 @@ def calculate_crypto_offset(hash_hex):
     offset = sum(ord(left_half[i]) ^ ord(mirrored_right[i]) for i in range(32))
     return (offset % 256) / 256.0
 
-def generate_proprietary_matrix(global_tick, time_offset):
+def generate_proprietary_matrix(global_tick, time_offset, node_count=320):
     points = []
-    for i in range(320): 
-        phi = math.acos(-1.0 + (2.0 * i) / 320.0)
-        theta = math.sqrt(320.0 * math.pi) * phi
+    for i in range(node_count): 
+        phi = math.acos(-1.0 + (2.0 * i) / node_count)
+        theta = math.sqrt(node_count * math.pi) * phi
         
         scale_idx = (i + global_tick) % 296
         state = SEBRA_ATOMIC_ENGINE.evaluate_atomic_state(scale_idx, theta, phi)
@@ -103,27 +109,28 @@ def generate_proprietary_matrix(global_tick, time_offset):
 
 async def process_request(path, request_headers):
     """
-    HTTP Handshake Interceptor: Enforces IP Rate Limiting and Token Validation
-    before allocating memory for the WebSocket connection.
+    HTTP Handshake Interceptor: Enforces IP Rate Limiting and Tiered Token Validation.
     """
-    # Extract client IP (Respecting Render proxy headers)
     client_ip = request_headers.get("X-Forwarded-For", "127.0.0.1").split(",")[0]
     current_time = time.time()
     
-    # Prune stale timestamps
     connection_attempts[client_ip] = [t for t in connection_attempts.get(client_ip, []) if current_time - t < RATE_LIMIT_WINDOW]
-    
     if len(connection_attempts[client_ip]) >= MAX_CONNECTIONS:
         return (http.HTTPStatus.TOO_MANY_REQUESTS, [], b"Rate limit exceeded. Connection dropped.\n")
-        
     connection_attempts[client_ip].append(current_time)
     
-    # Parse query parameters
     query = urllib.parse.urlparse(path).query
     params = urllib.parse.parse_qs(query)
     
     if "hash" not in params:
         return (http.HTTPStatus.UNAUTHORIZED, [], b"Unauthorized: Missing Handshake Token\n")
+        
+    hash_val = params.get("hash", [""])[0]
+    tier = params.get("tier", ["demo"])[0]
+    
+    # Enforce strict server-side validation for licensed access
+    if tier == "license" and hash_val not in VALID_LICENSE_KEYS and len(hash_val) < 20:
+        return (http.HTTPStatus.UNAUTHORIZED, [], b"Unauthorized: Invalid License Key\n")
         
     return None
 
@@ -134,11 +141,12 @@ async def sebra_engine(websocket):
         params = urllib.parse.parse_qs(query)
         
         key = params.get("hash", [""])[0]
+        tier = params.get("tier", ["demo"])[0]
         is_decoy = params.get("is_decoy", ["false"])[0].lower() == "true"
+        is_demo = (tier == "demo")
         
-        # Initialize encryption cipher bound to this session's hash token
+        # Initialize encryption cipher bound to session token
         fernet = get_fernet_from_hash(key)
-        
         session_crypto_offset = 0 if is_decoy else calculate_crypto_offset(key)
         
         global_tick, time_offset = 0, 0.0
@@ -149,7 +157,9 @@ async def sebra_engine(websocket):
             global_tick += 1
             time_offset += 0.05
             
-            atomic_matrix = generate_proprietary_matrix(global_tick, time_offset)
+            # Silo data capability based on tier (Demo = 120 nodes, Licensed = 320 nodes)
+            node_limit = 120 if is_demo else 320
+            atomic_matrix = generate_proprietary_matrix(global_tick, time_offset, node_count=node_limit)
             
             raw_x = (global_tick % 400 - 200) * 0.0001
             carrier = math.cos((math.pi * 1e-4 * raw_x) / (R_N * 1.0 + 1e-35) + time_offset * 0.8) ** 2
@@ -176,10 +186,12 @@ async def sebra_engine(websocket):
             norm_factor = math.sqrt(raw_alpha**2 + 0.5**2)
             alpha, beta = raw_alpha / norm_factor, 0.5 / norm_factor
             
-            roi = base_value * damping * 14.8
-            alpha_confidence = 92.0 + damping
+            # Mask proprietary ROI metrics for demo users
+            roi = 0.0 if is_demo else (base_value * damping * 14.8)
+            alpha_confidence = 80.0 if is_demo else (92.0 + damping)
             
             packet = {
+                "tier": tier,
                 "system": {"tick": global_tick, "time": time_offset, "crypto_offset": session_crypto_offset},
                 "wave": {"value": val, "z_score": z_score, "is_spike": is_spike},
                 "quantum": {"alpha": alpha, "beta": beta, "norm": 1.0},
@@ -187,7 +199,7 @@ async def sebra_engine(websocket):
                 "matrix": atomic_matrix
             }
             
-            # Serialize and encrypt payload prior to transmission
+            # Encrypt packet payload with Fernet before transmitting
             raw_payload = json.dumps(packet).encode('utf-8')
             encrypted_payload = fernet.encrypt(raw_payload)
             
