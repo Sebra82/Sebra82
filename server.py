@@ -14,7 +14,7 @@ from cryptography.fernet import Fernet
 
 class SebraInstitutionalEngine:
     """
-    SEBRA82 v10.0 Institutional Alpha & Quantum Tensor Kernel
+    SEBRA82 v10.5 Ultra-Low-Latency Institutional Tensor Kernel
     Security Profile: AES-GCM / Fernet Dynamic Token Splicing
     """
     def __init__(self):
@@ -39,7 +39,7 @@ R_N = ENGINE.R_MATRIX_CACHE[64]
 
 connection_attempts = {}
 RATE_LIMIT_WINDOW = 60
-MAX_CONNECTIONS = 20
+MAX_CONNECTIONS = 25
 
 VALID_LICENSE_KEYS = {
     "Quantum", 
@@ -99,7 +99,15 @@ async def process_request(path, request_headers):
     return None
 
 async def sebra_engine(websocket):
-    print(f"🔒 Secure SEBRA82 Vault Session Initialized from {websocket.remote_address[0] if websocket.remote_address else 'Unknown'}")
+    # Enforce TCP_NODELAY (disable Nagle's algorithm) for instant packet delivery
+    try:
+        sock = websocket.transport.get_extra_info('socket')
+        if sock is not None:
+            sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+    except Exception:
+        pass
+
+    print(f"🔒 Secure SEBRA82 Ultra-Low-Latency Session Initialized from {websocket.remote_address[0] if websocket.remote_address else 'Unknown'}")
     try:
         query = urllib.parse.urlparse(websocket.path).query
         params = urllib.parse.parse_qs(query)
@@ -184,7 +192,7 @@ async def main():
         ping_interval=20,
         ping_timeout=20
     ):
-        print(f"⚡ SEBRA82 Institutional Vault Engine Online on port {port}")
+        print(f"⚡ SEBRA82 Ultra-Low-Latency Engine Online on port {port}")
         await asyncio.Future()
 
 if __name__ == "__main__":
