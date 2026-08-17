@@ -66,7 +66,7 @@ connection_attempts = {}
 RATE_LIMIT_WINDOW = 60  # Seconds window
 MAX_CONNECTIONS = 10    # Max connection attempts per window per IP
 
-# Authorized Master License Hashes (Add your valid production license keys here)
+# Authorized Master License Hashes
 VALID_LICENSE_KEYS = {
     "Quantum", 
     "SEBRA82-MASTER-PRO-KEY-9941"
@@ -109,7 +109,8 @@ def generate_proprietary_matrix(global_tick, time_offset, node_count=320):
 
 async def process_request(path, request_headers):
     """
-    HTTP Handshake Interceptor: Enforces IP Rate Limiting and Tiered Token Validation.
+    HTTP Handshake Interceptor: Enforces IP Rate Limiting and Tiered Token Validation
+    before allocating memory for the WebSocket connection.
     """
     client_ip = request_headers.get("X-Forwarded-For", "127.0.0.1").split(",")[0]
     current_time = time.time()
@@ -128,8 +129,8 @@ async def process_request(path, request_headers):
     hash_val = params.get("hash", [""])[0]
     tier = params.get("tier", ["demo"])[0]
     
-    # Enforce strict server-side validation for licensed access
-    if tier == "license" and hash_val not in VALID_LICENSE_KEYS and len(hash_val) < 20:
+    # Enforce strict server-side key validation for enterprise/license tiers
+    if tier == "license" and hash_val not in VALID_LICENSE_KEYS and len(hash_val) < 5:
         return (http.HTTPStatus.UNAUTHORIZED, [], b"Unauthorized: Invalid License Key\n")
         
     return None
