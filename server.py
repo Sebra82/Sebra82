@@ -12,56 +12,31 @@ import base64
 import hashlib
 from cryptography.fernet import Fernet
 
-class SebraAtomicMatrixEngine:
+class SebraInstitutionalEngine:
     """
-    SEBRA82 v5.5 Atomic Model Matrix Engine
-    Watermark: SEBRA82-PROPRIETARY-ATOMIC-MATRIX-KERNEL-44019-TX
-    Execution Profile: O(1) Constant Time
+    SEBRA82 v10.0 Institutional Alpha & Quantum Tensor Kernel
+    Security Profile: AES-GCM / Fernet Dynamic Token Splicing
     """
     def __init__(self):
         self.PLANCK_SCALE = 1.616255e-35
         self.GOLDEN_RATIO = 1.61803398875
-        
-        self.R_MATRIX_CACHE = [0.0] * 296
-        self.ENERGY_EIGEN_CACHE = [0.0] * 64
-        self.SPHERICAL_HARMONIC_LUT = [0.0] * 512
-        self._initialize_memory_vault()
+        self.R_MATRIX_CACHE = [self.PLANCK_SCALE * (self.GOLDEN_RATIO ** n) for n in range(296)]
+        self.ENERGY_EIGEN_CACHE = [-0.5 / ((i % 8 + 1) ** 2) for i in range(64)]
+        self.SPHERICAL_LUT = [math.cos(i * 0.01227) * math.sin(i * 0.01227) for i in range(512)]
 
-    def _initialize_memory_vault(self):
-        for n in range(296):
-            self.R_MATRIX_CACHE[n] = self.PLANCK_SCALE * (self.GOLDEN_RATIO ** n)
-            
-        for i in range(64):
-            n = (i % 8) + 1
-            self.ENERGY_EIGEN_CACHE[i] = -0.5 / (n * n)
-            
-        for i in range(512):
-            angle = (i / 512.0) * math.pi * 2.0
-            self.SPHERICAL_HARMONIC_LUT[i] = math.cos(angle) * math.sin(angle)
-
-    def evaluate_atomic_state(self, scale_index, theta, phi):
+    def evaluate_state(self, scale_index, theta, phi):
         r_n = self.R_MATRIX_CACHE[scale_index]
         lut_idx = int(((theta % (math.pi * 2.0)) / (math.pi * 2.0)) * 512) & 511
-        harmonic_term = self.SPHERICAL_HARMONIC_LUT[lut_idx]
-        
+        harmonic = self.SPHERICAL_LUT[lut_idx]
         try:
             radial_decay = math.exp(-r_n * 1e31)
         except OverflowError:
             radial_decay = 0.0
-            
-        probability_density = (radial_decay ** 2.0) * abs(1.0 + harmonic_term * math.cos(phi))
-        
-        return {
-            "radius": r_n,
-            "probability": probability_density,
-            "energy_eigenvalue": self.ENERGY_EIGEN_CACHE[scale_index % 64],
-            "watermark": "SEBRA82-PROPRIETARY-ATOMIC-MATRIX-KERNEL-44019-TX"
-        }
+        return (radial_decay ** 2.0) * abs(1.0 + harmonic * math.cos(phi))
 
-SEBRA_ATOMIC_ENGINE = SebraAtomicMatrixEngine()
-R_N = SEBRA_ATOMIC_ENGINE.R_MATRIX_CACHE[64]
+ENGINE = SebraInstitutionalEngine()
+R_N = ENGINE.R_MATRIX_CACHE[64]
 
-# Rate Limiting In-Memory Store
 connection_attempts = {}
 RATE_LIMIT_WINDOW = 60
 MAX_CONNECTIONS = 20
@@ -91,10 +66,10 @@ def generate_proprietary_matrix(global_tick, time_offset, node_count=320):
         theta = math.sqrt(node_count * math.pi) * phi
         
         scale_idx = (i + global_tick) % 296
-        state = SEBRA_ATOMIC_ENGINE.evaluate_atomic_state(scale_idx, theta, phi)
+        prob = ENGINE.evaluate_state(scale_idx, theta, phi)
         
         base_shell = 90 if (i % 3 == 0) else (65 if i % 3 == 1 else 42)
-        dynamic_radius = base_shell + (state["probability"] * 50.0) + math.sin(i * 4 + time_offset) * 9
+        dynamic_radius = base_shell + (prob * 50.0) + math.sin(i * 4 + time_offset) * 9
         
         x = dynamic_radius * math.sin(phi) * math.cos(theta)
         y = dynamic_radius * math.sin(phi) * math.sin(theta)
@@ -102,7 +77,7 @@ def generate_proprietary_matrix(global_tick, time_offset, node_count=320):
         
         points.append({
             "x": round(x, 4), "y": round(y, 4), "z": round(z, 4),
-            "prob": round(state["probability"], 4), "id": i
+            "prob": round(prob, 4), "id": i
         })
     return points
 
@@ -201,7 +176,6 @@ async def sebra_engine(websocket):
 
 async def main():
     port = int(os.environ.get("PORT", 8767))
-    # Enforce automated WebSocket ping/pong keepalive every 20 seconds
     async with websockets.serve(
         sebra_engine, 
         "0.0.0.0", 
@@ -210,8 +184,8 @@ async def main():
         ping_interval=20,
         ping_timeout=20
     ):
-        print(f"⚡ SEBRA82 Vault Engine Online with Keepalive Heartbeats on port {port}")
-        await asyncio.Future()  # run forever
+        print(f"⚡ SEBRA82 Institutional Vault Engine Online on port {port}")
+        await asyncio.Future()
 
 if __name__ == "__main__":
     asyncio.run(main())
