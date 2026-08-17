@@ -1,12 +1,12 @@
-Here is the finalized SEBRA82 v16.0 (Action-Conditioned Aegis).
-This build integrates every upgrade we have discussed into a single, unbreakable monolith. All inline execution scripts (onclick) remain strictly eliminated for CSP compliance, the AI ghost-text is perfectly synced to 3-character auto-execution, the 3D molecular matrix features fluid continuous interpolation, and Card 3 now features the Counterfactual Forecasting Studio (allowing you to inject Bullish/Bearish shocks directly into the Markov trajectory).
-Copy and paste this entirely into your index.html file.
+Ah, the duplicate text artifact! Because the ghost-text overlay sits directly beneath your actual input field to perfectly align the words, the characters you typed were rendering twice (the white text of your input, and the grey text of the overlay right behind it).
+To remove that background text artifact on the left, we simply make the "already typed" portion of the ghost overlay transparent. This way, the overlay only visually renders the purple predictive text extending to the right, while the left side remains perfectly clean.
+I have applied the transparency fix to the CSS and cleared the overlay upon auto-completion. Here is the perfectly polished SEBRA82 v16.1.
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SEBRA82 v16.0 - Action-Conditioned Aegis Master Terminal</title>
+    <title>SEBRA82 v16.1 - Action-Conditioned Aegis Master Terminal</title>
     
     <!-- Core Cryptography and Zero-Copy Serialization Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
@@ -109,8 +109,11 @@ Copy and paste this entirely into your index.html file.
         .ai-chat-input-row { display: flex; gap: 6px; position: relative; }
         .input-ghost-container { position: relative; flex: 1; height: 30px; background: #1e2a40; border: 1px solid rgba(192, 132, 252, 0.4); border-radius: 4px; overflow: hidden; }
         .ai-chat-input, .ghost-input-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent; padding: 6px 10px; font-size: 0.55rem; font-family: var(--font-mono); }
+        
         .ai-chat-input { color: #fff; border: none; outline: none; z-index: 2; }
-        .ghost-input-overlay { color: rgba(122, 140, 158, 0.4); pointer-events: none; z-index: 1; display: flex; align-items: center; white-space: pre; overflow: hidden; }
+        
+        /* Fixed Ghost Formatting: Base color is completely transparent so typed text does not duplicate */
+        .ghost-input-overlay { color: transparent; pointer-events: none; z-index: 1; display: flex; align-items: center; white-space: pre; overflow: hidden; }
         .ghost-match { color: rgba(192, 132, 252, 0.9); text-shadow: 0 0 5px rgba(192,132,252,0.5); }
 
         .ai-chat-btn { background: rgba(192, 132, 252, 0.1); color: var(--accent-purple); border: 1px solid var(--accent-purple); padding: 4px 14px; border-radius: 4px; font-size: 0.55rem; font-family: var(--font-mono); font-weight: bold; cursor: pointer; transition: all 0.2s; text-transform: uppercase; }
@@ -283,7 +286,7 @@ Copy and paste this entirely into your index.html file.
 
     <!-- Main Header Toolbar -->
     <div class="widget-header">
-        <div class="brand-title">⚡ <span>SEBRA82 v16.0</span> Action-Conditioned Aegis</div>
+        <div class="brand-title">⚡ <span>SEBRA82 v16.1</span> Action-Conditioned Aegis</div>
         <div class="header-actions">
             <button class="top-btn btn-rand" id="btnGenRandom">🎲 Generate Noise</button>
             <button class="top-btn btn-save" id="btnSaveState">💾 Save State</button>
@@ -727,7 +730,8 @@ Copy and paste this entirely into your index.html file.
             
             if (!this.fullMatchedPhrase) this.acceptedGhostChars = 0;
             
-            let overlayHTML = window.UTILS.escapeHtml(val);
+            // FIX: Make the typed portion perfectly transparent to eliminate background artifact
+            let overlayHTML = `<span style="color: transparent;">${window.UTILS.escapeHtml(val)}</span>`;
             if (this.currentPrediction) {
                 overlayHTML += `<span class="ghost-match">${window.UTILS.escapeHtml(this.currentPrediction)}</span>`;
             }
@@ -742,7 +746,7 @@ Copy and paste this entirely into your index.html file.
                 input.value = this.fullMatchedPhrase;
                 this.currentPrediction = "";
                 this.acceptedGhostChars = 0;
-                document.getElementById('ghostOverlay').innerHTML = window.UTILS.escapeHtml(input.value);
+                document.getElementById('ghostOverlay').innerHTML = ""; 
                 return;
             }
             
