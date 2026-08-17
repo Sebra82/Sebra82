@@ -1,6 +1,12 @@
+Here is server.py (v5.8), featuring a Dual-Mode Pipeline.
+To immediately unfreeze the frontend shown in your screenshot without requiring you to rewrite any JavaScript right now, this version automatically detects what your client can handle.
+ * Encryption is bypassed by default (USE_ENCRYPTION = False) to prevent the browser from silently dropping AES-CBC encrypted packets.
+ * Legacy JSON Fallback: If your frontend connects without specifically requesting binary (e.g., ws://localhost:8767/?hash=...), the server automatically reverts to sending JSON dictionaries ({"x": 10.5, "y": ...}). Your UI will instantly light up and graph data again.
+ * High-Performance Binary Path: Once you update your frontend to handle binary arrays, simply connect using ws://localhost:8767/?hash=...&format=msgpack. The server will dynamically shift back to the ultra-fast compact tuples.
 import asyncio
 import websockets
 import msgpack
+import json
 import math
 import random
 import os
@@ -19,12 +25,12 @@ try:
 except ImportError:
     print("ℹ️ Standard asyncio event loop active.")
 
-# Performance Toggle: Set to False to bypass Fernet CPU cryptographic overhead on secure networks
-USE_ENCRYPTION = True
+# 🔧 DISABLED by default to allow standard browser JavaScript to read the WebSocket stream
+USE_ENCRYPTION = False
 
 class SebraAtomicMatrixEngine:
     """
-    IP Classification: SEBRA82 v5.7 High-Performance Cached Geometry Engine
+    IP Classification: SEBRA82 v5.8 Dual-Mode Cached Geometry Engine
     Watermark Identifier: SEBRA82-PROPRIETARY-ATOMIC-MATRIX-KERNEL-44019-TX
     """
     def __init__(self):
@@ -34,7 +40,6 @@ class SebraAtomicMatrixEngine:
         self.ENERGY_EIGEN_CACHE = [-0.5 / (((i % 8) + 1) ** 2) for i in range(64)]
         self.SPHERICAL_HARMONIC_LUT = [math.cos(i * 0.01227) * math.sin(i * 0.01227) for i in range(512)]
         
-        # Precompute static Fibonacci lattice geometries to eliminate per-frame trig overhead
         print("⚙️ Precomputing static spatial geometries (320 & 120 nodes)...")
         self.static_lattice_320 = self._precompute_lattice(320)
         self.static_lattice_120 = self._precompute_lattice(120)
@@ -96,17 +101,14 @@ def calculate_crypto_offset(hash_hex):
     offset = sum(ord(left_half[i]) ^ ord(mirrored_right[i]) for i in range(32))
     return (offset % 256) / 256.0
 
-def generate_cached_proprietary_matrix(global_tick, time_offset, is_demo=False):
+def generate_cached_proprietary_matrix(global_tick, time_offset, is_demo=False, as_dict=False):
     """
-    Ultra-fast matrix generation leveraging precomputed static geometry.
-    Bypasses math.acos and math.sqrt completely in the hot loop.
+    Generates matrix geometry. Returns dictionaries for JSON fallback, or tuples for MessagePack speed.
     """
     lattice = ENGINE.static_lattice_120 if is_demo else ENGINE.static_lattice_320
     points = []
     
-    # Local namespace bindings for micro-optimization
     m_sin = math.sin
-    m_cos = math.cos
     r_func = round
     
     for node in lattice:
@@ -122,20 +124,27 @@ def generate_cached_proprietary_matrix(global_tick, time_offset, is_demo=False):
         y = dynamic_radius * node["sin_phi"] * node["sin_theta"]
         z = dynamic_radius * node["cos_phi"]
         
-        points.append((
-            i, 
-            r_func(x, 4), 
-            r_func(y, 4), 
-            r_func(z, 4), 
-            r_func(prob, 4), 
-            r_func(state["energyEigenvalue"], 4)
-        ))
+        if as_dict:
+            points.append({
+                "id": i, 
+                "x": r_func(x, 4), 
+                "y": r_func(y, 4), 
+                "z": r_func(z, 4), 
+                "prob": r_func(prob, 4), 
+                "energy": r_func(state["energyEigenvalue"], 4)
+            })
+        else:
+            points.append((
+                i, 
+                r_func(x, 4), 
+                r_func(y, 4), 
+                r_func(z, 4), 
+                r_func(prob, 4), 
+                r_func(state["energyEigenvalue"], 4)
+            ))
     return points
 
 class RollingStats:
-    """
-    O(1) Incremental Statistics Tracker.
-    """
     def __init__(self, window_size=160):
         self.window_size = window_size
         self.buffer = []
@@ -154,8 +163,7 @@ class RollingStats:
 
     def get_mean_and_std(self):
         n = len(self.buffer)
-        if n == 0:
-            return 50.0, 1e-5
+        if n == 0: return 50.0, 1e-5
         mean = self.sum / n
         variance = (self.sum_sq / n) - (mean ** 2)
         std = math.sqrt(max(0.0, variance))
@@ -167,7 +175,7 @@ async def process_request(path, request_headers):
     
     connection_attempts[client_ip] = [t for t in connection_attempts.get(client_ip, []) if current_time - t < RATE_LIMIT_WINDOW]
     if len(connection_attempts[client_ip]) >= MAX_CONNECTIONS:
-        return (http.HTTPStatus.TOO_MANY_REQUESTS, [], b"Rate limit exceeded. Connection dropped.\n")
+        return (http.HTTPStatus.TOO_MANY_REQUESTS, [], b"Rate limit exceeded.\n")
     connection_attempts[client_ip].append(current_time)
     
     query = urllib.parse.urlparse(path).query
@@ -186,18 +194,20 @@ async def sebra_engine(websocket):
     except Exception:
         pass
 
-    print(f"🔒 Secure SEBRA82 Binary Vault Session Initialized from {websocket.remote_address[0] if websocket.remote_address else 'Unknown'}")
     try:
         query = urllib.parse.urlparse(websocket.path).query
         params = urllib.parse.parse_qs(query)
         
         key = params.get("hash", [""])[0]
         tier = params.get("tier", ["demo"])[0]
+        data_format = params.get("format", ["json"])[0].lower() # Default to JSON for UI compatibility
         is_decoy = params.get("is_decoy", ["false"])[0].lower() == "true"
         is_demo = (tier == "demo")
         
         fernet = get_fernet_from_hash(key) if USE_ENCRYPTION else None
         session_crypto_offset = 0 if is_decoy else calculate_crypto_offset(key)
+        
+        print(f"🔒 Session Initialized. Tier: {tier.upper()} | Format: {data_format.upper()} | Encrypted: {USE_ENCRYPTION}")
         
         global_tick, time_offset = 0, 0.0
         stats_tracker = RollingStats(window_size=160)
@@ -206,13 +216,14 @@ async def sebra_engine(websocket):
             stats_tracker.update(50.0)
 
         base_value, damping, spike_threshold = 10.0, 1.45, 2.0
+        as_dict = (data_format == "json")
         
         while True:
             loop_start = time.perf_counter()
             global_tick += 1
             time_offset += 0.05
             
-            atomic_matrix = generate_cached_proprietary_matrix(global_tick, time_offset, is_demo=is_demo)
+            atomic_matrix = generate_cached_proprietary_matrix(global_tick, time_offset, is_demo=is_demo, as_dict=as_dict)
             
             raw_x = (global_tick % 400 - 200) * 0.0001
             carrier = math.cos((math.pi * 1e-4 * raw_x) / (R_N * 1.0 + 1e-35) + time_offset * 0.8) ** 2
@@ -222,8 +233,7 @@ async def sebra_engine(websocket):
             burst_active = math.sin(global_tick * 0.01 + time_offset * 0.6) > 0.80
             quantum_burst = random.uniform(0, 30.0) if burst_active else random.uniform(0, 6.0)
             
-            if is_decoy:
-                session_crypto_offset += 0.05
+            if is_decoy: session_crypto_offset += 0.05
                 
             val = min(92.0, max(22.0, (carrier * sub_harmonic * 50.0) + high_freq_noise + quantum_burst))
             
@@ -235,15 +245,26 @@ async def sebra_engine(websocket):
             roi = 0.0 if is_demo else (base_value * damping * 14.8)
             alpha_confidence = 80.0 if is_demo else (92.0 + damping)
             
-            packet = [
-                tier,
-                [global_tick, round(time_offset, 3), round(session_crypto_offset, 4)],
-                [round(val, 2), round(z_score, 2), is_spike],
-                [round(roi, 2), round(alpha_confidence, 2)],
-                atomic_matrix
-            ]
+            # Format Router: JSON vs MessagePack
+            if data_format == "msgpack":
+                packet = [
+                    tier,
+                    [global_tick, round(time_offset, 3), round(session_crypto_offset, 4)],
+                    [round(val, 2), round(z_score, 2), is_spike],
+                    [round(roi, 2), round(alpha_confidence, 2)],
+                    atomic_matrix
+                ]
+                raw_payload = msgpack.packb(packet, use_bin_type=True)
+            else:
+                packet = {
+                    "tier": tier,
+                    "system": {"tick": global_tick, "time": round(time_offset, 3), "crypto_offset": round(session_crypto_offset, 4)},
+                    "wave": {"value": round(val, 2), "z_score": round(z_score, 2), "is_spike": is_spike},
+                    "finance": {"projected_roi": round(roi, 2), "confidence": round(alpha_confidence, 2)},
+                    "matrix": atomic_matrix
+                }
+                raw_payload = json.dumps(packet).encode('utf-8')
             
-            raw_payload = msgpack.packb(packet, use_bin_type=True)
             payload_to_send = fernet.encrypt(raw_payload) if fernet else raw_payload
             
             await websocket.send(payload_to_send)
@@ -265,8 +286,9 @@ async def main():
         ping_interval=20,
         ping_timeout=20
     ):
-        print(f"⚡ SEBRA82 v5.7 Cached Geometry Engine Online on port {port}")
+        print(f"⚡ SEBRA82 v5.8 Dual-Mode Engine Online on port {port}")
         await asyncio.Future()
 
 if __name__ == "__main__":
     asyncio.run(main())
+
