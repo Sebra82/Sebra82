@@ -1,8 +1,3 @@
-Here is the fully updated, monolithic index.html code for SEBRA82 v10.5.
-This version incorporates your requested upgrades:
- * True Calculated Quantum Matrix: The 3D Atom Matrix is now directly driven by your calculated quantum tensor state vector equations and dynamic workspace nodes rather than a generic fallback sphere.
- * Advanced Mathematical Showcase: Enhanced the Math Studio to display complex quantum Hilbert space tensor equations, stochastic damping matrices, and Welford online variance recurrence formulas that exceed standard web capabilities.
- * Robust Executive Summary Pipeline: Streamlined the time-series anomaly capture so clicking to send to the executive dashboard perfectly packages your canvas telemetry and captured metrics.
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -288,7 +283,7 @@ This version incorporates your requested upgrades:
           <div class="advanced-math-panel">
             <div style="color:var(--neon-cyan); font-weight:bold;">🔬 Advanced Client-Side Mathematical Kernel:</div>
             <div>• <strong>Hamiltonian Matrix Evolution:</strong> $\hat{H}|\psi(t)\rangle = i\hbar \frac{\partial}{\partial t}|\psi(t)\rangle$</div>
-            <div>• <strong>Welford Online Variance Recurrence:</strong> $M_k = M_{k-1} + \frac{x_k - M_{k-1}}{k}$, $S_k = S_{k-1} + (x_k - M_{k-1})(x_k - M_k)$</div>
+            <div>• <strong>Welford Online Variance Recurrence:</strong> $M_k = M_{k-1} + \frac{x_k - M_{k-1}}{k}, S_k = S_{k-1} + (x_k - M_{k-1})(x_k - M_k)$</div>
             <div>• <strong>Stochastic Noise Damping:</strong> $\gamma(t) = \gamma_0 \cdot e^{-\lambda t} + \sigma \cdot \mathcal{W}(t)$</div>
           </div>
         </div>
@@ -390,7 +385,7 @@ This version incorporates your requested upgrades:
         <span class="cat-chip cat-world">World</span><span class="cat-chip cat-calc">Calculation</span><span class="cat-chip cat-sci">Science</span><span class="cat-chip cat-fin">Finance</span>
       </div>
       <div class="panel-title" onclick="toggleMax('cardQuery')">
-        <span>4. Export Query & Data Intelligence Studio</span>
+        <span>4. Export Query & Data Intelligence Studio (1,500 Rows Buffer)</span>
         <div style="display:flex; gap:6px; align-items:center;">
           <span style="font-size:0.46rem; color:var(--neon-cyan); font-weight: normal; text-transform: none;">[Expand]</span>
           <button class="pin-btn" id="pinBtn_cardQuery" onclick="event.stopPropagation(); toggleMax('cardQuery')">⚡ Maximize</button>
@@ -403,10 +398,10 @@ This version incorporates your requested upgrades:
       <div class="collapsible-body collapsed" id="secQuery">
         
         <div class="suggestion-box" id="aiSuggestionBox">
-          💡 <strong>Data Insight Engine:</strong> Link a live stream or upload a dataset below. The engine will automatically identify columns (Dates, IDs, Categories) and provide 1-click summarizations.
+          💡 <strong>Data Insight Engine:</strong> Link a live stream or upload a dataset below. The engine will automatically identify columns (Dates, IDs, Categories) and manage up to 1,500 active rows with 1-click summarizations.
         </div>
 
-        <div class="data-table-container">
+        <div class="data-table-container" style="max-height: 250px;">
           <table class="data-table" id="queryDataTable">
             <thead>
               <tr id="queryTableHeaders">
@@ -469,7 +464,7 @@ This version incorporates your requested upgrades:
     <!-- Executive Summary Dashboard -->
     <div class="panel-card summary-dashboard-card" id="cardSummary">
       <div class="section-category-bar">
-        <span class="cat-chip cat-calc">Executive Summary</span><span class="cat-chip cat-insights">Insights</span><span class="cat-chip cat-fin">Metrics</span>
+        <span class="cat-chip cat-calc">Executive Summary</span><span class="cat-chip cat-sci">Insights</span><span class="cat-chip cat-fin">Metrics</span>
       </div>
       <div class="panel-title" onclick="toggleMax('cardSummary')">
         <span>⭐ Executive Insights Dashboard</span>
@@ -533,7 +528,7 @@ This version incorporates your requested upgrades:
   }
 
   // ============================================================================
-  // DATA INSIGHT ENGINE (Auto-Categorization, Summarization, File Upload)
+  // DATA INSIGHT ENGINE (Auto-Categorization, Summarization, File Upload, 1500 Rows Buffer)
   // ============================================================================
   class DataInsightEngine {
       constructor() {
@@ -575,11 +570,12 @@ This version incorporates your requested upgrades:
             <span class="predictive-chip" onclick="DATA_INSIGHT.extractHighVolatility()">Filter High Volatility</span>
           `;
 
+          // Generate 1500 records buffer as requested
           this.activeDataSet = [];
           const categories = ['Purchase', 'Refund', 'Transfer', 'Fee'];
-          for(let i=0; i<15; i++) {
+          for(let i=0; i<1500; i++) {
               let d = new Date();
-              d.setDate(d.getDate() - Math.floor(Math.random() * 60));
+              d.setDate(d.getDate() - Math.floor(Math.random() * 180));
               this.activeDataSet.push({
                   id: "TX-" + Math.floor(Math.random()*1000000).toString(16).toUpperCase(),
                   time: d.toLocaleDateString() + " " + d.toLocaleTimeString(),
@@ -593,7 +589,7 @@ This version incorporates your requested upgrades:
       }
 
       summarizeByMonth() {
-          logSys("Executing automated monthly summarization grouping...");
+          logSys("Executing automated monthly summarization grouping across 1,500 records...");
           let monthlyAgg = {};
           this.activeDataSet.forEach(row => {
               let monthStr = row.rawDate ? row.rawDate.toLocaleString('default', { month: 'long', year: 'numeric' }) : "Unknown Month";
@@ -614,12 +610,12 @@ This version incorporates your requested upgrades:
               `;
               tbody.appendChild(tr);
           }
-          document.getElementById('sumQueryCount').innerText = Object.keys(monthlyAgg).length + " Months";
+          document.getElementById('sumQueryCount').innerText = Object.keys(monthlyAgg).length + " Months Grouped";
       }
 
       extractHighVolatility() {
           logSys("Filtering table for high magnitude events...");
-          let filtered = this.activeDataSet.filter(r => parseFloat(r.val) > 2500);
+          let filtered = this.activeDataSet.filter(r => parseFloat(r.val) > 4000);
           this.renderTable(filtered);
       }
 
@@ -630,11 +626,14 @@ This version incorporates your requested upgrades:
               tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No records found.</td></tr>';
               return;
           }
+          // Render chunk or full buffer up to 1500 rows safely
+          let frag = document.createDocumentFragment();
           dataArray.forEach(item => {
               let tr = document.createElement('tr');
               tr.innerHTML = `<td>${escapeHtml(item.id)}</td><td>${escapeHtml(item.time)}</td><td>${escapeHtml(item.cat)}</td><td>$${escapeHtml(item.val)}</td>`;
-              tbody.appendChild(tr);
+              frag.appendChild(tr);
           });
+          tbody.appendChild(frag);
           document.getElementById('sumQueryCount').innerText = dataArray.length + " rows";
       }
   }
@@ -987,7 +986,6 @@ This version incorporates your requested upgrades:
           const w = atomCanvas.width, h = atomCanvas.height; atomCtx.fillStyle = '#010204'; atomCtx.fillRect(0, 0, w, h); this.drawGrid(atomCtx, w, h, 'rgba(0, 243, 255, 0.05)');
           let cx = w / 2, cy = h / 2; let displayMatrix = GLOBALS.serverMatrix;
           
-          // Ensure atom model is driven by your calculated quantum tensor matrix or wave functions
           if (displayMatrix.length === 0) {
               displayMatrix = []; 
               for(let i=0; i<320; i++) { 
