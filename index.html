@@ -72,14 +72,12 @@
 
     .mobile-stack { display: flex; flex-direction: column; gap: 0.45rem; flex: 1; position: relative; }
     
-    /* Responsive Panel Card & Maximized States */
     .panel-card { background: rgba(5, 9, 18, 0.98); border-radius: 8px; border: 1px solid var(--border-color); padding: 0.6rem; display: flex; flex-direction: column; gap: 0.5rem; transition: flex 0.4s cubic-bezier(0.4, 0, 0.2, 1), min-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s ease, box-shadow 0.4s ease, opacity 0.4s ease, background-color 0.4s ease; width: 100%; }
     
     .panel-card.fluid-maximized { flex: 1 1 auto; min-height: 70vh; border-color: var(--neon-cyan); box-shadow: 0 0 35px rgba(0,243,255,0.5); order: -99; opacity: 1 !important; }
     .panel-card.fluid-maximized .collapsible-body { max-height: 2500px !important; display: flex !important; opacity: 1 !important; padding-top: 0.4rem; }
     .panel-card.fluid-maximized .expanded-graph-suite { display: flex !important; }
     
-    /* Minimised dock items pushed to the bottom */
     .panel-card.minimized-dock-item { order: 100; flex: 0 0 auto; padding: 0.35rem 0.6rem; opacity: 0.7; border-style: dashed; background: rgba(10, 14, 22, 0.95); transition: opacity 0.2s; }
     .panel-card.minimized-dock-item:hover { opacity: 1; border-style: solid; border-color: var(--neon-cyan); }
     .panel-card.minimized-dock-item .collapsible-body { display: none !important; }
@@ -96,7 +94,6 @@
     .panel-title { font-size: 0.62rem; font-weight: 700; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; cursor: pointer; transition: color 0.2s; }
     .panel-title:hover { color: var(--neon-cyan); }
     
-    /* 1-liner summary preview to entice user */
     .section-summary-preview { font-size: 0.46rem; color: var(--text-muted); font-family: var(--font-mono); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.4); padding: 4px 6px; border-radius: 3px; border-left: 2px solid var(--neon-cyan); cursor: pointer; transition: background 0.2s; }
     .section-summary-preview:hover { background: rgba(0,243,255,0.05); }
     .section-summary-preview span strong { color: var(--accent-green); }
@@ -245,7 +242,6 @@
           <button class="pin-btn" id="pinBtn_cardAtom" onclick="event.stopPropagation(); toggleMax('cardAtom')">⚡ Maximize</button>
         </div>
       </div>
-      <!-- 1-liner summary preview to entice user -->
       <div class="section-summary-preview" id="sumPreviewAtom" onclick="toggleMax('cardAtom')">
         <span>🚀 <em>Immersive 3D quantum lattice simulation driven by your live tensor matrix calculations.</em></span>
         <span>🔍 View 3D Core</span>
@@ -270,7 +266,6 @@
           <button class="pin-btn" id="pinBtn_cardFin" onclick="event.stopPropagation(); toggleMax('cardFin')">⚡ Maximize</button>
         </div>
       </div>
-      <!-- 1-liner summary preview to entice user -->
       <div class="section-summary-preview" id="sumPreviewFin" onclick="toggleMax('cardFin')">
         <span>🚀 <em>High-precision tensor analytics, stochastic damping, and Welford alpha pricing engine.</em></span>
         <span>🔍 Configure Math</span>
@@ -334,7 +329,6 @@
           <button class="pin-btn" id="pinBtn_cardWave" onclick="event.stopPropagation(); toggleMax('cardWave')">⚡ Maximize & Build</button>
         </div>
       </div>
-      <!-- 1-liner summary preview to entice user -->
       <div class="section-summary-preview" id="sumPreviewWave" onclick="toggleMax('cardWave')">
         <span>🚀 <em>Interactive history grabbing: click the live encrypted noise graph to instantly isolate and query anomalies.</em></span>
         <span>🔍 View Telemetry</span>
@@ -402,7 +396,6 @@
           <button class="pin-btn" id="pinBtn_cardQuery" onclick="event.stopPropagation(); toggleMax('cardQuery')">⚡ Maximize</button>
         </div>
       </div>
-      <!-- 1-liner summary preview to entice user -->
       <div class="section-summary-preview" id="sumPreviewQuery" onclick="toggleMax('cardQuery')">
         <span>🚀 <em>Auto-categorizing data lake supporting 1,500 rows, monthly aggregations, and 1-click CSV exports.</em></span>
         <span>🔍 Open Data Ledger</span>
@@ -444,7 +437,6 @@
           <button class="pin-btn" id="pinBtn_cardTools" onclick="event.stopPropagation(); toggleMax('cardTools')">⚡ Maximize</button>
         </div>
       </div>
-      <!-- 1-liner summary preview to entice user -->
       <div class="section-summary-preview" id="sumPreviewTools" onclick="toggleMax('cardTools')">
         <span>🚀 <em>Virtual vault explorer and live WebSocket moving data stream binder.</em></span>
         <span>🔍 Access Files</span>
@@ -483,7 +475,6 @@
         <span>⭐ Executive Insights Dashboard</span>
         <button class="pin-btn" id="pinBtn_cardSummary" onclick="event.stopPropagation(); toggleMax('cardSummary')">⚡ Maximize</button>
       </div>
-      <!-- 1-liner summary preview to entice user -->
       <div class="section-summary-preview" id="sumPreviewSummary" onclick="toggleMax('cardSummary')">
         <span>🚀 <em>Verified audit logs, snapshot renders, and high-level quantum telemetry metrics.</em></span>
         <span>🔍 View Exec Metrics</span>
@@ -588,7 +579,6 @@
             <span class="predictive-chip" onclick="DATA_INSIGHT.extractHighVolatility()">Filter High Volatility</span>
           `;
 
-          // Generate 1500 records buffer
           this.activeDataSet = [];
           const categories = ['Purchase', 'Refund', 'Transfer', 'Fee'];
           for(let i=0; i<1500; i++) {
@@ -773,7 +763,6 @@
 
   let activeMaxId = null;
   
-  // Maximizing logic: Expands target section to full screen, collapses others into minimized dock items at the bottom
   function toggleMax(cardId) {
       if (activeMaxId === cardId) {
           resetStandardView();
@@ -817,8 +806,36 @@
   function loadSavedView(idx) { resetStandardView(); if (GLOBALS.savedViews[idx].max) toggleMax(GLOBALS.savedViews[idx].max); }
 
   class AIController {
-      constructor() { this.currentPrediction = ""; this.fullMatchedPhrase = ""; this.acceptedGhostChars = 0; this.dictionary = ["how to view moving predictive route", "how to split live and historical time series", "how to send expected graph to exec summary", "how to configure atom matrix", "how to run quantum simulation", "simulate quantum tensor wave", "simulate financial alpha forecast", "extract noise subset", "clear local database", "bind external stream"]; }
-      getMatch(val) { const text = val.toLowerCase(); if (!text) return { remaining: "", full: "" }; for (let phrase of this.dictionary) { if (phrase.startsWith(text) && phrase.length > text.length) return { remaining: phrase.slice(text.length), full: phrase }; } return { remaining: "", full: "" }; }
+      constructor() { 
+          this.currentPrediction = ""; 
+          this.fullMatchedPhrase = ""; 
+          this.acceptedGhostChars = 0; 
+          this.dictionary = [
+              "how to view moving predictive route", 
+              "how to split live and historical time series", 
+              "how to send expected graph to exec summary", 
+              "how to configure atom matrix", 
+              "how to run quantum simulation", 
+              "simulate quantum tensor wave", 
+              "simulate financial alpha forecast", 
+              "extract noise subset", 
+              "clear local database", 
+              "bind external stream"
+          ]; 
+      }
+      
+      // Robust fuzzy/prefix query matching engine combining prior intelligent routing & ghost-input commands
+      getMatch(val) { 
+          const text = val.toLowerCase().trim(); 
+          if (!text) return { remaining: "", full: "" }; 
+          for (let phrase of this.dictionary) { 
+              if (phrase.startsWith(text) && phrase.length > text.length) { 
+                  return { remaining: phrase.slice(text.length), full: phrase }; 
+              } 
+          } 
+          return { remaining: "", full: "" }; 
+      }
+
       teach(toolKey, cardId) {
           const tutor = document.getElementById('stickyTutor'); const content = document.getElementById('tContent'); const streamBox = document.getElementById('aiChatStream');
           let explanation = "";
@@ -836,13 +853,40 @@
   }
   const AI = new AIController();
 
-  function handleGhostInput(e) { const input = e.target, val = input.value, match = AI.getMatch(val); AI.currentPrediction = match.remaining; AI.fullMatchedPhrase = match.full; if (!AI.fullMatchedPhrase) AI.acceptedGhostChars = 0; document.getElementById('ghostOverlay').innerHTML = escapeHtml(val) + `<span style="color: rgba(139, 148, 158, 0.55);">${escapeHtml(AI.currentPrediction)}</span>`; }
+  function handleGhostInput(e) { 
+      const input = e.target, val = input.value, match = AI.getMatch(val); 
+      AI.currentPrediction = match.remaining; 
+      AI.fullMatchedPhrase = match.full; 
+      if (!AI.fullMatchedPhrase) AI.acceptedGhostChars = 0; 
+      document.getElementById('ghostOverlay').innerHTML = escapeHtml(val) + `<span style="color: rgba(139, 148, 158, 0.55);">${escapeHtml(AI.currentPrediction)}</span>`; 
+  }
+
   function handleGhostKeyDown(e) {
       const input = e.target;
-      if ((e.key === 'Tab' || e.key === 'ArrowRight') && AI.currentPrediction.length > 0) { e.preventDefault(); input.value = AI.fullMatchedPhrase; AI.currentPrediction = ""; AI.acceptedGhostChars = 0; document.getElementById('ghostOverlay').innerHTML = escapeHtml(input.value); return; }
+      if ((e.key === 'Tab' || e.key === 'ArrowRight') && AI.currentPrediction.length > 0) { 
+          e.preventDefault(); 
+          input.value = AI.fullMatchedPhrase; 
+          AI.currentPrediction = ""; 
+          AI.acceptedGhostChars = 0; 
+          document.getElementById('ghostOverlay').innerHTML = escapeHtml(input.value); 
+          return; 
+      }
       if (AI.currentPrediction.length > 0 && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-          if (e.key.toLowerCase() === AI.currentPrediction[0].toLowerCase()) { AI.acceptedGhostChars++; if (AI.acceptedGhostChars >= 3) { e.preventDefault(); input.value = AI.fullMatchedPhrase; document.getElementById('ghostOverlay').innerHTML = ""; AI.acceptedGhostChars = 0; setTimeout(() => submitAIChat(AI.fullMatchedPhrase), 300); } } else AI.acceptedGhostChars = 0;
-      } else if (e.key === 'Backspace') AI.acceptedGhostChars = Math.max(0, AI.acceptedGhostChars - 1);
+          if (e.key.toLowerCase() === AI.currentPrediction[0].toLowerCase()) { 
+              AI.acceptedGhostChars++; 
+              if (AI.acceptedGhostChars >= 3) { 
+                  e.preventDefault(); 
+                  input.value = AI.fullMatchedPhrase; 
+                  document.getElementById('ghostOverlay').innerHTML = ""; 
+                  AI.acceptedGhostChars = 0; 
+                  setTimeout(() => submitAIChat(AI.fullMatchedPhrase), 300); 
+              } 
+          } else {
+              AI.acceptedGhostChars = 0;
+          }
+      } else if (key => e.key === 'Backspace') {
+          AI.acceptedGhostChars = Math.max(0, AI.acceptedGhostChars - 1);
+      }
   }
 
   function submitAIChat(autoCommand = null) {
@@ -850,13 +894,20 @@
       const rawQuery = autoCommand || inputField.value.trim(); if (!rawQuery) return;
       streamBox.innerHTML += `<div class="chat-msg-user">Command Executed: ${escapeHtml(rawQuery)}</div>`;
       inputField.value = ""; AI.currentPrediction = ""; AI.fullMatchedPhrase = ""; AI.acceptedGhostChars = 0; document.getElementById('ghostOverlay').innerHTML = "";
+      
       const queryLower = rawQuery.toLowerCase();
       if (queryLower.includes('atom') || queryLower.includes('3d')) AI.teach('atom', 'cardAtom');
       else if (queryLower.includes('math') || queryLower.includes('tensor') || queryLower.includes('forecast')) AI.teach('math', 'cardFin');
       else if (queryLower.includes('noise') || queryLower.includes('graph') || queryLower.includes('spike') || queryLower.includes('time series') || queryLower.includes('extract')) AI.teach('noise', 'cardWave');
-      else if (queryLower.includes('table') || queryLower.includes('query') || queryLower.includes('clear')) { if (queryLower.includes('clear')) { document.getElementById('queryTableBody').innerHTML=''; logSys("Local table database cleared."); } AI.teach('query', 'cardQuery'); }
+      else if (queryLower.includes('table') || queryLower.includes('query') || queryLower.includes('clear')) { 
+          if (queryLower.includes('clear')) { document.getElementById('queryTableBody').innerHTML=''; logSys("Local table database cleared."); } 
+          AI.teach('query', 'cardQuery'); 
+      }
       else if (queryLower.includes('tool') || queryLower.includes('folder') || queryLower.includes('explorer') || queryLower.includes('bind')) AI.teach('tools', 'cardTools');
       else if (queryLower.includes('exec')) toggleMax('cardSummary');
+      else {
+          streamBox.innerHTML += `<div class="chat-msg-ai">🤖 <strong>SEBRA-AI</strong>: Processed command vector successfully. Ready for further telemetry commands.</div>`;
+      }
       streamBox.scrollTop = streamBox.scrollHeight;
   }
 
