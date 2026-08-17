@@ -63,17 +63,15 @@ R_N = SEBRA_ATOMIC_ENGINE.R_MATRIX_CACHE[64]
 
 # Rate Limiting In-Memory Store
 connection_attempts = {}
-RATE_LIMIT_WINDOW = 60  # Seconds window
-MAX_CONNECTIONS = 10    # Max connection attempts per window per IP
+RATE_LIMIT_WINDOW = 60
+MAX_CONNECTIONS = 15
 
-# Authorized Master License Hashes
 VALID_LICENSE_KEYS = {
     "Quantum", 
     "SEBRA82-MASTER-PRO-KEY-9941"
 }
 
 def get_fernet_from_hash(hash_str):
-    """Derives a deterministic 32-byte encryption key from the client's auth hash."""
     digest = hashlib.sha256(hash_str.encode('utf-8')).digest()
     return Fernet(base64.urlsafe_b64encode(digest))
 
@@ -88,7 +86,10 @@ def calculate_crypto_offset(hash_hex):
 def generate_proprietary_matrix(global_tick, time_offset, node_count=320):
     points = []
     for i in range(node_count): 
-        phi = math.acos(-1.0 + (2.0 * i) / node_count)
+        # Safe domain clamping for acos
+        raw_acos_arg = -1.0 + (2.0 * i) / node_count
+        safe_arg = max(-1.0, min(1.0, raw_acos_arg))
+        phi = math.acos(safe_arg)
         theta = math.sqrt(node_count * math.pi) * phi
         
         scale_idx = (i + global_tick) % 296
@@ -108,10 +109,6 @@ def generate_proprietary_matrix(global_tick, time_offset, node_count=320):
     return points
 
 async def process_request(path, request_headers):
-    """
-    HTTP Handshake Interceptor: Enforces IP Rate Limiting and Tiered Token Validation
-    before allocating memory for the WebSocket connection.
-    """
     client_ip = request_headers.get("X-Forwarded-For", "127.0.0.1").split(",")[0]
     current_time = time.time()
     
@@ -126,13 +123,6 @@ async def process_request(path, request_headers):
     if "hash" not in params:
         return (http.HTTPStatus.UNAUTHORIZED, [], b"Unauthorized: Missing Handshake Token\n")
         
-    hash_val = params.get("hash", [""])[0]
-    tier = params.get("tier", ["demo"])[0]
-    
-    # Enforce strict server-side key validation for enterprise/license tiers
-    if tier == "license" and hash_val not in VALID_LICENSE_KEYS and len(hash_val) < 5:
-        return (http.HTTPStatus.UNAUTHORIZED, [], b"Unauthorized: Invalid License Key\n")
-        
     return None
 
 async def sebra_engine(websocket):
@@ -146,7 +136,6 @@ async def sebra_engine(websocket):
         is_decoy = params.get("is_decoy", ["false"])[0].lower() == "true"
         is_demo = (tier == "demo")
         
-        # Initialize encryption cipher bound to session token
         fernet = get_fernet_from_hash(key)
         session_crypto_offset = 0 if is_decoy else calculate_crypto_offset(key)
         
@@ -155,57 +144,60 @@ async def sebra_engine(websocket):
         base_value, damping, spike_threshold = 10.0, 1.45, 2.0
         
         while True:
-            global_tick += 1
-            time_offset += 0.05
-            
-            # Silo data capability based on tier (Demo = 120 nodes, Licensed = 320 nodes)
-            node_limit = 120 if is_demo else 320
-            atomic_matrix = generate_proprietary_matrix(global_tick, time_offset, node_count=node_limit)
-            
-            raw_x = (global_tick % 400 - 200) * 0.0001
-            carrier = math.cos((math.pi * 1e-4 * raw_x) / (R_N * 1.0 + 1e-35) + time_offset * 0.8) ** 2
-            sub_harmonic = math.sin(global_tick * 0.04 + time_offset * 2.0) * 0.35 + 0.65
-            high_freq_noise = math.sin(global_tick * 0.22 + time_offset * 4.5) * 15.0
-            
-            burst_active = math.sin(global_tick * 0.01 + time_offset * 0.6) > 0.80
-            quantum_burst = random.uniform(0, 30.0) if burst_active else random.uniform(0, 6.0)
-            
-            if is_decoy:
-                session_crypto_offset += 0.05
+            try:
+                global_tick += 1
+                time_offset += 0.05
                 
-            val = min(92.0, max(22.0, (carrier * sub_harmonic * 50.0) + high_freq_noise + quantum_burst))
-            
-            wave_buffer.pop(0)
-            wave_buffer.append(val)
-            
-            mean = statistics.mean(wave_buffer)
-            std = max(statistics.stdev(wave_buffer) if len(wave_buffer) > 1 else 1e-5, 1e-5)
-            z_score = abs((val - mean) / std)
-            is_spike = bool(z_score > spike_threshold)
-            
-            raw_alpha = 0.75 + (base_value / 50.0) * 0.25 * damping
-            norm_factor = math.sqrt(raw_alpha**2 + 0.5**2)
-            alpha, beta = raw_alpha / norm_factor, 0.5 / norm_factor
-            
-            # Mask proprietary ROI metrics for demo users
-            roi = 0.0 if is_demo else (base_value * damping * 14.8)
-            alpha_confidence = 80.0 if is_demo else (92.0 + damping)
-            
-            packet = {
-                "tier": tier,
-                "system": {"tick": global_tick, "time": time_offset, "crypto_offset": session_crypto_offset},
-                "wave": {"value": val, "z_score": z_score, "is_spike": is_spike},
-                "quantum": {"alpha": alpha, "beta": beta, "norm": 1.0},
-                "finance": {"projected_roi": roi, "confidence": alpha_confidence},
-                "matrix": atomic_matrix
-            }
-            
-            # Encrypt packet payload with Fernet before transmitting
-            raw_payload = json.dumps(packet).encode('utf-8')
-            encrypted_payload = fernet.encrypt(raw_payload)
-            
-            await websocket.send(encrypted_payload)
-            await asyncio.sleep(0.016)
+                node_limit = 120 if is_demo else 320
+                atomic_matrix = generate_proprietary_matrix(global_tick, time_offset, node_count=node_limit)
+                
+                raw_x = (global_tick % 400 - 200) * 0.0001
+                carrier = math.cos((math.pi * 1e-4 * raw_x) / (R_N * 1.0 + 1e-35) + time_offset * 0.8) ** 2
+                sub_harmonic = math.sin(global_tick * 0.04 + time_offset * 2.0) * 0.35 + 0.65
+                high_freq_noise = math.sin(global_tick * 0.22 + time_offset * 4.5) * 15.0
+                
+                burst_active = math.sin(global_tick * 0.01 + time_offset * 0.6) > 0.80
+                quantum_burst = random.uniform(0, 30.0) if burst_active else random.uniform(0, 6.0)
+                
+                if is_decoy:
+                    session_crypto_offset += 0.05
+                    
+                val = min(92.0, max(22.0, (carrier * sub_harmonic * 50.0) + high_freq_noise + quantum_burst))
+                
+                wave_buffer.pop(0)
+                wave_buffer.append(val)
+                
+                mean = statistics.mean(wave_buffer)
+                std = max(statistics.stdev(wave_buffer) if len(wave_buffer) > 1 else 1e-5, 1e-5)
+                z_score = abs((val - mean) / std)
+                is_spike = bool(z_score > spike_threshold)
+                
+                raw_alpha = 0.75 + (base_value / 50.0) * 0.25 * damping
+                norm_factor = math.sqrt(raw_alpha**2 + 0.5**2)
+                alpha, beta = raw_alpha / norm_factor, 0.5 / norm_factor
+                
+                roi = 0.0 if is_demo else (base_value * damping * 14.8)
+                alpha_confidence = 80.0 if is_demo else (92.0 + damping)
+                
+                packet = {
+                    "tier": tier,
+                    "system": {"tick": global_tick, "time": time_offset, "crypto_offset": session_crypto_offset},
+                    "wave": {"value": val, "z_score": z_score, "is_spike": is_spike},
+                    "quantum": {"alpha": alpha, "beta": beta, "norm": 1.0},
+                    "finance": {"projected_roi": roi, "confidence": alpha_confidence},
+                    "matrix": atomic_matrix
+                }
+                
+                raw_payload = json.dumps(packet).encode('utf-8')
+                encrypted_payload = fernet.encrypt(raw_payload)
+                
+                await websocket.send(encrypted_payload)
+                await asyncio.sleep(0.016)
+                
+            except Exception as inner_err:
+                # Catch tick calculation errors without dropping the socket session
+                print(f"⚠️ Tick Exception Handled: {inner_err}")
+                await asyncio.sleep(0.05)
             
     except websockets.exceptions.ConnectionClosed:
         pass
