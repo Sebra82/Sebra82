@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SEBRA82 v20.5 - Integrated Zero-Scroll Terminal</title>
+    <title>SEBRA82 v20.6 - Persistent Zero-Scroll Terminal</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@msgpack/msgpack@2.8.0/dist/msgpack.min.js"></script>
@@ -54,6 +55,7 @@
 
         .top-btn { font-size: 0.55rem; padding: 4px 10px; border-radius: 3px; border: 1px solid; font-family: var(--font-mono); font-weight: 700; cursor: pointer; transition: all 0.2s; text-transform: uppercase; }
         .btn-reset { background: rgba(255, 51, 68, 0.1); color: var(--crimson-red); border-color: rgba(255, 51, 68, 0.4); } .btn-reset:hover { background: rgba(255, 51, 68, 0.2); }
+        .btn-save { background: rgba(126, 231, 135, 0.1); color: var(--accent-green); border-color: rgba(126, 231, 135, 0.4); } .btn-save:hover { background: rgba(126, 231, 135, 0.2); }
         .node-badge { font-size: 0.55rem; background: rgba(31, 41, 61, 0.8); color: var(--text-muted); padding: 3px 8px; border-radius: 6px; border: 1px solid var(--border-color); font-family: var(--font-mono); }
 
         .ai-wrapper { flex-shrink: 0; display: flex; align-items: center; gap: 8px; background: rgba(0, 243, 255, 0.02); border: 1px solid var(--border-color); border-radius: 4px; padding: 4px 8px; height: 34px; overflow: hidden; }
@@ -165,20 +167,22 @@
 <div class="platform-container">
 
     <div class="widget-header">
-        <div class="brand-title">⚡ <span>SEBRA82 v20.5</span> Quantum Terminal</div>
+        <div class="brand-title">⚡ <span>SEBRA82 v20.6</span> Quantum Terminal</div>
         <div class="header-actions">
             <button type="button" class="top-btn btn-rand" id="btnGenRandom" data-guide="Generates a fresh deterministic noise epoch across the entire state vector.">🎲 Noise</button>
+            <button type="button" class="top-btn btn-save" id="btnSaveState" data-guide="Encrypts (AES-256) and stores current dashboard layout to local memory.">💾 Save</button>
             <button type="button" class="top-btn btn-reset" id="btnResetView" data-guide="Restores the primary Zero-Scroll 3x2 grid layout instantly.">↺ Reset Layout</button>
             <div class="node-badge" id="vault-status">VAULT: STANDBY</div>
         </div>
     </div>
 
+    <!-- Ultra-Slim AI Navigation Bar with Natively Docked Mini-Prompts -->
     <div class="ai-wrapper">
         <div class="ai-compact-bar">
             <span class="ai-status-indicator">🤖 SYNAPSE</span>
             <div class="ai-input-wrap">
                 <div class="ghost-overlay" id="ghostOverlay"></div>
-                <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Command AI (e.g. 'run benchmark', 'extract noise')..." autocomplete="off" spellcheck="false">
+                <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Command AI (e.g. 'run benchmark')..." autocomplete="off" spellcheck="false">
             </div>
             <button type="button" class="ai-btn-submit" id="btnSubmitAiChat" data-guide="Executes natural language AI command.">Exec</button>
         </div>
@@ -192,6 +196,7 @@
         </div>
     </div>
 
+    <!-- PURE CSS FLEX-GRID STATE MACHINE (Zero-Scroll Architecture) -->
     <div class="mobile-stack" id="mobileStack">
         
         <!-- CARD 1: 3D Atom Matrix -->
@@ -609,10 +614,12 @@
     window.UI = {
         authenticateAndLaunch: function(tier) {
             window.GLOBALS.currentTier = tier;
+            window.GLOBALS.activeHashKey = tier === 'license' ? document.getElementById('licenseKeyInput').value.trim() : "SEBRA82_DEMO_GUEST_KEY";
             document.getElementById('authGatewayModal').style.display = 'none';
-            window.NETWORK.connect("DEMO_KEY", tier);
+            window.NETWORK.connect(window.GLOBALS.activeHashKey, tier);
             window.UTILS.logSys(`Authentication approved. Terminal tier: ${tier.toUpperCase()}`);
             setTimeout(window.UI.resizeCanvases, 10);
+            setTimeout(() => window.UI.loadCustomView(), 200); // Decrypt layout on boot
         },
         activeMaxId: null,
         toggleMax: function(cardId) {
@@ -652,6 +659,60 @@
                     canvas.width = parent.clientWidth; canvas.height = parent.clientHeight;
                 }
             });
+        },
+        saveCustomView: function() { 
+            const state = {
+                maxId: this.activeMaxId,
+                atomMode: window.GLOBALS.atomMode,
+                finBase: window.GLOBALS.finConfig.baseValue,
+                finDamping: window.GLOBALS.finConfig.damping,
+                zoom: document.getElementById('atomZoomSlider').value
+            };
+            try {
+                const cipher = CryptoJS.AES.encrypt(JSON.stringify(state), window.GLOBALS.activeHashKey).toString();
+                localStorage.setItem('sebra82_vault_state', cipher);
+                window.GUIDE.show("State encrypted (AES-256) and safely persisted to local browser storage.");
+            } catch(e) {
+                window.UTILS.logSys("Failed to encrypt state.", "err");
+            }
+        },
+        loadCustomView: function() {
+            const cipher = localStorage.getItem('sebra82_vault_state');
+            if(!cipher) return;
+            try {
+                const bytes = CryptoJS.AES.decrypt(cipher, window.GLOBALS.activeHashKey);
+                const state = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+                
+                if (state.maxId) this.toggleMax(state.maxId);
+                
+                if (state.atomMode) {
+                    document.querySelectorAll('#atomTabs .cat-chip').forEach(c => c.classList.remove('active'));
+                    const targetChip = document.querySelector(`#atomTabs .cat-chip[data-atom-mode="${state.atomMode}"]`);
+                    if(targetChip) targetChip.classList.add('active');
+                    window.GLOBALS.atomMode = state.atomMode;
+                }
+                
+                if (state.finBase) {
+                    window.GLOBALS.finConfig.baseValue = state.finBase;
+                    document.getElementById('baseValueSlider').value = state.finBase;
+                    document.getElementById('baseValueReadout').innerText = parseFloat(state.finBase).toFixed(2);
+                }
+                if (state.finDamping) {
+                    window.GLOBALS.finConfig.damping = state.finDamping;
+                    document.getElementById('dampingSlider').value = state.finDamping;
+                    document.getElementById('dampingReadout').innerText = parseFloat(state.finDamping).toFixed(2);
+                }
+                if (state.zoom) {
+                    document.getElementById('atomZoomSlider').value = state.zoom;
+                    document.getElementById('atomZoomReadout').innerText = parseFloat(state.zoom).toFixed(1) + "x";
+                    targetAtomZoom = parseFloat(state.zoom);
+                }
+                
+                window.MATH.updateInteractiveMathReadout();
+                window.UTILS.logSys("Previous encrypted state successfully decrypted and restored.");
+            } catch(e) {
+                window.UTILS.logSys("Failed to decrypt saved state. Invalid Hash Key?", "err");
+            }
         }
     };
 
@@ -759,13 +820,14 @@
             targetAtomRotY = window.UTILS.lerp(targetAtomRotY, currentAtomRotY, 0.1);
 
             let mode = window.GLOBALS.atomMode; 
+
             if (!isDraggingAtom) { 
                 if(mode === 'world') { currentAtomRotY += 0.008; currentAtomRotX += 0.004; }
                 else if(mode === 'sci') { currentAtomRotY += 0.001; currentAtomRotX -= 0.001; }
                 else { currentAtomRotY += 0.003; currentAtomRotX += 0.001; } 
             }
             
-            if (window.GLOBALS.serverMatrix.length === 0) {
+            if (window.GLOBALS.serverMatrix.length === 0 && !window.GLOBALS.isStreamPaused) {
                 let m = [];
                 for(let i=0; i<36; i++) { m.push({ id: i, type: 'core', phi: Math.acos(1 - 2*(i+0.5)/36), theta: Math.PI * (1 + Math.sqrt(5)) * (i+0.5), baseR: 30 }); }
                 for(let i=0; i<42; i++) { m.push({ id: i+36, type: 'inner', angle: (i/42) * Math.PI * 2, baseR: 70 }); }
@@ -798,8 +860,18 @@
                     ox = r * Math.sin(n.phi) * Math.cos(n.theta); oy = r * Math.sin(n.phi) * Math.sin(n.theta); oz = r * Math.cos(n.phi);
                 }
 
-                let color = mode === 'sci' ? (n.isCore ? '#ffffff' : (n.type === 'inner' ? '#7ee787' : '#00f3ff')) : (mode === 'world' ? (n.isCore ? '#ffffff' : (n.type === 'inner' ? '#f0883e' : '#ff3344')) : (n.isCore ? '#ffffff' : (n.type === 'inner' ? '#00f3ff' : '#c084fc')));
-                return { ox: ox, oy: oy, oz: oz, type: n.type, isCore: n.type === 'core', id: n.id, color: color };
+                let color, glow;
+                if (mode === 'sci') {
+                    color = n.isCore ? '#ffffff' : (n.type === 'inner' ? '#7ee787' : '#00f3ff');
+                    glow = n.isCore ? 'rgba(255,255,255,0.9)' : (n.type === 'inner' ? 'rgba(126,231,135,0.8)' : 'rgba(0,243,255,0.8)');
+                } else if (mode === 'world') {
+                    color = n.isCore ? '#ffffff' : (n.type === 'inner' ? '#f0883e' : '#ff3344');
+                    glow = n.isCore ? 'rgba(255,255,255,0.9)' : (n.type === 'inner' ? 'rgba(240,136,62,0.8)' : 'rgba(255,51,68,0.8)');
+                } else { 
+                    color = n.isCore ? '#ffffff' : (n.type === 'inner' ? '#00f3ff' : '#c084fc');
+                    glow = n.isCore ? 'rgba(255,255,255,0.9)' : (n.type === 'inner' ? 'rgba(0,243,255,0.8)' : 'rgba(192,132,252,0.8)');
+                }
+                return { ox: ox, oy: oy, oz: oz, type: n.type, isCore: n.type === 'core', id: n.id, color: color, glow: glow };
             });
 
             let projected = localNodes.map(n => {
@@ -810,7 +882,7 @@
                 let pers = 400 / (400 + z2);
                 return {
                     px: cx + x1 * pers * targetAtomZoom, py: cy + y2 * pers * targetAtomZoom, z: z2, ox: n.ox, oy: n.oy, oz: n.oz,
-                    isCore: n.isCore, type: n.type, id: n.id, color: n.color, size: (n.isCore ? 3.0 : 2.0) * pers * Math.min(targetAtomZoom, 4.0)
+                    isCore: n.isCore, type: n.type, id: n.id, color: n.color, glow: n.glow, size: (n.isCore ? 3.0 : 2.0) * pers * Math.min(targetAtomZoom, 4.0)
                 };
             });
 
@@ -829,23 +901,37 @@
                     if (dist3D < maxDist) {
                         drawnBonds++;
                         let alpha = (1.0 - (dist3D / maxDist)) * 0.7;
-                        atomCtx.strokeStyle = `rgba(0,243,255,${alpha})`;
+                        let grad = atomCtx.createLinearGradient(projected[i].px, projected[i].py, projected[j].px, projected[j].py);
+                        
+                        let c1 = projected[i].color === '#ffffff' ? `255,255,255` : (projected[i].color === '#00f3ff' ? `0,243,255` : (projected[i].color === '#c084fc' ? `192,132,252` : (projected[i].color === '#7ee787' ? `126,231,135` : (projected[i].color === '#f0883e' ? `240,136,62` : `255,51,68`))));
+                        let c2 = projected[j].color === '#ffffff' ? `255,255,255` : (projected[j].color === '#00f3ff' ? `0,243,255` : (projected[j].color === '#c084fc' ? `192,132,252` : (projected[j].color === '#7ee787' ? `126,231,135` : (projected[j].color === '#f0883e' ? `240,136,62` : `255,51,68`))));
+
+                        grad.addColorStop(0, `rgba(${c1},${alpha})`);
+                        grad.addColorStop(1, `rgba(${c2},${alpha})`);
+                        
+                        atomCtx.strokeStyle = grad;
                         atomCtx.beginPath(); atomCtx.moveTo(projected[i].px, projected[i].py); atomCtx.lineTo(projected[j].px, projected[j].py); atomCtx.stroke();
-                        if(drawnBonds > 600) break;
+                        
+                        if(drawnBonds > 800) break; 
                     }
                 }
-                if(drawnBonds > 600) break;
+                if(drawnBonds > 800) break;
             }
 
             projected.forEach(n => {
                 if (n.px < -20 || n.px > w+20 || n.py < -20 || n.py > h+20) return;
                 atomCtx.fillStyle = n.color;
+                atomCtx.shadowBlur = n.isCore ? 15 : 8; atomCtx.shadowColor = n.glow;
+                
                 let s = Math.max(2.0, n.size * 2);
                 if (mode === 'sci') {
                     atomCtx.beginPath(); atomCtx.arc(n.px, n.py, s/2, 0, Math.PI*2); atomCtx.fill();
+                    atomCtx.fillStyle = '#fff'; atomCtx.beginPath(); atomCtx.arc(n.px, n.py, s/4, 0, Math.PI*2); atomCtx.fill();
                 } else {
                     atomCtx.fillRect(n.px - s/2, n.py - s/2, s, s);
+                    atomCtx.fillStyle = '#fff'; atomCtx.fillRect(n.px - s/4, n.py - s/4, s/2, s/2);
                 }
+                atomCtx.shadowBlur = 0;
             });
         }
 
@@ -862,8 +948,7 @@
             const w = waveCanvas.width, h = waveCanvas.height; waveCtx.clearRect(0, 0, w, h); this.drawGrid(waveCtx, w, h, 'rgba(0, 243, 255, 0.04)');
             let st = w / Math.max(1, window.GLOBALS.waveBuffer.length - 1);
             
-            waveCtx.beginPath();
-            waveCtx.moveTo(0, h - (window.GLOBALS.waveBuffer[0] * (h / 100)));
+            waveCtx.beginPath(); waveCtx.moveTo(0, h - (window.GLOBALS.waveBuffer[0] * (h / 100)));
             for (let i = 0; i < window.GLOBALS.waveBuffer.length - 1; i++) { 
                 let xPos = i * st, yPos = h - (window.GLOBALS.waveBuffer[i] * (h / 100));
                 let nextX = (i + 1) * st, nextY = h - (window.GLOBALS.waveBuffer[i + 1] * (h / 100));
@@ -875,6 +960,7 @@
             waveCtx.lineTo(w, h); waveCtx.lineTo(0, h); waveCtx.closePath();
             let grad = waveCtx.createLinearGradient(0, 0, 0, h); grad.addColorStop(0, 'rgba(0, 243, 255, 0.2)'); grad.addColorStop(1, 'rgba(0, 243, 255, 0.0)');
             waveCtx.fillStyle = grad; waveCtx.fill();
+
         }
 
         static renderDataGraphs() {
@@ -902,31 +988,6 @@
         }
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-        const atomCanvas = document.getElementById('atom3DCanvas');
-        if(atomCanvas) {
-            atomCanvas.addEventListener('pointerdown', (e) => { 
-                isDraggingAtom = true; lastX = e.clientX; lastY = e.clientY; atomCanvas.setPointerCapture(e.pointerId); e.preventDefault(); 
-            });
-            atomCanvas.addEventListener('pointermove', (e) => { 
-                if (isDraggingAtom) { 
-                    let dx = (e.clientX - lastX) * 0.012; let dy = (e.clientY - lastY) * 0.012;
-                    currentAtomRotY += dx; currentAtomRotX -= dy; lastX = e.clientX; lastY = e.clientY; 
-                } 
-                e.preventDefault(); 
-            });
-            atomCanvas.addEventListener('pointerup', (e) => { isDraggingAtom = false; try { atomCanvas.releasePointerCapture(e.pointerId); } catch(err) {} });
-            atomCanvas.addEventListener('wheel', (e) => { 
-                e.preventDefault(); 
-                let currentS = parseFloat(document.getElementById('atomZoomSlider').value);
-                let newS = Math.max(0.3, Math.min(30.0, currentS + e.deltaY * -0.01));
-                document.getElementById('atomZoomSlider').value = newS; 
-                document.getElementById('atomZoomReadout').innerText = newS.toFixed(1) + "x";
-            }, { passive: false });
-        }
-        document.getElementById('atomZoomSlider')?.addEventListener('input', (e) => { document.getElementById('atomZoomReadout').innerText = parseFloat(e.target.value).toFixed(1) + "x"; });
-    });
-
     function bindAllEvents() {
         window.addEventListener('resize', window.UI.resizeCanvases);
 
@@ -940,7 +1001,9 @@
                 document.querySelectorAll('#atomTabs .cat-chip').forEach(c => c.classList.remove('active'));
                 chip.classList.add('active');
                 window.GLOBALS.atomMode = chip.getAttribute('data-atom-mode');
-                window.NETWORK.sendMode(window.GLOBALS.atomMode);
+                if (window.NETWORK && window.NETWORK.socket && window.NETWORK.socket.readyState === WebSocket.OPEN) {
+                    window.NETWORK.sendMode(window.GLOBALS.atomMode);
+                }
                 window.DATA_INSIGHT.setFilter(window.GLOBALS.atomMode.toUpperCase());
                 window.UTILS.logSys(`Quantum Lattice reconfigured to ${window.GLOBALS.atomMode.toUpperCase()} topology.`);
             });
@@ -958,7 +1021,9 @@
 
         document.getElementById('btnAuthLicense')?.addEventListener('click', () => window.UI.authenticateAndLaunch('license'));
         document.getElementById('btnAuthDemo')?.addEventListener('click', () => window.UI.authenticateAndLaunch('demo'));
+        
         document.getElementById('btnGenRandom')?.addEventListener('click', () => window.ACTIONS.generateRandomDataEpoch());
+        document.getElementById('btnSaveState')?.addEventListener('click', () => window.UI.saveCustomView());
         document.getElementById('btnResetView')?.addEventListener('click', () => window.UI.resetStandardView());
 
         document.querySelectorAll('[data-toggle-card]').forEach(el => { el.addEventListener('click', () => { window.UI.toggleMax(el.getAttribute('data-toggle-card')); }); });
@@ -981,10 +1046,12 @@
         
         document.getElementById('btnDownloadExport')?.addEventListener('click', () => window.DATA_INSIGHT.triggerExport());
         document.getElementById('btnArchiveData')?.addEventListener('click', () => window.DATA_INSIGHT.archiveData());
+        document.getElementById('btnClearLedger')?.addEventListener('click', () => window.DATA_INSIGHT.clearLedger());
         
         document.getElementById('btnNavUp')?.addEventListener('click', () => window.WORKSPACE.navigateUp());
         document.getElementById('btnLoad3M')?.addEventListener('click', () => window.DATA_INSIGHT.loadHistoricalData(3));
         document.getElementById('btnLoad6M')?.addEventListener('click', () => window.DATA_INSIGHT.loadHistoricalData(6));
+        document.getElementById('btnLoad12M')?.addEventListener('click', () => window.DATA_INSIGHT.loadHistoricalData(12));
 
         document.getElementById('btnAutoSummary')?.addEventListener('click', (e) => { e.stopPropagation(); window.ACTIONS.autoGenerateExecSummary(); });
     }
@@ -998,3 +1065,5 @@
 </script>
 </body>
 </html>
+
+```
