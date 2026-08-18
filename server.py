@@ -8,15 +8,14 @@ import hmac
 import hashlib
 from urllib.parse import parse_qs, urlparse
 
-# --- 1. RUST-ACCELERATED WEBSOCKETS ---
+# --- 1. STANDARD WEBSOCKETS (PaaS Compatible) ---
 try:
-    import websocket_rs as websockets
-    print("🚀 Rust-Accelerated 'websocket-rs' bindings active.")
-except ImportError:
     import websockets
     print("ℹ️ Standard pure-Python 'websockets' active.")
+except ImportError:
+    import websockets
 
-# Optional: Unix high-performance loop
+# Optional: High-performance loop if available
 try:
     import uvloop
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
@@ -25,7 +24,6 @@ except ImportError:
     pass
 
 # --- PROPRIETARY TRADE SECRET SIGNING KEY ---
-# Institutional Aegis cryptographic envelope seal (HMAC-SHA256)
 SERVER_SIGNING_KEY = b"SEBRA82_AEGIS_MASTER_SECRET_2026"
 
 class WelfordVariance:
@@ -47,12 +45,9 @@ class WelfordVariance:
         variance = self.m2 / (self.count - 1)
         return self.mean, math.sqrt(variance)
 
-
 CONNECTED_CLIENTS = set()
 
 def compute_and_pack(global_tick, time_offset, live_market_volatility, welford_packet):
-    # Pass an empty matrix list. This triggers the v20.0 Frontend to securely build 
-    # its own highly-optimized 3D topology engine locally, preventing the NaN render crash.
     empty_matrix_trigger = [] 
     
     core_packet = [
@@ -78,10 +73,8 @@ async def centralized_broadcast_loop():
         global_tick += 1
         time_offset += 0.05
         
-        # High-Frequency Simulated Market Volatility
         live_market_volatility = math.sin(global_tick * 0.08) * 2.8 + random.uniform(-0.4, 0.4)
         
-        # Real-time anomaly detection
         welford_stats.update(live_market_volatility)
         mean, std = welford_stats.get_stats()
         z_score = abs((live_market_volatility - mean) / std)
@@ -89,7 +82,6 @@ async def centralized_broadcast_loop():
         welford_packet = [round(live_market_volatility, 3), round(z_score, 3), is_spike]
 
         if CONNECTED_CLIENTS:
-            # Offload msgpack serialization to prevent loop blocking
             raw_payload = await asyncio.to_thread(
                 compute_and_pack, 
                 global_tick, time_offset, live_market_volatility, welford_packet
@@ -99,7 +91,6 @@ async def centralized_broadcast_loop():
             await asyncio.gather(*tasks, return_exceptions=True)
             
         elapsed = time.perf_counter() - loop_start
-        # Enforce strict 60Hz tick rate (~16.6ms)
         await asyncio.sleep(max(0.0, 0.016 - elapsed))
 
 async def ws_handler(websocket):
@@ -125,11 +116,11 @@ async def ws_handler(websocket):
     except Exception:
         pass
 
-    print(f"⚡ Secured Cryptographic Tunnel [{client_ip}] | Tier: {tier_mode.upper()} | Hash: {auth_hash[:6]}... Active Pool: {len(CONNECTED_CLIENTS)}")
+    print(f"⚡ Secured Tunnel [{client_ip}] | Tier: {tier_mode.upper()} | Active Pool: {len(CONNECTED_CLIENTS)}")
     
     try:
         async for message in websocket:
-            pass # Server acts as broadcast-only; ingests keep-alives silently
+            pass 
     except Exception:
         pass
     finally:
@@ -141,7 +132,7 @@ async def main():
     asyncio.create_task(centralized_broadcast_loop())
     
     async with websockets.serve(ws_handler, "0.0.0.0", port):
-        print(f"🪐 SEBRA82 'Trade Secret Protected' Terminal Active on ws://0.0.0.0:{port}")
+        print(f"🪐 SEBRA82 Master Server Active on ws://0.0.0.0:{port}")
         await asyncio.Future()
 
 if __name__ == "__main__":
