@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SEBRA82 v21.1 - Institutional Stylesheet
+   SEBRA82 v21.1 - Institutional Stylesheet (Fixed & Enhanced)
    ========================================================================== */
 
 :root {
@@ -273,17 +273,36 @@ html, body {
 
 .ai-prompt-btn:hover { background: rgba(0, 243, 255, 0.1); color: var(--neon-cyan); border-color: var(--neon-cyan); }
 
-.mobile-stack { flex: 1; display: grid; gap: 0.6rem; overflow: hidden; min-height: 0; width: 100%; }
+/* CRITICAL FIX: minmax(0, 1fr) prevents grid rows from collapsing flex canvases to 0 height */
+.mobile-stack { 
+    flex: 1; 
+    display: grid; 
+    gap: 0.6rem; 
+    overflow: hidden; 
+    min-height: 0; 
+    width: 100%; 
+}
 
 @media (min-width: 900px) { 
-    .mobile-stack:not(.has-maximized) { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); } 
+    .mobile-stack:not(.has-maximized) { 
+        grid-template-columns: repeat(3, 1fr); 
+        grid-template-rows: repeat(2, minmax(0, 1fr)); 
+    } 
 }
 
 @media (max-width: 899px) { 
-    .mobile-stack:not(.has-maximized) { grid-template-columns: 1fr; overflow-y: auto; } 
+    .mobile-stack:not(.has-maximized) { 
+        grid-template-columns: 1fr; 
+        overflow-y: auto; 
+    } 
 }
 
-.mobile-stack.has-maximized { display: flex; flex-wrap: wrap; align-content: flex-start; gap: 6px; }
+.mobile-stack.has-maximized { 
+    display: flex; 
+    flex-wrap: wrap; 
+    align-content: flex-start; 
+    gap: 6px; 
+}
 
 .panel-card { 
     background: rgba(5, 9, 18, 0.98); 
@@ -295,6 +314,8 @@ html, body {
     gap: 0.4rem; 
     overflow: hidden; 
     min-height: 0; 
+    height: 100%;
+    will-change: transform, width, height;
 }
 
 #cardAtom { border-left: 3px solid #00f3ff; } 
@@ -505,7 +526,7 @@ canvas { display: block; width: 100%; height: 100%; cursor: crosshair; touch-act
 
 .control-item { 
     background: rgba(10, 14, 22, 0.9); 
-    border: 1px solid rgba(0,243,255,0.2); 
+    border: 1px solid rgba(0, 243, 255, 0.2); 
     padding: 6px; 
     border-radius: 3px; 
     display: flex; 
