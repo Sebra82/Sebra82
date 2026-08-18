@@ -1,10 +1,10 @@
 /* ========================================================================== */
-/* SEBRA82 v21.2 - Institutional Cyber-Quantum Design System (Locked Dark)    */
+/* SEBRA82 v21.2 - Aggressive Dark Mode Enforcement                           */
 /* ========================================================================== */
 
 :root {
     --bg-deep: #0a0e17;
-    --bg-card: rgba(13, 20, 33, 0.85);
+    --bg-card: rgba(13, 20, 33, 0.92);
     --panel-border: rgba(0, 243, 255, 0.3);
     --panel-border-hover: rgba(0, 243, 255, 0.7);
     
@@ -26,26 +26,32 @@
     padding: 0;
 }
 
-html, body {
+/* Force absolute dark background across the entire browser viewport */
+html {
+    background-color: #0a0e17 !important;
+    color: #f0f6fc !important;
+}
+
+body {
     width: 100%;
     min-height: 100dvh;
-    background-color: var(--bg-deep) !important;
+    background-color: #0a0e17 !important;
     color: var(--text-main);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     overflow-x: hidden;
 }
 
-/* Background Grid Pattern Overlay */
+/* Fixed Cyber-Grid Background Layer */
 body::before {
     content: "";
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
-    background: #0a0e17;
+    background-color: #0a0e17 !important;
     background-image: 
         linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
     background-size: 30px 30px;
-    z-index: -2;
+    z-index: -10;
     pointer-events: none;
 }
 
@@ -57,7 +63,7 @@ body::before {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    background-color: var(--bg-deep);
+    background-color: #0a0e17 !important;
 }
 
 /* Glassmorphism Panel Cards */
@@ -69,12 +75,12 @@ body::before {
     -webkit-backdrop-filter: blur(12px);
     padding: 16px;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
 }
 
 .panel-card:hover {
     border-color: var(--panel-border-hover);
-    box-shadow: 0 8px 32px rgba(0, 243, 255, 0.12);
+    box-shadow: 0 8px 32px rgba(0, 243, 255, 0.15);
 }
 
 /* Panel Header & Typography */
@@ -105,6 +111,7 @@ body::before {
     min-height: 80dvh;
     display: flex;
     flex-direction: column;
+    background-color: rgba(13, 20, 33, 0.98) !important;
 }
 
 .panel-card.fluid-maximized .collapsible-body {
@@ -119,7 +126,7 @@ body::before {
 
 /* Interactive Chips & Buttons */
 .cat-chip, button {
-    background: rgba(13, 20, 33, 0.9) !important;
+    background: rgba(13, 20, 33, 0.95) !important;
     border: 1px solid rgba(0, 243, 255, 0.3) !important;
     color: var(--neon-cyan) !important;
     padding: 6px 14px;
@@ -134,7 +141,7 @@ body::before {
     background: rgba(0, 243, 255, 0.2) !important;
     border-color: var(--neon-cyan) !important;
     color: #ffffff !important;
-    box-shadow: 0 0 12px rgba(0, 243, 255, 0.3);
+    box-shadow: 0 0 12px rgba(0, 243, 255, 0.4);
 }
 
 /* Action Buttons */
@@ -153,7 +160,7 @@ body::before {
 .action-btn:hover {
     background: var(--neon-cyan) !important;
     color: var(--bg-deep) !important;
-    box-shadow: 0 0 18px rgba(0, 243, 255, 0.5);
+    box-shadow: 0 0 18px rgba(0, 243, 255, 0.6);
 }
 
 /* Canvas Wrapper */
@@ -162,7 +169,7 @@ canvas {
     height: 220px !important;
     display: block;
     border-radius: 6px;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.5) !important;
 }
 
 .fluid-maximized canvas {
@@ -176,7 +183,7 @@ canvas {
 }
 
 .ghost-input {
-    background: rgba(0, 0, 0, 0.6) !important;
+    background: rgba(0, 0, 0, 0.7) !important;
     border: 1px solid rgba(0, 243, 255, 0.4) !important;
     color: var(--text-main) !important;
     padding: 10px 14px;
@@ -206,6 +213,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.8rem;
+    background-color: transparent !important;
 }
 
 th, td {
@@ -220,8 +228,8 @@ th {
 }
 
 .sys-logger {
-    background: rgba(0, 0, 0, 0.7) !important;
-    border: 1px solid rgba(0, 243, 255, 0.2) !important;
+    background: rgba(0, 0, 0, 0.8) !important;
+    border: 1px solid rgba(0, 243, 255, 0.25) !important;
     border-radius: 6px;
     padding: 10px;
     font-family: var(--font-mono);
@@ -239,12 +247,12 @@ th {
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%) translateY(100px);
-    background: rgba(13, 20, 33, 0.95);
+    background: rgba(13, 20, 33, 0.98) !important;
     border: 1px solid var(--neon-cyan);
     color: var(--text-main);
     padding: 12px 20px;
     border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.5);
     font-size: 0.85rem;
     z-index: 10000;
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -258,7 +266,7 @@ th {
 #authGatewayModal {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(5, 8, 14, 0.95);
+    background: rgba(5, 8, 14, 0.98) !important;
     backdrop-filter: blur(20px);
     z-index: 9999;
     display: flex;
