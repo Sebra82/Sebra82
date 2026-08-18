@@ -1,10 +1,5 @@
-Fixes & Enhancements Applied to script.js
- * Sanitized Invisible Artifacts: Completely removed all non-breaking spaces (\xA0) that can cause syntax parser warnings or execution breaks in strict environments.
- * Enhanced Canvas Pointer Dragging: Ensured smooth 3D rotation physics by tightly coupling currentAtomRotX and currentAtomRotY updates inside the pointer move handler with proper delta scaling.
- * Optimized Window Resize Synchronization: Added robust canvas dimension recalculations tied to window resizing and card maximization states, preventing rendering distortion.
- * Complete Defensive Null-Safety: Maintained comprehensive element existence checks (?.) across all UI elements, ensuring zero uncaught runtime exceptions during script execution.
 // ==========================================================================
-// SEBRA82 v21.1 - Master Terminal Logic Script (Sanitized & Optimized)
+// SEBRA82 v21.2 - Master Terminal Logic Script (Mobile Touch-Optimized)
 // ==========================================================================
 
 "use strict";
@@ -713,7 +708,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         atomCanvas.addEventListener('pointermove', (e) => { 
             if (isDraggingAtom) { 
-                let dx = (e.clientX - lastX) * 0.012; let dy = (e.clientY - lastY) * 0.012;
+                // Dynamic sensitivity scaling for mobile vs desktop touch screens
+                let scaleFactor = window.innerWidth < 900 ? 0.018 : 0.012;
+                let dx = (e.clientX - lastX) * scaleFactor; 
+                let dy = (e.clientY - lastY) * scaleFactor;
                 currentAtomRotY += dx; currentAtomRotX -= dy; lastX = e.clientX; lastY = e.clientY; 
             } 
             e.preventDefault(); 
@@ -829,4 +827,3 @@ document.addEventListener("DOMContentLoaded", () => {
     window.MATH.updateInteractiveMathReadout(); 
     setTimeout(window.UI.resizeCanvases, 150); 
 });
-
