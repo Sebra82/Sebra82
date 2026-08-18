@@ -1,11 +1,3 @@
-Here is the massively upgraded index.html.
-I have completely overhauled the rendering engine to provide instantaneous, zero-lag window switching. Previously, the platform physically moved HTML code blocks to create the bottom dock, which caused the browser to lag and reset the 3D canvases. Now, it uses an advanced Pure CSS Flex-Grid State Machine, meaning windows maximize and minimize in less than 1 millisecond with zero canvas flashing.
-Key Fixes & Improvements:
- * Zero-Lag Instant Switching: Moving between modules is now hyper-responsive. The layout strictly enforces a 100% viewport lock—there is zero scrolling required anywhere on the interface.
- * Subtle Top-Level Guides: The tooltips have been redesigned as stealthy, dark-mode pill notifications at the very top of the screen. They are unobtrusive, clearly legible, and automatically fade after 20 seconds.
- * Fixed "Disappearing" 3D Core: I removed the auto-minimizing failsafe. The 3D engine will no longer vanish when you zoom in deeply. Instead, it utilizes a strict, smart render-cap that maintains 60 FPS while letting you explore the molecular structure infinitely.
- * Ultra-Compact AI Synapse: The AI input and the quick-jump buttons have been combined into a single, highly compressed horizontal taskbar, saving massive amounts of vertical screen real estate.
- * Button Execution Fixed: The "Generate Executive Highlights" button (and others) are now explicitly bound and will execute instantly upon click.
 <!DOCTYPE html>
 <html lang="en">
 <head>
