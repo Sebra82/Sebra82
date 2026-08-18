@@ -30,10 +30,11 @@
     <div class="terminal-container">
         
         <!-- Header & Action Bar -->
-        <div class="top-brand">
-            <h1 style="color: var(--warning-amber); font-size: 1.3rem; text-shadow: 0 0 8px rgba(240, 136, 62, 0.4); display: flex; align-items: center; gap: 8px;">
-                ⚡ SEBRA82 v21.2 <span style="color: var(--text-main); text-shadow: none;">Aegis Encrypted Suite</span>
-            </h1>
+        <div class="top-brand" style="margin-bottom: 12px;">
+            <div style="color: var(--warning-amber); font-size: 1.2rem; font-weight: 800; text-shadow: 0 0 8px rgba(240, 136, 62, 0.4); display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px;">
+                ⚡ SEBRA82 v21.2 
+                <span style="color: var(--text-main); font-size: 1.1rem; text-shadow: none;">Aegis Encrypted Suite</span>
+            </div>
         </div>
         
         <div class="top-action-bar">
@@ -41,7 +42,7 @@
             <button id="btnSaveState" class="btn-green">💾 Save State</button>
             <button id="btnResetView" class="btn-red">↺ Reset View</button>
             <button id="btnPauseStream" class="btn-teal" style="background: transparent !important;">⏸ Pause</button>
-            <span id="vault-status" class="vault-badge">VAULT: DEMO MODE (RESTRICTED 120 NODES)</span>
+            <span id="vault-status" class="vault-badge">VAULT: DEMO MODE</span>
         </div>
         
         <!-- Saved States Divider -->
@@ -61,7 +62,7 @@
             <div style="background: rgba(0,0,0,0.5); border: 1px solid rgba(192,132,252,0.2); border-radius: 6px; padding: 12px; margin-bottom: 12px; min-height: 80px;">
                 <span style="color: var(--accent-purple);">🤖 SEBRA-AI:</span> System initialized. Aegis defenses active. Ask me anything or click a topic below.
             </div>
-            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px; font-size: 0.75rem;">
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px; font-size: 0.75rem; flex-wrap: wrap;">
                 <span style="color: var(--text-muted);">Learn & Go:</span>
                 <span class="tag-chip calc">3D Atom Matrix</span>
                 <span class="tag-chip sci">Math Studio</span>
@@ -70,7 +71,7 @@
             <div style="display: flex; gap: 12px;">
                 <div class="ghost-container" style="flex: 1;">
                     <div id="ghostOverlay" class="ghost-overlay"></div>
-                    <input type="text" id="aiChatInput" class="ghost-input" placeholder="Command AI (e.g., 'extract noise')..." autocomplete="off">
+                    <input type="text" id="aiChatInput" class="ghost-input" placeholder="Command AI..." autocomplete="off">
                 </div>
                 <button id="btnSubmitAiChat" class="purple-btn" style="padding: 0 20px; font-size: 0.85rem;">EXECUTE</button>
             </div>
@@ -81,8 +82,7 @@
             
             <!-- 1. Quantum Lattice Core -->
             <div id="cardAtom" class="panel-card minimized-dock-item">
-                <!-- Restored Aegis Header Structure -->
-                <div class="panel-header-complex panel-title">
+                <div class="panel-header-complex">
                     <div class="header-tags">
                         <span class="tag-chip calc">CALCULATION</span>
                         <span class="tag-chip sci">SCIENCE</span>
@@ -96,16 +96,15 @@
                         </div>
                     </div>
                     <div class="header-status-row">
-                        <span>Status: <span style="color: var(--accent-green);">Active Lattice</span> | Shell Nodes: <span style="color: var(--neon-cyan);">120 (Demo)</span></span>
+                        <span>Status: <span style="color: var(--accent-green);">Active Lattice</span> | Shell Nodes: <span style="color: var(--neon-cyan);">120</span></span>
                         <span>🔍 View 3D Core</span>
                     </div>
                 </div>
-                <!-- Body -->
                 <div class="collapsible-body collapsed" style="margin-top: 16px;">
                     <div id="atomTabs" style="display: flex; gap: 8px; margin-bottom: 12px;">
-                        <span class="cat-chip active" data-atom-mode="calc">CALCULATION</span>
-                        <span class="cat-chip" data-atom-mode="sci">SCIENCE</span>
-                        <span class="cat-chip" data-atom-mode="world">WORLD</span>
+                        <button class="cat-chip active" data-atom-mode="calc">CALCULATION</button>
+                        <button class="cat-chip" data-atom-mode="sci">SCIENCE</button>
+                        <button class="cat-chip" data-atom-mode="world">WORLD</button>
                     </div>
                     <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
                         <span>Magnification (Deep Molecular Zoom):</span>
@@ -113,7 +112,7 @@
                     </div>
                     <input type="range" id="atomZoomSlider" min="0.3" max="5.0" step="0.1" value="1.0" style="width: 100%; margin-bottom: 12px;">
                     <div style="border: 1px solid var(--panel-border); border-radius: 6px; padding: 2px;">
-                        <div style="font-size: 0.7rem; color: var(--neon-cyan); padding: 6px; background: rgba(0,243,255,0.05); border-bottom: 1px solid var(--panel-border);">✨ OPTIMIZED QUANTUM LATTICE | Drag to Rotate, Scroll to Zoom</div>
+                        <div style="font-size: 0.7rem; color: var(--neon-cyan); padding: 6px; background: rgba(0,243,255,0.05); border-bottom: 1px solid var(--panel-border);">✨ OPTIMIZED QUANTUM LATTICE | Drag to Rotate</div>
                         <canvas id="atom3DCanvas"></canvas>
                     </div>
                 </div>
@@ -121,7 +120,7 @@
 
             <!-- 2. Calculus & Modeling Studio -->
             <div id="cardFin" class="panel-card minimized-dock-item">
-                <div class="panel-header-complex panel-title">
+                <div class="panel-header-complex">
                     <div class="header-tags">
                         <span class="tag-chip calc">CALCULATION</span>
                         <span class="tag-chip fin">FINANCE</span>
@@ -136,8 +135,8 @@
                         </div>
                     </div>
                     <div class="header-status-row">
-                        <span>Current Model: <span style="color: var(--accent-green);">&lt;Quantum Tensor&gt;</span> | Events: <span style="color: var(--neon-cyan);">15,480 X</span></span>
-                        <span>🔍 Click for Enhanced Dashboard</span>
+                        <span>Model: <span style="color: var(--accent-green);">&lt;Quantum Tensor&gt;</span> | Events: <span style="color: var(--neon-cyan);">15,480 X</span></span>
+                        <span>🔍 Configure Math</span>
                     </div>
                 </div>
                 <div class="collapsible-body collapsed" style="margin-top: 16px;">
@@ -157,7 +156,7 @@
                     </div>
                     <div style="background: rgba(0,0,0,0.6); padding: 16px; border-radius: 8px; text-align: center; border: 1px solid rgba(0, 243, 255, 0.2);">
                         <span id="mathLiveTitle" style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 8px;">Normalized Tensor Vector:</span>
-                        <h2 id="mathLiveResult" style="color: var(--text-main); font-family: var(--font-mono); letter-spacing: 1px; text-shadow: 0 0 10px rgba(255,255,255,0.4);">Awaiting Data...</h2>
+                        <h2 id="mathLiveResult" style="color: var(--text-main); font-family: var(--font-mono); letter-spacing: 1px;">Awaiting Data...</h2>
                     </div>
                     <button id="btnRunBench" class="purple-btn" style="width: 100%; margin-top: 12px; padding: 10px;">Run Speed Benchmark</button>
                 </div>
@@ -165,7 +164,7 @@
 
             <!-- 3. Noise & Predictive Studio -->
             <div id="cardWave" class="panel-card minimized-dock-item">
-                <div class="panel-header-complex panel-title">
+                <div class="panel-header-complex">
                     <div class="header-tags">
                         <span class="tag-chip calc">CALCULATION</span>
                         <span class="tag-chip sci">SCIENCE</span>
@@ -180,8 +179,8 @@
                         </div>
                     </div>
                     <div class="header-status-row">
-                        <span>Stream Status: <span style="color: var(--accent-green);">Secure Encrypted Stream</span> | Live Spikes: <span style="color: var(--neon-cyan);">0</span></span>
-                        <span>🔍 Click for Enhanced Noise Graph</span>
+                        <span>Stream: <span style="color: var(--accent-green);">Secure Encrypted Stream</span> | Spikes: <span style="color: var(--neon-cyan);">0</span></span>
+                        <span>🔍 View Graphs</span>
                     </div>
                 </div>
                 <div class="collapsible-body collapsed" style="margin-top: 16px; display: flex; flex-direction: column; gap: 16px;">
@@ -202,7 +201,7 @@
 
             <!-- 4. Query & Ledger Studio -->
             <div id="cardQuery" class="panel-card minimized-dock-item">
-                <div class="panel-header-complex panel-title">
+                <div class="panel-header-complex">
                     <div class="header-tags">
                         <span class="tag-chip world">WORLD</span>
                         <span class="tag-chip calc">CALCULATION</span>
@@ -217,31 +216,28 @@
                         </div>
                     </div>
                     <div class="header-status-row">
-                        <span>Query Records: <span style="color: var(--accent-green);">0 rows</span> | Status: <span style="color: var(--neon-cyan);">Mapped & Categorized</span></span>
-                        <span>🔍 Click for Enhanced Table</span>
+                        <span>Records: <span style="color: var(--accent-green);">0 rows</span> | Status: <span style="color: var(--neon-cyan);">Mapped</span></span>
+                        <span>🔍 Open Ledger</span>
                     </div>
                 </div>
                 <div class="collapsible-body collapsed" style="margin-top: 16px;">
                     <div id="secQuery" style="display: flex; gap: 8px; margin-bottom: 12px; overflow-x: auto; padding-bottom: 4px;">
-                        <span id="filtAll" class="cat-chip active">ALL</span>
-                        <span id="filtWorld" class="cat-chip">WORLD</span>
-                        <span id="filtCalc" class="cat-chip">CALC</span>
-                        <span id="filtFin" class="cat-chip">FINANCE</span>
+                        <button id="filtAll" class="cat-chip active">ALL</button>
+                        <button id="filtWorld" class="cat-chip">WORLD</button>
+                        <button id="filtCalc" class="cat-chip">CALC</button>
+                        <button id="filtFin" class="cat-chip">FINANCE</button>
                     </div>
                     <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
-                        Active Filter: <span id="filterStateLabel" style="color: var(--neon-cyan);">ALL</span> | 
-                        Total: <span id="sumQueryCount" style="color: var(--neon-cyan);">0 rows</span>
+                        Active Filter: <span id="filterStateLabel" style="color: var(--neon-cyan);">ALL</span> | Total: <span id="sumQueryCount" style="color: var(--neon-cyan);">0 rows</span>
                     </div>
                     <div style="max-height: 250px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; margin-bottom: 12px;">
                         <table>
-                            <thead>
-                                <tr><th>EVENT ID</th><th>TIMESTAMP / DATE</th><th>CLASSIFICATION</th><th>MAGNITUDE</th></tr>
-                            </thead>
+                            <thead><tr><th>EVENT ID</th><th>TIMESTAMP</th><th>CLASSIFICATION</th><th>MAGNITUDE</th></tr></thead>
                             <tbody id="queryTableBody"></tbody>
                         </table>
                     </div>
                     <div style="display: flex; gap: 8px;">
-                        <button id="btnDownloadExport" class="purple-btn" style="flex: 1; padding: 10px;">📥 DOWNLOAD .CSV EXPORT</button>
+                        <button id="btnDownloadExport" class="purple-btn" style="flex: 1; padding: 10px;">📥 .CSV EXPORT</button>
                         <button id="btnArchiveData" class="action-btn" style="flex: 1;">CLEAR LEDGER</button>
                     </div>
                 </div>
@@ -249,7 +245,7 @@
 
             <!-- 5. Workspace Explorer -->
             <div id="cardTools" class="panel-card minimized-dock-item">
-                <div class="panel-header-complex panel-title">
+                <div class="panel-header-complex">
                     <div class="header-tags">
                         <span class="tag-chip world">WORLD</span>
                         <span class="tag-chip fin">FINANCE</span>
@@ -257,15 +253,15 @@
                         <span class="tag-chip sci">SCIENCE</span>
                     </div>
                     <div class="header-title-row">
-                        <h2 class="panel-main-title">5. UPLOAD, DOWNLOADS & FOLDER EXPLORER</h2>
+                        <h2 class="panel-main-title">5. UPLOAD, DOWNLOADS & EXPLORER</h2>
                         <div class="header-actions">
                             <span class="expand-hint">[CLICK TO EXPAND]</span>
                             <button class="pin-btn purple-btn">⚡ Maximize</button>
                         </div>
                     </div>
                     <div class="header-status-row">
-                        <span>Workspace: <span style="color: var(--accent-green);">/root/datasets</span> | Stream: <span style="color: var(--neon-cyan);">Active</span></span>
-                        <span>🔍 Click for File Explorer</span>
+                        <span>Workspace: <span style="color: var(--accent-green);">/root/datasets</span></span>
+                        <span>🔍 File Explorer</span>
                     </div>
                 </div>
                 <div class="collapsible-body collapsed" style="margin-top: 16px;">
@@ -283,7 +279,7 @@
 
             <!-- 6. Executive Insights -->
             <div id="cardExec" class="panel-card minimized-dock-item" style="border-color: rgba(0, 243, 255, 0.5);">
-                <div class="panel-header-complex panel-title" style="background: rgba(0, 243, 255, 0.02); border-color: var(--neon-cyan);">
+                <div class="panel-header-complex" style="background: rgba(0, 243, 255, 0.02); border-color: var(--neon-cyan);">
                     <div class="header-tags">
                         <span class="tag-chip calc">EXECUTIVE SUMMARY</span>
                         <span class="tag-chip sci">INSIGHTS</span>
@@ -300,7 +296,6 @@
                     </div>
                 </div>
                 <div class="collapsible-body collapsed" style="margin-top: 16px;">
-                    
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
                         <div style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 6px; text-align: center;">
                             <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Active Quantum Nodes</div>
@@ -319,22 +314,18 @@
                             <div style="font-size: 1.1rem; color: var(--crimson-red); font-weight: bold;">Network Fault</div>
                         </div>
                     </div>
-
                     <div style="font-size: 0.8rem; font-weight: bold; margin-bottom: 8px;">System Audit Log:</div>
                     <div id="sysLogger" class="sys-logger" style="margin-bottom: 12px; min-height: 120px;">
                         <div class="log-info">[System] SEBRA82 Terminal initialized.</div>
                     </div>
-                    
                     <button id="btnAutoSummary" class="purple-btn" style="width: 100%; padding: 10px;">Generate Exec Briefing</button>
                 </div>
             </div>
 
-        </div> <!-- End Mobile Stack -->
+        </div> 
     </div>
 
-    <!-- Global Toast -->
     <div id="globalToast"></div>
-
     <script src="script.js" defer></script>
 </body>
 </html>
