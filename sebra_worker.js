@@ -1,5 +1,5 @@
 // ==========================================================================
-// SEBRA82 DEDICATED WEB WORKER (v20.0)
+// SEBRA82 DEDICATED WEB WORKER (v21.1)
 // High-Performance Off-Thread Computational Engine
 // ==========================================================================
 
@@ -27,7 +27,6 @@ self.onmessage = function(event) {
 function executeTensorMath(payload) {
     const { baseValue, damping, liveNoise, mathMode } = payload;
     
-    // Core deterministic math shifted off the main thread
     let dynamicMod = (liveNoise / 50) * damping;
     let result = {};
 
@@ -52,7 +51,6 @@ function executeTensorMath(payload) {
 function executeMatrixBenchmark() {
     const start = performance.now();
     
-    // Simulating a heavy exact algebraic matrix inversion
     let checksum = 0;
     for (let i = 0; i < 8000000; i++) {
         checksum += Math.sqrt(i) * Math.sin(i);
@@ -71,12 +69,11 @@ function executeMatrixBenchmark() {
 /**
  * 3. Heavy Historical Data Ingestion 
  * Generates, maps, and deeply sorts thousands of rows of historical 
- * data in the background. If this ran on the main thread, the 3D lattice 
- * would completely freeze for several seconds.
+ * data in the background without freezing the 3D lattice canvas.
  */
 function processHistoricalEpoch(payload) {
     const { months } = payload;
-    const count = months * 45; // High volume data generation
+    const count = months * 45; 
     let dataset = [];
     const now = Date.now();
 
@@ -84,7 +81,6 @@ function processHistoricalEpoch(payload) {
         let r = Math.random();
         let cat = r > 0.66 ? 'FINANCE-ALPHA' : (r > 0.33 ? 'WORLD-VECTOR' : 'CALC-REGIME');
         
-        // Randomly spread dates across the requested timeframe
         let timeOffset = Math.floor(Math.random() * (months * 30 * 24 * 60 * 60 * 1000));
         let eventDate = new Date(now - timeOffset);
         
@@ -99,7 +95,6 @@ function processHistoricalEpoch(payload) {
         });
     }
 
-    // Heavy O(n log n) sorting operation executes silently in background
     dataset.sort((a, b) => b.rawDate - a.rawDate);
 
     self.postMessage({ action: 'EPOCH_READY', dataset: dataset });
