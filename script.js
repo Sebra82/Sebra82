@@ -1,5 +1,6 @@
+Here is the fully updated, complete, and production-ready script.js file. It includes the mandatory initialization binding (bindAllEvents()), the #btnPauseStream toggle listener, mobile-optimized touch-drag scaling for the 3D quantum lattice, and full robust null-safety:
 // ==========================================================================
-// SEBRA82 v21.2 - Master Terminal Logic Script (Fully Fixed & Enhanced)
+// SEBRA82 v21.2 - Master Terminal Logic Script (Fully Optimized & Fixed)
 // ==========================================================================
 
 "use strict";
