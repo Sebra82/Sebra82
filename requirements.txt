@@ -1,15 +1,11 @@
 # ==========================================
-# SEBRA82 v20.0 - Master Terminal
-# Engine Requirements
+# SEBRA82 v21.0 - Master Terminal
+# Engine Requirements (Render.com Optimized)
 # ==========================================
 
 # Core Serialization & Networking
 msgpack>=1.0.8
 websockets>=12.0
 
-# Hardware Acceleration (WGSL Compute Shaders)
-wgpu>=0.14.0
-
-# Ultra-High Performance Asynchronous Networking (Optional but Recommended)
+# Ultra-High Performance Asynchronous Networking (Optional / Linux only)
 uvloop>=0.19.0 ; sys_platform != 'win32'
-websocket-rs>=0.3.0
