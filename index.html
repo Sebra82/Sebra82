@@ -1,14 +1,9 @@
-Here is the fully upgraded SEBRA82 v17.1 (Dynamic Quantum Lattice).
-What Was Fixed:
- * The Static Lattice Fix: In previous builds, if the WebSocket connection initialized or received a static array, the 3D core would lock up and stop animating. The renderAtom() engine has been rewritten to run a fully autonomous client-side quantum procedural loop. The core nucleus, inner orbital rings, and outer valence lattice now pulse, twist, and breathe dynamically at 60 FPS regardless of network status.
- * Fluid Rotational Momentum: Inertia and easing (lerping) have been retuned so that when you drag or pinch-zoom the 3D lattice, it responds instantly with buttery-smooth physics.
-Copy and paste this master file directly into your index.html.
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SEBRA82 v17.1 - Quantum Lattice Aegis</title>
+    <title>SEBRA82 v18.1 - Ultra-Intuitive Aegis Master Terminal</title>
     
     <!-- Core Cryptography and Zero-Copy Serialization Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
@@ -88,7 +83,7 @@ Copy and paste this master file directly into your index.html.
         .close-chip { color: var(--crimson-red); font-weight: 700; font-size: 0.6rem; cursor: pointer; }
 
         /* ==========================================================================
-           5. SMART AI NAVIGATOR CHAT & GHOST TEXT
+           5. SMART AI NAVIGATOR CHAT & FLAWLESS GHOST TEXT
            ========================================================================== */
         .quick-guide-box { background: rgba(0, 243, 255, 0.03); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; font-family: var(--font-mono); font-size: 0.55rem; color: var(--text-main); display: flex; flex-direction: column; gap: 8px; }
         .quick-guide-header { display: flex; justify-content: space-between; align-items: center; color: var(--neon-cyan); font-weight: bold; text-transform: uppercase; cursor: pointer; }
@@ -106,7 +101,11 @@ Copy and paste this master file directly into your index.html.
         .ai-chat-input-row { display: flex; gap: 6px; position: relative; }
         .input-ghost-container { position: relative; flex: 1; height: 30px; background: #1e2a40; border: 1px solid rgba(192, 132, 252, 0.4); border-radius: 4px; overflow: hidden; }
         .ai-chat-input, .ghost-input-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent; padding: 6px 10px; font-size: 0.55rem; font-family: var(--font-mono); }
+        
+        /* User text input is fully visible */
         .ai-chat-input { color: #fff; border: none; outline: none; z-index: 2; }
+        
+        /* Ghost text completely transparent on left, showing purple suggestion on right */
         .ghost-input-overlay { color: transparent; pointer-events: none; z-index: 1; display: flex; align-items: center; white-space: pre; overflow: hidden; }
         .ghost-match { color: rgba(192, 132, 252, 0.9); text-shadow: 0 0 5px rgba(192,132,252,0.5); }
 
@@ -279,7 +278,7 @@ Copy and paste this master file directly into your index.html.
 
     <!-- Main Header Toolbar -->
     <div class="widget-header">
-        <div class="brand-title">⚡ <span>SEBRA82 v17.1</span> Quantum Lattice Aegis</div>
+        <div class="brand-title">⚡ <span>SEBRA82 v18.1</span> Ultra-Intuitive Aegis</div>
         <div class="header-actions">
             <button class="top-btn btn-rand" id="btnGenRandom">🎲 Generate Noise</button>
             <button class="top-btn btn-save" id="btnSaveState">💾 Save State</button>
@@ -732,7 +731,7 @@ Copy and paste this master file directly into your index.html.
 
 
     /* ==========================================================================
-       AI SMART TUTOR & GHOST CHAT PARSER
+       AI SMART TUTOR & GHOST CHAT PARSER (NO LEFT BACKGROUND TEXT)
        ========================================================================== */
     window.AI = {
         currentPrediction: "",
@@ -772,6 +771,7 @@ Copy and paste this master file directly into your index.html.
             
             if (!this.fullMatchedPhrase) this.acceptedGhostChars = 0;
             
+            // Explicitly transparent left side to completely prevent background white text duplication
             let overlayHTML = `<span style="color: transparent;">${window.UTILS.escapeHtml(val)}</span>`;
             if (this.currentPrediction) {
                 overlayHTML += `<span class="ghost-match">${window.UTILS.escapeHtml(this.currentPrediction)}</span>`;
@@ -1306,6 +1306,43 @@ Copy and paste this master file directly into your index.html.
                 waveCtx.strokeStyle = `rgba(192, 132, 252, ${window.GLOBALS.extractionHighlight})`; waveCtx.setLineDash([4, 4]); waveCtx.strokeRect(hx, 0, hw, h); waveCtx.setLineDash([]); 
                 window.GLOBALS.extractionHighlight -= 0.01; 
             }
+        }
+
+        static renderPhaseSpace(canvasId, buffer) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+            
+            ctx.fillStyle = '#010204';
+            ctx.fillRect(0, 0, w, h);
+            this.drawGrid(ctx, w, h, 'rgba(126, 231, 135, 0.04)');
+            
+            if (buffer.length < 3) return;
+            
+            ctx.strokeStyle = '#7ee787';
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            
+            let xMin = 0, xMax = 100, yMin = -20, yMax = 20;
+            for (let i = 1; i < buffer.length; i++) {
+                let pos = buffer[i];
+                let vel = buffer[i] - buffer[i-1];
+                let cx = ((pos - xMin) / (xMax - xMin)) * w;
+                let cy = h - (((vel - yMin) / (yMax - yMin)) * h);
+                if (i === 1) ctx.moveTo(cx, cy);
+                else ctx.lineTo(cx, cy);
+            }
+            ctx.stroke();
+            
+            ctx.fillStyle = '#00f3ff';
+            ctx.beginPath();
+            let lastPos = buffer[buffer.length-1];
+            let lastVel = buffer[buffer.length-1] - buffer[buffer.length-2];
+            let lcx = ((lastPos - xMin) / (xMax - xMin)) * w;
+            let lcy = h - (((lastVel - yMin) / (yMax - yMin)) * h);
+            ctx.arc(lcx, lcy, 3, 0, Math.PI * 2);
+            ctx.fill();
         }
 
         static renderDataGraphs() {
