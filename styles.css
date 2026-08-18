@@ -1,8 +1,4 @@
-Here is the fully upgraded, polished, and optimized version of your styles.css file.
-Key Upgrades Applied:
- * Grid Row Bounding (minmax(0, 1fr)): Upgraded .mobile-stack rows to use minmax(0, 1fr) instead of a fixed 1fr. This permanently fixes the canvas height-collapse bug, ensuring the 3D quantum lattice and charts render instantly with correct dimensions.
- * GPU Hardware Acceleration: Added will-change and transform: translateZ(0) hints to panel cards and canvas wrappers for butter-smooth 60 FPS transitions and drag animations.
- * Enhanced Interactive Feedback: Refined hover states, active states, and focus rings across buttons, tabs, and range sliders to maximize tactile responsiveness.
+Here is your fully upgraded and polished styles.css file with the mobile thumb-friendly touch targets and padding enhancements appended cleanly to the bottom:
 /* ==========================================================================
    SEBRA82 v21.1 - Upgraded Institutional Stylesheet
    ========================================================================== */
@@ -655,5 +651,35 @@ input[type="range"]::-webkit-slider-thumb {
     display: flex; 
     flex-direction: column; 
     gap: 2px; 
+}
+
+/* ==========================================================================
+   Mobile Thumb-Friendly Touch Targets & Padding Upgrades
+   ========================================================================== */
+@media (max-width: 899px) {
+    .top-btn, .ai-prompt-btn, .action-btn {
+        padding: 8px 14px;
+        font-size: 0.65rem;
+        min-height: 38px;
+    }
+    
+    .cat-chip {
+        padding: 6px 10px;
+        font-size: 0.55rem;
+    }
+
+    .ai-wrapper {
+        height: 42px;
+    }
+
+    .ai-chat-input, .ghost-overlay {
+        font-size: 0.7rem;
+        line-height: 32px;
+    }
+
+    .ai-btn-submit {
+        padding: 0 14px;
+        font-size: 0.65rem;
+    }
 }
 
