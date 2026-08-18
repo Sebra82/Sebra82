@@ -1,6 +1,5 @@
-Here is the fully updated, complete, and production-ready script.js file. It includes the mandatory initialization binding (bindAllEvents()), the #btnPauseStream toggle listener, mobile-optimized touch-drag scaling for the 3D quantum lattice, and full robust null-safety:
 // ==========================================================================
-// SEBRA82 v21.2 - Master Terminal Logic Script (Fully Optimized & Fixed)
+// SEBRA82 v21.2 - Master Terminal Logic Script (Production Render WebSocket)
 // ==========================================================================
 
 "use strict";
@@ -83,7 +82,7 @@ class SebraNetwork {
     constructor() { this.socket = null; }
     connect(hashKey, tier) {
         try {
-            this.socket = new WebSocket(`wss://sebra82.onrender.com/?hash=${encodeURIComponent(hashKey)}&tier=${tier}`);
+            this.socket = new WebSocket(`wss://server-py-gq0d.onrender.com/?hash=${encodeURIComponent(hashKey)}&tier=${tier}`);
             this.socket.binaryType = 'arraybuffer';
             this.socket.onopen = () => {
                 const statusBadge = document.getElementById('vault-status');
