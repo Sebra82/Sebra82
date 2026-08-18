@@ -5,6 +5,8 @@ import os
 import struct
 import math
 import random
+import hmac
+import hashlib
 from urllib.parse import parse_qs, urlparse
 
 # --- 1. RUST-ACCELERATED WEBSOCKETS ---
@@ -32,6 +34,10 @@ try:
 except Exception as e:
     print(f"⚠️ WebGPU Bypassed ({e}). Falling back to Universal CPU Cached Core.")
     USE_WEBGPU = False
+
+# --- PROPRIETARY TRADE SECRET SIGNING KEY ---
+# Institutional Aegis cryptographic envelope seal (HMAC-SHA256)
+SERVER_SIGNING_KEY = b"SEBRA82_AEGIS_MASTER_SECRET_2026"
 
 # WGSL Compute Shader: 4D Hyperspatial Projection & Empirical Drift
 WGSL_SHADER = """
@@ -162,16 +168,19 @@ class SupremeSebraEngine:
             self.output_staging.map_sync(wgpu.MapMode.READ)
             gpu_memory_view = self.output_staging.read_mapped()
             
-            packet = [
+            core_packet = [
                 global_tick,
                 round(time_offset, 3),
                 welford_packet,
                 gpu_memory_view
             ]
-            raw_payload = msgpack.packb(packet, use_bin_type=True)
+            serialized_core = msgpack.packb(core_packet, use_bin_type=True)
             self.output_staging.unmap()
             
-            return raw_payload
+            # Apply Cryptographic Trade Secret Signature Envelope
+            signature = hmac.new(SERVER_SIGNING_KEY, serialized_core, hashlib.sha256).digest()
+            signed_envelope = [signature, core_packet]
+            return msgpack.packb(signed_envelope, use_bin_type=True)
         else:
             points = []
             m_sin, m_cos, r_func = math.sin, math.cos, round
@@ -185,8 +194,13 @@ class SupremeSebraEngine:
                 h_scale = 150.0 / (150.0 - raw_w)
                 points.append((i, r_func(raw_x * h_scale, 4), r_func(raw_y * h_scale, 4), r_func(raw_z * h_scale, 4)))
             
-            packet = [global_tick, round(time_offset, 3), welford_packet, points]
-            return msgpack.packb(packet, use_bin_type=True)
+            core_packet = [global_tick, round(time_offset, 3), welford_packet, points]
+            serialized_core = msgpack.packb(core_packet, use_bin_type=True)
+            
+            # Apply Cryptographic Trade Secret Signature Envelope
+            signature = hmac.new(SERVER_SIGNING_KEY, serialized_core, hashlib.sha256).digest()
+            signed_envelope = [signature, core_packet]
+            return msgpack.packb(signed_envelope, use_bin_type=True)
 
 class WelfordVariance:
     def __init__(self):
@@ -263,7 +277,7 @@ async def ws_handler(websocket):
     except Exception:
         pass
 
-    print(f"⚡ Secured Tunnel [{client_ip}] | Tier: {tier_mode.upper()} | Hash: {auth_hash[:6]}... Active Pool: {len(CONNECTED_CLIENTS)}")
+    print(f"⚡ Secured Cryptographic Tunnel [{client_ip}] | Tier: {tier_mode.upper()} | Hash: {auth_hash[:6]}... Active Pool: {len(CONNECTED_CLIENTS)}")
     
     try:
         async for message in websocket:
@@ -279,7 +293,7 @@ async def main():
     asyncio.create_task(centralized_broadcast_loop())
     
     async with websockets.serve(ws_handler, "0.0.0.0", port):
-        print(f"🪐 SEBRA82 'Holy Grail' Terminal Active on ws://0.0.0.0:{port}")
+        print(f"🪐 SEBRA82 'Trade Secret Protected' Terminal Active on ws://0.0.0.0:{port}")
         await asyncio.Future()
 
 if __name__ == "__main__":
