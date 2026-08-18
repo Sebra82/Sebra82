@@ -1,9 +1,6 @@
-The visual clipping at the top and the lack of proper mobile spacing seen in your screenshot are caused by two things:
- * The viewport height calculation (100vh) failing to account for mobile browser UI address bars and safe areas (notches/dynamic islands).
- * Tight mobile media query rules that leave cards squished when stacked vertically.
-Here is the fully upgraded, professional-grade fix for your styles.css. It incorporates dynamic viewport units (100dvh), safe area padding (env(safe-area-inset-top)), improved mobile spacing, and clean touch-target boundaries so everything looks centered, professional, and fully interactive.
+Here is the complete, production-ready styles.css file incorporating all layout fixes, mobile safe-area padding (env(safe-area-inset-top)), dynamic viewport scaling (100dvh), and professional touch targets:
 /* ==========================================================================
-   SEBRA82 v21.3 - Professional Institutional Stylesheet (Mobile Optimized)
+   SEBRA82 v21.2 - Professional Institutional Stylesheet (Mobile Optimized)
    ========================================================================== */
 
 :root {
@@ -441,7 +438,7 @@ html, body {
     position: relative; 
     width: 100%; 
     flex: 1; 
-    min-height: 140px; /* Ensures minimum interactive space for touch/mouse */
+    min-height: 140px; 
     background: radial-gradient(circle at center, #0a1128 0%, #010204 100%); 
     border-radius: 6px; 
     border: 1px solid rgba(0, 243, 255, 0.25); 
