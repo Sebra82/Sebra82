@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -178,8 +178,8 @@
         <div class="auth-desc">Aegis Protection Protocol Active. Enter license hash or launch interactive sandbox.</div>
         <div id="authErrorDisplay"></div>
         <input type="password" class="auth-input" id="licenseKeyInput" placeholder="Enter License Hash Key...">
-        <button id="btnAuthLicense" class="action-btn">Authenticate & Unlock</button>
-        <button id="btnAuthDemo" class="action-btn btn-secondary">Launch Sandbox (Demo Mode)</button>
+        <button type="button" id="btnAuthLicense" class="action-btn">Authenticate & Unlock</button>
+        <button type="button" id="btnAuthDemo" class="action-btn btn-secondary">Launch Sandbox (Demo Mode)</button>
     </div>
 </div>
 
@@ -188,8 +188,8 @@
     <div class="widget-header">
         <div class="brand-title">⚡ <span>SEBRA82 v19.5</span> Quantum Terminal</div>
         <div class="header-actions">
-            <button class="top-btn btn-rand" id="btnGenRandom" data-guide="Generates a fresh deterministic noise epoch across the entire state vector.">🎲 Noise</button>
-            <button class="top-btn btn-reset" id="btnResetView" data-guide="Restores the primary Zero-Scroll 3x2 grid layout.">↺ Reset Layout</button>
+            <button type="button" class="top-btn btn-rand" id="btnGenRandom" data-guide="Generates a fresh deterministic noise epoch across the entire state vector.">🎲 Noise</button>
+            <button type="button" class="top-btn btn-reset" id="btnResetView" data-guide="Restores the primary Zero-Scroll 3x2 grid layout.">↺ Reset Layout</button>
             <div class="node-badge" id="vault-status">VAULT: STANDBY</div>
         </div>
     </div>
@@ -201,15 +201,15 @@
                 <div class="ghost-overlay" id="ghostOverlay"></div>
                 <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Command AI (e.g. 'run benchmark', 'extract noise')..." autocomplete="off" spellcheck="false">
             </div>
-            <button class="ai-btn-submit" id="btnSubmitAiChat" data-guide="Executes natural language AI command.">Exec</button>
+            <button type="button" class="ai-btn-submit" id="btnSubmitAiChat" data-guide="Executes natural language AI command.">Exec</button>
         </div>
         <div class="ai-prompt-bar">
-            <button class="ai-prompt-btn" data-target="cardAtom" data-guide="Navigates directly to the 3D Molecular Lattice Core.">⚛️ Lattice</button>
-            <button class="ai-prompt-btn" data-target="cardFin" data-guide="Navigates directly to the Calculus & Math Studio.">📈 Maths</button>
-            <button class="ai-prompt-btn" data-target="cardWave" data-guide="Navigates directly to the Predictive Markov Streams.">🌊 Noise</button>
-            <button class="ai-prompt-btn" data-target="cardQuery" data-guide="Navigates directly to the live Data Ledger.">🗃️ Ledger</button>
-            <button class="ai-prompt-btn" data-target="cardTools" data-guide="Navigates directly to the Workspace Vault.">📂 Vault</button>
-            <button class="ai-prompt-btn" data-target="cardSummary" data-guide="Navigates directly to the Executive Insights Briefing.">📊 Exec Summary</button>
+            <button type="button" class="ai-prompt-btn" data-target="cardAtom" data-guide="Navigates directly to the 3D Molecular Lattice Core.">⚛️ Lattice</button>
+            <button type="button" class="ai-prompt-btn" data-target="cardFin" data-guide="Navigates directly to the Calculus & Math Studio.">📈 Maths</button>
+            <button type="button" class="ai-prompt-btn" data-target="cardWave" data-guide="Navigates directly to the Predictive Markov Streams.">🌊 Noise</button>
+            <button type="button" class="ai-prompt-btn" data-target="cardQuery" data-guide="Navigates directly to the live Data Ledger.">🗃️ Ledger</button>
+            <button type="button" class="ai-prompt-btn" data-target="cardTools" data-guide="Navigates directly to the Workspace Vault.">📂 Vault</button>
+            <button type="button" class="ai-prompt-btn" data-target="cardSummary" data-guide="Navigates directly to the Executive Insights Briefing.">📊 Exec Summary</button>
         </div>
     </div>
 
@@ -223,9 +223,9 @@
                 <span class="cat-chip cat-sci" data-atom-mode="sci" data-guide="Configures Lattice to Science Mode (Organic Spheres, Sine Wave Breathing).">Science</span>
                 <span class="cat-chip cat-world" data-atom-mode="world" data-guide="Configures Lattice to World Mode (Chaotic Phase Space, High Velocity).">World</span>
             </div>
-            <div class="panel-title" data-toggle-card="cardAtom" data-guide="Maximizes the 3D Core to full screen.">
+            <div class="panel-title" data-guide="Maximizes the 3D Core to full screen.">
                 <span>1. 3D Quantum Lattice Core</span>
-                <button class="pin-btn" id="pinBtn_cardAtom">⚡ Maximize</button>
+                <button type="button" class="pin-btn" id="pinBtn_cardAtom">⚡ Maximize</button>
             </div>
             <div class="section-summary-preview">
                 <span>Status: <strong>Active</strong> | Nodes: <strong id="nodeCountLabel">128</strong></span>
@@ -247,9 +247,9 @@
             <div class="section-category-bar">
                 <span class="cat-chip cat-calc">Calculus</span><span class="cat-chip cat-fin">Pricing</span>
             </div>
-            <div class="panel-title" data-toggle-card="cardFin" data-guide="Maximizes the Math Studio.">
+            <div class="panel-title" data-guide="Maximizes the Math Studio.">
                 <span>2. Calculus & Modeling Studio</span>
-                <button class="pin-btn" id="pinBtn_cardFin">⚡ Maximize</button>
+                <button type="button" class="pin-btn" id="pinBtn_cardFin">⚡ Maximize</button>
             </div>
             <div class="section-summary-preview">
                 <span>Model: <strong style="color:var(--accent-purple);">Hilbert State</strong> | Damping: <strong id="sumDamping">1.45x</strong></span>
@@ -258,8 +258,8 @@
                 <div class="math-dashboard">
                     <div class="math-interactive-card">
                         <div style="display:flex; gap: 6px;">
-                            <button class="math-mode-btn active" id="modeBtnQuantum">⚛ Hilbert Space</button>
-                            <button class="math-mode-btn" id="modeBtnFinancial">📈 Alpha Pricing</button>
+                            <button type="button" class="math-mode-btn active" id="modeBtnQuantum">⚛ Hilbert Space</button>
+                            <button type="button" class="math-mode-btn" id="modeBtnFinancial">📈 Alpha Pricing</button>
                         </div>
                         <div class="math-live-readout" style="margin-top: 6px;">
                             <span id="mathLiveTitle">Normalized Tensor Vector:</span>
@@ -287,9 +287,9 @@
             <div class="section-category-bar">
                 <span class="cat-chip cat-calc">Signal</span><span class="cat-chip cat-sci">Markov Stream</span>
             </div>
-            <div class="panel-title" data-toggle-card="cardWave" data-guide="Maximizes Telemetry Studio.">
+            <div class="panel-title" data-guide="Maximizes Telemetry Studio.">
                 <span>3. Noise & Predictive Studio</span>
-                <button class="pin-btn" id="pinBtn_cardWave">⚡ Maximize</button>
+                <button type="button" class="pin-btn" id="pinBtn_cardWave">⚡ Maximize</button>
             </div>
             <div class="section-summary-preview">
                 <span>Anomalies: <strong id="sumSubPoints">0</strong> | Status: <strong>Tracking</strong></span>
@@ -303,6 +303,10 @@
                     <canvas id="predictiveForecastCanvas"></canvas>
                     <div class="hud-tag" style="color:var(--accent-purple);">📉 MARKOV CONE vs ACTUAL TRAJECTORY</div>
                 </div>
+                <div class="canvas-box" style="border-color: var(--accent-purple);">
+                    <canvas id="detailedAnomalyCanvas"></canvas>
+                    <div class="hud-tag" id="detailPlotTag" style="color:var(--accent-purple); border-color:var(--accent-purple);">⚠️ EXTRACTED ISOLATION PLOT</div>
+                </div>
                 <div class="canvas-box" style="border-color: rgba(255, 51, 68, 0.5);">
                     <canvas id="timeSeriesAnomalyCanvas"></canvas>
                     <div class="hud-tag" style="color:var(--crimson-red);">WELFORD ACCUMULATOR MAP</div>
@@ -315,9 +319,9 @@
             <div class="section-category-bar">
                 <span class="cat-chip cat-world">World</span><span class="cat-chip cat-fin">Finance</span>
             </div>
-            <div class="panel-title" data-toggle-card="cardQuery" data-guide="Maximizes the Data Ledger.">
+            <div class="panel-title" data-guide="Maximizes the Data Ledger.">
                 <span>4. Query & Ledger Studio</span>
-                <button class="pin-btn" id="pinBtn_cardQuery">⚡ Maximize</button>
+                <button type="button" class="pin-btn" id="pinBtn_cardQuery">⚡ Maximize</button>
             </div>
             <div class="section-summary-preview">
                 <span>Records: <strong id="sumQueryCount">0 rows</strong> | Filter: <strong id="filterStateLabel">ALL</strong></span>
@@ -338,8 +342,8 @@
                     </table>
                 </div>
                 <div class="btn-row">
-                    <button id="btnArchiveData" class="action-btn" data-guide="Archive to physical workspace.">📂 Archive</button>
-                    <button id="btnDownloadExport" class="action-btn" style="background:rgba(192, 132, 252, 0.2); color:var(--accent-purple);" data-guide="Export CSV to local machine.">📥 CSV</button>
+                    <button type="button" id="btnArchiveData" class="action-btn" data-guide="Archive to physical workspace.">📂 Archive</button>
+                    <button type="button" id="btnDownloadExport" class="action-btn" style="background:rgba(192, 132, 252, 0.2); color:var(--accent-purple);" data-guide="Export CSV to local machine.">📥 CSV</button>
                 </div>
             </div>
         </div>
@@ -349,15 +353,15 @@
             <div class="section-category-bar">
                 <span class="cat-chip cat-world">Storage</span><span class="cat-chip cat-sci">Telemetry</span>
             </div>
-            <div class="panel-title" data-toggle-card="cardTools" data-guide="Maximizes Virtual Workspace.">
+            <div class="panel-title" data-guide="Maximizes Virtual Workspace.">
                 <span>5. Workspace & Integrations</span>
-                <button class="pin-btn" id="pinBtn_cardTools">⚡ Maximize</button>
+                <button type="button" class="pin-btn" id="pinBtn_cardTools">⚡ Maximize</button>
             </div>
             <div class="section-summary-preview">
                 <span>Path: <strong>/root/datasets</strong> | Status: <strong>Secure</strong></span>
             </div>
             <div class="collapsible-body collapsed" id="secTools">
-                <div class="control-item" style="flex:1;">
+                <div class="control-item" style="flex:1; min-height:0;">
                     <div class="file-explorer-box" style="height:100%;">
                         <div class="explorer-toolbar">
                             <span id="currentPathDisplay" style="font-weight:bold; color:#fff;">📁 /root/datasets/</span>
@@ -369,8 +373,8 @@
                 <div class="control-item" style="border-color: rgba(192, 132, 252, 0.4);">
                     <div class="control-label"><span style="color:var(--accent-purple);">Macro Historical Ingestion:</span></div>
                     <div class="btn-row">
-                        <button id="btnLoad3M" class="action-btn" style="background:rgba(192,132,252,0.1); color:var(--accent-purple);" data-guide="Dump 3 months historical data into ledger.">Load 3M</button>
-                        <button id="btnLoad6M" class="action-btn" style="background:rgba(192,132,252,0.1); color:var(--accent-purple);" data-guide="Dump 6 months historical data into ledger.">Load 6M</button>
+                        <button type="button" id="btnLoad3M" class="action-btn" style="background:rgba(192,132,252,0.1); color:var(--accent-purple);" data-guide="Dump 3 months historical data into ledger.">Load 3M</button>
+                        <button type="button" id="btnLoad6M" class="action-btn" style="background:rgba(192,132,252,0.1); color:var(--accent-purple);" data-guide="Dump 6 months historical data into ledger.">Load 6M</button>
                     </div>
                 </div>
             </div>
@@ -381,13 +385,13 @@
             <div class="section-category-bar">
                 <span class="cat-chip cat-calc">Executive</span><span class="cat-chip cat-sci">Briefing</span>
             </div>
-            <div class="panel-title" data-toggle-card="cardSummary" data-guide="Maximizes Executive Insight Dashboard.">
+            <div class="panel-title" data-guide="Maximizes Executive Insight Dashboard.">
                 <span>⭐ Executive Insights</span>
-                <button class="pin-btn" id="pinBtn_cardSummary">⚡ Maximize</button>
+                <button type="button" class="pin-btn" id="pinBtn_cardSummary">⚡ Maximize</button>
             </div>
             <div class="collapsible-body collapsed" id="secSummary">
                 <div class="btn-row">
-                   <button id="btnAutoSummary" class="action-btn" style="background:var(--neon-cyan); color:#000;" data-guide="AI generates real-time synopsis of system matrix state.">🤖 Generate Executive Highlights</button>
+                   <button type="button" id="btnAutoSummary" class="action-btn" style="background:var(--neon-cyan); color:#000;" data-guide="AI generates real-time synopsis of system matrix state.">🤖 Generate Executive Highlights</button>
                 </div>
                 <div class="summary-grid">
                     <div class="metric-box"><div class="metric-label">Active Nodes</div><div class="metric-value">128</div></div>
@@ -678,7 +682,7 @@
             this.updateInteractiveMathReadout(); 
         },
         updateFin: function(val) { window.GLOBALS.finConfig.baseValue = parseFloat(val); document.getElementById('baseValueReadout').innerText = window.GLOBALS.finConfig.baseValue.toFixed(2); this.updateInteractiveMathReadout(); },
-        updateDamping: function(val) { window.GLOBALS.finConfig.damping = parseFloat(val); document.getElementById('dampingReadout').innerText = window.GLOBALS.finConfig.damping.toFixed(2); document.getElementById('sumDamping').innerText = window.GLOBALS.finConfig.damping.toFixed(2) + "x"; this.updateInteractiveMathReadout(); },
+        updateDamping: function(val) { window.GLOBALS.finConfig.damping = parseFloat(val); document.getElementById('dampingReadout').innerText = window.GLOBALS.finConfig.damping.toFixed(2); this.updateInteractiveMathReadout(); },
         updateInteractiveMathReadout: function() {
             let resElem = document.getElementById('mathLiveResult');
             let liveNoise = window.GLOBALS.waveBuffer[window.GLOBALS.waveBuffer.length - 1] || 50;
@@ -710,8 +714,6 @@
        ACTIONS & EXTRACTIONS
        ========================================================================== */
     window.ACTIONS = {
-        simulateIntervention: function(mag) { window.GLOBALS.activeIntervention = mag; window.UTILS.logSys(`Markov trajectory shock simulated (${mag > 0 ? '+' : ''}${mag}).`); },
-        clearInterventions: function() { window.GLOBALS.activeIntervention = 0.0; },
         generateRandomDataEpoch: function() { window.GLOBALS.waveBuffer = window.GLOBALS.waveBuffer.map(() => Math.floor(Math.random() * 60) + 20); window.GLOBALS.timeSeriesBuffer = []; window.DATA_INSIGHT.renderLedger(); },
         extractAndInjectAnomalies: function() {
             let selection = window.GLOBALS.waveBuffer.slice(-45); window.GLOBALS.extractionHighlight = 1.0;
@@ -733,14 +735,6 @@
             let totalSpikes = window.GLOBALS.timeSeriesBuffer.filter(i => i.spike).length;
             document.getElementById('sumMetricSpikes').innerText = totalSpikes;
             if(isSpike) { window.DATA_INSIGHT.renderLedger(); }
-        },
-        autoGenerateExecSummary: function() {
-            let totalSpikes = window.GLOBALS.timeSeriesBuffer.filter(i => i.spike).length;
-            let html = `🏆 <strong>Executive Briefing (${new Date().toLocaleTimeString()}):</strong><br>`;
-            html += `• Quantum lattice operating at sustained 60 FPS matrix fidelity.<br>`;
-            html += `• Welford statistical anomaly detector identified <strong>${totalSpikes}</strong> regime events.<br>`;
-            html += `• Current deterministic calculation latency benchmarked at &lt; 0.05ms on single CPU core.`;
-            document.getElementById('execSummaryText').innerHTML = html;
         }
     };
 
@@ -751,7 +745,8 @@
         static drawGrid(ctx, w, h, color) { ctx.strokeStyle = color; ctx.lineWidth = 0.5; ctx.beginPath(); for(let x=0; x<w; x+=30) { ctx.moveTo(x, 0); ctx.lineTo(x, h); } for(let y=0; y<h; y+=20) { ctx.moveTo(0, y); ctx.lineTo(w, y); } ctx.stroke(); }
 
         static renderAtom() {
-            if(!atomCanvas.width || !atomCanvas.height) return;
+            const atomCanvas = document.getElementById('atom3DCanvas'); const atomCtx = atomCanvas ? atomCanvas.getContext('2d') : null;
+            if(!atomCtx || !atomCanvas.width || !atomCanvas.height) return;
             const w = atomCanvas.width, h = atomCanvas.height; atomCtx.clearRect(0, 0, w, h); this.drawGrid(atomCtx, w, h, 'rgba(0, 243, 255, 0.04)');
             let cx = w / 2, cy = h / 2; 
 
@@ -761,13 +756,12 @@
             targetAtomRotX = window.UTILS.lerp(targetAtomRotX, currentAtomRotX, 0.1);
             targetAtomRotY = window.UTILS.lerp(targetAtomRotY, currentAtomRotY, 0.1);
 
-            let mode = window.GLOBALS.atomMode; // 'calc', 'sci', 'world'
+            let mode = window.GLOBALS.atomMode; 
 
-            // Dynamic rotation speeds based on mode
             if (!isDraggingAtom) { 
                 if(mode === 'world') { currentAtomRotY += 0.008; currentAtomRotX += 0.004; }
                 else if(mode === 'sci') { currentAtomRotY += 0.001; currentAtomRotX -= 0.001; }
-                else { currentAtomRotY += 0.003; currentAtomRotX += 0.001; } // Calc
+                else { currentAtomRotY += 0.003; currentAtomRotX += 0.001; } 
             }
             
             if (window.GLOBALS.serverMatrix.length === 0 && !window.GLOBALS.isStreamPaused) {
@@ -782,17 +776,15 @@
 
             let localNodes = activeMatrix.map(n => {
                 let r = n.baseR;
-                
-                // Dynamic physics based on active mode tab
                 if (mode === 'sci') {
-                    if(n.type === 'core') r += Math.sin(window.GLOBALS.globalTick * 0.05) * 8; // Deep breathing
+                    if(n.type === 'core') r += Math.sin(window.GLOBALS.globalTick * 0.05) * 8; 
                     if(n.type === 'inner') r += Math.sin(window.GLOBALS.globalTick*0.03 + n.id)*12;
                     if(n.type === 'valence') r += Math.cos(n.id*0.2 + window.GLOBALS.timeOffset)*15;
                 } else if (mode === 'world') {
-                    if(n.type === 'core') r += Math.random() * 4; // Chaotic jitter
+                    if(n.type === 'core') r += Math.random() * 4; 
                     if(n.type === 'inner') r += Math.tan(window.GLOBALS.globalTick*0.01 + n.id)*2;
-                    if(n.type === 'valence') r += Math.sin(n.id*0.8 + window.GLOBALS.timeOffset*3)*20; // High velocity waves
-                } else { // Calc
+                    if(n.type === 'valence') r += Math.sin(n.id*0.8 + window.GLOBALS.timeOffset*3)*20; 
+                } else { 
                     if(n.type === 'core') r += Math.sin(window.GLOBALS.globalTick * 0.08) * 4;
                     if(n.type === 'inner') r += Math.sin(window.GLOBALS.globalTick*0.05 + n.id)*6;
                     if(n.type === 'valence') r += (window.GLOBALS.waveBuffer[window.GLOBALS.waveBuffer.length-1] - 50) * 0.4 + Math.sin(n.id*0.3 + window.GLOBALS.timeOffset)*8;
@@ -805,7 +797,6 @@
                     ox = r * Math.sin(n.phi) * Math.cos(n.theta); oy = r * Math.sin(n.phi) * Math.sin(n.theta); oz = r * Math.cos(n.phi);
                 }
 
-                // Dynamic Colors based on mode
                 let color, glow;
                 if (mode === 'sci') {
                     color = n.isCore ? '#ffffff' : (n.type === 'inner' ? '#7ee787' : '#00f3ff');
@@ -813,11 +804,10 @@
                 } else if (mode === 'world') {
                     color = n.isCore ? '#ffffff' : (n.type === 'inner' ? '#f0883e' : '#ff3344');
                     glow = n.isCore ? 'rgba(255,255,255,0.9)' : (n.type === 'inner' ? 'rgba(240,136,62,0.8)' : 'rgba(255,51,68,0.8)');
-                } else { // Calc
+                } else { 
                     color = n.isCore ? '#ffffff' : (n.type === 'inner' ? '#00f3ff' : '#c084fc');
                     glow = n.isCore ? 'rgba(255,255,255,0.9)' : (n.type === 'inner' ? 'rgba(0,243,255,0.8)' : 'rgba(192,132,252,0.8)');
                 }
-
                 return { ox: ox, oy: oy, oz: oz, type: n.type, isCore: n.type === 'core', id: n.id, color: color, glow: glow };
             });
 
@@ -877,11 +867,9 @@
                 
                 let s = Math.max(2.0, n.size * 2);
                 if (mode === 'sci') {
-                    // Render organic spheres
                     atomCtx.beginPath(); atomCtx.arc(n.px, n.py, s/2, 0, Math.PI*2); atomCtx.fill();
                     atomCtx.fillStyle = '#fff'; atomCtx.beginPath(); atomCtx.arc(n.px, n.py, s/4, 0, Math.PI*2); atomCtx.fill();
                 } else {
-                    // Render structural cubes (Calc & World)
                     atomCtx.fillRect(n.px - s/2, n.py - s/2, s, s);
                     atomCtx.fillStyle = '#fff'; atomCtx.fillRect(n.px - s/4, n.py - s/4, s/2, s/2);
                 }
@@ -890,7 +878,8 @@
         }
 
         static updateWaveOptics() {
-            if(!waveCanvas.width || !waveCanvas.height) return;
+            const waveCanvas = document.getElementById('secureSimCanvas'); const waveCtx = waveCanvas ? waveCanvas.getContext('2d') : null;
+            if(!waveCtx || !waveCanvas.width || !waveCanvas.height) return;
             if (!window.GLOBALS.isStreamPaused) { 
                 window.GLOBALS.globalTick++; window.GLOBALS.timeOffset += 0.05; 
                 let liveVal = Math.min(90, Math.max(15, 50 + Math.sin(window.GLOBALS.globalTick * 0.04 + window.GLOBALS.timeOffset * 2) * 22 * window.GLOBALS.burstMultiplier + (Math.random() * 6 - 3)));
@@ -922,6 +911,10 @@
         }
 
         static renderDataGraphs() {
+            const predictiveCanvas = document.getElementById('predictiveForecastCanvas'); const predictiveCtx = predictiveCanvas ? predictiveCanvas.getContext('2d') : null;
+            const detailCanvas = document.getElementById('detailedAnomalyCanvas'); const detailCtx = detailCanvas ? detailCanvas.getContext('2d') : null;
+            const timeSeriesCanvas = document.getElementById('timeSeriesAnomalyCanvas'); const timeSeriesCtx = timeSeriesCanvas ? timeSeriesCanvas.getContext('2d') : null;
+
             if (predictiveCtx && predictiveCanvas.width > 0) { 
                 predictiveCtx.clearRect(0, 0, predictiveCanvas.width, predictiveCanvas.height); 
                 let h = predictiveCanvas.height, w = predictiveCanvas.width;
@@ -942,13 +935,8 @@
                 for(let i=0; i<window.GLOBALS.waveBuffer.length - 1; i++) {
                     let x = i * pst, y = h - (window.GLOBALS.waveBuffer[i] * 0.8 / 100) * h;
                     let nextX = (i+1) * pst, nextY = h - (window.GLOBALS.waveBuffer[i+1] * 0.8 / 100) * h;
-                    if(window.GLOBALS.activeIntervention !== 0.0 && i >= historyCutoff) {
-                        y -= (Math.log(i - historyCutoff + 1) * window.GLOBALS.activeIntervention * 12);
-                        nextY -= (Math.log(i + 1 - historyCutoff + 1) * window.GLOBALS.activeIntervention * 12);
-                    }
                     predictiveCtx.quadraticCurveTo(x, y, (x + nextX) / 2, (y + nextY) / 2);
                 }
-                if (window.GLOBALS.activeIntervention !== 0.0) { predictiveCtx.strokeStyle = window.GLOBALS.activeIntervention > 0 ? '#7ee787' : '#ff3344'; }
                 predictiveCtx.stroke();
             }
 
@@ -966,41 +954,62 @@
                 detailCtx.fillStyle = '#fff'; 
                 window.GLOBALS.detailedBuffer.forEach((val, idx) => { detailCtx.beginPath(); detailCtx.arc(idx * dst, detailCanvas.height - (val / 100) * detailCanvas.height, 2.5, 0, Math.PI*2); detailCtx.fill(); }); 
             }
+
+            if (timeSeriesCtx && timeSeriesCanvas.width > 0 && window.GLOBALS.timeSeriesBuffer.length > 0) { 
+                let w = timeSeriesCanvas.width, h = timeSeriesCanvas.height;
+                timeSeriesCtx.clearRect(0, 0, w, h);
+                let displayData = window.GLOBALS.timeSeriesBuffer.slice(-30); 
+                let tst = w / Math.max(1, displayData.length - 1); 
+                timeSeriesCtx.strokeStyle = '#7ee787'; timeSeriesCtx.lineWidth = 1.8; timeSeriesCtx.beginPath(); 
+                timeSeriesCtx.moveTo(0, h - (displayData[0].val / 100) * h);
+                for(let idx=0; idx < displayData.length - 1; idx++) {
+                    let x = idx * tst, y = h - (displayData[idx].val / 100) * h; 
+                    let nextX = (idx+1) * tst, nextY = h - (displayData[idx+1].val / 100) * h;
+                    timeSeriesCtx.quadraticCurveTo(x, y, (x + nextX) / 2, (y + nextY) / 2);
+                } 
+                timeSeriesCtx.stroke(); 
+                displayData.forEach((item, idx) => { 
+                    if(item.spike) { 
+                        let x = idx * tst, y = h - (item.val / 100) * h; 
+                        timeSeriesCtx.fillStyle = '#ff3344'; timeSeriesCtx.beginPath(); timeSeriesCtx.arc(x, y, 3.5, 0, Math.PI*2); timeSeriesCtx.fill();
+                    } 
+                }); 
+            }
         }
     }
 
     /* ==========================================================================
        POINTER EVENTS & SMOOTH MOLECULAR ZOOM
        ========================================================================== */
-    const atomCanvas = document.getElementById('atom3DCanvas'); const atomCtx = atomCanvas.getContext('2d');
-    const waveCanvas = document.getElementById('secureSimCanvas'); const waveCtx = waveCanvas.getContext('2d');
-    const predictiveCanvas = document.getElementById('predictiveForecastCanvas'); const predictiveCtx = predictiveCanvas.getContext('2d');
-    const detailCanvas = document.getElementById('detailedAnomalyCanvas'); const detailCtx = detailCanvas.getContext('2d');
-    
     let targetAtomRotX = 0.4, targetAtomRotY = 0.2, targetAtomZoom = 1.0;
     let currentAtomRotX = 0.4, currentAtomRotY = 0.2;
     let isDraggingAtom = false, lastX = 0, lastY = 0;
 
-    atomCanvas.addEventListener('pointerdown', (e) => { 
-        isDraggingAtom = true; lastX = e.clientX; lastY = e.clientY; atomCanvas.setPointerCapture(e.pointerId); e.preventDefault(); 
-    });
-    atomCanvas.addEventListener('pointermove', (e) => { 
-        if (isDraggingAtom) { 
-            let dx = (e.clientX - lastX) * 0.012; let dy = (e.clientY - lastY) * 0.012;
-            currentAtomRotY += dx; currentAtomRotX -= dy; lastX = e.clientX; lastY = e.clientY; 
-        } 
-        e.preventDefault(); 
-    });
-    atomCanvas.addEventListener('pointerup', (e) => { isDraggingAtom = false; try { atomCanvas.releasePointerCapture(e.pointerId); } catch(err) {} });
-    atomCanvas.addEventListener('wheel', (e) => { 
-        e.preventDefault(); 
-        let currentS = parseFloat(document.getElementById('atomZoomSlider').value);
-        let newS = Math.max(0.3, Math.min(30.0, currentS + e.deltaY * -0.01));
-        document.getElementById('atomZoomSlider').value = newS; 
-        document.getElementById('atomZoomReadout').innerText = newS.toFixed(1) + "x";
-    }, { passive: false });
+    document.addEventListener("DOMContentLoaded", () => {
+        const atomCanvas = document.getElementById('atom3DCanvas');
+        if(atomCanvas) {
+            atomCanvas.addEventListener('pointerdown', (e) => { 
+                isDraggingAtom = true; lastX = e.clientX; lastY = e.clientY; atomCanvas.setPointerCapture(e.pointerId); e.preventDefault(); 
+            });
+            atomCanvas.addEventListener('pointermove', (e) => { 
+                if (isDraggingAtom) { 
+                    let dx = (e.clientX - lastX) * 0.012; let dy = (e.clientY - lastY) * 0.012;
+                    currentAtomRotY += dx; currentAtomRotX -= dy; lastX = e.clientX; lastY = e.clientY; 
+                } 
+                e.preventDefault(); 
+            });
+            atomCanvas.addEventListener('pointerup', (e) => { isDraggingAtom = false; try { atomCanvas.releasePointerCapture(e.pointerId); } catch(err) {} });
+            atomCanvas.addEventListener('wheel', (e) => { 
+                e.preventDefault(); 
+                let currentS = parseFloat(document.getElementById('atomZoomSlider').value);
+                let newS = Math.max(0.3, Math.min(30.0, currentS + e.deltaY * -0.01));
+                document.getElementById('atomZoomSlider').value = newS; 
+                document.getElementById('atomZoomReadout').innerText = newS.toFixed(1) + "x";
+            }, { passive: false });
+        }
 
-    document.getElementById('atomZoomSlider').addEventListener('input', (e) => { document.getElementById('atomZoomReadout').innerText = parseFloat(e.target.value).toFixed(1) + "x"; });
+        document.getElementById('atomZoomSlider')?.addEventListener('input', (e) => { document.getElementById('atomZoomReadout').innerText = parseFloat(e.target.value).toFixed(1) + "x"; });
+    });
 
     /* ==========================================================================
        EVENT BINDINGS
@@ -1008,12 +1017,10 @@
     function bindAllEvents() {
         window.addEventListener('resize', window.UI.resizeCanvases);
 
-        // Guide bindings
         document.querySelectorAll('[data-guide]').forEach(el => {
             el.addEventListener('click', () => window.GUIDE.show(el.getAttribute('data-guide')));
         });
 
-        // 3D Matrix Mode State Switching
         document.querySelectorAll('#atomTabs .cat-chip').forEach(chip => {
             chip.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -1024,14 +1031,10 @@
             });
         });
 
-        // AI Navigator Mini Prompts
         document.querySelectorAll('.ai-prompt-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                window.UI.toggleMax(btn.getAttribute('data-target'));
-            });
+            btn.addEventListener('click', () => { window.UI.toggleMax(btn.getAttribute('data-target')); });
         });
 
-        // Click maximized cards from the dock
         document.querySelectorAll('.panel-card').forEach(card => {
             card.addEventListener('click', (e) => {
                 if(card.classList.contains('minimized-dock-item')) window.UI.toggleMax(card.id);
@@ -1040,6 +1043,7 @@
 
         document.getElementById('btnAuthLicense')?.addEventListener('click', () => window.UI.authenticateAndLaunch('license'));
         document.getElementById('btnAuthDemo')?.addEventListener('click', () => window.UI.authenticateAndLaunch('demo'));
+        
         document.getElementById('btnGenRandom')?.addEventListener('click', () => window.ACTIONS.generateRandomDataEpoch());
         document.getElementById('btnResetView')?.addEventListener('click', () => window.UI.resetStandardView());
 
@@ -1057,10 +1061,6 @@
         document.getElementById('dampingSlider')?.addEventListener('input', (e) => window.MATH.updateDamping(e.target.value));
 
         document.getElementById('btnPauseStream')?.addEventListener('click', (e) => { e.stopPropagation(); window.ACTIONS.togglePauseStream(); });
-        document.getElementById('btnTriggerBurst')?.addEventListener('click', (e) => { e.stopPropagation(); window.ACTIONS.triggerSpikeBurst(); });
-        document.getElementById('btnSimBull')?.addEventListener('click', (e) => { e.stopPropagation(); window.ACTIONS.simulateIntervention(1.5); });
-        document.getElementById('btnSimBear')?.addEventListener('click', (e) => { e.stopPropagation(); window.ACTIONS.simulateIntervention(-1.5); });
-        document.getElementById('btnClearShock')?.addEventListener('click', (e) => { e.stopPropagation(); window.ACTIONS.clearInterventions(); });
         document.getElementById('secureSimCanvas')?.addEventListener('click', () => window.ACTIONS.extractAndInjectAnomalies());
 
         document.getElementById('filtAll')?.addEventListener('click', () => window.DATA_INSIGHT.setFilter('ALL'));
