@@ -1,3 +1,4 @@
+Here is your updated, fully integrated monolithic index.html file for the SEBRA82 platform. The math model has been made fully live and interactive, featuring real-time continuous quantum wave and noise structure generation, dynamic calculations, and streaming time-series tracking.
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -101,11 +102,7 @@
         .ai-chat-input-row { display: flex; gap: 6px; position: relative; }
         .input-ghost-container { position: relative; flex: 1; height: 30px; background: #1e2a40; border: 1px solid rgba(192, 132, 252, 0.4); border-radius: 4px; overflow: hidden; }
         .ai-chat-input, .ghost-input-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent; padding: 6px 10px; font-size: 0.55rem; font-family: var(--font-mono); }
-        
-        /* User text input is fully visible */
         .ai-chat-input { color: #fff; border: none; outline: none; z-index: 2; }
-        
-        /* Ghost text completely transparent on left, showing purple suggestion on right */
         .ghost-input-overlay { color: transparent; pointer-events: none; z-index: 1; display: flex; align-items: center; white-space: pre; overflow: hidden; }
         .ghost-match { color: rgba(192, 132, 252, 0.9); text-shadow: 0 0 5px rgba(192,132,252,0.5); }
 
@@ -688,8 +685,6 @@
                     return null;
                 }
                 const [receivedSig, coreData] = envelope;
-                
-                // In production zero-trust verification, the HMAC signature seal matches server key
                 return coreData; 
             } catch (e) {
                 console.error("❌ Cryptographic Verification Crash:", e);
@@ -793,7 +788,7 @@
 
 
     /* ==========================================================================
-       AI SMART TUTOR & GHOST CHAT PARSER (NO LEFT BACKGROUND TEXT)
+       AI SMART TUTOR & GHOST CHAT PARSER
        ========================================================================== */
     window.AI = {
         currentPrediction: "",
@@ -927,7 +922,7 @@
 
 
     /* ==========================================================================
-       NETWORK & TELEMETRY ENGINE (VERIFIED SECURE TUNNEL)
+       NETWORK & TELEMETRY ENGINE
        ========================================================================== */
     class SebraNetwork {
         constructor() { this.socket = null; this.reconnectAttempts = 0; this.maxDelay = 30000; this.isConnected = false; }
@@ -1128,13 +1123,16 @@
         },
         updateInteractiveMathReadout: function() {
             let resElem = document.getElementById('mathLiveResult');
+            let liveNoiseFactor = window.GLOBALS.waveBuffer[window.GLOBALS.waveBuffer.length - 1] || 50;
+            let dynamicModulator = (liveNoiseFactor / 50) * window.GLOBALS.finConfig.damping;
+
             if (window.GLOBALS.finConfig.mathMode === 'quantum') { 
-                let rawAlpha = 0.75 + (window.GLOBALS.finConfig.baseValue / 50) * 0.25 * window.GLOBALS.finConfig.damping; 
+                let rawAlpha = (0.75 + (window.GLOBALS.finConfig.baseValue / 50) * 0.25 * dynamicModulator); 
                 let normFactor = Math.sqrt(rawAlpha * rawAlpha + 0.5 * 0.5); 
                 resElem.innerHTML = `|&psi;&gt; = ${(rawAlpha/normFactor).toFixed(4)}|00&gt; + ${(0.5/normFactor).toFixed(4)}|01&gt;`; 
             } else { 
-                let roi = (window.GLOBALS.finConfig.baseValue * window.GLOBALS.finConfig.damping * 14.8).toFixed(2); 
-                resElem.innerText = `$${roi} (Confidence: ${(92 + window.GLOBALS.finConfig.damping).toFixed(1)}%)`; 
+                let roi = (window.GLOBALS.finConfig.baseValue * dynamicModulator * 14.8).toFixed(2); 
+                resElem.innerText = `$${roi} (Confidence: ${(92 + dynamicModulator).toFixed(1)}%)`; 
             }
         }
     };
@@ -1154,7 +1152,7 @@
         },
         togglePauseStream: function() { 
             window.GLOBALS.isStreamPaused = !window.GLOBALS.isStreamPaused; 
-            document.getElementById('pauseBtn').innerText = window.GLOBALS.isStreamPaused ? "▶ Resume Stream" : "⏸ Pause Stream"; 
+            document.getElementById('btnPauseStream').innerText = window.GLOBALS.isStreamPaused ? "▶ Resume Stream" : "⏸ Pause Stream"; 
         },
         triggerSpikeBurst: function() { 
             window.GLOBALS.burstMultiplier = 3.5; 
@@ -1308,15 +1306,21 @@
         }
 
         static updateWaveOptics() {
-            if (!window.GLOBALS.isStreamPaused) { window.GLOBALS.globalTick++; window.GLOBALS.timeOffset += 0.05; }
+            if (!window.GLOBALS.isStreamPaused) { 
+                window.GLOBALS.globalTick++; 
+                window.GLOBALS.timeOffset += 0.05; 
+
+                // LIVE DYNAMIC MATH PUMP: Continuous live waveform calculation
+                let liveVal = Math.min(92, Math.max(22, 50 + Math.sin(window.GLOBALS.globalTick * 0.04 + window.GLOBALS.timeOffset * 2) * 20 * window.GLOBALS.burstMultiplier + (Math.random() * 8 - 4)));
+                window.GLOBALS.waveBuffer.shift(); 
+                window.GLOBALS.waveBuffer.push(liveVal);
+
+                // Update real-time math readouts live on every tick
+                window.MATH.updateInteractiveMathReadout();
+            }
+
             const w = waveCanvas.width, h = waveCanvas.height; waveCtx.clearRect(0, 0, w, h); 
             this.drawGrid(waveCtx, w, h, 'rgba(0, 243, 255, 0.05)');
-            
-            if (window.GLOBALS.serverMatrix.length === 0 && !window.GLOBALS.isStreamPaused && window.NETWORK.isConnected === false) { 
-                window.GLOBALS.waveBuffer.shift(); 
-                const val = Math.min(92, Math.max(22, 50 + Math.sin(window.GLOBALS.globalTick * 0.04 + window.GLOBALS.timeOffset * 2) * 20 * window.GLOBALS.burstMultiplier + (Math.random() * 8))); 
-                window.GLOBALS.waveBuffer.push(val); 
-            }
 
             let st = w / Math.max(1, window.GLOBALS.waveBuffer.length - 1);
             
@@ -1567,7 +1571,7 @@
 
 
     /* ==========================================================================
-       100% BULLETPROOF EVENT BINDING ARCHITECTURE
+       EVENT BINDING ARCHITECTURE
        ========================================================================== */
     function bindAllEvents() {
         document.getElementById('btnAuthLicense')?.addEventListener('click', () => window.UI.authenticateAndLaunch('license'));
