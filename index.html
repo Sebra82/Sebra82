@@ -1,3 +1,4 @@
+Here is the updated index.html file, integrating the single continuous graph for the noise structure and forecasting studio:
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -292,7 +293,7 @@
             </div>
         </div>
 
-        <!-- CARD 3: Noise Studio -->
+        <!-- CARD 3: Noise Studio (UNIFIED CONTINUOUS GRAPH) -->
         <div class="panel-card" id="cardWave">
             <div class="section-category-bar">
                 <span class="cat-chip cat-calc">Signal</span><span class="cat-chip cat-sci">Markov Stream</span>
@@ -306,16 +307,10 @@
             </div>
             <div class="collapsible-body collapsed" id="secWave">
                 <div class="canvas-box" style="cursor: crosshair;">
-                    <canvas id="secureSimCanvas"></canvas>
-                    <div class="hud-tag">🔒 L1 NOISE | CLICK SIGNAL TO EXTRACT</div>
-                </div>
-                <div class="canvas-box" style="border-color: rgba(192, 132, 252, 0.5);">
-                    <canvas id="predictiveForecastCanvas"></canvas>
-                    <div class="hud-tag" style="color:var(--accent-purple);">📉 MARKOV CONE vs ACTUAL TRAJECTORY</div>
-                </div>
-                <div class="canvas-box" style="border-color: rgba(255, 51, 68, 0.5);">
-                    <canvas id="timeSeriesAnomalyCanvas"></canvas>
-                    <div class="hud-tag" style="color:var(--crimson-red);">WELFORD ACCUMULATOR MAP</div>
+                    <canvas id="secureSimCanvas" style="position: absolute; z-index: 1;"></canvas>
+                    <canvas id="predictiveForecastCanvas" style="position: absolute; z-index: 2; pointer-events: none;"></canvas>
+                    <canvas id="timeSeriesAnomalyCanvas" style="position: absolute; z-index: 3; pointer-events: none;"></canvas>
+                    <div class="hud-tag" style="z-index: 4;">🔒 UNIFIED CONTINUOUS NOISE GRAPH (L1 + MARKOV + WELFORD)</div>
                 </div>
             </div>
         </div>
@@ -416,6 +411,14 @@
 
 <script>
     "use strict";
+
+    // Globals for Atom Rendering State
+    let targetAtomZoom = 1.0;
+    let targetAtomRotX = 0.0;
+    let targetAtomRotY = 0.0;
+    let currentAtomRotX = 0.0;
+    let currentAtomRotY = 0.0;
+    let isDraggingAtom = false;
 
     /* ==========================================================================
        GLOBAL STATE MANAGER
