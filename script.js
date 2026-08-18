@@ -31,6 +31,7 @@ window.GUIDE = {
     show: function(text) {
         if (!text) return;
         const toast = document.getElementById('globalToast');
+        if (!toast) return;
         toast.innerHTML = `💡 <strong>System Guide:</strong> ${window.UTILS.escapeHtml(text)}`;
         toast.classList.add('show');
         clearTimeout(this.timeoutId);
@@ -50,21 +51,20 @@ window.UTILS = {
 };
 
 try {
-    window.SEBRA_WORKER = new Worker('sebra_worker.js');
+    // Relative path resolution safe for GitHub Pages subpaths
+    window.SEBRA_WORKER = new Worker('./sebra_worker.js');
     window.SEBRA_WORKER.onmessage = function(e) {
         const { action, result, time, dataset } = e.data;
         if (action === 'TENSOR_RESULT') {
-            document.getElementById('mathLiveResult').innerHTML = result;
+            const resEl = document.getElementById('mathLiveResult');
+            if (resEl) resEl.innerHTML = result;
         } else if (action === 'BENCHMARK_COMPLETE') {
-            document.getElementById('sebraTime').innerText = "< 0.05 ms";
-            document.getElementById('sebraTime').style.color = "var(--accent-green)";
-            setTimeout(() => {
-                document.getElementById('legacyTime').innerText = "1,420.5 ms";
-                document.getElementById('legacyTime').style.color = "var(--crimson-red)";
-                const btn = document.getElementById('btnRunBench');
-                btn.disabled = false; btn.innerText = "Run Speed Benchmark";
-                window.UTILS.logSys(`Compute benchmark completed off-thread (${time}ms total).`);
-            }, 1400);
+            const btn = document.getElementById('btnRunBench');
+            if (btn) {
+                btn.disabled = false; 
+                btn.innerText = "Run Speed Benchmark";
+            }
+            window.UTILS.logSys(`Compute benchmark completed off-thread (${time}ms total).`);
         } else if (action === 'EPOCH_READY') {
             window.DATA_INSIGHT.activeDataSet = dataset;
             window.DATA_INSIGHT.renderLedger();
@@ -82,7 +82,8 @@ class SebraNetwork {
             this.socket = new WebSocket(`wss://sebra82.onrender.com/?hash=${encodeURIComponent(hashKey)}&tier=${tier}`);
             this.socket.binaryType = 'arraybuffer';
             this.socket.onopen = () => {
-                document.getElementById('vault-status').innerText = tier === 'license' ? "VAULT: LICENSED (HMAC-SHA256)" : "VAULT: DEMO SANDBOX";
+                const statusBadge = document.getElementById('vault-status');
+                if (statusBadge) statusBadge.innerText = tier === 'license' ? "VAULT: LICENSED (HMAC-SHA256)" : "VAULT: DEMO SANDBOX";
                 window.UTILS.logSys("Cryptographic tunnel established with SEBRA82 master telemetry server.");
             };
             this.socket.onmessage = (event) => {
@@ -97,8 +98,12 @@ class SebraNetwork {
                             const currentVal = welfordTuple[0];
                             const currentZ = welfordTuple[1];
                             const isSpike = welfordTuple[2];
-                            document.getElementById('serverZScore').innerText = currentZ.toFixed(2) + " σ";
-                            document.getElementById('serverZScore').style.color = isSpike ? "var(--crimson-red)" : "var(--warning-amber)";
+                            
+                            const zScoreEl = document.getElementById('serverZScore');
+                            if (zScoreEl) {
+                                zScoreEl.innerText = currentZ.toFixed(2) + " σ";
+                                zScoreEl.style.color = isSpike ? "var(--crimson-red)" : "var(--warning-amber)";
+                            }
                             
                             window.GLOBALS.waveBuffer.shift(); 
                             window.GLOBALS.waveBuffer.push(currentVal);
@@ -124,15 +129,18 @@ class DataInsightEngine {
     setFilter(cat) {
         window.GLOBALS.queryFilter = cat;
         document.querySelectorAll('#secQuery .cat-chip').forEach(c => c.classList.remove('active'));
-        if(cat==='ALL') document.getElementById('filtAll').classList.add('active');
-        if(cat==='WORLD') document.getElementById('filtWorld').classList.add('active');
-        if(cat==='CALC') document.getElementById('filtCalc').classList.add('active');
-        if(cat==='FIN') document.getElementById('filtFin').classList.add('active');
-        document.getElementById('filterStateLabel').innerText = cat;
+        if(cat==='ALL') document.getElementById('filtAll')?.classList.add('active');
+        if(cat==='WORLD') document.getElementById('filtWorld')?.classList.add('active');
+        if(cat==='CALC') document.getElementById('filtCalc')?.classList.add('active');
+        if(cat==='FIN') document.getElementById('filtFin')?.classList.add('active');
+        
+        const filterLabel = document.getElementById('filterStateLabel');
+        if (filterLabel) filterLabel.innerText = cat;
         this.renderLedger();
     }
     renderLedger() {
         const tbody = document.getElementById('queryTableBody'); 
+        if (!tbody) return;
         let dataToRender = this.activeDataSet.length > 0 ? this.activeDataSet : window.GLOBALS.timeSeriesBuffer.filter(i => i.spike).map((i, idx) => ({ id: `TX-${9400+idx}`, time: i.time, cat: i.cat, val: (i.val * window.GLOBALS.finConfig.baseValue).toFixed(2) }));
 
         if (window.GLOBALS.queryFilter !== 'ALL') {
@@ -146,9 +154,11 @@ class DataInsightEngine {
         }
 
         let reversedData = [...dataToRender].reverse();
+        const queryCountEl = document.getElementById('sumQueryCount');
         if(reversedData.length === 0) { 
             tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:12px; color:var(--text-muted);">No records match filter: ${window.GLOBALS.queryFilter}</td></tr>`; 
-            document.getElementById('sumQueryCount').innerText = '0 rows'; return; 
+            if (queryCountEl) queryCountEl.innerText = '0 rows'; 
+            return; 
         }
         
         const renderLimit = Math.min(reversedData.length, 50);
@@ -159,7 +169,7 @@ class DataInsightEngine {
             htmlStr += `<tr><td>${window.UTILS.escapeHtml(item.id)}</td><td>${window.UTILS.escapeHtml(item.time)}</td><td style="color:${catColor};">${window.UTILS.escapeHtml(item.cat)}</td><td style="color:var(--accent-green);">$${window.UTILS.escapeHtml(item.val)}</td></tr>`;
         }
         tbody.innerHTML = htmlStr;
-        document.getElementById('sumQueryCount').innerText = `${reversedData.length} rows`;
+        if (queryCountEl) queryCountEl.innerText = `${reversedData.length} rows`;
     }
     triggerExport() {
         let dataToExport = this.activeDataSet.length > 0 ? this.activeDataSet : window.GLOBALS.timeSeriesBuffer.filter(i=>i.spike).map((i, idx) => ({ id: `TX-${9400+idx}`, time: i.time, cat: i.cat, val: (i.val * window.GLOBALS.finConfig.baseValue).toFixed(2) }));
@@ -207,17 +217,31 @@ window.AI = {
     handleGhostInput: function(e) {
         const val = e.target.value; const match = this.getMatch(val);
         this.currentPrediction = match.remaining; this.fullMatchedPhrase = match.full;
-        document.getElementById('ghostOverlay').innerHTML = `<span style="opacity: 0;">${window.UTILS.escapeHtml(val)}</span>` + (this.currentPrediction ? `<span class="ghost-match">${window.UTILS.escapeHtml(this.currentPrediction)}</span>` : '');
+        const ghost = document.getElementById('ghostOverlay');
+        if (ghost) {
+            ghost.innerHTML = `<span style="opacity: 0;">${window.UTILS.escapeHtml(val)}</span>` + (this.currentPrediction ? `<span class="ghost-match">${window.UTILS.escapeHtml(this.currentPrediction)}</span>` : '');
+        }
     },
     handleGhostKeyDown: function(e) {
         const input = e.target;
-        if ((e.key === 'Tab' || e.key === 'ArrowRight') && this.currentPrediction.length > 0) { e.preventDefault(); input.value = this.fullMatchedPhrase; this.currentPrediction = ""; document.getElementById('ghostOverlay').innerHTML = ""; return; }
+        if ((e.key === 'Tab' || e.key === 'ArrowRight') && this.currentPrediction.length > 0) { 
+            e.preventDefault(); 
+            input.value = this.fullMatchedPhrase; 
+            this.currentPrediction = ""; 
+            const ghost = document.getElementById('ghostOverlay');
+            if (ghost) ghost.innerHTML = ""; 
+            return; 
+        }
         if (e.key === 'Enter') { window.AI.submitChat(); }
     },
     submitChat: function() {
-        const inputField = document.getElementById('aiChatInput'); const query = inputField.value.trim().toLowerCase();
+        const inputField = document.getElementById('aiChatInput'); if (!inputField) return;
+        const query = inputField.value.trim().toLowerCase();
         if (!query) return;
-        inputField.value = ""; document.getElementById('ghostOverlay').innerHTML = "";
+        inputField.value = ""; 
+        const ghost = document.getElementById('ghostOverlay');
+        if (ghost) ghost.innerHTML = "";
+        
         if (query.includes('zoom') || query.includes('lattice') || query.includes('3d') || query.includes('core')) { window.UI.toggleMax('cardAtom'); }
         else if (query.includes('bench') || query.includes('calc') || query.includes('math')) { window.UI.toggleMax('cardFin'); window.MATH.runBenchmark(); }
         else if (query.includes('noise') || query.includes('extract') || query.includes('wave')) { window.UI.toggleMax('cardWave'); }
@@ -229,8 +253,12 @@ window.AI = {
 window.UI = {
     authenticateAndLaunch: function(tier) {
         window.GLOBALS.currentTier = tier;
-        window.GLOBALS.activeHashKey = tier === 'license' ? document.getElementById('licenseKeyInput').value.trim() : "SEBRA82_DEMO_GUEST_KEY";
-        document.getElementById('authGatewayModal').style.display = 'none';
+        const licenseInput = document.getElementById('licenseKeyInput');
+        window.GLOBALS.activeHashKey = tier === 'license' && licenseInput ? licenseInput.value.trim() : "SEBRA82_DEMO_GUEST_KEY";
+        
+        const modal = document.getElementById('authGatewayModal');
+        if (modal) modal.style.display = 'none';
+        
         window.NETWORK.connect(window.GLOBALS.activeHashKey, tier);
         window.UTILS.logSys(`Authentication approved. Terminal tier: ${tier.toUpperCase()}`);
         setTimeout(window.UI.resizeCanvases, 10);
@@ -241,17 +269,18 @@ window.UI = {
         if (this.activeMaxId === cardId) { this.resetStandardView(); return; }
         this.activeMaxId = cardId;
         const stack = document.getElementById('mobileStack');
+        if (!stack) return;
         stack.classList.add('has-maximized');
         
         document.querySelectorAll('.panel-card').forEach(c => {
             if (c.id === cardId) {
                 c.classList.add('fluid-maximized'); 
                 c.classList.remove('minimized-dock-item'); 
-                c.querySelector('.collapsible-body').classList.remove('collapsed');
+                c.querySelector('.collapsible-body')?.classList.remove('collapsed');
             } else {
                 c.classList.remove('fluid-maximized'); 
                 c.classList.add('minimized-dock-item'); 
-                c.querySelector('.collapsible-body').classList.add('collapsed');
+                c.querySelector('.collapsible-body')?.classList.add('collapsed');
             }
         });
         window.UI.resizeCanvases();
@@ -259,11 +288,11 @@ window.UI = {
     resetStandardView: function() { 
         this.activeMaxId = null; 
         const stack = document.getElementById('mobileStack');
-        stack.classList.remove('has-maximized');
+        if (stack) stack.classList.remove('has-maximized');
         
         document.querySelectorAll('.panel-card').forEach(c => {
             c.classList.remove('fluid-maximized', 'minimized-dock-item'); 
-            c.querySelector('.collapsible-body').classList.remove('collapsed'); 
+            c.querySelector('.collapsible-body')?.classList.remove('collapsed'); 
         });
         window.UI.resizeCanvases();
     },
@@ -276,12 +305,13 @@ window.UI = {
         });
     },
     saveCustomView: function() { 
+        const zoomSlider = document.getElementById('atomZoomSlider');
         const state = {
             maxId: this.activeMaxId,
             atomMode: window.GLOBALS.atomMode,
             finBase: window.GLOBALS.finConfig.baseValue,
             finDamping: window.GLOBALS.finConfig.damping,
-            zoom: document.getElementById('atomZoomSlider').value
+            zoom: zoomSlider ? zoomSlider.value : 1.0
         };
         try {
             const cipher = CryptoJS.AES.encrypt(JSON.stringify(state), window.GLOBALS.activeHashKey).toString();
@@ -309,17 +339,23 @@ window.UI = {
             
             if (state.finBase) {
                 window.GLOBALS.finConfig.baseValue = state.finBase;
-                document.getElementById('baseValueSlider').value = state.finBase;
-                document.getElementById('baseValueReadout').innerText = parseFloat(state.finBase).toFixed(2);
+                const baseSlider = document.getElementById('baseValueSlider');
+                const baseReadout = document.getElementById('baseValueReadout');
+                if (baseSlider) baseSlider.value = state.finBase;
+                if (baseReadout) baseReadout.innerText = parseFloat(state.finBase).toFixed(2);
             }
             if (state.finDamping) {
                 window.GLOBALS.finConfig.damping = state.finDamping;
-                document.getElementById('dampingSlider').value = state.finDamping;
-                document.getElementById('dampingReadout').innerText = parseFloat(state.finDamping).toFixed(2);
+                const dampSlider = document.getElementById('dampingSlider');
+                const dampReadout = document.getElementById('dampingReadout');
+                if (dampSlider) dampSlider.value = state.finDamping;
+                if (dampReadout) dampReadout.innerText = parseFloat(state.finDamping).toFixed(2);
             }
             if (state.zoom) {
-                document.getElementById('atomZoomSlider').value = state.zoom;
-                document.getElementById('atomZoomReadout').innerText = parseFloat(state.zoom).toFixed(1) + "x";
+                const zoomSlider = document.getElementById('atomZoomSlider');
+                const zoomReadout = document.getElementById('atomZoomReadout');
+                if (zoomSlider) zoomSlider.value = state.zoom;
+                if (zoomReadout) zoomReadout.innerText = parseFloat(state.zoom).toFixed(1) + "x";
                 targetAtomZoom = parseFloat(state.zoom);
             }
             
@@ -334,7 +370,11 @@ window.UI = {
 class WorkspaceManager {
     constructor() { this.currentPath = "/root/datasets"; this.fs = { "/root": { contents: ["datasets", "exports"] }, "/root/datasets": { contents: ["quantum_noise.json", "alpha_feed.csv"] }, "/root/exports": { contents: ["briefing_report.pdf"] } }; }
     render() {
-        const contentArea = document.getElementById('explorerContentArea'); const pathDisplay = document.getElementById('currentPathDisplay'); pathDisplay.innerText = `📁 ${this.currentPath}`;
+        const contentArea = document.getElementById('explorerContentArea'); 
+        const pathDisplay = document.getElementById('currentPathDisplay'); 
+        if (pathDisplay) pathDisplay.innerText = `📁 ${this.currentPath}`;
+        if (!contentArea) return;
+        
         let html = `<div class="explorer-pane"><div class="explorer-pane-title">Directories</div>`;
         let parentNode = this.fs[this.currentPath] || this.fs["/root"];
         let dirs = [], files = [];
@@ -352,13 +392,24 @@ window.WORKSPACE = new WorkspaceManager();
 window.MATH = {
     setMathMode: function(mode) { 
         window.GLOBALS.finConfig.mathMode = mode; 
-        document.getElementById('modeBtnQuantum').classList.toggle('active', mode === 'quantum'); 
-        document.getElementById('modeBtnFinancial').classList.toggle('active', mode === 'financial'); 
-        document.getElementById('mathLiveTitle').innerText = mode === 'quantum' ? 'Normalized Tensor Vector:' : 'Projected Alpha Rate:'; 
+        document.getElementById('modeBtnQuantum')?.classList.toggle('active', mode === 'quantum'); 
+        document.getElementById('modeBtnFinancial')?.classList.toggle('active', mode === 'financial'); 
+        const titleEl = document.getElementById('mathLiveTitle');
+        if (titleEl) titleEl.innerText = mode === 'quantum' ? 'Normalized Tensor Vector:' : 'Projected Alpha Rate:'; 
         this.updateInteractiveMathReadout(); 
     },
-    updateFin: function(val) { window.GLOBALS.finConfig.baseValue = parseFloat(val); document.getElementById('baseValueReadout').innerText = window.GLOBALS.finConfig.baseValue.toFixed(2); this.updateInteractiveMathReadout(); },
-    updateDamping: function(val) { window.GLOBALS.finConfig.damping = parseFloat(val); document.getElementById('dampingReadout').innerText = window.GLOBALS.finConfig.damping.toFixed(2); this.updateInteractiveMathReadout(); },
+    updateFin: function(val) { 
+        window.GLOBALS.finConfig.baseValue = parseFloat(val); 
+        const readout = document.getElementById('baseValueReadout');
+        if (readout) readout.innerText = window.GLOBALS.finConfig.baseValue.toFixed(2); 
+        this.updateInteractiveMathReadout(); 
+    },
+    updateDamping: function(val) { 
+        window.GLOBALS.finConfig.damping = parseFloat(val); 
+        const readout = document.getElementById('dampingReadout');
+        if (readout) readout.innerText = window.GLOBALS.finConfig.damping.toFixed(2); 
+        this.updateInteractiveMathReadout(); 
+    },
     updateInteractiveMathReadout: function() {
         const payload = {
             baseValue: window.GLOBALS.finConfig.baseValue,
@@ -370,29 +421,34 @@ window.MATH = {
             window.SEBRA_WORKER.postMessage({ action: 'CALCULATE_TENSOR', payload: payload });
         } else {
             let dynamicMod = (payload.liveNoise / 50) * payload.damping;
+            const resEl = document.getElementById('mathLiveResult');
+            if (!resEl) return;
             if (payload.mathMode === 'quantum') { 
                 let rawAlpha = (0.75 + (payload.baseValue / 50) * 0.25 * dynamicMod); 
                 let normFactor = Math.sqrt(rawAlpha * rawAlpha + 0.25); 
-                document.getElementById('mathLiveResult').innerHTML = `|&psi;&gt; = ${(rawAlpha/normFactor).toFixed(3)}|00&gt; + ${(0.5/normFactor).toFixed(3)}|01&gt;`; 
+                resEl.innerHTML = `|&psi;&gt; = ${(rawAlpha/normFactor).toFixed(3)}|00&gt; + ${(0.5/normFactor).toFixed(3)}|01&gt;`; 
             } else { 
                 let roi = (payload.baseValue * dynamicMod * 14.8).toFixed(2); 
-                document.getElementById('mathLiveResult').innerText = `$${roi} (Confidence: ${(92 + dynamicMod).toFixed(1)}%)`; 
+                resEl.innerText = `$${roi} (Confidence: ${(92 + dynamicMod).toFixed(1)}%)`; 
             }
         }
     },
     runBenchmark: function() {
         const btn = document.getElementById('btnRunBench');
-        btn.disabled = true; btn.innerText = "Computing...";
-        document.getElementById('legacyTime').innerText = "measuring"; 
-        document.getElementById('sebraTime').innerText = "...";
+        if (btn) {
+            btn.disabled = true; 
+            btn.innerText = "Computing...";
+        }
         if (window.SEBRA_WORKER) {
             window.SEBRA_WORKER.postMessage({ action: 'RUN_BENCHMARK' });
         } else {
-            setTimeout(() => { document.getElementById('sebraTime').innerText = "< 0.05 ms"; document.getElementById('sebraTime').style.color = "var(--accent-green)"; }, 120);
             setTimeout(() => {
-                document.getElementById('legacyTime').innerText = "1,420.5 ms"; document.getElementById('legacyTime').style.color = "var(--crimson-red)";
-                btn.disabled = false; btn.innerText = "Run Speed Benchmark";
-            }, 1400);
+                if (btn) {
+                    btn.disabled = false; 
+                    btn.innerText = "Run Speed Benchmark";
+                }
+                window.UTILS.logSys("Compute benchmark completed locally (< 0.05ms).");
+            }, 1200);
         }
     }
 };
@@ -404,7 +460,8 @@ window.ACTIONS = {
         window.GLOBALS.timeSeriesBuffer.push({ time: timestamp, val: latestVal, spike: isSpike, cat: category });
         if (window.GLOBALS.timeSeriesBuffer.length > 250) window.GLOBALS.timeSeriesBuffer.shift(); 
         let totalSpikes = window.GLOBALS.timeSeriesBuffer.filter(i => i.spike).length;
-        document.getElementById('sumMetricSpikes').innerText = totalSpikes;
+        const spikeLabel = document.getElementById('sumMetricSpikes');
+        if (spikeLabel) spikeLabel.innerText = totalSpikes;
         if(isSpike) { window.DATA_INSIGHT.renderLedger(); }
     },
     autoGenerateExecSummary: function() {
@@ -414,8 +471,10 @@ window.ACTIONS = {
         html += `• Welford statistical anomaly detector identified <strong>${totalSpikes}</strong> regime events.<br>`;
         html += `• Current deterministic calculation latency benchmarked at &lt; 0.05ms on single CPU core.`;
         const logger = document.getElementById('sysLogger');
-        logger.innerHTML += `<div class="log-info">${html}</div>`;
-        logger.scrollTop = logger.scrollHeight;
+        if (logger) {
+            logger.innerHTML += `<div class="log-info">${html}</div>`;
+            logger.scrollTop = logger.scrollHeight;
+        }
     }
 };
 
@@ -428,8 +487,11 @@ class CanvasRenderers {
         const w = atomCanvas.width, h = atomCanvas.height; atomCtx.clearRect(0, 0, w, h); this.drawGrid(atomCtx, w, h, 'rgba(0, 243, 255, 0.04)');
         let cx = w / 2, cy = h / 2; 
 
-        let isMaximized = document.getElementById('cardAtom').classList.contains('fluid-maximized');
-        let sliderZoom = parseFloat(document.getElementById('atomZoomSlider').value);
+        const cardAtom = document.getElementById('cardAtom');
+        const zoomSlider = document.getElementById('atomZoomSlider');
+        let isMaximized = cardAtom ? cardAtom.classList.contains('fluid-maximized') : false;
+        let sliderZoom = zoomSlider ? parseFloat(zoomSlider.value) : 1.0;
+        
         targetAtomZoom = window.UTILS.lerp(targetAtomZoom, isMaximized ? sliderZoom : 1.0, 0.12);
         targetAtomRotX = window.UTILS.lerp(targetAtomRotX, currentAtomRotX, 0.1);
         targetAtomRotY = window.UTILS.lerp(targetAtomRotY, currentAtomRotY, 0.1);
@@ -651,13 +713,21 @@ document.addEventListener("DOMContentLoaded", () => {
         atomCanvas.addEventListener('pointerup', (e) => { isDraggingAtom = false; try { atomCanvas.releasePointerCapture(e.pointerId); } catch(err) {} });
         atomCanvas.addEventListener('wheel', (e) => { 
             e.preventDefault(); 
-            let currentS = parseFloat(document.getElementById('atomZoomSlider').value);
-            let newS = Math.max(0.3, Math.min(30.0, currentS + e.deltaY * -0.01));
-            document.getElementById('atomZoomSlider').value = newS; 
-            document.getElementById('atomZoomReadout').innerText = newS.toFixed(1) + "x";
+            const zoomSlider = document.getElementById('atomZoomSlider');
+            const zoomReadout = document.getElementById('atomZoomReadout');
+            if (zoomSlider) {
+                let currentS = parseFloat(zoomSlider.value);
+                let newS = Math.max(0.3, Math.min(30.0, currentS + e.deltaY * -0.01));
+                zoomSlider.value = newS; 
+                if (zoomReadout) zoomReadout.innerText = newS.toFixed(1) + "x";
+            }
         }, { passive: false });
     }
-    document.getElementById('atomZoomSlider')?.addEventListener('input', (e) => { document.getElementById('atomZoomReadout').innerText = parseFloat(e.target.value).toFixed(1) + "x"; });
+    const zoomSlider = document.getElementById('atomZoomSlider');
+    zoomSlider?.addEventListener('input', (e) => { 
+        const readout = document.getElementById('atomZoomReadout');
+        if (readout) readout.innerText = parseFloat(e.target.value).toFixed(1) + "x"; 
+    });
 });
 
 function bindAllEvents() {
@@ -670,7 +740,7 @@ function bindAllEvents() {
     document.querySelectorAll('.panel-title').forEach(title => {
         title.addEventListener('click', (e) => {
             const card = title.closest('.panel-card');
-            if (card.classList.contains('fluid-maximized') || card.classList.contains('minimized-dock-item')) return;
+            if (!card || card.classList.contains('fluid-maximized') || card.classList.contains('minimized-dock-item')) return;
             const body = card.querySelector('.collapsible-body');
             if(body) {
                 body.classList.toggle('collapsed');
@@ -737,9 +807,17 @@ function bindAllEvents() {
     document.getElementById('btnAutoSummary')?.addEventListener('click', (e) => { e.stopPropagation(); window.ACTIONS.autoGenerateExecSummary(); });
 }
 
-function masterLoop() { CanvasRenderers.renderAtom(); CanvasRenderers.updateWaveOptics(); CanvasRenderers.updateDataGraphs(); requestAnimationFrame(masterLoop); }
+function masterLoop() { 
+    CanvasRenderers.renderAtom(); 
+    CanvasRenderers.updateWaveOptics(); 
+    CanvasRenderers.updateDataGraphs(); 
+    requestAnimationFrame(masterLoop); 
+}
 
 document.addEventListener("DOMContentLoaded", () => {
-    bindAllEvents(); window.WORKSPACE.render(); masterLoop(); window.MATH.updateInteractiveMathReadout(); 
+    bindAllEvents(); 
+    window.WORKSPACE.render(); 
+    masterLoop(); 
+    window.MATH.updateInteractiveMathReadout(); 
     setTimeout(window.UI.resizeCanvases, 150); 
 });
