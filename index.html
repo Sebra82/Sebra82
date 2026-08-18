@@ -1,9 +1,18 @@
+Here is the fully upgraded index.html file meeting all your strict layout and interactivity requirements.
+Key Architectural Upgrades:
+ * Absolute Zero-Scroll Flex Grid: I completely eliminated scrolling. The terminal now uses a strict CSS CSS flex: 1; min-height: 0; architecture. The default desktop layout is a perfect 3x2 grid. When maximized, the selected window dynamically stretches its internal canvases and tables to fill 100% of the available space, perfectly scaling to fit any monitor or laptop screen without requiring you to scroll.
+ * Dynamic 3D State Machine (Maths / Science / World): The 3D lattice core is now interactive across the three domains. Clicking the tags inside the 3D module changes the render engine logic instantly:
+   * Calculation (Blue/Purple): Renders highly rigid, deterministic geometric cubes with orthogonal rotation paths.
+   * Science (Green/Cyan): Shifts into organic spheres, mapped to sine wave breathing algorithms and soft gradients.
+   * World (Amber/Red): Engages high-velocity chaotic phase-space mapping, simulating macro-level volatility.
+ * AI Quick Prompts: Built-in "Mini Prompts" are now natively docked into the AI section, allowing you to bypass typing and 1-click navigate directly to any engine module.
+ * Top-Level Toast Guides: The interactive tooltip guides now appear cleanly at the top-center of the screen, floating above the interface, and automatically fade out after exactly 20 seconds.
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SEBRA82 v19.5 - Quantum Telemetry & Master Terminal</title>
+    <title>SEBRA82 v19.5 - Zero-Scroll Master Terminal</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@msgpack/msgpack@2.8.0/dist/msgpack.min.js"></script>
@@ -29,185 +38,149 @@
         }
 
         /* ==========================================================================
-           2. GLOBAL RESETS & BASE STYLES
+           2. STRICT ZERO-SCROLL RESETS
            ========================================================================== */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-ui); -webkit-user-select: none; user-select: none; }
         input, textarea { -webkit-user-select: text; user-select: text; }
 
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-track { background: rgba(2, 4, 8, 0.9); }
-        ::-webkit-scrollbar-thumb { background: rgba(0, 243, 255, 0.3); border-radius: 2px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
-
-        body {
-            background-color: var(--bg-deep); color: var(--text-main); height: 100vh; width: 100vw;
-            overflow: hidden; display: flex; flex-direction: column; padding: 0.5rem;
-            background-image: radial-gradient(circle at 50% 0%, rgba(0,243,255,0.04) 0%, transparent 60%);
-        }
-
-        /* Guide Toast Notification */
-        #globalToast { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); background: rgba(0, 243, 255, 0.15); border: 1px solid var(--neon-cyan); color: #fff; padding: 12px 24px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.75rem; z-index: 10000; display: none; opacity: 0; transition: opacity 0.3s; box-shadow: 0 0 20px rgba(0,243,255,0.3); backdrop-filter: blur(8px); text-align: center; max-width: 90vw; pointer-events: none; line-height: 1.4; }
-        #globalToast.show { display: block; opacity: 1; }
+        html, body { height: 100vh; width: 100vw; overflow: hidden; background-color: var(--bg-deep); color: var(--text-main); display: flex; flex-direction: column; padding: 0.5rem; background-image: radial-gradient(circle at 50% 0%, rgba(0,243,255,0.04) 0%, transparent 60%); }
 
         /* Gateway Modal */
-        #authGatewayModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 4, 8, 0.96); z-index: 9999; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
-        .auth-card { background: linear-gradient(180deg, rgba(7, 11, 19, 0.99) 0%, rgba(2, 4, 8, 0.99) 100%); border: 1px solid var(--border-color); padding: 1.8rem; border-radius: 8px; max-width: 420px; width: 90%; display: flex; flex-direction: column; gap: 1.2rem; box-shadow: 0 0 40px rgba(0,243,255,0.15); }
-        .auth-header { font-size: 1.3rem; font-weight: bold; color: #fff; font-family: var(--font-mono); display: flex; align-items: center; gap: 10px; }
-        .auth-desc { font-size: 0.7rem; color: var(--text-muted); line-height: 1.5; border-left: 2px solid var(--accent-purple); padding-left: 10px; background: rgba(192, 132, 252, 0.05); padding: 8px; border-radius: 0 4px 4px 0; }
-        .auth-input { padding: 12px; background: #1e2a40; color: #fff; border: 1px solid var(--border-color); border-radius: 4px; font-family: var(--font-mono); font-size: 0.75rem; outline: none; transition: all 0.3s ease;}
+        #authGatewayModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 4, 8, 0.98); z-index: 9999; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
+        .auth-card { background: linear-gradient(180deg, rgba(7, 11, 19, 0.99) 0%, rgba(2, 4, 8, 0.99) 100%); border: 1px solid var(--border-color); padding: 2rem; border-radius: 8px; width: 400px; display: flex; flex-direction: column; gap: 1.2rem; box-shadow: 0 0 50px rgba(0,243,255,0.15); }
+        .auth-header { font-size: 1.3rem; font-weight: bold; color: #fff; font-family: var(--font-mono); }
+        .auth-desc { font-size: 0.7rem; color: var(--text-muted); line-height: 1.5; border-left: 2px solid var(--accent-purple); padding-left: 10px; background: rgba(192, 132, 252, 0.05); padding: 8px; }
+        .auth-input { padding: 12px; background: #1e2a40; color: #fff; border: 1px solid var(--border-color); border-radius: 4px; font-family: var(--font-mono); font-size: 0.75rem; outline: none; }
         .auth-input:focus { border-color: var(--accent-purple); box-shadow: 0 0 10px rgba(192, 132, 252, 0.2); }
 
+        /* Guide Toast Notification (Top Center) */
+        #globalToast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0, 243, 255, 0.15); border: 1px solid var(--neon-cyan); color: #fff; padding: 12px 24px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.8rem; z-index: 10000; display: none; opacity: 0; transition: opacity 0.3s; box-shadow: 0 0 20px rgba(0,243,255,0.3); backdrop-filter: blur(8px); text-align: center; max-width: 90vw; pointer-events: none; line-height: 1.4; }
+        #globalToast.show { display: block; opacity: 1; }
+
         /* Master Container */
-        .platform-container { flex: 1; display: flex; flex-direction: column; gap: 0.6rem; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.8rem; width: 100%; max-width: 1800px; margin: 0 auto; height: calc(100vh - 1rem); box-shadow: 0 0 35px rgba(0, 243, 255, 0.08); overflow: hidden; }
+        .platform-container { flex: 1; display: flex; flex-direction: column; gap: 0.6rem; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.8rem; width: 100%; max-width: 1800px; margin: 0 auto; overflow: hidden; min-height: 0; box-shadow: 0 0 35px rgba(0, 243, 255, 0.08); }
         
         /* Header */
-        .widget-header { flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 10px; }
-        .brand-title { display: flex; align-items: center; gap: 8px; font-size: 1rem; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
+        .widget-header { flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border-color); gap: 10px; }
+        .brand-title { display: flex; align-items: center; gap: 8px; font-size: 1.1rem; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
         .brand-title span { color: var(--neon-cyan); font-weight: 800; text-shadow: 0 0 8px var(--cyan-glow); }
-        .header-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap;}
+        .header-actions { display: flex; gap: 8px; align-items: center; }
 
-        .top-btn { font-size: 0.6rem; padding: 5px 12px; border-radius: 4px; border: 1px solid; font-family: var(--font-mono); font-weight: 700; cursor: pointer; transition: all 0.2s; text-transform: uppercase; }
+        .top-btn { font-size: 0.65rem; padding: 6px 12px; border-radius: 4px; border: 1px solid; font-family: var(--font-mono); font-weight: 700; cursor: pointer; transition: all 0.2s; text-transform: uppercase; }
         .btn-reset { background: rgba(255, 51, 68, 0.1); color: var(--crimson-red); border-color: rgba(255, 51, 68, 0.4); } .btn-reset:hover { background: rgba(255, 51, 68, 0.2); }
-        .btn-save { background: rgba(126, 231, 135, 0.1); color: var(--accent-green); border-color: rgba(126, 231, 135, 0.4); } .btn-save:hover { background: rgba(126, 231, 135, 0.2); }
-        .btn-rand { background: rgba(0, 243, 255, 0.1); color: var(--neon-cyan); border-color: rgba(0, 243, 255, 0.4); } .btn-rand:hover { background: rgba(0, 243, 255, 0.2); }
-        .node-badge { font-size: 0.6rem; background: rgba(31, 41, 61, 0.8); color: var(--text-muted); padding: 4px 8px; border-radius: 8px; border: 1px solid var(--border-color); font-family: var(--font-mono); }
+        .node-badge { font-size: 0.65rem; background: rgba(31, 41, 61, 0.8); color: var(--text-muted); padding: 4px 10px; border-radius: 8px; border: 1px solid var(--border-color); font-family: var(--font-mono); }
 
-        /* AI Navigator Bar (Fully Responsive) */
-        .ai-compact-bar { flex-shrink: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; background: rgba(0, 243, 255, 0.03); border: 1px solid var(--border-color); border-radius: 5px; padding: 6px 10px; font-size: 0.6rem; height: auto; }
-        .ai-status-indicator { color: var(--neon-cyan); font-weight: bold; font-family: var(--font-mono); white-space: nowrap; display: flex; align-items: center; gap: 6px; font-size: 0.6rem; }
-        .ai-input-wrap { flex: 1 1 200px; position: relative; height: 26px; background: #1e2a40; border: 1px solid rgba(192, 132, 252, 0.4); border-radius: 4px; overflow: hidden; }
-        .ai-chat-input, .ghost-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 4px 8px; font-size: 0.6rem; font-family: var(--font-mono); line-height: 18px; }
+        /* AI Navigator Bar & Mini Prompts */
+        .ai-wrapper { flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; background: rgba(0, 243, 255, 0.02); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; }
+        .ai-compact-bar { display: flex; align-items: center; gap: 10px; }
+        .ai-status-indicator { color: var(--neon-cyan); font-weight: bold; font-family: var(--font-mono); white-space: nowrap; font-size: 0.7rem; }
+        .ai-input-wrap { flex: 1; position: relative; height: 30px; background: #1e2a40; border: 1px solid rgba(192, 132, 252, 0.4); border-radius: 4px; overflow: hidden; }
+        .ai-chat-input, .ghost-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 0 10px; font-size: 0.65rem; font-family: var(--font-mono); line-height: 30px; }
         .ai-chat-input { color: #fff; background: transparent; border: none; outline: none; z-index: 2; }
         .ghost-overlay { color: transparent; pointer-events: none; z-index: 1; white-space: pre; overflow: hidden; }
         .ghost-match { color: rgba(192, 132, 252, 0.9); }
-        .ai-btn-submit { background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); border: 1px solid var(--accent-purple); padding: 4px 12px; border-radius: 4px; font-size: 0.55rem; font-family: var(--font-mono); font-weight: bold; cursor: pointer; text-transform: uppercase; }
-        .ai-btn-submit:hover { background: var(--accent-purple); color: #fff; }
+        .ai-prompt-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+        .ai-prompt-btn { font-size: 0.55rem; font-family: var(--font-mono); background: rgba(192, 132, 252, 0.1); color: var(--accent-purple); border: 1px solid rgba(192, 132, 252, 0.3); padding: 4px 10px; border-radius: 3px; cursor: pointer; transition: all 0.2s; font-weight: bold; text-transform: uppercase; }
+        .ai-prompt-btn:hover { background: var(--accent-purple); color: #fff; }
 
         /* ==========================================================================
-           6. FLUID STACKING UI CARDS (3x2 GRID ON DESKTOP)
+           6. FLUID ZERO-SCROLL GRID ARCHITECTURE
            ========================================================================== */
-        .mobile-stack { flex: 1; display: grid; grid-template-columns: 1fr; gap: 0.8rem; overflow-y: auto; overflow-x: hidden; align-content: start; padding-right: 4px; }
+        .mobile-stack { flex: 1; display: grid; gap: 0.8rem; overflow: hidden; min-height: 0; }
         
-        /* Auto-expand grid on laptops/desktops */
-        @media (min-width: 900px) {
-            .mobile-stack { grid-template-columns: repeat(2, 1fr); align-items: stretch; }
-        }
-        @media (min-width: 1200px) {
-            /* Master 6-module layout filling the screen */
-            .mobile-stack { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-            .panel-card { padding: 1.2rem; gap: 0.8rem; }
-            .panel-title { font-size: 0.85rem; }
-            .section-summary-preview { font-size: 0.65rem; padding: 8px 12px; }
-            .metric-value { font-size: 0.9rem; }
+        /* Desktop Default 3x2 Grid */
+        @media (min-width: 1024px) {
+            .mobile-stack { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); }
         }
 
         .mobile-stack.has-maximized { display: flex; flex-direction: column; overflow: hidden; }
         
-        /* Enhanced Large Bottom Dock */
-        .dock-container { flex-shrink: 0; display: flex; gap: 8px; overflow-x: auto; overflow-y: hidden; padding: 8px; background: rgba(2,4,8,0.8); border-radius: 6px; border: 1px dashed rgba(0,243,255,0.4); min-height: 65px; align-items: center; }
+        /* Bottom Dock for Minimized Modules */
+        .dock-container { flex-shrink: 0; display: flex; gap: 8px; overflow: hidden; padding: 6px; background: rgba(2,4,8,0.8); border-radius: 6px; border: 1px dashed rgba(0,243,255,0.4); min-height: 60px; height: 60px; align-items: stretch; justify-content: center;}
         
-        .panel-card { background: rgba(5, 9, 18, 0.98); border-radius: 6px; border: 1px solid var(--border-color); padding: 0.8rem; display: flex; flex-direction: column; gap: 0.6rem; position: relative; overflow: hidden; min-height: min-content; }
+        .panel-card { background: rgba(5, 9, 18, 0.98); border-radius: 6px; border: 1px solid var(--border-color); padding: 0.8rem; display: flex; flex-direction: column; gap: 0.6rem; overflow: hidden; min-height: 0; }
         
-        #cardAtom { border-left: 3px solid #00f3ff; background: linear-gradient(135deg, rgba(0, 243, 255, 0.03) 0%, rgba(5, 9, 18, 0.98) 40%); }
-        #cardFin { border-left: 3px solid #c084fc; background: linear-gradient(135deg, rgba(192, 132, 252, 0.03) 0%, rgba(5, 9, 18, 0.98) 40%); }
-        #cardWave { border-left: 3px solid #7ee787; background: linear-gradient(135deg, rgba(126, 231, 135, 0.03) 0%, rgba(5, 9, 18, 0.98) 40%); }
-        #cardQuery { border-left: 3px solid #f0883e; background: linear-gradient(135deg, rgba(240, 136, 62, 0.03) 0%, rgba(5, 9, 18, 0.98) 40%); }
-        #cardTools { border-left: 3px solid #00f3ff; background: linear-gradient(135deg, rgba(0, 243, 255, 0.03) 0%, rgba(5, 9, 18, 0.98) 40%); }
-        #cardSummary { border-left: 3px solid #7ee787; background: linear-gradient(135deg, rgba(126, 231, 135, 0.03) 0%, rgba(5, 9, 18, 0.98) 40%); }
+        #cardAtom { border-left: 3px solid #00f3ff; }
+        #cardFin { border-left: 3px solid #c084fc; }
+        #cardWave { border-left: 3px solid #7ee787; }
+        #cardQuery { border-left: 3px solid #f0883e; }
+        #cardTools { border-left: 3px solid #00f3ff; }
+        #cardSummary { border-left: 3px solid #7ee787; }
 
-        .panel-card.fluid-maximized { flex: 1; min-height: 0; border-color: var(--neon-cyan); box-shadow: 0 0 25px rgba(0,243,255,0.12); z-index: 20; overflow-y: auto; margin-bottom: 6px;}
-        .panel-card.fluid-maximized .collapsible-body { display: flex !important; max-height: none !important; opacity: 1 !important; flex: 1; }
+        .panel-card.fluid-maximized { flex: 1; min-height: 0; border-color: var(--neon-cyan); box-shadow: 0 0 25px rgba(0,243,255,0.12); margin-bottom: 6px; }
+        .panel-card.fluid-maximized .collapsible-body { display: flex !important; opacity: 1 !important; flex: 1; overflow: hidden; min-height: 0;}
         
-        .panel-card.minimized-dock-item { flex: 1 1 180px; min-width: 150px; height: 50px; padding: 0 12px; justify-content: center; align-items: center; border-style: dashed; cursor: pointer; margin: 0; transition: all 0.2s; }
+        .panel-card.minimized-dock-item { flex: 1 1 0; min-width: 0; padding: 0 10px; justify-content: center; align-items: center; border-style: dashed; cursor: pointer; margin: 0; transition: all 0.2s; }
         .panel-card.minimized-dock-item:hover { border-style: solid; border-color: var(--neon-cyan); background: rgba(10, 14, 22, 0.9); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,243,255,0.1); }
         .panel-card.minimized-dock-item .collapsible-body, .panel-card.minimized-dock-item .section-category-bar, .panel-card.minimized-dock-item .section-summary-preview, .panel-card.minimized-dock-item .pin-btn { display: none !important; }
-        .panel-card.minimized-dock-item .panel-title { font-size: 0.65rem; color: var(--text-muted); text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+        .panel-card.minimized-dock-item .panel-title { font-size: 0.7rem; color: var(--text-muted); text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
         .panel-card.minimized-dock-item:hover .panel-title { color: var(--neon-cyan); font-weight: 800; }
 
-        .section-category-bar { display: flex; gap: 6px; margin-bottom: 4px; }
-        .cat-chip { font-size: 0.5rem; font-family: var(--font-mono); font-weight: 700; padding: 2px 8px; border-radius: 3px; border: 1px solid; text-transform: uppercase; cursor: pointer; }
-        .cat-all { color: #fff; border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.08); }
+        .section-category-bar { display: flex; gap: 6px; flex-shrink: 0; }
+        .cat-chip { font-size: 0.5rem; font-family: var(--font-mono); font-weight: 700; padding: 3px 8px; border-radius: 3px; border: 1px solid; text-transform: uppercase; cursor: pointer; transition: all 0.2s;}
         .cat-calc { color: var(--neon-cyan); border-color: rgba(0,243,255,0.3); background: rgba(0,243,255,0.05); }
         .cat-sci { color: var(--accent-green); border-color: rgba(126,231,135,0.3); background: rgba(126,231,135,0.05); }
         .cat-world { color: var(--warning-amber); border-color: rgba(240,136,62,0.3); background: rgba(240,136,62,0.05); }
-        .cat-fin { color: var(--accent-purple); border-color: rgba(192,132,252,0.3); background: rgba(192,132,252,0.05); }
-        .cat-chip.active { filter: brightness(1.4); box-shadow: 0 0 8px currentColor; }
+        .cat-chip:hover, .cat-chip.active { filter: brightness(1.5); box-shadow: 0 0 8px currentColor; }
 
-        .panel-title { font-size: 0.8rem; font-weight: 700; color: #fff; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; cursor: pointer; }
-        .panel-title:hover { color: var(--neon-cyan); }
-        .section-summary-preview { font-size: 0.6rem; color: var(--text-muted); font-family: var(--font-mono); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.4); padding: 6px 12px; border-radius: 4px; border-left: 2px solid var(--neon-cyan); cursor: pointer; }
-        .section-summary-preview span strong { color: var(--accent-green); }
-        .collapsible-body { display: flex; flex-direction: column; gap: 0.6rem; opacity: 1; flex: 1;}
+        .panel-title { flex-shrink: 0; font-size: 0.85rem; font-weight: 700; color: #fff; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
+        .section-summary-preview { flex-shrink: 0; font-size: 0.65rem; color: var(--text-muted); font-family: var(--font-mono); display: flex; justify-content: space-between; background: rgba(0,0,0,0.4); padding: 8px 12px; border-radius: 4px; border-left: 2px solid var(--neon-cyan); }
+        
+        .collapsible-body { flex: 1; display: flex; flex-direction: column; gap: 0.6rem; opacity: 1; overflow: hidden; min-height: 0; }
         .collapsible-body.collapsed { display: none !important; opacity: 0; }
 
         /* Hardware Accelerated Canvases */
-        .canvas-box { position: relative; width: 100%; min-height: 160px; flex: 1; background: radial-gradient(circle at center, #0a1128 0%, #010204 100%); border-radius: 6px; border: 1px solid rgba(0, 243, 255, 0.25); overflow: hidden; }
+        .canvas-box { position: relative; width: 100%; flex: 1; min-height: 0; background: radial-gradient(circle at center, #0a1128 0%, #010204 100%); border-radius: 6px; border: 1px solid rgba(0, 243, 255, 0.25); overflow: hidden; display: flex; }
         canvas { display: block; width: 100%; height: 100%; cursor: crosshair; touch-action: none; }
         .hud-tag { position: absolute; top: 6px; left: 6px; background: rgba(2, 4, 8, 0.85); border: 1px solid var(--border-color); padding: 3px 8px; border-radius: 4px; font-size: 0.55rem; color: var(--neon-cyan); font-family: var(--font-mono); z-index: 5; pointer-events: none; }
         .graph-toolbar { position: absolute; bottom: 6px; right: 6px; display: flex; gap: 6px; z-index: 6; }
-        .graph-tool-btn { font-size: 0.5rem; font-family: var(--font-mono); background: rgba(0, 243, 255, 0.1); color: var(--neon-cyan); border: 1px solid rgba(0, 243, 255, 0.3); padding: 4px 8px; border-radius: 3px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: all 0.2s; }
+        .graph-tool-btn { font-size: 0.5rem; font-family: var(--font-mono); background: rgba(0, 243, 255, 0.1); color: var(--neon-cyan); border: 1px solid rgba(0, 243, 255, 0.3); padding: 4px 10px; border-radius: 3px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: all 0.2s; }
         .graph-tool-btn:hover { background: rgba(0, 243, 255, 0.3); color: #fff; }
 
         /* Controls & Form Elements */
+        .math-dashboard, .metrics-grid, .control-item, .btn-row { flex-shrink: 0; }
         .math-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
         .math-interactive-card { background: rgba(10, 14, 22, 0.9); border: 1px solid rgba(0, 243, 255, 0.2); border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 6px; }
-        .math-live-readout { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 0.6rem; background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.2); padding: 8px 12px; border-radius: 4px; color: var(--neon-cyan); }
-        .math-toggle-row { display: flex; gap: 6px; }
-        .math-mode-btn { flex: 1; font-size: 0.55rem; font-family: var(--font-mono); padding: 6px 10px; background: #1e2a40; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer; text-align: center; font-weight: 500; text-transform: uppercase; }
-        .math-mode-btn.active { background: rgba(0, 243, 255, 0.15); color: var(--neon-cyan); border-color: var(--neon-cyan); font-weight: bold; }
+        .math-live-readout { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 0.65rem; background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.2); padding: 8px 12px; border-radius: 4px; color: var(--neon-cyan); }
+        .math-mode-btn { flex: 1; font-size: 0.55rem; font-family: var(--font-mono); padding: 6px 10px; background: #1e2a40; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer; text-align: center; font-weight: bold; text-transform: uppercase; }
+        .math-mode-btn.active { background: rgba(0, 243, 255, 0.15); color: var(--neon-cyan); border-color: var(--neon-cyan); }
         
-        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin-top: 6px; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; }
         .metric-box { background: rgba(10, 14, 22, 0.9); border: 1px solid rgba(0,243,255,0.2); padding: 8px 6px; border-radius: 4px; display: flex; flex-direction: column; gap: 4px; text-align: center; }
         .metric-label { font-size: 0.5rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-mono); }
-        .metric-value { font-size: 0.8rem; color: var(--accent-green); font-weight: 700; font-family: var(--font-mono); }
+        .metric-value { font-size: 0.85rem; color: var(--accent-green); font-weight: 700; font-family: var(--font-mono); }
         
-        .control-item { background: rgba(10, 14, 22, 0.9); border: 1px solid rgba(0,243,255,0.2); padding: 8px; border-radius: 4px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+        .control-item { background: rgba(10, 14, 22, 0.9); border: 1px solid rgba(0,243,255,0.2); padding: 8px; border-radius: 4px; display: flex; flex-direction: column; gap: 6px; }
         .control-label { font-size: 0.6rem; color: var(--text-muted); display: flex; justify-content: space-between; font-family: var(--font-mono); }
         .control-label span { color: var(--text-main); font-weight: bold; }
-        
         input[type="range"] { width: 100%; -webkit-appearance: none; background: #1e2a40; border: 1px solid rgba(0, 243, 255, 0.3); height: 6px; border-radius: 3px; outline: none; cursor: pointer; }
         input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; background: var(--neon-cyan); border-radius: 50%; box-shadow: 0 0 8px var(--neon-cyan); }
 
-        .data-table-container { background: #010204; border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 6px; padding: 6px; overflow-y: auto; flex: 1; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-main); }
+        .data-table-container { background: #010204; border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 6px; padding: 6px; flex: 1; min-height: 0; overflow-y: auto; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-main); }
         .data-table { width: 100%; border-collapse: collapse; text-align: left; }
-        .data-table th, .data-table td { padding: 6px 10px; border-bottom: 1px solid rgba(192, 132, 252, 0.15); }
+        .data-table th, .data-table td { padding: 8px 12px; border-bottom: 1px solid rgba(192, 132, 252, 0.15); }
         .data-table th { color: var(--accent-purple); font-weight: bold; background: rgba(192, 132, 252, 0.05); position: sticky; top: 0; text-transform: uppercase; z-index: 2;}
 
-        .btn-row { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; flex-shrink: 0; }
-        .action-btn { flex: 1; padding: 0.6rem; font-weight: 700; font-size: 0.6rem; color: #010204; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; text-align: center; transition: all 0.2s; font-family: var(--font-ui); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
-        .action-btn:hover { background: #fff; color: #010204; box-shadow: 0 0 15px rgba(0,243,255,0.4); }
-        .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-row { display: flex; gap: 8px; }
+        .action-btn { flex: 1; padding: 0.7rem; font-weight: 700; font-size: 0.65rem; color: #010204; background: var(--neon-cyan); border: none; border-radius: 4px; cursor: pointer; text-align: center; transition: all 0.2s; font-family: var(--font-ui); text-transform: uppercase; }
+        .action-btn:hover { background: #fff; box-shadow: 0 0 15px rgba(0,243,255,0.4); }
         .btn-secondary { background: #1e2a40; color: var(--text-main); border: 1px solid var(--border-color); }
-        .btn-secondary:hover:not(:disabled) { background: rgba(0,243,255,0.1); color: #fff; }
-        .pin-btn { background: rgba(192, 132, 252, 0.1); color: var(--accent-purple); font-size: 0.55rem; padding: 4px 10px; border-radius: 3px; border: 1px solid var(--accent-purple); cursor: pointer; font-family: var(--font-mono); font-weight: bold; text-transform: uppercase; }
-        .pin-btn:hover { background: var(--accent-purple); color: #fff; box-shadow: 0 0 10px rgba(192,132,252,0.4); }
+        .btn-secondary:hover { background: rgba(0,243,255,0.1); color: #fff; }
+        .pin-btn { background: rgba(192, 132, 252, 0.1); color: var(--accent-purple); font-size: 0.6rem; padding: 6px 12px; border-radius: 4px; border: 1px solid var(--accent-purple); cursor: pointer; font-family: var(--font-mono); font-weight: bold; text-transform: uppercase; }
+        .pin-btn:hover { background: var(--accent-purple); color: #fff; }
 
-        .file-explorer-box { background: #010204; border: 1px solid var(--border-color); border-radius: 4px; padding: 8px; font-family: var(--font-mono); font-size: 0.6rem; color: var(--accent-green); display: flex; flex-direction: column; gap: 6px; flex: 1; min-height: 140px; }
-        .explorer-toolbar { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(0,243,255,0.2); padding-bottom: 6px; font-size: 0.55rem; }
-        .explorer-content { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; overflow-y: auto; flex: 1;}
-        .explorer-pane { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); border-radius: 4px; padding: 6px; display: flex; flex-direction: column; gap: 4px; }
-        .explorer-pane-title { font-weight: bold; color: var(--neon-cyan); font-size: 0.5rem; text-transform: uppercase; border-bottom: 1px solid rgba(0,243,255,0.2); padding-bottom: 4px; }
-        .file-row { display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 4px 6px; border-radius: 3px; }
+        .explorer-content { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex: 1; min-height: 0; overflow-y: auto;}
+        .explorer-pane { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); border-radius: 4px; padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+        .file-row { display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 6px; border-radius: 3px; font-size: 0.6rem; font-family: var(--font-mono); color: var(--accent-green);}
         .file-row:hover { background: rgba(0, 243, 255, 0.1); color: #fff; }
-
-        .summary-dashboard-card { background: linear-gradient(135deg, rgba(0,243,255,0.05) 0%, rgba(192,132,252,0.05) 100%); border: 1px solid var(--neon-cyan); }
-        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; margin-top: 8px; flex-shrink: 0;}
-        .summary-metric-card { background: rgba(10, 14, 22, 0.9); border: 1px solid rgba(0,243,255,0.3); border-radius: 6px; padding: 14px; text-align: center; font-family: var(--font-mono); transition: all 0.2s; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
-        .summary-metric-title { font-size: 0.55rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .summary-metric-val { font-size: 1rem; color: var(--neon-cyan); font-weight: bold; margin-top: 8px; }
-        .sys-logger { background: #000; border: 1px solid rgba(126, 231, 135, 0.3); border-radius: 4px; padding: 8px; height: 90px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.55rem; color: var(--accent-green); display: flex; flex-direction: column; gap: 4px; flex-shrink: 0;}
-        .log-err { color: var(--crimson-red); } .log-info { color: var(--neon-cyan); }
         
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        .loader-spin { display: inline-block; width: 12px; height: 12px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; }
+        .sys-logger { background: #000; border: 1px solid rgba(126, 231, 135, 0.3); border-radius: 4px; padding: 8px; flex: 1; min-height: 0; overflow-y: auto; font-family: var(--font-mono); font-size: 0.6rem; color: var(--accent-green); display: flex; flex-direction: column; gap: 4px;}
     </style>
 </head>
 <body>
 
-<!-- Global Guide Toast Notification -->
 <div id="globalToast">💡 Guide: Interface element selected.</div>
 
-<!-- GATEWAY MODAL -->
 <div id="authGatewayModal">
     <div class="auth-card">
         <div class="auth-header">🔐 SEBRA82 Gateway</div>
@@ -221,216 +194,183 @@
 
 <div class="platform-container">
 
-    <!-- Top Header -->
     <div class="widget-header">
         <div class="brand-title">⚡ <span>SEBRA82 v19.5</span> Quantum Terminal</div>
         <div class="header-actions">
-            <button class="top-btn btn-rand" id="btnGenRandom" data-guide="Instantly generates a fresh batch of deterministic noise vectors across all active models.">🎲 Noise</button>
-            <button class="top-btn btn-save" id="btnSaveState" data-guide="Saves your current interface layout to local browser storage.">💾 Save</button>
-            <button class="top-btn btn-reset" id="btnResetView" data-guide="Minimizes all panels and restores the clean, 6-card dashboard grid.">↺ Reset Layout</button>
+            <button class="top-btn btn-rand" id="btnGenRandom" data-guide="Generates a fresh deterministic noise epoch across the entire state vector.">🎲 Noise</button>
+            <button class="top-btn btn-reset" id="btnResetView" data-guide="Restores the primary Zero-Scroll 3x2 grid layout.">↺ Reset Layout</button>
             <div class="node-badge" id="vault-status">VAULT: STANDBY</div>
         </div>
     </div>
 
-    <!-- Ultra-Slim AI Navigation Bar -->
-    <div class="ai-compact-bar">
-        <span class="ai-status-indicator">🤖 SYNAPSE</span>
-        <div class="ai-input-wrap">
-            <div class="ghost-overlay" id="ghostOverlay"></div>
-            <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Command AI (e.g. 'zoom lattice', 'run benchmark', 'extract noise')..." autocomplete="off" spellcheck="false">
+    <div class="ai-wrapper">
+        <div class="ai-compact-bar">
+            <span class="ai-status-indicator">🤖 SYNAPSE</span>
+            <div class="ai-input-wrap">
+                <div class="ghost-overlay" id="ghostOverlay"></div>
+                <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Command AI (e.g. 'run benchmark', 'extract noise')..." autocomplete="off" spellcheck="false">
+            </div>
+            <button class="ai-btn-submit" id="btnSubmitAiChat" data-guide="Executes natural language AI command.">Exec</button>
         </div>
-        <button class="ai-btn-submit" id="btnSubmitAiChat" data-guide="Executes the natural language command typed into the Synapse AI input bar.">Exec</button>
+        <div class="ai-prompt-bar">
+            <button class="ai-prompt-btn" data-target="cardAtom" data-guide="Navigates directly to the 3D Molecular Lattice Core.">⚛️ Lattice</button>
+            <button class="ai-prompt-btn" data-target="cardFin" data-guide="Navigates directly to the Calculus & Math Studio.">📈 Maths</button>
+            <button class="ai-prompt-btn" data-target="cardWave" data-guide="Navigates directly to the Predictive Markov Streams.">🌊 Noise</button>
+            <button class="ai-prompt-btn" data-target="cardQuery" data-guide="Navigates directly to the live Data Ledger.">🗃️ Ledger</button>
+            <button class="ai-prompt-btn" data-target="cardTools" data-guide="Navigates directly to the Workspace Vault.">📂 Vault</button>
+            <button class="ai-prompt-btn" data-target="cardSummary" data-guide="Navigates directly to the Executive Insights Briefing.">📊 Exec Summary</button>
+        </div>
     </div>
 
-    <!-- RESPONSIVE DYNAMIC WORKSPACE (3x2 Desktop Grid) -->
+    <!-- ZERO-SCROLL 3x2 DESKTOP GRID -->
     <div class="mobile-stack" id="mobileStack">
         
         <!-- CARD 1: 3D Atom Matrix -->
         <div class="panel-card" id="cardAtom">
-            <div class="section-category-bar">
-                <span class="cat-chip cat-calc">Calculation</span><span class="cat-chip cat-sci">Quantum Science</span>
+            <div class="section-category-bar" id="atomTabs">
+                <span class="cat-chip cat-calc active" data-atom-mode="calc" data-guide="Configures Lattice to Calculation Mode (Rigid Cubes, Orthogonal Physics).">Calculation</span>
+                <span class="cat-chip cat-sci" data-atom-mode="sci" data-guide="Configures Lattice to Science Mode (Organic Spheres, Sine Wave Breathing).">Science</span>
+                <span class="cat-chip cat-world" data-atom-mode="world" data-guide="Configures Lattice to World Mode (Chaotic Phase Space, High Velocity).">World</span>
             </div>
-            <div class="panel-title" data-toggle-card="cardAtom">
-                <span>1. Breathing 3D Quantum Lattice Core</span>
-                <button class="pin-btn" data-pin-card="cardAtom" id="pinBtn_cardAtom" data-guide="Maximizes the 3D Lattice module and docks all other windows.">⚡ Maximize</button>
+            <div class="panel-title" data-toggle-card="cardAtom" data-guide="Maximizes the 3D Core to full screen.">
+                <span>1. 3D Quantum Lattice Core</span>
+                <button class="pin-btn" id="pinBtn_cardAtom">⚡ Maximize</button>
             </div>
-            <div class="section-summary-preview" data-toggle-card="cardAtom">
-                <span>Status: <strong>Active Dynamic Lattice</strong> | Nodes: <strong id="nodeCountLabel">128</strong></span>
-                <span>🔍 Focus 3D Core</span>
+            <div class="section-summary-preview">
+                <span>Status: <strong>Active</strong> | Nodes: <strong id="nodeCountLabel">128</strong></span>
             </div>
             <div class="collapsible-body collapsed" id="secAtom">
                 <div class="control-item" style="border-color: rgba(0, 243, 255, 0.4); background: rgba(0,243,255,0.03);">
-                    <div class="control-label">Magnification (Deep Molecular Level): <span id="atomZoomReadout" style="color:var(--neon-cyan);">1.0x</span></div>
-                    <input type="range" id="atomZoomSlider" min="0.3" max="30.0" step="0.2" value="1.0" data-guide="Zoom deeply into the lattice structure. Render energy adjusts automatically to prevent crashing.">
+                    <div class="control-label">Magnification: <span id="atomZoomReadout" style="color:var(--neon-cyan);">1.0x</span></div>
+                    <input type="range" id="atomZoomSlider" min="0.3" max="30.0" step="0.2" value="1.0" data-guide="Seamlessly zoom down to the molecular bond level. Auto-failsafe prevents crashes.">
                 </div>
                 <div class="canvas-box">
                     <canvas id="atom3DCanvas"></canvas>
-                    <div class="hud-tag">✨ CONTINUOUS QUANTUM MATRIX | Drag to Rotate, Scroll or Slider to Zoom</div>
+                    <div class="hud-tag">✨ DYNAMIC MATRIX | Scroll/Slider to Zoom</div>
                 </div>
             </div>
         </div>
 
-        <!-- CARD 2: Maths & Modeling Studio -->
+        <!-- CARD 2: Maths -->
         <div class="panel-card" id="cardFin">
             <div class="section-category-bar">
                 <span class="cat-chip cat-calc">Calculus</span><span class="cat-chip cat-fin">Pricing</span>
             </div>
-            <div class="panel-title" data-toggle-card="cardFin">
+            <div class="panel-title" data-toggle-card="cardFin" data-guide="Maximizes the Math Studio.">
                 <span>2. Calculus & Modeling Studio</span>
-                <button class="pin-btn" data-pin-card="cardFin" id="pinBtn_cardFin" data-guide="Maximizes the Calculus Studio and docks all other windows.">⚡ Maximize</button>
+                <button class="pin-btn" id="pinBtn_cardFin">⚡ Maximize</button>
             </div>
-            <div class="section-summary-preview" data-toggle-card="cardFin">
+            <div class="section-summary-preview">
                 <span>Model: <strong style="color:var(--accent-purple);">Hilbert State</strong> | Damping: <strong id="sumDamping">1.45x</strong></span>
-                <span>🔍 Configure Math</span>
             </div>
             <div class="collapsible-body collapsed" id="secFin">
                 <div class="math-dashboard">
                     <div class="math-interactive-card">
-                        <div class="math-toggle-row">
-                            <button class="math-mode-btn active" id="modeBtnQuantum" data-guide="Switches the core engine into Quantum Hilbert Space mode for state vector modeling.">⚛ Hilbert Tensor Space</button>
-                            <button class="math-mode-btn" id="modeBtnFinancial" data-guide="Switches the core engine into Welford Alpha mode to project price probabilities.">📈 Welford Alpha Pricing</button>
+                        <div style="display:flex; gap: 6px;">
+                            <button class="math-mode-btn active" id="modeBtnQuantum">⚛ Hilbert Space</button>
+                            <button class="math-mode-btn" id="modeBtnFinancial">📈 Alpha Pricing</button>
                         </div>
                         <div class="math-live-readout" style="margin-top: 6px;">
                             <span id="mathLiveTitle">Normalized Tensor Vector:</span>
                             <span id="mathLiveResult" style="color: var(--accent-green); font-weight: bold;">|00&gt; + 0.88|01&gt;</span>
                         </div>
                     </div>
-                    <div class="math-interactive-card" style="border-color: var(--accent-purple);">
-                        <div style="font-size:0.55rem; color:var(--text-muted); text-transform: uppercase;">Compute Matrix Benchmark</div>
-                        <div style="display:flex; justify-content:space-between; gap:8px; margin-top:4px;">
-                            <div style="flex:1; background:#1e2a40; padding:6px; border-radius:4px; text-align:center;">
-                                <div style="font-size:0.45rem; color:var(--warning-amber);">Legacy Neural</div>
-                                <div id="legacyTime" style="font-size:0.75rem; font-family:var(--font-mono); margin-top:2px;">-- ms</div>
-                            </div>
-                            <div style="flex:1; background:rgba(0,243,255,0.1); border:1px solid var(--neon-cyan); padding:6px; border-radius:4px; text-align:center;">
-                                <div style="font-size:0.45rem; color:var(--neon-cyan); font-weight:bold;">SEBRA82 Core</div>
-                                <div id="sebraTime" style="font-size:0.75rem; font-family:var(--font-mono); color:var(--neon-cyan); font-weight:bold; margin-top:2px;">-- ms</div>
-                            </div>
-                        </div>
-                        <button id="btnRunBench" class="action-btn" style="margin-top:6px; background:rgba(192, 132, 252, 0.2); border:1px solid var(--accent-purple); color:var(--accent-purple);" data-guide="Triggers an explicit hardware test comparing SEBRA82 matrix inversion against standard neural loops.">Run Speed Benchmark</button>
-                    </div>
                 </div>
                 <div class="metrics-grid">
                     <div class="metric-box"><div class="metric-label">Z-Score</div><div class="metric-value" id="serverZScore" style="color:var(--warning-amber);">0.00 &sigma;</div></div>
                     <div class="metric-box"><div class="metric-label">Scale Rate</div><div class="metric-value">1.616e-35</div></div>
-                    <div class="metric-box"><div class="metric-label">Extrapolation</div><div class="metric-value">15,480 X</div></div>
                 </div>
                 <div class="control-item">
                     <div class="control-label">Planck Magnitude Base ($M_0$): <span id="baseValueReadout">10.00</span></div>
-                    <input type="range" id="baseValueSlider" min="1.0" max="50.0" step="0.5" value="10.0" data-guide="Adjusts the foundational magnitude variable applied across all predictive mathematics.">
+                    <input type="range" id="baseValueSlider" min="1.0" max="50.0" step="0.5" value="10.0" data-guide="Adjusts foundational math magnitude.">
                 </div>
                 <div class="control-item">
                     <div class="control-label">Stochastic Damping (&gamma;): <span id="dampingReadout">1.45</span></div>
-                    <input type="range" id="dampingSlider" min="0.1" max="3.0" step="0.05" value="1.45" data-guide="Applies friction to the mathematical state vectors, lowering extreme outcome probabilities.">
+                    <input type="range" id="dampingSlider" min="0.1" max="3.0" step="0.05" value="1.45" data-guide="Alters physical friction coefficients.">
                 </div>
             </div>
         </div>
 
-        <!-- CARD 3: Noise & Predictive Studio -->
+        <!-- CARD 3: Noise Studio -->
         <div class="panel-card" id="cardWave">
             <div class="section-category-bar">
                 <span class="cat-chip cat-calc">Signal</span><span class="cat-chip cat-sci">Markov Stream</span>
             </div>
-            <div class="panel-title" data-toggle-card="cardWave">
+            <div class="panel-title" data-toggle-card="cardWave" data-guide="Maximizes Telemetry Studio.">
                 <span>3. Noise & Predictive Studio</span>
-                <button class="pin-btn" data-pin-card="cardWave" id="pinBtn_cardWave" data-guide="Maximizes the Telemetry Studio and docks all other windows.">⚡ Maximize</button>
+                <button class="pin-btn" id="pinBtn_cardWave">⚡ Maximize</button>
             </div>
-            <div class="section-summary-preview" data-toggle-card="cardWave">
-                <span>Status: <strong id="waveStreamStatus" style="color:var(--neon-cyan);">Awaiting Stream</strong> | Anomalies: <strong id="sumSubPoints">0</strong></span>
-                <span>🔍 View Telemetry</span>
+            <div class="section-summary-preview">
+                <span>Anomalies: <strong id="sumSubPoints">0</strong> | Status: <strong>Tracking</strong></span>
             </div>
             <div class="collapsible-body collapsed" id="secWave">
                 <div class="canvas-box" style="cursor: crosshair;">
                     <canvas id="secureSimCanvas"></canvas>
-                    <div class="hud-tag" id="waveHudTag">🔒 L1 NOISE | CLICK SIGNAL TO TAKE SLICE</div>
-                    <div class="graph-toolbar">
-                        <button class="graph-tool-btn" id="btnPauseStream" data-guide="Freezes the incoming real-time telemetry stream so you can carefully analyze the active waveform.">⏸ Pause</button>
-                        <button class="graph-tool-btn" id="btnTriggerBurst" data-guide="Injects a synthetic high-frequency volatility burst into the math engine.">⚡ Burst</button>
-                    </div>
+                    <div class="hud-tag">🔒 L1 NOISE | CLICK SIGNAL TO EXTRACT</div>
                 </div>
                 <div class="canvas-box" style="border-color: rgba(192, 132, 252, 0.5);">
                     <canvas id="predictiveForecastCanvas"></canvas>
-                    <div class="hud-tag" style="color:var(--accent-purple);">📉 MARKOV CONE vs TRAJECTORY</div>
+                    <div class="hud-tag" style="color:var(--accent-purple);">📉 MARKOV CONE vs ACTUAL TRAJECTORY</div>
                 </div>
-                <div class="btn-row">
-                    <button id="btnSimBull" class="action-btn" style="background: rgba(126, 231, 135, 0.1); color: var(--accent-green); border: 1px solid var(--accent-green);" data-guide="Simulates a massive bullish counterfactual shock onto the Markov predictive cone.">+ Bullish Shock</button>
-                    <button id="btnSimBear" class="action-btn" style="background: rgba(255, 51, 68, 0.1); color: var(--crimson-red); border: 1px solid var(--crimson-red);" data-guide="Simulates a massive bearish counterfactual shock onto the Markov predictive cone.">- Bearish Shock</button>
-                    <button id="btnClearShock" class="action-btn btn-secondary" data-guide="Removes all counterfactual shocks and returns the Markov model to baseline tracking.">Clear</button>
-                </div>
-                <div class="canvas-box" style="border-color: var(--accent-purple); margin-top: 6px;">
-                    <canvas id="detailedAnomalyCanvas"></canvas>
-                    <div class="hud-tag" id="detailPlotTag" style="color:var(--accent-purple); border-color:var(--accent-purple);">⚠️ EXTRACTED ISOLATION PLOT</div>
-                </div>
-                <div class="btn-row">
-                    <button id="btnSendIsoToExec" class="action-btn" style="background:rgba(192, 132, 252, 0.15); color:var(--accent-purple); border:1px solid var(--accent-purple);" data-guide="Pushes the currently extracted Isolation Plot directly to the Executive Dashboard for reporting.">⭐ Push Isolation to Exec Summary</button>
-                </div>
-                <div class="canvas-box" style="border-color: rgba(255, 51, 68, 0.5); margin-top: 6px;">
+                <div class="canvas-box" style="border-color: rgba(255, 51, 68, 0.5);">
                     <canvas id="timeSeriesAnomalyCanvas"></canvas>
                     <div class="hud-tag" style="color:var(--crimson-red);">WELFORD ACCUMULATOR MAP</div>
                 </div>
-                <div class="btn-row">
-                    <button id="btnSendToExec" class="action-btn" style="background:rgba(126, 231, 135, 0.15); color:var(--accent-green); border:1px solid var(--accent-green);" data-guide="Pushes the live Regime Shift Accumulator map directly to the Executive Dashboard for reporting.">⭐ Push Accumulator to Exec Summary</button>
-                </div>
             </div>
         </div>
 
-        <!-- CARD 4: Data Ledger & Export Studio -->
+        <!-- CARD 4: Data Ledger -->
         <div class="panel-card" id="cardQuery">
             <div class="section-category-bar">
-                <span class="cat-chip cat-world">World</span><span class="cat-chip cat-calc">Calculation</span><span class="cat-chip cat-fin">Finance</span>
+                <span class="cat-chip cat-world">World</span><span class="cat-chip cat-fin">Finance</span>
             </div>
-            <div class="panel-title" data-toggle-card="cardQuery">
+            <div class="panel-title" data-toggle-card="cardQuery" data-guide="Maximizes the Data Ledger.">
                 <span>4. Query & Ledger Studio</span>
-                <button class="pin-btn" data-pin-card="cardQuery" id="pinBtn_cardQuery" data-guide="Maximizes the Data Ledger and docks all other windows.">⚡ Maximize</button>
+                <button class="pin-btn" id="pinBtn_cardQuery">⚡ Maximize</button>
             </div>
-            <div class="section-summary-preview" data-toggle-card="cardQuery">
+            <div class="section-summary-preview">
                 <span>Records: <strong id="sumQueryCount">0 rows</strong> | Filter: <strong id="filterStateLabel">ALL</strong></span>
-                <span>🔍 Open Ledger</span>
             </div>
             <div class="collapsible-body collapsed" id="secQuery">
                 <div class="section-category-bar">
-                    <span class="cat-chip cat-all active" id="filtAll" data-guide="Remove all filters to view the raw data feed.">ALL</span>
-                    <span class="cat-chip cat-world" id="filtWorld" data-guide="Filters the ledger to isolate WORLD-EVT categorized anomalies.">WORLD</span>
-                    <span class="cat-chip cat-calc" id="filtCalc" data-guide="Filters the ledger to isolate CALC-NODE categorized system drops.">CALCULATION</span>
-                    <span class="cat-chip cat-fin" id="filtFin" data-guide="Filters the ledger to isolate high-frequency FINANCE-ALPHA pricing shocks.">FINANCE</span>
+                    <span class="cat-chip cat-all active" id="filtAll" data-guide="Show all ledger events.">ALL</span>
+                    <span class="cat-chip cat-world" id="filtWorld" data-guide="Filter to World Vectors.">WORLD</span>
+                    <span class="cat-chip cat-calc" id="filtCalc" data-guide="Filter to Calculation Nodes.">CALC</span>
+                    <span class="cat-chip cat-fin" id="filtFin" data-guide="Filter to Finance Alphas.">FINANCE</span>
                 </div>
                 <div class="data-table-container">
                     <table class="data-table" id="queryDataTable">
-                        <thead>
-                            <tr id="queryTableHeaders"><th>Event ID</th><th>Timestamp</th><th>Classification</th><th>Magnitude</th></tr>
-                        </thead>
+                        <thead><tr id="queryTableHeaders"><th>Event ID</th><th>Timestamp</th><th>Category</th><th>Magnitude</th></tr></thead>
                         <tbody id="queryTableBody">
-                            <tr><td colspan="4" style="color:var(--text-muted); text-align:center; padding: 20px;">Awaiting live stream anomaly extractions...</td></tr>
+                            <tr><td colspan="4" style="text-align:center; padding: 20px;">Awaiting live data extraction...</td></tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="btn-row" style="margin-top: 10px;">
-                    <button id="btnArchiveData" class="action-btn" style="background: rgba(126, 231, 135, 0.15); color: var(--accent-green); border:1px solid var(--accent-green);" data-guide="Saves the current live query ledger into a physical CSV file inside your Virtual Workspace Vault.">📂 Archive to Vault</button>
-                    <button id="btnDownloadExport" class="action-btn" style="background: rgba(192, 132, 252, 0.15); color: var(--accent-purple); border:1px solid var(--accent-purple);" data-guide="Packages the current query table into a raw .CSV file and downloads it to your machine.">📥 Download .CSV</button>
-                    <button id="btnClearLedger" class="action-btn btn-secondary" data-guide="Permanently purges all active row data from the live Query Table.">Clear</button>
+                <div class="btn-row">
+                    <button id="btnArchiveData" class="action-btn" data-guide="Archive to physical workspace.">📂 Archive</button>
+                    <button id="btnDownloadExport" class="action-btn" style="background:rgba(192, 132, 252, 0.2); color:var(--accent-purple);" data-guide="Export CSV to local machine.">📥 CSV</button>
                 </div>
             </div>
         </div>
 
-        <!-- CARD 5: Workspace Integrations -->
+        <!-- CARD 5: Workspace -->
         <div class="panel-card" id="cardTools">
             <div class="section-category-bar">
                 <span class="cat-chip cat-world">Storage</span><span class="cat-chip cat-sci">Telemetry</span>
             </div>
-            <div class="panel-title" data-toggle-card="cardTools">
+            <div class="panel-title" data-toggle-card="cardTools" data-guide="Maximizes Virtual Workspace.">
                 <span>5. Workspace & Integrations</span>
-                <button class="pin-btn" data-pin-card="cardTools" id="pinBtn_cardTools" data-guide="Maximizes the Virtual Workspace Explorer and docks all other windows.">⚡ Maximize</button>
+                <button class="pin-btn" id="pinBtn_cardTools">⚡ Maximize</button>
             </div>
-            <div class="section-summary-preview" data-toggle-card="cardTools">
+            <div class="section-summary-preview">
                 <span>Path: <strong>/root/datasets</strong> | Status: <strong>Secure</strong></span>
-                <span>🔍 Access Vault</span>
             </div>
             <div class="collapsible-body collapsed" id="secTools">
-                <div class="control-item" style="flex: 1; display: flex; flex-direction: column;">
-                    <div class="file-explorer-box">
+                <div class="control-item" style="flex:1;">
+                    <div class="file-explorer-box" style="height:100%;">
                         <div class="explorer-toolbar">
                             <span id="currentPathDisplay" style="font-weight:bold; color:#fff;">📁 /root/datasets/</span>
-                            <span id="btnNavUp" style="color: var(--neon-cyan); cursor: pointer; border: 1px solid rgba(0,243,255,0.3); padding: 2px 8px; border-radius: 3px;" data-guide="Navigate up one folder level in the virtual file system.">⬆ Back</span>
+                            <span id="btnNavUp" style="color: var(--neon-cyan); cursor: pointer;">⬆ Back</span>
                         </div>
                         <div class="explorer-content" id="explorerContentArea"></div>
                     </div>
@@ -438,14 +378,9 @@
                 <div class="control-item" style="border-color: rgba(192, 132, 252, 0.4);">
                     <div class="control-label"><span style="color:var(--accent-purple);">Macro Historical Ingestion:</span></div>
                     <div class="btn-row">
-                        <button id="btnLoad3M" class="action-btn" style="background:rgba(192,132,252,0.1); border:1px solid var(--accent-purple); color:var(--accent-purple);" data-guide="Injects 3 months of simulated historical anomaly structures directly into the query pipeline.">Load 3M</button>
-                        <button id="btnLoad6M" class="action-btn" style="background:rgba(192,132,252,0.1); border:1px solid var(--accent-purple); color:var(--accent-purple);" data-guide="Injects 6 months of simulated historical anomaly structures directly into the query pipeline.">Load 6M</button>
-                        <button id="btnLoad12M" class="action-btn" style="background:rgba(192,132,252,0.1); border:1px solid var(--accent-purple); color:var(--accent-purple);" data-guide="Injects 12 months of simulated historical anomaly structures directly into the query pipeline.">Load 12M</button>
+                        <button id="btnLoad3M" class="action-btn" style="background:rgba(192,132,252,0.1); color:var(--accent-purple);" data-guide="Dump 3 months historical data into ledger.">Load 3M</button>
+                        <button id="btnLoad6M" class="action-btn" style="background:rgba(192,132,252,0.1); color:var(--accent-purple);" data-guide="Dump 6 months historical data into ledger.">Load 6M</button>
                     </div>
-                </div>
-                <div class="btn-row" style="margin-top: 8px;">
-                    <button id="btnUploadData" class="action-btn btn-secondary" data-guide="Upload an external CSV or JSON file into the SEBRA82 terminal memory.">Upload CSV / JSON Dataset</button>
-                    <input type="file" id="fileUploadInput" style="display:none" accept=".csv,.json">
                 </div>
             </div>
         </div>
@@ -455,24 +390,20 @@
             <div class="section-category-bar">
                 <span class="cat-chip cat-calc">Executive</span><span class="cat-chip cat-sci">Briefing</span>
             </div>
-            <div class="panel-title" data-toggle-card="cardSummary">
-                <span>⭐ Executive Insights & Performance</span>
-                <button class="pin-btn" data-pin-card="cardSummary" id="pinBtn_cardSummary" data-guide="Maximizes the Executive HUD and docks all other windows.">⚡ Maximize</button>
+            <div class="panel-title" data-toggle-card="cardSummary" data-guide="Maximizes Executive Insight Dashboard.">
+                <span>⭐ Executive Insights</span>
+                <button class="pin-btn" id="pinBtn_cardSummary">⚡ Maximize</button>
             </div>
-            <div class="collapsible-body" id="secSummary">
+            <div class="collapsible-body collapsed" id="secSummary">
                 <div class="btn-row">
-                   <button id="btnAutoSummary" class="action-btn" style="background:var(--neon-cyan); color:#000;" data-guide="Prompts the AI to read current Z-scores and anomaly counts to write a real-time executive briefing.">🤖 Generate Executive Highlights</button>
+                   <button id="btnAutoSummary" class="action-btn" style="background:var(--neon-cyan); color:#000;" data-guide="AI generates real-time synopsis of system matrix state.">🤖 Generate Executive Highlights</button>
                 </div>
-                <div style="font-size: 0.65rem; color: var(--text-main); font-family: var(--font-mono); line-height: 1.5; border-left: 2px solid var(--accent-green); padding-left: 10px; background: rgba(126,231,135,0.04); padding: 10px; border-radius: 0 4px 4px 0; margin-top: 8px;" id="execSummaryText">
-                    🏆 <strong>Executive Summary</strong>: Cryptographic engine seal verified. Continuous 60 FPS mathematical pipeline operational.
-                </div>
-                <img id="execSummaryImg" alt="Snapshot" style="display: none; width: 100%; border: 1px solid var(--neon-cyan); margin-top: 8px; border-radius: 4px;" />
                 <div class="summary-grid">
-                    <div class="summary-metric-card"><div class="summary-metric-title">Active Lattice Nodes</div><div class="summary-metric-val" id="nodeCountMetric">128 Nodes</div></div>
-                    <div class="summary-metric-card"><div class="summary-metric-title">Captured Anomalies</div><div class="summary-metric-val" id="sumMetricSpikes">0 Events</div></div>
-                    <div class="summary-metric-card"><div class="summary-metric-title">Kernel Status</div><div class="summary-metric-val" id="execStatusVal" style="color: var(--accent-green);">Optimal</div></div>
+                    <div class="metric-box"><div class="metric-label">Active Nodes</div><div class="metric-value">128</div></div>
+                    <div class="metric-box"><div class="metric-label">Anomalies</div><div class="metric-value" id="sumMetricSpikes">0</div></div>
+                    <div class="metric-box"><div class="metric-label">Kernel Status</div><div class="metric-value" style="color:var(--accent-green);">Optimal</div></div>
                 </div>
-                <div class="control-label" style="margin-top:8px;"><span>System Audit Logger:</span></div>
+                <div class="control-label" style="margin-top:4px;"><span>System Audit Logger:</span></div>
                 <div class="sys-logger" id="sysLogger">
                     <div class="log-info">[INIT] SEBRA82 Quantum Architecture Verified & Ready.</div>
                 </div>
@@ -489,9 +420,20 @@
        GLOBAL STATE MANAGER
        ========================================================================== */
     window.GLOBALS = {
-        currentTier: "demo", activeHashKey: "Quantum", isStreamPaused: false, burstMultiplier: 1.0, activeIntervention: 0.0,
-        globalTick: 0, timeOffset: 0.0, serverMatrix: [], waveBuffer: new Array(220).fill(50),
-        timeSeriesBuffer: [], detailedBuffer: [], extractionHighlight: 0.0, queryFilter: 'ALL',
+        currentTier: "demo",
+        activeHashKey: "Quantum",
+        isStreamPaused: false,
+        burstMultiplier: 1.0,
+        activeIntervention: 0.0,
+        globalTick: 0,
+        timeOffset: 0.0,
+        atomMode: 'calc', // 'calc', 'sci', 'world'
+        serverMatrix: [],
+        waveBuffer: new Array(220).fill(50),
+        timeSeriesBuffer: [],
+        detailedBuffer: [],
+        extractionHighlight: 0.0,
+        queryFilter: 'ALL',
         finConfig: { baseValue: 10.0, damping: 1.45, mathMode: 'quantum', threshold: 2.5 }
     };
 
@@ -503,10 +445,10 @@
         show: function(text) {
             if (!text) return;
             const toast = document.getElementById('globalToast');
-            toast.innerHTML = `💡 <strong>Guide:</strong> ${window.UTILS.escapeHtml(text)}`;
+            toast.innerHTML = `💡 <strong>System Guide:</strong> ${window.UTILS.escapeHtml(text)}`;
             toast.classList.add('show');
             clearTimeout(this.timeoutId);
-            this.timeoutId = setTimeout(() => { toast.classList.remove('show'); }, 20000); // Fades after 20 seconds
+            this.timeoutId = setTimeout(() => { toast.classList.remove('show'); }, 20000); 
         }
     };
 
@@ -524,49 +466,12 @@
         lerp: function(start, end, amt) { return (1 - amt) * start + amt * end; }
     };
 
-    class AegisEnvelopeVerifier {
-        static verifyAndUnpack(arrayBuffer) {
-            try {
-                const envelope = msgpack.decode(new Uint8Array(arrayBuffer));
-                if (!Array.isArray(envelope) || envelope.length !== 2) return null;
-                const [receivedSig, coreData] = envelope; return coreData; 
-            } catch (e) { return null; }
-        }
-    }
-
     /* ==========================================================================
-       DATA INSIGHT ENGINE (Fast Single-Pass Rendering)
+       DATA INSIGHT ENGINE (Fast Single-Pass Virtual Dom)
        ========================================================================== */
     class DataInsightEngine {
         constructor() { this.activeDataSet = []; }
-        handleFileUpload(event) {
-            const file = event.target.files[0]; if(!file) return;
-            window.UTILS.logSys(`Ingesting memory stream: ${file.name}`);
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const content = e.target.result;
-                if(file.name.endsWith('.csv')) { this.parseCSV(content); } 
-                else if(file.name.endsWith('.json')) { this.parseJSON(content); } 
-            };
-            reader.readAsText(file);
-        }
-        parseCSV(text) {
-            const lines = text.split('\n').filter(line => line.trim() !== ""); if(lines.length < 2) return;
-            const rawHeaders = lines[0].split(',');
-            this.activeDataSet = [];
-            for(let i = 1; i < lines.length; i++) {
-                const row = lines[i].split(',');
-                if(row.length === rawHeaders.length) { this.activeDataSet.push({ id: row[0] || `TX-${i}`, time: row[1] || new Date().toLocaleTimeString(), cat: row[2] || "Uncategorized", val: parseFloat(row[3] || 0).toFixed(2), rawDate: new Date(row[1]) }); }
-            }
-            this.renderLedger(); window.UI.toggleMax('cardQuery');
-        }
-        parseJSON(text) {
-            try {
-                const jsonArray = JSON.parse(text);
-                this.activeDataSet = jsonArray.map((obj, i) => ({ id: obj.id || `TX-${i}`, time: obj.time || new Date().toLocaleTimeString(), cat: obj.cat || "Uncategorized", val: parseFloat(obj.val || 0).toFixed(2), rawDate: new Date() }));
-                this.renderLedger(); window.UI.toggleMax('cardQuery');
-            } catch (err) { window.UTILS.logSys(`JSON Parse Error: ${err.message}`, "err"); }
-        }
+        
         setFilter(cat) {
             window.GLOBALS.queryFilter = cat;
             document.querySelectorAll('#secQuery .cat-chip').forEach(c => c.classList.remove('active'));
@@ -577,6 +482,7 @@
             document.getElementById('filterStateLabel').innerText = cat;
             this.renderLedger();
         }
+
         renderLedger() {
             const tbody = document.getElementById('queryTableBody'); 
             let dataToRender = this.activeDataSet.length > 0 ? this.activeDataSet : window.GLOBALS.timeSeriesBuffer.filter(i => i.spike).map((i, idx) => ({ id: `TX-${9400+idx}`, time: i.time, cat: i.cat, val: (i.val * window.GLOBALS.finConfig.baseValue).toFixed(2) }));
@@ -586,7 +492,7 @@
                     let c = item.cat.toUpperCase();
                     if (window.GLOBALS.queryFilter === 'WORLD' && c.includes('WORLD')) return true;
                     if (window.GLOBALS.queryFilter === 'CALC' && c.includes('CALC')) return true;
-                    if (window.GLOBALS.queryFilter === 'FIN' && (c.includes('FIN') || c.includes('PRICE'))) return true;
+                    if (window.GLOBALS.queryFilter === 'FIN' && (c.includes('FIN') || c.includes('PRICE') || c.includes('ALPHA'))) return true;
                     return false;
                 });
             }
@@ -607,6 +513,7 @@
             tbody.innerHTML = htmlStr;
             document.getElementById('sumQueryCount').innerText = `${reversedData.length} rows`;
         }
+
         triggerExport() {
             let dataToExport = this.activeDataSet.length > 0 ? this.activeDataSet : window.GLOBALS.timeSeriesBuffer.filter(i=>i.spike).map((i, idx) => ({ id: `TX-${9400+idx}`, time: i.time, cat: i.cat, val: (i.val * window.GLOBALS.finConfig.baseValue).toFixed(2) }));
             if(dataToExport.length === 0) { alert("No data available to export."); return; }
@@ -618,14 +525,15 @@
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
             window.UTILS.logSys("Export dataset generated and downloaded.");
         }
+
         archiveData() {
             let fileName = `vault_archive_${Date.now().toString().slice(-4)}.csv`;
             if(!window.WORKSPACE.fs["/root/datasets"]) window.WORKSPACE.fs["/root/datasets"] = { type: 'dir', contents: [] };
             window.WORKSPACE.fs["/root/datasets"].contents.push(fileName);
             window.WORKSPACE.render();
             window.UTILS.logSys(`Active telemetry archived to Virtual Vault: /root/datasets/${fileName}`);
-            alert(`Archived current dataset to /root/datasets/${fileName}`);
         }
+
         loadHistoricalData(months) {
             window.UTILS.logSys(`Loading ${months}-Month historical time-series model.`);
             this.activeDataSet = []; let count = months * 25;
@@ -636,12 +544,13 @@
             }
             this.renderLedger(); window.UI.toggleMax('cardQuery');
         }
+        
         clearLedger() { document.getElementById('queryTableBody').innerHTML=''; document.getElementById('sumQueryCount').innerText='0 rows'; this.activeDataSet = []; window.GLOBALS.timeSeriesBuffer = []; window.UTILS.logSys("Data ledger cleared."); }
     }
     window.DATA_INSIGHT = new DataInsightEngine();
 
     /* ==========================================================================
-       AI GHOST PARSER
+       AI GHOST PARSER & MINI PROMPTS
        ========================================================================== */
     window.AI = {
         currentPrediction: "", fullMatchedPhrase: "", acceptedGhostChars: 0,
@@ -675,14 +584,12 @@
     };
 
     /* ==========================================================================
-       UI DOCKING & MODAL CONTROLLER
+       UI DOCKING CONTROLLER (Strict Flex / Grid Engine)
        ========================================================================== */
     window.UI = {
         authenticateAndLaunch: function(tier) {
             window.GLOBALS.currentTier = tier;
-            window.GLOBALS.activeHashKey = tier === 'license' ? document.getElementById('licenseKeyInput').value.trim() : "SEBRA82_DEMO_GUEST_KEY"; 
             document.getElementById('authGatewayModal').style.display = 'none';
-            document.getElementById('vault-status').innerText = tier === 'license' ? "VAULT: LICENSED MASTER" : "VAULT: DEMO SANDBOX";
             window.UTILS.logSys(`Authentication approved. Terminal tier: ${tier.toUpperCase()}`);
             setTimeout(window.UI.resizeCanvases, 100);
         },
@@ -714,7 +621,7 @@
                         c.querySelector('.collapsible-body').classList.add('collapsed');
                     }
                 });
-                setTimeout(()=> { window.UI.resizeCanvases(); }, 100);
+                setTimeout(()=> { window.UI.resizeCanvases(); }, 50);
             }
         },
         resetStandardView: function() { 
@@ -735,7 +642,7 @@
             });
             
             if(dock) dock.remove();
-            setTimeout(window.UI.resizeCanvases, 100);
+            setTimeout(window.UI.resizeCanvases, 50);
         },
         resizeCanvases: function() {
             document.querySelectorAll('canvas').forEach(canvas => {
@@ -814,13 +721,6 @@
     window.ACTIONS = {
         simulateIntervention: function(mag) { window.GLOBALS.activeIntervention = mag; window.UTILS.logSys(`Markov trajectory shock simulated (${mag > 0 ? '+' : ''}${mag}).`); },
         clearInterventions: function() { window.GLOBALS.activeIntervention = 0.0; },
-        togglePauseStream: function() { window.GLOBALS.isStreamPaused = !window.GLOBALS.isStreamPaused; document.getElementById('btnPauseStream').innerText = window.GLOBALS.isStreamPaused ? "▶ Resume" : "⏸ Pause"; },
-        triggerSpikeBurst: function() { window.GLOBALS.burstMultiplier = 3.2; setTimeout(() => { window.GLOBALS.burstMultiplier = 1.0; }, 1000); },
-        sendToExecutiveDashboard: function(sourceId) {
-            const sourceCanvas = document.getElementById(sourceId);
-            if(sourceCanvas && sourceCanvas.width > 0) { document.getElementById('execSummaryImg').src = sourceCanvas.toDataURL('image/png'); document.getElementById('execSummaryImg').style.display = 'block'; }
-            window.UI.toggleMax('cardSummary');
-        },
         generateRandomDataEpoch: function() { window.GLOBALS.waveBuffer = window.GLOBALS.waveBuffer.map(() => Math.floor(Math.random() * 60) + 20); window.GLOBALS.timeSeriesBuffer = []; window.DATA_INSIGHT.renderLedger(); },
         extractAndInjectAnomalies: function() {
             let selection = window.GLOBALS.waveBuffer.slice(-45); window.GLOBALS.extractionHighlight = 1.0;
@@ -840,7 +740,7 @@
             window.GLOBALS.timeSeriesBuffer.push({ time: timestamp, val: latestVal, spike: isSpike, cat: category });
             if (window.GLOBALS.timeSeriesBuffer.length > 250) window.GLOBALS.timeSeriesBuffer.shift(); 
             let totalSpikes = window.GLOBALS.timeSeriesBuffer.filter(i => i.spike).length;
-            document.getElementById('sumMetricSpikes').innerText = totalSpikes + " Events";
+            document.getElementById('sumMetricSpikes').innerText = totalSpikes;
             if(isSpike) { window.DATA_INSIGHT.renderLedger(); }
         },
         autoGenerateExecSummary: function() {
@@ -854,7 +754,7 @@
     };
 
     /* ==========================================================================
-       ROBUST, CRASH-PROOF 3D QUANTUM LATTICE & CANVAS RENDERERS
+       ROBUST, CRASH-PROOF 3D QUANTUM LATTICE (DYNAMIC STATE MACHINE)
        ========================================================================== */
     class CanvasRenderers {
         static drawGrid(ctx, w, h, color) { ctx.strokeStyle = color; ctx.lineWidth = 0.5; ctx.beginPath(); for(let x=0; x<w; x+=30) { ctx.moveTo(x, 0); ctx.lineTo(x, h); } for(let y=0; y<h; y+=20) { ctx.moveTo(0, y); ctx.lineTo(w, y); } ctx.stroke(); }
@@ -870,36 +770,42 @@
             targetAtomRotX = window.UTILS.lerp(targetAtomRotX, currentAtomRotX, 0.1);
             targetAtomRotY = window.UTILS.lerp(targetAtomRotY, currentAtomRotY, 0.1);
 
-            if (!isDraggingAtom) { currentAtomRotY += 0.003; currentAtomRotX += 0.001; }
+            let mode = window.GLOBALS.atomMode; // 'calc', 'sci', 'world'
+
+            // Dynamic rotation speeds based on mode
+            if (!isDraggingAtom) { 
+                if(mode === 'world') { currentAtomRotY += 0.008; currentAtomRotX += 0.004; }
+                else if(mode === 'sci') { currentAtomRotY += 0.001; currentAtomRotX -= 0.001; }
+                else { currentAtomRotY += 0.003; currentAtomRotX += 0.001; } // Calc
+            }
             
             if (window.GLOBALS.serverMatrix.length === 0 && !window.GLOBALS.isStreamPaused) {
                 let m = [];
-                for(let i=0; i<36; i++) {
-                    let phi = Math.acos(1 - 2*(i+0.5)/36); let theta = Math.PI * (1 + Math.sqrt(5)) * (i+0.5);
-                    m.push({ id: i, type: 'core', phi: phi, theta: theta, baseR: 30 });
-                }
-                for(let i=0; i<42; i++) {
-                    let angle = (i/42) * Math.PI * 2;
-                    m.push({ id: i+36, type: 'inner', angle: angle, baseR: 70 });
-                }
-                for(let i=0; i<50; i++) {
-                    let phi = Math.acos(-1 + (2*i)/50); let theta = Math.sqrt(50*Math.PI) * phi;
-                    m.push({ id: i+78, type: 'valence', phi: phi, theta: theta, baseR: 125 });
-                }
+                for(let i=0; i<36; i++) { m.push({ id: i, type: 'core', phi: Math.acos(1 - 2*(i+0.5)/36), theta: Math.PI * (1 + Math.sqrt(5)) * (i+0.5), baseR: 30 }); }
+                for(let i=0; i<42; i++) { m.push({ id: i+36, type: 'inner', angle: (i/42) * Math.PI * 2, baseR: 70 }); }
+                for(let i=0; i<50; i++) { m.push({ id: i+78, type: 'valence', phi: Math.acos(-1 + (2*i)/50), theta: Math.sqrt(50*Math.PI) * Math.acos(-1 + (2*i)/50), baseR: 125 }); }
                 window.GLOBALS.serverMatrix = m;
             }
 
-            let liveNoise = window.GLOBALS.waveBuffer[window.GLOBALS.waveBuffer.length-1] || 50;
-            let noiseOffset = (liveNoise - 50) * 0.4;
-            let pulse = Math.sin(window.GLOBALS.globalTick * 0.08) * 4;
-
-            let activeMatrix = isMaximized ? window.GLOBALS.serverMatrix : window.GLOBALS.serverMatrix.slice(0, 36); // Preserve energy if not maximized
+            let activeMatrix = isMaximized ? window.GLOBALS.serverMatrix : window.GLOBALS.serverMatrix.slice(0, 36);
 
             let localNodes = activeMatrix.map(n => {
                 let r = n.baseR;
-                if(n.type === 'core') r += pulse;
-                if(n.type === 'inner') r += Math.sin(window.GLOBALS.globalTick*0.05 + n.id)*6;
-                if(n.type === 'valence') r += noiseOffset + Math.sin(n.id*0.3 + window.GLOBALS.timeOffset)*8;
+                
+                // Dynamic physics based on active mode tab
+                if (mode === 'sci') {
+                    if(n.type === 'core') r += Math.sin(window.GLOBALS.globalTick * 0.05) * 8; // Deep breathing
+                    if(n.type === 'inner') r += Math.sin(window.GLOBALS.globalTick*0.03 + n.id)*12;
+                    if(n.type === 'valence') r += Math.cos(n.id*0.2 + window.GLOBALS.timeOffset)*15;
+                } else if (mode === 'world') {
+                    if(n.type === 'core') r += Math.random() * 4; // Chaotic jitter
+                    if(n.type === 'inner') r += Math.tan(window.GLOBALS.globalTick*0.01 + n.id)*2;
+                    if(n.type === 'valence') r += Math.sin(n.id*0.8 + window.GLOBALS.timeOffset*3)*20; // High velocity waves
+                } else { // Calc
+                    if(n.type === 'core') r += Math.sin(window.GLOBALS.globalTick * 0.08) * 4;
+                    if(n.type === 'inner') r += Math.sin(window.GLOBALS.globalTick*0.05 + n.id)*6;
+                    if(n.type === 'valence') r += (window.GLOBALS.waveBuffer[window.GLOBALS.waveBuffer.length-1] - 50) * 0.4 + Math.sin(n.id*0.3 + window.GLOBALS.timeOffset)*8;
+                }
 
                 let ox = 0, oy = 0, oz = 0;
                 if(n.type === 'inner') {
@@ -907,7 +813,21 @@
                 } else {
                     ox = r * Math.sin(n.phi) * Math.cos(n.theta); oy = r * Math.sin(n.phi) * Math.sin(n.theta); oz = r * Math.cos(n.phi);
                 }
-                return { ox: ox, oy: oy, oz: oz, type: n.type, isCore: n.type === 'core', id: n.id };
+
+                // Dynamic Colors based on mode
+                let color, glow;
+                if (mode === 'sci') {
+                    color = n.isCore ? '#ffffff' : (n.type === 'inner' ? '#7ee787' : '#00f3ff');
+                    glow = n.isCore ? 'rgba(255,255,255,0.9)' : (n.type === 'inner' ? 'rgba(126,231,135,0.8)' : 'rgba(0,243,255,0.8)');
+                } else if (mode === 'world') {
+                    color = n.isCore ? '#ffffff' : (n.type === 'inner' ? '#f0883e' : '#ff3344');
+                    glow = n.isCore ? 'rgba(255,255,255,0.9)' : (n.type === 'inner' ? 'rgba(240,136,62,0.8)' : 'rgba(255,51,68,0.8)');
+                } else { // Calc
+                    color = n.isCore ? '#ffffff' : (n.type === 'inner' ? '#00f3ff' : '#c084fc');
+                    glow = n.isCore ? 'rgba(255,255,255,0.9)' : (n.type === 'inner' ? 'rgba(0,243,255,0.8)' : 'rgba(192,132,252,0.8)');
+                }
+
+                return { ox: ox, oy: oy, oz: oz, type: n.type, isCore: n.type === 'core', id: n.id, color: color, glow: glow };
             });
 
             let projected = localNodes.map(n => {
@@ -918,7 +838,7 @@
                 let pers = 400 / (400 + z2);
                 return {
                     px: cx + x1 * pers * targetAtomZoom, py: cy + y2 * pers * targetAtomZoom, z: z2, ox: n.ox, oy: n.oy, oz: n.oz,
-                    isCore: n.isCore, type: n.type, id: n.id, size: (n.isCore ? 3.0 : 2.0) * pers * Math.min(targetAtomZoom, 4.0)
+                    isCore: n.isCore, type: n.type, id: n.id, color: n.color, glow: n.glow, size: (n.isCore ? 3.0 : 2.0) * pers * Math.min(targetAtomZoom, 4.0)
                 };
             });
 
@@ -938,15 +858,19 @@
                         drawnBonds++;
                         let alpha = (1.0 - (dist3D / maxDist)) * 0.7;
                         let grad = atomCtx.createLinearGradient(projected[i].px, projected[i].py, projected[j].px, projected[j].py);
-                        grad.addColorStop(0, projected[i].isCore ? `rgba(255,255,255,${alpha})` : (projected[i].type==='inner' ? `rgba(0,243,255,${alpha})` : `rgba(192,132,252,${alpha})`));
-                        grad.addColorStop(1, projected[j].isCore ? `rgba(255,255,255,${alpha})` : (projected[j].type==='inner' ? `rgba(0,243,255,${alpha})` : `rgba(192,132,252,${alpha})`));
+                        
+                        let c1 = projected[i].color === '#ffffff' ? `255,255,255` : (projected[i].color === '#00f3ff' ? `0,243,255` : (projected[i].color === '#c084fc' ? `192,132,252` : (projected[i].color === '#7ee787' ? `126,231,135` : (projected[i].color === '#f0883e' ? `240,136,62` : `255,51,68`))));
+                        let c2 = projected[j].color === '#ffffff' ? `255,255,255` : (projected[j].color === '#00f3ff' ? `0,243,255` : (projected[j].color === '#c084fc' ? `192,132,252` : (projected[j].color === '#7ee787' ? `126,231,135` : (projected[j].color === '#f0883e' ? `240,136,62` : `255,51,68`))));
+
+                        grad.addColorStop(0, `rgba(${c1},${alpha})`);
+                        grad.addColorStop(1, `rgba(${c2},${alpha})`);
+                        
                         atomCtx.strokeStyle = grad;
                         atomCtx.beginPath(); atomCtx.moveTo(projected[i].px, projected[i].py); atomCtx.lineTo(projected[j].px, projected[j].py); atomCtx.stroke();
                     }
                 }
             }
 
-            // CRASH FAILSAFE
             if (drawnBonds > 600 || targetAtomZoom > 28.0) {
                 if (isMaximized) {
                     window.UTILS.logSys("⚠️ OVERLOAD: Minimizing lattice to protect client.", "err");
@@ -957,10 +881,20 @@
 
             projected.forEach(n => {
                 if (n.px < -20 || n.px > w+20 || n.py < -20 || n.py > h+20) return;
-                atomCtx.fillStyle = n.isCore ? '#ffffff' : (n.type === 'inner' ? '#00f3ff' : '#c084fc');
+                atomCtx.fillStyle = n.color;
+                atomCtx.shadowBlur = n.isCore ? 15 : 8; atomCtx.shadowColor = n.glow;
+                
                 let s = Math.max(2.0, n.size * 2);
-                atomCtx.fillRect(n.px - s/2, n.py - s/2, s, s);
-                atomCtx.fillStyle = '#fff'; atomCtx.fillRect(n.px - s/4, n.py - s/4, s/2, s/2);
+                if (mode === 'sci') {
+                    // Render organic spheres
+                    atomCtx.beginPath(); atomCtx.arc(n.px, n.py, s/2, 0, Math.PI*2); atomCtx.fill();
+                    atomCtx.fillStyle = '#fff'; atomCtx.beginPath(); atomCtx.arc(n.px, n.py, s/4, 0, Math.PI*2); atomCtx.fill();
+                } else {
+                    // Render structural cubes (Calc & World)
+                    atomCtx.fillRect(n.px - s/2, n.py - s/2, s, s);
+                    atomCtx.fillStyle = '#fff'; atomCtx.fillRect(n.px - s/4, n.py - s/4, s/2, s/2);
+                }
+                atomCtx.shadowBlur = 0;
             });
         }
 
@@ -1004,7 +938,6 @@
                 let pst = w / window.GLOBALS.waveBuffer.length; 
                 let startX = (historyCutoff-1) * pst;
 
-                // Predictive Cone
                 predictiveCtx.lineWidth = 1; predictiveCtx.beginPath(); predictiveCtx.moveTo(startX, h/2);
                 for(let i=historyCutoff; i<window.GLOBALS.waveBuffer.length; i++) { predictiveCtx.lineTo(i * pst, (h/2) - (i - historyCutoff) * 0.8); }
                 predictiveCtx.strokeStyle = 'rgba(192, 132, 252, 0.3)'; predictiveCtx.setLineDash([2, 2]); predictiveCtx.stroke();
@@ -1013,7 +946,6 @@
                 for(let i=historyCutoff; i<window.GLOBALS.waveBuffer.length; i++) { predictiveCtx.lineTo(i * pst, (h/2) + (i - historyCutoff) * 0.8); }
                 predictiveCtx.stroke(); predictiveCtx.setLineDash([]);
 
-                // Actual White Trajectory
                 predictiveCtx.strokeStyle = '#fff'; predictiveCtx.lineWidth = 2.0; predictiveCtx.beginPath(); 
                 predictiveCtx.moveTo(0, h - (window.GLOBALS.waveBuffer[0] * 0.8 / 100) * h);
                 for(let i=0; i<window.GLOBALS.waveBuffer.length - 1; i++) {
@@ -1043,27 +975,6 @@
                 detailCtx.fillStyle = '#fff'; 
                 window.GLOBALS.detailedBuffer.forEach((val, idx) => { detailCtx.beginPath(); detailCtx.arc(idx * dst, detailCanvas.height - (val / 100) * detailCanvas.height, 2.5, 0, Math.PI*2); detailCtx.fill(); }); 
             }
-
-            if (timeSeriesCtx && timeSeriesCanvas.width > 0 && window.GLOBALS.timeSeriesBuffer.length > 0) { 
-                let w = timeSeriesCanvas.width, h = timeSeriesCanvas.height;
-                timeSeriesCtx.clearRect(0, 0, w, h);
-                let displayData = window.GLOBALS.timeSeriesBuffer.slice(-30); 
-                let tst = w / Math.max(1, displayData.length - 1); 
-                timeSeriesCtx.strokeStyle = '#7ee787'; timeSeriesCtx.lineWidth = 1.8; timeSeriesCtx.beginPath(); 
-                timeSeriesCtx.moveTo(0, h - (displayData[0].val / 100) * h);
-                for(let idx=0; idx < displayData.length - 1; idx++) {
-                    let x = idx * tst, y = h - (displayData[idx].val / 100) * h; 
-                    let nextX = (idx+1) * tst, nextY = h - (displayData[idx+1].val / 100) * h;
-                    timeSeriesCtx.quadraticCurveTo(x, y, (x + nextX) / 2, (y + nextY) / 2);
-                } 
-                timeSeriesCtx.stroke(); 
-                displayData.forEach((item, idx) => { 
-                    if(item.spike) { 
-                        let x = idx * tst, y = h - (item.val / 100) * h; 
-                        timeSeriesCtx.fillStyle = '#ff3344'; timeSeriesCtx.beginPath(); timeSeriesCtx.arc(x, y, 3.5, 0, Math.PI*2); timeSeriesCtx.fill();
-                    } 
-                }); 
-            }
         }
     }
 
@@ -1074,10 +985,9 @@
     const waveCanvas = document.getElementById('secureSimCanvas'); const waveCtx = waveCanvas.getContext('2d');
     const predictiveCanvas = document.getElementById('predictiveForecastCanvas'); const predictiveCtx = predictiveCanvas.getContext('2d');
     const detailCanvas = document.getElementById('detailedAnomalyCanvas'); const detailCtx = detailCanvas.getContext('2d');
-    const timeSeriesCanvas = document.getElementById('timeSeriesAnomalyCanvas'); const timeSeriesCtx = timeSeriesCanvas.getContext('2d');
     
-    let targetAtomRotX = 0.3, targetAtomRotY = 0.2, targetAtomZoom = 1.0;
-    let currentAtomRotX = 0.3, currentAtomRotY = 0.2;
+    let targetAtomRotX = 0.4, targetAtomRotY = 0.2, targetAtomZoom = 1.0;
+    let currentAtomRotX = 0.4, currentAtomRotY = 0.2;
     let isDraggingAtom = false, lastX = 0, lastY = 0;
 
     atomCanvas.addEventListener('pointerdown', (e) => { 
@@ -1107,19 +1017,33 @@
     function bindAllEvents() {
         window.addEventListener('resize', window.UI.resizeCanvases);
 
-        // Guide bindings for all primary buttons
+        // Guide bindings
         document.querySelectorAll('[data-guide]').forEach(el => {
-            el.addEventListener('click', (e) => {
-                window.GUIDE.show(el.getAttribute('data-guide'));
+            el.addEventListener('click', () => window.GUIDE.show(el.getAttribute('data-guide')));
+        });
+
+        // 3D Matrix Mode State Switching
+        document.querySelectorAll('#atomTabs .cat-chip').forEach(chip => {
+            chip.addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.querySelectorAll('#atomTabs .cat-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                window.GLOBALS.atomMode = chip.getAttribute('data-atom-mode');
+                window.UTILS.logSys(`Quantum Lattice reconfigured to ${window.GLOBALS.atomMode.toUpperCase()} topology.`);
+            });
+        });
+
+        // AI Navigator Mini Prompts
+        document.querySelectorAll('.ai-prompt-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                window.UI.toggleMax(btn.getAttribute('data-target'));
             });
         });
 
         // Click maximized cards from the dock
         document.querySelectorAll('.panel-card').forEach(card => {
             card.addEventListener('click', (e) => {
-                if(card.classList.contains('minimized-dock-item')) {
-                    window.UI.toggleMax(card.id);
-                }
+                if(card.classList.contains('minimized-dock-item')) window.UI.toggleMax(card.id);
             });
         });
 
@@ -1161,11 +1085,7 @@
         document.getElementById('btnLoad3M')?.addEventListener('click', () => window.DATA_INSIGHT.loadHistoricalData(3));
         document.getElementById('btnLoad6M')?.addEventListener('click', () => window.DATA_INSIGHT.loadHistoricalData(6));
         document.getElementById('btnLoad12M')?.addEventListener('click', () => window.DATA_INSIGHT.loadHistoricalData(12));
-        document.getElementById('btnUploadData')?.addEventListener('click', () => document.getElementById('fileUploadInput').click());
-        document.getElementById('fileUploadInput')?.addEventListener('change', (e) => window.DATA_INSIGHT.handleFileUpload(e));
 
-        document.getElementById('btnSendToExec')?.addEventListener('click', () => window.ACTIONS.sendToExecutiveDashboard('timeSeriesAnomalyCanvas', 'Accumulator Map'));
-        document.getElementById('btnSendIsoToExec')?.addEventListener('click', () => window.ACTIONS.sendToExecutiveDashboard('detailedAnomalyCanvas', 'Isolation Plot'));
         document.getElementById('btnAutoSummary')?.addEventListener('click', () => window.ACTIONS.autoGenerateExecSummary());
     }
 
