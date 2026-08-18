@@ -1,5 +1,5 @@
 // ==========================================================================
-// SEBRA82 v21.2 - Master Terminal Logic Script (Mobile Touch-Optimized)
+// SEBRA82 v21.2 - Master Terminal Logic Script (Fully Fixed & Enhanced)
 // ==========================================================================
 
 "use strict";
@@ -708,7 +708,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         atomCanvas.addEventListener('pointermove', (e) => { 
             if (isDraggingAtom) { 
-                // Dynamic sensitivity scaling for mobile vs desktop touch screens
                 let scaleFactor = window.innerWidth < 900 ? 0.018 : 0.012;
                 let dx = (e.clientX - lastX) * scaleFactor; 
                 let dy = (e.clientY - lastY) * scaleFactor;
@@ -786,6 +785,12 @@ function bindAllEvents() {
     document.getElementById('btnSaveState')?.addEventListener('click', () => window.UI.saveCustomView());
     document.getElementById('btnResetView')?.addEventListener('click', () => window.UI.resetStandardView());
 
+    document.getElementById('btnPauseStream')?.addEventListener('click', (e) => {
+        window.GLOBALS.isStreamPaused = !window.GLOBALS.isStreamPaused;
+        e.target.innerText = window.GLOBALS.isStreamPaused ? "▶ Resume" : "⏸ Pause";
+        window.UTILS.logSys(window.GLOBALS.isStreamPaused ? "Telemetry stream paused." : "Telemetry stream resumed.");
+    });
+
     document.querySelectorAll('.pin-btn').forEach(el => { el.addEventListener('click', (e) => { e.stopPropagation(); window.UI.toggleMax(el.closest('.panel-card').id); }); });
 
     document.getElementById('btnSubmitAiChat')?.addEventListener('click', () => window.AI.submitChat());
@@ -827,3 +832,4 @@ document.addEventListener("DOMContentLoaded", () => {
     window.MATH.updateInteractiveMathReadout(); 
     setTimeout(window.UI.resizeCanvases, 150); 
 });
+
