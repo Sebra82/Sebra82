@@ -241,7 +241,6 @@ async def centralized_broadcast_loop():
         await asyncio.sleep(max(0.0, 0.016 - elapsed))
 
 async def ws_handler(websocket):
-    # Extract query parameters safely from connection path compatible with modern websockets
     query_params = {}
     try:
         path_str = websocket.path if hasattr(websocket, 'path') else (websocket.request.path if hasattr(websocket, 'request') else "")
@@ -285,4 +284,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
