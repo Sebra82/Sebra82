@@ -3,15 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SEBRA82 v21.0 - Persistent Zero-Scroll Terminal</title>
+    <title>SEBRA82 v21.2 - Instant Zero-Scroll Terminal</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@msgpack/msgpack@2.8.0/dist/msgpack.min.js"></script>
 
     <style>
-        /* ==========================================================================
-           1. CSS VARIABLES & INSTITUTIONAL THEME 
-           ========================================================================== */
         :root {
             --bg-deep: #020408;
             --card-bg: rgba(7, 11, 19, 0.98);
@@ -28,9 +25,6 @@
             --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
         }
 
-        /* ==========================================================================
-           2. STRICT ZERO-SCROLL RESETS
-           ========================================================================== */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-ui); -webkit-user-select: none; user-select: none; }
         input, textarea { -webkit-user-select: text; user-select: text; }
 
@@ -51,9 +45,6 @@
         .auth-input { padding: 10px; background: #1e2a40; color: #fff; border: 1px solid var(--border-color); border-radius: 4px; font-family: var(--font-mono); font-size: 0.7rem; outline: none; }
         .auth-input:focus { border-color: var(--accent-purple); box-shadow: 0 0 8px rgba(192, 132, 252, 0.2); }
 
-        /* ==========================================================================
-           3. MASTER CONTAINER & HEADER
-           ========================================================================== */
         .platform-container { flex: 1; display: flex; flex-direction: column; gap: 0.4rem; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.6rem; width: 100%; max-width: 1800px; margin: 0 auto; overflow: hidden; min-height: 0; box-shadow: 0 0 30px rgba(0, 243, 255, 0.05); }
         
         .widget-header { flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border-color); gap: 8px; }
@@ -66,7 +57,6 @@
         .btn-save { background: rgba(126, 231, 135, 0.1); color: var(--accent-green); border-color: rgba(126, 231, 135, 0.4); } .btn-save:hover { background: rgba(126, 231, 135, 0.2); }
         .node-badge { font-size: 0.55rem; background: rgba(31, 41, 61, 0.8); color: var(--text-muted); padding: 3px 8px; border-radius: 6px; border: 1px solid var(--border-color); font-family: var(--font-mono); }
 
-        /* AI Navigator Bar */
         .ai-wrapper { flex-shrink: 0; display: flex; align-items: center; gap: 8px; background: rgba(0, 243, 255, 0.02); border: 1px solid var(--border-color); border-radius: 4px; padding: 4px 8px; height: 34px; overflow: hidden; }
         .ai-status-indicator { color: var(--neon-cyan); font-weight: bold; font-family: var(--font-mono); white-space: nowrap; font-size: 0.6rem; }
         .ai-input-wrap { flex: 1; position: relative; height: 100%; background: #1e2a40; border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 3px; overflow: hidden; }
@@ -79,9 +69,6 @@
         .ai-prompt-btn { font-size: 0.5rem; font-family: var(--font-mono); background: rgba(0,0,0,0.4); color: var(--text-main); border: 1px solid var(--border-color); padding: 0 8px; height: 24px; border-radius: 3px; cursor: pointer; transition: all 0.2s; font-weight: bold; text-transform: uppercase; white-space: nowrap; }
         .ai-prompt-btn:hover { background: rgba(0, 243, 255, 0.1); color: var(--neon-cyan); border-color: var(--neon-cyan); }
 
-        /* ==========================================================================
-           4. INSTANT ZERO-LAG CSS GRID LAYOUT
-           ========================================================================== */
         .mobile-stack { flex: 1; display: grid; gap: 0.6rem; overflow: hidden; min-height: 0; width: 100%; }
         
         @media (min-width: 900px) { .mobile-stack:not(.has-maximized) { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); } }
@@ -96,11 +83,9 @@
         #cardAtom { border-left: 3px solid #00f3ff; } #cardFin { border-left: 3px solid #c084fc; } #cardWave { border-left: 3px solid #7ee787; }
         #cardQuery { border-left: 3px solid #f0883e; } #cardTools { border-left: 3px solid #00f3ff; } #cardSummary { border-left: 3px solid #7ee787; }
 
-        /* Fluid Maximized Class */
         .panel-card.fluid-maximized { width: 100%; height: calc(100% - 66px); order: 1; border-color: var(--neon-cyan); box-shadow: 0 0 25px rgba(0,243,255,0.12); }
         .panel-card.fluid-maximized .collapsible-body { display: flex !important; opacity: 1 !important; flex: 1; overflow: hidden; min-height: 0;}
         
-        /* Fluid Minimized Dock Class */
         .panel-card.minimized-dock-item { flex: 1 1 0; min-width: 0; height: 40px; order: 2; padding: 0 8px; justify-content: center; align-items: center; border-style: dashed; cursor: pointer; transition: all 0.2s; background: rgba(2,4,8,0.8); }
         .panel-card.minimized-dock-item:hover { border-style: solid; border-color: var(--neon-cyan); background: rgba(10, 14, 22, 0.9); transform: translateY(-2px); }
         .panel-card.minimized-dock-item .collapsible-body, .panel-card.minimized-dock-item .section-category-bar, .panel-card.minimized-dock-item .section-summary-preview, .panel-card.minimized-dock-item .pin-btn { display: none !important; }
@@ -123,14 +108,12 @@
         .collapsible-body { flex: 1; display: flex; flex-direction: column; gap: 0.4rem; opacity: 1; overflow: hidden; min-height: 0; }
         .collapsible-body.collapsed { display: none !important; opacity: 0; }
 
-        /* Hardware Accelerated Canvases */
         .canvas-box { position: relative; width: 100%; flex: 1; min-height: 0; background: radial-gradient(circle at center, #0a1128 0%, #010204 100%); border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.2); overflow: hidden; display: flex; }
         canvas { display: block; width: 100%; height: 100%; cursor: crosshair; touch-action: none; }
         .hud-tag { position: absolute; top: 4px; left: 4px; background: rgba(2, 4, 8, 0.85); border: 1px solid var(--border-color); padding: 2px 6px; border-radius: 3px; font-size: 0.45rem; color: var(--neon-cyan); font-family: var(--font-mono); z-index: 5; pointer-events: none; }
         .graph-toolbar { position: absolute; bottom: 4px; right: 4px; display: flex; gap: 4px; z-index: 6; }
         .graph-tool-btn { font-size: 0.45rem; font-family: var(--font-mono); background: rgba(0, 243, 255, 0.1); color: var(--neon-cyan); border: 1px solid rgba(0, 243, 255, 0.3); padding: 2px 8px; border-radius: 2px; cursor: pointer; font-weight: bold; text-transform: uppercase; }
 
-        /* Controls & Form Elements */
         .math-dashboard, .metrics-grid, .control-item, .btn-row { flex-shrink: 0; }
         .math-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 6px; }
         .math-interactive-card { background: rgba(10, 14, 22, 0.9); border: 1px solid rgba(0, 243, 255, 0.2); border-radius: 4px; padding: 6px; display: flex; flex-direction: column; gap: 4px; }
@@ -143,7 +126,7 @@
         .metric-label { font-size: 0.45rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-mono); }
         .metric-value { font-size: 0.75rem; color: var(--accent-green); font-weight: 700; font-family: var(--font-mono); }
         
-        .control-item { background: rgba(10, 14, 22, 0.9); border: 1px solid rgba(0,243,255,0.2); padding: 6px; border-radius: 3px; display: flex; flex-direction: column; gap: 4px; }
+        .control-item { background: rgba(10, 14, 22, 0.9); border: 1px solid rgba(0, 243, 255, 0.2); padding: 6px; border-radius: 3px; display: flex; flex-direction: column; gap: 4px; }
         .control-label { font-size: 0.55rem; color: var(--text-muted); display: flex; justify-content: space-between; font-family: var(--font-mono); }
         .control-label span { color: var(--text-main); font-weight: bold; }
         input[type="range"] { width: 100%; -webkit-appearance: none; background: #1e2a40; border: 1px solid rgba(0, 243, 255, 0.3); height: 4px; border-radius: 2px; outline: none; cursor: pointer; }
@@ -304,7 +287,7 @@
             <div class="collapsible-body collapsed" id="secWave">
                 <div class="canvas-box" style="cursor: crosshair;">
                     <canvas id="secureSimCanvas"></canvas>
-                    <div class="hud-tag">🔒 L1 NOISE | CLICK SIGNAL TO EXTRACT</div>
+                    <div class="hud-tag">🔒 L1 NOISE SIGNAL</div>
                     <div class="graph-toolbar">
                         <button type="button" class="graph-tool-btn" id="btnPauseStream">⏸ Pause</button>
                     </div>
@@ -466,7 +449,6 @@
         lerp: function(start, end, amt) { return (1 - amt) * start + amt * end; }
     };
 
-    /* Background Web Worker Bridge with Graceful Fallback */
     try {
         window.SEBRA_WORKER = new Worker('sebra_worker.js');
         window.SEBRA_WORKER.onmessage = function(e) {
@@ -493,7 +475,6 @@
         window.SEBRA_WORKER = null;
     }
 
-    /* Cryptographic WebSocket Telemetry Client */
     class SebraNetwork {
         constructor() { this.socket = null; }
         connect(hashKey, tier) {
@@ -513,12 +494,16 @@
                                 const [tick, offset, welfordTuple] = core;
                                 window.GLOBALS.globalTick = tick;
                                 window.GLOBALS.timeOffset = offset;
+                                const currentVal = welfordTuple[0];
                                 const currentZ = welfordTuple[1];
                                 const isSpike = welfordTuple[2];
                                 document.getElementById('serverZScore').innerText = currentZ.toFixed(2) + " σ";
                                 document.getElementById('serverZScore').style.color = isSpike ? "var(--crimson-red)" : "var(--warning-amber)";
+                                
+                                window.GLOBALS.waveBuffer.shift(); 
+                                window.GLOBALS.waveBuffer.push(currentVal);
                                 if (isSpike) {
-                                    window.ACTIONS.updateTimeSeriesAccumulator(welfordTuple[0], true, "Welford Stream Flag");
+                                    window.ACTIONS.updateTimeSeriesAccumulator(currentVal, true, "Welford Stream Flag");
                                 }
                             }
                         } catch(e) {}
@@ -964,12 +949,13 @@
             });
         }
 
+        /* 1. L1 Noise Signal Renderer */
         static updateWaveOptics() {
             const waveCanvas = document.getElementById('secureSimCanvas'); const waveCtx = waveCanvas ? waveCanvas.getContext('2d') : null;
             if(!waveCtx || !waveCanvas.width || !waveCanvas.height) return;
             if (!window.GLOBALS.isStreamPaused) { 
                 window.GLOBALS.globalTick++; window.GLOBALS.timeOffset += 0.05; 
-                let liveVal = Math.min(90, Math.max(15, 50 + Math.sin(window.GLOBALS.globalTick * 0.04 + window.GLOBALS.timeOffset * 2) * 22 * window.GLOBALS.burstMultiplier + (Math.random() * 6 - 3)));
+                let liveVal = Math.min(85, Math.max(15, 50 + Math.sin(window.GLOBALS.globalTick * 0.04 + window.GLOBALS.timeOffset * 2) * 20 * window.GLOBALS.burstMultiplier + (Math.random() * 6 - 3)));
                 window.GLOBALS.waveBuffer.shift(); window.GLOBALS.waveBuffer.push(liveVal);
                 window.MATH.updateInteractiveMathReadout();
             }
@@ -977,39 +963,74 @@
             const w = waveCanvas.width, h = waveCanvas.height; waveCtx.clearRect(0, 0, w, h); this.drawGrid(waveCtx, w, h, 'rgba(0, 243, 255, 0.04)');
             let st = w / Math.max(1, window.GLOBALS.waveBuffer.length - 1);
             
-            waveCtx.beginPath(); waveCtx.moveTo(0, h - (window.GLOBALS.waveBuffer[0] * (h / 100)));
+            waveCtx.beginPath(); 
+            let startY = h - (Math.min(95, Math.max(5, window.GLOBALS.waveBuffer[0])) * (h / 100));
+            waveCtx.moveTo(0, startY);
+
             for (let i = 0; i < window.GLOBALS.waveBuffer.length - 1; i++) { 
-                let xPos = i * st, yPos = h - (window.GLOBALS.waveBuffer[i] * (h / 100));
-                let nextX = (i + 1) * st, nextY = h - (window.GLOBALS.waveBuffer[i + 1] * (h / 100));
-                waveCtx.quadraticCurveTo(xPos, yPos, (xPos + nextX) / 2, (yPos + nextY) / 2);
+                let xPos = i * st; 
+                let yPos = h - (Math.min(95, Math.max(5, window.GLOBALS.waveBuffer[i])) * (h / 100)); 
+                let nextX = (i + 1) * st; 
+                let nextY = h - (Math.min(95, Math.max(5, window.GLOBALS.waveBuffer[i + 1])) * (h / 100)); 
+                let xc = (xPos + nextX) / 2; let yc = (yPos + nextY) / 2;
+                waveCtx.quadraticCurveTo(xPos, yPos, xc, yc);
             } 
-            waveCtx.lineTo(w, h - (window.GLOBALS.waveBuffer[window.GLOBALS.waveBuffer.length - 1] * (h / 100)));
             waveCtx.strokeStyle = '#00f3ff'; waveCtx.lineWidth = 1.8; waveCtx.stroke();
             
             waveCtx.lineTo(w, h); waveCtx.lineTo(0, h); waveCtx.closePath();
-            let grad = waveCtx.createLinearGradient(0, 0, 0, h); grad.addColorStop(0, 'rgba(0, 243, 255, 0.2)'); grad.addColorStop(1, 'rgba(0, 243, 255, 0.0)');
+            let grad = waveCtx.createLinearGradient(0, 0, 0, h); grad.addColorStop(0, 'rgba(0, 243, 255, 0.25)'); grad.addColorStop(1, 'rgba(0, 243, 255, 0.0)');
             waveCtx.fillStyle = grad; waveCtx.fill();
-
         }
 
+        /* 2. Markov Predictive Cone Renderer */
+        static renderMarkovCone() {
+            const predCanvas = document.getElementById('predictiveForecastCanvas'); const predCtx = predCanvas ? predCanvas.getContext('2d') : null;
+            if(!predCtx || !predCanvas.width || !predCanvas.height) return;
+            const w = predCanvas.width, h = predCanvas.height; predCtx.clearRect(0, 0, w, h); this.drawGrid(predCtx, w, h, 'rgba(192, 132, 252, 0.04)');
+
+            let historyCutoff = Math.floor(window.GLOBALS.waveBuffer.length * 0.45);
+            let pst = w / window.GLOBALS.waveBuffer.length;
+            let startX = historyCutoff * pst;
+            let centerY = h / 2;
+
+            predCtx.strokeStyle = 'rgba(192, 132, 252, 0.4)'; predCtx.lineWidth = 1.0; predCtx.setLineDash([3, 3]);
+            predCtx.beginPath(); predCtx.moveTo(startX, centerY);
+            for(let i = historyCutoff; i < window.GLOBALS.waveBuffer.length; i++) {
+                predCtx.lineTo(i * pst, centerY - (i - historyCutoff) * 0.8);
+            }
+            predCtx.stroke();
+
+            predCtx.beginPath(); predCtx.moveTo(startX, centerY);
+            for(let i = historyCutoff; i < window.GLOBALS.waveBuffer.length; i++) {
+                predCtx.lineTo(i * pst, centerY + (i - historyCutoff) * 0.8);
+            }
+            predCtx.stroke();
+            predCtx.setLineDash([]);
+        }
+
+        /* 3. Welford Accumulator Map Renderer */
         static renderDataGraphs() {
+            this.renderMarkovCone();
             const timeSeriesCanvas = document.getElementById('timeSeriesAnomalyCanvas'); const timeSeriesCtx = timeSeriesCanvas ? timeSeriesCanvas.getContext('2d') : null;
             if (timeSeriesCtx && timeSeriesCanvas.width > 0 && window.GLOBALS.timeSeriesBuffer.length > 0) { 
                 let w = timeSeriesCanvas.width, h = timeSeriesCanvas.height;
-                timeSeriesCtx.clearRect(0, 0, w, h);
+                timeSeriesCtx.clearRect(0, 0, w, h); this.drawGrid(timeSeriesCtx, w, h, 'rgba(255, 51, 68, 0.04)');
                 let displayData = window.GLOBALS.timeSeriesBuffer.slice(-30); 
                 let tst = w / Math.max(1, displayData.length - 1); 
                 timeSeriesCtx.strokeStyle = '#7ee787'; timeSeriesCtx.lineWidth = 1.8; timeSeriesCtx.beginPath(); 
-                timeSeriesCtx.moveTo(0, h - (displayData[0].val / 100) * h);
+                
+                let startY = h - (Math.min(95, Math.max(5, displayData[0].val)) * (h / 100));
+                timeSeriesCtx.moveTo(0, startY);
+
                 for(let idx=0; idx < displayData.length - 1; idx++) {
-                    let x = idx * tst, y = h - (displayData[idx].val / 100) * h; 
-                    let nextX = (idx+1) * tst, nextY = h - (displayData[idx+1].val / 100) * h;
+                    let x = idx * tst, y = h - (Math.min(95, Math.max(5, displayData[idx].val)) * (h / 100)); 
+                    let nextX = (idx+1) * tst, nextY = h - (Math.min(95, Math.max(5, displayData[idx+1].val)) * (h / 100));
                     timeSeriesCtx.quadraticCurveTo(x, y, (x + nextX) / 2, (y + nextY) / 2);
                 } 
                 timeSeriesCtx.stroke(); 
                 displayData.forEach((item, idx) => { 
                     if(item.spike) { 
-                        let x = idx * tst, y = h - (item.val / 100) * h; 
+                        let x = idx * tst, y = h - (Math.min(95, Math.max(5, item.val)) * (h / 100)); 
                         timeSeriesCtx.fillStyle = '#ff3344'; timeSeriesCtx.beginPath(); timeSeriesCtx.arc(x, y, 3.5, 0, Math.PI*2); timeSeriesCtx.fill();
                     } 
                 }); 
@@ -1049,12 +1070,11 @@
             el.addEventListener('click', () => window.GUIDE.show(el.getAttribute('data-guide')));
         });
 
-        // Smart Text Toggles (Accordion) for the Grid view
+        // Dual-Action Logic: Title text toggles accordion in grid mode; Maximize button opens full screen
         document.querySelectorAll('.panel-title').forEach(title => {
             title.addEventListener('click', (e) => {
                 const card = title.closest('.panel-card');
                 if (card.classList.contains('fluid-maximized') || card.classList.contains('minimized-dock-item')) return;
-                
                 const body = card.querySelector('.collapsible-body');
                 if(body) {
                     body.classList.toggle('collapsed');
@@ -1106,6 +1126,7 @@
         document.getElementById('baseValueSlider')?.addEventListener('input', (e) => window.MATH.updateFin(e.target.value));
         document.getElementById('dampingSlider')?.addEventListener('input', (e) => window.MATH.updateDamping(e.target.value));
 
+        document.getElementById('btnPauseStream')?.addEventListener('click', (e) => { e.stopPropagation(); window.ACTIONS.togglePauseStream(); });
         document.getElementById('filtAll')?.addEventListener('click', () => window.DATA_INSIGHT.setFilter('ALL'));
         document.getElementById('filtWorld')?.addEventListener('click', () => window.DATA_INSIGHT.setFilter('WORLD'));
         document.getElementById('filtCalc')?.addEventListener('click', () => window.DATA_INSIGHT.setFilter('CALC'));
@@ -1113,17 +1134,15 @@
         
         document.getElementById('btnDownloadExport')?.addEventListener('click', () => window.DATA_INSIGHT.triggerExport());
         document.getElementById('btnArchiveData')?.addEventListener('click', () => window.DATA_INSIGHT.archiveData());
-        document.getElementById('btnClearLedger')?.addEventListener('click', () => window.DATA_INSIGHT.clearLedger());
         
         document.getElementById('btnNavUp')?.addEventListener('click', () => window.WORKSPACE.navigateUp());
         document.getElementById('btnLoad3M')?.addEventListener('click', () => window.DATA_INSIGHT.loadHistoricalData(3));
         document.getElementById('btnLoad6M')?.addEventListener('click', () => window.DATA_INSIGHT.loadHistoricalData(6));
-        document.getElementById('btnLoad12M')?.addEventListener('click', () => window.DATA_INSIGHT.loadHistoricalData(12));
 
         document.getElementById('btnAutoSummary')?.addEventListener('click', (e) => { e.stopPropagation(); window.ACTIONS.autoGenerateExecSummary(); });
     }
 
-    function masterLoop() { CanvasRenderers.renderAtom(); CanvasRenderers.updateWaveOptics(); CanvasRenderers.renderDataGraphs(); requestAnimationFrame(masterLoop); }
+    function masterLoop() { CanvasRenderers.renderAtom(); CanvasRenderers.updateWaveOptics(); CanvasRenderers.updateDataGraphs(); requestAnimationFrame(masterLoop); }
     
     document.addEventListener("DOMContentLoaded", () => {
         bindAllEvents(); window.WORKSPACE.render(); masterLoop(); window.MATH.updateInteractiveMathReadout(); 
