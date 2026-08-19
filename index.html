@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SEBRA82 v23.2 - Master Terminal</title>
+    <title>SEBRA82 v24.0 - Master Terminal</title>
     
-    <!-- 🚨 FORCED CSS CACHE BUSTER v23.2 🚨 -->
-    <link rel="stylesheet" href="styles.css?v=23.2">
+    <!-- 🚨 FORCED CSS CACHE BUSTER v24.0 🚨 -->
+    <link rel="stylesheet" href="styles.css?v=24.0">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@msgpack/msgpack@2.8.0/dist/msgpack.min.js"></script>
@@ -16,8 +16,8 @@
     <!-- Authentication Gateway -->
     <div id="authGatewayModal">
         <div class="panel-card" style="max-width: 400px; text-align: center;">
-            <h2 style="color: var(--neon-cyan); margin-bottom: 16px;">SEBRA82 AEGIS TERMINAL</h2>
-            <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 0.9rem;">
+            <h2 style="color: var(--neon-cyan); margin-bottom: 12px;">SEBRA82 AEGIS TERMINAL</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.85rem;">
                 Cryptographic signature required for master telemetry access.
             </p>
             <input type="password" id="licenseKeyInput" class="ghost-input" placeholder="Enter AEGIS Hash Key..." style="margin-bottom: 16px;">
@@ -28,200 +28,195 @@
         </div>
     </div>
 
+    <!-- Master Single-Page Container -->
     <div class="terminal-container">
         
         <!-- Header & Action Bar -->
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-            <h1 style="color: var(--warning-amber); font-size: 1.2rem;">⚡ SEBRA82 v23.2</h1>
-            <span style="color: var(--text-main); font-weight: 600;">Master Encrypted Suite</span>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <h1 style="color: var(--warning-amber); font-size: 1.1rem;">⚡ SEBRA82</h1>
+                <span style="color: var(--text-main); font-weight: 600; font-size: 0.85rem;">v24.0</span>
+            </div>
+            <span id="vault-status" class="cat-chip" style="border-radius: 20px; font-size: 0.65rem;">DEMO MODE</span>
         </div>
         
-        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
-            <button id="btnGenRandom" class="action-btn" style="border-color: var(--neon-cyan); color: var(--neon-cyan);">🎲 GENERATE NOISE</button>
-            <button id="btnSaveState" class="action-btn" style="border-color: var(--accent-green); color: var(--accent-green);">💾 SAVE STATE</button>
-            <button id="btnResetView" class="action-btn" style="border-color: var(--crimson-red); color: var(--crimson-red);">↺ RESET VIEW</button>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;">
+            <button id="btnGenRandom" class="action-btn" style="border-color: var(--neon-cyan); color: var(--neon-cyan);">🎲 NOISE</button>
+            <button id="btnSaveState" class="action-btn" style="border-color: var(--accent-green); color: var(--accent-green);">💾 SAVE</button>
+            <button id="btnResetView" class="action-btn" style="border-color: var(--crimson-red); color: var(--crimson-red);">↺ RESET</button>
             <button id="btnPauseStream" class="action-btn" style="border-color: var(--warning-amber); color: var(--warning-amber);">⏸ PAUSE</button>
-            <span id="vault-status" class="cat-chip chip-world" style="border-radius: 20px;">VAULT: DEMO MODE</span>
         </div>
 
         <!-- AI Synapse Command Bar -->
-        <div class="panel-card">
-            <div class="panel-title" style="margin-bottom: 12px; color: var(--accent-purple);">🧠 SEBRA82 SYNAPSE AI <span style="float: right; color: var(--text-muted);">[-]</span></div>
-            <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px;">
-                • Interactive Guidance: Type any command below. The AI will ghost-complete. <span style="color: var(--neon-cyan);">Type the next 3 letters to auto-execute!</span>
+        <div id="cardAi" class="panel-card">
+            <div class="panel-header">
+                <div class="panel-title">🧠 SEBRA82 SYNAPSE AI</div>
+                <span style="color: var(--accent-purple); font-weight: bold; font-size: 1.2rem;">-</span>
             </div>
-            <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(192,132,252,0.2); border-radius: 6px; padding: 12px; margin-bottom: 12px;">
-                <span style="color: var(--accent-purple);">🤖 SEBRA-AI:</span> System initialized. Aegis defenses active. Ask me anything or click a topic below.
-            </div>
-            <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
-                <span class="cat-chip chip-calc" onclick="document.getElementById('aiChatInput').value='zoom lattice'; window.AI.submitChat();">3D Atom Matrix</span>
-                <span class="cat-chip chip-fin" onclick="document.getElementById('aiChatInput').value='run benchmark'; window.AI.submitChat();">Math Studio</span>
-                <span class="cat-chip chip-sci" onclick="document.getElementById('aiChatInput').value='extract noise'; window.AI.submitChat();">Noise Graph</span>
-                <span class="cat-chip chip-world" onclick="document.getElementById('aiChatInput').value='clear ledger'; window.AI.submitChat();">Query Table</span>
-            </div>
-            <div style="display: flex; gap: 12px;">
-                <div class="ghost-container" style="flex: 1;">
-                    <div id="ghostOverlay" class="ghost-overlay"></div>
-                    <input type="text" id="aiChatInput" class="ghost-input" placeholder="Command AI (e.g., 'extract noise')..." autocomplete="off">
+            <div class="collapsible-body">
+                <div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 8px;">
+                    • Interactive Guidance: Type any command below. <span style="color: var(--neon-cyan);">Auto-executes on 3 letters.</span>
                 </div>
-                <button id="btnSubmitAiChat" class="action-btn btn-max">EXECUTE</button>
+                <div style="display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap;">
+                    <span class="cat-chip" onclick="document.getElementById('aiChatInput').value='zoom lattice'; window.AI.submitChat();">3D Matrix</span>
+                    <span class="cat-chip" onclick="document.getElementById('aiChatInput').value='run benchmark'; window.AI.submitChat();">Math</span>
+                    <span class="cat-chip" onclick="document.getElementById('aiChatInput').value='extract noise'; window.AI.submitChat();">Graphs</span>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <div class="ghost-container" style="flex: 1;">
+                        <div id="ghostOverlay" class="ghost-overlay"></div>
+                        <input type="text" id="aiChatInput" class="ghost-input" placeholder="Command AI..." autocomplete="off">
+                    </div>
+                    <button id="btnSubmitAiChat" class="action-btn" style="border-color: var(--accent-purple); color: var(--accent-purple);">EXECUTE</button>
+                </div>
             </div>
         </div>
 
-        <!-- Master Mobile Stack Grid -->
-        <div id="mobileStack" class="mobile-stack" style="display: grid; gap: 16px; grid-template-columns: 1fr;">
+        <!-- Master Flex Stack -->
+        <div id="mobileStack" class="mobile-stack">
             
             <!-- 1. Quantum Lattice Core -->
             <div id="cardAtom" class="panel-card">
-                <div id="atomTabs" style="display: flex; gap: 8px; margin-bottom: 12px;">
-                    <span class="cat-chip chip-calc active" data-atom-mode="calc">CALCULATION</span>
-                    <span class="cat-chip chip-sci" data-atom-mode="sci">SCIENCE</span>
-                    <span class="cat-chip chip-world" data-atom-mode="world">WORLD</span>
-                </div>
                 <div class="panel-header">
-                    <div class="panel-title">1. BREATHING 3D QUANTUM LATTICE CORE</div>
-                    <button class="action-btn btn-max pin-btn">⚡ MAXIMIZE</button>
+                    <div class="panel-title">1. BREATHING 3D LATTICE</div>
+                    <button class="action-btn pin-btn">⚡ MAX</button>
                 </div>
-                <div class="collapsible-body">
-                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px; display: flex; justify-content: space-between;">
-                        <span>Status: <span style="color: var(--accent-green);">Active Lattice</span> | Shell Nodes: <span style="color: var(--neon-cyan);">120</span></span>
+                <div class="collapsible-body collapsed">
+                    <div id="atomTabs" style="display: flex; gap: 6px; margin-bottom: 8px;">
+                        <span class="cat-chip active" data-atom-mode="calc">CALC</span>
+                        <span class="cat-chip" data-atom-mode="sci">SCIENCE</span>
+                        <span class="cat-chip" data-atom-mode="world">WORLD</span>
                     </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
-                        <span>Magnification (Deep Molecular Zoom):</span>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">
+                        <span>Molecular Zoom:</span>
                         <span id="atomZoomReadout" style="color: var(--neon-cyan);">1.0x</span>
                     </div>
-                    <input type="range" id="atomZoomSlider" min="0.3" max="5.0" step="0.1" value="1.0" style="width: 100%; margin-bottom: 12px;">
-                    <div style="border: 1px solid var(--panel-border); border-radius: 6px; padding: 2px;">
+                    <input type="range" id="atomZoomSlider" min="0.3" max="5.0" step="0.1" value="1.0" style="width: 100%; margin-bottom: 8px;">
+                    <div class="canvas-wrapper">
                         <canvas id="atom3DCanvas"></canvas>
                     </div>
                 </div>
             </div>
 
             <!-- 2. Calculus & Modeling Studio -->
-            <div id="cardFin" class="panel-card">
-                <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-                    <span id="modeBtnQuantum" class="cat-chip chip-calc active">QUANTUM TENSOR</span>
-                    <span id="modeBtnFinancial" class="cat-chip chip-fin">ALPHA PROJECTION</span>
-                </div>
+            <div id="cardFin" class="panel-card minimized-dock-item">
                 <div class="panel-header">
-                    <div class="panel-title">2. CALCULUS & MODELING STUDIO</div>
-                    <button class="action-btn btn-max pin-btn">⚡ MAXIMIZE</button>
+                    <div class="panel-title">2. CALCULUS STUDIO</div>
+                    <button class="action-btn pin-btn">⚡ MAX</button>
                 </div>
                 <div class="collapsible-body collapsed">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; margin-top: 12px;">
+                    <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+                        <span id="modeBtnQuantum" class="cat-chip active">QUANTUM TENSOR</span>
+                        <span id="modeBtnFinancial" class="cat-chip">ALPHA PROJECTION</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
                         <div>
-                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Base Metric (<span id="baseValueReadout" style="color: var(--neon-cyan);">10.00</span>)</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">Base (<span id="baseValueReadout">10.00</span>)</div>
                             <input type="range" id="baseValueSlider" min="1" max="100" step="1" value="10" style="width: 100%;">
                         </div>
                         <div>
-                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Damping (<span id="dampingReadout" style="color: var(--accent-purple);">1.45</span>)</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">Damping (<span id="dampingReadout">1.45</span>)</div>
                             <input type="range" id="dampingSlider" min="0.1" max="5.0" step="0.05" value="1.45" style="width: 100%;">
                         </div>
                     </div>
-                    <div style="background: rgba(0,0,0,0.4); padding: 16px; border-radius: 8px; text-align: center; border: 1px solid rgba(0, 243, 255, 0.1);">
-                        <span id="mathLiveTitle" style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 8px;">Normalized Tensor Vector:</span>
-                        <h2 id="mathLiveResult" style="color: var(--text-main); font-family: var(--font-mono); letter-spacing: 1px;">Awaiting Data...</h2>
+                    <div style="background: rgba(0,0,0,0.4); padding: 12px; border-radius: 8px; text-align: center; border: 1px solid rgba(0, 243, 255, 0.1); flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                        <span id="mathLiveTitle" style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">Normalized Tensor Vector:</span>
+                        <h2 id="mathLiveResult" style="color: var(--text-main); font-family: var(--font-mono); font-size: 1.2rem;">Awaiting Data...</h2>
                     </div>
-                    <button id="btnRunBench" class="action-btn btn-max" style="width: 100%; margin-top: 12px;">RUN SPEED BENCHMARK</button>
+                    <button id="btnRunBench" class="action-btn" style="width: 100%; margin-top: 8px;">Run Speed Benchmark</button>
                 </div>
             </div>
 
             <!-- 3. Noise & Predictive Studio -->
-            <div id="cardWave" class="panel-card">
-                <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-                    <span class="cat-chip chip-sci active">TELEMETRY SIGNAL</span>
-                    <span class="cat-chip chip-fin active">MARKOV STREAM</span>
-                </div>
+            <div id="cardWave" class="panel-card minimized-dock-item">
                 <div class="panel-header">
-                    <div class="panel-title">3. NOISE & PREDICTIVE STUDIO</div>
-                    <button class="action-btn btn-max pin-btn">⚡ MAXIMIZE</button>
+                    <div class="panel-title">3. PREDICTIVE STUDIO</div>
+                    <button class="action-btn pin-btn">⚡ MAX</button>
                 </div>
-                <div class="collapsible-body collapsed" style="margin-top: 12px;">
-                    <span style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; display: inline-block;">Continuous Anomaly & Predictive Forecasting Graph</span>
-                    <canvas id="predictiveForecastCanvas" style="height: 350px !important;"></canvas>
+                <div class="collapsible-body collapsed">
+                    <span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px;">Continuous Forecasting Graph</span>
+                    <div class="canvas-wrapper">
+                        <canvas id="predictiveForecastCanvas"></canvas>
+                    </div>
                 </div>
             </div>
 
             <!-- 4. Query & Ledger Studio -->
-            <div id="cardQuery" class="panel-card">
-                <div id="secQuery" style="display: flex; gap: 8px; margin-bottom: 12px;">
-                    <span id="filtAll" class="cat-chip active">ALL</span>
-                    <span id="filtWorld" class="cat-chip chip-world">WORLD</span>
-                    <span id="filtCalc" class="cat-chip chip-calc">CALCULATION</span>
-                    <span id="filtFin" class="cat-chip chip-fin">FINANCE</span>
-                </div>
+            <div id="cardQuery" class="panel-card minimized-dock-item">
                 <div class="panel-header">
-                    <div class="panel-title">4. EXPORT QUERY & TABLE STUDIO</div>
-                    <button class="action-btn btn-max pin-btn">⚡ MAXIMIZE</button>
+                    <div class="panel-title">4. EXPORT QUERY LEDGER</div>
+                    <button class="action-btn pin-btn">⚡ MAX</button>
                 </div>
-                <div class="collapsible-body collapsed" style="margin-top: 12px;">
-                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
-                        Active Filter: <span id="filterStateLabel" style="color: var(--neon-cyan);">ALL</span> | Total: <span id="sumQueryCount" style="color: var(--neon-cyan);">0 rows</span>
+                <div class="collapsible-body collapsed">
+                    <div id="secQuery" style="display: flex; gap: 6px; margin-bottom: 8px;">
+                        <span id="filtAll" class="cat-chip active">ALL</span>
+                        <span id="filtWorld" class="cat-chip">WORLD</span>
+                        <span id="filtCalc" class="cat-chip">CALC</span>
+                        <span id="filtFin" class="cat-chip">FIN</span>
                     </div>
-                    <div style="max-height: 250px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; margin-bottom: 12px;">
+                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">
+                        Filter: <span id="filterStateLabel" style="color: var(--neon-cyan);">ALL</span> | Total: <span id="sumQueryCount" style="color: var(--neon-cyan);">0 rows</span>
+                    </div>
+                    <div class="content-scroll-wrapper">
                         <table>
-                            <thead><tr><th>EVENT ID</th><th>TIMESTAMP</th><th>CLASSIFICATION</th><th>MAGNITUDE</th></tr></thead>
+                            <thead><tr><th>ID</th><th>TIME</th><th>CLASS</th><th>MAG</th></tr></thead>
                             <tbody id="queryTableBody"></tbody>
                         </table>
                     </div>
-                    <div style="display: flex; gap: 8px;">
-                        <button id="btnDownloadExport" class="action-btn chip-calc" style="flex: 1;">📥 .CSV EXPORT</button>
-                        <button id="btnArchiveData" class="action-btn chip-world" style="flex: 1;">ARCHIVE LEDGER</button>
+                    <div style="display: flex; gap: 6px; margin-top: 8px;">
+                        <button id="btnDownloadExport" class="action-btn" style="flex: 1;">📥 CSV</button>
+                        <button id="btnArchiveData" class="action-btn" style="flex: 1; border-color: var(--warning-amber); color: var(--warning-amber);">ARCHIVE</button>
                     </div>
                 </div>
             </div>
 
             <!-- 5. Workspace Explorer -->
-            <div id="cardTools" class="panel-card">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <span id="currentPathDisplay" style="font-size: 0.85rem; color: var(--neon-cyan); font-family: var(--font-mono);"></span>
-                    <button id="btnNavUp" class="cat-chip chip-world">↑ UP DIR</button>
-                </div>
+            <div id="cardTools" class="panel-card minimized-dock-item">
                 <div class="panel-header">
-                    <div class="panel-title">5. UPLOAD & FILE EXPLORER</div>
-                    <button class="action-btn btn-max pin-btn">⚡ MAXIMIZE</button>
+                    <div class="panel-title">5. FILE EXPLORER</div>
+                    <button class="action-btn pin-btn">⚡ MAX</button>
                 </div>
-                <div class="collapsible-body collapsed" style="margin-top: 12px;">
-                    <div id="explorerContentArea" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; padding: 12px; min-height: 150px; margin-bottom: 12px; font-family: var(--font-mono); font-size: 0.8rem;"></div>
-                    <div style="display: flex; gap: 8px;">
-                        <button id="btnLoad3M" class="action-btn chip-fin" style="flex: 1;">LOAD 3M DATA</button>
-                        <button id="btnLoad6M" class="action-btn chip-fin" style="flex: 1;">LOAD 6M DATA</button>
+                <div class="collapsible-body collapsed">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span id="currentPathDisplay" style="font-size: 0.75rem; color: var(--neon-cyan); font-family: var(--font-mono);"></span>
+                        <button id="btnNavUp" class="cat-chip">↑ UP</button>
+                    </div>
+                    <div id="explorerContentArea" class="content-scroll-wrapper" style="padding: 12px; font-family: var(--font-mono); font-size: 0.75rem;"></div>
+                    <div style="display: flex; gap: 6px; margin-top: 8px;">
+                        <button id="btnLoad3M" class="action-btn" style="flex: 1;">LOAD 3M</button>
+                        <button id="btnLoad6M" class="action-btn" style="flex: 1;">LOAD 6M</button>
                     </div>
                 </div>
             </div>
 
             <!-- 6. Executive Insights -->
-            <div id="cardExec" class="panel-card">
-                <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-                    <span class="cat-chip chip-world active">EXECUTIVE SUMMARY</span>
-                    <span class="cat-chip chip-fin">METRICS</span>
-                </div>
+            <div id="cardExec" class="panel-card minimized-dock-item">
                 <div class="panel-header">
-                    <div class="panel-title" style="color: var(--neon-cyan);">⭐ EXECUTIVE INSIGHTS DASHBOARD</div>
-                    <button class="action-btn btn-max pin-btn">⚡ MAXIMIZE</button>
+                    <div class="panel-title">⭐ EXECUTIVE DASHBOARD</div>
+                    <button class="action-btn pin-btn" style="border-color: var(--warning-amber); color: var(--warning-amber);">AUDIT</button>
                 </div>
-                <div class="collapsible-body collapsed" style="margin-top: 12px;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
-                        <div style="background: rgba(0,0,0,0.5); border: 1px solid var(--panel-border); padding: 12px; border-radius: 6px; text-align: center;">
-                            <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Active Nodes</div>
-                            <div style="font-size: 1.2rem; color: var(--neon-cyan); font-weight: bold;">120</div>
+                <div class="collapsible-body collapsed">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                        <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(0,243,255,0.1); padding: 8px; border-radius: 6px; text-align: center;">
+                            <div style="font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase;">Nodes</div>
+                            <div style="font-size: 1.1rem; color: var(--neon-cyan); font-weight: bold;">120</div>
                         </div>
-                        <div style="background: rgba(0,0,0,0.5); border: 1px solid var(--panel-border); padding: 12px; border-radius: 6px; text-align: center;">
-                            <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Current Target</div>
-                            <div style="font-size: 1.2rem; color: var(--accent-green); font-weight: bold;">$10.00</div>
+                        <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(0,243,255,0.1); padding: 8px; border-radius: 6px; text-align: center;">
+                            <div style="font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase;">Target</div>
+                            <div style="font-size: 1.1rem; color: var(--neon-cyan); font-weight: bold;">$10.00</div>
                         </div>
-                        <div style="background: rgba(0,0,0,0.5); border: 1px solid var(--panel-border); padding: 12px; border-radius: 6px; text-align: center;">
-                            <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Anomalies</div>
-                            <div id="sumMetricSpikes" style="font-size: 1.2rem; color: var(--crimson-red); font-weight: bold;">0</div>
+                        <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(0,243,255,0.1); padding: 8px; border-radius: 6px; text-align: center;">
+                            <div style="font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase;">Anomalies</div>
+                            <div id="sumMetricSpikes" style="font-size: 1.1rem; color: var(--crimson-red); font-weight: bold;">0</div>
                         </div>
-                        <div style="background: rgba(0,0,0,0.5); border: 1px solid var(--panel-border); padding: 12px; border-radius: 6px; text-align: center;">
-                            <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">System Status</div>
-                            <div style="font-size: 1.1rem; color: var(--accent-purple); font-weight: bold;">Optimal</div>
+                        <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(0,243,255,0.1); padding: 8px; border-radius: 6px; text-align: center;">
+                            <div style="font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase;">Status</div>
+                            <div style="font-size: 1.1rem; color: var(--accent-green); font-weight: bold;">Optimal</div>
                         </div>
                     </div>
-                    <button id="btnAutoSummary" class="action-btn btn-max" style="width: 100%; margin-bottom: 12px;">GENERATE AUDIT BRIEFING</button>
-                    <div id="sysLogger" class="sys-logger" style="min-height: 120px;">
-                        <div class="log-info">[System] SEBRA82 Terminal initialized. Master logic systems online.</div>
+                    <button id="btnAutoSummary" class="action-btn" style="width: 100%; margin-bottom: 8px; border-color: var(--accent-purple); color: var(--accent-purple);">GENERATE BRIEFING</button>
+                    <div id="sysLogger" class="content-scroll-wrapper" style="padding: 8px;">
+                        <div class="log-info">[System] SEBRA82 Terminal initialized.</div>
                     </div>
                 </div>
             </div>
@@ -231,7 +226,7 @@
 
     <div id="globalToast"></div>
     
-    <!-- 🚨 FORCED JAVASCRIPT CACHE BUSTER v23.2 🚨 -->
-    <script src="script.js?v=23.2" defer></script>
+    <!-- 🚨 FORCED JAVASCRIPT CACHE BUSTER v24.0 🚨 -->
+    <script src="script.js?v=24.0" defer></script>
 </body>
 </html>
