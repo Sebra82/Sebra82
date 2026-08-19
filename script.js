@@ -1,5 +1,5 @@
 // ==========================================================================
-// SEBRA82 v26.1 - Master Logic (ResizeObserver Bugfix Engine)
+// SEBRA82 v27.0 - Master Logic (ResizeObserver Grid Bugfix Engine)
 // ==========================================================================
 
 "use strict";
@@ -215,7 +215,7 @@ window.UI = {
         window.UI.triggerResize();
     },
     
-    // 🚨 BULLETPROOF CANVAS RESIZING LOGIC 🚨
+    // 🚨 BULLETPROOF STAGGERED RESIZE TRIGGER 🚨
     resizeCanvases: function() {
         document.querySelectorAll('.canvas-wrapper canvas').forEach(canvas => {
             const rect = canvas.parentElement.getBoundingClientRect();
@@ -228,10 +228,12 @@ window.UI = {
         });
     },
     triggerResize: function() {
-        // Staggered resize to guarantee alignment mid and post CSS animation
+        // Guaranteed execution across the entire CSS animation window to prevent 0x0 canvas lock
         this.resizeCanvases();
+        setTimeout(() => this.resizeCanvases(), 50);
         setTimeout(() => this.resizeCanvases(), 150);
-        setTimeout(() => this.resizeCanvases(), 350);
+        setTimeout(() => this.resizeCanvases(), 300);
+        setTimeout(() => this.resizeCanvases(), 400);
     }
 };
 
@@ -431,7 +433,6 @@ function bindAllEvents() {
         if (e.key === 'Enter') window.AI.submitChat();
     });
 
-    // Interaction bindings logic
     document.querySelectorAll('.panel-header').forEach(header => {
         header.addEventListener('click', (e) => {
             if (e.target.closest('.pin-btn')) return; 
@@ -488,7 +489,6 @@ function bindAllEvents() {
     document.getElementById('btnDownloadExport')?.addEventListener('click', () => window.DATA_INSIGHT.triggerExport());
     document.getElementById('btnClearLedger')?.addEventListener('click', () => { window.GLOBALS.timeSeriesBuffer = []; window.DATA_INSIGHT.renderLedger(); });
 
-    // Workspace Nav
     document.getElementById('btnNavUp')?.addEventListener('click', () => window.WORKSPACE.navigateUp());
 
     // 3D Canvas Interaction
