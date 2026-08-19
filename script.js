@@ -1,5 +1,5 @@
 // ==========================================================================
-// SEBRA82 v26.0 - Master Logic (Dynamic Docking & Point Extraction)
+// SEBRA82 v26.1 - Master Logic (ResizeObserver Bugfix Engine)
 // ==========================================================================
 
 "use strict";
@@ -62,11 +62,10 @@ window.AI = {
         else if (query.includes('load') || query.includes('workspace')) window.UI.toggleMax('cardTools'); 
         
         window.UTILS.logSys(`Synapse AI executed: [${query}]`);
-        window.UI.toggleAiPanel(true); // Close AI panel
+        window.UI.toggleAiPanel(true);
     }
 };
 
-// 💡 DATA INSIGHT ENGINE (Auto-Categorization & Monthly Summary)
 window.DATA_INSIGHT = {
     renderLedger: function() {
         const tbody = document.getElementById('queryTableBody'); 
@@ -155,7 +154,7 @@ window.WORKSPACE = {
         window.UTILS.logSys("Connecting to external Live Socket Stream...", true);
         setTimeout(() => {
             window.UTILS.logSys("Live Socket Connected. Simulating high-velocity injection.");
-            window.GLOBALS.timeOffset += 100; // Jolts the wave function
+            window.GLOBALS.timeOffset += 100;
         }, 800);
     }
 };
@@ -178,7 +177,7 @@ window.UI = {
     authenticateAndLaunch: function(tier) {
         document.getElementById('authGatewayModal').style.display = 'none';
         window.UTILS.logSys(`Cryptographic handshake verified. Core active.`);
-        setTimeout(window.UI.resizeCanvases, 50);
+        window.UI.triggerResize();
     },
     activeMaxId: null,
     toggleAiPanel: function(forceClose = false) {
@@ -186,7 +185,7 @@ window.UI = {
         if(!aiBody) return;
         if(forceClose) aiBody.classList.add('collapsed');
         else aiBody.classList.toggle('collapsed');
-        setTimeout(window.UI.resizeCanvases, 50);
+        window.UI.triggerResize();
     },
     toggleMax: function(cardId) {
         if (this.activeMaxId === cardId) { this.resetStandardView(); return; }
@@ -202,8 +201,8 @@ window.UI = {
                 c.querySelector('.collapsible-body')?.classList.add('collapsed');
             }
         });
-        this.toggleAiPanel(true); // Close AI panel
-        window.UI.resizeCanvases();
+        this.toggleAiPanel(true);
+        window.UI.triggerResize();
     },
     resetStandardView: function() { 
         this.activeMaxId = null; 
@@ -213,13 +212,26 @@ window.UI = {
             c.classList.remove('fluid-maximized', 'minimized-dock-item');
             c.querySelector('.collapsible-body')?.classList.add('collapsed');
         });
-        window.UI.resizeCanvases();
+        window.UI.triggerResize();
     },
+    
+    // 🚨 BULLETPROOF CANVAS RESIZING LOGIC 🚨
     resizeCanvases: function() {
-        document.querySelectorAll('canvas').forEach(canvas => {
-            const parent = canvas.parentElement;
-            if (parent && parent.clientWidth > 0 && parent.clientHeight > 0) { canvas.width = parent.clientWidth; canvas.height = parent.clientHeight; }
+        document.querySelectorAll('.canvas-wrapper canvas').forEach(canvas => {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            if (rect.width > 0 && rect.height > 0) {
+                if (canvas.width !== rect.width || canvas.height !== rect.height) {
+                    canvas.width = rect.width;
+                    canvas.height = rect.height;
+                }
+            }
         });
+    },
+    triggerResize: function() {
+        // Staggered resize to guarantee alignment mid and post CSS animation
+        this.resizeCanvases();
+        setTimeout(() => this.resizeCanvases(), 150);
+        setTimeout(() => this.resizeCanvases(), 350);
     }
 };
 
@@ -341,7 +353,6 @@ class CanvasRenderers {
         });
     }
 
-    // 🌊 Interactive Time-Series extraction and Adjustable Thresholds
     static renderContinuousGraph() {
         const canvas = document.getElementById('predictiveForecastCanvas'); 
         const ctx = canvas ? canvas.getContext('2d') : null;
@@ -352,15 +363,15 @@ class CanvasRenderers {
         this.drawGrid(ctx, w, h, 'rgba(0, 243, 255, 0.04)');
 
         let threshVal = parseFloat(document.getElementById('anomalyThreshold')?.value || 85);
-        document.getElementById('threshReadout').innerText = threshVal + "%";
+        const threshReadout = document.getElementById('threshReadout');
+        if (threshReadout) threshReadout.innerText = threshVal + "%";
 
         if (!window.GLOBALS.isStreamPaused) { 
             window.GLOBALS.globalTick++; window.GLOBALS.timeOffset += 0.05; 
             let val = Math.min(100, Math.max(0, 50 + Math.sin(window.GLOBALS.globalTick * 0.04 + window.GLOBALS.timeOffset * 2) * 25 + (Math.random() * 8 - 4)));
             
-            // Dynamic Anomaly Detection based on user threshold
             let isSpike = val >= threshVal || val <= (100 - threshVal);
-            if (isSpike && Math.random() > 0.5) window.ACTIONS.updateTimeSeriesAccumulator(val, 'ANOMALY'); // throttled to prevent spam
+            if (isSpike && Math.random() > 0.5) window.ACTIONS.updateTimeSeriesAccumulator(val, 'ANOMALY');
 
             window.GLOBALS.waveBuffer.shift(); 
             window.GLOBALS.waveBuffer.push({val: val, spike: isSpike});
@@ -408,27 +419,26 @@ class CanvasRenderers {
             let hx = window.GLOBALS.extractionHighlight * st;
             ctx.strokeStyle = 'rgba(192, 132, 252, 0.8)'; ctx.lineWidth = 2.0; ctx.setLineDash([4, 4]);
             ctx.beginPath(); ctx.moveTo(hx, 0); ctx.lineTo(hx, h); ctx.stroke(); ctx.setLineDash([]);
-            // fade out highlight over time
             if (!window.GLOBALS.isStreamPaused) window.GLOBALS.extractionHighlight -= 1;
         }
     }
 }
 
 function bindAllEvents() {
-    window.addEventListener('resize', window.UI.resizeCanvases);
+    window.addEventListener('resize', () => window.UI.triggerResize());
 
-    // AI chat keybind
     document.getElementById('aiChatInput')?.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') window.AI.submitChat();
     });
 
+    // Interaction bindings logic
     document.querySelectorAll('.panel-header').forEach(header => {
         header.addEventListener('click', (e) => {
             if (e.target.closest('.pin-btn')) return; 
             const card = header.closest('.panel-card');
             if (!card || card.classList.contains('fluid-maximized') || card.classList.contains('minimized-dock-item')) return;
             const body = card.querySelector('.collapsible-body');
-            if(body) { body.classList.toggle('collapsed'); setTimeout(window.UI.resizeCanvases, 50); }
+            if(body) { body.classList.toggle('collapsed'); window.UI.triggerResize(); }
         });
     });
 
@@ -508,5 +518,5 @@ document.addEventListener("DOMContentLoaded", () => {
     masterLoop(); 
     window.MATH.updateInteractiveMathReadout(); 
     window.DATA_INSIGHT.renderLedger();
-    setTimeout(window.UI.resizeCanvases, 150); 
+    window.UI.triggerResize(); 
 });
