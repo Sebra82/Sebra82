@@ -1,5 +1,5 @@
 /* ========================================================================== */
-/* SEBRA82 v22.0 - Original Morning Glassmorphism Aesthetic                   */
+/* SEBRA82 v23.0 - Original Morning Glassmorphism Aesthetic                   */
 /* ========================================================================== */
 
 :root {
@@ -57,7 +57,6 @@ body::before {
     pointer-events: none;
 }
 
-/* Main Terminal Container */
 .terminal-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -84,7 +83,6 @@ body::before {
     box-shadow: 0 8px 32px rgba(0, 243, 255, 0.1);
 }
 
-/* Clean Header & Typography */
 .panel-header {
     display: flex;
     justify-content: space-between;
@@ -100,28 +98,13 @@ body::before {
     text-transform: uppercase;
 }
 
-/* Maximized / Minimized View States */
-.has-maximized .panel-card.minimized-dock-item {
-    display: none;
-}
+/* Maximized States */
+.has-maximized .panel-card.minimized-dock-item { display: none; }
+.panel-card.fluid-maximized { min-height: 85dvh; display: flex; flex-direction: column; }
+.panel-card.fluid-maximized .collapsible-body { flex: 1; display: flex; flex-direction: column; }
+.collapsible-body.collapsed { display: none; }
 
-.panel-card.fluid-maximized {
-    min-height: 85dvh;
-    display: flex;
-    flex-direction: column;
-}
-
-.panel-card.fluid-maximized .collapsible-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.collapsible-body.collapsed {
-    display: none;
-}
-
-/* Clean Interactive Chips */
+/* Interactive Chips */
 .cat-chip {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -134,14 +117,13 @@ body::before {
     transition: all 0.2s ease;
     text-transform: uppercase;
 }
-
 .cat-chip.active, .cat-chip:hover {
     background: rgba(0, 243, 255, 0.15);
     border-color: var(--neon-cyan);
     color: var(--neon-cyan);
 }
 
-/* Linear Gradient Action Buttons */
+/* Action Buttons */
 .action-btn {
     background: linear-gradient(135deg, rgba(0, 243, 255, 0.1), rgba(192, 132, 252, 0.1)) !important;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -154,7 +136,6 @@ body::before {
     transition: all 0.2s ease;
     text-transform: uppercase;
 }
-
 .action-btn:hover {
     background: rgba(0, 243, 255, 0.2) !important;
     border-color: var(--neon-cyan);
@@ -171,76 +152,44 @@ canvas {
     background: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
-
-.fluid-maximized canvas {
-    height: 450px !important;
-}
+.fluid-maximized canvas { height: 450px !important; }
 
 input[type=range] { accent-color: var(--neon-cyan); }
 
-/* Ghost Input & AI Prompt Overlay */
-.ghost-container {
-    position: relative;
-    width: 100%;
-}
-
+/* Ghost Input & Overlays */
+.ghost-container { position: relative; width: 100%; }
 .ghost-input {
-    background: rgba(0, 0, 0, 0.4) !important;
-    border: 1px solid rgba(0, 243, 255, 0.3) !important;
-    color: var(--text-main) !important;
-    padding: 10px 14px;
-    border-radius: 6px;
-    width: 100%;
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
+    background: rgba(0, 0, 0, 0.4) !important; border: 1px solid rgba(0, 243, 255, 0.3) !important;
+    color: var(--text-main) !important; padding: 10px 14px; border-radius: 6px; width: 100%;
+    font-family: var(--font-mono); font-size: 0.85rem;
 }
-
 .ghost-overlay {
-    position: absolute;
-    top: 0; left: 0;
-    padding: 10px 14px;
-    pointer-events: none;
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    white-space: pre;
+    position: absolute; top: 0; left: 0; padding: 10px 14px; pointer-events: none;
+    font-family: var(--font-mono); font-size: 0.85rem; white-space: pre;
 }
+.ghost-match { color: var(--text-muted); opacity: 0.6; }
 
-.ghost-match {
-    color: var(--text-muted);
-    opacity: 0.6;
+/* Tables & Logs */
+table { width: 100%; border-collapse: collapse; font-size: 0.75rem; background-color: transparent !important; }
+th, td { padding: 10px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+th { color: var(--text-muted); font-weight: bold; text-transform: uppercase; }
+
+.sys-logger {
+    background: rgba(0, 0, 0, 0.6) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 6px; padding: 12px; font-family: var(--font-mono); font-size: 0.75rem; max-height: 120px; overflow-y: auto;
 }
+.log-info { color: var(--neon-cyan); margin-bottom: 6px; }
 
-/* Global Toast Notifications */
 #globalToast {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: rgba(13, 20, 33, 0.95);
-    border: 1px solid var(--neon-cyan);
-    color: var(--text-main);
-    padding: 12px 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
-    font-size: 0.85rem;
-    z-index: 10000;
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px);
+    background: rgba(13, 20, 33, 0.95); border: 1px solid var(--neon-cyan); color: var(--text-main);
+    padding: 12px 20px; border-radius: 8px; box-shadow: 0 0 20px rgba(0, 243, 255, 0.3); font-size: 0.85rem;
+    z-index: 10000; transition: transform 0.3s ease;
 }
+#globalToast.show { transform: translateX(-50%) translateY(0); }
 
-#globalToast.show {
-    transform: translateX(-50%) translateY(0);
-}
-
-/* Gateway Modal Overlay */
 #authGatewayModal {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(5, 8, 14, 0.92);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(5, 8, 14, 0.92);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 9999;
+    display: flex; justify-content: center; align-items: center; padding: 20px;
 }
