@@ -1,3 +1,7 @@
+The issue is hiding right at the very bottom of the file you provided. The cache buster was successfully added to the CSS (styles.css?v=21.3), but the JavaScript tag at the end of the document is still loading the old cached version (<script src="script.js" defer></script>).
+Because your phone is running the old JavaScript on the new HTML, the buttons are unresponsive.
+Here is the fully corrected index.html with the JavaScript cache buster applied. Copy and paste this exact block to overwrite your file, commit the change, and the "DEMO SANDBOX" button will instantly spring to life.
+index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SEBRA82 v21.2 - Aegis Encrypted Suite</title>
     
-    <!-- 🚨 CACHE BUSTER ADDED HERE 🚨 -->
+    <!-- 🚨 CSS CACHE BUSTER 🚨 -->
     <link rel="stylesheet" href="styles.css?v=21.3">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
@@ -327,6 +331,9 @@
     </div>
 
     <div id="globalToast"></div>
-    <script src="script.js" defer></script>
+    
+    <!-- 🚨 JAVASCRIPT CACHE BUSTER ADDED BELOW 🚨 -->
+    <script src="script.js?v=21.3" defer></script>
 </body>
 </html>
+
