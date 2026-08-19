@@ -1,5 +1,5 @@
 // ==========================================================================
-// SEBRA82 v23.2 - Master Logic Engine with Smart Accordion/Dock Interactions
+// SEBRA82 v24.0 - Master Logic (No-Scroll Viewport Architecture)
 // ==========================================================================
 
 "use strict";
@@ -11,9 +11,8 @@ let isDraggingAtom = false, lastX = 0, lastY = 0;
 window.GLOBALS = {
     isStreamPaused: false, globalTick: 0, timeOffset: 0.0,
     atomMode: 'calc', serverMatrix: [],
-    waveBuffer: new Array(220).fill({val: 50, spike: false}),
-    timeSeriesBuffer: [],
-    queryFilter: 'ALL',
+    waveBuffer: new Array(150).fill({val: 50, spike: false}), // Adjusted for new flex canvas width
+    timeSeriesBuffer: [], queryFilter: 'ALL',
     finConfig: { baseValue: 10.0, damping: 1.45, mathMode: 'quantum' }
 };
 
@@ -28,7 +27,6 @@ window.UTILS = {
     lerp: function(start, end, amt) { return (1 - amt) * start + amt * end; }
 };
 
-// 🧠 Advanced AI Synapse Logic
 window.AI = {
     currentPrediction: "", fullMatchedPhrase: "",
     dictionary: [ "zoom lattice", "run benchmark", "extract noise", "clear ledger", "load 6 months", "export data", "maximize calculus" ],
@@ -41,9 +39,7 @@ window.AI = {
         const val = e.target.value; const match = this.getMatch(val);
         this.currentPrediction = match.remaining; this.fullMatchedPhrase = match.full;
         const ghost = document.getElementById('ghostOverlay');
-        if (ghost) {
-            ghost.innerHTML = `<span style="opacity: 0;">${window.UTILS.escapeHtml(val)}</span>` + (this.currentPrediction ? `<span class="ghost-match">${window.UTILS.escapeHtml(this.currentPrediction)}</span>` : '');
-        }
+        if (ghost) ghost.innerHTML = `<span style="opacity: 0;">${window.UTILS.escapeHtml(val)}</span>` + (this.currentPrediction ? `<span class="ghost-match">${window.UTILS.escapeHtml(this.currentPrediction)}</span>` : '');
     },
     handleGhostKeyDown: function(e) {
         const input = e.target;
@@ -51,7 +47,7 @@ window.AI = {
             e.preventDefault(); input.value = this.fullMatchedPhrase; 
             this.currentPrediction = ""; document.getElementById('ghostOverlay').innerHTML = ""; return; 
         }
-        if (e.key === 'Enter') { window.AI.submitChat(); }
+        if (e.key === 'Enter') window.AI.submitChat(); 
     },
     submitChat: function() {
         const inputField = document.getElementById('aiChatInput'); if (!inputField) return;
@@ -59,16 +55,19 @@ window.AI = {
         if (!query) return;
         inputField.value = ""; document.getElementById('ghostOverlay').innerHTML = "";
         
-        if (query.includes('zoom') || query.includes('lattice') || query.includes('3d') || query.includes('core')) { window.UI.toggleMax('cardAtom'); }
+        if (query.includes('zoom') || query.includes('lattice') || query.includes('3d') || query.includes('core')) window.UI.toggleMax('cardAtom'); 
         else if (query.includes('bench') || query.includes('calc') || query.includes('math')) { window.UI.toggleMax('cardFin'); window.MATH.runBenchmark(); }
-        else if (query.includes('noise') || query.includes('extract') || query.includes('wave')) { window.UI.toggleMax('cardWave'); }
-        else if (query.includes('ledger') || query.includes('table') || query.includes('query')) { window.UI.toggleMax('cardQuery'); }
-        else if (query.includes('load') || query.includes('month') || query.includes('workspace')) { window.UI.toggleMax('cardTools'); }
+        else if (query.includes('noise') || query.includes('extract') || query.includes('wave')) window.UI.toggleMax('cardWave'); 
+        else if (query.includes('ledger') || query.includes('table') || query.includes('query')) window.UI.toggleMax('cardQuery'); 
+        else if (query.includes('load') || query.includes('month') || query.includes('workspace')) window.UI.toggleMax('cardTools'); 
+        
         window.UTILS.logSys(`Synapse AI executed directive: [${query}]`);
+        
+        const aiCard = document.getElementById('cardAi');
+        if (aiCard) { const body = aiCard.querySelector('.collapsible-body'); if (body) body.classList.add('collapsed'); }
     }
 };
 
-// 📊 Advanced Data & Query Logic
 window.DATA_INSIGHT = {
     activeDataSet: [],
     setFilter: function(cat) {
@@ -88,7 +87,6 @@ window.DATA_INSIGHT = {
         if (!tbody) return;
         
         let dataToRender = this.activeDataSet.length > 0 ? this.activeDataSet : window.GLOBALS.timeSeriesBuffer;
-
         if (window.GLOBALS.queryFilter !== 'ALL') {
             dataToRender = dataToRender.filter(item => {
                 let c = item.cat.toUpperCase();
@@ -111,7 +109,7 @@ window.DATA_INSIGHT = {
         let htmlStr = '';
         reversedData.forEach((item, idx) => {
             let catColor = item.cat.includes('WORLD') ? "var(--warning-amber)" : (item.cat.includes('CALC') ? "var(--neon-cyan)" : "var(--accent-purple)");
-            htmlStr += `<tr><td>TX-${9400+idx}</td><td>${item.time}</td><td style="color:${catColor};">${item.cat}</td><td style="color:var(--accent-green);">$${item.val}</td></tr>`;
+            htmlStr += `<tr><td>TX-${9400+idx}</td><td>${item.time}</td><td style="color:${catColor};">${item.cat.substring(0,6)}</td><td style="color:var(--accent-green);">$${item.val}</td></tr>`;
         });
         tbody.innerHTML = htmlStr;
         if (queryCountEl) queryCountEl.innerText = `${dataToRender.length} rows`;
@@ -123,16 +121,16 @@ window.DATA_INSIGHT = {
         dataToExport.forEach((i, idx) => { csvContent += `TX-${9400+idx},${i.time},${i.cat},${i.val}\n`; });
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
-        const link = document.createElement("a"); link.href = url; link.download = "SEBRA82_Telemetry_Export.csv";
+        const link = document.createElement("a"); link.href = url; link.download = "SEBRA82_Telemetry.csv";
         document.body.appendChild(link); link.click(); document.body.removeChild(link);
-        window.UTILS.logSys("Export dataset generated and downloaded.");
+        window.UTILS.logSys("Export dataset generated.");
     },
     archiveData: function() {
         let fileName = `vault_archive_${Date.now().toString().slice(-4)}.csv`;
         if(!window.WORKSPACE.fs["/root/datasets"]) window.WORKSPACE.fs["/root/datasets"] = [];
         window.WORKSPACE.fs["/root/datasets"].push(fileName);
         window.WORKSPACE.render();
-        window.UTILS.logSys(`Active telemetry archived to Virtual Vault: /root/datasets/${fileName}`);
+        window.UTILS.logSys(`Data archived: /datasets/${fileName}`);
     },
     loadHistoricalData: function(months) {
         window.UTILS.logSys(`Loading ${months}-Month historical dataset...`);
@@ -140,14 +138,13 @@ window.DATA_INSIGHT = {
         let count = months * 25;
         for(let i=0; i<count; i++) {
             let r = Math.random();
-            let cat = r > 0.66 ? 'FINANCE-ALPHA' : (r > 0.33 ? 'WORLD-VECTOR' : 'CALC-REGIME');
+            let cat = r > 0.66 ? 'FINANCE' : (r > 0.33 ? 'WORLD' : 'CALC');
             this.activeDataSet.push({ time: new Date(Date.now() - i*3600000).toLocaleTimeString(), cat: cat, val: (Math.random()*4000+100).toFixed(2) });
         }
         this.renderLedger(); window.UI.toggleMax('cardQuery');
     }
 };
 
-// 📁 Advanced Workspace Logic
 window.WORKSPACE = {
     currentPath: "/root/datasets",
     fs: { "/root": ["datasets", "exports"], "/root/datasets": ["quantum_noise.json", "alpha_feed.csv"], "/root/exports": ["briefing_report.pdf"] },
@@ -174,7 +171,6 @@ window.WORKSPACE = {
     }
 };
 
-// 📐 Advanced Action & Mathematical Logic
 window.ACTIONS = {
     generateRandomDataEpoch: function() { 
         window.GLOBALS.waveBuffer = window.GLOBALS.waveBuffer.map(() => ({val: Math.floor(Math.random() * 60) + 20, spike: false})); 
@@ -184,7 +180,7 @@ window.ACTIONS = {
     },
     updateTimeSeriesAccumulator: function(val, isSpike) {
         const time = new Date().toLocaleTimeString();
-        window.GLOBALS.timeSeriesBuffer.push({ time: time, val: val.toFixed(2), cat: "FINANCE-ALPHA" });
+        window.GLOBALS.timeSeriesBuffer.push({ time: time, val: val.toFixed(2), cat: "FINANCE" });
         if (window.GLOBALS.timeSeriesBuffer.length > 250) window.GLOBALS.timeSeriesBuffer.shift(); 
         
         let totalSpikes = window.GLOBALS.waveBuffer.filter(i => i.spike).length + 1; 
@@ -194,19 +190,14 @@ window.ACTIONS = {
     },
     autoGenerateExecSummary: function() {
         let totalSpikes = window.GLOBALS.waveBuffer.filter(i => i.spike).length;
-        let html = `🏆 <strong>Executive Briefing (${new Date().toLocaleTimeString()}):</strong><br>`;
-        html += `• Quantum lattice operating at sustained 60 FPS matrix fidelity.<br>`;
-        html += `• Welford statistical anomaly detector identified <strong>${totalSpikes}</strong> regime events.<br>`;
-        html += `• Current deterministic calculation latency benchmarked at &lt; 0.05ms on single CPU core.`;
-        window.UTILS.logSys(html);
+        window.UTILS.logSys(`🏆 Executive Briefing (${new Date().toLocaleTimeString()}): Lattice nominal. 60 FPS. ${totalSpikes} anomalies detected.`);
     }
 };
 
-// 🧠 Smart UI: Maximize and Dock Logic
 window.UI = {
     authenticateAndLaunch: function(tier) {
         document.getElementById('authGatewayModal').style.display = 'none';
-        window.UTILS.logSys(`Authentication approved. Access granted to master core.`);
+        window.UTILS.logSys(`Authentication approved.`);
         setTimeout(window.UI.resizeCanvases, 50);
     },
     activeMaxId: null,
@@ -217,30 +208,25 @@ window.UI = {
         if (stack) stack.classList.add('has-maximized');
         document.querySelectorAll('.panel-card').forEach(c => {
             if (c.id === cardId) {
-                // Expand to full screen, open accordion, change button text
-                c.classList.add('fluid-maximized'); 
-                c.classList.remove('minimized-dock-item'); 
+                c.classList.add('fluid-maximized'); c.classList.remove('minimized-dock-item'); 
                 c.querySelector('.collapsible-body')?.classList.remove('collapsed');
-                let btn = c.querySelector('.pin-btn');
-                if(btn) btn.innerHTML = "↙ STANDARDIZE";
             } else {
-                // Hide into the dock completely
-                c.classList.remove('fluid-maximized'); 
-                c.classList.add('minimized-dock-item'); 
+                c.classList.remove('fluid-maximized'); c.classList.add('minimized-dock-item'); 
                 c.querySelector('.collapsible-body')?.classList.add('collapsed');
-                let btn = c.querySelector('.pin-btn');
-                if(btn) btn.innerHTML = "⚡ MAXIMIZE";
             }
         });
         window.UI.resizeCanvases();
+        
+        // Auto-collapse AI when a panel maximizes
+        const aiCard = document.getElementById('cardAi');
+        if (aiCard && cardId !== 'cardAi') { const body = aiCard.querySelector('.collapsible-body'); if (body) body.classList.add('collapsed'); }
     },
     resetStandardView: function() { 
         this.activeMaxId = null; 
         document.getElementById('mobileStack')?.classList.remove('has-maximized');
         document.querySelectorAll('.panel-card').forEach(c => {
             c.classList.remove('fluid-maximized', 'minimized-dock-item');
-            let btn = c.querySelector('.pin-btn');
-            if(btn) btn.innerHTML = "⚡ MAXIMIZE";
+            c.querySelector('.collapsible-body')?.classList.add('collapsed');
         });
         window.UI.resizeCanvases();
     },
@@ -272,18 +258,18 @@ window.MATH = {
         if (window.GLOBALS.finConfig.mathMode === 'quantum') { 
             let rawAlpha = (0.75 + (window.GLOBALS.finConfig.baseValue / 50) * 0.25 * dynamicMod); 
             let normFactor = Math.sqrt(rawAlpha * rawAlpha + 0.25); 
-            resEl.innerHTML = `|&psi;&gt; = ${(rawAlpha/normFactor).toFixed(3)}|00&gt; + ${(0.5/normFactor).toFixed(3)}|01&gt;`; 
+            resEl.innerHTML = `|&psi;&gt; = ${(rawAlpha/normFactor).toFixed(3)}|00&gt;<br>+ ${(0.5/normFactor).toFixed(3)}|01&gt;`; 
         } else { 
             let roi = (window.GLOBALS.finConfig.baseValue * dynamicMod * 14.8).toFixed(2); 
-            resEl.innerText = `$${roi} (Confidence: ${(92 + dynamicMod).toFixed(1)}%)`; 
+            resEl.innerText = `$${roi} (${(92 + dynamicMod).toFixed(1)}%)`; 
         }
     },
     runBenchmark: function() {
         const btn = document.getElementById('btnRunBench');
-        if (btn) { btn.disabled = true; btn.innerText = "Computing Tensor Core..."; }
+        if (btn) { btn.disabled = true; btn.innerText = "Computing Core..."; }
         setTimeout(() => {
-            if (btn) { btn.disabled = false; btn.innerText = "RUN SPEED BENCHMARK"; }
-            window.UTILS.logSys("Compute benchmark completed locally (< 0.05ms).");
+            if (btn) { btn.disabled = false; btn.innerText = "Run Benchmark"; }
+            window.UTILS.logSys("Compute benchmark completed locally.");
         }, 1200);
     }
 };
@@ -398,7 +384,6 @@ class CanvasRenderers {
         });
     }
 
-    // 🚨 The Single Continuous Graph 🚨
     static renderContinuousGraph() {
         const canvas = document.getElementById('predictiveForecastCanvas'); 
         const ctx = canvas ? canvas.getContext('2d') : null;
@@ -412,7 +397,6 @@ class CanvasRenderers {
             window.GLOBALS.globalTick++; window.GLOBALS.timeOffset += 0.05; 
             let val = Math.min(85, Math.max(15, 50 + Math.sin(window.GLOBALS.globalTick * 0.04 + window.GLOBALS.timeOffset * 2) * 20 + (Math.random() * 6 - 3)));
             
-            // Welford simulated anomaly check
             let isSpike = Math.random() > 0.98;
             if (isSpike) window.ACTIONS.updateTimeSeriesAccumulator(val, isSpike);
 
@@ -423,7 +407,6 @@ class CanvasRenderers {
 
         let st = w / Math.max(1, window.GLOBALS.waveBuffer.length - 1);
         
-        // 1. Draw Main Wave
         ctx.beginPath(); 
         ctx.moveTo(0, h - (window.GLOBALS.waveBuffer[0].val * (h / 100)));
         for (let i = 0; i < window.GLOBALS.waveBuffer.length - 1; i++) { 
@@ -433,7 +416,6 @@ class CanvasRenderers {
         } 
         ctx.strokeStyle = '#00f3ff'; ctx.lineWidth = 2.0; ctx.stroke();
         
-        // 2. Draw Anomaly Spikes directly on the continuous line
         window.GLOBALS.waveBuffer.forEach((pt, i) => {
             if (pt.spike) {
                 let x = i * st, y = h - (pt.val * (h / 100));
@@ -442,7 +424,6 @@ class CanvasRenderers {
             }
         });
 
-        // 3. Draw Predictive Markov Cone
         let historyCutoff = Math.floor(window.GLOBALS.waveBuffer.length * 0.55);
         let startX = historyCutoff * st;
         let centerY = h / 2;
@@ -466,17 +447,18 @@ class CanvasRenderers {
 function bindAllEvents() {
     window.addEventListener('resize', window.UI.resizeCanvases);
 
-    // 🧠 Smart Accordion Logic
+    // Advanced UI Logic Hooks
     document.querySelectorAll('.panel-header').forEach(header => {
         header.addEventListener('click', (e) => {
-            // Ignore if clicking the pin/max button
             if (e.target.closest('.pin-btn')) return; 
-            
             const card = header.closest('.panel-card');
-            
-            // DO NOT collapse if it's minimized in the dock OR currently full-screen maximized
-            if (!card || card.classList.contains('fluid-maximized') || card.classList.contains('minimized-dock-item')) return;
-            
+            if (!card || card.classList.contains('fluid-maximized') || card.classList.contains('minimized-dock-item')) {
+                if (card && card.id === 'cardAi') {
+                    const body = card.querySelector('.collapsible-body');
+                    if (body) { body.classList.toggle('collapsed'); setTimeout(window.UI.resizeCanvases, 50); }
+                }
+                return; 
+            }
             const body = card.querySelector('.collapsible-body');
             if(body) {
                 body.classList.toggle('collapsed');
@@ -487,6 +469,12 @@ function bindAllEvents() {
 
     document.querySelectorAll('.pin-btn').forEach(el => { 
         el.addEventListener('click', (e) => { e.stopPropagation(); window.UI.toggleMax(el.closest('.panel-card').id); }); 
+    });
+
+    document.querySelectorAll('.panel-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            if(card.classList.contains('minimized-dock-item')) window.UI.toggleMax(card.id);
+        });
     });
 
     // Top Bar Logic
