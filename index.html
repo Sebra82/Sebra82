@@ -1,7 +1,3 @@
-The issue is hiding right at the very bottom of the file you provided. The cache buster was successfully added to the CSS (styles.css?v=21.3), but the JavaScript tag at the end of the document is still loading the old cached version (<script src="script.js" defer></script>).
-Because your phone is running the old JavaScript on the new HTML, the buttons are unresponsive.
-Here is the fully corrected index.html with the JavaScript cache buster applied. Copy and paste this exact block to overwrite your file, commit the change, and the "DEMO SANDBOX" button will instantly spring to life.
-index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,8 +5,8 @@ index.html
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SEBRA82 v21.2 - Aegis Encrypted Suite</title>
     
-    <!-- 🚨 CSS CACHE BUSTER 🚨 -->
-    <link rel="stylesheet" href="styles.css?v=21.3">
+    <!-- 🚨 FORCED CSS CACHE BUSTER v21.4 🚨 -->
+    <link rel="stylesheet" href="styles.css?v=21.4">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@msgpack/msgpack@2.8.0/dist/msgpack.min.js"></script>
@@ -27,7 +23,9 @@ index.html
             <input type="password" id="licenseKeyInput" class="ghost-input" placeholder="Enter AEGIS Hash Key..." style="margin-bottom: 16px;">
             <div style="display: flex; gap: 12px; justify-content: center;">
                 <button id="btnAuthLicense" class="purple-btn" style="padding: 10px 20px;">AUTHENTICATE</button>
-                <button id="btnAuthDemo" class="action-btn" style="background: transparent !important; border-color: var(--warning-amber) !important; color: var(--warning-amber) !important;">DEMO SANDBOX</button>
+                
+                <!-- 🚨 BULLETPROOF INLINE ONCLICK OVERRIDE 🚨 -->
+                <button id="btnAuthDemo" class="action-btn" style="background: transparent !important; border-color: var(--warning-amber) !important; color: var(--warning-amber) !important;" onclick="document.getElementById('authGatewayModal').style.display='none'; if(window.UI) { window.UI.authenticateAndLaunch('demo'); }">DEMO SANDBOX</button>
             </div>
         </div>
     </div>
@@ -332,8 +330,7 @@ index.html
 
     <div id="globalToast"></div>
     
-    <!-- 🚨 JAVASCRIPT CACHE BUSTER ADDED BELOW 🚨 -->
-    <script src="script.js?v=21.3" defer></script>
+    <!-- 🚨 FORCED JAVASCRIPT CACHE BUSTER v21.4 🚨 -->
+    <script src="script.js?v=21.4" defer></script>
 </body>
 </html>
-
