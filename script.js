@@ -1,5 +1,5 @@
 // ==========================================================================
-// SEBRA82 v22.0 - Master Logic (Morning UI Framework & Continuous Graph)
+// SEBRA82 v23.0 - Full Master Logic mapped to Clean Glassmorphism UI
 // ==========================================================================
 
 "use strict";
@@ -9,18 +9,69 @@ let currentAtomRotX = 0.4, currentAtomRotY = 0.2;
 let isDraggingAtom = false, lastX = 0, lastY = 0;
 
 window.GLOBALS = {
-    isStreamPaused: false,
-    globalTick: 0,
-    timeOffset: 0.0,
-    atomMode: 'calc',
-    serverMatrix: [],
-    waveBuffer: new Array(220).fill(50),
+    isStreamPaused: false, globalTick: 0, timeOffset: 0.0,
+    atomMode: 'calc', serverMatrix: [],
+    waveBuffer: new Array(220).fill({val: 50, spike: false}),
+    timeSeriesBuffer: [],
     finConfig: { baseValue: 10.0, damping: 1.45, mathMode: 'quantum' }
+};
+
+window.UTILS = {
+    escapeHtml: function(str) { return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); },
+    logSys: function(msg) {
+        const logger = document.getElementById('sysLogger'); if(!logger) return;
+        const t = new Date().toISOString().split('T')[1].slice(0, -1);
+        logger.innerHTML += `<div class="log-info">[${t}] ${this.escapeHtml(msg)}</div>`;
+        logger.scrollTop = logger.scrollHeight;
+    },
+    lerp: function(start, end, amt) { return (1 - amt) * start + amt * end; }
+};
+
+window.ACTIONS = {
+    updateTimeSeriesAccumulator: function(val, isSpike) {
+        const time = new Date().toLocaleTimeString();
+        window.GLOBALS.timeSeriesBuffer.push({ time: time, val: val.toFixed(2), cat: "FINANCE-ALPHA" });
+        if (window.GLOBALS.timeSeriesBuffer.length > 250) window.GLOBALS.timeSeriesBuffer.shift(); 
+        
+        let totalSpikes = window.GLOBALS.waveBuffer.filter(i => i.spike).length + 1; // Approx
+        const spikeLabel = document.getElementById('sumMetricSpikes');
+        if (spikeLabel) spikeLabel.innerText = totalSpikes + " Detected";
+        this.renderLedger();
+    },
+    renderLedger: function() {
+        const tbody = document.getElementById('queryTableBody'); 
+        if (!tbody) return;
+        let data = window.GLOBALS.timeSeriesBuffer.slice().reverse().slice(0, 50);
+        let htmlStr = '';
+        data.forEach((item, idx) => {
+            htmlStr += `<tr><td>TX-${9400+idx}</td><td>${item.time}</td><td style="color:var(--accent-purple);">${item.cat}</td><td style="color:var(--accent-green);">$${item.val}</td></tr>`;
+        });
+        tbody.innerHTML = htmlStr;
+        const count = document.getElementById('sumQueryCount');
+        if(count) count.innerText = `${data.length} rows`;
+    }
+};
+
+window.WORKSPACE = {
+    currentPath: "/root/datasets",
+    fs: { "/root/datasets": ["quantum_noise.json", "alpha_feed.csv"], "/root/exports": ["briefing_report.pdf"] },
+    render: function() {
+        const area = document.getElementById('explorerContentArea'); 
+        const display = document.getElementById('currentPathDisplay'); 
+        if (display) display.innerText = `📁 ${this.currentPath}`;
+        if (!area) return;
+        let html = `<div style="color:var(--text-muted); margin-bottom:8px;">Files in Directory:</div>`;
+        (this.fs[this.currentPath] || []).forEach(f => {
+            html += `<div style="padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">📄 ${f}</div>`;
+        });
+        area.innerHTML = html;
+    }
 };
 
 window.UI = {
     authenticateAndLaunch: function(tier) {
         document.getElementById('authGatewayModal').style.display = 'none';
+        window.UTILS.logSys(`Authentication approved. Access granted.`);
         setTimeout(window.UI.resizeCanvases, 50);
     },
     activeMaxId: null,
@@ -29,15 +80,12 @@ window.UI = {
         this.activeMaxId = cardId;
         const stack = document.getElementById('mobileStack');
         if (stack) stack.classList.add('has-maximized');
-        
         document.querySelectorAll('.panel-card').forEach(c => {
             if (c.id === cardId) {
-                c.classList.add('fluid-maximized'); 
-                c.classList.remove('minimized-dock-item'); 
+                c.classList.add('fluid-maximized'); c.classList.remove('minimized-dock-item'); 
                 c.querySelector('.collapsible-body')?.classList.remove('collapsed');
             } else {
-                c.classList.remove('fluid-maximized'); 
-                c.classList.add('minimized-dock-item'); 
+                c.classList.remove('fluid-maximized'); c.classList.add('minimized-dock-item'); 
                 c.querySelector('.collapsible-body')?.classList.add('collapsed');
             }
         });
@@ -45,12 +93,8 @@ window.UI = {
     },
     resetStandardView: function() { 
         this.activeMaxId = null; 
-        const stack = document.getElementById('mobileStack');
-        if (stack) stack.classList.remove('has-maximized');
-        
-        document.querySelectorAll('.panel-card').forEach(c => {
-            c.classList.remove('fluid-maximized', 'minimized-dock-item'); 
-        });
+        document.getElementById('mobileStack')?.classList.remove('has-maximized');
+        document.querySelectorAll('.panel-card').forEach(c => c.classList.remove('fluid-maximized', 'minimized-dock-item'));
         window.UI.resizeCanvases();
     },
     resizeCanvases: function() {
@@ -65,7 +109,8 @@ window.UI = {
 
 window.MATH = {
     updateInteractiveMathReadout: function() {
-        let dynamicMod = ((window.GLOBALS.waveBuffer[window.GLOBALS.waveBuffer.length - 1] || 50) / 50) * window.GLOBALS.finConfig.damping;
+        let lastObj = window.GLOBALS.waveBuffer[window.GLOBALS.waveBuffer.length - 1];
+        let dynamicMod = ((lastObj ? lastObj.val : 50) / 50) * window.GLOBALS.finConfig.damping;
         const resEl = document.getElementById('mathLiveResult');
         if (!resEl) return;
         let rawAlpha = (0.75 + (window.GLOBALS.finConfig.baseValue / 50) * 0.25 * dynamicMod); 
@@ -83,12 +128,12 @@ class CanvasRenderers {
     }
 
     static renderAtom() {
-        const atomCanvas = document.getElementById('atom3DCanvas'); 
-        const atomCtx = atomCanvas ? atomCanvas.getContext('2d') : null;
-        if(!atomCtx || !atomCanvas.width || !atomCanvas.height) return;
-        const w = atomCanvas.width, h = atomCanvas.height; 
-        atomCtx.clearRect(0, 0, w, h); 
-        this.drawGrid(atomCtx, w, h, 'rgba(0, 243, 255, 0.04)');
+        const canvas = document.getElementById('atom3DCanvas'); 
+        const ctx = canvas ? canvas.getContext('2d') : null;
+        if(!ctx || !canvas.width || !canvas.height) return;
+        const w = canvas.width, h = canvas.height; 
+        ctx.clearRect(0, 0, w, h); 
+        this.drawGrid(ctx, w, h, 'rgba(0, 243, 255, 0.04)');
         let cx = w / 2, cy = h / 2; 
 
         targetAtomZoom = window.UTILS.lerp(targetAtomZoom, parseFloat(document.getElementById('atomZoomSlider')?.value || 1.0), 0.12);
@@ -105,11 +150,12 @@ class CanvasRenderers {
             window.GLOBALS.serverMatrix = m;
         }
 
+        let lastVal = window.GLOBALS.waveBuffer[window.GLOBALS.waveBuffer.length-1].val;
         let localNodes = window.GLOBALS.serverMatrix.map(n => {
             let r = n.baseR;
             if(n.type === 'core') r += Math.sin(window.GLOBALS.globalTick * 0.08) * 4;
             if(n.type === 'inner') r += Math.sin(window.GLOBALS.globalTick*0.05 + n.id)*6;
-            if(n.type === 'valence') r += (window.GLOBALS.waveBuffer[window.GLOBALS.waveBuffer.length-1] - 50) * 0.4 + Math.sin(n.id*0.3 + window.GLOBALS.timeOffset)*8;
+            if(n.type === 'valence') r += (lastVal - 50) * 0.4 + Math.sin(n.id*0.3 + window.GLOBALS.timeOffset)*8;
 
             let ox = 0, oy = 0, oz = 0;
             if(n.type === 'inner') {
@@ -117,15 +163,12 @@ class CanvasRenderers {
                 oy = r * Math.sin(n.angle + window.GLOBALS.globalTick*0.03) * Math.cos(Math.PI/4); 
                 oz = r * Math.sin(n.angle + window.GLOBALS.globalTick*0.03) * Math.sin(Math.PI/4);
             } else {
-                ox = r * Math.sin(n.phi) * Math.cos(n.theta); 
-                oy = r * Math.sin(n.phi) * Math.sin(n.theta); 
-                oz = r * Math.cos(n.phi);
+                ox = r * Math.sin(n.phi) * Math.cos(n.theta); oy = r * Math.sin(n.phi) * Math.sin(n.theta); oz = r * Math.cos(n.phi);
             }
 
             let color = n.type === 'core' ? '#ffffff' : (n.type === 'inner' ? '#00f3ff' : '#c084fc');
             let glow = n.type === 'core' ? 'rgba(255,255,255,0.9)' : (n.type === 'inner' ? 'rgba(0,243,255,0.8)' : 'rgba(192,132,252,0.8)');
-            
-            return { ox: ox, oy: oy, oz: oz, type: n.type, isCore: n.type === 'core', id: n.id, color: color, glow: glow };
+            return { ox, oy, oz, type: n.type, isCore: n.type === 'core', id: n.id, color, glow };
         });
 
         let projected = localNodes.map(n => {
@@ -134,14 +177,11 @@ class CanvasRenderers {
             let y2 = n.oy * Math.cos(targetAtomRotX) - z1 * Math.sin(targetAtomRotX);
             let z2 = n.oy * Math.sin(targetAtomRotX) + z1 * Math.cos(targetAtomRotX);
             let pers = 400 / (400 + z2);
-            return {
-                px: cx + x1 * pers * targetAtomZoom, py: cy + y2 * pers * targetAtomZoom, z: z2, ox: n.ox, oy: n.oy, oz: n.oz,
-                isCore: n.isCore, type: n.type, id: n.id, color: n.color, glow: n.glow, size: (n.isCore ? 3.0 : 2.0) * pers * Math.min(targetAtomZoom, 4.0)
-            };
+            return { px: cx + x1 * pers * targetAtomZoom, py: cy + y2 * pers * targetAtomZoom, z: z2, ox: n.ox, oy: n.oy, oz: n.oz, isCore: n.isCore, type: n.type, color: n.color, glow: n.glow, size: (n.isCore ? 3.0 : 2.0) * pers * Math.min(targetAtomZoom, 4.0) };
         });
 
         projected.sort((a, b) => a.z - b.z);
-        atomCtx.lineWidth = 1.0;
+        ctx.lineWidth = 1.0;
 
         for (let i = 0; i < projected.length; i++) {
             for (let j = i + 1; j < Math.min(i + 30, projected.length); j++) {
@@ -152,82 +192,90 @@ class CanvasRenderers {
 
                 if (dist3D < maxDist) {
                     let alpha = (1.0 - (dist3D / maxDist)) * 0.7;
-                    atomCtx.strokeStyle = `rgba(0, 243, 255, ${alpha})`;
-                    atomCtx.beginPath(); atomCtx.moveTo(projected[i].px, projected[i].py); atomCtx.lineTo(projected[j].px, projected[j].py); atomCtx.stroke();
+                    ctx.strokeStyle = `rgba(0, 243, 255, ${alpha})`;
+                    ctx.beginPath(); ctx.moveTo(projected[i].px, projected[i].py); ctx.lineTo(projected[j].px, projected[j].py); ctx.stroke();
                 }
             }
         }
 
         projected.forEach(n => {
-            atomCtx.fillStyle = n.color;
-            atomCtx.shadowBlur = n.isCore ? 15 : 8; atomCtx.shadowColor = n.glow;
+            ctx.fillStyle = n.color;
+            ctx.shadowBlur = n.isCore ? 15 : 8; ctx.shadowColor = n.glow;
             let s = Math.max(2.0, n.size * 2);
-            atomCtx.fillRect(n.px - s/2, n.py - s/2, s, s);
-            atomCtx.shadowBlur = 0;
+            ctx.fillRect(n.px - s/2, n.py - s/2, s, s);
+            ctx.shadowBlur = 0;
         });
     }
 
-    // 🚨 RESTORED: Continuous Graphic Structure for Noise & Predictive Studio
+    // 🚨 The Single Continuous Graph (With embedded Anomalies & Predictions) 🚨
     static renderContinuousGraph() {
-        const predCanvas = document.getElementById('predictiveForecastCanvas'); 
-        const predCtx = predCanvas ? predCanvas.getContext('2d') : null;
-        if(!predCtx || !predCanvas.width || !predCanvas.height) return;
+        const canvas = document.getElementById('predictiveForecastCanvas'); 
+        const ctx = canvas ? canvas.getContext('2d') : null;
+        if(!ctx || !canvas.width || !canvas.height) return;
         
-        const w = predCanvas.width, h = predCanvas.height; 
-        predCtx.clearRect(0, 0, w, h); 
-        this.drawGrid(predCtx, w, h, 'rgba(0, 243, 255, 0.04)');
+        const w = canvas.width, h = canvas.height; 
+        ctx.clearRect(0, 0, w, h); 
+        this.drawGrid(ctx, w, h, 'rgba(0, 243, 255, 0.04)');
 
         if (!window.GLOBALS.isStreamPaused) { 
             window.GLOBALS.globalTick++; window.GLOBALS.timeOffset += 0.05; 
-            let liveVal = Math.min(85, Math.max(15, 50 + Math.sin(window.GLOBALS.globalTick * 0.04 + window.GLOBALS.timeOffset * 2) * 20 + (Math.random() * 6 - 3)));
+            let val = Math.min(85, Math.max(15, 50 + Math.sin(window.GLOBALS.globalTick * 0.04 + window.GLOBALS.timeOffset * 2) * 20 + (Math.random() * 6 - 3)));
+            
+            // Welford simulated anomaly check
+            let isSpike = Math.random() > 0.98;
+            if (isSpike) window.ACTIONS.updateTimeSeriesAccumulator(val, isSpike);
+
             window.GLOBALS.waveBuffer.shift(); 
-            window.GLOBALS.waveBuffer.push(liveVal);
+            window.GLOBALS.waveBuffer.push({val: val, spike: isSpike});
             window.MATH.updateInteractiveMathReadout();
         }
 
         let st = w / Math.max(1, window.GLOBALS.waveBuffer.length - 1);
         
-        // Draw Main Wave
-        predCtx.beginPath(); 
-        predCtx.moveTo(0, h - (window.GLOBALS.waveBuffer[0] * (h / 100)));
+        // 1. Draw Main Wave
+        ctx.beginPath(); 
+        ctx.moveTo(0, h - (window.GLOBALS.waveBuffer[0].val * (h / 100)));
         for (let i = 0; i < window.GLOBALS.waveBuffer.length - 1; i++) { 
-            let xPos = i * st; 
-            let yPos = h - (window.GLOBALS.waveBuffer[i] * (h / 100)); 
-            let nextX = (i + 1) * st; 
-            let nextY = h - (window.GLOBALS.waveBuffer[i + 1] * (h / 100)); 
-            predCtx.quadraticCurveTo(xPos, yPos, (xPos + nextX) / 2, (yPos + nextY) / 2);
+            let xPos = i * st, yPos = h - (window.GLOBALS.waveBuffer[i].val * (h / 100)); 
+            let nextX = (i + 1) * st, nextY = h - (window.GLOBALS.waveBuffer[i + 1].val * (h / 100)); 
+            ctx.quadraticCurveTo(xPos, yPos, (xPos + nextX) / 2, (yPos + nextY) / 2);
         } 
-        predCtx.strokeStyle = '#00f3ff'; predCtx.lineWidth = 2.0; predCtx.stroke();
+        ctx.strokeStyle = '#00f3ff'; ctx.lineWidth = 2.0; ctx.stroke();
         
-        // Draw Predictive Cone Overlay
-        let historyCutoff = Math.floor(window.GLOBALS.waveBuffer.length * 0.45);
+        // 2. Draw Anomaly Spikes directly on the continuous line
+        window.GLOBALS.waveBuffer.forEach((pt, i) => {
+            if (pt.spike) {
+                let x = i * st, y = h - (pt.val * (h / 100));
+                ctx.fillStyle = '#ff3344';
+                ctx.beginPath(); ctx.arc(x, y, 4.5, 0, Math.PI*2); ctx.fill();
+            }
+        });
+
+        // 3. Draw Predictive Markov Cone
+        let historyCutoff = Math.floor(window.GLOBALS.waveBuffer.length * 0.55);
         let startX = historyCutoff * st;
         let centerY = h / 2;
 
-        predCtx.strokeStyle = 'rgba(192, 132, 252, 0.6)'; predCtx.lineWidth = 1.0; predCtx.setLineDash([3, 3]);
-        predCtx.beginPath(); predCtx.moveTo(startX, centerY);
+        ctx.strokeStyle = 'rgba(192, 132, 252, 0.6)'; ctx.lineWidth = 1.0; ctx.setLineDash([3, 3]);
+        ctx.beginPath(); ctx.moveTo(startX, centerY);
         for(let i = historyCutoff; i < window.GLOBALS.waveBuffer.length; i++) {
-            predCtx.lineTo(i * st, centerY - (i - historyCutoff) * 0.8);
+            ctx.lineTo(i * st, centerY - (i - historyCutoff) * 0.8);
         }
-        predCtx.stroke();
+        ctx.stroke();
 
-        predCtx.beginPath(); predCtx.moveTo(startX, centerY);
+        ctx.beginPath(); ctx.moveTo(startX, centerY);
         for(let i = historyCutoff; i < window.GLOBALS.waveBuffer.length; i++) {
-            predCtx.lineTo(i * st, centerY + (i - historyCutoff) * 0.8);
+            ctx.lineTo(i * st, centerY + (i - historyCutoff) * 0.8);
         }
-        predCtx.stroke();
-        predCtx.setLineDash([]);
+        ctx.stroke();
+        ctx.setLineDash([]);
     }
 }
-
-window.UTILS = {
-    lerp: function(start, end, amt) { return (1 - amt) * start + amt * end; }
-};
 
 function bindAllEvents() {
     window.addEventListener('resize', window.UI.resizeCanvases);
 
-    // 🚨 BINDING TO THE ORIGINAL DOM STRUCTURE 🚨
+    // Accordion Logic
     document.querySelectorAll('.panel-header').forEach(header => {
         header.addEventListener('click', (e) => {
             if (e.target.closest('.pin-btn')) return; 
@@ -285,6 +333,7 @@ function masterLoop() {
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.panel-card').forEach(c => c.classList.remove('minimized-dock-item'));
     bindAllEvents(); 
+    window.WORKSPACE.render();
     masterLoop(); 
     window.MATH.updateInteractiveMathReadout(); 
     setTimeout(window.UI.resizeCanvases, 150); 
