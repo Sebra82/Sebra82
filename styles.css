@@ -1,5 +1,5 @@
 /* ========================================================================== */
-/* SEBRA82 v25.0 - Master Encrypted Suite (Zero-Scroll Glassmorphism)         */
+/* SEBRA82 v26.0 - Zero-Scroll App State with Dynamic Bottom Dock             */
 /* ========================================================================== */
 
 :root {
@@ -21,11 +21,9 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
-/* 🚨 KILL APPLE'S NATIVE STYLING 🚨 */
 button, input { appearance: none !important; -webkit-appearance: none !important; outline: none; font-family: inherit; }
 
-/* 🚨 LOCK VIEWPORT (NO SCROLLING) 🚨 */
+/* 🚨 STRICT VIEWPORT LOCK 🚨 */
 html, body {
     width: 100vw; height: 100dvh; overflow: hidden;
     background-color: var(--bg-deep) !important; color: var(--text-main);
@@ -39,61 +37,72 @@ body::before {
     background-size: 30px 30px; z-index: -1; pointer-events: none;
 }
 
-/* Master Flex Container */
 .terminal-container { width: 100%; height: 100%; max-height: 100%; display: flex; flex-direction: column; padding: 8px 12px; gap: 8px; }
 
-/* Panel Design */
+/* 💎 CORE PANEL CARDS 💎 */
 .panel-card {
     background: var(--bg-card) !important; border: 1px solid var(--panel-border); border-radius: 12px;
     backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 12px;
-    display: flex; flex-direction: column; flex: 0 0 auto; transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    display: flex; flex-direction: column; flex: 0 0 auto; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+.panel-card:hover { border-color: var(--panel-border-hover); box-shadow: 0 8px 32px rgba(0, 243, 255, 0.1); }
+
+/* 🚨 THE MAGIC BOTTOM DOCK ARCHITECTURE 🚨 */
 .mobile-stack { flex: 1; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
 
-/* Maximized State Behavior */
-.has-maximized .panel-card.minimized-dock-item { display: none; }
-.panel-card.fluid-maximized { flex: 1; min-height: 0; border-color: var(--neon-cyan); box-shadow: 0 0 20px rgba(0,243,255,0.1) inset; }
+.mobile-stack.has-maximized {
+    flex-direction: row; flex-wrap: wrap; align-content: flex-end; /* Forces minimized items to the bottom */
+}
+
+/* The Maximized Card */
+.panel-card.fluid-maximized {
+    order: -1; /* Forces it to the top */
+    width: 100%; flex: 1 1 100%; min-height: 0;
+    margin-bottom: 8px; border-color: var(--neon-cyan); box-shadow: 0 0 20px rgba(0,243,255,0.1) inset;
+}
+
+/* The Docked Minimized Cards */
+.panel-card.minimized-dock-item {
+    order: 1; /* Forces them to the bottom dock */
+    flex: 1 1 auto; height: 38px; padding: 6px 8px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(5, 8, 14, 0.95) !important; border-color: rgba(255,255,255,0.1);
+}
+.panel-card.minimized-dock-item .panel-header { width: 100%; margin: 0; justify-content: center; }
+.panel-card.minimized-dock-item .panel-title { font-size: 0.65rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0; }
+.panel-card.minimized-dock-item .pin-btn,
+.panel-card.minimized-dock-item .cat-chip,
+.panel-card.minimized-dock-item .collapsible-body { display: none !important; }
+
+/* Inner Content Structuring */
 .collapsible-body { display: flex; flex-direction: column; flex: 1; min-height: 0; margin-top: 8px; animation: fadeIn 0.3s ease; }
 .collapsible-body.collapsed { display: none; }
-
 @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Flex-Responsive Canvases */
-.canvas-wrapper {
-    flex: 1; min-height: 0; position: relative; border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 6px; background: rgba(0, 0, 0, 0.5); overflow: hidden;
-}
+.canvas-wrapper { flex: 1; min-height: 0; position: relative; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 6px; background: rgba(0, 0, 0, 0.5); overflow: hidden; }
 canvas { position: absolute; top: 0; left: 0; width: 100% !important; height: 100% !important; }
 
-/* Internal Scroll Areas */
-.content-scroll-wrapper {
-    flex: 1; min-height: 0; overflow-y: auto; background: rgba(0,0,0,0.4);
-    border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 6px; position: relative;
-}
+.content-scroll-wrapper { flex: 1; min-height: 0; overflow-y: auto; background: rgba(0,0,0,0.4); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 6px; position: relative; padding-bottom: 4px; }
 ::-webkit-scrollbar { display: none; }
 
-/* Headers & Buttons */
+/* Typography & Buttons */
 .panel-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
 .panel-title { font-size: 0.95rem; font-weight: 800; letter-spacing: 0.05em; color: var(--text-main); text-transform: uppercase; }
 
 .cat-chip {
-    display: inline-flex; justify-content: center; align-items: center;
-    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--text-muted); padding: 4px 10px; border-radius: 6px;
-    font-size: 0.65rem; font-weight: 600; cursor: pointer; text-transform: uppercase; white-space: nowrap; transition: all 0.2s ease;
+    display: inline-flex; justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-muted); padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 600; cursor: pointer; text-transform: uppercase; white-space: nowrap; transition: all 0.2s ease;
 }
 .cat-chip.active, .cat-chip:hover { background: rgba(0, 243, 255, 0.15); border-color: var(--neon-cyan); color: var(--neon-cyan); }
 
 .action-btn {
-    background: linear-gradient(135deg, rgba(0, 243, 255, 0.1), rgba(192, 132, 252, 0.1)) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2); color: var(--text-main);
-    padding: 6px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: 600; cursor: pointer;
-    text-transform: uppercase; display: inline-flex; justify-content: center; align-items: center; white-space: nowrap; transition: all 0.2s ease;
+    background: linear-gradient(135deg, rgba(0, 243, 255, 0.1), rgba(192, 132, 252, 0.1)) !important; border: 1px solid rgba(255, 255, 255, 0.2); color: var(--text-main);
+    padding: 6px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: 600; cursor: pointer; text-transform: uppercase; display: inline-flex; justify-content: center; align-items: center; white-space: nowrap; transition: all 0.2s ease;
 }
 .pin-btn { padding: 4px 8px; font-size: 0.65rem; }
 .action-btn:hover { background: rgba(0, 243, 255, 0.25) !important; border-color: var(--neon-cyan); color: #ffffff; text-shadow: 0 0 5px var(--neon-cyan); }
 
-/* Inputs & Data Grids */
+/* Inputs, Ghost Text, Tables */
 input[type=range] { accent-color: var(--neon-cyan); }
 .ghost-container { position: relative; width: 100%; }
 .ghost-input { background: rgba(0, 0, 0, 0.4) !important; border: 1px solid rgba(0, 243, 255, 0.3) !important; color: var(--text-main) !important; padding: 8px 12px; border-radius: 6px; width: 100%; font-family: var(--font-mono); font-size: 0.8rem; }
@@ -106,13 +115,12 @@ th { color: var(--text-muted); font-weight: bold; position: sticky; top: 0; back
 .tx-hash { color: var(--text-muted); font-size: 0.55rem; }
 
 .log-info { color: var(--neon-cyan); margin-bottom: 6px; font-family: var(--font-mono); font-size: 0.7rem; border-left: 2px solid var(--neon-cyan); padding-left: 6px; }
-
-/* File Hex Viewer */
 .hex-row { display: flex; font-size: 0.65rem; padding: 2px 0; border-bottom: 1px solid rgba(255,255,255,0.02); }
 .hex-addr { color: var(--text-muted); width: 60px; margin-right: 8px; }
 .hex-data { color: var(--accent-green); flex: 1; letter-spacing: 1px; }
 
-/* Modals & Toasts */
 #globalToast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(13, 20, 33, 0.95); border: 1px solid var(--neon-cyan); color: var(--text-main); padding: 12px 20px; border-radius: 8px; font-size: 0.85rem; z-index: 10000; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 #globalToast.show { transform: translateX(-50%) translateY(0); }
 #authGatewayModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(5, 8, 14, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px; }
+
+.extraction-line { position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(192, 132, 252, 0.8); box-shadow: 0 0 10px rgba(192,132,252,1); pointer-events: none; display: none; }
