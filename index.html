@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SEBRA82 v22.0 - Master Terminal</title>
+    <title>SEBRA82 v23.0 - Master Terminal</title>
     
-    <!-- 🚨 FORCED CSS CACHE BUSTER 🚨 -->
-    <link rel="stylesheet" href="styles.css?v=22.0">
+    <!-- 🚨 FORCED CSS CACHE BUSTER v23.0 🚨 -->
+    <link rel="stylesheet" href="styles.css?v=23.0">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@msgpack/msgpack@2.8.0/dist/msgpack.min.js"></script>
@@ -29,6 +29,19 @@
     </div>
 
     <div class="terminal-container">
+        
+        <!-- Header & Action Bar -->
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <h1 style="color: var(--warning-amber); font-size: 1.2rem;">⚡ SEBRA82 v23.0</h1>
+            <span style="color: var(--text-main); font-weight: 600;">Master Encrypted Suite</span>
+        </div>
+        
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+            <button id="btnGenRandom" class="action-btn" style="border-color: var(--neon-cyan); color: var(--neon-cyan);">🎲 GENERATE NOISE</button>
+            <button id="btnSaveState" class="action-btn" style="border-color: var(--accent-green); color: var(--accent-green);">💾 SAVE STATE</button>
+            <button id="btnResetView" class="action-btn" style="border-color: var(--crimson-red); color: var(--crimson-red);">↺ RESET VIEW</button>
+            <span id="vault-status" class="cat-chip" style="border-radius: 20px;">VAULT: DEMO MODE</span>
+        </div>
 
         <!-- AI Synapse Command Bar -->
         <div class="panel-card">
@@ -53,19 +66,6 @@
                 <button id="btnSubmitAiChat" class="action-btn" style="border-color: var(--accent-purple); color: var(--accent-purple);">EXECUTE</button>
             </div>
         </div>
-        
-        <!-- Header & Action Bar -->
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-            <h1 style="color: var(--warning-amber); font-size: 1.2rem;">⚡ SEBRA82 v22.0</h1>
-            <span style="color: var(--text-main); font-weight: 600;">Ultra-Intuitive Aegis</span>
-        </div>
-        
-        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
-            <button id="btnGenRandom" class="action-btn" style="border-color: var(--neon-cyan); color: var(--neon-cyan);">🎲 GENERATE NOISE</button>
-            <button id="btnSaveState" class="action-btn" style="border-color: var(--accent-green); color: var(--accent-green);">💾 SAVE STATE</button>
-            <button id="btnResetView" class="action-btn" style="border-color: var(--crimson-red); color: var(--crimson-red);">↺ RESET VIEW</button>
-            <span id="vault-status" class="cat-chip" style="border-radius: 20px;">VAULT: DEMO MODE (120 NODES)</span>
-        </div>
 
         <!-- Master Mobile Stack Grid -->
         <div id="mobileStack" class="mobile-stack" style="display: grid; gap: 16px; grid-template-columns: 1fr;">
@@ -79,21 +79,18 @@
                 </div>
                 <div class="panel-header">
                     <div class="panel-title">1. BREATHING 3D QUANTUM LATTICE CORE</div>
-                    <button class="action-btn pin-btn" style="padding: 4px 10px; font-size: 0.7rem; border-color: var(--accent-purple); color: var(--accent-purple);">STANDARDIZE</button>
+                    <button class="action-btn pin-btn" style="padding: 4px 10px; font-size: 0.7rem;">⚡ MAXIMIZE</button>
                 </div>
                 <div class="collapsible-body">
                     <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px; display: flex; justify-content: space-between;">
-                        <span>Status: <span style="color: var(--accent-green);">Active Lattice</span> | Optimized Nodes: <span style="color: var(--neon-cyan);">145 (Demo)</span></span>
-                        <span>🔍 View 3D Core</span>
+                        <span>Status: <span style="color: var(--accent-green);">Active Lattice</span> | Shell Nodes: <span style="color: var(--neon-cyan);">120</span></span>
                     </div>
                     <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
                         <span>Magnification (Deep Molecular Zoom):</span>
                         <span id="atomZoomReadout" style="color: var(--neon-cyan);">1.0x</span>
                     </div>
                     <input type="range" id="atomZoomSlider" min="0.3" max="5.0" step="0.1" value="1.0" style="width: 100%; margin-bottom: 12px;">
-                    
                     <div style="border: 1px solid var(--panel-border); border-radius: 6px; padding: 2px;">
-                        <div style="font-size: 0.7rem; color: var(--neon-cyan); padding: 6px; background: rgba(0,243,255,0.05); border-bottom: 1px solid var(--panel-border);">✨ OPTIMIZED QUANTUM LATTICE | Drag to Rotate, Scroll/Slider to Zoom</div>
                         <canvas id="atom3DCanvas"></canvas>
                     </div>
                 </div>
@@ -127,7 +124,7 @@
                 </div>
             </div>
 
-            <!-- 3. Noise & Predictive Studio -->
+            <!-- 3. Noise & Predictive Studio (Single Continuous Graph) -->
             <div id="cardWave" class="panel-card minimized-dock-item">
                 <div style="display: flex; gap: 8px; margin-bottom: 12px;">
                     <span class="cat-chip active">SIGNAL</span>
@@ -138,28 +135,68 @@
                     <button class="action-btn pin-btn" style="padding: 4px 10px; font-size: 0.7rem;">⚡ MAXIMIZE</button>
                 </div>
                 <div class="collapsible-body collapsed" style="margin-top: 12px;">
-                    <!-- Single Continuous Predictive Graph per User Specifications -->
-                    <span style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; display: inline-block;">Continuous Predictive Forecasting Graph</span>
+                    <span style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; display: inline-block;">Continuous Anomaly & Predictive Forecasting Graph</span>
                     <canvas id="predictiveForecastCanvas" style="height: 350px !important;"></canvas>
                 </div>
             </div>
 
-            <!-- 4. Executive Insights -->
+            <!-- 4. Query & Ledger Studio -->
+            <div id="cardQuery" class="panel-card minimized-dock-item">
+                <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                    <span class="cat-chip active">WORLD</span>
+                    <span class="cat-chip">CALCULATION</span>
+                </div>
+                <div class="panel-header">
+                    <div class="panel-title">4. EXPORT QUERY & TABLE STUDIO</div>
+                    <button class="action-btn pin-btn" style="padding: 4px 10px; font-size: 0.7rem;">⚡ MAXIMIZE</button>
+                </div>
+                <div class="collapsible-body collapsed" style="margin-top: 12px;">
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
+                        Active Filter: <span style="color: var(--neon-cyan);">ALL</span> | Total: <span id="sumQueryCount" style="color: var(--neon-cyan);">0 rows</span>
+                    </div>
+                    <div style="max-height: 250px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; margin-bottom: 12px;">
+                        <table>
+                            <thead><tr><th>EVENT ID</th><th>TIMESTAMP</th><th>CLASSIFICATION</th><th>MAGNITUDE</th></tr></thead>
+                            <tbody id="queryTableBody"></tbody>
+                        </table>
+                    </div>
+                    <button id="btnDownloadExport" class="action-btn" style="width: 100%;">📥 .CSV EXPORT</button>
+                </div>
+            </div>
+
+            <!-- 5. Workspace Explorer -->
+            <div id="cardTools" class="panel-card minimized-dock-item">
+                <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                    <span class="cat-chip active">FOLDERS</span>
+                    <span class="cat-chip">DATASETS</span>
+                </div>
+                <div class="panel-header">
+                    <div class="panel-title">5. UPLOAD & FILE EXPLORER</div>
+                    <button class="action-btn pin-btn" style="padding: 4px 10px; font-size: 0.7rem;">⚡ MAXIMIZE</button>
+                </div>
+                <div class="collapsible-body collapsed" style="margin-top: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <span id="currentPathDisplay" style="font-size: 0.85rem; color: var(--neon-cyan); font-family: var(--font-mono);"></span>
+                    </div>
+                    <div id="explorerContentArea" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; padding: 12px; min-height: 150px; margin-bottom: 12px; font-family: var(--font-mono); font-size: 0.8rem;"></div>
+                </div>
+            </div>
+
+            <!-- 6. Executive Insights -->
             <div id="cardExec" class="panel-card minimized-dock-item">
                 <div style="display: flex; gap: 8px; margin-bottom: 12px;">
                     <span class="cat-chip active">EXECUTIVE SUMMARY</span>
-                    <span class="cat-chip">INSIGHTS</span>
                     <span class="cat-chip">METRICS</span>
                 </div>
                 <div class="panel-header">
-                    <div class="panel-title">⭐ EXECUTIVE INSIGHTS & PERFORMANCE AUDIT</div>
-                    <button class="action-btn pin-btn" style="padding: 4px 10px; font-size: 0.7rem; border-color: var(--accent-purple); color: var(--accent-purple);">STANDARDIZE</button>
+                    <div class="panel-title">⭐ EXECUTIVE INSIGHTS DASHBOARD</div>
+                    <button class="action-btn pin-btn" style="padding: 4px 10px; font-size: 0.7rem; border-color: var(--warning-amber); color: var(--warning-amber);">AUDIT</button>
                 </div>
                 <div class="collapsible-body collapsed" style="margin-top: 12px;">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
                         <div style="background: rgba(0,0,0,0.5); border: 1px solid rgba(0,243,255,0.2); padding: 12px; border-radius: 6px; text-align: center;">
                             <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Active Quantum Nodes</div>
-                            <div style="font-size: 1.2rem; color: var(--neon-cyan); font-weight: bold;">290 Nodes</div>
+                            <div style="font-size: 1.2rem; color: var(--neon-cyan); font-weight: bold;">120 Nodes</div>
                         </div>
                         <div style="background: rgba(0,0,0,0.5); border: 1px solid rgba(0,243,255,0.2); padding: 12px; border-radius: 6px; text-align: center;">
                             <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Current Base Target</div>
@@ -167,12 +204,15 @@
                         </div>
                         <div style="background: rgba(0,0,0,0.5); border: 1px solid rgba(0,243,255,0.2); padding: 12px; border-radius: 6px; text-align: center;">
                             <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Captured Anomalies</div>
-                            <div id="sumMetricSpikes" style="font-size: 1.2rem; color: var(--neon-cyan); font-weight: bold;">14 Detected</div>
+                            <div id="sumMetricSpikes" style="font-size: 1.2rem; color: var(--crimson-red); font-weight: bold;">0 Detected</div>
                         </div>
                         <div style="background: rgba(0,0,0,0.5); border: 1px solid rgba(0,243,255,0.2); padding: 12px; border-radius: 6px; text-align: center;">
                             <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">System Status</div>
                             <div style="font-size: 1.1rem; color: var(--accent-green); font-weight: bold;">Optimal Network</div>
                         </div>
+                    </div>
+                    <div id="sysLogger" class="sys-logger" style="margin-bottom: 12px; min-height: 120px;">
+                        <div class="log-info">[System] SEBRA82 Terminal initialized.</div>
                     </div>
                 </div>
             </div>
@@ -182,7 +222,7 @@
 
     <div id="globalToast"></div>
     
-    <!-- 🚨 FORCED JAVASCRIPT CACHE BUSTER 🚨 -->
-    <script src="script.js?v=22.0" defer></script>
+    <!-- 🚨 FORCED JAVASCRIPT CACHE BUSTER v23.0 🚨 -->
+    <script src="script.js?v=23.0" defer></script>
 </body>
 </html>
