@@ -1,5 +1,5 @@
 // ==========================================================================
-// SEBRA82 v23.1 - The Master Logic Engine (Restored Advanced Features)
+// SEBRA82 v23.2 - Master Logic Engine with Smart Accordion/Dock Interactions
 // ==========================================================================
 
 "use strict";
@@ -189,7 +189,7 @@ window.ACTIONS = {
         
         let totalSpikes = window.GLOBALS.waveBuffer.filter(i => i.spike).length + 1; 
         const spikeLabel = document.getElementById('sumMetricSpikes');
-        if (spikeLabel) spikeLabel.innerText = totalSpikes + " Detected";
+        if (spikeLabel) spikeLabel.innerText = totalSpikes;
         window.DATA_INSIGHT.renderLedger();
     },
     autoGenerateExecSummary: function() {
@@ -202,6 +202,7 @@ window.ACTIONS = {
     }
 };
 
+// 🧠 Smart UI: Maximize and Dock Logic
 window.UI = {
     authenticateAndLaunch: function(tier) {
         document.getElementById('authGatewayModal').style.display = 'none';
@@ -216,11 +217,19 @@ window.UI = {
         if (stack) stack.classList.add('has-maximized');
         document.querySelectorAll('.panel-card').forEach(c => {
             if (c.id === cardId) {
-                c.classList.add('fluid-maximized'); c.classList.remove('minimized-dock-item'); 
+                // Expand to full screen, open accordion, change button text
+                c.classList.add('fluid-maximized'); 
+                c.classList.remove('minimized-dock-item'); 
                 c.querySelector('.collapsible-body')?.classList.remove('collapsed');
+                let btn = c.querySelector('.pin-btn');
+                if(btn) btn.innerHTML = "↙ STANDARDIZE";
             } else {
-                c.classList.remove('fluid-maximized'); c.classList.add('minimized-dock-item'); 
+                // Hide into the dock completely
+                c.classList.remove('fluid-maximized'); 
+                c.classList.add('minimized-dock-item'); 
                 c.querySelector('.collapsible-body')?.classList.add('collapsed');
+                let btn = c.querySelector('.pin-btn');
+                if(btn) btn.innerHTML = "⚡ MAXIMIZE";
             }
         });
         window.UI.resizeCanvases();
@@ -230,7 +239,8 @@ window.UI = {
         document.getElementById('mobileStack')?.classList.remove('has-maximized');
         document.querySelectorAll('.panel-card').forEach(c => {
             c.classList.remove('fluid-maximized', 'minimized-dock-item');
-            c.querySelector('.collapsible-body')?.classList.add('collapsed');
+            let btn = c.querySelector('.pin-btn');
+            if(btn) btn.innerHTML = "⚡ MAXIMIZE";
         });
         window.UI.resizeCanvases();
     },
@@ -272,7 +282,7 @@ window.MATH = {
         const btn = document.getElementById('btnRunBench');
         if (btn) { btn.disabled = true; btn.innerText = "Computing Tensor Core..."; }
         setTimeout(() => {
-            if (btn) { btn.disabled = false; btn.innerText = "Run Speed Benchmark"; }
+            if (btn) { btn.disabled = false; btn.innerText = "RUN SPEED BENCHMARK"; }
             window.UTILS.logSys("Compute benchmark completed locally (< 0.05ms).");
         }, 1200);
     }
@@ -388,7 +398,7 @@ class CanvasRenderers {
         });
     }
 
-    // 🚨 The Single Continuous Graph (With embedded Anomalies & Predictions) 🚨
+    // 🚨 The Single Continuous Graph 🚨
     static renderContinuousGraph() {
         const canvas = document.getElementById('predictiveForecastCanvas'); 
         const ctx = canvas ? canvas.getContext('2d') : null;
@@ -456,12 +466,17 @@ class CanvasRenderers {
 function bindAllEvents() {
     window.addEventListener('resize', window.UI.resizeCanvases);
 
-    // Advanced UI Logic Hooks
+    // 🧠 Smart Accordion Logic
     document.querySelectorAll('.panel-header').forEach(header => {
         header.addEventListener('click', (e) => {
+            // Ignore if clicking the pin/max button
             if (e.target.closest('.pin-btn')) return; 
+            
             const card = header.closest('.panel-card');
+            
+            // DO NOT collapse if it's minimized in the dock OR currently full-screen maximized
             if (!card || card.classList.contains('fluid-maximized') || card.classList.contains('minimized-dock-item')) return;
+            
             const body = card.querySelector('.collapsible-body');
             if(body) {
                 body.classList.toggle('collapsed');
@@ -472,12 +487,6 @@ function bindAllEvents() {
 
     document.querySelectorAll('.pin-btn').forEach(el => { 
         el.addEventListener('click', (e) => { e.stopPropagation(); window.UI.toggleMax(el.closest('.panel-card').id); }); 
-    });
-
-    document.querySelectorAll('.panel-card').forEach(card => {
-        card.addEventListener('click', (e) => {
-            if(card.classList.contains('minimized-dock-item')) window.UI.toggleMax(card.id);
-        });
     });
 
     // Top Bar Logic
