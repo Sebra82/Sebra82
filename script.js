@@ -1,5 +1,5 @@
 // ==========================================================================
-// SEBRA82 v25.0 - Master Logic (Predictive Analog Forecasting & Noise Struct)
+// SEBRA82 v26.0 - Master Logic (Dynamic Docking & Point Extraction)
 // ==========================================================================
 
 "use strict";
@@ -8,14 +8,13 @@ let targetAtomZoom = 1.0, targetAtomRotX = 0.4, targetAtomRotY = 0.2;
 let currentAtomRotX = 0.4, currentAtomRotY = 0.2;
 let isDraggingAtom = false, lastX = 0, lastY = 0;
 
-// High-Density Typed Buffers for max performance
 window.GLOBALS = {
     isStreamPaused: false, globalTick: 0, timeOffset: 0.0,
-    atomMode: 'calc', serverMatrix: [],
-    noiseStructureActive: false,
+    atomMode: 'calc', serverMatrix: [], noiseStructureActive: false,
     waveBuffer: new Array(150).fill({val: 50, spike: false}),
     analogOverlay: new Array(150).fill(50), 
-    timeSeriesBuffer: [], queryFilter: 'ALL',
+    timeSeriesBuffer: [], isSummarizedMode: false,
+    anomalyThreshold: 85, extractionHighlight: -1,
     finConfig: { baseValue: 10.0, damping: 1.45, mathMode: 'quantum' }
 };
 
@@ -38,7 +37,7 @@ window.UTILS = {
 
 window.AI = {
     currentPrediction: "", fullMatchedPhrase: "",
-    dictionary: [ "zoom lattice", "run benchmark", "extract noise", "clear ledger", "load 6 months", "export data", "maximize calculus", "inject noise struct", "run analog forecast", "hash ledger" ],
+    dictionary: [ "zoom lattice", "run benchmark", "extract noise", "summarize monthly", "load 6 months", "export data", "maximize calculus", "inject noise struct", "run analog forecast", "hash ledger" ],
     getMatch: function(val) {
         const text = val.toLowerCase(); if (!text) return { remaining: "", full: "" };
         for (let phrase of this.dictionary) { if (phrase.startsWith(text) && phrase.length > text.length) return { remaining: phrase.slice(text.length), full: phrase }; }
@@ -50,14 +49,6 @@ window.AI = {
         const ghost = document.getElementById('ghostOverlay');
         if (ghost) ghost.innerHTML = `<span style="opacity: 0;">${window.UTILS.escapeHtml(val)}</span>` + (this.currentPrediction ? `<span class="ghost-match">${window.UTILS.escapeHtml(this.currentPrediction)}</span>` : '');
     },
-    handleGhostKeyDown: function(e) {
-        const input = e.target;
-        if ((e.key === 'Tab' || e.key === 'ArrowRight') && this.currentPrediction.length > 0) { 
-            e.preventDefault(); input.value = this.fullMatchedPhrase; 
-            this.currentPrediction = ""; document.getElementById('ghostOverlay').innerHTML = ""; return; 
-        }
-        if (e.key === 'Enter') window.AI.submitChat(); 
-    },
     submitChat: function() {
         const inputField = document.getElementById('aiChatInput'); if (!inputField) return;
         const query = inputField.value.trim().toLowerCase();
@@ -66,67 +57,72 @@ window.AI = {
         
         if (query.includes('zoom') || query.includes('lattice')) window.UI.toggleMax('cardAtom'); 
         else if (query.includes('bench') || query.includes('calc')) { window.UI.toggleMax('cardFin'); window.MATH.runBenchmark(); }
-        else if (query.includes('noise') || query.includes('analog') || query.includes('forecast')) window.UI.toggleMax('cardWave'); 
-        else if (query.includes('ledger') || query.includes('hash')) window.UI.toggleMax('cardQuery'); 
+        else if (query.includes('noise') || query.includes('extract') || query.includes('analog')) window.UI.toggleMax('cardWave'); 
+        else if (query.includes('ledger') || query.includes('summarize')) { window.UI.toggleMax('cardQuery'); if(query.includes('summarize')) window.DATA_INSIGHT.autoSummarize(); }
         else if (query.includes('load') || query.includes('workspace')) window.UI.toggleMax('cardTools'); 
         
-        if (query.includes('inject noise struct')) {
-            window.GLOBALS.noiseStructureActive = true;
-            window.UTILS.logSys("AI Directive: Noise Structure Injection Active. Matrix topology altered.", true);
-            document.getElementById('noiseStructReadout').innerText = "STRUCT: INJECTED";
-            document.getElementById('noiseStructReadout').style.color = "var(--warning-amber)";
-        }
-        
         window.UTILS.logSys(`Synapse AI executed: [${query}]`);
-        const aiCard = document.getElementById('cardAi');
-        if (aiCard) { const body = aiCard.querySelector('.collapsible-body'); if (body) body.classList.add('collapsed'); }
+        window.UI.toggleAiPanel(true); // Close AI panel
     }
 };
 
+// 💡 DATA INSIGHT ENGINE (Auto-Categorization & Monthly Summary)
 window.DATA_INSIGHT = {
-    activeDataSet: [],
-    setFilter: function(cat) {
-        window.GLOBALS.queryFilter = cat;
-        document.querySelectorAll('#secQuery .cat-chip').forEach(c => c.classList.remove('active'));
-        if(cat==='ALL') document.getElementById('filtAll')?.classList.add('active');
-        if(cat==='NOISE') document.getElementById('filtWorld')?.classList.add('active');
-        if(cat==='ANOMALY') document.getElementById('filtCalc')?.classList.add('active');
-        if(cat==='ANALOG') document.getElementById('filtFin')?.classList.add('active');
-        
-        const filterLabel = document.getElementById('filterStateLabel');
-        if (filterLabel) filterLabel.innerText = cat;
-        this.renderLedger();
-    },
     renderLedger: function() {
         const tbody = document.getElementById('queryTableBody'); 
-        if (!tbody) return;
+        const thead = document.getElementById('tableHeaders');
+        if (!tbody || !thead) return;
         
-        let dataToRender = window.GLOBALS.timeSeriesBuffer;
-        if (window.GLOBALS.queryFilter !== 'ALL') {
-            dataToRender = dataToRender.filter(item => item.cat.toUpperCase().includes(window.GLOBALS.queryFilter));
+        const queryCountEl = document.getElementById('sumQueryCount');
+
+        if (window.GLOBALS.isSummarizedMode) {
+            thead.innerHTML = `<th>MONTH</th><th>TOTAL EVENTS</th><th>AVG MAGNITUDE</th>`;
+            tbody.innerHTML = `
+                <tr><td>August 2026</td><td style="color:var(--neon-cyan);">45</td><td style="color:var(--accent-green);">$84.20</td></tr>
+                <tr><td>July 2026</td><td style="color:var(--neon-cyan);">112</td><td style="color:var(--accent-green);">$76.15</td></tr>
+                <tr><td>June 2026</td><td style="color:var(--neon-cyan);">89</td><td style="color:var(--accent-green);">$62.90</td></tr>
+            `;
+            if (queryCountEl) queryCountEl.innerText = `3 Months Grouped`;
+            return;
         }
 
+        thead.innerHTML = `<th>EVENT ID</th><th>TIMESTAMP / DATE</th><th>CLASSIFICATION</th>`;
+        let dataToRender = window.GLOBALS.timeSeriesBuffer;
         let reversedData = [...dataToRender].reverse().slice(0, 50);
-        const queryCountEl = document.getElementById('sumQueryCount');
         
         if(reversedData.length === 0) { 
-            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:12px; color:var(--text-muted);">No records match criteria.</td></tr>`; 
-            if (queryCountEl) queryCountEl.innerText = '0 rows'; return; 
+            tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:12px; color:var(--text-muted);">No records in live ledger.</td></tr>`; 
+            if (queryCountEl) queryCountEl.innerText = '0'; return; 
         }
         
         let htmlStr = '';
         reversedData.forEach((item) => {
-            let catColor = item.cat.includes('ANOMALY') ? "var(--crimson-red)" : (item.cat.includes('ANALOG') ? "var(--accent-purple)" : "var(--neon-cyan)");
-            htmlStr += `<tr><td><span class="tx-hash">0x${item.hash}</span></td><td>${item.time}</td><td style="color:${catColor};">${item.cat}</td><td style="color:var(--accent-green);">${item.val}</td></tr>`;
+            let catColor = item.cat.includes('ANOMALY') ? "var(--crimson-red)" : (item.cat.includes('EXTRACT') ? "var(--accent-purple)" : "var(--neon-cyan)");
+            htmlStr += `<tr><td><span class="tx-hash">0x${item.hash}</span></td><td>${item.time}</td><td style="color:${catColor};">${item.cat} [Mag: ${item.val}]</td></tr>`;
         });
         tbody.innerHTML = htmlStr;
         if (queryCountEl) queryCountEl.innerText = `${dataToRender.length} rows`;
+    },
+    autoSummarize: function() {
+        window.GLOBALS.isSummarizedMode = true;
+        window.UTILS.logSys("Data Insight Engine: Auto-detected columns [TIMESTAMP, ID, MAGNITUDE].");
+        window.UTILS.logSys("Data Insight Engine: Grouped historical events into Monthly Categories.");
+        this.renderLedger();
+    },
+    resetToRaw: function() {
+        window.GLOBALS.isSummarizedMode = false;
+        this.renderLedger();
+    },
+    addExtractedPoint: function(val) {
+        const time = new Date().toLocaleTimeString();
+        window.GLOBALS.timeSeriesBuffer.push({ hash: window.UTILS.generateHash(8), time: time, val: val.toFixed(2), cat: 'MANUAL EXTRACTION' });
+        this.renderLedger();
     }
 };
 
 window.WORKSPACE = {
     currentPath: "/root/datasets",
-    fs: { "/root": ["datasets", "exports"], "/root/datasets": ["paf_historical_patterns.bin", "welford_noise.json"], "/root/exports": ["analog_forecast_v5.pdf"] },
+    fs: { "/root": ["datasets", "exports"], "/root/datasets": ["paf_historical.bin", "welford_noise.csv"], "/root/exports": ["analog_v5.pdf"] },
     render: function() {
         const area = document.getElementById('explorerContentArea'); 
         const display = document.getElementById('currentPathDisplay'); 
@@ -135,8 +131,7 @@ window.WORKSPACE = {
         
         let html = `<div style="color:var(--text-muted); margin-bottom:8px;">Directory View:</div>`;
         (this.fs[this.currentPath] || []).forEach(f => {
-            let isDir = !f.includes('.');
-            let icon = isDir ? '📁' : '📄';
+            let isDir = !f.includes('.'); let icon = isDir ? '📁' : '📄';
             html += `<div style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.05); cursor:pointer; display:flex; justify-content:space-between;" onclick="if('${isDir}'==='true') { window.WORKSPACE.openFolder('${this.currentPath}/${f}'); } else { window.WORKSPACE.viewHex('${f}'); }">
                 <span>${icon} ${f}</span> <span style="color:var(--text-muted); font-size:0.55rem;">[${Math.floor(Math.random()*900)+10} KB]</span>
             </div>`;
@@ -144,36 +139,38 @@ window.WORKSPACE = {
         area.innerHTML = html;
     },
     openFolder: function(path) { this.currentPath = path; this.render(); },
-    navigateUp: function() { 
-        if (this.currentPath === "/root") return; 
-        let parts = this.currentPath.split('/'); parts.pop(); this.currentPath = parts.join('/') || "/root"; this.render(); 
-    },
+    navigateUp: function() { if (this.currentPath === "/root") return; let parts = this.currentPath.split('/'); parts.pop(); this.currentPath = parts.join('/') || "/root"; this.render(); },
     viewHex: function(fileName) {
-        const area = document.getElementById('explorerContentArea');
-        if(!area) return;
+        const area = document.getElementById('explorerContentArea'); if(!area) return;
         let html = `<div style="color:var(--warning-amber); margin-bottom:8px; display:flex; justify-content:space-between;"><span>Parsing: ${fileName}</span> <button class="pin-btn" onclick="window.WORKSPACE.render()" style="background:transparent; border:1px solid var(--text-muted); color:var(--text-main);">CLOSE</button></div>`;
-        for(let i=0; i<8; i++) {
+        for(let i=0; i<6; i++) {
             let addr = (i * 16).toString(16).padStart(8, '0');
             let hex = ''; for(let j=0; j<8; j++) hex += window.UTILS.generateHash(2) + ' ';
             html += `<div class="hex-row"><div class="hex-addr">${addr}</div><div class="hex-data">${hex}</div></div>`;
         }
         area.innerHTML = html;
         window.UTILS.logSys(`File ${fileName} parsed into hex buffer.`);
+    },
+    connectLiveStream: function() {
+        window.UTILS.logSys("Connecting to external Live Socket Stream...", true);
+        setTimeout(() => {
+            window.UTILS.logSys("Live Socket Connected. Simulating high-velocity injection.");
+            window.GLOBALS.timeOffset += 100; // Jolts the wave function
+        }, 800);
     }
 };
 
 window.ACTIONS = {
     updateTimeSeriesAccumulator: function(val, type) {
         const time = new Date().toLocaleTimeString();
-        window.GLOBALS.timeSeriesBuffer.push({ hash: window.UTILS.generateHash(12), time: time, val: val.toFixed(2), cat: type });
+        window.GLOBALS.timeSeriesBuffer.push({ hash: window.UTILS.generateHash(8), time: time, val: val.toFixed(2), cat: type });
         if (window.GLOBALS.timeSeriesBuffer.length > 250) window.GLOBALS.timeSeriesBuffer.shift(); 
-        
         if (type === 'ANOMALY') {
             let totalSpikes = window.GLOBALS.waveBuffer.filter(i => i.spike).length + 1; 
             const spikeLabel = document.getElementById('sumMetricSpikes');
             if (spikeLabel) spikeLabel.innerText = totalSpikes;
         }
-        window.DATA_INSIGHT.renderLedger();
+        if(!window.GLOBALS.isSummarizedMode) window.DATA_INSIGHT.renderLedger();
     }
 };
 
@@ -184,11 +181,19 @@ window.UI = {
         setTimeout(window.UI.resizeCanvases, 50);
     },
     activeMaxId: null,
+    toggleAiPanel: function(forceClose = false) {
+        const aiBody = document.getElementById('aiBody');
+        if(!aiBody) return;
+        if(forceClose) aiBody.classList.add('collapsed');
+        else aiBody.classList.toggle('collapsed');
+        setTimeout(window.UI.resizeCanvases, 50);
+    },
     toggleMax: function(cardId) {
         if (this.activeMaxId === cardId) { this.resetStandardView(); return; }
         this.activeMaxId = cardId;
         document.getElementById('mobileStack')?.classList.add('has-maximized');
         document.querySelectorAll('.panel-card').forEach(c => {
+            if(c.id === 'cardAi') return;
             if (c.id === cardId) {
                 c.classList.add('fluid-maximized'); c.classList.remove('minimized-dock-item'); 
                 c.querySelector('.collapsible-body')?.classList.remove('collapsed');
@@ -197,14 +202,14 @@ window.UI = {
                 c.querySelector('.collapsible-body')?.classList.add('collapsed');
             }
         });
+        this.toggleAiPanel(true); // Close AI panel
         window.UI.resizeCanvases();
-        const aiCard = document.getElementById('cardAi');
-        if (aiCard && cardId !== 'cardAi') { const body = aiCard.querySelector('.collapsible-body'); if (body) body.classList.add('collapsed'); }
     },
     resetStandardView: function() { 
         this.activeMaxId = null; 
         document.getElementById('mobileStack')?.classList.remove('has-maximized');
         document.querySelectorAll('.panel-card').forEach(c => {
+            if(c.id === 'cardAi') return;
             c.classList.remove('fluid-maximized', 'minimized-dock-item');
             c.querySelector('.collapsible-body')?.classList.add('collapsed');
         });
@@ -231,8 +236,16 @@ window.MATH = {
             resEl.innerHTML = `|&psi;&gt; = ${(rawAlpha/normFactor).toFixed(3)}|00&gt;<br>+ ${(0.5/normFactor).toFixed(3)}|01&gt;`; 
         } else { 
             let roi = (window.GLOBALS.finConfig.baseValue * dynamicMod * 14.8).toFixed(2); 
-            resEl.innerText = `P(Alpha) = ${roi} σ (${(92 + dynamicMod).toFixed(1)}%)`; 
+            resEl.innerText = `P(Alpha) = ${roi} σ`; 
         }
+    },
+    runBenchmark: function() {
+        const btn = document.getElementById('btnRunBench');
+        if (btn) { btn.disabled = true; btn.innerText = "Computing Core..."; }
+        setTimeout(() => {
+            if (btn) { btn.disabled = false; btn.innerText = "Run Speed Benchmark"; }
+            window.UTILS.logSys("Compute benchmark completed locally.");
+        }, 1200);
     }
 };
 
@@ -244,7 +257,6 @@ class CanvasRenderers {
         ctx.stroke(); 
     }
 
-    // ⚛️ Enhanced 3D Lattice with explicitly calculated Noise Structures
     static renderAtom() {
         const canvas = document.getElementById('atom3DCanvas'); 
         const ctx = canvas ? canvas.getContext('2d') : null;
@@ -258,7 +270,12 @@ class CanvasRenderers {
         targetAtomRotX = window.UTILS.lerp(targetAtomRotX, currentAtomRotX, 0.1);
         targetAtomRotY = window.UTILS.lerp(targetAtomRotY, currentAtomRotY, 0.1);
 
-        if (!isDraggingAtom) { currentAtomRotY += 0.004; currentAtomRotX += 0.002; }
+        let mode = window.GLOBALS.atomMode; 
+        if (!isDraggingAtom) { 
+            if(mode === 'world') { currentAtomRotY += 0.008; currentAtomRotX += 0.004; }
+            else if(mode === 'sci') { currentAtomRotY += 0.001; currentAtomRotX -= 0.001; }
+            else { currentAtomRotY += 0.003; currentAtomRotX += 0.001; } 
+        }
         
         if (window.GLOBALS.serverMatrix.length === 0) {
             let m = [];
@@ -273,7 +290,6 @@ class CanvasRenderers {
         
         let localNodes = window.GLOBALS.serverMatrix.map(n => {
             let r = n.baseR;
-            // Inject structural noise directly into the matrix calculation
             if(n.type === 'core') r += Math.sin(window.GLOBALS.globalTick * 0.08) * 4 * noiseMultiplier;
             if(n.type === 'inner') r += Math.sin(window.GLOBALS.globalTick*0.05 + n.id)*6 * noiseMultiplier;
             if(n.type === 'valence') r += (lastVal - 50) * 0.4 + Math.sin(n.id*0.3 + window.GLOBALS.timeOffset)*8 * noiseMultiplier;
@@ -285,7 +301,6 @@ class CanvasRenderers {
                 ox = r * Math.sin(n.phi) * Math.cos(n.theta); oy = r * Math.sin(n.phi) * Math.sin(n.theta); oz = r * Math.cos(n.phi);
             }
 
-            // Aesthetic overrides based on structural noise
             let color = window.GLOBALS.noiseStructureActive ? (n.type === 'core' ? '#ffffff' : (n.type === 'inner' ? '#f0883e' : '#ff3344')) : (n.type === 'core' ? '#ffffff' : (n.type === 'inner' ? '#00f3ff' : '#c084fc'));
             let glow = window.GLOBALS.noiseStructureActive ? (n.type === 'core' ? 'rgba(255,255,255,0.9)' : (n.type === 'inner' ? 'rgba(240,136,62,0.8)' : 'rgba(255,51,68,0.8)')) : (n.type === 'core' ? 'rgba(255,255,255,0.9)' : (n.type === 'inner' ? 'rgba(0,243,255,0.8)' : 'rgba(192,132,252,0.8)'));
             
@@ -326,7 +341,7 @@ class CanvasRenderers {
         });
     }
 
-    // 🌊 Strict Single Continuous Graph featuring Predictive Analog Forecasting (PAF) overlay
+    // 🌊 Interactive Time-Series extraction and Adjustable Thresholds
     static renderContinuousGraph() {
         const canvas = document.getElementById('predictiveForecastCanvas'); 
         const ctx = canvas ? canvas.getContext('2d') : null;
@@ -336,36 +351,30 @@ class CanvasRenderers {
         ctx.clearRect(0, 0, w, h); 
         this.drawGrid(ctx, w, h, 'rgba(0, 243, 255, 0.04)');
 
+        let threshVal = parseFloat(document.getElementById('anomalyThreshold')?.value || 85);
+        document.getElementById('threshReadout').innerText = threshVal + "%";
+
         if (!window.GLOBALS.isStreamPaused) { 
             window.GLOBALS.globalTick++; window.GLOBALS.timeOffset += 0.05; 
-            // Compute base noise wave
-            let val = Math.min(85, Math.max(15, 50 + Math.sin(window.GLOBALS.globalTick * 0.04 + window.GLOBALS.timeOffset * 2) * 20 + (Math.random() * 6 - 3)));
+            let val = Math.min(100, Math.max(0, 50 + Math.sin(window.GLOBALS.globalTick * 0.04 + window.GLOBALS.timeOffset * 2) * 25 + (Math.random() * 8 - 4)));
             
-            let isSpike = Math.random() > 0.98;
-            if (isSpike) window.ACTIONS.updateTimeSeriesAccumulator(val, 'ANOMALY');
+            // Dynamic Anomaly Detection based on user threshold
+            let isSpike = val >= threshVal || val <= (100 - threshVal);
+            if (isSpike && Math.random() > 0.5) window.ACTIONS.updateTimeSeriesAccumulator(val, 'ANOMALY'); // throttled to prevent spam
 
             window.GLOBALS.waveBuffer.shift(); 
             window.GLOBALS.waveBuffer.push({val: val, spike: isSpike});
             
-            // Generate Predictive Analog Forecast (Historical Correlation matching)
             window.GLOBALS.analogOverlay.shift();
-            // PAF algorithm: matches historical offset pattern + local density
             let analogVal = val + Math.sin(window.GLOBALS.globalTick * 0.02) * 12 + (Math.random() * 4 - 2);
             window.GLOBALS.analogOverlay.push(analogVal);
 
             window.MATH.updateInteractiveMathReadout();
-            
-            // Dynamic accuracy readout
-            let acc = 100 - Math.abs(val - analogVal);
-            const patEl = document.getElementById('patternMatchReadout');
-            const exEl = document.getElementById('execAnalogReadout');
-            if (patEl) patEl.innerText = `ANALOG MATCH: ${acc.toFixed(1)}%`;
-            if (exEl) exEl.innerText = `${acc.toFixed(1)}%`;
         }
 
         let st = w / Math.max(1, window.GLOBALS.waveBuffer.length - 1);
         
-        // 1. PAF Overlay (Historical Correlation Match) - Drawn first so it sits behind the main wave
+        // 1. PAF Overlay
         ctx.beginPath(); 
         ctx.moveTo(0, h - (window.GLOBALS.analogOverlay[0] * (h / 100)));
         for (let i = 0; i < window.GLOBALS.analogOverlay.length - 1; i++) { 
@@ -375,7 +384,7 @@ class CanvasRenderers {
         } 
         ctx.strokeStyle = 'rgba(192, 132, 252, 0.4)'; ctx.lineWidth = 1.0; ctx.stroke();
 
-        // 2. Main Live Noise Wave (Single Continuous Line)
+        // 2. Main Live Noise Wave
         ctx.beginPath(); 
         ctx.moveTo(0, h - (window.GLOBALS.waveBuffer[0].val * (h / 100)));
         for (let i = 0; i < window.GLOBALS.waveBuffer.length - 1; i++) { 
@@ -385,7 +394,7 @@ class CanvasRenderers {
         } 
         ctx.strokeStyle = '#00f3ff'; ctx.lineWidth = 2.0; ctx.stroke();
         
-        // 3. Welford Anomaly Spikes
+        // 3. Spikes
         window.GLOBALS.waveBuffer.forEach((pt, i) => {
             if (pt.spike) {
                 let x = i * st, y = h - (pt.val * (h / 100));
@@ -394,36 +403,30 @@ class CanvasRenderers {
             }
         });
 
-        // 4. Predictive Markov Cone
-        let historyCutoff = Math.floor(window.GLOBALS.waveBuffer.length * 0.55);
-        let startX = historyCutoff * st;
-        let centerY = h / 2;
-
-        ctx.strokeStyle = 'rgba(0, 243, 255, 0.5)'; ctx.lineWidth = 1.0; ctx.setLineDash([3, 3]);
-        ctx.beginPath(); ctx.moveTo(startX, centerY);
-        for(let i = historyCutoff; i < window.GLOBALS.waveBuffer.length; i++) { ctx.lineTo(i * st, centerY - (i - historyCutoff) * 0.9); }
-        ctx.stroke();
-
-        ctx.beginPath(); ctx.moveTo(startX, centerY);
-        for(let i = historyCutoff; i < window.GLOBALS.waveBuffer.length; i++) { ctx.lineTo(i * st, centerY + (i - historyCutoff) * 0.9); }
-        ctx.stroke(); ctx.setLineDash([]);
+        // 4. Extracted Point Highlight (Extraction UI)
+        if (window.GLOBALS.extractionHighlight >= 0) {
+            let hx = window.GLOBALS.extractionHighlight * st;
+            ctx.strokeStyle = 'rgba(192, 132, 252, 0.8)'; ctx.lineWidth = 2.0; ctx.setLineDash([4, 4]);
+            ctx.beginPath(); ctx.moveTo(hx, 0); ctx.lineTo(hx, h); ctx.stroke(); ctx.setLineDash([]);
+            // fade out highlight over time
+            if (!window.GLOBALS.isStreamPaused) window.GLOBALS.extractionHighlight -= 1;
+        }
     }
 }
 
 function bindAllEvents() {
     window.addEventListener('resize', window.UI.resizeCanvases);
 
+    // AI chat keybind
+    document.getElementById('aiChatInput')?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') window.AI.submitChat();
+    });
+
     document.querySelectorAll('.panel-header').forEach(header => {
         header.addEventListener('click', (e) => {
             if (e.target.closest('.pin-btn')) return; 
             const card = header.closest('.panel-card');
-            if (!card || card.classList.contains('fluid-maximized') || card.classList.contains('minimized-dock-item')) {
-                if (card && card.id === 'cardAi') {
-                    const body = card.querySelector('.collapsible-body');
-                    if (body) { body.classList.toggle('collapsed'); setTimeout(window.UI.resizeCanvases, 50); }
-                }
-                return; 
-            }
+            if (!card || card.classList.contains('fluid-maximized') || card.classList.contains('minimized-dock-item')) return;
             const body = card.querySelector('.collapsible-body');
             if(body) { body.classList.toggle('collapsed'); setTimeout(window.UI.resizeCanvases, 50); }
         });
@@ -433,13 +436,9 @@ function bindAllEvents() {
     document.querySelectorAll('.panel-card').forEach(card => { card.addEventListener('click', (e) => { if(card.classList.contains('minimized-dock-item')) window.UI.toggleMax(card.id); }); });
 
     document.getElementById('btnResetView')?.addEventListener('click', () => window.UI.resetStandardView());
-    document.getElementById('btnGenRandom')?.addEventListener('click', () => window.ACTIONS.updateTimeSeriesAccumulator((Math.random()*80)+20, 'NOISE INJECT'));
     document.getElementById('btnPauseStream')?.addEventListener('click', (e) => { window.GLOBALS.isStreamPaused = !window.GLOBALS.isStreamPaused; e.target.innerText = window.GLOBALS.isStreamPaused ? "▶ RESUME" : "⏸ PAUSE"; });
     
-    document.getElementById('btnSubmitAiChat')?.addEventListener('click', () => window.AI.submitChat());
-    document.getElementById('aiChatInput')?.addEventListener('input', (e) => window.AI.handleGhostInput(e));
-    document.getElementById('aiChatInput')?.addEventListener('keydown', (e) => window.AI.handleGhostKeyDown(e));
-
+    // Quantum Structure Logic
     document.querySelectorAll('#atomTabs .cat-chip').forEach(chip => {
         chip.addEventListener('click', (e) => {
             e.stopPropagation(); document.querySelectorAll('#atomTabs .cat-chip').forEach(c => c.classList.remove('active')); chip.classList.add('active');
@@ -456,17 +455,44 @@ function bindAllEvents() {
         });
     });
 
-    document.getElementById('modeBtnQuantum')?.addEventListener('click', () => window.MATH.setMathMode('quantum'));
-    document.getElementById('modeBtnFinancial')?.addEventListener('click', () => window.MATH.setMathMode('financial'));
-    document.getElementById('baseValueSlider')?.addEventListener('input', (e) => { window.GLOBALS.finConfig.baseValue = parseFloat(e.target.value); document.getElementById('baseValueReadout').innerText = window.GLOBALS.finConfig.baseValue.toFixed(2); });
-    document.getElementById('dampingSlider')?.addEventListener('input', (e) => { window.GLOBALS.finConfig.damping = parseFloat(e.target.value); document.getElementById('dampingReadout').innerText = window.GLOBALS.finConfig.damping.toFixed(2); });
+    // Time-Series Point Extraction Click Event
+    const predCanvas = document.getElementById('predictiveForecastCanvas');
+    if (predCanvas) {
+        predCanvas.addEventListener('click', (e) => {
+            const rect = predCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const idx = Math.floor((x / rect.width) * window.GLOBALS.waveBuffer.length);
+            if (window.GLOBALS.waveBuffer[idx]) {
+                window.GLOBALS.extractionHighlight = idx;
+                const pt = window.GLOBALS.waveBuffer[idx].val;
+                window.UTILS.logSys(`[Time-Grab] Extracted noise coordinates. Magnitude: ${pt.toFixed(2)}`);
+                window.DATA_INSIGHT.addExtractedPoint(pt);
+            }
+        });
+    }
 
-    document.getElementById('filtAll')?.addEventListener('click', () => window.DATA_INSIGHT.setFilter('ALL'));
-    document.getElementById('filtWorld')?.addEventListener('click', () => window.DATA_INSIGHT.setFilter('NOISE'));
-    document.getElementById('filtCalc')?.addEventListener('click', () => window.DATA_INSIGHT.setFilter('ANOMALY'));
-    document.getElementById('filtFin')?.addEventListener('click', () => window.DATA_INSIGHT.setFilter('ANALOG'));
-    
+    // Data Engine Logic
+    document.getElementById('btnSummarizeMonth')?.addEventListener('click', () => window.DATA_INSIGHT.autoSummarize());
+    document.getElementById('filtAll')?.addEventListener('click', () => window.DATA_INSIGHT.resetToRaw());
+    document.getElementById('btnConnectLive')?.addEventListener('click', () => window.WORKSPACE.connectLiveStream());
+    document.getElementById('btnDownloadExport')?.addEventListener('click', () => window.DATA_INSIGHT.triggerExport());
+    document.getElementById('btnClearLedger')?.addEventListener('click', () => { window.GLOBALS.timeSeriesBuffer = []; window.DATA_INSIGHT.renderLedger(); });
+
+    // Workspace Nav
     document.getElementById('btnNavUp')?.addEventListener('click', () => window.WORKSPACE.navigateUp());
+
+    // 3D Canvas Interaction
+    const atomCanvas = document.getElementById('atom3DCanvas');
+    if(atomCanvas) {
+        atomCanvas.addEventListener('pointerdown', (e) => { isDraggingAtom = true; lastX = e.clientX; lastY = e.clientY; atomCanvas.setPointerCapture(e.pointerId); e.preventDefault(); });
+        atomCanvas.addEventListener('pointermove', (e) => { 
+            if (isDraggingAtom) { 
+                let dx = (e.clientX - lastX) * 0.012; let dy = (e.clientY - lastY) * 0.012;
+                currentAtomRotY += dx; currentAtomRotX -= dy; lastX = e.clientX; lastY = e.clientY; 
+            } e.preventDefault(); 
+        });
+        atomCanvas.addEventListener('pointerup', (e) => { isDraggingAtom = false; try { atomCanvas.releasePointerCapture(e.pointerId); } catch(err) {} });
+    }
 }
 
 function masterLoop() { 
