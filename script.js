@@ -1,5 +1,5 @@
 // ==========================================================================
-// SEBRA82 v32.0 - Master Logic (Anisotropic Shear & Native Touch Zoom)
+// SEBRA82 v33.0 - Master Logic (Bi-Directional Rotational Engine)
 // ==========================================================================
 
 "use strict";
@@ -283,7 +283,7 @@ class CanvasRenderers {
         ctx.stroke(); 
     }
 
-    // ⚛️ User Custom Spacetime Shear Math & Geometry
+    // ⚛️ Bi-Directional Spherical Rotational Engine
     static renderAtom() {
         const canvas = document.getElementById('atom3DCanvas'); 
         const ctx = canvas ? canvas.getContext('2d') : null;
@@ -298,9 +298,12 @@ class CanvasRenderers {
         targetAtomRotX = window.UTILS.lerp(targetAtomRotX, currentAtomRotX, 0.1);
         targetAtomRotY = window.UTILS.lerp(targetAtomRotY, currentAtomRotY, 0.1);
 
+        let mode = window.GLOBALS.atomMode;
         if (!isDraggingAtom) { 
-            currentAtomRotY += 0.005; 
-            currentAtomRotX += 0.0015; 
+            if(mode === 'world') { currentAtomRotY += 0.008; currentAtomRotX += 0.004; }
+            else if(mode === 'sci') { currentAtomRotY += 0.001; currentAtomRotX -= 0.001; }
+            else if(mode === 'bidir') { currentAtomRotY += 0.004; currentAtomRotX += 0.002; }
+            else { currentAtomRotY += 0.005; currentAtomRotX += 0.0015; } 
         }
         
         if (window.GLOBALS.serverMatrix.length === 0) {
@@ -329,6 +332,8 @@ class CanvasRenderers {
         }
 
         const size = 100 * targetAtomZoom;
+        
+        // --- 1. PRIMARY CLOCKWISE LAYER ---
         const cosY = Math.cos(currentAtomRotY);
         const sinY = Math.sin(currentAtomRotY);
         const cosX = Math.cos(currentAtomRotX);
@@ -336,22 +341,44 @@ class CanvasRenderers {
 
         let projected = window.GLOBALS.serverMatrix.map((node) => {
             let x = node[0], y = node[1], z = node[2], type = node[3];
-
-            // 🚨 Spacetime Shear Math (90% Up / 80% Down) 🚨
             if (window.GLOBALS.noiseStructureActive) {
                 if (y < 0) { y *= 1.9; } else { y *= 0.2; }
             }
-
             let x1 = x * cosY - z * sinY;
             let rz1 = x * sinY + z * cosY;
             let rx1 = x1;
-
             let ry2 = y * cosX - rz1 * sinX;
             let rz2 = y * sinX + rz1 * cosX;
-
             let depth = 3 / (rz2 + 3);
-            return [cx + rx1 * size * depth, cy + ry2 * size * depth, type, rz2];
+            return [cx + rx1 * size * depth, cy + ry2 * size * depth, type, rz2, 'primary'];
         });
+
+        let combinedDots = [...projected];
+
+        // --- 2. BI-DIRECTIONAL COUNTER-ROTATING OVERLAY ---
+        if (mode === 'bidir') {
+            const antiRotY = -currentAtomRotY * 1.2;
+            const antiRotX = -currentAtomRotX * 0.5;
+            const cosAntiY = Math.cos(antiRotY);
+            const sinAntiY = Math.sin(antiRotY);
+            const cosAntiX = Math.cos(antiRotX);
+            const sinAntiX = Math.sin(antiRotX);
+
+            let overlayProjected = window.GLOBALS.serverMatrix.map((node) => {
+                let x = node[0], y = node[1], z = node[2], type = node[3];
+                if (window.GLOBALS.noiseStructureActive) {
+                    if (y < 0) { y *= 1.9; } else { y *= 0.2; }
+                }
+                let x1 = x * cosAntiY - z * sinAntiY;
+                let rz1 = x * sinAntiY + z * cosAntiY;
+                let rx1 = x1;
+                let ry2 = y * cosAntiX - rz1 * sinAntiX;
+                let rz2 = y * sinAntiX + rz1 * cosAntiX;
+                let depth = 3 / (rz2 + 3);
+                return [cx + rx1 * size * depth, cy + ry2 * size * depth, type, rz2, 'overlay'];
+            });
+            combinedDots = [...projected, ...overlayProjected];
+        }
 
         ctx.strokeStyle = 'rgba(0, 255, 255, 0.4)';
         ctx.lineWidth = 1.5;
@@ -369,18 +396,23 @@ class CanvasRenderers {
             }
         }
 
-        let sortedDots = [...projected].sort((a, b) => b[3] - a[3]);
+        let sortedDots = combinedDots.sort((a, b) => b[3] - a[3]);
 
-        sortedDots.forEach(([px, py, type]) => {
-            if (type === 'core') {
-                ctx.fillStyle = '#00ffcc';
-                ctx.beginPath(); ctx.arc(px, py, Math.max(2.0, 2.5 * targetAtomZoom / 2), 0, Math.PI * 2); ctx.fill();
-            } else if (type === 'cloud') {
-                ctx.fillStyle = 'rgba(255, 105, 225, 0.95)';
-                ctx.beginPath(); ctx.arc(px, py, Math.max(1.2, 1.5 * targetAtomZoom / 3), 0, Math.PI * 2); ctx.fill();
-            } else if (type === 'ring') {
-                ctx.fillStyle = 'rgba(0, 255, 255, 0.9)';
-                ctx.beginPath(); ctx.arc(px, py, Math.max(1.2, 1.5 * targetAtomZoom / 3), 0, Math.PI * 2); ctx.fill();
+        sortedDots.forEach(([px, py, type, z, layer]) => {
+            if (layer === 'overlay') {
+                ctx.fillStyle = type === 'core' ? 'rgba(192, 132, 252, 0.7)' : 'rgba(0, 243, 255, 0.4)';
+                ctx.beginPath(); ctx.arc(px, py, Math.max(1.1, 1.4 * targetAtomZoom / 3), 0, Math.PI * 2); ctx.fill();
+            } else {
+                if (type === 'core') {
+                    ctx.fillStyle = '#00ffcc';
+                    ctx.beginPath(); ctx.arc(px, py, Math.max(2.0, 2.5 * targetAtomZoom / 2), 0, Math.PI * 2); ctx.fill();
+                } else if (type === 'cloud') {
+                    ctx.fillStyle = 'rgba(255, 105, 225, 0.95)';
+                    ctx.beginPath(); ctx.arc(px, py, Math.max(1.2, 1.5 * targetAtomZoom / 3), 0, Math.PI * 2); ctx.fill();
+                } else if (type === 'ring') {
+                    ctx.fillStyle = 'rgba(0, 255, 255, 0.9)';
+                    ctx.beginPath(); ctx.arc(px, py, Math.max(1.2, 1.5 * targetAtomZoom / 3), 0, Math.PI * 2); ctx.fill();
+                }
             }
         });
     }
@@ -417,7 +449,6 @@ class CanvasRenderers {
 
         let st = w / Math.max(1, window.GLOBALS.waveBuffer.length - 1);
         
-        // PAF Overlay
         ctx.beginPath(); 
         ctx.moveTo(0, h - (window.GLOBALS.analogOverlay[0] * (h / 100)));
         for (let i = 0; i < window.GLOBALS.analogOverlay.length - 1; i++) { 
@@ -427,7 +458,6 @@ class CanvasRenderers {
         } 
         ctx.strokeStyle = 'rgba(192, 132, 252, 0.4)'; ctx.lineWidth = 1.0; ctx.stroke();
 
-        // Main Live Noise Wave
         ctx.beginPath(); 
         ctx.moveTo(0, h - (window.GLOBALS.waveBuffer[0].val * (h / 100)));
         for (let i = 0; i < window.GLOBALS.waveBuffer.length - 1; i++) { 
@@ -437,7 +467,6 @@ class CanvasRenderers {
         } 
         ctx.strokeStyle = '#00f3ff'; ctx.lineWidth = 2.0; ctx.stroke();
         
-        // Spikes
         window.GLOBALS.waveBuffer.forEach((pt, i) => {
             if (pt.spike) {
                 let x = i * st, y = h - (pt.val * (h / 100));
@@ -446,7 +475,6 @@ class CanvasRenderers {
             }
         });
 
-        // Extracted Point Highlight
         if (window.GLOBALS.extractionHighlight >= 0) {
             let hx = window.GLOBALS.extractionHighlight * st;
             ctx.strokeStyle = 'rgba(192, 132, 252, 0.8)'; ctx.lineWidth = 2.0; ctx.setLineDash([4, 4]);
@@ -456,7 +484,6 @@ class CanvasRenderers {
     }
 }
 
-// 🚨 FULLY RESTORED EVENT BINDINGS WITH TOUCH PINCH-TO-ZOOM 🚨
 function bindAllEvents() {
     window.addEventListener('resize', () => window.UI.triggerResize());
 
@@ -494,8 +521,8 @@ function bindAllEvents() {
                 document.getElementById('noiseStructReadout').style.color = "var(--warning-amber)";
             } else {
                 window.GLOBALS.noiseStructureActive = false;
-                document.getElementById('noiseStructReadout').innerText = "SHEAR: INACTIVE";
-                document.getElementById('noiseStructReadout').style.color = "rgba(255,255,255,0.4)";
+                document.getElementById('noiseStructReadout').innerText = mode === 'bidir' ? "MODE: BI-DIR ROT" : "SHEAR: INACTIVE";
+                document.getElementById('noiseStructReadout').style.color = mode === 'bidir' ? "var(--accent-purple)" : "rgba(255,255,255,0.4)";
             }
         });
     });
@@ -530,7 +557,6 @@ function bindAllEvents() {
     document.getElementById('btnNavUp')?.addEventListener('click', () => window.WORKSPACE.navigateUp());
     document.getElementById('btnConnectLive')?.addEventListener('click', () => window.WORKSPACE.connectLiveStream());
 
-    // ⚛️ 3D Canvas Pointer & Native Touch Pinch-to-Zoom Handlers
     const atomCanvas = document.getElementById('atom3DCanvas');
     if(atomCanvas) {
         let initialPinchDist = null;
