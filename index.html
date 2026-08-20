@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SEBRA82 v30.0 - Anisotropic Shear Edition</title>
+    <title>SEBRA82 v33.0 - Bi-Directional Shear Edition</title>
     
-    <!-- 🚨 FORCED CSS CACHE BUSTER v30.0 🚨 -->
-    <link rel="stylesheet" href="styles.css?v=30.0">
+    <!-- 🚨 FORCED CSS CACHE BUSTER v33.0 🚨 -->
+    <link rel="stylesheet" href="styles.css?v=33.0">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@msgpack/msgpack@2.8.0/dist/msgpack.min.js"></script>
@@ -35,7 +35,7 @@
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
             <div style="display: flex; align-items: center; gap: 8px;">
                 <h1 style="color: var(--warning-amber); font-size: 1.1rem; font-weight: 900;">⚡ SEBRA82</h1>
-                <span style="color: var(--text-main); font-weight: 600; font-size: 0.85rem; letter-spacing: 1px;">v30.0</span>
+                <span style="color: var(--text-main); font-weight: 600; font-size: 0.85rem; letter-spacing: 1px;">v33.0</span>
             </div>
             <span id="vault-status" class="cat-chip" style="border-radius: 20px; font-size: 0.65rem; border-color: rgba(255,255,255,0.2); color: var(--text-muted);">DEMO MODE</span>
         </div>
@@ -75,20 +75,20 @@
         <!-- Master Grid Stack (Zero-Scroll Docking System) -->
         <div id="mobileStack" class="mobile-stack">
             
-            <!-- 1. Quantum Lattice Core (UPGRADED FOR SHEAR) -->
+            <!-- 1. Quantum Lattice Core (UPGRADED WITH BI-DIR TAB) -->
             <div id="cardAtom" class="panel-card">
                 <div class="panel-header" onclick="window.UI.toggleMax('cardAtom')">
                     <div class="panel-title">1. ANISOTROPIC QUANTUM CORE</div>
                     <button class="action-btn pin-btn">⚡ MAX</button>
                 </div>
                 <div class="collapsible-body collapsed">
-                    <div id="atomTabs" style="display: flex; gap: 6px; margin-bottom: 6px;">
+                    <div id="atomTabs" style="display: flex; gap: 6px; margin-bottom: 6px; flex-wrap: wrap;">
                         <span class="cat-chip active" data-atom-mode="calc">STANDARD</span>
                         <span class="cat-chip" data-atom-mode="sci">SHEAR INJECT</span>
                         <span class="cat-chip" data-atom-mode="world">ENTANGLED</span>
+                        <span class="cat-chip" data-atom-mode="bidir" style="border-color: var(--accent-purple); color: var(--accent-purple);">BI-DIR ROT</span>
                     </div>
                     
-                    <!-- NEW GEOMETRIC LEGEND -->
                     <div style="font-size: 0.6rem; margin-bottom: 10px; font-family: var(--font-mono); display: flex; flex-wrap: wrap; gap: 8px; background: rgba(0,0,0,0.3); padding: 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05);">
                         <span style="color: #00ffff; text-shadow: 0 0 5px rgba(0,255,255,0.5);">■ BOUNDARY RINGS</span>
                         <span style="color: #00ffcc; text-shadow: 0 0 5px rgba(0,255,204,0.5);">■ S-SHELL CORE</span>
@@ -231,9 +231,9 @@
                         </div>
                     </div>
                     <div id="sysLogger" class="content-scroll-wrapper" style="padding: 8px;">
-                        <div class="log-info">[System] SEBRA82 AEGIS Engine v30.0 Online.</div>
+                        <div class="log-info">[System] SEBRA82 AEGIS Engine v33.0 Online.</div>
                         <div class="log-info" style="color: var(--accent-purple);">[Module] Predictive Analog Forecasting loaded.</div>
-                        <div class="log-info" style="color: var(--neon-cyan);">[Module] Anisotropic Spacetime Core active.</div>
+                        <div class="log-info" style="color: var(--neon-cyan);">[Module] Bi-Directional Rotational Core active.</div>
                     </div>
                 </div>
             </div>
@@ -243,7 +243,7 @@
 
     <div id="globalToast"></div>
     
-    <!-- 🚨 FORCED JAVASCRIPT CACHE BUSTER v30.0 🚨 -->
-    <script src="script.js?v=30.0" defer></script>
+    <!-- 🚨 FORCED JAVASCRIPT CACHE BUSTER v33.0 🚨 -->
+    <script src="script.js?v=33.0" defer></script>
 </body>
 </html>
