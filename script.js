@@ -1,5 +1,5 @@
 // ==========================================================================
-// SEBRA82 v29.0 - Master Logic (Fully Restored Events & Shear Math)
+// SEBRA82 v31.0 - Master Logic (User Custom Spacetime Shear Math Integrated)
 // ==========================================================================
 
 "use strict";
@@ -283,6 +283,7 @@ class CanvasRenderers {
         ctx.stroke(); 
     }
 
+    // 🚨 USER CUSTOM MATH: Anisotropic Spacetime Matrix 🚨
     static renderAtom() {
         const canvas = document.getElementById('atom3DCanvas'); 
         const ctx = canvas ? canvas.getContext('2d') : null;
@@ -290,108 +291,107 @@ class CanvasRenderers {
         const w = canvas.width, h = canvas.height; 
         ctx.clearRect(0, 0, w, h); 
         this.drawGrid(ctx, w, h, 'rgba(0, 243, 255, 0.04)');
+        
         let cx = w / 2, cy = h / 2; 
 
+        // Smoothly interpolate slider zoom
         targetAtomZoom = window.UTILS.lerp(targetAtomZoom, parseFloat(document.getElementById('atomZoomSlider')?.value || 1.0), 0.12);
         targetAtomRotX = window.UTILS.lerp(targetAtomRotX, currentAtomRotX, 0.1);
         targetAtomRotY = window.UTILS.lerp(targetAtomRotY, currentAtomRotY, 0.1);
 
-        let mode = window.GLOBALS.atomMode; 
+        // Auto-rotation
         if (!isDraggingAtom) { 
-            if(mode === 'world') { currentAtomRotY += 0.008; currentAtomRotX += 0.004; }
-            else if(mode === 'sci') { currentAtomRotY += 0.001; currentAtomRotX -= 0.001; }
-            else { currentAtomRotY += 0.005; currentAtomRotX += 0.0015; } 
+            currentAtomRotY += 0.005; 
+            currentAtomRotX += 0.0015; 
         }
         
+        // Exact User Geometric Generation
         if (window.GLOBALS.serverMatrix.length === 0) {
             let nodes = [];
+            // 1. S-orbital core 
             for (let i = 0; i < 180; i++) { 
-                let theta = Math.random() * 2 * Math.PI; let phi = Math.acos(2 * Math.random() - 1);
-                let r = 35 * Math.cbrt(Math.random());
-                nodes.push({ox: r * Math.sin(phi) * Math.cos(theta), oy: r * Math.cos(phi), oz: r * Math.sin(phi) * Math.sin(theta), type: 'core'});
+                let theta = Math.random() * 2 * Math.PI;
+                let phi = Math.acos(2 * Math.random() - 1);
+                let r = 0.35 * Math.cbrt(Math.random());
+                nodes.push([r * Math.sin(phi) * Math.cos(theta), r * Math.cos(phi), r * Math.sin(phi) * Math.sin(theta), 'core']);
             }
-            for (let i = 0; i < 600; i++) { 
-                let theta = Math.random() * 2 * Math.PI; let phi = Math.acos(2 * Math.random() - 1); let lobe = Math.cos(phi);
-                let r = 80 * Math.abs(lobe) * (0.8 + 0.4 * Math.random()) + 20;
-                nodes.push({ox: r * Math.sin(phi) * Math.cos(theta), oy: r * lobe, oz: r * Math.sin(phi) * Math.sin(theta), type: 'cloud'});
+            // 2. p_z orbital lobes 
+            for (let i = 0; i < 800; i++) { 
+                let theta = Math.random() * 2 * Math.PI;
+                let phi = Math.acos(2 * Math.random() - 1);
+                let lobe = Math.cos(phi);
+                let r = 2.0 * Math.abs(lobe) * (0.8 + 0.4 * Math.random()) + 0.4;
+                nodes.push([r * Math.sin(phi) * Math.cos(theta), r * lobe, r * Math.sin(phi) * Math.sin(theta), 'cloud']);
             }
+            // 3. Boundary Wave Rings 
             for (let r = 0; r < 3; r++) {
-                let rad = 100 + r * 15;
+                let rad = 2.4 + r * 0.4;
                 for (let i = 0; i < 40; i++) {
                     let theta = (2 * Math.PI * i) / 40;
-                    nodes.push({ox: rad * Math.cos(theta), oy: 0, oz: rad * Math.sin(theta), type: 'ring'});
+                    nodes.push([rad * Math.cos(theta), 0, rad * Math.sin(theta), 'ring']);
                 }
             }
             window.GLOBALS.serverMatrix = nodes;
         }
 
-        let noiseMultiplier = window.GLOBALS.noiseStructureActive ? 2.0 : 1.0;
-        let lastVal = window.GLOBALS.waveBuffer[window.GLOBALS.waveBuffer.length-1].val;
-        
-        let localNodes = window.GLOBALS.serverMatrix.map((n, index) => {
-            let nx = n.ox, ny = n.oy, nz = n.oz;
-            
-            if(n.type === 'core') { nx += Math.sin(window.GLOBALS.globalTick * 0.08) * 2 * noiseMultiplier; }
-            if(n.type === 'cloud') { ny += Math.sin(window.GLOBALS.globalTick * 0.05 + index) * 3 * noiseMultiplier; }
-            if(n.type === 'ring') { nz += (lastVal - 50) * 0.1 + Math.sin(index * 0.3 + window.GLOBALS.timeOffset) * 4 * noiseMultiplier; }
+        const size = 100 * targetAtomZoom;
+        const cosY = Math.cos(currentAtomRotY);
+        const sinY = Math.sin(currentAtomRotY);
+        const cosX = Math.cos(currentAtomRotX);
+        const sinX = Math.sin(currentAtomRotX);
 
+        // Exact User Projection Math
+        let projected = window.GLOBALS.serverMatrix.map((node) => {
+            let x = node[0], y = node[1], z = node[2], type = node[3];
+
+            // 🚨 Exact User Spacetime Shear Math (Tied to UI Tab) 🚨
             if (window.GLOBALS.noiseStructureActive) {
-                if (ny < 0) { ny *= 1.9; } else { ny *= 0.2; }
+                if (y < 0) { y *= 1.9; } else { y *= 0.2; }
             }
 
-            let color, glow;
-            if (n.type === 'core') { color = '#00ffcc'; glow = 'rgba(0,255,204,0.9)'; }
-            else if (n.type === 'cloud') { color = 'rgba(255, 105, 225, 0.95)'; glow = 'rgba(255,105,225,0.8)'; }
-            else { color = 'rgba(0, 255, 255, 0.9)'; glow = 'rgba(0,255,255,0.8)'; }
-            
-            return { ox: nx, oy: ny, oz: nz, type: n.type, color: color, glow: glow };
+            let x1 = x * cosY - z * sinY;
+            let rz1 = x * sinY + z * cosY;
+            let rx1 = x1;
+
+            let ry2 = y * cosX - rz1 * sinX;
+            let rz2 = y * sinX + rz1 * cosX;
+
+            let depth = 3 / (rz2 + 3);
+            return [cx + rx1 * size * depth, cy + ry2 * size * depth, type, rz2];
         });
 
-        let projected = localNodes.map(n => {
-            let x1 = n.ox * Math.cos(targetAtomRotY) + n.oz * Math.sin(targetAtomRotY);
-            let z1 = -n.ox * Math.sin(targetAtomRotY) + n.oz * Math.cos(targetAtomRotY);
-            let y2 = n.oy * Math.cos(targetAtomRotX) - z1 * Math.sin(targetAtomRotX);
-            let z2 = n.oy * Math.sin(targetAtomRotX) + z1 * Math.cos(targetAtomRotX);
-            let depth = 400 / (400 + z2);
-            
-            let sizeBase = (n.type === 'core' ? 2.5 : 1.5);
-            return { 
-                px: cx + x1 * depth * targetAtomZoom, 
-                py: cy + y2 * depth * targetAtomZoom, 
-                z: z2, type: n.type, color: n.color, glow: n.glow, 
-                size: Math.max(1.2, sizeBase * depth * targetAtomZoom) 
-            };
-        });
-
-        projected.sort((a, b) => a.z - b.z);
-        
+        // Exact User Ring Connecting Lines
         ctx.strokeStyle = 'rgba(0, 255, 255, 0.4)';
-        ctx.lineWidth = window.GLOBALS.noiseStructureActive ? 2.5 : 1.5;
-        
-        let ringStartIndex = projected.findIndex(p => p.type === 'ring');
+        ctx.lineWidth = 1.5;
+        let ringStartIndex = window.GLOBALS.serverMatrix.findIndex(p => p[3] === 'ring');
         if (ringStartIndex !== -1) {
             for (let r = 0; r < 3; r++) {
                 ctx.beginPath();
                 for (let i = 0; i < 40; i++) {
                     let idx = ringStartIndex + (r * 40) + i;
-                    if (projected[idx]) {
-                        if (i === 0) ctx.moveTo(projected[idx].px, projected[idx].py);
-                        else ctx.lineTo(projected[idx].px, projected[idx].py);
-                    }
+                    if (i === 0) ctx.moveTo(projected[idx][0], projected[idx][1]);
+                    else ctx.lineTo(projected[idx][0], projected[idx][1]);
                 }
                 ctx.closePath();
                 ctx.stroke();
             }
         }
 
-        projected.forEach(n => {
-            ctx.fillStyle = n.color; 
-            ctx.shadowBlur = (n.type === 'core') ? 10 : 0; 
-            ctx.shadowColor = n.glow;
-            ctx.beginPath(); 
-            ctx.arc(n.px, n.py, n.size, 0, Math.PI * 2); 
-            ctx.fill(); 
-            ctx.shadowBlur = 0;
+        // Sort by Z to prevent rendering overlap weirdness
+        let sortedDots = [...projected].sort((a, b) => b[3] - a[3]);
+
+        // Exact User Particle Rendering & Colors
+        sortedDots.forEach(([px, py, type]) => {
+            if (type === 'core') {
+                ctx.fillStyle = '#00ffcc';
+                ctx.beginPath(); ctx.arc(px, py, Math.max(2.0, 2.5 * targetAtomZoom / 2), 0, Math.PI * 2); ctx.fill();
+            } else if (type === 'cloud') {
+                ctx.fillStyle = 'rgba(255, 105, 225, 0.95)';
+                ctx.beginPath(); ctx.arc(px, py, Math.max(1.2, 1.5 * targetAtomZoom / 3), 0, Math.PI * 2); ctx.fill();
+            } else if (type === 'ring') {
+                ctx.fillStyle = 'rgba(0, 255, 255, 0.9)';
+                ctx.beginPath(); ctx.arc(px, py, Math.max(1.2, 1.5 * targetAtomZoom / 3), 0, Math.PI * 2); ctx.fill();
+            }
         });
     }
 
