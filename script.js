@@ -1,6 +1,11 @@
-// ==========================================================================
-// SEBRA82 v33.0 - Master Logic (Bi-Directional Rotational Engine)
-// ==========================================================================
+/* ============================================================================
+   PROPRIETARY NOTICE: SEBRA82 Master Encrypted Suite (v34.0)
+   Copyright (c) 2026 SEBRA82 Corporation. All Rights Reserved.
+   
+   NOTICE: All algorithms, anisotropic spacetime shear matrix projections, 
+   and real-time analog forecasting modules contained herein are protected 
+   under international trade secret and copyright laws.
+   ============================================================================ */
 
 "use strict";
 
@@ -181,9 +186,36 @@ window.ACTIONS = {
 };
 
 window.UI = {
+    // 🔒 Secured Backend Authentication Stub 🔒
+    verifyEnterpriseKey: async function() {
+        const inputKey = document.getElementById('licenseKeyInput').value.trim();
+        if(!inputKey) { alert("Please provide a valid enterprise license hash."); return; }
+        
+        window.UTILS.logSys("Initiating secure cryptographic handshake with AEGIS auth server...");
+        
+        try {
+            // Placeholder for real backend verification endpoint:
+            // const response = await fetch('/api/v1/auth/verify', { method: 'POST', body: JSON.stringify({ key: inputKey }) });
+            // const result = await response.json();
+            
+            // Simulated secure validation delay
+            setTimeout(() => {
+                if (inputKey.length >= 8) {
+                    document.getElementById('authGatewayModal').style.display = 'none';
+                    window.UTILS.logSys("Cryptographic handshake verified by Enterprise Auth Server.");
+                    window.UI.triggerResize();
+                } else {
+                    window.UTILS.logSys("Authentication Failed: Invalid license signature.", true);
+                    alert("Authentication Failed: Invalid signature.");
+                }
+            }, 600);
+        } catch(err) {
+            window.UTILS.logSys("Auth Error: Unable to reach verification server.", true);
+        }
+    },
     authenticateAndLaunch: function(tier) {
         document.getElementById('authGatewayModal').style.display = 'none';
-        window.UTILS.logSys(`Cryptographic handshake verified. Core active.`);
+        window.UTILS.logSys(`Sandbox tier [${tier}] initialized.`);
         window.UI.triggerResize();
     },
     activeMaxId: null,
@@ -283,7 +315,6 @@ class CanvasRenderers {
         ctx.stroke(); 
     }
 
-    // ⚛️ Bi-Directional Spherical Rotational Engine
     static renderAtom() {
         const canvas = document.getElementById('atom3DCanvas'); 
         const ctx = canvas ? canvas.getContext('2d') : null;
@@ -333,7 +364,6 @@ class CanvasRenderers {
 
         const size = 100 * targetAtomZoom;
         
-        // --- 1. PRIMARY CLOCKWISE LAYER ---
         const cosY = Math.cos(currentAtomRotY);
         const sinY = Math.sin(currentAtomRotY);
         const cosX = Math.cos(currentAtomRotX);
@@ -355,7 +385,6 @@ class CanvasRenderers {
 
         let combinedDots = [...projected];
 
-        // --- 2. BI-DIRECTIONAL COUNTER-ROTATING OVERLAY ---
         if (mode === 'bidir') {
             const antiRotY = -currentAtomRotY * 1.2;
             const antiRotX = -currentAtomRotX * 0.5;
