@@ -1,5 +1,5 @@
 // ==========================================================================
-// SEBRA82 v31.0 - Master Logic (User Custom Spacetime Shear Math Integrated)
+// SEBRA82 v32.0 - Master Logic (Anisotropic Shear & Native Touch Zoom)
 // ==========================================================================
 
 "use strict";
@@ -283,7 +283,7 @@ class CanvasRenderers {
         ctx.stroke(); 
     }
 
-    // 🚨 USER CUSTOM MATH: Anisotropic Spacetime Matrix 🚨
+    // ⚛️ User Custom Spacetime Shear Math & Geometry
     static renderAtom() {
         const canvas = document.getElementById('atom3DCanvas'); 
         const ctx = canvas ? canvas.getContext('2d') : null;
@@ -294,28 +294,23 @@ class CanvasRenderers {
         
         let cx = w / 2, cy = h / 2; 
 
-        // Smoothly interpolate slider zoom
         targetAtomZoom = window.UTILS.lerp(targetAtomZoom, parseFloat(document.getElementById('atomZoomSlider')?.value || 1.0), 0.12);
         targetAtomRotX = window.UTILS.lerp(targetAtomRotX, currentAtomRotX, 0.1);
         targetAtomRotY = window.UTILS.lerp(targetAtomRotY, currentAtomRotY, 0.1);
 
-        // Auto-rotation
         if (!isDraggingAtom) { 
             currentAtomRotY += 0.005; 
             currentAtomRotX += 0.0015; 
         }
         
-        // Exact User Geometric Generation
         if (window.GLOBALS.serverMatrix.length === 0) {
             let nodes = [];
-            // 1. S-orbital core 
             for (let i = 0; i < 180; i++) { 
                 let theta = Math.random() * 2 * Math.PI;
                 let phi = Math.acos(2 * Math.random() - 1);
                 let r = 0.35 * Math.cbrt(Math.random());
                 nodes.push([r * Math.sin(phi) * Math.cos(theta), r * Math.cos(phi), r * Math.sin(phi) * Math.sin(theta), 'core']);
             }
-            // 2. p_z orbital lobes 
             for (let i = 0; i < 800; i++) { 
                 let theta = Math.random() * 2 * Math.PI;
                 let phi = Math.acos(2 * Math.random() - 1);
@@ -323,7 +318,6 @@ class CanvasRenderers {
                 let r = 2.0 * Math.abs(lobe) * (0.8 + 0.4 * Math.random()) + 0.4;
                 nodes.push([r * Math.sin(phi) * Math.cos(theta), r * lobe, r * Math.sin(phi) * Math.sin(theta), 'cloud']);
             }
-            // 3. Boundary Wave Rings 
             for (let r = 0; r < 3; r++) {
                 let rad = 2.4 + r * 0.4;
                 for (let i = 0; i < 40; i++) {
@@ -340,11 +334,10 @@ class CanvasRenderers {
         const cosX = Math.cos(currentAtomRotX);
         const sinX = Math.sin(currentAtomRotX);
 
-        // Exact User Projection Math
         let projected = window.GLOBALS.serverMatrix.map((node) => {
             let x = node[0], y = node[1], z = node[2], type = node[3];
 
-            // 🚨 Exact User Spacetime Shear Math (Tied to UI Tab) 🚨
+            // 🚨 Spacetime Shear Math (90% Up / 80% Down) 🚨
             if (window.GLOBALS.noiseStructureActive) {
                 if (y < 0) { y *= 1.9; } else { y *= 0.2; }
             }
@@ -360,7 +353,6 @@ class CanvasRenderers {
             return [cx + rx1 * size * depth, cy + ry2 * size * depth, type, rz2];
         });
 
-        // Exact User Ring Connecting Lines
         ctx.strokeStyle = 'rgba(0, 255, 255, 0.4)';
         ctx.lineWidth = 1.5;
         let ringStartIndex = window.GLOBALS.serverMatrix.findIndex(p => p[3] === 'ring');
@@ -377,10 +369,8 @@ class CanvasRenderers {
             }
         }
 
-        // Sort by Z to prevent rendering overlap weirdness
         let sortedDots = [...projected].sort((a, b) => b[3] - a[3]);
 
-        // Exact User Particle Rendering & Colors
         sortedDots.forEach(([px, py, type]) => {
             if (type === 'core') {
                 ctx.fillStyle = '#00ffcc';
@@ -466,16 +456,14 @@ class CanvasRenderers {
     }
 }
 
-// 🚨 FULLY RESTORED EVENT BINDINGS 🚨
+// 🚨 FULLY RESTORED EVENT BINDINGS WITH TOUCH PINCH-TO-ZOOM 🚨
 function bindAllEvents() {
     window.addEventListener('resize', () => window.UI.triggerResize());
 
-    // AI Keyboard Trigger
     document.getElementById('aiChatInput')?.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') window.AI.submitChat();
     });
 
-    // Accordion Logic
     document.querySelectorAll('.panel-header').forEach(header => {
         header.addEventListener('click', (e) => {
             if (e.target.closest('.pin-btn')) return; 
@@ -486,16 +474,13 @@ function bindAllEvents() {
         });
     });
 
-    // Maximize/Minimize Logic
     document.querySelectorAll('.pin-btn').forEach(el => { el.addEventListener('click', (e) => { e.stopPropagation(); window.UI.toggleMax(el.closest('.panel-card').id); }); });
     document.querySelectorAll('.panel-card').forEach(card => { card.addEventListener('click', (e) => { if(card.classList.contains('minimized-dock-item')) window.UI.toggleMax(card.id); }); });
 
-    // Top Action Bar
     document.getElementById('btnResetView')?.addEventListener('click', () => window.UI.resetStandardView());
     document.getElementById('btnPauseStream')?.addEventListener('click', (e) => { window.GLOBALS.isStreamPaused = !window.GLOBALS.isStreamPaused; e.target.innerText = window.GLOBALS.isStreamPaused ? "▶ RESUME" : "⏸ PAUSE"; });
     document.getElementById('btnGenRandom')?.addEventListener('click', () => window.ACTIONS.updateTimeSeriesAccumulator((Math.random()*80)+20, 'NOISE INJECT'));
 
-    // Atom Tab Logic (Shear UI Hook)
     document.querySelectorAll('#atomTabs .cat-chip').forEach(chip => {
         chip.addEventListener('click', (e) => {
             e.stopPropagation(); 
@@ -515,17 +500,14 @@ function bindAllEvents() {
         });
     });
 
-    // Math Studio Controls
     document.getElementById('modeBtnQuantum')?.addEventListener('click', () => window.MATH.setMathMode('quantum'));
     document.getElementById('modeBtnFinancial')?.addEventListener('click', () => window.MATH.setMathMode('financial'));
     document.getElementById('baseValueSlider')?.addEventListener('input', (e) => { window.GLOBALS.finConfig.baseValue = parseFloat(e.target.value); document.getElementById('baseValueReadout').innerText = window.GLOBALS.finConfig.baseValue.toFixed(2); });
     document.getElementById('dampingSlider')?.addEventListener('input', (e) => { window.GLOBALS.finConfig.damping = parseFloat(e.target.value); document.getElementById('dampingReadout').innerText = window.GLOBALS.finConfig.damping.toFixed(2); });
     document.getElementById('btnRunBench')?.addEventListener('click', () => window.MATH.runBenchmark());
 
-    // Query Data Filters
     document.getElementById('filtAll')?.addEventListener('click', () => window.DATA_INSIGHT.resetToRaw());
 
-    // Time-Series Point Extraction
     const predCanvas = document.getElementById('predictiveForecastCanvas');
     if (predCanvas) {
         predCanvas.addEventListener('click', (e) => {
@@ -541,26 +523,69 @@ function bindAllEvents() {
         });
     }
 
-    // Ledger Engine Buttons
     document.getElementById('btnSummarizeMonth')?.addEventListener('click', () => window.DATA_INSIGHT.autoSummarize());
     document.getElementById('btnDownloadExport')?.addEventListener('click', () => window.DATA_INSIGHT.triggerExport());
     document.getElementById('btnClearLedger')?.addEventListener('click', () => { window.GLOBALS.timeSeriesBuffer = []; window.DATA_INSIGHT.renderLedger(); });
 
-    // Workspace Nav
     document.getElementById('btnNavUp')?.addEventListener('click', () => window.WORKSPACE.navigateUp());
     document.getElementById('btnConnectLive')?.addEventListener('click', () => window.WORKSPACE.connectLiveStream());
 
-    // 3D Canvas Drag Logic
+    // ⚛️ 3D Canvas Pointer & Native Touch Pinch-to-Zoom Handlers
     const atomCanvas = document.getElementById('atom3DCanvas');
     if(atomCanvas) {
-        atomCanvas.addEventListener('pointerdown', (e) => { isDraggingAtom = true; lastX = e.clientX; lastY = e.clientY; atomCanvas.setPointerCapture(e.pointerId); e.preventDefault(); });
+        let initialPinchDist = null;
+
+        atomCanvas.addEventListener('pointerdown', (e) => { 
+            isDraggingAtom = true; lastX = e.clientX; lastY = e.clientY; 
+            atomCanvas.setPointerCapture(e.pointerId); e.preventDefault(); 
+        });
+
         atomCanvas.addEventListener('pointermove', (e) => { 
             if (isDraggingAtom) { 
-                let dx = (e.clientX - lastX) * 0.012; let dy = (e.clientY - lastY) * 0.012;
-                currentAtomRotY += dx; currentAtomRotX -= dy; lastX = e.clientX; lastY = e.clientY; 
+                let dx = (e.clientX - lastX) * 0.012; 
+                let dy = (e.clientY - lastY) * 0.012;
+                currentAtomRotY += dx; currentAtomRotX -= dy; 
+                lastX = e.clientX; lastY = e.clientY; 
             } e.preventDefault(); 
         });
-        atomCanvas.addEventListener('pointerup', (e) => { isDraggingAtom = false; try { atomCanvas.releasePointerCapture(e.pointerId); } catch(err) {} });
+
+        atomCanvas.addEventListener('pointerup', (e) => { 
+            isDraggingAtom = false; 
+            try { atomCanvas.releasePointerCapture(e.pointerId); } catch(err) {} 
+        });
+
+        atomCanvas.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 2) {
+                isDraggingAtom = false;
+                initialPinchDist = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+            }
+        }, { passive: false });
+
+        atomCanvas.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 2 && initialPinchDist !== null) {
+                e.preventDefault();
+                let currentDist = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                let factor = currentDist / initialPinchDist;
+                
+                targetAtomZoom = Math.min(Math.max(targetAtomZoom * factor, 0.3), 5.0);
+                const zoomSlider = document.getElementById('atomZoomSlider');
+                if (zoomSlider) {
+                    zoomSlider.value = targetAtomZoom.toFixed(1);
+                    document.getElementById('atomZoomReadout').innerText = targetAtomZoom.toFixed(1) + "x";
+                }
+                initialPinchDist = currentDist;
+            }
+        }, { passive: false });
+
+        atomCanvas.addEventListener('touchend', (e) => {
+            if (e.touches.length < 2) initialPinchDist = null;
+        });
     }
 }
 
