@@ -1,15 +1,13 @@
-Here is the fully responsive, mobile-optimized index.html file.
-What Was Optimized for Mobile & Any Device:
- * Adaptive Grid System: Added a CSS media query (@media (max-width: 900px)) that automatically switches the desktop 3-column layout into a clean, vertical scrolling stack on mobile phones and tablets.
- * Dynamic Scroll & Viewport: Adjusted body and container heights so mobile browsers don't clip content, allowing smooth vertical scrolling through the sidebar controls, central workspace, and input deck.
- * Fluid Canvas Resizing: The 3D model viewport canvas dynamically scales to match smaller screens while keeping touch rotation and pinch-to-zoom fully active.
-Save and replace your index.html with this version:
+Here is your updated, fully responsive index.html workspace. It now includes:
+ * Sidebar Collapse / Minimize Toggle: Buttons to minimize/collapse both the left navigation sidebar and the right "Strict Boundaries & Real Checks" sidebar to free up workspace space.
+ * Maximize / Full-Screen Mode for 3D Model: A maximize button (🗖) on the 3D model asset header that expands the viewport to fill the entire workspace.
+Save and replace your index.html file with this version:
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Synapse AI — Fully Responsive Workspace</title>
+    <title>Synapse AI — Fully Modular Workspace</title>
     <style>
         :root {
             --bg-primary: #0a0d14;
@@ -69,9 +67,22 @@ Save and replace your index.html with this version:
             width: 100%;
             height: calc(100vh - 35px);
             overflow: hidden;
+            transition: grid-template-columns 0.3s ease;
         }
 
-        /* --- Navigation & Tabs --- */
+        .app-container.left-collapsed {
+            grid-template-columns: 50px 1fr 340px;
+        }
+
+        .app-container.right-collapsed {
+            grid-template-columns: 260px 1fr 50px;
+        }
+
+        .app-container.both-collapsed {
+            grid-template-columns: 50px 1fr 50px;
+        }
+
+        /* --- Navigation & Tabs Sidebar --- */
         .sidebar-left {
             background: var(--bg-secondary);
             border-right: 1px solid var(--border);
@@ -80,6 +91,17 @@ Save and replace your index.html with this version:
             flex-direction: column;
             gap: 12px;
             overflow-y: auto;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .app-container.left-collapsed .sidebar-left .collapse-content {
+            display: none;
+        }
+
+        .app-container.left-collapsed .sidebar-left {
+            padding: 16px 8px;
+            align-items: center;
         }
 
         .section-title {
@@ -103,6 +125,7 @@ Save and replace your index.html with this version:
             display: flex;
             align-items: center;
             justify-content: space-between;
+            width: 100%;
         }
 
         .tab-btn:hover, .tab-btn.active {
@@ -128,6 +151,7 @@ Save and replace your index.html with this version:
             display: flex;
             flex-direction: column;
             gap: 16px;
+            transition: all 0.3s ease;
         }
 
         .asset-box {
@@ -138,6 +162,25 @@ Save and replace your index.html with this version:
             display: flex;
             flex-direction: column;
             gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        /* Maximized State for Asset Box */
+        .asset-box.maximized {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            z-index: 150;
+            height: calc(100% - 20px) !important;
+            background: var(--bg-primary);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+
+        .asset-box.maximized #viewportCanvas {
+            height: calc(100vh - 140px) !important;
         }
 
         .asset-header {
@@ -152,6 +195,12 @@ Save and replace your index.html with this version:
             gap: 4px;
         }
 
+        .asset-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
         .asset-tag {
             background: rgba(0, 255, 170, 0.15);
             color: var(--accent-green);
@@ -160,6 +209,21 @@ Save and replace your index.html with this version:
             font-size: 0.7rem;
             font-weight: bold;
             border: 1px solid rgba(0, 255, 170, 0.3);
+        }
+
+        .icon-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 2px 6px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+
+        .icon-btn:hover {
+            color: var(--accent-cyan);
+            border-color: var(--accent-cyan);
         }
 
         #viewportCanvas {
@@ -276,6 +340,16 @@ Save and replace your index.html with this version:
             flex-direction: column;
             gap: 16px;
             overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+
+        .app-container.right-collapsed .sidebar-right .collapse-content {
+            display: none;
+        }
+
+        .app-container.right-collapsed .sidebar-right {
+            padding: 16px 8px;
+            align-items: center;
         }
 
         .toggle-group {
@@ -437,6 +511,10 @@ Save and replace your index.html with this version:
                 border-bottom: 1px solid var(--border);
                 max-height: none;
             }
+            .app-container.left-collapsed .sidebar-left .collapse-content,
+            .app-container.right-collapsed .sidebar-right .collapse-content {
+                display: none;
+            }
             .workspace {
                 min-height: 600px;
             }
@@ -450,23 +528,28 @@ Save and replace your index.html with this version:
 
     <!-- 1. GHOST MINI-GUIDE -->
     <div class="ghost-guide">
-        <div><strong>GUIDE:</strong> <span id="ghostInstruction">Tap prediction chip or type command to transform model.</span></div>
+        <div><strong>GUIDE:</strong> <span id="ghostInstruction">Use minimize buttons on sidebars or maximize 🗖 on 3D view.</span></div>
         <div style="font-family: monospace; font-size: 0.7rem; color: var(--accent-green);">STATUS: 100% REAL CHECK VERIFIED</div>
     </div>
 
-    <div class="app-container">
+    <div class="app-container" id="appContainer">
         
-        <!-- 2. WORKSPACE TABS -->
+        <!-- 2. WORKSPACE TABS & LEFT SIDEBAR -->
         <div class="sidebar-left">
-            <div class="section-title">Workspaces</div>
-            <button class="tab-btn active" onclick="switchTab('3d_blueprint')">3D Blueprint & Engine</button>
-            <button class="tab-btn" onclick="switchTab('calculations')">Calculations & Math</button>
-            <button class="tab-btn" onclick="switchTab('code_optimizer')">Code & ML Optimizer</button>
-            <button class="tab-btn" onclick="switchTab('patent_ip')">Patent & Trade Secret</button>
-            
-            <div class="section-title" style="margin-top: 20px;">Footprint Optimization</div>
-            <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">
-                Context collapsed into active core summary archive with zero latency.
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <span class="section-title" style="margin: 0;">Workspaces</span>
+                <button class="icon-btn" onclick="toggleSidebar('left')" title="Minimize/Expand Sidebar">◀</button>
+            </div>
+            <div class="collapse-content" style="display: flex; flex-direction: column; gap: 12px; margin-top: 8px;">
+                <button class="tab-btn active" onclick="switchTab('3d_blueprint')">3D Blueprint & Engine</button>
+                <button class="tab-btn" onclick="switchTab('calculations')">Calculations & Math</button>
+                <button class="tab-btn" onclick="switchTab('code_optimizer')">Code & ML Optimizer</button>
+                <button class="tab-btn" onclick="switchTab('patent_ip')">Patent & Trade Secret</button>
+                
+                <div class="section-title" style="margin-top: 10px;">Footprint Optimization</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">
+                    Context collapsed into active core summary archive with zero latency.
+                </div>
             </div>
         </div>
 
@@ -475,19 +558,25 @@ Save and replace your index.html with this version:
             <div class="core-display" id="coreDisplay">
                 
                 <!-- Live 3D / Blueprint Render Box -->
-                <div class="asset-box" id="visualAssetContainer">
+                <div class="asset-box" id="modelCard">
                     <div class="asset-header">
                         <span id="canvasTitleLabel">LIVE 3D MODEL & BLUEPRINT (INTERACTIVE)</span>
-                        <span class="asset-tag">✓ REAL CHECK SIGNED</span>
+                        <div class="asset-actions">
+                            <span class="asset-tag">✓ REAL CHECK SIGNED</span>
+                            <button class="icon-btn" onclick="toggleMaximize('modelCard')" title="Maximize Full Screen">🗖</button>
+                        </div>
                     </div>
                     <canvas id="viewportCanvas"></canvas>
                 </div>
 
                 <!-- Structured Dynamic Asset Output -->
-                <div class="asset-box">
+                <div class="asset-box" id="matrixCard">
                     <div class="asset-header">
                         <span id="outputTitle">ACTIVE LOGIC MATRIX</span>
-                        <span class="asset-tag" id="statusBadge">VERIFIED SECURE</span>
+                        <div class="asset-actions">
+                            <span class="asset-tag" id="statusBadge">VERIFIED SECURE</span>
+                            <button class="icon-btn" onclick="toggleMaximize('matrixCard')" title="Maximize Full Screen">🗖</button>
+                        </div>
                     </div>
                     <pre id="outputCode">// Core Logic Matrix State
 {
@@ -535,67 +624,72 @@ Save and replace your index.html with this version:
 
         <!-- 6. STRICT BOUNDARIES & REAL-CHECK SIGN-OFF SIDEBAR -->
         <div class="sidebar-right">
-            <div class="section-title">Strict Boundaries & Real Checks</div>
-            
-            <div class="toggle-group">
-                <div class="real-check-card">
-                    <div class="real-check-header">
-                        <span>RAG REALISM CHECK</span>
-                        <span>✓ SIGNED</span>
-                    </div>
-                    <div class="real-check-desc">Zero hallucination guardrail enforced against primary dataset.</div>
-                    <div class="toggle-item" style="margin-top: 4px;">
-                        <span style="font-size: 0.75rem;">Enforce RAG Only</span>
-                        <label class="switch"><input type="checkbox" checked id="toggleRag"><span class="slider"></span></label>
-                    </div>
-                </div>
-
-                <div class="real-check-card">
-                    <div class="real-check-header">
-                        <span>NON-FICTION CHECK</span>
-                        <span>✓ SIGNED</span>
-                    </div>
-                    <div class="real-check-desc">Absolute physical and mathematical possibility constraint.</div>
-                    <div class="toggle-item" style="margin-top: 4px;">
-                        <span style="font-size: 0.75rem;">Strict Realism</span>
-                        <label class="switch"><input type="checkbox" checked id="toggleRealism"><span class="slider"></span></label>
-                    </div>
-                </div>
-
-                <div class="real-check-card">
-                    <div class="real-check-header">
-                        <span>UI THEME VERIFICATION</span>
-                        <span>✓ SIGNED</span>
-                    </div>
-                    <div class="real-check-desc">Dynamic green highlight and amber warning boundaries active.</div>
-                    <div class="toggle-item" style="margin-top: 4px;">
-                        <span style="font-size: 0.75rem;">Color Coded Output</span>
-                        <label class="switch"><input type="checkbox" checked id="toggleColors"><span class="slider"></span></label>
-                    </div>
-                </div>
-
-                <div class="real-check-card">
-                    <div class="real-check-header">
-                        <span>PYTORCH TENSOR CHECK</span>
-                        <span>✓ SIGNED</span>
-                    </div>
-                    <div class="real-check-desc">Vectorized calculation path verified for zero context lag.</div>
-                    <div class="toggle-item" style="margin-top: 4px;">
-                        <span style="font-size: 0.75rem;">PyTorch Learning</span>
-                        <label class="switch"><input type="checkbox" checked id="togglePytorch"><span class="slider"></span></label>
-                    </div>
-                </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <button class="icon-btn" onclick="toggleSidebar('right')" title="Minimize/Expand Sidebar">▶</button>
+                <span class="section-title" style="margin: 0;">Strict Boundaries & Real Checks</span>
             </div>
+            
+            <div class="collapse-content" style="display: flex; flex-direction: column; gap: 12px; margin-top: 8px;">
+                <div class="toggle-group">
+                    <div class="real-check-card">
+                        <div class="real-check-header">
+                            <span>RAG REALISM CHECK</span>
+                            <span>✓ SIGNED</span>
+                        </div>
+                        <div class="real-check-desc">Zero hallucination guardrail enforced against primary dataset.</div>
+                        <div class="toggle-item" style="margin-top: 4px;">
+                            <span style="font-size: 0.75rem;">Enforce RAG Only</span>
+                            <label class="switch"><input type="checkbox" checked id="toggleRag"><span class="slider"></span></label>
+                        </div>
+                    </div>
 
-            <div class="section-title" style="margin-top: 15px;">Active Engine Config</div>
-            <pre style="font-size: 0.65rem;" id="configSummary">
+                    <div class="real-check-card">
+                        <div class="real-check-header">
+                            <span>NON-FICTION CHECK</span>
+                            <span>✓ SIGNED</span>
+                        </div>
+                        <div class="real-check-desc">Absolute physical and mathematical possibility constraint.</div>
+                        <div class="toggle-item" style="margin-top: 4px;">
+                            <span style="font-size: 0.75rem;">Strict Realism</span>
+                            <label class="switch"><input type="checkbox" checked id="toggleRealism"><span class="slider"></span></label>
+                        </div>
+                    </div>
+
+                    <div class="real-check-card">
+                        <div class="real-check-header">
+                            <span>UI THEME VERIFICATION</span>
+                            <span>✓ SIGNED</span>
+                        </div>
+                        <div class="real-check-desc">Dynamic green highlight and amber warning boundaries active.</div>
+                        <div class="toggle-item" style="margin-top: 4px;">
+                            <span style="font-size: 0.75rem;">Color Coded Output</span>
+                            <label class="switch"><input type="checkbox" checked id="toggleColors"><span class="slider"></span></label>
+                        </div>
+                    </div>
+
+                    <div class="real-check-card">
+                        <div class="real-check-header">
+                            <span>PYTORCH TENSOR CHECK</span>
+                            <span>✓ SIGNED</span>
+                        </div>
+                        <div class="real-check-desc">Vectorized calculation path verified for zero context lag.</div>
+                        <div class="toggle-item" style="margin-top: 4px;">
+                            <span style="font-size: 0.75rem;">PyTorch Learning</span>
+                            <label class="switch"><input type="checkbox" checked id="togglePytorch"><span class="slider"></span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title" style="margin-top: 10px;">Active Engine Config</div>
+                <pre style="font-size: 0.65rem;" id="configSummary">
 sebra82_synapse.json
 {
   "mode": "REAL_CHECK_STRICT",
   "shape": "dynamic_render",
-  "device_adapt": "responsive_mobile_ready",
+  "modular_layout": "active",
   "status": "GREEN_HIGHLIGHT_ACTIVE"
 }</pre>
+            </div>
         </div>
 
     </div>
@@ -607,6 +701,31 @@ sebra82_synapse.json
         ];
         let currentPredIndex = 0;
         let activeShapeMode = "cube"; // default
+
+        // --- Sidebar & Card Maximize Toggles ---
+        function toggleSidebar(side) {
+            const container = document.getElementById('appContainer');
+            if (side === 'left') {
+                container.classList.toggle('left-collapsed');
+            } else if (side === 'right') {
+                container.classList.toggle('right-collapsed');
+            }
+            setTimeout(resizeCanvas, 300);
+        }
+
+        function toggleMaximize(cardId) {
+            const card = document.getElementById(cardId);
+            card.classList.toggle('maximized');
+            const btn = card.querySelector('.icon-btn[title*="Maximize"], .icon-btn[title*="Restore"]');
+            if (card.classList.contains('maximized')) {
+                btn.innerText = "🗗";
+                btn.title = "Restore Normal Size";
+            } else {
+                btn.innerText = "🗖";
+                btn.title = "Maximize Full Screen";
+            }
+            setTimeout(resizeCanvas, 300);
+        }
 
         function updatePredictionChip() {
             const predEl = document.getElementById('predText');
@@ -747,7 +866,8 @@ sebra82_synapse.json
 
         function resizeCanvas() {
             canvas.width = canvas.parentElement.clientWidth - 32;
-            canvas.height = window.innerWidth <= 900 ? 260 : 220;
+            const isMaximized = document.getElementById('modelCard').classList.contains('maximized');
+            canvas.height = isMaximized ? window.innerHeight - 150 : (window.innerWidth <= 900 ? 260 : 220);
         }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
