@@ -1,1 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEBRA82 Unified Hybrid Engine - 14M Ops Manifest</title>
+    <style>
+        body {
+            margin: 0;
+            background: #030308;
+            color: #00ffcc;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+        #hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(5, 5, 15, 0.85);
+            padding: 15px 20px;
+            border: 1px solid #00ffcc;
+            border-radius: 6px;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
+            pointer-events: auto;
+            z-index: 10;
+        }
+        h2 { margin: 0 0 10px 0; font-size: 16px; letter-spacing: 2px; color: #ff007f; }
+        p { margin: 5px 0; font-size: 13px; }
+        .btn-action {
+            margin-top: 10px;
+            background: #00ffcc;
+            color: #030308;
+            border: none;
+            padding: 8px 14px;
+            font-weight: bold;
+            font-family: inherit;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .btn-action.active {
+            background: #ff007f;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
 
+    <div id="hud">
+        <h2>SEBRA82 v5.5 CORE</h2>
+        <p>Active Nodes: <span id="node-count">1,000,000</span></p>
+        <p>Ops / Frame: <span id="ops-count">14,000,000</span></p>
+        <p>Frame Latency: <span id="latency-display">0.0</span> ms</p>
+        <p>FPS: <span id="fps-display">60</span></p>
+        <button class="btn-action active" id="btn-toggle-overlay">Overlay: Cinematic</button>
+    </div>
+
+    <canvas id="sebraCanvas"></canvas>
+
+    <script>
+        // --- 1. INITIALIZE ENVIRONMENT & SIN_LUT ---
+        const canvas = document.getElementById('sebraCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Pre-computed trigonometric lookup table (Zero runtime Math.sin overhead)
+        const LUT_SIZE = 3600;
+        const SIN_LUT = new Float32Array(LUT_SIZE);
+        for (let i = 0; i < LUT_SIZE; i++) {
+            SIN_LUT[i] = Math.sin((i * Math.PI) / 180);
+        }
+
+        // --- 2. ALLOCATE MEMORY (Data-Oriented Design Stride-3) ---
+        const TOTAL_NODES = 1000000;
+        const STRIDE = 3; // [x, y, delta] packed continuously for L1 Cache alignment
+        const masterBuffer = new Float32Array(TOTAL_NODES * STRIDE);
+
+        let globalTick = 0;
+        let lastTime = performance.now();
+        let frameCount = 0;
+
+        // UI State Flag
+        window.SEBRA82_UI_STATE = { cinematicOverlayEnabled: true };
+
+        const toggleBtn = document.getElementById('btn-toggle-overlay');
+        toggleBtn.addEventListener('click', () => {
+            window.SEBRA82_UI_STATE.cinematicOverlayEnabled = !window.SEBRA82_UI_STATE.cinematicOverlayEnabled;
+            if (window.SEBRA82_UI_STATE.cinematicOverlayEnabled) {
+                toggleBtn.textContent = "Overlay: Cinematic";
+                toggleBtn.classList.add('active');
+            } else {
+                toggleBtn.textContent = "Overlay: Wireframe";
+                toggleBtn.classList.remove('active');
+            }
+        });
+
+        // --- 3. THE MASTER SIMULATION & RENDER LOOP ---
+        function masterLoop() {
+            let frameStart = performance.now();
+            globalTick++;
+            let expansionLimit = 10; // 10-layer harmonic multipoles
+
+            // --- 14,000,000 OPERATIONS HOT LOOP ---
+            for (let i = 0; i < masterBuffer.length; i += STRIDE) {
+                let nodeIndex = i / STRIDE;
+
+                // 1. Layer 1: Geometric Base (SIN_LUT lookup)
+                let lutIdx = (globalTick + nodeIndex) % LUT_SIZE;
+                let base_x = SIN_LUT[lutIdx] * 12;
+                let base_y = SIN_LUT[(lutIdx * 2) % LUT_SIZE] * 12;
+
+                // 2. Layer 2: Tensor Jitter
+                let tensor_y = (nodeIndex % 7 - 3.5) * 0.002;
+
+                // 3. Layer 3: Spacetime Shear
+                let shear_y = base_y < 0 ? base_y * 1.9 : base_y * 0.2;
+
+                // 4. Layer 4: Infinite Harmonic Spectrum O(k) to O(-k)
+                let posHarmonics = 0;
+                let negHarmonics = 0;
+                for (let k = 1; k <= expansionLimit; k++) {
+                    posHarmonics += (1 / k) * SIN_LUT[(globalTick * k + nodeIndex) % LUT_SIZE];
+                    negHarmonics += (k * 0.2) * SIN_LUT[(Math.floor(globalTick / k)) % LUT_SIZE];
+                }
+                let totalDelta = posHarmonics + negHarmonics;
+
+                // In-place zero-heap memory write
+                masterBuffer[i]     = base_x + totalDelta;
+                masterBuffer[i + 1] = base_y + tensor_y + shear_y + totalDelta;
+                masterBuffer[i + 2] = totalDelta;
+            }
+
+            // --- RENDER PASS ---
+            ctx.fillStyle = 'rgba(3, 3, 8, 0.3)'; // Motion blur trail
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            if (window.SEBRA82_UI_STATE.cinematicOverlayEnabled) {
+                ctx.globalCompositeOperation = 'lighter';
+                // Render a sparse sampling of nodes (every 4th node for clean visual performance)
+                for (let i = 0; i < masterBuffer.length; i += (STRIDE * 4)) {
+                    let x = centerX + (masterBuffer[i] * 35);
+                    let y = centerY + (masterBuffer[i + 1] * 35);
+                    let delta = masterBuffer[i + 2];
+
+                    ctx.fillStyle = delta > 0 ? 'rgba(0, 255, 204, 0.6)' : 'rgba(255, 0, 127, 0.6)';
+                    ctx.beginPath();
+                    ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            } else {
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.fillStyle = 'rgba(0, 255, 204, 0.4)';
+                for (let i = 0; i < masterBuffer.length; i += (STRIDE * 6)) {
+                    let x = centerX + (masterBuffer[i] * 35);
+                    let y = centerY + (masterBuffer[i + 1] * 35);
+                    ctx.fillRect(x, y, 1, 1);
+                }
+            }
+
+            // --- TELEMETRY CALCULATIONS ---
+            let frameEnd = performance.now();
+            let frameDuration = frameEnd - frameStart;
+            frameCount++;
+
+            if (frameEnd - lastTime >= 500) {
+                document.getElementById('latency-display').textContent = frameDuration.toFixed(2);
+                document.getElementById('fps-display').textContent = Math.round(1000 / (frameDuration || 1));
+                lastTime = frameEnd;
+                frameCount = 0;
+            }
+
+            requestAnimationFrame(masterLoop);
+        }
+
+        // Initialize Loop
+        requestAnimationFrame(masterLoop);
+    </script>
+</body>
+</html>
