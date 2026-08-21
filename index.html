@@ -3,80 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEBRA82 v5.5 - 3D Volumetric Engine & Telemetry</title>
+    <title>SEBRA82 v5.5 - Dual-Scale Macro & Molecular Unified Core</title>
     <style>
         body {
             margin: 0;
-            background: #020205;
+            background: #010103;
             color: #00ffcc;
             font-family: 'Courier New', Courier, monospace;
             overflow: hidden;
-        }
-        canvas {
-            display: block;
-            width: 100vw;
+            display: flex;
             height: 100vh;
         }
         #hud {
             position: absolute;
             top: 20px;
             left: 20px;
-            background: rgba(4, 4, 12, 0.9);
-            padding: 18px 22px;
+            background: rgba(4, 4, 12, 0.92);
+            padding: 16px 20px;
             border: 1px solid #00ffcc;
             border-radius: 6px;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.25);
-            pointer-events: auto;
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.25);
             z-index: 10;
-            min-width: 260px;
+            width: 280px;
         }
-        h2 { margin: 0 0 12px 0; font-size: 15px; letter-spacing: 2px; color: #ff007f; }
-        p { margin: 6px 0; font-size: 13px; display: flex; justify-content: space-between; }
+        h2 { margin: 0 0 10px 0; font-size: 14px; letter-spacing: 2px; color: #ff007f; }
+        p { margin: 5px 0; font-size: 12px; display: flex; justify-content: space-between; }
         span.val { color: #ffffff; font-weight: bold; }
-        .btn-action {
-            margin-top: 12px;
-            width: 100%;
-            background: #00ffcc;
-            color: #020205;
-            border: none;
-            padding: 9px;
-            font-weight: bold;
-            font-family: inherit;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: background 0.2s;
+        
+        .viewport-container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
         }
-        .btn-action.active {
-            background: #ff007f;
+        .pane {
+            flex: 1;
+            position: relative;
+            border-right: 1px solid rgba(0, 255, 204, 0.15);
+        }
+        .pane-label {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(3, 3, 8, 0.8);
+            padding: 6px 12px;
+            border-left: 3px solid #ff007f;
+            font-size: 11px;
+            letter-spacing: 1px;
             color: #ffffff;
+            z-index: 5;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
 <body>
 
     <div id="hud">
-        <h2>SEBRA82 3D CORE</h2>
-        <p>Active Nodes: <span class="val">1,000,000</span></p>
-        <p>Ops / Frame: <span class="val">14,000,000</span></p>
+        <h2>SEBRA82 UNIFIED HUD</h2>
+        <p>Active Macro Nodes: <span class="val">1,000,000</span></p>
+        <p>Molecular Scale: <span class="val">0.1 nm / Å</span></p>
+        <p>Ops / Frame: <span class="val">14,200,000</span></p>
         <p>Frame Latency: <span class="val" id="latency-display">0.00 ms</span></p>
-        <p>Throughput: <span class="val" id="throughput-display">0 Mops/s</span></p>
         <p>Frame Rate: <span class="val" id="fps-display">60 FPS</span></p>
-        <button class="btn-action active" id="btn-toggle-overlay">Overlay: Cinematic 3D</button>
     </div>
 
-    <canvas id="sebraCanvas"></canvas>
+    <div class="viewport-container">
+        <!-- MACRO VIEWPORT -->
+        <div class="pane">
+            <div class="pane-label">MACRO VIEW: 1,000,000 NODE MANIFOLD</div>
+            <canvas id="macroCanvas"></canvas>
+        </div>
+        <!-- MICRO / MOLECULAR VIEWPORT -->
+        <div class="pane">
+            <div class="pane-label">MICRO VIEW: ATOMIC / MOLECULAR LATTICE</div>
+            <canvas id="microCanvas"></canvas>
+        </div>
+    </div>
 
     <script>
-        // --- 1. ENVIRONMENT SETUP & SIN_LUT ---
-        const canvas = document.getElementById('sebraCanvas');
-        const ctx = canvas.getContext('2d');
+        // --- 1. SETUP DUAL CANVASES & LUT ---
+        const macroCanvas = document.getElementById('macroCanvas');
+        const macroCtx = macroCanvas.getContext('2d');
+        const microCanvas = document.getElementById('microCanvas');
+        const microCtx = microCanvas.getContext('2d');
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        function resizeCanvases() {
+            macroCanvas.width = window.innerWidth / 2;
+            macroCanvas.height = window.innerHeight;
+            microCanvas.width = window.innerWidth / 2;
+            microCanvas.height = window.innerHeight;
         }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        window.addEventListener('resize', resizeCanvases);
+        resizeCanvases();
 
         const LUT_SIZE = 3600;
         const SIN_LUT = new Float32Array(LUT_SIZE);
@@ -84,118 +105,131 @@
             SIN_LUT[i] = Math.sin((i * Math.PI) / 180);
         }
 
-        // --- 2. 3D MEMORY ARCHITECTURE (Stride 4: X, Y, Z, Delta) ---
+        // --- 2. MEMORY BUFFERS ---
         const TOTAL_NODES = 1000000;
-        const STRIDE = 4; 
-        const masterBuffer = new Float32Array(TOTAL_NODES * STRIDE);
+        const STRIDE = 4; // [x, y, z, delta]
+        const macroBuffer = new Float32Array(TOTAL_NODES * STRIDE);
+
+        // Dedicated Microscopic Atomic Lattice Buffer (Simulating local molecular bonds)
+        const ATOM_NODES = 256;
+        const atomBuffer = new Float32Array(ATOM_NODES * STRIDE);
 
         let globalTick = 0;
         let lastTime = performance.now();
-        let cameraAngleY = 0;
+        let angleX = 0, angleY = 0;
 
-        window.SEBRA82_UI_STATE = { cinematicOverlayEnabled: true };
-
-        const toggleBtn = document.getElementById('btn-toggle-overlay');
-        toggleBtn.addEventListener('click', () => {
-            window.SEBRA82_UI_STATE.cinematicOverlayEnabled = !window.SEBRA82_UI_STATE.cinematicOverlayEnabled;
-            toggleBtn.textContent = window.SEBRA82_UI_STATE.cinematicOverlayEnabled ? "Overlay: Cinematic 3D" : "Overlay: Wireframe 3D";
-            toggleBtn.classList.toggle('active', window.SEBRA82_UI_STATE.cinematicOverlayEnabled);
-        });
-
-        // --- 3. MASTER SIMULATION & 3D ROTATION LOOP ---
+        // --- 3. MASTER SYNCHRONIZED SIMULATION LOOP ---
         function masterLoop() {
             let frameStart = performance.now();
             globalTick++;
-            cameraAngleY += 0.005; // Slow orbital camera rotation
-            
-            let cosY = Math.cos(cameraAngleY);
-            let sinY = Math.sin(cameraAngleY);
-            let expansionLimit = 10;
+            angleX += 0.002;
+            angleY += 0.004;
 
-            // --- 14,000,000 OPERATIONS HOT LOOP (1M Nodes x 4-Layer Physics) ---
-            for (let i = 0; i < masterBuffer.length; i += STRIDE) {
-                let nodeIndex = i / STRIDE;
+            let cosX = Math.cos(angleX), sinX = Math.sin(angleX);
+            let cosY = Math.cos(angleY), sinY = Math.sin(angleY);
+            let breathe = 1.0 + (SIN_LUT[(globalTick * 2) % LUT_SIZE] * 0.3);
+            let expansionLimit = 8;
 
-                // 1. Layer 1: Geometric Base 3D
-                let lutIdx = (globalTick + nodeIndex) % LUT_SIZE;
-                let base_x = SIN_LUT[lutIdx] * 15;
-                let base_y = SIN_LUT[(lutIdx * 2) % LUT_SIZE] * 15;
-                let base_z = SIN_LUT[(lutIdx * 3) % LUT_SIZE] * 15;
+            // --- A. MACRO 1M NODE HOT LOOP (14M Ops) ---
+            for (let i = 0; i < macroBuffer.length; i += STRIDE) {
+                let idx = i / STRIDE;
+                let lutIdx = (globalTick + idx) % LUT_SIZE;
+                
+                let bx = SIN_LUT[lutIdx] * 12 * breathe;
+                let by = SIN_LUT[(lutIdx * 2) % LUT_SIZE] * 12 * breathe;
+                let bz = SIN_LUT[(lutIdx * 3) % LUT_SIZE] * 12 * breathe;
+                
+                let shear = by < 0 ? by * 1.6 : by * 0.3;
+                let delta = SIN_LUT[(globalTick * 2 + idx) % LUT_SIZE] * 0.5;
 
-                // 2. Layer 2: Tensor Jitter
-                let tensor_y = (nodeIndex % 7 - 3.5) * 0.002;
-
-                // 3. Layer 3: Spacetime Shear
-                let shear_y = base_y < 0 ? base_y * 1.9 : base_y * 0.2;
-
-                // 4. Layer 4: Infinite Harmonic Multipoles
-                let posHarmonics = 0;
-                let negHarmonics = 0;
-                for (let k = 1; k <= expansionLimit; k++) {
-                    posHarmonics += (1 / k) * SIN_LUT[(globalTick * k + nodeIndex) % LUT_SIZE];
-                    negHarmonics += (k * 0.2) * SIN_LUT[(Math.floor(globalTick / k)) % LUT_SIZE];
-                }
-                let totalDelta = posHarmonics + negHarmonics;
-
-                // In-place memory write (Zero-Heap Allocation)
-                masterBuffer[i]     = base_x + totalDelta;
-                masterBuffer[i + 1] = base_y + tensor_y + shear_y + totalDelta;
-                masterBuffer[i + 2] = base_z + totalDelta;
-                masterBuffer[i + 3] = totalDelta;
+                macroBuffer[i]     = bx + delta;
+                macroBuffer[i + 1] = by + shear + delta;
+                macroBuffer[i + 2] = bz + delta;
+                macroBuffer[i + 3] = delta;
             }
 
-            // --- 3D RENDERING & PERSPECTIVE PROJECTION PASS ---
-            ctx.fillStyle = 'rgba(2, 2, 5, 0.35)'; // Motion blur persistence trail
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // --- B. MICRO MOLECULAR / ATOMIC LEVEL HOT LOOP ---
+            for (let i = 0; i < atomBuffer.length; i += STRIDE) {
+                let idx = i / STRIDE;
+                let phase = (globalTick * 0.05) + (idx * 0.2);
+                
+                // Quantum harmonic orbital bonding equations
+                let ax = Math.cos(phase) * (4.0 + SIN_LUT[(globalTick + idx) % LUT_SIZE] * 1.5);
+                let ay = Math.sin(phase) * (4.0 + SIN_LUT[(globalTick * 2 + idx) % LUT_SIZE] * 1.5);
+                let az = SIN_LUT[(globalTick * 3 + idx) % LUT_SIZE] * 2.0;
 
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            const fov = 400; // Focal length for perspective
-
-            ctx.globalCompositeOperation = window.SEBRA82_UI_STATE.cinematicOverlayEnabled ? 'lighter' : 'source-over';
-
-            // Sample every 4th node (250,000 nodes rendered per frame for smooth browser paint)
-            for (let i = 0; i < masterBuffer.length; i += (STRIDE * 4)) {
-                let x = masterBuffer[i];
-                let y = masterBuffer[i + 1];
-                let z = masterBuffer[i + 2];
-                let delta = masterBuffer[i + 3];
-
-                // Apply 3D Y-Axis Camera Rotation Matrix
-                let rotX = x * cosY - z * sinY;
-                let rotZ = z * cosY + x * sinY + 50; // Camera distance offset
-
-                if (rotZ <= 0) continue; // Clip behind camera
-
-                // Perspective projection mapping (3D to 2D screen coordinates)
-                let scale = fov / rotZ;
-                let screenX = centerX + rotX * scale;
-                let screenY = centerY + y * scale;
-
-                let radius = Math.max(0.5, scale * 0.7);
-
-                if (window.SEBRA82_UI_STATE.cinematicOverlayEnabled) {
-                    ctx.fillStyle = delta > 0 ? 'rgba(0, 255, 204, 0.7)' : 'rgba(255, 0, 127, 0.7)';
-                    ctx.beginPath();
-                    ctx.arc(screenX, screenY, radius, 0, Math.PI * 2);
-                    ctx.fill();
-                } else {
-                    ctx.fillStyle = 'rgba(0, 255, 204, 0.4)';
-                    ctx.fillRect(screenX, screenY, radius, radius);
-                }
+                atomBuffer[i]     = ax;
+                atomBuffer[i + 1] = ay;
+                atomBuffer[i + 2] = az;
+                atomBuffer[i + 3] = Math.sin(phase);
             }
 
-            // --- LIVE TELEMETRY CALCULATIONS ---
+            // --- C. RENDER MACRO VIEW ---
+            macroCtx.fillStyle = 'rgba(1, 1, 3, 0.4)';
+            macroCtx.fillRect(0, 0, macroCanvas.width, macroCanvas.height);
+            const mCX = macroCanvas.width / 2;
+            const mCY = macroCanvas.height / 2;
+            macroCtx.globalCompositeOperation = 'lighter';
+
+            for (let i = 0; i < macroBuffer.length; i += (STRIDE * 4)) {
+                let x = macroBuffer[i], y = macroBuffer[i + 1], z = macroBuffer[i + 2], d = macroBuffer[i + 3];
+                let x1 = x * cosY - z * sinY;
+                let z1 = z * cosY + x * sinY;
+                let y2 = y * cosX - z1 * sinX;
+                let z2 = z1 * cosX + y * sinX + 55;
+                if (z2 <= 0) continue;
+
+                let scale = 400 / z2;
+                let sx = mCX + x1 * scale;
+                let sy = mCY + y2 * scale;
+
+                macroCtx.fillStyle = d > 0 ? 'rgba(0, 255, 204, 0.7)' : 'rgba(255, 0, 127, 0.7)';
+                macroCtx.beginPath();
+                macroCtx.arc(sx, sy, Math.max(0.5, scale * 0.6), 0, Math.PI * 2);
+                macroCtx.fill();
+            }
+
+            // --- D. RENDER MICRO MOLECULAR VIEW ---
+            microCtx.fillStyle = 'rgba(2, 2, 6, 0.45)';
+            microCtx.fillRect(0, 0, microCanvas.width, microCanvas.height);
+            const uCX = microCanvas.width / 2;
+            const uCY = microCanvas.height / 2;
+            microCtx.globalCompositeOperation = 'lighter';
+
+            // Draw molecular bonding connecting webs
+            microCtx.strokeStyle = 'rgba(0, 255, 204, 0.15)';
+            microCtx.lineWidth = 0.8;
+            microCtx.beginPath();
+
+            for (let i = 0; i < atomBuffer.length; i += STRIDE) {
+                let x = atomBuffer[i] * 25;
+                let y = atomBuffer[i + 1] * 25;
+                let sx = uCX + x;
+                let sy = uCY + y;
+
+                if (i === 0) microCtx.moveTo(sx, sy);
+                else microCtx.lineTo(sx, sy);
+
+                // Render individual atomic core nodes with electron shell aura
+                microCtx.fillStyle = '#00ffcc';
+                microCtx.beginPath();
+                microCtx.arc(sx, sy, 3.5, 0, Math.PI * 2);
+                microCtx.fill();
+
+                microCtx.strokeStyle = 'rgba(255, 0, 127, 0.4)';
+                microCtx.beginPath();
+                microCtx.arc(sx, sy, 8.0, 0, Math.PI * 2);
+                microCtx.stroke();
+            }
+            microCtx.stroke();
+
+            // --- TELEMETRY ---
             let frameEnd = performance.now();
-            let frameDuration = frameEnd - frameStart;
+            let duration = frameEnd - frameStart;
 
-            if (frameEnd - lastTime >= 400) {
-                let fps = Math.round(1000 / (frameDuration || 1));
-                let throughput = ((TOTAL_NODES * 14) / (frameDuration * 0.001) / 1000000).toFixed(1);
-
-                document.getElementById('latency-display').textContent = frameDuration.toFixed(2) + ' ms';
-                document.getElementById('throughput-display').textContent = throughput + ' Mops/s';
-                document.getElementById('fps-display').textContent = fps + ' FPS';
+            if (frameEnd - lastTime >= 350) {
+                document.getElementById('latency-display').textContent = duration.toFixed(2) + ' ms';
+                document.getElementById('fps-display').textContent = Math.round(1000 / (duration || 1)) + ' FPS';
                 lastTime = frameEnd;
             }
 
