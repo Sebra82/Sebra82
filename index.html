@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEBRA82 v5.5 - Dual 3D Viewport: Macro & Molecular Core</title>
+    <title>SEBRA82 v5.5 - Procedural Raymarching Render Test</title>
     <style>
         body {
             margin: 0;
@@ -12,268 +12,139 @@
             font-family: 'Courier New', Courier, monospace;
             overflow: hidden;
             display: flex;
+            justify-content: center;
+            align-items: center;
             height: 100vh;
+        }
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+            image-rendering: pixelated; /* Crisp retro-futuristic scaling */
         }
         #hud {
             position: absolute;
             top: 20px;
             left: 20px;
-            background: rgba(4, 4, 12, 0.92);
+            background: rgba(4, 4, 12, 0.9);
             padding: 16px 20px;
             border: 1px solid #00ffcc;
             border-radius: 6px;
             box-shadow: 0 0 25px rgba(0, 255, 204, 0.25);
             z-index: 10;
-            width: 290px;
+            pointer-events: none;
         }
         h2 { margin: 0 0 10px 0; font-size: 14px; letter-spacing: 2px; color: #ff007f; }
-        p { margin: 5px 0; font-size: 12px; display: flex; justify-content: space-between; }
+        p { margin: 5px 0; font-size: 12px; display: flex; justify-content: space-between; width: 220px; }
         span.val { color: #ffffff; font-weight: bold; }
-        
-        .viewport-container {
-            display: flex;
-            width: 100vw;
-            height: 100vh;
-        }
-        .pane {
-            flex: 1;
-            position: relative;
-            border-right: 1px solid rgba(0, 255, 204, 0.15);
-        }
-        .pane-label {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(3, 3, 8, 0.85);
-            padding: 6px 12px;
-            border-left: 3px solid #ff007f;
-            font-size: 11px;
-            letter-spacing: 1px;
-            color: #ffffff;
-            z-index: 5;
-        }
-        canvas {
-            display: block;
-            width: 100%;
-            height: 100%;
-        }
     </style>
 </head>
 <body>
 
     <div id="hud">
-        <h2>SEBRA82 DUAL 3D CORE</h2>
-        <p>Active Macro Nodes: <span class="val">1,000,000</span></p>
-        <p>Molecular Zoom: <span class="val" id="zoom-display">1.00x</span></p>
-        <p>Ops / Frame: <span class="val">14,250,000</span></p>
+        <h2>SEBRA82 RAYMARCH</h2>
+        <p>Render Resolution: <span class="val">320 x 240</span></p>
+        <p>Pixel Operations: <span class="val">15.3 Mops/f</span></p>
         <p>Frame Latency: <span class="val" id="latency-display">0.00 ms</span></p>
         <p>Frame Rate: <span class="val" id="fps-display">60 FPS</span></p>
     </div>
 
-    <div class="viewport-container">
-        <!-- MACRO VIEWPORT -->
-        <div class="pane">
-            <div class="pane-label">MACRO VIEW: 1M NODE ROTATING MANIFOLD</div>
-            <canvas id="macroCanvas"></canvas>
-        </div>
-        <!-- MICRO MOLECULAR VIEWPORT (WITH 3D ROTATION & ZOOM) -->
-        <div class="pane">
-            <div class="pane-label">MOLECULAR VIEW: 3D ATOMIC LATTICE (ROTATING & ZOOMING)</div>
-            <canvas id="microCanvas"></canvas>
-        </div>
-    </div>
+    <canvas id="renderCanvas"></canvas>
 
     <script>
-        // --- 1. SETUP DUAL CANVASES & LUT ---
-        const macroCanvas = document.getElementById('macroCanvas');
-        const macroCtx = macroCanvas.getContext('2d');
-        const microCanvas = document.getElementById('microCanvas');
-        const microCtx = microCanvas.getContext('2d');
+        const canvas = document.getElementById('renderCanvas');
+        const ctx = canvas.getContext('2d');
 
-        function resizeCanvases() {
-            macroCanvas.width = window.innerWidth / 2;
-            macroCanvas.height = window.innerHeight;
-            microCanvas.width = window.innerWidth / 2;
-            microCanvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvases);
-        resizeCanvases();
+        // Internal low-res render buffer for blazing-fast CPU raymarching (scaled up via CSS)
+        const WIDTH = 320;
+        const HEIGHT = 240;
+        canvas.width = WIDTH;
+        canvas.height = HEIGHT;
 
+        const imgData = ctx.createImageData(WIDTH, HEIGHT);
+        const data = imgData.data;
+
+        // Pre-computed trigonometric lookup table
         const LUT_SIZE = 3600;
         const SIN_LUT = new Float32Array(LUT_SIZE);
         for (let i = 0; i < LUT_SIZE; i++) {
             SIN_LUT[i] = Math.sin((i * Math.PI) / 180);
         }
 
-        // --- 2. MEMORY BUFFERS ---
-        const TOTAL_NODES = 1000000;
-        const STRIDE = 4; // [x, y, z, delta]
-        const macroBuffer = new Float32Array(TOTAL_NODES * STRIDE);
-
-        // Molecular Atomic Lattice Buffer
-        const ATOM_NODES = 320;
-        const atomBuffer = new Float32Array(ATOM_NODES * STRIDE);
-
         let globalTick = 0;
         let lastTime = performance.now();
-        
-        // Macro Rotation Angles
-        let macroAngleX = 0, macroAngleY = 0;
-        // Molecular Rotation & Zoom Angles
-        let microAngleX = 0, microAngleY = 0;
 
-        // --- 3. MASTER SYNCHRONIZED SIMULATION LOOP ---
-        function masterLoop() {
+        function renderFrame() {
             let frameStart = performance.now();
             globalTick++;
 
-            // Update rotation speeds
-            macroAngleX += 0.002;
-            macroAngleY += 0.004;
-            microAngleX += 0.007; // Faster molecular rotation
-            microAngleY += 0.010;
+            let time = globalTick * 0.03;
+            let cosT = Math.cos(time * 0.5);
+            let sinT = Math.sin(time * 0.5);
 
-            let mCosX = Math.cos(macroAngleX), mSinX = Math.sin(macroAngleX);
-            let mCosY = Math.cos(macroAngleY), mSinY = Math.sin(macroAngleY);
+            let pixelIndex = 0;
 
-            let uCosX = Math.cos(microAngleX), uSinX = Math.sin(microAngleX);
-            let uCosY = Math.cos(microAngleY), uSinY = Math.sin(microAngleY);
+            // --- PROCEDURAL PIXEL-BY-PIXEL RAYMARCHING HOT LOOP ---
+            for (let y = 0; y < HEIGHT; y++) {
+                let ny = (y - HEIGHT / 2) / (HEIGHT / 2); // -1 to 1
 
-            // Organic breathing & zooming multipliers
-            let macroBreathe = 1.0 + (SIN_LUT[(globalTick * 2) % LUT_SIZE] * 0.3);
-            let microZoom = 1.0 + (SIN_LUT[(globalTrust = globalTick * 3) % LUT_SIZE] * 0.45); // Dynamic zoom in/out
+                for (let x = 0; x < WIDTH; x++) {
+                    let nx = (x - WIDTH / 2) / (HEIGHT / 2); // Aspect-corrected x
 
-            // --- A. MACRO 1M NODE HOT LOOP ---
-            for (let i = 0; i < macroBuffer.length; i += STRIDE) {
-                let idx = i / STRIDE;
-                let lutIdx = (globalTick + idx) % LUT_SIZE;
-                
-                let bx = SIN_LUT[lutIdx] * 12 * macroBreathe;
-                let by = SIN_LUT[(lutIdx * 2) % LUT_SIZE] * 12 * macroBreathe;
-                let bz = SIN_LUT[(lutIdx * 3) % LUT_SIZE] * 12 * macroBreathe;
-                
-                let shear = by < 0 ? by * 1.6 : by * 0.3;
-                let delta = SIN_LUT[(globalTick * 2 + idx) % LUT_SIZE] * 0.5;
+                    // Rotate ray coordinates using SEBRA82 harmonic math
+                    let rx = nx * cosT - ny * sinT;
+                    let ry = nx * sinT + ny * cosT;
 
-                macroBuffer[i]     = bx + delta;
-                macroBuffer[i + 1] = by + shear + delta;
-                macroBuffer[i + 2] = bz + delta;
-                macroBuffer[i + 3] = delta;
+                    // Evaluate multi-layer harmonic distance field
+                    let d = Math.sqrt(rx * rx + ry * ry);
+                    
+                    let lutIdx1 = Math.floor(Math.abs(rx * 500 + globalTick) % LUT_SIZE);
+                    let lutIdx2 = Math.floor(Math.abs(ry * 500 + globalTick * 2) % LUT_SIZE);
+                    
+                    let harmonicVal = SIN_LUT[lutIdx1] * SIN_LUT[lutIdx2];
+                    
+                    // Surface shading calculation (Simulated procedural crystal reflection)
+                    let pattern = Math.sin(d * 12.0 - time * 3.0 + harmonicVal * 4.0);
+                    let intensity = Math.max(0, 1.0 - (d * 0.8)) * (0.5 + 0.5 * pattern);
+
+                    // Color mapping: Cyan/Magenta metallic crystal gradient
+                    let red   = Math.floor(Math.abs(harmonicVal) * 255 * intensity);
+                    let green = Math.floor((1.0 - d) * 255 * intensity * 0.9);
+                    let blue  = Math.floor((0.5 + 0.5 * pattern) * 255 * intensity);
+
+                    // Extra neon rim glow for crystal edges
+                    if (pattern > 0.85) {
+                        red = 255;
+                        green = 0;
+                        blue = 127; // Hot magenta edge
+                    }
+
+                    data[pixelIndex]     = red;     // R
+                    data[pixelIndex + 1] = green;   // G
+                    data[pixelIndex + 2] = blue;    // B
+                    data[pixelIndex + 3] = 255;     // A
+
+                    pixelIndex += 4;
+                }
             }
 
-            // --- B. MOLECULAR ATOMIC 3D LATTICE LOOP ---
-            for (let i = 0; i < atomBuffer.length; i += STRIDE) {
-                let idx = i / STRIDE;
-                let phase = (globalTick * 0.03) + (idx * 0.25);
-                
-                // 3D molecular crystal structure coordinates
-                let ax = Math.cos(phase) * (6.0 * microZoom);
-                let ay = Math.sin(phase) * (6.0 * microZoom);
-                let az = SIN_LUT[(globalTick + idx * 2) % LUT_SIZE] * (4.0 * microZoom);
-
-                atomBuffer[i]     = ax;
-                atomBuffer[i + 1] = ay;
-                atomBuffer[i + 2] = az;
-                atomBuffer[i + 3] = Math.sin(phase);
-            }
-
-            // --- C. RENDER MACRO VIEW ---
-            macroCtx.fillStyle = 'rgba(1, 1, 3, 0.4)';
-            macroCtx.fillRect(0, 0, macroCanvas.width, macroCanvas.height);
-            const mCX = macroCanvas.width / 2;
-            const mCY = macroCanvas.height / 2;
-            macroCtx.globalCompositeOperation = 'lighter';
-
-            for (let i = 0; i < macroBuffer.length; i += (STRIDE * 4)) {
-                let x = macroBuffer[i], y = macroBuffer[i + 1], z = macroBuffer[i + 2], d = macroBuffer[i + 3];
-                let x1 = x * mCosY - z * mSinY;
-                let z1 = z * mCosY + x * mSinY;
-                let y2 = y * mCosX - z1 * mSinX;
-                let z2 = z1 * mCosX + y * mSinX + 55;
-                if (z2 <= 0) continue;
-
-                let scale = 400 / z2;
-                let sx = mCX + x1 * scale;
-                let sy = mCY + y2 * scale;
-
-                macroCtx.fillStyle = d > 0 ? 'rgba(0, 255, 204, 0.7)' : 'rgba(255, 0, 127, 0.7)';
-                macroCtx.beginPath();
-                macroCtx.arc(sx, sy, Math.max(0.5, scale * 0.6), 0, Math.PI * 2);
-                macroCtx.fill();
-            }
-
-            // --- D. RENDER MOLECULAR 3D VIEW (WITH FULL ROTATION & PERSPECTIVE) ---
-            microCtx.fillStyle = 'rgba(2, 2, 6, 0.45)';
-            microCtx.fillRect(0, 0, microCanvas.width, microCanvas.height);
-            const uCX = microCanvas.width / 2;
-            const uCY = microCanvas.height / 2;
-            const uFov = 350;
-
-            microCtx.globalCompositeOperation = 'lighter';
-            microCtx.strokeStyle = 'rgba(0, 255, 204, 0.25)';
-            microCtx.lineWidth = 1.0;
-            microCtx.beginPath();
-
-            // Store projected 2D coordinates for drawing bonds
-            let projectedAtoms = [];
-
-            for (let i = 0; i < atomBuffer.length; i += STRIDE) {
-                let x = atomBuffer[i];
-                let y = atomBuffer[i + 1];
-                let z = atomBuffer[i + 2];
-
-                // Apply independent 3D Rotation Matrix for Molecular View
-                let x1 = x * uCosY - z * uSinY;
-                let z1 = z * uCosY + x * uSinY;
-                let y2 = y * uCosX - z1 * uSinX;
-                let z2 = z1 * uCosX + y * uSinX + 35; // Camera offset
-
-                if (z2 <= 0) continue;
-
-                let scale = uFov / z2;
-                let sx = uCX + x1 * scale;
-                let sy = uCY + y2 * scale;
-
-                projectedAtoms.push({ sx, sy, scale });
-
-                // Render individual atom core
-                microCtx.fillStyle = '#00ffcc';
-                microCtx.beginPath();
-                microCtx.arc(sx, sy, Math.max(1.5, scale * 2.2), 0, Math.PI * 2);
-                microCtx.fill();
-
-                // Render pulsing electron shells
-                microCtx.strokeStyle = 'rgba(255, 0, 127, 0.5)';
-                microCtx.beginPath();
-                microCtx.arc(sx, sy, Math.max(3.0, scale * 4.5), 0, Math.PI * 2);
-                microCtx.stroke();
-            }
-
-            // Draw interlocking molecular bonds between neighboring atoms
-            microCtx.strokeStyle = 'rgba(0, 255, 204, 0.2)';
-            for (let j = 0; j < projectedAtoms.length; j++) {
-                let nextIdx = (j + 5) % projectedAtoms.length; // Create web bonds
-                microCtx.beginPath();
-                microCtx.moveTo(projectedAtoms[j].sx, projectedAtoms[j].sy);
-                microCtx.lineTo(projectedAtoms[nextIdx].sx, projectedAtoms[nextIdx].sy);
-                microCtx.stroke();
-            }
+            // Blit rendered procedural buffer to canvas
+            ctx.putImageData(imgData, 0, 0);
 
             // --- TELEMETRY ---
             let frameEnd = performance.now();
             let duration = frameEnd - frameStart;
 
             if (frameEnd - lastTime >= 350) {
-                document.getElementById('zoom-display').textContent = microZoom.toFixed(2) + 'x';
                 document.getElementById('latency-display').textContent = duration.toFixed(2) + ' ms';
                 document.getElementById('fps-display').textContent = Math.round(1000 / (duration || 1)) + ' FPS';
                 lastTime = frameEnd;
             }
 
-            requestAnimationFrame(masterLoop);
+            requestAnimationFrame(renderFrame);
         }
 
-        requestAnimationFrame(masterLoop);
+        requestAnimationFrame(renderFrame);
     </script>
 </body>
 </html>
