@@ -1,9 +1,15 @@
+Here is the fully responsive, mobile-optimized index.html file.
+What Was Optimized for Mobile & Any Device:
+ * Adaptive Grid System: Added a CSS media query (@media (max-width: 900px)) that automatically switches the desktop 3-column layout into a clean, vertical scrolling stack on mobile phones and tablets.
+ * Dynamic Scroll & Viewport: Adjusted body and container heights so mobile browsers don't clip content, allowing smooth vertical scrolling through the sidebar controls, central workspace, and input deck.
+ * Fluid Canvas Resizing: The 3D model viewport canvas dynamically scales to match smaller screens while keeping touch rotation and pinch-to-zoom fully active.
+Save and replace your index.html with this version:
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Synapse AI — Verified Interactive Workspace</title>
+    <title>Synapse AI — Fully Responsive Workspace</title>
     <style>
         :root {
             --bg-primary: #0a0d14;
@@ -28,18 +34,18 @@
         body {
             background: var(--bg-primary);
             color: var(--text-main);
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
         /* --- Ghost Mini-Guide (Top Overlay) --- */
         .ghost-guide {
-            background: rgba(18, 24, 36, 0.85);
+            background: rgba(18, 24, 36, 0.9);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
-            padding: 8px 20px;
+            padding: 8px 16px;
             font-size: 0.75rem;
             color: var(--accent-cyan);
             display: flex;
@@ -47,6 +53,8 @@
             align-items: center;
             letter-spacing: 0.5px;
             z-index: 100;
+            flex-wrap: wrap;
+            gap: 6px;
         }
 
         .ghost-guide span {
@@ -56,8 +64,10 @@
         /* --- Main Layout --- */
         .app-container {
             display: grid;
-            grid-template-columns: 260px 1fr 360px;
+            grid-template-columns: 260px 1fr 340px;
             flex: 1;
+            width: 100%;
+            height: calc(100vh - 35px);
             overflow: hidden;
         }
 
@@ -69,6 +79,7 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+            overflow-y: auto;
         }
 
         .section-title {
@@ -107,11 +118,12 @@
             background: var(--bg-primary);
             overflow: hidden;
             position: relative;
+            flex: 1;
         }
 
         .core-display {
             flex: 1;
-            padding: 20px;
+            padding: 16px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -136,6 +148,8 @@
             color: var(--text-muted);
             border-bottom: 1px solid var(--border);
             padding-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 4px;
         }
 
         .asset-tag {
@@ -176,7 +190,7 @@
         .input-deck {
             background: var(--bg-secondary);
             border-top: 1px solid var(--border);
-            padding: 16px 20px;
+            padding: 14px 16px;
             display: flex;
             flex-direction: column;
             gap: 8px;
@@ -187,6 +201,7 @@
             align-items: center;
             gap: 8px;
             font-size: 0.75rem;
+            flex-wrap: wrap;
         }
 
         .prediction-chip {
@@ -233,7 +248,7 @@
             border: 1px solid var(--border);
             border-radius: 8px;
             color: var(--text-main);
-            padding: 12px 16px;
+            padding: 10px 14px;
             font-size: 0.9rem;
             outline: none;
         }
@@ -247,7 +262,7 @@
             color: #050811;
             font-weight: 600;
             border: none;
-            padding: 0 20px;
+            padding: 0 18px;
             border-radius: 8px;
             cursor: pointer;
         }
@@ -266,7 +281,7 @@
         .toggle-group {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .toggle-item {
@@ -348,14 +363,16 @@
             justify-content: center;
             align-items: center;
             z-index: 200;
+            padding: 16px;
         }
 
         .modal-card {
             background: var(--bg-card);
             border: 1px solid var(--accent-amber);
             border-radius: 12px;
-            padding: 24px;
-            width: 440px;
+            padding: 20px;
+            width: 100%;
+            max-width: 440px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
@@ -401,13 +418,39 @@
             border-radius: 6px;
             cursor: pointer;
         }
+
+        /* --- RESPONSIVE MEDIA QUERIES FOR MOBILE --- */
+        @media (max-width: 900px) {
+            body {
+                height: auto;
+                overflow-y: auto;
+            }
+            .app-container {
+                display: flex;
+                flex-direction: column;
+                height: auto;
+                overflow: visible;
+            }
+            .sidebar-left, .sidebar-right {
+                width: 100%;
+                border: none;
+                border-bottom: 1px solid var(--border);
+                max-height: none;
+            }
+            .workspace {
+                min-height: 600px;
+            }
+            #viewportCanvas {
+                height: 260px;
+            }
+        }
     </style>
 </head>
 <body>
 
     <!-- 1. GHOST MINI-GUIDE -->
     <div class="ghost-guide">
-        <div><strong>GUIDE:</strong> <span id="ghostInstruction">Click prediction chip or type command to instantly transform model.</span></div>
+        <div><strong>GUIDE:</strong> <span id="ghostInstruction">Tap prediction chip or type command to transform model.</span></div>
         <div style="font-family: monospace; font-size: 0.7rem; color: var(--accent-green);">STATUS: 100% REAL CHECK VERIFIED</div>
     </div>
 
@@ -550,7 +593,7 @@ sebra82_synapse.json
 {
   "mode": "REAL_CHECK_STRICT",
   "shape": "dynamic_render",
-  "interaction": "rotate_zoom_enabled",
+  "device_adapt": "responsive_mobile_ready",
   "status": "GREEN_HIGHLIGHT_ACTIVE"
 }</pre>
         </div>
@@ -704,7 +747,7 @@ sebra82_synapse.json
 
         function resizeCanvas() {
             canvas.width = canvas.parentElement.clientWidth - 32;
-            canvas.height = 220;
+            canvas.height = window.innerWidth <= 900 ? 260 : 220;
         }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
@@ -882,3 +925,4 @@ sebra82_synapse.json
     </script>
 </body>
 </html>
+
