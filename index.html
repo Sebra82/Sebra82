@@ -1,9 +1,4 @@
-To improve zoom capabilities on mobile devices without breaking your existing SEBRA82 v167.1 architecture, we need to address two primary flaws in the current touch handler:
- * Weak Pinch-to-Zoom Scaling: The current touchmove calculation uses a sluggish power-law factor that makes zooming feel unresponsive or stuck when trying to pinch deeply into structures.
- * Hardcoded Zoom Caps: The minimum zoom floor is fixed at 2.0, which prevents smooth transitioning into angstrom/sub-atomic scales unless the Atomic button is explicitly clicked.
-The Fix
-The touch-handling block within bindGestures() has been upgraded to use an exponential ratio mapping (Math.exp). This provides fluid, 1:1 finger tracking, letting you pull right through the particle matrix smoothly. The minimum zoom floor has also been relaxed to allow deep inspection without breaking the render matrix.
-Here is the fully stabilized and improved version ready for deployment:
+
 <!DOCTYPE html>
 <html lang="en" class="dark h-full w-full">
 <head>
