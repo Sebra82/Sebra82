@@ -1,4 +1,5 @@
-import { mat4, vec3 } from 'https://cdn.jsdelivr.net/npm/gl-matrix@3.4.3/+esm';
+const { mat4, vec3 } = glMatrix;
+
 
 // ==========================================
 // 1. GLOBAL UI & ERROR HANDLERS
