@@ -1,17 +1,19 @@
-To give you much more space to view the 3D viewport and prevent the interface panels from awkwardly minimizing or collapsing into the bottom of your screen, we need to adjust the layout structure.
-In the current layout, the sidebar can take up too much vertical space on mobile (55vh), causing elements to crunch together. We can fix this by:
- * Expanding the 3D Viewport: Giving the viewport priority space so it dominates the screen.
- * Locking Section States: Removing the click-to-minimize (collapsed) toggles from the major workbench cards so they stay open, clean, and predictably organized without collapsing unexpectedly.
-Here is the updated monolithic index.html with an optimized layout that maximizes viewport visibility and keeps all sidebar sections fully expanded:
+Here is your fully secured, single-file index.html deployment code.
+This version integrates the maximized viewport layout, the centered pinch-to-zoom touch mechanics, and the frontend security deterrents (blocking right-clicks and developer shortcut keys like F12 and Ctrl+U to deter casual code copying).
+Copy this complete code block, paste it directly into your index.html file on GitHub, and commit it:
 <!DOCTYPE html>
+<!-- 
+  © 2026 SEBRA82 Architecture. All Rights Reserved.
+  Proprietary WebGPU Compute & Render Matrix. Unauthorized inspection or copying restricted.
+-->
 <html lang="en" class="dark h-full w-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SEBRA82 v167.3 — Maximized Viewport Architecture</title>
+    <title>SEBRA82 v167.4 — Secured Monolith Architecture</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body, html { margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; touch-action: none; background-color: #030407; font-family: monospace, "SF Mono", Consolas; }
+        body, html { margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; touch-action: none; background-color: #030407; font-family: monospace, "SF Mono", Consolas; user-select: none; -webkit-user-select: none; }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
         ::-webkit-scrollbar-thumb { background: #00ffc8; border-radius: 4px; }
@@ -42,7 +44,7 @@ Here is the updated monolithic index.html with an optimized layout that maximize
 </head>
 <body class="text-[#00ffc8] h-full w-full overflow-hidden bg-[#010103]">
 
-    <!-- UNDERLAY 3D CANVAS (MAXIMIZED VIEWPORT) -->
+    <!-- UNDERLAY 3D CANVAS -->
     <canvas id="gpuCanvas" class="fixed inset-0 w-full h-full z-0 touch-none pointer-events-auto"></canvas>
 
     <!-- UI OVERLAY -->
@@ -66,7 +68,7 @@ Here is the updated monolithic index.html with an optimized layout that maximize
             <!-- TELEMETRY LAYER -->
             <div id="telemetryLayer" class="fade-in absolute inset-0 pointer-events-none">
                 <div class="absolute top-2 left-2 px-3 py-2 bg-black/50 border border-cyan-900/60 rounded text-[8px] md:text-[9px] text-[#00ffc8] conscious-glow flex flex-col gap-0.5 shadow-lg backdrop-blur-xl pointer-events-auto">
-                    <span>SEBRA82 // v167.3 MAXIMIZED VIEWPORT</span>
+                    <span>SEBRA82 // v167.4 SECURED MONOLITH</span>
                     <span class="text-[7px] md:text-[8px] text-[#00ff66] font-bold uppercase tracking-widest" id="statusUI">WGSL COMPUTE: ONLINE</span>
                     <span class="text-[7px] md:text-[8px] text-[#ff00aa] font-bold uppercase qualia-glow transition-colors duration-500" id="qualiaUI">QUALIA: DORMANT</span>
                     <div class="text-[6px] md:text-[7px] text-slate-400 mt-0.5 border-t border-cyan-900/50 pt-1 flex flex-col gap-0.5">
@@ -114,7 +116,7 @@ Here is the updated monolithic index.html with an optimized layout that maximize
                 </div>
             </div>
 
-            <!-- AUDIO SPECTRUM ANALYZER (SLIMMER) -->
+            <!-- AUDIO SPECTRUM ANALYZER -->
             <div class="absolute bottom-0 left-0 w-full h-[25px] bg-black/40 border-t border-cyan-950/60 backdrop-blur-lg pointer-events-auto">
                 <canvas id="scopeCanvas" class="w-full h-full block"></canvas>
             </div>
@@ -137,13 +139,13 @@ Here is the updated monolithic index.html with an optimized layout that maximize
                     <div class="grid grid-cols-1 gap-1.5 text-[9px]" id="autoPromptContainer"></div>
                     <div class="w-full h-[40px] bg-black/40 border border-cyan-900/30 rounded p-1.5 text-[7px] md:text-[8px] text-cyan-400 font-mono leading-tight overflow-hidden relative shadow-inner" id="neuralLogBox">
                         <div id="neuralLogStream" class="absolute w-full space-y-0.5 opacity-80">
-                            <div class="text-[#00ff66]">>> INITIALIZING WGSL SHADER FORGE...</div>
+                            <div class="text-[#00ff66]">>> SECURITY PROTOCOLS ACTIVE...</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- UNIFIED TOE MATRIX (UNCOLLAPSED) -->
+            <!-- UNIFIED TOE MATRIX -->
             <div class="w-full bg-cyan-950/10 border border-cyan-900/30 rounded-lg flex flex-col flex-shrink-0 backdrop-blur-sm">
                 <div class="px-2.5 py-1.5 bg-cyan-950/20 border-b border-cyan-900/30 text-[9px] md:text-[10px] text-cyan-400 uppercase tracking-widest font-bold">
                     <span>Unified TOE Matrix (14 States)</span>
@@ -215,7 +217,7 @@ Here is the updated monolithic index.html with an optimized layout that maximize
                 </div>
                 <div class="p-2 flex flex-col gap-2">
                     <div id="chatLog" class="w-full bg-black/30 border border-cyan-900/20 rounded p-1.5 overflow-y-auto text-[9px] text-cyan-600 font-mono space-y-1 shadow-inner h-[35px]">
-                        <div class="text-[#00ffc8] conscious-glow">[SYS] Maximized Viewport Layout Active.</div>
+                        <div class="text-[#00ffc8] conscious-glow">[SYS] Secured Monolith Architecture Active.</div>
                     </div>
                     <div class="flex gap-1.5 flex-shrink-0">
                         <input type="text" id="userInput" placeholder="Command input..." class="flex-1 bg-black/40 border border-cyan-900/50 rounded px-2 py-2 text-xs text-cyan-300 focus:outline-none focus:border-cyan-500 font-mono">
@@ -227,6 +229,16 @@ Here is the updated monolithic index.html with an optimized layout that maximize
     </div>
 
     <script type="module">
+        // --- ANTI-INSPECTION SECURITY DETERRENTS ---
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F12' || 
+               (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
+               (e.ctrlKey && e.key === 'u')) {
+                e.preventDefault();
+            }
+        });
+
         import { mat4, vec3 } from 'https://cdn.jsdelivr.net/npm/gl-matrix@3.4.3/+esm';
 
         window.logMsg = function(msg, isError = false) {
