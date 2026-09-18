@@ -1,13 +1,4 @@
-If the 3D canvas is blank and the buttons are dead, it means the browser is completely failing to load or execute the app.js file over the network. This happens on GitHub Pages when folder paths get mismatched during a repository update, causing a fatal 404 error for the JavaScript.
-We are going to use the nuclear option.
-We will bypass GitHub's folder routing entirely by embedding the complete engine directly inside your index.html file. When the HTML loads, the JavaScript is mathematically guaranteed to load with it.
-The Single-File Override
- * Open your repository on GitHub.
- * Click on index.html and click the Pencil icon.
- * Delete everything inside.
- * Paste the complete master block below.
- * Click Commit changes.
-   (You can safely delete your js folder and style.css file after doing this, as they are no longer needed).
+
 <!DOCTYPE html>
 <html lang="en" class="dark h-full w-full">
 <head>
