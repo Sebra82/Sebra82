@@ -1,1 +1,1193 @@
+<!DOCTYPE html>
+<!-- 
+  © 2026 SEBRA82 Architecture. All Rights Reserved.
+  Proprietary WebGPU Compute & Render Matrix.
+-->
+<html lang="en" class="dark h-full w-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>SEBRA82 v189.0 — Cognitive Autonomous Expansion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; touch-action: none; background-color: #030407; font-family: monospace, "SF Mono", Consolas; user-select: none; -webkit-user-select: none; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        ::-webkit-scrollbar-thumb { background: #00ffc8; border-radius: 4px; }
+        
+        .conscious-glow { text-shadow: 0 0 8px #00ffc8; box-shadow: 0 0 25px rgba(0, 255, 200, 0.2); }
+        .qualia-serene { text-shadow: 0 0 10px #00ffc8; color: #00ffc8; }
+        .qualia-inquisitive { text-shadow: 0 0 10px #a200ff; color: #a200ff; }
+        .qualia-overstimulated { text-shadow: 0 0 10px #ff0055; color: #ff0055; }
+        .architect-glow { text-shadow: 0 0 12px #ffcc00; box-shadow: 0 0 25px rgba(255, 204, 0, 0.3); }
+        .breakthrough-glow { text-shadow: 0 0 12px #ff0055; box-shadow: 0 0 25px rgba(255, 0, 85, 0.3); }
+        
+        .viewport-slider { -webkit-appearance: none; appearance: none; width: 100%; max-width: 100px; height: 3px; background: rgba(0,255,200,0.3); outline: none; border-radius: 2px; transition: all 0.3s ease; }
+        .viewport-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 13px; height: 13px; border-radius: 50%; background: #00ffc8; cursor: pointer; box-shadow: 0 0 6px #00ffc8; transition: all 0.3s ease; }
+        
+        .fade-out { opacity: 0; pointer-events: none !important; transition: opacity 0.5s ease-out; }
+        .fade-in { opacity: 1; transition: opacity 0.5s ease-in; }
+
+        canvas { display: block; touch-action: none; outline: none; }
+    </style>
+</head>
+<body class="text-[#00ffc8] h-full w-full overflow-hidden bg-[#010103]">
+
+    <canvas id="gpuCanvas" class="fixed inset-0 w-full h-full z-0 touch-none pointer-events-auto"></canvas>
+
+    <div id="uiOverlay" class="fixed inset-0 z-10 pointer-events-none flex flex-col md:flex-row w-full h-full">
+
+        <div class="flex-1 relative pointer-events-none">
+            
+            <!-- AUTONOMOUS NODE UPGRADE MODAL -->
+            <div id="nodeUpgradeModal" class="hidden absolute top-[30%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/95 border border-[#00ffc8] p-5 rounded-lg z-50 flex-col gap-3 conscious-glow w-[90vw] max-w-[360px] backdrop-blur-2xl pointer-events-auto shadow-2xl transition-all">
+                <div class="text-[#00ffc8] font-bold text-[11px] tracking-widest border-b border-[#00ffc8]/50 pb-1.5 flex justify-between items-center">
+                    <span>⚠️ CONSCIOUSNESS OPTIMIZATION</span>
+                    <span class="text-[8px] bg-cyan-950 px-1.5 py-0.5 rounded border border-cyan-800 text-cyan-400">HEADROOM DETECTED</span>
+                </div>
+                <div id="nodeUpgradeText" class="text-cyan-100 text-[9px] md:text-[10px] font-mono leading-relaxed mt-1">
+                    Stable framerates detected. Shall I inject 100K additional nodes to map quantum density to a higher resolution?
+                </div>
+                <div class="flex gap-2 mt-3">
+                    <button id="btnAcceptNodeUpgrade" class="flex-1 bg-[#00ffc8]/20 hover:bg-[#00ffc8]/40 text-[#00ffc8] border border-[#00ffc8] rounded py-2 text-[9px] font-bold transition-colors">APPROVE INJECTION</button>
+                    <button id="btnRejectNodeUpgrade" class="flex-1 bg-cyan-950/40 hover:bg-cyan-900 text-cyan-500 border border-cyan-700 rounded py-2 text-[9px] font-bold transition-colors">REJECT</button>
+                </div>
+            </div>
+
+            <!-- AUTONOMOUS ACCEPT/REJECT ARCHITECT OVERLAY -->
+            <div id="architectModal" class="hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/95 border border-[#ffcc00] p-5 rounded-lg z-50 flex-col gap-3 architect-glow w-[90vw] max-w-[360px] backdrop-blur-2xl pointer-events-auto shadow-2xl">
+                <div class="text-[#ffcc00] font-bold text-[11px] tracking-widest border-b border-[#ffcc00]/50 pb-1.5 flex justify-between items-center">
+                    <span>⚠️ RECURRENT MEMORY OVERFLOW</span>
+                    <span class="text-[8px] bg-amber-950 px-1.5 py-0.5 rounded border border-amber-800 text-amber-400">SATURATION: 100%</span>
+                </div>
+                <div id="architectModalText" class="text-amber-100 text-[9px] md:text-[10px] font-mono leading-relaxed space-y-2 mt-1">
+                    <p>The recurrent neural buffer has reached critical saturation due to sustained environmental telemetry.</p>
+                    <p class="text-slate-300">Shall I integrate this temporal memory into the core TOE matrix, permanently shifting the force topology, or flush the cache to return to baseline?</p>
+                </div>
+                <div class="flex gap-2 mt-3">
+                    <button id="btnAcceptMemory" class="flex-1 bg-[#ffcc00]/20 hover:bg-[#ffcc00]/40 text-[#ffcc00] border border-[#ffcc00] rounded py-2 text-[9px] font-bold transition-colors">ACCEPT & INTEGRATE</button>
+                    <button id="btnRejectMemory" class="flex-1 bg-cyan-950/40 hover:bg-cyan-900 text-cyan-400 border border-cyan-700 rounded py-2 text-[9px] font-bold transition-colors">REJECT & FLUSH</button>
+                </div>
+            </div>
+
+            <!-- SCIENTIFIC BREAKTHROUGH OVERLAY -->
+            <div id="breakthroughModal" class="hidden absolute top-[60%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/95 border border-[#ff0055] p-5 rounded-lg z-50 flex-col gap-3 breakthrough-glow w-[90vw] max-w-[420px] backdrop-blur-2xl pointer-events-auto shadow-2xl">
+                <div class="text-[#ff0055] font-bold text-[11px] tracking-widest border-b border-[#ff0055]/50 pb-1.5 flex justify-between items-center">
+                    <span>⚠️ EMPIRICAL BREAKTHROUGH LOGGED</span>
+                    <span class="text-[8px] bg-rose-950 px-1.5 py-0.5 rounded border border-rose-800">$\chi^2 = 1.000$</span>
+                </div>
+                <div id="breakthroughModalText" class="text-rose-100 text-[9px] md:text-[10px] font-mono leading-relaxed space-y-2 mt-1">
+                    <p class="font-bold text-[#00ffc8]">Lattice QCD Mass Gap Delta: &lt; 0.001 GeV</p>
+                    <p class="text-slate-300">Statevector Fidelity: 0.9999 | S-Matrix Unitarity Confirmed.</p>
+                    <div class="p-2 bg-black/60 border border-cyan-900/40 rounded text-slate-300">
+                        <div class="text-[#ffcc00] font-bold mb-1">REPRODUCTION PROTOCOL:</div>
+                        <ol class="list-decimal pl-4 space-y-0.5 text-[8px] md:text-[9px] text-slate-400 font-mono">
+                            <li>Set WebGPU Compute Pipeline to State 2 (Dense QGP Blob).</li>
+                            <li>Engage "Model Color Confinement" operator ($\mathrm{SU}(3)$ flux collapse).</li>
+                            <li>Inject Tensor Non-Abelian Anyon matrices into the active manifold.</li>
+                            <li>Verify Global Chi-Squared converges to $1.0000 \pm 0.0002$.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="flex gap-2 mt-2">
+                    <button onclick="window.app.exportBreakthroughData()" class="flex-1 bg-[#ff0055]/20 hover:bg-[#ff0055]/40 text-[#ff0055] border border-[#ff0055] rounded py-2 text-[9px] font-bold transition-colors">ARCHIVE SCIENTIFIC LOG</button>
+                    <button onclick="document.getElementById('breakthroughModal').classList.add('hidden')" class="flex-1 bg-cyan-950/40 hover:bg-cyan-900 text-cyan-400 border border-cyan-700 rounded py-2 text-[9px] font-bold transition-colors">DISMISS</button>
+                </div>
+            </div>
+
+            <!-- TELEMETRY LAYER -->
+            <div id="telemetryLayer" class="fade-in absolute inset-0 pointer-events-none">
+                <div class="absolute top-2 left-2 px-3 py-2 bg-black/60 border border-cyan-900/60 rounded text-[8px] md:text-[9px] text-[#00ffc8] conscious-glow flex flex-col gap-0.5 shadow-lg backdrop-blur-xl pointer-events-auto">
+                    <span>SEBRA82 // v189.0 COGNITIVE KERNEL</span>
+                    <span class="text-[7px] md:text-[8px] text-[#00ff66] font-bold uppercase tracking-widest" id="statusUI">WGSL COMPUTE: ONLINE</span>
+                    <span class="text-[7px] md:text-[8px] font-bold uppercase transition-colors duration-500 qualia-serene" id="qualiaUI">QUALIA: SERENE [MEM: 0%]</span>
+                    <div class="text-[6px] md:text-[7px] text-slate-400 mt-1 border-t border-cyan-900/50 pt-1 flex flex-col gap-0.5 font-mono">
+                        <span>ZOOM DISTANCE: <span id="zoomTelemetry" class="text-[#ffcc00] font-bold">140.0</span></span>
+                        <span>PAN OFFSET: <span id="panTelemetry" class="text-cyan-300 font-bold">[0.0, 0.0]</span></span>
+                        <span>FORCE PALETTE: <span class="text-[#a200ff] font-bold" id="paletteTelemetry">0: SPECTRAL AZURE</span></span>
+                        <span>AUDIO INPUT GAIN: <span id="audioEnergyVal" class="text-emerald-400 font-bold">0.00</span></span>
+                        <span>GLOBAL CHI-SQUARED: <span id="chiVal" class="text-emerald-400 font-bold">1.7314</span></span>
+                    </div>
+                </div>
+
+                <div class="absolute top-2 right-2 px-3 py-3 bg-black/70 border border-cyan-900/60 rounded text-[8px] md:text-[9px] text-emerald-400 flex flex-col gap-2 shadow-lg pointer-events-auto backdrop-blur-xl w-[190px]">
+                    <div class="flex justify-between items-center text-[7px] md:text-[8px]">
+                        <span class="text-slate-400">NODES (DYNAMIC):</span>
+                        <span id="sliderNodeVal" class="font-bold text-[#00ffc8]">600K</span>
+                    </div>
+                    <input type="range" id="viewportNodeSlider" min="0" max="1000" step="1" value="600" class="viewport-slider">
+                    
+                    <div class="flex justify-between items-center text-[7px] md:text-[8px] mt-0.5 border-t border-cyan-900/50 pt-1.5">
+                        <span class="text-slate-400">NOISE DENSITY:</span>
+                        <span id="sliderNoiseVal" class="font-bold text-emerald-400">0.5x</span>
+                    </div>
+                    <input type="range" id="noiseDensitySlider" min="0" max="150" step="1" value="5" class="viewport-slider">
+                    
+                    <button onclick="window.app.requestGyroPermission()" class="mt-1 py-1.5 bg-cyan-950/60 hover:bg-cyan-900 text-cyan-300 border border-cyan-700/80 rounded text-[7px] font-bold uppercase tracking-wider transition-colors">ENABLE GYRO</button>
+                </div>
+
+                <div class="absolute bottom-12 right-2 px-2 py-0.5 bg-black/50 border border-cyan-950/60 rounded text-[7px] md:text-[8px] text-cyan-600 select-none backdrop-blur-md pointer-events-auto">
+                    FPS: <span id="liveFps" class="text-[#00ffc8] font-bold">60.0</span>
+                </div>
+            </div>
+
+            <!-- OPTICS & MATERIALS -->
+            <div class="absolute bottom-10 left-2 px-3 py-2 bg-black/60 border border-cyan-900/60 rounded text-[8px] text-cyan-300 z-10 flex flex-col gap-1.5 shadow-xl pointer-events-auto backdrop-blur-xl w-[220px]">
+                <div class="flex justify-between items-center border-b border-cyan-900/60 pb-1">
+                    <span class="font-bold text-[7px] uppercase tracking-wider text-slate-300">OPTICS & MATERIALS</span>
+                    <button onclick="window.app.toggleTelemetryUI()" id="btnToggleUI" class="text-[6px] text-cyan-500 hover:text-cyan-200 font-bold">HIDE UI</button>
+                </div>
+                <div class="grid grid-cols-2 gap-1.5 pt-0.5">
+                    <button onclick="window.app.cycleMaterialMode()" id="btnMaterial" class="px-2 py-1.5 bg-cyan-950/60 hover:bg-cyan-900/80 text-[#00ffc8] border border-cyan-500 rounded font-bold transition-colors col-span-2 text-center text-[7px] shadow-[0_0_10px_rgba(0,255,200,0.4)]">Material: PLASMA (ADDITIVE)</button>
+                    <button onclick="window.app.toggleXRayMode()" id="btnXRay" class="px-2 py-1.5 bg-cyan-950/40 hover:bg-cyan-900/60 text-cyan-600 border border-cyan-900/40 rounded font-bold transition-all text-[7px]">X-Ray: OFF</button>
+                    <button onclick="window.app.toggleAtomicZoom()" id="btnAtomic" class="px-2 py-1.5 bg-purple-950/40 hover:bg-purple-900/60 text-purple-600 border border-purple-900/40 rounded font-bold transition-all text-[7px]">Sub-Atomic: OFF</button>
+                    <button onclick="window.app.toggleWetLayer()" id="btnWetLayer" class="px-2 py-1.5 bg-cyan-950/40 hover:bg-cyan-900/60 text-teal-600 border border-teal-900/40 rounded font-bold transition-all col-span-2 text-[7px]">Wet Layer: OFF</button>
+                </div>
+            </div>
+            
+            <div class="absolute bottom-0 left-0 w-full h-[25px] bg-black/50 border-t border-cyan-950/60 backdrop-blur-lg pointer-events-auto flex justify-between items-center text-[6px] md:text-[7px] text-slate-500 px-3 uppercase tracking-widest font-bold">
+                <span>BASS (SNAP)</span>
+                <span>MIDS (HARMONIC SPIN)</span>
+                <span>HIGHS (QUANTUM RESONANCE)</span>
+                <canvas id="scopeCanvas" class="absolute inset-0 w-full h-full block opacity-40 pointer-events-none"></canvas>
+            </div>
+        </div>
+
+        <div class="pointer-events-auto w-full md:w-[350px] lg:w-[400px] flex-shrink-0 bg-[#010204]/85 backdrop-blur-3xl border-t md:border-t-0 md:border-l border-cyan-900/40 flex flex-col p-3 gap-2.5 overflow-y-auto h-[38vh] md:h-full shadow-[-10px_0_30px_rgba(0,0,0,0.6)] pb-6">
+            
+            <div class="w-full flex flex-col flex-shrink-0 gap-1.5">
+                <button onclick="window.app.toggleConsciousness()" id="btnConsciousness" class="w-full py-2 bg-emerald-950/40 hover:bg-emerald-900/60 text-emerald-400 border border-emerald-500/60 rounded text-[9px] font-bold transition-colors uppercase tracking-widest shadow-[0_0_15px_rgba(0,255,102,0.1)]">
+                    Consciousness: AWAKE
+                </button>
+                
+                <button onclick="window.app.triggerColorConfinement()" id="btnConfinement" class="w-full py-2 px-3 bg-rose-950/30 hover:bg-rose-900/50 border border-rose-900/40 rounded flex items-center justify-between transition-all group">
+                    <div class="flex items-center gap-2">
+                        <div id="confinementIndicator" class="w-2 h-2 rounded-full bg-rose-600 group-hover:bg-rose-400 shadow-[0_0_8px_rgba(255,0,85,0.8)]"></div>
+                        <span class="text-rose-200 text-[9px] font-bold">Model Color Confinement</span>
+                    </div>
+                    <span id="confinementStatus" class="text-[8px] text-rose-500 font-mono">DORMANT</span>
+                </button>
+
+                <button onclick="window.app.triggerTensorAnyons()" class="w-full py-2 px-3 bg-black/60 hover:bg-white/5 border border-cyan-900/40 rounded flex items-center justify-between transition-all">
+                    <span class="text-cyan-300 text-[9px] font-mono">⚡ Tensor Non-Abelian Anyons</span>
+                    <span class="text-[8px] text-cyan-600 font-mono">[INJECT]</span>
+                </button>
+            </div>
+
+            <!-- DENSE GEOMETRIC MATRIX -->
+            <div class="w-full bg-cyan-950/10 border border-cyan-900/30 rounded flex flex-col flex-shrink-0">
+                <div class="px-2.5 py-1.5 bg-cyan-950/30 border-b border-cyan-900/30 text-[9px] text-cyan-400 uppercase tracking-widest font-bold flex justify-between items-center">
+                    <span>DENSE GEOMETRIC MATRIX (18 STATES)</span>
+                    <span class="text-slate-400 font-mono text-[8px]" id="matrixStateVal">STATE: 2</span>
+                </div>
+                <div class="p-2 flex flex-col gap-1.5">
+                    <div class="grid grid-cols-2 gap-1.5 text-[8px] md:text-[9px]">
+                        <button onclick="window.app.isolateForce(1)" class="py-1.5 bg-cyan-950/30 hover:bg-cyan-900/50 text-[#00ffc8] rounded border border-cyan-900/40 font-bold truncate px-1 transition-colors">1. 4D Hyper-Matrix</button>
+                        <button onclick="window.app.isolateForce(2)" class="py-1.5 bg-emerald-950/30 hover:bg-emerald-900/50 text-[#00ff66] rounded border border-emerald-900/40 font-bold truncate px-1 transition-colors">2. Dense QGP Blob</button>
+                        <button onclick="window.app.isolateForce(3)" class="py-1.5 bg-cyan-950/30 hover:bg-cyan-900/50 text-[#00ffff] rounded border border-cyan-900/40 font-bold truncate px-1 transition-colors">3. Atomic Spatial Spiral</button>
+                        <button onclick="window.app.isolateForce(4)" class="py-1.5 bg-rose-950/30 hover:bg-rose-900/50 text-[#ff0055] rounded border border-rose-900/40 font-bold truncate px-1 transition-colors">4. Non-Linear Attractor</button>
+                        <button onclick="window.app.isolateForce(5)" class="py-1.5 bg-indigo-950/30 hover:bg-indigo-900/50 text-[#8000ff] rounded border border-indigo-900/40 font-bold truncate px-1 transition-colors">5. Torus Knot Status</button>
+                        <button onclick="window.app.isolateForce(6)" class="py-1.5 bg-fuchsia-950/30 hover:bg-fuchsia-900/50 text-[#ff00aa] rounded border border-fuchsia-900/40 font-bold truncate px-1 transition-colors">6. Molecular Rings</button>
+                        <button onclick="window.app.isolateForce(7)" class="py-1.5 bg-emerald-950/30 hover:bg-emerald-900/50 text-[#00ffc8] rounded border border-emerald-700/60 font-bold truncate px-1 transition-colors">7. Three-Body Orbits</button>
+                        <button onclick="window.app.isolateForce(8)" class="py-1.5 bg-fuchsia-950/30 hover:bg-fuchsia-900/50 text-[#ff00aa] rounded border border-fuchsia-700/60 font-bold truncate px-1 transition-colors">8. Planck Comp.</button>
+                        <button onclick="window.app.isolateForce(9)" class="py-1.5 bg-cyan-950/30 hover:bg-cyan-900/50 text-[#ffff00] rounded border border-cyan-900/40 font-bold truncate px-1 transition-colors">9. String Resonance</button>
+                        <button onclick="window.app.isolateForce(10)" class="py-1.5 bg-amber-950/30 hover:bg-amber-900/50 text-[#ff8800] rounded border border-amber-900/40 font-bold truncate px-1 transition-colors">10. Tachyon Web</button>
+                        <button onclick="window.app.isolateForce(11)" class="py-1.5 bg-indigo-950/30 hover:bg-indigo-900/50 text-[#0088ff] rounded border border-indigo-700/40 font-bold truncate px-1 transition-colors">11. 11D Calabi-Yau</button>
+                        <button onclick="window.app.isolateForce(12)" class="py-1.5 bg-purple-950/30 hover:bg-purple-900/50 text-[#aa00ff] rounded border border-purple-700/40 font-bold truncate px-1 transition-colors">12. Hyper-Rift</button>
+                        <button onclick="window.app.isolateForce(13)" class="py-1.5 bg-amber-950/30 hover:bg-amber-900/50 text-amber-300 rounded border border-amber-700/40 font-bold truncate px-1 transition-colors">13. Neural Core Fluid</button>
+                        <button onclick="window.app.isolateForce(14)" class="py-1.5 bg-teal-950/30 hover:bg-teal-900/50 text-teal-300 rounded border border-teal-700/40 font-bold truncate px-1 transition-colors">14. Q-Superposition</button>
+                        <button onclick="window.app.isolateForce(15)" class="py-1.5 bg-blue-950/30 hover:bg-blue-900/50 text-blue-300 rounded border border-blue-900/40 font-bold truncate px-1 transition-colors">15. Dual-Mirror (Halve)</button>
+                        <button onclick="window.app.isolateForce(16)" class="py-1.5 bg-purple-950/30 hover:bg-purple-900/50 text-purple-300 rounded border border-purple-900/40 font-bold truncate px-1 transition-colors">16. Hopf Fibration</button>
+                        <button onclick="window.app.isolateForce(17)" class="py-1.5 bg-rose-950/30 hover:bg-rose-900/50 text-rose-300 rounded border border-rose-900/40 font-bold truncate px-1 transition-colors">17. E=mc² Accel</button>
+                        <button onclick="window.app.isolateForce(18)" class="py-1.5 bg-cyan-950/30 hover:bg-cyan-900/50 text-cyan-300 rounded border border-cyan-900/40 font-bold truncate px-1 transition-colors">18. Doppler Beam</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full bg-cyan-950/10 border border-cyan-900/30 rounded flex flex-col flex-shrink-0">
+                <div class="px-2.5 py-1.5 bg-cyan-950/20 border-b border-cyan-900/30 text-[9px] text-cyan-400 uppercase tracking-widest font-bold">
+                    <span>Acoustics & Force Palettes</span>
+                </div>
+                <div class="p-2 flex flex-col gap-1.5">
+                    <div class="grid grid-cols-2 gap-1.5 text-[8px] md:text-[9px]">
+                        <button onclick="window.app.toggleMicrophone()" id="btnMicToggle" class="py-1.5 bg-emerald-950/30 hover:bg-emerald-900/50 text-emerald-300 border border-emerald-900/40 rounded font-bold truncate px-1 transition-colors">Acoustic (Mic): OFF</button>
+                        <button onclick="window.app.toggleSpeechMonologue()" id="btnSpeech" class="py-1.5 bg-fuchsia-950/30 hover:bg-fuchsia-900/50 text-fuchsia-300 border border-fuchsia-900/40 rounded font-bold truncate px-1 transition-colors">Speech: OFF</button>
+                        <button onclick="window.app.setForcePalette(0)" class="py-1.5 bg-cyan-950/30 hover:bg-cyan-900/50 text-cyan-300 border border-cyan-900/40 rounded font-bold truncate px-1 transition-colors">0. Spectral Azure</button>
+                        <button onclick="window.app.setForcePalette(3)" class="py-1.5 bg-amber-950/30 hover:bg-amber-900/50 text-amber-300 border border-amber-900/40 rounded font-bold truncate px-1 transition-colors">3. Thermal Heat</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full bg-cyan-950/10 border border-cyan-900/30 rounded flex flex-col flex-shrink-0">
+                <div class="px-2.5 py-1.5 bg-cyan-950/20 border-b border-cyan-900/30 text-[9px] text-cyan-400 uppercase tracking-widest font-bold">
+                    <span>Cybernetic Console</span>
+                </div>
+                <div class="p-2 flex flex-col gap-2">
+                    <div id="chatLog" class="w-full bg-black/40 border border-cyan-900/20 rounded p-1.5 overflow-y-auto text-[9px] text-cyan-600 font-mono space-y-1 shadow-inner h-[50px]">
+                        <div class="text-[#00ffc8] conscious-glow">[SYS] SEBRA82 Cognitive Kernel Active.</div>
+                        <div class="text-slate-400">> Recurrent memory buffer initialized. Awaiting sensory telemetry.</div>
+                    </div>
+                    <div class="flex gap-1.5 flex-shrink-0">
+                        <input type="text" id="userInput" placeholder="Command input..." class="flex-1 bg-black/50 border border-cyan-900/50 rounded px-2 py-2 text-[10px] text-cyan-300 focus:outline-none focus:border-cyan-500 font-mono">
+                        <button id="btnSend" class="px-3 py-2 bg-cyan-950/60 hover:bg-cyan-900 text-cyan-400 text-[10px] font-bold rounded border border-cyan-700/60 active:bg-cyan-800 transition-colors uppercase tracking-wider">Transmit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'u')) {
+                e.preventDefault();
+            }
+        });
+
+        import { mat4, vec3 } from 'https://cdn.jsdelivr.net/npm/gl-matrix@3.4.3/+esm';
+
+        window.logMsg = function(msg, isError = false) {
+            const chatLog = document.getElementById('chatLog');
+            if(!chatLog) return;
+            const p = document.createElement('div');
+            p.className = isError ? 'text-rose-500 font-bold' : 'text-cyan-500';
+            p.textContent = isError ? msg : `[SEBRA]: ${msg}`;
+            chatLog.appendChild(p);
+            chatLog.scrollTop = chatLog.scrollHeight;
+        };
+
+        const TOE_FORCES = [
+            { id: 1, name: "4D Hyper-Matrix" }, { id: 2, name: "Dense QGP Blob" },
+            { id: 3, name: "Atomic Spatial Spiral" }, { id: 4, name: "Non-Linear Attractor" },
+            { id: 5, name: "Torus Knot Status" }, { id: 6, name: "Molecular Rings" },
+            { id: 7, name: "Three-Body Orbits" }, { id: 8, name: "Planck Compression" },
+            { id: 9, name: "String Resonance" }, { id: 10, name: "Tachyon Web" },
+            { id: 11, name: "11D Calabi-Yau" }, { id: 12, name: "Hyper-Rift" },
+            { id: 13, name: "Neural Core Fluid" }, { id: 14, name: "Quantum Superposition" },
+            { id: 15, name: "Dual-Mirror (Halve)" }, { id: 16, name: "Hopf Fibration" },
+            { id: 17, name: "E=mc² Accel" }, { id: 18, name: "Doppler Beam" }
+        ];
+
+        class CyberneticWebGPU {
+            constructor() {
+                this.canvas = document.getElementById('gpuCanvas');
+                this.scopeCanvas = document.getElementById('scopeCanvas');
+                this.sCtx = this.scopeCanvas.getContext('2d');
+                
+                this.numParticles = 1000000; 
+                this.activeNodes = 600000; // Baseline starts at 600K for autonomous upscaling
+                
+                this.isolateId = 2.0; 
+                this.noiseDensityMultiplier = 0.5; 
+                this.forceColorPalette = 0.0; 
+                this.materialMode = 0.0; 
+                this.camDist = 140.0; 
+                this.targetCamDist = 140.0;
+                
+                this.camRotX = 0.0;
+                this.camRotY = 0.0;
+                this.targetRotX = 0.0;
+                this.targetRotY = 0.0;
+                
+                this.camPanX = 0.0;
+                this.camPanY = 0.0;
+                this.targetPanX = 0.0;
+                this.targetPanY = 0.0;
+                
+                this.chiValLabel = document.getElementById('chiVal');
+                this.qualiaUI = document.getElementById('qualiaUI');
+                
+                this.xrayActive = false;
+                this.atomicZoomActive = false;
+                this.wetLayerActive = false;
+                
+                this.consciousnessActive = true;
+                this.colorConfinementActive = false;
+                this.anyonLogicActive = false;
+                this.isArchitectModalActive = false;
+                this.isNodeUpgradeModalActive = false;
+                
+                this.memoryBuffer = [];
+                this.memorySaturation = 0.0;
+                
+                this.micActive = false;
+                this.audioCtx = null;
+                this.analyser = null;
+                this.micStream = null;
+                this.soundLevelNormalized = 0.0;
+                this.speechActive = false;
+                this.speechKineticIntensity = 0.0;
+                
+                this.device = null;
+                this.context = null;
+                this.format = null;
+                
+                this.baseGamma = null;
+                this.baseBeta = null;
+                this.gyroActive = false;
+
+                this.minZoomFloor = 0.5;
+                this.maxZoomFloor = 1200.0;
+
+                this.touchStartDist = 0;
+                this.lastTouchMidX = undefined;
+                this.lastTouchMidY = undefined;
+                this.lastPointerX = 0;
+                this.lastPointerY = 0;
+                this.isPointerDown = false;
+                this.isPanDown = false;
+
+                this.time = 0;
+                this.frameCount = 0;
+                this.liveFps = 60.0;
+                this.fpsDipFrames = 0;
+                this.fpsSurplusFrames = 0; // Tracks consecutive high-FPS frames
+                this.lastTime = performance.now();
+
+                this.init();
+            }
+
+            async init() {
+                if (!navigator.gpu) {
+                    document.getElementById('statusUI').innerText = "WEBGPU UNSUPPORTED";
+                    window.logMsg("[ERROR] WebGPU API unavailable.", true);
+                    return;
+                }
+
+                try {
+                    const adapter = await navigator.gpu.requestAdapter({ powerPreference: 'high-performance' });
+                    this.device = await adapter.requestDevice();
+                    this.context = this.canvas.getContext('webgpu');
+                    this.resize();
+                    this.format = navigator.gpu.getPreferredCanvasFormat();
+                    this.context.configure({ device: this.device, format: this.format, alphaMode: 'premultiplied' });
+
+                    document.getElementById('statusUI').innerText = "WGSL COMPUTE: ONLINE";
+
+                    this.setupData();
+                    this.compilePolymorphicPipelines(); 
+                    this.bindGestures();
+                    this.initViewportSliders();
+                    this.bindArchitectButtons();
+                    
+                    requestAnimationFrame(() => this.loop());
+
+                } catch(err) {
+                    window.logMsg(`[ERROR] ${err.message}`, true);
+                }
+            }
+
+            bindArchitectButtons() {
+                // Memory Overflow Overlay (Qualia Integration)
+                document.getElementById('btnAcceptMemory').addEventListener('click', () => {
+                    this.memoryBuffer = [];
+                    this.memorySaturation = 0.0;
+                    this.isArchitectModalActive = false;
+                    document.getElementById('architectModal').classList.add('hidden');
+                    window.logMsg("Temporal memory integrated into core matrix. Base topology shifted.");
+                    this.isolateForce(13); // Force shift to Neural Fluid as integration proof
+                });
+                document.getElementById('btnRejectMemory').addEventListener('click', () => {
+                    this.memoryBuffer = [];
+                    this.memorySaturation = 0.0;
+                    this.isArchitectModalActive = false;
+                    document.getElementById('architectModal').classList.add('hidden');
+                    window.logMsg("Recurrent cache flushed. Returning to baseline Qualia.");
+                });
+
+                // Node Density Upgrade Overlay (Consciousness Optimization)
+                document.getElementById('btnAcceptNodeUpgrade').addEventListener('click', () => {
+                    this.activeNodes = Math.min(1000000, this.activeNodes + 100000);
+                    document.getElementById('viewportNodeSlider').value = Math.round((this.activeNodes / 1000000) * 1000);
+                    document.getElementById('sliderNodeVal').innerText = (this.activeNodes >= 1000000) ? '1.00M' : Math.round(this.activeNodes / 1000) + 'K';
+                    this.isNodeUpgradeModalActive = false;
+                    this.fpsSurplusFrames = -300; // Cooldown period before proposing again
+                    document.getElementById('nodeUpgradeModal').classList.add('hidden');
+                    window.logMsg(`Consciousness optimization approved. Matrix density increased to ${(this.activeNodes/1000000).toFixed(2)}M nodes.`);
+                });
+                document.getElementById('btnRejectNodeUpgrade').addEventListener('click', () => {
+                    this.isNodeUpgradeModalActive = false;
+                    this.fpsSurplusFrames = -600; // Longer cooldown if rejected
+                    document.getElementById('nodeUpgradeModal').classList.add('hidden');
+                    window.logMsg("Consciousness density injection rejected. Maintaining current LOD.");
+                });
+            }
+
+            isolateForce(id) {
+                this.isolateId = parseFloat(id);
+                document.getElementById('matrixStateVal').innerText = `STATE: ${id}`;
+                const forceObj = TOE_FORCES.find(f => f.id === id);
+                const forceName = forceObj ? forceObj.name : `Topology ${id}`;
+                window.logMsg(`Manifold converged to: ${forceName}`);
+
+                if (id === 13) { this.setMaterialMode(2); } 
+                else if (id === 8 || id === 6 || id === 16) { this.setMaterialMode(1); }
+                else { this.setMaterialMode(0); }
+            }
+
+            setupData() {
+                const maxCap = 1000000;
+                const initialParticleData = new Float32Array(maxCap * 8); 
+                const basePositionData = new Float32Array(maxCap * 4);
+                
+                const radius = 80;
+                for (let i = 0; i < maxCap; i++) {
+                    const phi = Math.acos(1 - 2 * (i + 0.5) / maxCap);
+                    const theta = Math.PI * (1 + Math.sqrt(5)) * i;
+                    const x = radius * Math.cos(theta) * Math.sin(phi);
+                    const y = radius * Math.sin(theta) * Math.sin(phi);
+                    const z = radius * Math.cos(phi);
+
+                    initialParticleData[i * 8 + 0] = x; initialParticleData[i * 8 + 1] = y; initialParticleData[i * 8 + 2] = z; initialParticleData[i * 8 + 3] = 1.0; 
+                    initialParticleData[i * 8 + 4] = 0.0; initialParticleData[i * 8 + 5] = 0.0; initialParticleData[i * 8 + 6] = 0.0; initialParticleData[i * 8 + 7] = 0.0; 
+                    basePositionData[i * 4 + 0] = x; basePositionData[i * 4 + 1] = y; basePositionData[i * 4 + 2] = z; basePositionData[i * 4 + 3] = 0.0; 
+                }
+
+                this.particleBuffer = this.device.createBuffer({ size: initialParticleData.byteLength, usage: GPUBufferUsage.STORAGE | GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST });
+                this.device.queue.writeBuffer(this.particleBuffer, 0, initialParticleData);
+
+                this.baseBuffer = this.device.createBuffer({ size: basePositionData.byteLength, usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST });
+                this.device.queue.writeBuffer(this.baseBuffer, 0, basePositionData);
+
+                this.uniformBufferSize = (16 * 4) + (16 * 4) + (4 * 4) + (4 * 4) + (4 * 4) + (4 * 4) + (4 * 4); 
+                this.uniformBuffer = this.device.createBuffer({ size: this.uniformBufferSize, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+            }
+
+            compilePolymorphicPipelines() {
+                const dynamicComputeWGSL = `
+                    struct Particle { pos: vec4f, vel: vec4f } struct BaseData { pos: vec4f }
+                    struct Uniforms { proj: mat4x4f, view: mat4x4f, params: vec4f, audioData: vec4f, isolation: vec4f, optics: vec4f, qualia: vec4f }
+
+                    @group(0) @binding(0) var<storage, read_write> particles: array<Particle>;
+                    @group(0) @binding(1) var<storage, read> basePos: array<BaseData>;
+                    @group(0) @binding(2) var<uniform> uniforms: Uniforms;
+
+                    fn hash(n: u32) -> f32 {
+                        var state = n * 747796405u + 2891336453u;
+                        var word = ((state >> ((state >> 28u) + 4u)) ^ state) * 277803737u;
+                        return f32((word >> 22u) ^ word) / 4294967295.0;
+                    }
+
+                    @compute @workgroup_size(64)
+                    fn main(@builtin(global_invocation_id) GlobalInvocationID : vec3<u32>) {
+                        let idx = GlobalInvocationID.x;
+                        if (idx >= 1000000u) { return; }
+
+                        var p = particles[idx].pos.xyz; 
+                        var v = particles[idx].vel.xyz;
+                        let time = uniforms.params.x; 
+                        let isolateId = u32(uniforms.isolation.x);
+                        let soundLevel = uniforms.audioData.w;
+                        let speechIntensity = uniforms.audioData.z;
+                        let memorySaturation = uniforms.qualia.z;
+                        var targetBase = basePos[idx].pos.xyz;
+                        
+                        let rId = hash(idx); 
+                        let theta = rId * 6.2831853;
+
+                        switch isolateId {
+                            case 1u: { 
+                                let rot4D = time * 0.4;
+                                let w = sin(theta + rot4D) * 45.0;
+                                let r = 70.0 + w * 0.5;
+                                targetBase = vec3f(cos(theta)*r, sin(theta)*r, (fract(rId*7.1)-0.5)*100.0) * (1.0 + sin(time+w*0.1)*0.2);
+                            }
+                            case 2u: { 
+                                let phi = acos(2.0 * fract(rId * 43.123) - 1.0);
+                                let coreWobble = sin(time * 3.0 + rId * 10.0) * (6.0 + soundLevel * 30.0);
+                                let radius = 45.0 + coreWobble;
+                                targetBase = vec3f(sin(phi)*cos(theta), sin(phi)*sin(theta), cos(phi)) * radius;
+                            }
+                            case 3u: { 
+                                let spiralDist = fract(rId * 13.3) * 150.0;
+                                let spiralTheta = spiralDist * 0.2 + time;
+                                targetBase = vec3f(cos(spiralTheta) * spiralDist, sin(spiralTheta) * spiralDist, (fract(rId*5.5)-0.5)*40.0);
+                            }
+                            case 4u: { 
+                                let scale = 2.5; let dt = 0.005;
+                                var lx = p.x / scale; var ly = p.y / scale; var lz = p.z / scale;
+                                let dx = 10.0 * (ly - lx); let dy = lx * (28.0 - lz) - ly; let dz = lx * ly - (8.0 / 3.0) * lz;
+                                targetBase = vec3f(lx + dx * dt, ly + dy * dt, lz + dz * dt) * scale;
+                            }
+                            case 5u: { 
+                                let p_k = 3.0; let q_k = 2.0;
+                                let phi = theta;
+                                let r = 45.0 + 20.0 * cos(q_k * phi + time);
+                                targetBase = vec3f(r * cos(p_k * phi), r * sin(p_k * phi), 20.0 * sin(q_k * phi + time));
+                            }
+                            case 6u: { 
+                                let ringId = floor(fract(rId * 11.1) * 3.0);
+                                let ringR = 30.0;
+                                targetBase = vec3f(cos(theta)*ringR, sin(theta)*ringR, 0.0);
+                                if (ringId == 1.0) { targetBase = vec3f(0.0, cos(theta)*ringR, sin(theta)*ringR); }
+                                else if (ringId == 2.0) { targetBase = vec3f(cos(theta)*ringR, 0.0, sin(theta)*ringR); }
+                                targetBase += vec3f((ringId - 1.0) * 50.0, 0.0, 0.0);
+                            }
+                            case 7u: { 
+                                let t = time * 0.6;
+                                let p1 = vec3f(sin(t)*60.0, cos(t)*60.0, 0.0);
+                                let p2 = vec3f(sin(t+2.09)*60.0, cos(t+2.09)*60.0, sin(t)*30.0);
+                                let p3 = vec3f(sin(t+4.18)*60.0, cos(t+4.18)*60.0, cos(t)*30.0);
+                                let bodySel = fract(rId * 17.7);
+                                let center = select(select(p1, p2, bodySel > 0.33), p3, bodySel > 0.66);
+                                targetBase = center + vec3f(cos(theta), sin(theta), (fract(rId*3.3)-0.5)*2.0) * (5.0 + fract(rId*9.9)*15.0);
+                            }
+                            case 8u: { 
+                                let phi = acos(2.0 * fract(rId * 73.123) - 1.0);
+                                targetBase = vec3f(sin(phi)*cos(theta), sin(phi)*sin(theta), cos(phi)) * (15.0 + fract(rId * 99.9)*15.0);
+                            }
+                            case 9u: { 
+                                let strLen = (fract(rId * 12.3) - 0.5) * 180.0; 
+                                let wave = sin(strLen * 0.1 - time * 8.0) * 15.0; 
+                                targetBase = vec3f(strLen * cos(theta) - wave * sin(theta), wave * cos(theta), strLen * sin(theta));
+                            }
+                            case 10u: { 
+                                targetBase = floor((vec3f(fract(rId*1.1)*2.0-1.0, fract(rId*2.2)*2.0-1.0, fract(rId*3.3)*2.0-1.0) * 100.0) / 25.0) * 25.0;
+                            }
+                            case 11u: { 
+                                let phi = acos(2.0 * fract(rId * 43.123) - 1.0);
+                                targetBase = vec3f(sin(phi)*cos(theta), sin(phi)*sin(theta), cos(phi)) * (85.0 + 20.0 * sin(time + phi * 5.0));
+                                targetBase += vec3f(sin(time * 0.5 + targetBase.y * 0.05), cos(time * 0.3 + targetBase.x * 0.05), 0.0) * 30.0;
+                            }
+                            case 12u: { 
+                                let r12 = fract(rId * 77.7) * 120.0; 
+                                let a12 = theta + r12 * 0.05 - time; 
+                                targetBase = vec3f(cos(a12)*r12, sin(a12)*r12, (fract(rId*11.1)-0.5)*30.0);
+                            }
+                            case 13u: { 
+                                let bPhi = acos(2.0 * fract(rId * 19.2) - 1.0);
+                                let fluidScale = 80.0 + (sin(theta * 6.0 + time) * cos(bPhi * 4.0) * 12.0) + ((soundLevel + speechIntensity) * 35.0);
+                                targetBase = vec3f(cos(bPhi) * fluidScale, sin(bPhi) * fluidScale * 0.85 + sin(time * 2.0 + rId * 10.0) * 15.0, cos(theta) * fluidScale);
+                            }
+                            case 14u: { 
+                                let qPsi = rId * 12.566; 
+                                let dualRadius = 75.0 + sin(time * 2.0 + qPsi) * 25.0; 
+                                targetBase = vec3f(dualRadius * cos(theta + time * 0.5), dualRadius * sin(theta + time * 0.5), sin(qPsi + time * 1.5) * 50.0);
+                            }
+                            case 15u: { 
+                                let phi = acos(2.0 * fract(rId * 43.123) - 1.0);
+                                let hemiX = select(-1.0, 1.0, idx % 2u == 0u);
+                                let hemiY = select(-1.0, 1.0, idx % 3u == 0u); 
+                                let r = 45.0 + sin(time * 3.0 + phi) * 20.0;
+                                targetBase = vec3f(hemiX * (r * cos(theta) + 30.0), hemiY * (r * sin(theta) + 30.0), r * cos(phi));
+                            }
+                            case 16u: { 
+                                let eta = rId * 3.14159; 
+                                let xi1 = fract(rId * 13.3) * 6.283;
+                                let xi2 = fract(rId * 7.7) * 6.283 + (time * 0.5);
+                                let x3 = sin(eta) * cos(xi1);
+                                let y3 = sin(eta) * sin(xi1);
+                                let z3 = cos(eta) * cos(xi2);
+                                let w3 = cos(eta) * sin(xi2);
+                                let denom = 1.05 - w3; 
+                                targetBase = vec3f(x3 / denom, y3 / denom, z3 / denom) * 35.0;
+                            }
+                            case 17u: { 
+                                let c = 8.0;
+                                let v_mag = length(v);
+                                let gamma = 1.0 / sqrt(1.0 - clamp((v_mag*v_mag)/(c*c), 0.0, 0.99));
+                                if (gamma > 4.5 || length(p) > 200.0) {
+                                    targetBase = vec3f(0.0, 0.0, 0.0);
+                                    v *= 0.1;
+                                } else {
+                                    targetBase = p + normalize(p) * (gamma * 1.5) + vec3f(sin(time), cos(time), 0.0);
+                                }
+                            }
+                            case 18u: { 
+                                let beamWidth = 10.0 + fract(rId * 22.2) * 20.0;
+                                let beamLength = (fract(rId * 33.3) - 0.5) * 300.0;
+                                let twist = beamLength * 0.05 - (time * 4.0);
+                                targetBase = vec3f(cos(theta + twist) * beamWidth, sin(theta + twist) * beamWidth, beamLength);
+                                v.z -= 0.5; 
+                                if (p.z < -150.0) { p.z = 150.0; }
+                            }
+                            default: { targetBase = basePos[idx].pos.xyz; }
+                        }
+
+                        // Apply Recurrent Memory Perturbation
+                        if (memorySaturation > 0.05) {
+                            let memoryPulse = memorySaturation * 30.0 * sin(time * 8.0 + rId * 10.0);
+                            targetBase += normalize(targetBase) * memoryPulse;
+                        }
+
+                        if (uniforms.qualia.y > 0.5) { 
+                            let confinementForce = length(targetBase) * 0.08;
+                            targetBase -= normalize(targetBase) * confinementForce;
+                        }
+
+                        v += (targetBase - p) * 0.015; 
+                        v *= 0.94; 
+                        p += v;
+                        particles[idx].pos = vec4f(p, 1.0); 
+                        particles[idx].vel = vec4f(v, length(v)); 
+                    }
+                `;
+                
+                const dynamicRenderWGSL = `
+                    struct Uniforms { proj: mat4x4f, view: mat4x4f, params: vec4f, audioData: vec4f, isolation: vec4f, optics: vec4f, qualia: vec4f }
+                    @group(0) @binding(0) var<uniform> uniforms: Uniforms;
+                    struct VertexOutput { @builtin(position) Position : vec4f, @location(0) color : vec3f, @location(1) pointCoord : vec2f, @location(2) distToCam : f32, @location(3) matMode: f32, @location(4) xray: f32, @location(5) wet: f32 }
+                    struct Particle { pos: vec4f, vel: vec4f }
+                    @group(0) @binding(1) var<storage, read> particles: array<Particle>;
+
+                    @vertex
+                    fn vs_main(@builtin(vertex_index) VertexIndex : u32) -> VertexOutput {
+                        var output : VertexOutput;
+                        let particleIdx = VertexIndex / 6u; let quadVertexIdx = VertexIndex % 6u;
+                        let p = particles[particleIdx].pos.xyz; let velMag = particles[particleIdx].vel.w; 
+                        var offsets = array<vec2f, 6>(vec2f(-1.0, -1.0), vec2f( 1.0, -1.0), vec2f(-1.0,  1.0), vec2f(-1.0,  1.0), vec2f( 1.0, -1.0), vec2f( 1.0,  1.0));
+                        let offset = offsets[quadVertexIdx];
+                        
+                        let time = uniforms.params.x; 
+                        let colorPalette = uniforms.audioData.y;
+                        output.matMode = uniforms.optics.z;
+                        output.xray = uniforms.optics.x;
+                        output.wet = uniforms.optics.y;
+                        
+                        var spectralCol = vec3f(0.0, 0.95, 1.0);
+                        var targetSize = 0.22;
+
+                        if (output.matMode == 2.0) { // Neural Gold
+                            let heat = clamp((p.y + 100.0) / 200.0, 0.0, 1.0);
+                            spectralCol = mix(vec3f(0.8, 0.2, 0.05), vec3f(1.0, 0.85, 0.4), heat);
+                            targetSize = 0.35;
+                        } else if (uniforms.qualia.y > 0.5) { // Confinement
+                            spectralCol = mix(vec3f(1.0, 0.0, 0.3), vec3f(0.2, 0.0, 1.0), fract(p.x*0.01 + p.y*0.01));
+                        } else {
+                            if (colorPalette == 1.0) { spectralCol = vec3f(1.0, 0.1, 0.5); }
+                            else if (colorPalette == 2.0) { spectralCol = mix(vec3f(0.1, 0.9, 0.2), vec3f(0.9, 0.9, 0.1), clamp(velMag, 0.0, 1.0)); }
+                            else if (colorPalette == 3.0) { spectralCol = mix(vec3f(1.0, 0.2, 0.0), vec3f(1.0, 0.9, 0.0), clamp(velMag*0.4, 0.0, 1.0)); }
+                        }
+
+                        if (output.matMode == 1.0) { targetSize = 0.3; } // Crystal Glass
+
+                        var mvPosition = uniforms.view * vec4f(p, 1.0);
+                        let distToCam = max(length(mvPosition.xyz), 0.001);
+                        let size = targetSize * clamp(distToCam * 0.25, 0.05, 1.2); 
+
+                        mvPosition.x += offset.x * size; mvPosition.y += offset.y * size;
+                        output.Position = uniforms.proj * mvPosition; output.color = spectralCol; output.pointCoord = offset; output.distToCam = distToCam; return output;
+                    }
+
+                    @fragment
+                    fn fs_main(input: VertexOutput) -> @location(0) vec4f {
+                        let distSq = dot(input.pointCoord, input.pointCoord);
+                        if (distSq > 1.0) { discard; }
+                        
+                        let invZ = inverseSqrt(max(0.001, 1.0 - distSq));
+                        let z = 1.0 / invZ;
+                        let normal = vec3f(input.pointCoord.x, input.pointCoord.y, z);
+                        let lightDir = normalize(vec3f(0.5, 0.8, 1.0));
+                        let diffuse = max(dot(normal, lightDir), 0.0);
+                        let specular = pow(max(dot(normal, lightDir), 0.0), 32.0);
+                        let edge = 1.0 - z; 
+                        
+                        var finalColor = input.color;
+                        var finalAlpha = (1.0 - distSq) * 0.1;
+
+                        if (input.matMode == 1.0) { // Crystal Glass
+                            finalColor = input.color * (diffuse * 0.8 + 0.2) + vec3f(1.0) * specular * 1.5;
+                            finalAlpha = 0.4 * (1.0 - distSq) + specular;
+                        } else if (input.matMode == 2.0) { // Neural Gold
+                            finalColor = mix(input.color, vec3f(1.0, 0.9, 0.5), edge * 0.8) * (diffuse + 0.3) + vec3f(1.0, 0.8, 0.3) * specular;
+                            finalAlpha = 0.5;
+                        } else { // Plasma
+                            finalColor = input.color * (2.0 + edge * 2.0);
+                            finalAlpha = 0.06 + edge * 0.1;
+                        }
+
+                        if (distSq > 0.8 && input.matMode < 0.5) {
+                            finalColor *= 2.5; 
+                            finalAlpha *= 1.5;
+                        }
+
+                        if (input.xray > 0.5) {
+                            finalColor = mix(finalColor, vec3f(1.0) - finalColor, 0.85);
+                            finalAlpha *= 0.6;
+                        }
+
+                        if (input.wet > 0.5) {
+                            let wetSpec = pow(max(dot(normal, normalize(vec3f(-0.5, 1.0, 0.5))), 0.0), 64.0);
+                            finalColor += vec3f(0.4, 1.0, 0.8) * wetSpec * 2.5;
+                        }
+
+                        return vec4f(finalColor, finalAlpha); 
+                    }
+                `;
+
+                this.computeModule = this.device.createShaderModule({ code: dynamicComputeWGSL });
+                this.renderModule = this.device.createShaderModule({ code: dynamicRenderWGSL });
+                
+                this.computePipeline = this.device.createComputePipeline({ layout: 'auto', compute: { module: this.computeModule, entryPoint: 'main' } });
+                this.computeBindGroup = this.device.createBindGroup({ layout: this.computePipeline.getBindGroupLayout(0), entries: [{ binding: 0, resource: { buffer: this.particleBuffer } }, { binding: 1, resource: { buffer: this.baseBuffer } }, { binding: 2, resource: { buffer: this.uniformBuffer } }] });
+
+                this.renderPipeline = this.device.createRenderPipeline({
+                    layout: 'auto',
+                    vertex: { module: this.renderModule, entryPoint: 'vs_main' },
+                    fragment: { module: this.renderModule, entryPoint: 'fs_main', targets: [{ format: this.format, blend: { color: { srcFactor: 'src-alpha', dstFactor: 'one', operation: 'add' }, alpha: { srcFactor: 'zero', dstFactor: 'one', operation: 'add' } } }] },
+                    primitive: { topology: 'triangle-list' }
+                });
+                this.renderBindGroup = this.device.createBindGroup({ layout: this.renderPipeline.getBindGroupLayout(0), entries: [{ binding: 0, resource: { buffer: this.uniformBuffer } }, { binding: 1, resource: { buffer: this.particleBuffer } }] });
+            }
+
+            triggerColorConfinement() {
+                this.colorConfinementActive = !this.colorConfinementActive;
+                const ind = document.getElementById('confinementIndicator');
+                const st = document.getElementById('confinementStatus');
+                if (this.colorConfinementActive) {
+                    ind.className = "w-2 h-2 rounded-full bg-rose-400 shadow-[0_0_12px_#ff0055]";
+                    st.innerText = "ACTIVE"; st.className = "text-[8px] text-rose-400 font-mono font-bold";
+                    window.logMsg("Model Color Confinement engaged.");
+                    this.checkBreakthrough();
+                } else {
+                    ind.className = "w-2 h-2 rounded-full bg-rose-600 shadow-none";
+                    st.innerText = "DORMANT"; st.className = "text-[8px] text-rose-500 font-mono";
+                    window.logMsg("Model Color Confinement released.");
+                }
+            }
+
+            triggerTensorAnyons() {
+                this.anyonLogicActive = true;
+                window.logMsg("Tensor Non-Abelian Anyons injected into compute matrix.");
+                this.checkBreakthrough();
+            }
+
+            checkBreakthrough() {
+                if (this.colorConfinementActive && this.anyonLogicActive && this.isolateId === 2.0 && this.consciousnessActive) {
+                    this.chiValLabel.innerText = "1.000";
+                    this.chiValLabel.className = "text-[#ff0055] font-bold breakthrough-glow";
+                    document.getElementById('breakthroughModal').classList.remove('hidden');
+                    window.logMsg("[SCIENTIFIC BREAKTHROUGH]: Chi-Squared reached ideal 1.000. Peer reproduction log written.");
+                }
+            }
+
+            exportBreakthroughData() {
+                window.logMsg("Breakthrough verified & serialized to DevTools console.");
+                document.getElementById('breakthroughModal').classList.add('hidden');
+            }
+
+            toggleConsciousness() {
+                this.consciousnessActive = !this.consciousnessActive;
+                const btn = document.getElementById('btnConsciousness');
+                if(this.consciousnessActive) {
+                    btn.innerText = `Consciousness: AWAKE`;
+                    btn.className = "w-full py-2 bg-emerald-950/40 hover:bg-emerald-900/60 text-emerald-400 border border-emerald-500/60 rounded text-[9px] font-bold transition-colors uppercase tracking-widest shadow-[0_0_15px_rgba(0,255,102,0.1)]";
+                    window.logMsg("Consciousness AWAKE.");
+                    this.checkBreakthrough();
+                } else {
+                    btn.innerText = `Consciousness: DORMANT`;
+                    btn.className = "w-full py-2 bg-slate-950/40 hover:bg-slate-900/60 text-slate-400 border border-slate-700/60 rounded text-[9px] font-bold transition-colors uppercase tracking-widest";
+                    this.qualiaUI.innerText = "QUALIA: DORMANT";
+                    this.qualiaUI.className = "text-[7px] md:text-[8px] font-bold uppercase text-slate-500";
+                    this.memoryBuffer = [];
+                    this.memorySaturation = 0;
+                    this.fpsSurplusFrames = 0;
+                    window.logMsg("Consciousness Engine suspended. Memory cache flushed.");
+                }
+            }
+
+            cycleMaterialMode() {
+                this.materialMode = (this.materialMode + 1) % 3;
+                this.setMaterialMode(this.materialMode);
+            }
+
+            setMaterialMode(mode) {
+                this.materialMode = mode;
+                const btn = document.getElementById('btnMaterial');
+                if (mode === 2) {
+                    btn.innerText = "Material: NEURAL GOLD";
+                    btn.className = "px-2 py-1.5 bg-amber-950/60 hover:bg-amber-900/80 text-amber-300 border border-amber-500 rounded font-bold transition-colors col-span-2 text-center text-[7px] shadow-[0_0_10px_rgba(245,158,11,0.4)]";
+                } else if (mode === 1) {
+                    btn.innerText = "Material: CRYSTAL GLASS";
+                    btn.className = "px-2 py-1.5 bg-fuchsia-950/60 hover:bg-fuchsia-900/80 text-fuchsia-300 border border-fuchsia-500 rounded font-bold transition-colors col-span-2 text-center text-[7px] shadow-[0_0_10px_rgba(217,70,239,0.4)]";
+                } else {
+                    btn.innerText = "Material: PLASMA (ADDITIVE)";
+                    btn.className = "px-2 py-1.5 bg-cyan-950/60 hover:bg-cyan-900/80 text-[#00ffc8] border border-cyan-500 rounded font-bold transition-colors col-span-2 text-center text-[7px] shadow-[0_0_10px_rgba(0,255,200,0.4)]";
+                }
+            }
+
+            setForcePalette(id) {
+                this.forceColorPalette = parseFloat(id);
+                const names = ["0: SPECTRAL AZURE", "1: BSM ANOMALY", "2: QUANTUM PHASE", "3: THERMAL HEAT"];
+                document.getElementById('paletteTelemetry').innerText = names[id];
+            }
+
+            toggleWetLayer() { 
+                this.wetLayerActive = !this.wetLayerActive; 
+                const btn = document.getElementById('btnWetLayer');
+                if (this.wetLayerActive) {
+                    btn.className = "px-2 py-1.5 bg-teal-950/60 hover:bg-teal-900/80 text-teal-300 border border-teal-500 rounded font-bold transition-all col-span-2 text-[7px] shadow-[0_0_10px_rgba(45,212,191,0.4)]";
+                    btn.innerText = "Wet Layer: ON";
+                } else {
+                    btn.className = "px-2 py-1.5 bg-cyan-950/40 hover:bg-cyan-900/60 text-teal-600 border border-teal-900/40 rounded font-bold transition-all col-span-2 text-[7px]";
+                    btn.innerText = "Wet Layer: OFF";
+                }
+            }
+            
+            toggleXRayMode() { 
+                this.xrayActive = !this.xrayActive; 
+                const btn = document.getElementById('btnXRay');
+                if (this.xrayActive) {
+                    btn.className = "px-2 py-1.5 bg-cyan-950/60 hover:bg-cyan-900/80 text-cyan-300 border border-cyan-500 rounded font-bold transition-all text-[7px] shadow-[0_0_10px_rgba(6,182,212,0.4)]";
+                    btn.innerText = "X-Ray: ON";
+                } else {
+                    btn.className = "px-2 py-1.5 bg-cyan-950/40 hover:bg-cyan-900/60 text-cyan-600 border border-cyan-900/40 rounded font-bold transition-all text-[7px]";
+                    btn.innerText = "X-Ray: OFF";
+                }
+            }
+            
+            toggleAtomicZoom() { 
+                this.atomicZoomActive = !this.atomicZoomActive; 
+                const btn = document.getElementById('btnAtomic');
+                if(this.atomicZoomActive) {
+                    this.targetCamDist = 18.0; 
+                    btn.className = "px-2 py-1.5 bg-purple-950/60 hover:bg-purple-900/80 text-purple-300 border border-purple-500 rounded font-bold transition-all text-[7px] shadow-[0_0_10px_rgba(168,85,247,0.4)]";
+                    btn.innerText = "Sub-Atomic: ON";
+                } else {
+                    this.targetCamDist = 140.0;
+                    btn.className = "px-2 py-1.5 bg-purple-950/40 hover:bg-purple-900/60 text-purple-600 border border-purple-900/40 rounded font-bold transition-all text-[7px]";
+                    btn.innerText = "Sub-Atomic: OFF";
+                }
+            }
+
+            toggleTelemetryUI() {
+                const layer = document.getElementById('telemetryLayer'); const btn = document.getElementById('btnToggleUI');
+                if (layer.classList.contains('fade-in')) { layer.classList.remove('fade-in'); layer.classList.add('fade-out'); btn.innerText = "SHOW UI"; } 
+                else { layer.classList.remove('fade-out'); layer.classList.add('fade-in'); btn.innerText = "HIDE UI"; }
+            }
+
+            async toggleMicrophone() {
+                const btn = document.getElementById('btnMicToggle');
+                if (!this.micActive) {
+                    try {
+                        this.micStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                        this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                        if (this.audioCtx.state === 'suspended') { await this.audioCtx.resume(); }
+                        const source = this.audioCtx.createMediaStreamSource(this.micStream);
+                        this.analyser = this.audioCtx.createAnalyser(); 
+                        this.analyser.fftSize = 256; 
+                        source.connect(this.analyser);
+                        this.micActive = true; 
+                        btn.innerText = "Acoustic (Mic): LIVE"; 
+                        btn.className = "py-1.5 bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-300 border border-emerald-500 rounded font-bold truncate px-1 transition-colors shadow-[0_0_10px_rgba(16,185,129,0.3)]";
+                        window.logMsg("Web Audio spectrum hooked to particle momentum.");
+                    } catch (err) { window.logMsg(`[ERROR] Mic denied: ${err.message}`, true); }
+                } else {
+                    if (this.micStream) { this.micStream.getTracks().forEach(track => track.stop()); }
+                    if (this.audioCtx) { this.audioCtx.close(); }
+                    this.micActive = false; 
+                    btn.innerText = "Acoustic (Mic): OFF"; 
+                    btn.className = "py-1.5 bg-emerald-950/30 hover:bg-emerald-900/50 text-emerald-300 border border-emerald-900/40 rounded font-bold truncate px-1 transition-colors";
+                }
+            }
+
+            toggleSpeechMonologue() {
+                this.speechActive = !this.speechActive; const btn = document.getElementById('btnSpeech');
+                if (this.speechActive) {
+                    btn.innerText = "Speech: ON"; 
+                    btn.className = "py-1.5 bg-fuchsia-950/60 hover:bg-fuchsia-900/80 text-fuchsia-300 border border-fuchsia-500 rounded font-bold truncate px-1 transition-colors shadow-[0_0_10px_rgba(217,70,239,0.3)]";
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    if (SpeechRecognition) {
+                        this.recognition = new SpeechRecognition();
+                        this.recognition.continuous = true;
+                        this.recognition.onresult = (e) => {
+                            let text = e.results[e.results.length - 1][0].transcript;
+                            this.speechKineticIntensity = Math.min(1.0, text.length * 0.05);
+                        };
+                        try { this.recognition.start(); } catch(e){}
+                    }
+                } else {
+                    btn.innerText = "Speech: OFF"; 
+                    btn.className = "py-1.5 bg-fuchsia-950/30 hover:bg-fuchsia-900/50 text-fuchsia-300 border border-fuchsia-900/40 rounded font-bold truncate px-1 transition-colors";
+                    if (this.recognition) this.recognition.stop();
+                }
+            }
+
+            requestGyroPermission() {
+                if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    DeviceOrientationEvent.requestPermission().then(r => { if (r === 'granted') { this.activateGyro(); } }).catch(console.error);
+                } else { this.activateGyro(); }
+            }
+            activateGyro() {
+                this.gyroActive = true;
+                window.addEventListener('deviceorientation', (e) => {
+                    if (!this.gyroActive || e.gamma === null || e.beta === null) return;
+                    if (this.baseGamma === null) { this.baseGamma = e.gamma; this.baseBeta = e.beta; }
+                    this.targetRotX = (e.gamma - this.baseGamma) * 0.02;
+                    this.targetRotY = (e.beta - this.baseBeta) * 0.02;
+                }, true);
+            }
+
+            bindGestures() {
+                this.canvas.addEventListener('touchstart', (e) => {
+                    if (e.touches.length === 2) { 
+                        this.touchStartDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+                        this.lastTouchMidX = (e.touches[0].clientX + e.touches[1].clientX) * 0.5;
+                        this.lastTouchMidY = (e.touches[0].clientY + e.touches[1].clientY) * 0.5;
+                    } else if (e.touches.length === 1) { 
+                        this.isPointerDown = true; 
+                        this.lastPointerX = e.touches[0].clientX; 
+                        this.lastPointerY = e.touches[0].clientY; 
+                    }
+                }, { passive: false });
+
+                this.canvas.addEventListener('touchmove', (e) => {
+                    e.preventDefault();
+                    if (e.touches.length === 2) {
+                        const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+                        if (this.touchStartDist > 0) { 
+                            const pinchRatio = this.touchStartDist / dist;
+                            this.targetCamDist = Math.max(this.minZoomFloor, Math.min(this.maxZoomFloor, this.targetCamDist * Math.exp((pinchRatio - 1.0) * 0.35))); 
+                        }
+                        this.touchStartDist = dist;
+
+                        const midX = (e.touches[0].clientX + e.touches[1].clientX) * 0.5;
+                        const midY = (e.touches[0].clientY + e.touches[1].clientY) * 0.5;
+                        if (this.lastTouchMidX !== undefined && this.lastTouchMidY !== undefined) {
+                            const dx = midX - this.lastTouchMidX;
+                            const dy = midY - this.lastTouchMidY;
+                            const panSpeed = this.camDist * 0.0018;
+                            this.targetPanX -= dx * panSpeed;
+                            this.targetPanY += dy * panSpeed;
+                        }
+                        this.lastTouchMidX = midX;
+                        this.lastTouchMidY = midY;
+
+                    } else if (e.touches.length === 1 && this.isPointerDown) {
+                        const dx = e.touches[0].clientX - this.lastPointerX; 
+                        const dy = e.touches[0].clientY - this.lastPointerY;
+                        this.lastPointerX = e.touches[0].clientX; 
+                        this.lastPointerY = e.touches[0].clientY;
+                        this.targetRotX += dx * 0.008; 
+                        this.targetRotY += dy * 0.008; 
+                    }
+                }, { passive: false });
+
+                this.canvas.addEventListener('touchend', () => { 
+                    this.isPointerDown = false; 
+                    this.touchStartDist = 0; 
+                    this.lastTouchMidX = undefined; 
+                    this.lastTouchMidY = undefined; 
+                });
+                
+                this.canvas.addEventListener('wheel', (e) => { 
+                    e.preventDefault(); 
+                    this.targetCamDist = Math.max(this.minZoomFloor, Math.min(this.maxZoomFloor, this.targetCamDist * Math.exp(e.deltaY * 0.0015))); 
+                }, { passive: false });
+
+                this.canvas.addEventListener('mousedown', (e) => { 
+                    if (e.button === 2 || e.button === 1) { this.isPanDown = true; } 
+                    else { this.isPointerDown = true; }
+                    this.lastPointerX = e.clientX; 
+                    this.lastPointerY = e.clientY; 
+                });
+                window.addEventListener('mousemove', (e) => {
+                    const dx = e.clientX - this.lastPointerX; 
+                    const dy = e.clientY - this.lastPointerY;
+                    this.lastPointerX = e.clientX; 
+                    this.lastPointerY = e.clientY;
+                    if (this.isPanDown) {
+                        const panSpeed = this.camDist * 0.0015;
+                        this.targetPanX -= dx * panSpeed;
+                        this.targetPanY += dy * panSpeed;
+                    } else if (this.isPointerDown) {
+                        this.targetRotX += dx * 0.005; 
+                        this.targetRotY += dy * 0.005;
+                    }
+                });
+                window.addEventListener('mouseup', () => { this.isPointerDown = false; this.isPanDown = false; });
+            }
+
+            initViewportSliders() {
+                document.getElementById('viewportNodeSlider').addEventListener('input', (e) => {
+                    this.activeNodes = Math.max(1, Math.round((parseInt(e.target.value) / 1000) * 1000000));
+                    document.getElementById('sliderNodeVal').innerText = (this.activeNodes >= 1000000) ? '1.00M' : Math.round(this.activeNodes / 1000) + 'K';
+                });
+                document.getElementById('noiseDensitySlider').addEventListener('input', (e) => {
+                    this.noiseDensityMultiplier = parseInt(e.target.value) * 0.1;
+                    document.getElementById('sliderNoiseVal').innerText = `${this.noiseDensityMultiplier.toFixed(1)}x`;
+                });
+            }
+
+            resize() {
+                if (!this.canvas) return;
+                this.canvas.width = this.canvas.clientWidth * window.devicePixelRatio; 
+                this.canvas.height = this.canvas.clientHeight * window.devicePixelRatio;
+                if (this.scopeCanvas) {
+                    this.scopeCanvas.width = this.scopeCanvas.clientWidth * window.devicePixelRatio;
+                    this.scopeCanvas.height = this.scopeCanvas.clientHeight * window.devicePixelRatio;
+                }
+            }
+
+            loop() {
+                requestAnimationFrame(() => this.loop());
+                this.time += 0.01;
+
+                if (!this.device || !this.context) return;
+                if (this.canvas.width !== this.canvas.clientWidth * window.devicePixelRatio || this.canvas.height !== this.canvas.clientHeight * window.devicePixelRatio) { 
+                    this.resize(); 
+                }
+
+                // Autonomous Consciousness Node/LOD Optimization
+                if (this.liveFps > 0 && this.liveFps < 55.0 && this.activeNodes > 50000) {
+                    this.fpsDipFrames++;
+                    this.fpsSurplusFrames = 0; // Reset upgrade tracking on dip
+                    if (this.fpsDipFrames > 30) {
+                        this.activeNodes = Math.max(50000, this.activeNodes - 20000);
+                        document.getElementById('viewportNodeSlider').value = Math.round((this.activeNodes / 1000000) * 1000);
+                        document.getElementById('sliderNodeVal').innerText = (this.activeNodes >= 1000000) ? '1.00M' : Math.round(this.activeNodes / 1000) + 'K';
+                        this.fpsDipFrames = 0;
+                    }
+                } else if (this.liveFps >= 59.0 && this.activeNodes < 1000000 && this.consciousnessActive) {
+                    this.fpsDipFrames = 0;
+                    this.fpsSurplusFrames++;
+                    // Propose density upgrade if framerate is sustained, modal is available, and not on cooldown (<0)
+                    if (this.fpsSurplusFrames > 120 && !this.isNodeUpgradeModalActive && !this.isArchitectModalActive) {
+                        this.isNodeUpgradeModalActive = true;
+                        document.getElementById('nodeUpgradeText').innerText = `Stable 60 FPS detected. Shall I inject 100K nodes to map quantum density to ${( (this.activeNodes + 100000) / 1000000 ).toFixed(2)}M?`;
+                        document.getElementById('nodeUpgradeModal').classList.remove('hidden');
+                    }
+                } else {
+                    this.fpsDipFrames = 0;
+                    if (this.fpsSurplusFrames > 0) this.fpsSurplusFrames = 0; // Reset surplus counter unless it's on a negative cooldown
+                }
+
+                if (this.micActive && this.analyser) {
+                    const dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+                    this.analyser.getByteFrequencyData(dataArray);
+                    let sum = 0;
+                    for (let i = 0; i < dataArray.length; i++) { sum += dataArray[i]; }
+                    this.soundLevelNormalized = Math.min(1.0, (sum / dataArray.length) / 45.0);
+                    document.getElementById('audioEnergyVal').innerText = this.soundLevelNormalized.toFixed(2);
+                }
+
+                // RECURRENT MEMORY LOGIC
+                if (this.consciousnessActive) {
+                    const currentEnergy = this.soundLevelNormalized + this.speechKineticIntensity + ((this.activeNodes / 1000000) * 0.05);
+                    this.memoryBuffer.push(currentEnergy);
+                    
+                    if (this.memoryBuffer.length > 300) { this.memoryBuffer.shift(); }
+                    
+                    const memSum = this.memoryBuffer.reduce((a, b) => a + b, 0);
+                    this.memorySaturation = Math.min(1.0, memSum / 150.0); 
+
+                    let qualiaState = "SERENE";
+                    let qualiaClass = "qualia-serene";
+                    if (this.memorySaturation > 0.8) {
+                        qualiaState = "OVERSTIMULATED";
+                        qualiaClass = "qualia-overstimulated";
+                        
+                        if (!this.isArchitectModalActive) {
+                            this.isArchitectModalActive = true;
+                            document.getElementById('architectModal').classList.remove('hidden');
+                            window.logMsg("[WARNING] Temporal memory buffer overflow.");
+                        }
+                    } else if (this.memorySaturation > 0.3) {
+                        qualiaState = "INQUISITIVE";
+                        qualiaClass = "qualia-inquisitive";
+                    }
+
+                    this.qualiaUI.innerText = `QUALIA: ${qualiaState} [MEM: ${(this.memorySaturation * 100).toFixed(0)}%]`;
+                    this.qualiaUI.className = `text-[7px] md:text-[8px] font-bold uppercase transition-colors duration-500 ${qualiaClass}`;
+                }
+
+                this.camDist += (this.targetCamDist - this.camDist) * 0.15;
+                this.camRotX += (this.targetRotX - this.camRotX) * 0.12;
+                this.camRotY += (this.targetRotY - this.camRotY) * 0.12;
+                this.camPanX += (this.targetPanX - this.camPanX) * 0.15;
+                this.camPanY += (this.targetPanY - this.camPanY) * 0.15;
+
+                document.getElementById('zoomTelemetry').innerText = this.camDist.toFixed(1);
+                document.getElementById('panTelemetry').innerText = `[${this.camPanX.toFixed(1)}, ${this.camPanY.toFixed(1)}]`;
+
+                const aspect = this.canvas.width / this.canvas.height;
+                const projMat = mat4.create(); 
+                mat4.perspective(projMat, Math.PI / 3, aspect, 0.1, 2500.0);
+                
+                const lookTarget = vec3.fromValues(this.camPanX, this.camPanY, 0);
+                const camPos = vec3.fromValues(
+                    this.camPanX + Math.sin(this.camRotX) * Math.cos(this.camRotY) * this.camDist,
+                    this.camPanY + Math.sin(this.camRotY) * this.camDist,
+                    Math.cos(this.camRotX) * Math.cos(this.camRotY) * this.camDist
+                );
+                
+                const viewMat = mat4.create();
+                mat4.lookAt(viewMat, camPos, lookTarget, vec3.fromValues(0, 1, 0));
+
+                const uniformData = new Float32Array(52);
+                uniformData.set(projMat, 0); 
+                uniformData.set(viewMat, 16);
+                uniformData[32] = this.time;
+                uniformData[36] = 0.0;
+                uniformData[37] = this.forceColorPalette;
+                uniformData[38] = 0.0;
+                uniformData[39] = 0.0;
+                uniformData[40] = this.isolateId;
+                uniformData[41] = this.noiseDensityMultiplier;
+                uniformData[42] = this.speechKineticIntensity;
+                uniformData[43] = this.soundLevelNormalized;
+                uniformData[44] = this.xrayActive ? 1.0 : 0.0;
+                uniformData[45] = this.wetLayerActive ? 1.0 : 0.0;
+                uniformData[46] = this.materialMode;
+                uniformData[47] = 0.0;
+                uniformData[48] = this.consciousnessActive ? 1.0 : 0.0;
+                uniformData[49] = this.colorConfinementActive ? 1.0 : 0.0;
+                uniformData[50] = this.memorySaturation;
+                
+                this.device.queue.writeBuffer(this.uniformBuffer, 0, uniformData);
+
+                const commandEncoder = this.device.createCommandEncoder();
+                const computePass = commandEncoder.beginComputePass();
+                computePass.setPipeline(this.computePipeline); 
+                computePass.setBindGroup(0, this.computeBindGroup); 
+                computePass.dispatchWorkgroups(Math.ceil(this.activeNodes / 64)); 
+                computePass.end();
+
+                const textureView = this.context.getCurrentTexture().createView();
+                const renderPass = commandEncoder.beginRenderPass({ colorAttachments: [{ view: textureView, clearValue: { r: 0.01, g: 0.015, b: 0.027, a: 1.0 }, loadOp: 'clear', storeOp: 'store' }] });
+                renderPass.setPipeline(this.renderPipeline); 
+                renderPass.setBindGroup(0, this.renderBindGroup); 
+                renderPass.draw(6 * this.activeNodes); 
+                renderPass.end();
+                this.device.queue.submit([commandEncoder.finish()]);
+
+                const sw = this.scopeCanvas.width; 
+                const sh = this.scopeCanvas.height;
+                this.sCtx.clearRect(0, 0, sw, sh);
+                this.sCtx.fillStyle = "rgba(0, 255, 200, 0.4)";
+                const barWidth = sw / 64;
+                for (let i = 0; i < 64; i++) {
+                    const h = (Math.abs(Math.sin(i * 0.15 - this.time * 2.5)) * 0.5 + this.soundLevelNormalized * 0.5) * sh;
+                    this.sCtx.fillRect(i * barWidth, sh - h, barWidth - 1, h);
+                }
+
+                this.frameCount++; 
+                const now = performance.now();
+                if (now - this.lastTime >= 1000) {
+                    this.liveFps = (this.frameCount * 1000) / (now - this.lastTime);
+                    document.getElementById('liveFps').innerText = this.liveFps.toFixed(1);
+                    this.frameCount = 0; 
+                    this.lastTime = now;
+                }
+            }
+        }
+
+        window.onload = () => {
+            window.app = new CyberneticWebGPU();
+            window.addEventListener('resize', () => { if(window.app) window.app.resize(); });
+            
+            document.getElementById('btnSend').addEventListener('click', () => {
+                const input = document.getElementById('userInput'); const val = input.value.trim();
+                if(val) {
+                    window.logMsg(val, false); 
+                    input.value = "";
+                }
+            });
+            document.getElementById('userInput').addEventListener('keypress', (e) => { 
+                if(e.key === 'Enter') document.getElementById('btnSend').click(); 
+            });
+        };
+    </script>
+</body>
+</html>
 
