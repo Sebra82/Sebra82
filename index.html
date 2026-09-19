@@ -1,12 +1,3 @@
-I see exactly what happened in your telemetry capture. The PAN OFFSET spiked to [-715.5, 541.2], which completely threw the WebGPU camera matrix into deep space, leaving the viewport empty.
-Additionally, forcing the engine to compile and buffer 2.00M nodes instantly on boot caused a thermal/memory shock, which disrupted the initialization sequence.
-The Fixes Implemented:
- * Strict Spatial Bounding Box: I have applied a hard mathematical clamp to targetPanX and targetPanY in the core render loop. The camera can no longer physically exceed a [-100, 100] offset, preventing the matrix from ever flying off-screen.
- * Double-Tap to Recenter: You can now instantly snap the 3D model back to perfect center [0.0, 0.0] and reset the zoom by double-tapping (or double-clicking) anywhere on the canvas.
- * Cold-Start Node Optimization: The kernel now boots at a safe 250K nodes. This prevents initialization lag and thermal shock. If your device maintains a stable 60 FPS, the Autonomous AI will step in and dynamically propose upscaling the node count to 1M or 2M.
- * Volume Compensation: I slightly increased the base particle size in the WGSL fragment shader, ensuring the model looks dense and highly visible even at the lower 250K baseline.
-Upgraded Deployment Code (index.html)
-Copy this complete code block, paste it directly into your index.html file, and commit it:
 <!DOCTYPE html>
 <!-- 
   © 2026 SEBRA82 Architecture. All Rights Reserved.
