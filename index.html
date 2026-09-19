@@ -1,12 +1,3 @@
-The total disappearance of your rendering (leaving the viewport completely black) was caused by a critical mathematical bug in the Autonomous AI Lattice Proposal within the WebGPU compute shader.
-When you clicked "ACCEPT" on the lattice injection, it applied a velocity multiplier (v *= noiseDens;) every single frame. Because noiseDens defaults to 5.0, the velocity of all 1,000,000 particles compounded exponentially, causing the entire matrix to explode into Infinity / NaN coordinates and disappear off-screen within 10 frames.
-Implemented Fixes & Upgrades
- * Removed Exponential Velocity Explosions: The AI proposals now strictly apply trigonometric permutations to the targetBase geometry rather than multiplying raw velocity, guaranteeing the model never explodes or escapes the rendering bounds.
- * "RECENTER MATRIX" Button: To fix the viewport panning getting lost, I've added a dedicated RECENTER button next to "Enable Gyro", which instantly zeros out the camera pan, rotation, and zoom. The matrix also auto-recenters whenever you shift Topologies.
- * Safe 250K Baseline Initialization: The engine now strictly boots at a stable 250K nodes. This removes the thermal shock/lag on mobile loading. Once stable, the Autonomous AI will step in and propose upscaling to 500K / 1.00M / 2.00M in intervals.
- * Enhanced Specular Molecular Shading: The fragment shader has been heavily polished. Even the default "Plasma" material now utilizes 3D specular light reflections, ensuring the particles look like dense, volumetric spheres rather than flat dots.
-Complete Repaired Code (index.html)
-Copy this complete code block, paste it directly into your index.html file, and commit it:
 <!DOCTYPE html>
 <!-- 
   © 2026 SEBRA82 Architecture. All Rights Reserved.
