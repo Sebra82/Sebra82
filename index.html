@@ -1,11 +1,3 @@
-I have successfully injected the Particle Density, Noise Amplitude, and Global Rotation Speed parameters into the architecture, along with a full volumetric 3D Curl Noise fluid dynamics overlay.
-Architectural Upgrades Implemented:
- * DYNAMICS & NOISE PANEL: A new control matrix has been added to the right sidebar containing the specific kinematic sliders you requested.
- * Particle Spatial Density Map: The new Particle Density slider performs a dual-operation in WGSL. It multiplies the visual thickness of the fragments while simultaneously dividing the targetBase coordinates in the compute shader, allowing you to forcefully clump 2.00M particles into ultra-dense macroscopic cores.
- * 3D Curl Noise Fluid Dynamics: Activating the CURL NOISE button injects a custom trigonometric curl vector field (∇ × N) into the particle velocity. This creates continuous, non-intersecting fluid turbulence identical to atmospheric or plasma flow.
- * Time-Dilation Rotation Speed: Modifying the Rotation Speed scales the unified timeline modifier, instantly spinning the manifolds up or slowing them down to a crawl.
-Complete Upgraded Code (index.html)
-Copy this complete code block, paste it directly into your index.html file, and commit it:
 <!DOCTYPE html>
 <!-- 
   © 2026 SEBRA82 Architecture. All Rights Reserved.
