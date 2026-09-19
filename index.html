@@ -1,9 +1,3 @@
-I have integrated the Automated Thermal Step-Down Throttle directly into the continuous execution loop. This protects your local hardware during sustained 2.00M node simulations while maintaining visual coherence.
-Here is what this upgrade entails:
- * Thermal Telemetry Window: The engine now maintains a 300-frame rolling average of execution latency. If the aggregate FPS drops below 40.0 for a sustained window—indicating the GPU is downclocking due to heat—the system trips a thermal breaker.
- * Hard-Cap Throttle: When thermal degradation is detected, the engine forcefully drops the active node count to 400K, dynamically rewrites the slider limits to prevent manual overriding, and flashes a THERMAL THROTTLE hardware warning.
- * AI Proposal Suppression: The Autonomous AI is now aware of the thermal state and will temporarily halt any proposals that inject additional nodes or complex noise lattices until the SoC cools and the throttle resets.
-Copy this complete code block, paste it directly into your index.html file, and commit it:
 <!DOCTYPE html>
 <!-- 
   © 2026 SEBRA82 Architecture. All Rights Reserved.
