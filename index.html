@@ -1,11 +1,3 @@
-The completely black viewport while maintaining 60.1 FPS confirms that the engine suffered a Mathematical NaN (Not-a-Number) Explosion, a common and fatal issue in complex GPU compute shaders.
-When you activated the "Complex Plane (Z²)" solver or the Kinetic Modifiers, the WGSL shader attempted to run normalize() on particles that temporarily had a velocity or distance of 0.0. In GPU architecture, normalizing a vector of zero results in a divide-by-zero error, yielding NaN. Because the particles continuously feed their velocity into their position every frame, that NaN instantly infected all 2,000,000 particles, blowing the entire matrix out of bounds permanently.
-Implemented Fixes:
- * safeNormalize() Injection: I completely replaced standard WGSL vector normalizations with a custom guarded function that checks for zero-length vectors before applying physics, preventing the divide-by-zero crash.
- * The NaN Hardware Watchdog: I have added a hard-coded recovery block at the absolute end of the compute shader (if p.x != p.x). If any particle ever becomes corrupted by a bad math transformation, the GPU will instantly delete it and respawn it safely at its base location in the same frame. The matrix can mathematically never disappear again.
- * Atomic State Reset: When you double-tap the screen to recenter, it now correctly turns off "Atomic Zoom" in the UI to match the camera resetting to 140.0.
-Bulletproof Deployment Code (index.html)
-Copy this complete code block, paste it directly into your index.html file on GitHub, and commit it:
 <!DOCTYPE html>
 <!-- 
   © 2026 SEBRA82 Architecture. All Rights Reserved.
